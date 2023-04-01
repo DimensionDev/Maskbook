@@ -1,4 +1,5 @@
 import '@sentry/tracing'
+import { Flags } from '@masknet/flags'
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import {
     getSiteType,
@@ -10,40 +11,28 @@ import {
 } from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
+import { isNewerThan } from '../helpers/isNewerThan.js'
+import { isSameVersion } from '../helpers/isSameVersion.js'
 
 const IGNORE_ERRORS = [
-    // Twitter NFT Avatar API
-    'yb0w3z63oa',
-    // Twitter Identity API
-    'mr8asf7i4h',
-    // NextID
-    'https://proof-service.next.id/v1/proof',
-    // Twitter Assets
-    'https://t.co',
-    'https://pbs.twimg.com',
-    'https://abs.twimg.com',
-    'https://twitter.com',
-    // source code
-    'https://maskbook.pages.dev',
-    // KV
-    'https://kv.r2d2.to/api/com.maskbook.pets',
-    'https://kv.r2d2.to/api/com.maskbook.user',
-    // ScamDB
-    'https://scam.mask.r2d2.to',
-    // RSS3 domain query
-    'https://rss3.domains/name',
-    // CDN
-    /* cspell:disable-next-line */
-    'cdninstagram.com',
-    /* cspell:disable-next-line */
-    'fbcdn.net',
-    'imgix.net',
-    // misc
+    // FIXME
+    'timeout in mutex storage.',
+
+    // ignore
+    "Cannot perform 'getPrototypeOf' on a proxy that has been revoked",
+    'UnknownError: The databases() promise was rejected.',
+    'DataError: Failed to read large IndexedDB value',
+    "Failed to execute 'open' on 'CacheStorage': Unexpected internal error.",
+    'UnknownError: Internal error opening backing store for indexedDB.open.',
+    'TimeoutError: Transaction timed out due to inactivity.',
+    'execution reverted',
+    'Failed to fetch',
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
     'User rejected the request.',
+    'Non-Error promise rejection captured with keys: message',
 ]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
@@ -64,8 +53,14 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }),
             ],
             environment: process.env.NODE_ENV,
-            tracesSampleRate: 0.1,
+            tracesSampleRate: Flags.sentry_sample_rate,
             beforeSend(event) {
+                if (
+                    !isSameVersion(process.env.VERSION, Flags.sentry_earliest_version) &&
+                    !isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)
+                )
+                    return null
+
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
 
                 if (event.message) {
@@ -78,6 +73,11 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
                 if (event.message) {
                     event.message = formatMask(event.message)
+                }
+
+                if (process.env.NODE_ENV === 'development') {
+                    console.log(`[LOG EXCEPTION]: ${event}`)
+                    return null
                 }
 
                 return event
@@ -211,6 +211,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureEvent(options: TelemetryAPI.EventOptions) {
         if (this.status === 'off') return
+        if (!Flags.sentry_enabled) return
+        if (!Flags.sentry_event_enabled) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
@@ -228,10 +230,9 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureException(options: TelemetryAPI.ExceptionOptions) {
         if (this.status === 'off') return
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
-        } else {
-            Sentry.captureException(options.error, this.createException(options))
-        }
+        if (!Flags.sentry_enabled) return
+        if (!Flags.sentry_exception_enabled) return
+
+        Sentry.captureException(options.error, this.createException(options))
     }
 }

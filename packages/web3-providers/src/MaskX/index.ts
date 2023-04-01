@@ -28,19 +28,9 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
             }
         }
 
-        try {
-            const nameInfo = await this.RSS3.getNameInfo(handle)
-            if (!nameInfo?.rnsName) throw new Error('Failed to fetch RNS name.')
-
-            return {
-                ...identity,
-                sns_handle: nameInfo.rnsName,
-            }
-        } catch (error) {
-            return {
-                ...identity,
-                sns_handle: identity.web3_addr,
-            }
+        return {
+            ...identity,
+            sns_handle: identity.web3_addr,
         }
     }
 

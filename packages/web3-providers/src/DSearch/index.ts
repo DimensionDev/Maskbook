@@ -221,13 +221,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const specificTokens = (
             await Promise.allSettled([
                 fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
+                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json', { mode: 'cors' }),
                 ),
                 fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json'),
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json', { mode: 'cors' }),
                 ),
                 fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json', { mode: 'cors' }),
                 ),
             ])
         ).flatMap(
@@ -444,9 +444,10 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      * @returns
      */
     async search<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
-        keyword: string,
+        keyword_: string,
         type?: SearchResultType,
     ): Promise<T[]> {
+        const keyword = keyword_.toLowerCase()
         // filter out 'domain/xxx' or string ends with punctuation marks like 'eth.'
         if (
             keyword.replace(/([#$])?([\s\w+.])+/, '').length > 0 ||

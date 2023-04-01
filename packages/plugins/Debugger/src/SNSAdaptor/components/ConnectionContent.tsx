@@ -45,7 +45,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
         telemetry.captureException(
             TelemetryAPI.ExceptionType.Error,
             TelemetryAPI.ExceptionID.Debug,
-            new Error('An error message.'),
+            new Error(`An error message ${Date.now()}.`),
         )
     }, [telemetry])
 
