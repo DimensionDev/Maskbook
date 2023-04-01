@@ -52,9 +52,13 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }),
             ],
             environment: process.env.NODE_ENV,
-            tracesSampleRate: 0.1,
+            tracesSampleRate: Flags.sentry_sample_rate,
             beforeSend(event) {
-                if (!isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)) return null
+                if (
+                    process.env.VERSION !== Flags.sentry_earliest_version &&
+                    !isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)
+                )
+                    return null
 
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
 
@@ -68,6 +72,11 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
                 if (event.message) {
                     event.message = formatMask(event.message)
+                }
+
+                if (process.env.NODE_ENV === 'development') {
+                    console.log(`[LOG EXCEPTION]: ${event}`)
+                    return null
                 }
 
                 return event
@@ -222,10 +231,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
-        } else {
-            Sentry.captureException(options.error, this.createException(options))
-        }
+
+        Sentry.captureException(options.error, this.createException(options))
     }
 }
