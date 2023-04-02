@@ -1,7 +1,7 @@
 import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { type FC, useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
@@ -167,7 +167,7 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 {media?.mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        src={media.address}
+                        src={resolveResourceURL(media.address)}
                         height={imageSize}
                         width={imageSize}
                     />
