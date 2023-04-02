@@ -11,10 +11,9 @@ export function useUpdatedAvatar(showAvatar: boolean, nftAvatar?: NextIDAvatarMe
         if (!linkParentDom) return
 
         const handler = (event: MouseEvent) => {
-            if (!nftAvatar?.tokenId || !nftAvatar?.address) return
+            if (!nftAvatar?.tokenId || !nftAvatar?.address || !nftAvatar.pluginId || !nftAvatar.chainId) return
             event.stopPropagation()
             event.preventDefault()
-            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,
