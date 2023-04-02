@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
+import Linkify from 'linkify-react'
 import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -114,7 +115,9 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                     }}
                 />
             </Typography>
-            <Typography className={classes.comment}>{metadata?.body}</Typography>
+            <Typography className={classes.comment}>
+                <Linkify options={{ target: '_blank' }}>{metadata?.body}</Linkify>
+            </Typography>
             <article className={cx(classes.target, verbose ? classes.verbose : null)}>
                 {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (

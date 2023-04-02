@@ -276,7 +276,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
+        version: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
       typescript:
         specifier: 5.1.0-dev.20230308
         version: 5.1.0-dev.20230308
@@ -2233,15 +2233,18 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      linkify-react:
+        specifier: ^4.1.1
+        version: 4.1.1(linkifyjs@4.1.1)
       react-use:
         specifier: ^17.4.0
-        version: 17.4.0(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)
+        version: 17.4.0
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
       use-subscription:
         specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-d1e35c703-20221110)
+        version: 1.8.0
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -6749,13 +6752,13 @@ packages:
     dev: true
 
   /@dimensiondev/common-protocols@1.6.0-20210723072221-8f46a92:
-    resolution: {integrity: sha512-IuDpS+MpWEsicL3mMsZbGfGKGI+mjx+mFXc/LnpHddB7jdTjR9wP0aMVl1+UVeJjs52TL0i2J8ABSJx62/Qq9A==, tarball: https://npm.pkg.github.com/download/@DimensionDev/common-protocols/1.6.0-20210723072221-8f46a92/5b18ddc519e40a8e89ec1312261d7facd554edd0}
+    resolution: {integrity: sha512-IuDpS+MpWEsicL3mMsZbGfGKGI+mjx+mFXc/LnpHddB7jdTjR9wP0aMVl1+UVeJjs52TL0i2J8ABSJx62/Qq9A==, tarball: download/@DimensionDev/common-protocols/1.6.0-20210723072221-8f46a92/5b18ddc519e40a8e89ec1312261d7facd554edd0}
     dependencies:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
   /@dimensiondev/eslint-plugin@0.0.2-20220516081411-2649814(eslint@8.36.0):
-    resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/eslint-plugin/0.0.2-20220516081411-2649814/f6b6b4579bfb2788600cef1c58230fadd0f66ac8}
+    resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: download/@DimensionDev/eslint-plugin/0.0.2-20220516081411-2649814/f6b6b4579bfb2788600cef1c58230fadd0f66ac8}
     engines: {node: '>= 16'}
     peerDependencies:
       eslint: '>= 8'
@@ -6764,7 +6767,7 @@ packages:
     dev: true
 
   /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb:
-    resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
+    resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
     peerDependenciesMeta:
@@ -6778,7 +6781,7 @@ packages:
     dev: false
 
   /@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2):
-    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
+    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
       protobufjs: '>= 6.10 < 7'
     dependencies:
@@ -6786,7 +6789,7 @@ packages:
     dev: false
 
   /@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca:
-    resolution: {integrity: sha512-h9ktFcAIN2zVUB/NuQuhv3OoK11ynenScw048GIkxtg7Ol+4w+W4qnWIMErXPzVyep8d7hjt6kngt+sQHNgsYQ==, tarball: https://npm.pkg.github.com/download/@DimensionDev/metamask-extension-provider/3.0.6-20221105074301-8806fca/918f38662fdf7f473b2b934eb6b4c6193b73fd03}
+    resolution: {integrity: sha512-h9ktFcAIN2zVUB/NuQuhv3OoK11ynenScw048GIkxtg7Ol+4w+W4qnWIMErXPzVyep8d7hjt6kngt+sQHNgsYQ==, tarball: download/@DimensionDev/metamask-extension-provider/3.0.6-20221105074301-8806fca/918f38662fdf7f473b2b934eb6b4c6193b73fd03}
     dependencies:
       '@metamask/inpage-provider': 8.1.0
       detect-browser: 3.0.1
@@ -21453,7 +21456,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
       tsort: 0.0.1
       typescript: 5.1.0-dev.20230308
       undici: 5.20.0
@@ -23377,7 +23380,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -24391,6 +24394,22 @@ packages:
     resolution: {integrity: sha512-cNOjgCnLB+FnvWWtyRTzmB3POJ+cXxTA81LoW7u8JdmhfXzriropYwpjShnz1QLLWsQwY7nIxoDmcPTwphDK9w==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
+
+  /linkify-react@4.1.1(linkifyjs@4.1.1):
+    resolution: {integrity: sha512-2K9Y1cUdvq40dFWqCJ//X+WP19nlzIVITFGI93RjLnA0M7KbnxQ/ffC3AZIZaEIrLangF9Hjt3i0GQ9/anEG5A==}
+    peerDependencies:
+      linkifyjs: ^4.0.0
+      react: '>= 15.0.0 || 0.0.0-experimental-d1e35c703-20221110'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      linkifyjs: 4.1.1
+    dev: false
+
+  /linkifyjs@4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
+    dev: false
 
   /lint-staged@13.1.2:
     resolution: {integrity: sha512-K9b4FPbWkpnupvK3WXZLbgu9pchUJ6N7TtVZjbaPsoizkqFUDkUReUL25xdrCljJs7uLUF3tZ7nVPeo/6lp+6w==}
@@ -25988,6 +26007,27 @@ packages:
     resolution: {integrity: sha512-sxEtoTqAPdjWVGv71Q17koMFGsOMSiHsIFEvzOM7cNp8BXB4AnEwmDabm5dorusJf/v1z7QxaZYxUorU9RKaAw==}
     dev: false
 
+  /nano-css@5.3.5:
+    resolution: {integrity: sha512-vSB9X12bbNu4ALBu7nigJgRViZ6ja3OU7CeuiV1zMIbXOdmkLahgtPmh3GBOlDxbKY0CitqlPdOReGlBLSp+yg==}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      css-tree: 1.1.3
+      csstype: 3.1.1
+      fastest-stable-stringify: 2.0.2
+      inline-style-prefixer: 6.0.1
+      rtl-css-js: 1.15.0
+      sourcemap-codec: 1.4.8
+      stacktrace-js: 2.0.2
+      stylis: 4.1.3
+    dev: false
+
   /nano-css@5.3.5(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110):
     resolution: {integrity: sha512-vSB9X12bbNu4ALBu7nigJgRViZ6ja3OU7CeuiV1zMIbXOdmkLahgtPmh3GBOlDxbKY0CitqlPdOReGlBLSp+yg==}
     peerDependencies:
@@ -27427,7 +27467,7 @@ packages:
     dependencies:
       lilconfig: 2.0.6
       postcss: 8.4.21
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
       yaml: 1.10.2
     dev: false
 
@@ -27445,7 +27485,7 @@ packages:
     dependencies:
       lilconfig: 2.0.6
       postcss: 8.4.21
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
       yaml: 2.1.3
     dev: false
 
@@ -28681,6 +28721,45 @@ packages:
         optional: true
     dependencies:
       react: 0.0.0-experimental-d1e35c703-20221110
+      tslib: 2.5.0
+    dev: false
+
+  /react-universal-interface@0.6.2(tslib@2.5.0):
+    resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
+    peerDependencies:
+      react: '*'
+      tslib: '*'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      tslib: 2.5.0
+    dev: false
+
+  /react-use@17.4.0:
+    resolution: {integrity: sha512-TgbNTCA33Wl7xzIJegn1HndB4qTS9u03QUwyNycUnXaweZkE4Kq2SB+Yoxx8qbshkZGYBDvUXbXWRUmQDcZZ/Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-d1e35c703-20221110
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-d1e35c703-20221110
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      '@types/js-cookie': 2.2.7
+      '@xobotyi/scrollbar-width': 1.9.5
+      copy-to-clipboard: 3.3.1
+      fast-deep-equal: 3.1.3
+      fast-shallow-equal: 1.0.0
+      js-cookie: 2.2.1
+      nano-css: 5.3.5
+      react-universal-interface: 0.6.2(tslib@2.5.0)
+      resize-observer-polyfill: 1.5.1
+      screenfull: 5.2.0
+      set-harmonic-interval: 1.0.1
+      throttle-debounce: 3.0.1
+      ts-easing: 0.2.0
       tslib: 2.5.0
     dev: false
 
@@ -31752,6 +31831,7 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -32136,6 +32216,7 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /typescript@5.1.0-dev.20230308:
     resolution: {integrity: sha512-CSITPpBYNdPYujl36d9VhNNCLE+isuwm/ArFbYgPsWsLniLCcfBl+NcaOkVqyjV0XEjP+uN1yywiglCkEzed1w==}
@@ -32599,6 +32680,17 @@ packages:
       react: 0.0.0-experimental-d1e35c703-20221110
     dev: false
 
+  /use-subscription@1.8.0:
+    resolution: {integrity: sha512-LISuG0/TmmoDoCRmV5XAqYkd3UCBNM0ML3gGBndze65WITcsExCD3DTvXXTLyNcOC0heFQZzluW88bN/oC1DQQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-d1e35c703-20221110
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      use-sync-external-store: 1.2.0
+    dev: false
+
   /use-subscription@1.8.0(react@0.0.0-experimental-d1e35c703-20221110):
     resolution: {integrity: sha512-LISuG0/TmmoDoCRmV5XAqYkd3UCBNM0ML3gGBndze65WITcsExCD3DTvXXTLyNcOC0heFQZzluW88bN/oC1DQQ==}
     peerDependencies:
@@ -32609,6 +32701,15 @@ packages:
     dependencies:
       react: 0.0.0-experimental-d1e35c703-20221110
       use-sync-external-store: 1.2.0(react@0.0.0-experimental-d1e35c703-20221110)
+    dev: false
+
+  /use-sync-external-store@1.2.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-d1e35c703-20221110
+    peerDependenciesMeta:
+      react:
+        optional: true
     dev: false
 
   /use-sync-external-store@1.2.0(react@0.0.0-experimental-d1e35c703-20221110):
@@ -34892,6 +34993,7 @@ time:
   /iframe-resizer-react@1.1.0: '2021-01-05T22:32:47.844Z'
   /json-stable-stringify@1.0.2: '2022-11-08T17:21:21.117Z'
   /json2csv@5.0.6: '2021-02-03T15:23:57.794Z'
+  /linkify-react@4.1.1: '2023-03-25T15:06:24.522Z'
   /lint-staged@13.1.2: '2023-02-13T17:52:20.376Z'
   /lodash-es@4.17.21: '2021-02-20T15:43:35.756Z'
   /lru-cache@7.10.1: '2022-05-11T22:51:48.451Z'
