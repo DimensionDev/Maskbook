@@ -90,6 +90,10 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
                 marginTop: theme.spacing(1.5),
                 marginLeft: 0,
             },
+            aspectRatio: 'auto',
+            img: {
+                objectFit: 'unset',
+            },
         },
         [`.${refs.info}`]: {
             marginLeft: 0,
@@ -191,7 +195,9 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                             {metadata.body}
                         </Markdown>
                     ) : (
-                        <Typography className={classes.content}>{metadata?.summary || metadata?.body}</Typography>
+                        <Typography className={classes.content}>
+                            {(metadata?.summary || metadata?.body)?.replace(/<[^>]+>/g, '')}
+                        </Typography>
                     )}
                 </div>
             </div>
