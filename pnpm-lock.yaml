@@ -6758,13 +6758,13 @@ packages:
     dev: true
 
   /@dimensiondev/common-protocols@1.6.0-20210723072221-8f46a92:
-    resolution: {integrity: sha512-IuDpS+MpWEsicL3mMsZbGfGKGI+mjx+mFXc/LnpHddB7jdTjR9wP0aMVl1+UVeJjs52TL0i2J8ABSJx62/Qq9A==, tarball: download/@DimensionDev/common-protocols/1.6.0-20210723072221-8f46a92/5b18ddc519e40a8e89ec1312261d7facd554edd0}
+    resolution: {integrity: sha512-IuDpS+MpWEsicL3mMsZbGfGKGI+mjx+mFXc/LnpHddB7jdTjR9wP0aMVl1+UVeJjs52TL0i2J8ABSJx62/Qq9A==, tarball: https://npm.pkg.github.com/download/@DimensionDev/common-protocols/1.6.0-20210723072221-8f46a92/5b18ddc519e40a8e89ec1312261d7facd554edd0}
     dependencies:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
   /@dimensiondev/eslint-plugin@0.0.2-20220516081411-2649814(eslint@8.36.0):
-    resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: download/@DimensionDev/eslint-plugin/0.0.2-20220516081411-2649814/f6b6b4579bfb2788600cef1c58230fadd0f66ac8}
+    resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/eslint-plugin/0.0.2-20220516081411-2649814/f6b6b4579bfb2788600cef1c58230fadd0f66ac8}
     engines: {node: '>= 16'}
     peerDependencies:
       eslint: '>= 8'
@@ -6773,7 +6773,7 @@ packages:
     dev: true
 
   /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb:
-    resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
+    resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
     peerDependenciesMeta:
@@ -6787,7 +6787,7 @@ packages:
     dev: false
 
   /@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2):
-    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
+    resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
       protobufjs: '>= 6.10 < 7'
     dependencies:
@@ -6795,7 +6795,7 @@ packages:
     dev: false
 
   /@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca:
-    resolution: {integrity: sha512-h9ktFcAIN2zVUB/NuQuhv3OoK11ynenScw048GIkxtg7Ol+4w+W4qnWIMErXPzVyep8d7hjt6kngt+sQHNgsYQ==, tarball: download/@DimensionDev/metamask-extension-provider/3.0.6-20221105074301-8806fca/918f38662fdf7f473b2b934eb6b4c6193b73fd03}
+    resolution: {integrity: sha512-h9ktFcAIN2zVUB/NuQuhv3OoK11ynenScw048GIkxtg7Ol+4w+W4qnWIMErXPzVyep8d7hjt6kngt+sQHNgsYQ==, tarball: https://npm.pkg.github.com/download/@DimensionDev/metamask-extension-provider/3.0.6-20221105074301-8806fca/918f38662fdf7f473b2b934eb6b4c6193b73fd03}
     dependencies:
       '@metamask/inpage-provider': 8.1.0
       detect-browser: 3.0.1
