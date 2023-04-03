@@ -30,9 +30,9 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(0.5),
             height: 40,
             marginBottom: 6,
+            borderRadius: 4,
             '&:hover': {
                 backgroundColor: theme.palette.maskColor.bg,
-                borderRadius: 4,
             },
             '&:last-of-type': {
                 marginBottom: 0,
