@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile.js'
+import { Trans } from 'react-i18next'
 
 const isCyberConnectUrl = (x: string): boolean => !!x.match(/app\.cyberconnect\.me\/.+\/(0x[\dA-Fa-f]{40}|\w+.eth)/)
 
@@ -35,11 +36,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 17,
-            description: {
-                i18nKey: '__plugin_description',
-                fallback: 'Decentralized social graph protocol for user-centric Web3.',
-            },
-            name: { i18nKey: '__plugin_name', fallback: 'CyberConnect' },
+            description: (
+                <Trans
+                    i18nKey="__plugin_description"
+                    defaults="Decentralized social graph protocol for user-centric Web3."
+                    ns={base.ID}
+                />
+            ),
+            name: <Trans i18nKey="__plugin_name" fallback="CyberConnect" ns={base.ID} />,
             icon: <Icons.CyberConnect size={36} />,
             tutorialLink: 'https://cyberconnect.me/',
         },

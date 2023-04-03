@@ -10,6 +10,7 @@ import ScamAlert from './ScamAlert.js'
 import { PluginScamRPC } from '../messages.js'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
+import { Trans } from 'react-i18next'
 
 function Renderer(
     props: React.PropsWithChildren<{
@@ -57,11 +58,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 marketListSortingPriority: 19,
                 icon,
                 category: 'dapp',
-                description: {
-                    i18nKey: '__plugin_description',
-                    fallback: PLUGIN_DESCRIPTION,
-                },
-                name: { i18nKey: '__plugin_name', fallback: PLUGIN_NAME },
+                description: <Trans i18nKey="__plugin_description" defaults={PLUGIN_DESCRIPTION} ns={base.ID} />,
+                name: <Trans i18nKey="__plugin_name" defaults={PLUGIN_NAME} ns={base.ID} />,
                 tutorialLink: 'https://scamsniffer.io/?utm_source=mask-setting',
             }
         })(),
