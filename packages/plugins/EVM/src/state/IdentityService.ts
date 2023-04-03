@@ -1,4 +1,5 @@
 import { compact, first, uniqBy } from 'lodash-es'
+import { timeout } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import {
@@ -14,11 +15,11 @@ import {
     type SocialAddress,
     SocialAddressType,
 } from '@masknet/shared-base'
+import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS, Lens, MaskX, NextIDProof, NextIDStorageProvider, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { Web3StateSettings } from '../settings/index.js'
-import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi
@@ -155,7 +156,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
     /** Read a social address from NextID. */
     private async getSocialAddressesFromNextID(identity: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identity)
+        const listOfAddress = await timeout(getWalletAddressesFromNextID(identity), 30 * 1000 /* 30 seconds */)
         return compact(
             listOfAddress.map((x) =>
                 this.createSocialAddress(
