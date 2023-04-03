@@ -86,15 +86,19 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const token = tokenMap[key] ?? nativeTokenDetailed
 
     // #region balance
-    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(token?.address, gasOption, {
-        chainId: targetChainId,
-    })
-
+    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(
+        targetPluginID,
+        token?.address,
+        gasOption,
+        {
+            chainId: targetChainId,
+        },
+    )
     // #endregion
 
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
-    const validation = useTipValidate({
+    const validation = useTipValidate(targetPluginID, targetChainId, {
         tipType,
         amount,
         token,
@@ -191,6 +195,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         wrappedSendTip,
         isSending,
         reset,
+        balance,
         gasOption,
         storedTokens,
         validation,
