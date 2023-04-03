@@ -20,9 +20,10 @@ import { Deploy } from './Deploy.js'
 import { InEligibilityTips } from './InEligibilityTips.js'
 import { SmartPayContent } from './SmartPayContent.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDeployPage: boolean }>()((theme, { isDeployPage }) => ({
     dialogContent: {
         padding: 0,
+        overflow: isDeployPage ? 'hidden' : 'auto',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,
@@ -39,8 +40,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export function RouterDialog() {
     const t = useI18N()
-    const { classes } = useStyles()
     const { pathname, state } = useLocation()
+    const { classes } = useStyles({ isDeployPage: Boolean(matchPath(RoutePaths.Deploy, pathname)) })
     const navigate = useNavigate()
     const personas = useAllPersonas()
     const wallets = useWallets()

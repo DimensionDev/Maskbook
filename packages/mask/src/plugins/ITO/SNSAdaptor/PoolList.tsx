@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 350,
+        height: 564,
     },
 }))
 export interface PoolListProps {
@@ -53,9 +53,11 @@ export function PoolList(props: PoolListProps) {
     }
     if (!pools.length) {
         return (
-            <Typography variant="body1" color="textSecondary" className={classes.placeholder}>
-                {t('no_data')}
-            </Typography>
+            <Box className={classes.placeholder}>
+                <Typography variant="body1" color="textSecondary" className={classes.placeholder}>
+                    {t('no_data')}
+                </Typography>
+            </Box>
         )
     }
     return (
