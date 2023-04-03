@@ -4,7 +4,7 @@ export default function getSearchedKeywordAtFacebook() {
 
     if (/\/search\/top\/?$/.test(location.pathname)) {
         const params = new URLSearchParams(location.search)
-        return decodeURIComponent(params.get('q') ?? '')
+        return params.get('q') ?? ''
     }
 
     return ''

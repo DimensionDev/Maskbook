@@ -38,7 +38,6 @@ import {
     openNFTAvatarSettingDialog,
 } from './injection/NFT/NFTAvatarEditProfile.js'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar.js'
-import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip.js'
 import { TwitterRenderFragments } from './customization/render-fragments.js'
 import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
@@ -201,7 +200,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         profileAvatar: injectNFTAvatarInTwitter,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
-        avatarClipNFT: injectNFTAvatarClipInTwitter,
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
         tips: injectTips,

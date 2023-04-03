@@ -3,9 +3,9 @@ import type { AvatarMetaDB } from '../types.js'
 import { RainbowBox } from './RainbowBox.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type { NFTAvatarEvent } from '@masknet/shared-base'
+import { useCheckPersonaNFTAvatar } from '../index.js'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -24,7 +24,7 @@ const useStyles = makeStyles()(() => ({
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId, width, height, snsKey, timelineUpdated } = props
-    const { loading, value: _avatar } = usePersonaNFTAvatar(userId, avatarId, '', snsKey)
+    const { loading, value: _avatar } = useCheckPersonaNFTAvatar(userId, avatarId, '', snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
     const { classes } = useStyles(undefined, { props })

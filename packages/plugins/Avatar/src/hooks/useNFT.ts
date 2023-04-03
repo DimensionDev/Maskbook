@@ -55,6 +55,7 @@ export function useNFT(
             // Not all NFT markets have slug in the URL
             slug: token ? undefined : asset?.collection?.slug,
             permalink,
+            tokenId,
         } as NFTInfo
     }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId, ownerAddress])
 }

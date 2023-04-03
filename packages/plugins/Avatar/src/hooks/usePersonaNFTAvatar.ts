@@ -1,11 +1,18 @@
 import LRU from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
-import { type EnhanceableSite, NetworkPluginID, getEnhanceableSiteType, getSiteType } from '@masknet/shared-base'
+import {
+    type EnhanceableSite,
+    NetworkPluginID,
+    getEnhanceableSiteType,
+    getSiteType,
+    isTwitter,
+} from '@masknet/shared-base'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
 import { getNFTAvatarByUserId } from '../utils/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { Twitter } from '@masknet/web3-providers'
 
 const cache = new LRU<string, NextIDAvatarMeta>({
     max: 500,
@@ -40,4 +47,32 @@ async function getNFTAvatarForCache(userId: string, avatarId: string, persona: s
         return { imageUrl: '', nickname: '', ...avatarMeta, address: avatarMeta.tokenId }
     }
     return { imageUrl: '', nickname: '', pluginId: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet, ...avatarMeta }
+}
+
+export function useCheckPersonaNFTAvatar(userId: string, avatarId: string, persona: string, snsKey: RSS3_KEY_SNS) {
+    const getNFTAvatar = useGetNFTAvatar()
+
+    return useAsyncRetry(async () => {
+        if (!userId) return
+        const key = `${userId}-${getSiteType()}`
+        if (!cache.has(key)) {
+            const nftAvatar = await getNFTAvatarForCache(userId, avatarId, persona, getNFTAvatar)
+            if (nftAvatar) cache.set(key, nftAvatar)
+        }
+        const metaData = cache.get(key)
+        if (!metaData && isTwitter()) {
+            const nft = await Twitter.getUserNftContainer(userId)
+            if (nft)
+                // is twitter blue
+                return {
+                    address: nft.address,
+                    tokenId: nft.token_id,
+                    userId,
+                    avatarId,
+                    pluginId: NetworkPluginID.PLUGIN_EVM,
+                    chainId: ChainId.Mainnet,
+                }
+        }
+        return metaData
+    }, [userId, persona, snsKey, getNFTAvatar, avatarId])
 }

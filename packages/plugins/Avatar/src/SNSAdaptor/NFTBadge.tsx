@@ -1,7 +1,7 @@
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
-import type { AvatarMetaDB, NFTInfo } from '../types.js'
+import type { NFTInfo } from '../types.js'
 import { formatPrice, formatText } from '../utils/index.js'
 import { NFTAvatarRing } from './NFTAvatarRing.js'
 import { useI18N } from '../locales/i18n_generated.js'
@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
-    avatar: AvatarMetaDB
     nftInfo?: NFTInfo
     size?: number
     width?: number
@@ -24,7 +23,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
+    const { nftInfo, size = 140, hasRainbow, borderSize } = props
     const { classes } = useStyles(undefined, { props })
     const t = useI18N()
 
@@ -61,7 +60,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={formatText(nftInfo.name ?? '', avatar.tokenId)}
+                    text={formatText(nftInfo.name ?? '', nftInfo.tokenId)}
                     price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />
             </Link>

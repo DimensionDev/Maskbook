@@ -1,4 +1,6 @@
 import { Twitter } from '@masknet/web3-providers'
+import { AvatarType } from '../constant.js'
+import { getAvatarType } from './useAvatarType.js'
 
 export function getInjectNodeInfo(ele: HTMLElement) {
     const imgEle = ele.querySelector('img')
@@ -9,10 +11,10 @@ export function getInjectNodeInfo(ele: HTMLElement) {
 
     nftDom.style.overflow = 'unset'
     const avatarParent = nftDom.parentElement
-    let isTwitterNFT = false
+    let avatarType = AvatarType.Default
 
     if (avatarParent) {
-        isTwitterNFT = avatarParent.style.clipPath === 'url("#shape-hex")'
+        avatarType = getAvatarType(avatarParent)
         if (process.env.NODE_ENV === 'development') {
             if (
                 avatarParent.style.clipPath &&
@@ -28,5 +30,5 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     const avatarId = Twitter.getAvatarId(imgEle.src)
     if (!avatarId) return
 
-    return { element: nftDom, width, height, avatarId, isTwitterNFT }
+    return { element: nftDom, width, height, avatarId, avatarType }
 }
