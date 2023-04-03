@@ -47,7 +47,8 @@ export const flags = {
     sentry_enabled: prodOnly,
     sentry_event_enabled: prodOnly,
     sentry_exception_enabled: prodOnly,
-    sentry_fetch_exception_enabled: prodOnly,
+    sentry_fetch_transaction_enabled: prodOnly,
+    sentry_async_transaction_enabled: devOnly,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

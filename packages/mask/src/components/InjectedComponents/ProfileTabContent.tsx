@@ -24,6 +24,9 @@ import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@m
 import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
@@ -39,11 +42,8 @@ import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
-import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
-import { NextIDProof } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
