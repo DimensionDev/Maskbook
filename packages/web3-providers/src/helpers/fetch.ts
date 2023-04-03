@@ -1,5 +1,4 @@
 import { captureFetchTransaction } from './captureFetchTransaction.js'
-import { createTimeoutController } from './createTimeoutController.js'
 
 const { fetch: originalFetch } = globalThis
 
@@ -12,7 +11,7 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
         (ff, f) => (r, i) => f(r, i, ff),
         (input: RequestInfo | URL, init?: RequestInit | undefined) => {
             return originalFetch(input, {
-                signal: createTimeoutController(3 * 60 * 1000 /* 3 mins */).signal,
+                signal: AbortSignal.timeout(3 * 60 * 1000 /* 3 mins */),
                 ...init,
             })
         },
