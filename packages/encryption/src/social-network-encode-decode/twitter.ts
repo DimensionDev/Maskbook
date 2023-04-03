@@ -40,7 +40,7 @@ function TwitterDecoderBinary(raw: string): Option<Uint8Array> {
     try {
         for (const link of payloadLink) {
             const url = new URL(link)
-            const payload = decodeURIComponent(url.searchParams.get('PostData_v2') || '')
+            const payload = url.searchParams.get('PostData_v2')
             if (!payload) continue
             return Some(new Uint8Array(decodeArrayBuffer(payload)))
         }
