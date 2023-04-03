@@ -55,7 +55,6 @@ export async function captureFetchTransaction(
     options?: { status?: 'succeed' | 'failed'; startAt?: number; endAt?: number },
 ) {
     if (process.env.NODE_ENV === 'development') return
-    if (options?.status === 'succeed') return
     if (!Flags.sentry_enabled) return
     if (!Flags.sentry_fetch_exception_enabled) return
     if (isIgnoredRequest(request)) return

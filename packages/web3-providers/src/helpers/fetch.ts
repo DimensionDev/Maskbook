@@ -24,10 +24,12 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
         hasError = true
         throw error
     } finally {
-        await captureFetchTransaction(new Request(input, init), response, {
-            status: !hasError ? 'succeed' : 'failed',
-            startAt,
-            endAt: Date.now(),
-        })
+        if (hasError) {
+            await captureFetchTransaction(new Request(input, init), response, {
+                status: 'failed',
+                startAt,
+                endAt: Date.now(),
+            })
+        }
     }
 }
