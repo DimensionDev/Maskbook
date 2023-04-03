@@ -1,4 +1,4 @@
-export async function captureAsyncTransaction<T extends unknown>(name: string, toBeResolved: Promise<T>): Promise<T> {
+export async function captureAsyncTransaction<T>(name: string, toBeResolved: Promise<T>): Promise<T> {
     const startAt = Date.now()
 
     let hasError = false
