@@ -22,6 +22,6 @@ export function useNonFungibleOrders<S extends 'all' | void = void, T extends Ne
             return hub.getNonFungibleTokenOffers?.(address ?? '', id ?? '', { ...options, indicator: nextIndicator })
         },
         [address, id, hub],
-        options?.sourceType,
+        `${options?.sourceType}_${address}_${id}`,
     )
 }
