@@ -20,7 +20,7 @@ import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
-const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi
+const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const ADDRESS_FULL = /0x\w{40,}/i
 const CROSSBELL_HANDLE_RE = /(?<name>[\w.]+)\.csb/
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
@@ -37,8 +37,10 @@ function getLensNames(nickname: string, bio: string, homepage: string) {
     return [...names, homepageNames?.[1]].map((x) => first(x?.match(LENS_DOMAIN_RE)) ?? '').filter(Boolean)
 }
 
-function getSIDNames(userId: string, nickname: string, bio: string) {
-    return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)].flatMap((result) => result ?? [])
+export function getSIDNames(userId: string, nickname: string, bio: string) {
+    return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)]
+        .flatMap((result) => result || [])
+        .map((x) => x.toLowerCase())
 }
 
 function getCrossBellHandles(nickname: string, bio: string) {
