@@ -1,4 +1,9 @@
+import { Flags } from '@masknet/flags'
+
 export async function captureAsyncTransaction<T>(name: string, toBeResolved: Promise<T>): Promise<T> {
+    if (!Flags.sentry_enabled) return toBeResolved
+    if (!Flags.sentry_async_transaction_enabled) return toBeResolved
+
     const startAt = Date.now()
 
     let hasError = false
