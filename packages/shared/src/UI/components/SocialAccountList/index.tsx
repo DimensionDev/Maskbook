@@ -187,7 +187,15 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
                             className={classes.listItem}
                             disableRipple
                             disabled={false}
-                            onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))}>
+                            onClick={() => {
+                                if (x.platform === NextIDPlatform.ENS) {
+                                    ENS.lookup(x.identity).then((address) => {
+                                        openWindow(`https://app.ens.domains/address/${address}`)
+                                    })
+                                    return
+                                }
+                                return openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))
+                            }}>
                             <div className={classes.content}>
                                 {Icon ? <Icon size={20} /> : null}
                                 <Typography className={cx(classes.socialName, classes.accountName)} component="div">
