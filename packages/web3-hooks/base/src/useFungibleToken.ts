@@ -11,7 +11,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     fallbackToken?: Web3Helper.FungibleTokenScope<S, T>,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    const hub = useWeb3Hub()
+    const hub = useWeb3Hub(pluginID, options)
     const chainId = useChainId(pluginID, options?.chainId)
 
     return useAsyncRetry<Web3Helper.FungibleTokenScope<S, T> | undefined>(async () => {
