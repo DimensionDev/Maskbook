@@ -311,7 +311,13 @@ export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =
 
 export const searchTwitterAvatarSelector = () =>
     querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+
+export const searchTwitterCircleAvatarSelector = () =>
+    querySelector<E>('a[href$="/nft"]').querySelector('img').closest<E>(1)
+
 // #endregion
+
+export const searchTwitterSquareAvatarSelector = () => querySelector<E>('a[href$="/nft"] > div img')
 
 // #region twitter avatar
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
@@ -324,6 +330,8 @@ export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-
 
 export const searchTwitterAvatarNFTSelector = () =>
     querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
+
+export const searchTwitterAvatarNFTStyleSelector = () => querySelector<E>('a[href$="/nft"] > div')
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
 

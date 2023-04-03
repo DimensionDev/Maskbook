@@ -1,21 +1,22 @@
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
 import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { NFTAvatarClip } from '@masknet/plugin-avatar'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import {
+    NFTAvatarClip,
+    NFTAvatarSquare,
+    formatPrice,
+    formatText,
+    useNFT,
+    useNFTContainerAtTwitter,
+} from '@masknet/plugin-avatar'
+import { useI18N } from '../../../../utils/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
-
-export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        root.render(<NFTAvatarClipInTwitter />)
-        return () => root.destroy()
-    })
-    startWatch(watcher, signal)
-}
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { AvatarType } from '../../constant.js'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -29,8 +30,10 @@ const useStyles = makeStyles()(() => ({
     icon: {},
 }))
 
-function NFTAvatarClipInTwitter() {
-    const { classes } = useStyles()
+interface NFTAvatarClipInTwitterProps {
+    signal: AbortSignal
+}
+export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
     const windowSize = useWindowSize()
     const location = useLocation()
     const borderElement = useRef<Element | null>()
@@ -39,8 +42,7 @@ function NFTAvatarClipInTwitter() {
     const size = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a')?.querySelector('img')
         if (!ele) return 0
-        const style = window.getComputedStyle(ele)
-        return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
+        return ele.clientWidth
     }, [windowSize, location])
 
     const identity = useCurrentVisitingIdentity()
@@ -72,12 +74,56 @@ function NFTAvatarClipInTwitter() {
     }, [location.pathname])
 
     if (isZero(size) || !identity.identifier) return null
+
     return (
-        <NFTAvatarClip
+        <NFTAvatarClipOrSquareInTwitter
             screenName={identity.identifier.userId}
-            width={size}
-            height={size}
-            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+            size={size}
+            avatarType={AvatarType.Clip}
         />
     )
+}
+
+interface NFTAvatarClipOrSquareProps {
+    screenName: string
+    size: number
+    avatarType: AvatarType
+}
+export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
+    const { t } = useI18N()
+    const { classes } = useStyles()
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
+    const { account } = useChainContext()
+    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
+        account,
+        avatarMetadata?.address,
+        avatarMetadata?.token_id,
+        NetworkPluginID.PLUGIN_EVM,
+        ChainId.Mainnet,
+    )
+
+    const name = useMemo(() => {
+        if (loading || loadingNFT) return t('loading')
+        return `${formatText(value.name, avatarMetadata?.token_id ?? '')} ${
+            value.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
+        }`
+    }, [JSON.stringify(value), loading, loadingNFT, avatarMetadata?.token_id])
+
+    const price = useMemo(() => {
+        if (loading || loadingNFT) return t('loading')
+        return formatPrice(value.amount, value.symbol)
+    }, [JSON.stringify(value), loading, loadingNFT])
+
+    if (!avatarMetadata?.address || !avatarMetadata?.token_id) return null
+
+    return avatarType === AvatarType.Square ? (
+        <NFTAvatarSquare stroke="black" strokeWidth={20} fontSize={9} name={name} price={price} size={size} />
+    ) : avatarType === AvatarType.Clip ? (
+        <NFTAvatarClip
+            size={size}
+            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+            name={name}
+            price={price}
+        />
+    ) : null
 }
