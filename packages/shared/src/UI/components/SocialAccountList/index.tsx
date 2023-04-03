@@ -110,8 +110,6 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1.5),
             translate: theme.spacing(1.9, 1),
             background: theme.palette.maskColor.bottom,
-            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
-            scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -247,6 +245,11 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
             },
             MenuListProps: {
                 className: classes.menuList,
+                // Remove space for scrollbar
+                style: {
+                    paddingRight: 0,
+                    width: '100%',
+                },
             },
         },
         ref,
