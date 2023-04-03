@@ -27,6 +27,7 @@
     "bignumber.js": "9.1.0",
     "date-fns": "^2.29.3",
     "linkify-react": "^4.1.1",
+    "linkifyjs": "^4.1.1",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
     "use-subscription": "^1.8.0",

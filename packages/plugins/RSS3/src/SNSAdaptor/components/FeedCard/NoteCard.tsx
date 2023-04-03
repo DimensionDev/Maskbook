@@ -8,9 +8,10 @@ import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label } from './common.js'
+import { Label, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 import { Icons } from '@masknet/icons'
+import Linkify from 'linkify-react'
 
 const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'body' | 'center'>()((theme, _, refs) => ({
     summary: {
@@ -196,7 +197,9 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                         </Markdown>
                     ) : (
                         <Typography className={classes.content}>
-                            {(metadata?.summary || metadata?.body)?.replace(/<[^>]+>/g, '')}
+                            <Linkify options={LinkifyOptions}>
+                                {htmlToPlain(metadata?.summary || metadata?.body)}
+                            </Linkify>
                         </Typography>
                     )}
                 </div>
