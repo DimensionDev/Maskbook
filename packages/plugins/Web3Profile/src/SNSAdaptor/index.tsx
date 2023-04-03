@@ -73,10 +73,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 nextIdRequired: true,
                 category: 'dapp',
                 recommendFeature,
-                description: {
-                    i18nKey: '__plugin_description',
-                    fallback: 'Choose and showcase your Web3 footprints on Twitter.',
-                },
+                description: (
+                    <Trans
+                        i18nKey="__plugin_description"
+                        defaults="Choose and showcase your Web3 footprints on Twitter."
+                        ns={base.ID}
+                    />
+                ),
                 features: [
                     {
                         name: <Trans i18nKey="plugin_web3_profile_feature_general_user_name" />,
