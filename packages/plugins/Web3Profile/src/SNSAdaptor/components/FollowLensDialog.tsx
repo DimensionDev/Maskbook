@@ -218,7 +218,15 @@ export function FollowLensDialog() {
                     value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
                     symbol: approved.token?.symbol ?? '',
                 })}>
-                <ChainBoundary expectedPluginID={pluginID} expectedChainId={ChainId.Matic}>
+                <ChainBoundary
+                    expectedPluginID={pluginID}
+                    expectedChainId={ChainId.Matic}
+                    ActionButtonPromiseProps={{
+                        variant: 'roundedContained',
+                        className: classes.followAction,
+                        startIcon: null,
+                    }}
+                    switchText={t.switch_network_tips()}>
                     <ActionButton
                         variant="roundedContained"
                         className={classes.followAction}

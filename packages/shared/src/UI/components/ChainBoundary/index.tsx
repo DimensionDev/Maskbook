@@ -8,7 +8,6 @@ import {
     useAllowTestnet,
     useWeb3State,
     useChainIdValid,
-    useProviderDescriptor,
     ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -18,7 +17,6 @@ import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useSharedI18N } from '../../../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useAsyncFn } from 'react-use'
@@ -54,6 +52,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     actualNetworkPluginID?: T
+    switchText?: string
 }
 
 export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
@@ -62,6 +61,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         expectedChainId,
         expectedAccount,
         actualNetworkPluginID,
+        switchText,
         forceShowingWrongNetworkButton = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
@@ -71,8 +71,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const { classes } = useStyles(undefined, { props })
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
-    const plugin = useActivatedPlugin(actualPluginID, 'any')
-    const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
     const { Others: actualOthers, Connection } = useWeb3State(actualPluginID)
 
@@ -81,8 +79,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         chainId: actualChainId,
         providerType: actualProviderType,
     } = useChainContext({ account: expectedAccount })
-    const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
-    const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
@@ -199,7 +195,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 className={classes.switchButton}
                 sx={props.ActionButtonPromiseProps?.sx}
                 {...props.ActionButtonPromiseProps}>
-                {t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
+                {switchText ?? t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
             </ActionButton>,
             t.plugin_wallet_connect_tips(),
         )
