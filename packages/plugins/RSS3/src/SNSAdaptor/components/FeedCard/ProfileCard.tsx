@@ -1,14 +1,15 @@
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { Label } from './common.js'
+import { CardType } from '../share.js'
 import { LensAvatar } from './LensAvatar.js'
+import { Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
     summary: {
@@ -119,7 +120,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({ feed, ...rest }) => {
                     ) : metadata.profile_uri ? (
                         <Image
                             classes={{ container: classes.image }}
-                            src={metadata.profile_uri[0]}
+                            src={resolveResourceURL(metadata.profile_uri[0])}
                             height={imageSize}
                             width={imageSize}
                         />

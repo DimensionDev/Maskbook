@@ -29,7 +29,7 @@ export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
 }
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ showAlert: boolean }>()((theme, { showAlert }) => ({
     alertBox: {
         marginBottom: '20px',
     },
@@ -83,16 +83,23 @@ const useStyles = makeStyles()((theme) => ({
         width: 30,
         height: 30,
     },
+    container: {
+        maxHeight: showAlert ? 410 : 470,
+        overflow: 'scroll',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
 const supportedNetworkIds = [NetworkPluginID.PLUGIN_EVM]
 
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const t = useI18N()
-    const { classes } = useStyles()
     const { Storage } = useWeb3State()
 
     const [showAlert, setShowAlert] = useState(true)
+    const { classes } = useStyles({ showAlert })
     const [pendingDefault, setPendingDefault] = useState<string>()
 
     const { showSnackbar } = useCustomSnackbar()
@@ -221,7 +228,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         </div>
                     ) : null}
 
-                    <div>
+                    <div className={classes.container}>
                         {supportedNetworkIds?.map((x, idx) => {
                             return (
                                 <WalletsByNetwork
