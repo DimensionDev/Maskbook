@@ -1,9 +1,10 @@
 import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import Linkify from 'linkify-react'
+import type { FC } from 'react'
 import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -123,7 +124,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        src={commentTarget.media[0].address}
+                        src={resolveResourceURL(commentTarget.media[0].address)}
                         height={imageSize}
                         width={imageSize}
                     />
