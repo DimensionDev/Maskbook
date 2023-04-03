@@ -35,6 +35,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         },
         priceInToken: asset.last_sale
             ? {
+                  // eslint-disable-next-line @typescript-eslint/no-base-to-string
                   amount: asset.last_sale.total_price.toString(),
                   // FIXME: cannot get payment token
                   token:

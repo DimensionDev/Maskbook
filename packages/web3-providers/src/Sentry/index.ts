@@ -87,6 +87,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }
 
                 if (process.env.NODE_ENV === 'development') {
+                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     console.log(`[LOG EXCEPTION]: ${event}`)
                     return null
                 }
