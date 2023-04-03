@@ -155,7 +155,7 @@ export function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             borderSize={5}
             hasRainbow
             size={size}
-            width={15}
+            width={12}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
         />
     )

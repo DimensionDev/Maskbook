@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
-import { makeStyles } from '@masknet/theme'
+import { keyframes, makeStyles } from '@masknet/theme'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
+import type { Keyframes } from '@emotion/serialize'
 
 // from twitter page
 const ViewBoxWidth = 200
@@ -20,6 +21,24 @@ interface NFTAvatarMiniClipProps extends Omit<NFTAvatarClipProps, 'name' | 'pric
     screenName: string
 }
 
+const rainbowBorderKeyFrames: Keyframes = keyframes`
+    0%, to {
+        stroke: #00f8ff;
+    }
+    20% {
+        stroke: #a4ff00;
+    }
+    40% {
+        stroke: #f7275e;
+    }
+    60% {
+        stroke: #ffd300;
+    }
+    80% {
+        stroke: #ff8a00;
+    }
+`
+
 const useStyles = makeStyles()((theme) => ({
     root: {},
     miniBorder: {
@@ -33,7 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'scale(0.98, 1.035) translate(2px, -3px)',
         strokeWidth: 3,
         fill: 'none',
-        stroke: '#00E4C9',
     },
     background: {
         transform: 'scale(1, 1.05) translate(1px, -3px)',
@@ -42,6 +60,13 @@ const useStyles = makeStyles()((theme) => ({
         stroke: 'black',
         strokeLinecap: 'round',
         strokeLinejoin: 'round',
+    },
+    rainbowBorder: {
+        animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
+        transition: 'none',
+        fill: 'none',
+        strokeLinejoin: 'round',
+        strokeLinecap: 'round',
     },
     text: {
         transform: process.env.engine === 'firefox' ? 'translate(1px, -1px)' : 'translate(1px, -5px) ',
@@ -133,9 +158,13 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
             id={id}
             viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
             <defs>
-                <linearGradient id={`${id}-gradient`} x1="100%" y1="0%" x2="0%" y2="0%">
-                    <stop offset="0%" stopColor="#24FF00" />
-                    <stop offset="100%" stopColor="#00E4C9 " />
+                <linearGradient id={`${id}-gradient`} x1="0%" y1="0%" x2="100%" y2="0">
+                    <stop offset="0%" stopColor="#00f8ff" />
+                    <stop offset="20%" stopColor="#a4ff00" />
+                    <stop offset="40%" stopColor="#f7275e" />
+                    <stop offset="60%" stopColor="#ffd300" />
+                    <stop offset="80%" stopColor="#ff8a00" />
+                    <stop offset="100%" stopColor="#00f8ff" />
                 </linearGradient>
 
                 <linearGradient id={`${id}-border-gradient`} x1="100%" y1="0%" x2="0%" y2="0%">
@@ -145,23 +174,39 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 
                 <NamePath id={`${id}-name-path`} classes={{ root: classes.namePath }} />
                 <PricePath id={`${id}-price-path`} />
-                <BorderPath id={`${id}-border-path`} fill={`${id}-border-gradient`} />
+                <BorderPath id={`${id}-border-path`} />
             </defs>
 
             <g>
+                <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
+                    <circle
+                        cx={viewBoxWidth / 2}
+                        cy={viewBoxHeight / 2}
+                        r={Math.max(viewBoxWidth, viewBoxHeight) + 1}
+                        fill={`url(#${id}-gradient)`}>
+                        <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            dur="10s"
+                            repeatCount="indefinite"
+                            from={`0 ${viewBoxWidth / 2} ${viewBoxHeight / 2}`}
+                            to={`360 ${viewBoxWidth / 2} ${viewBoxHeight / 2}`}
+                        />
+                    </circle>
+                </pattern>
                 <use xlinkHref={`#${id}-border-path`} className={classes.background} />
-                <use xlinkHref={`#${id}-border-path`} className={classes.borderPath} />
+                <use xlinkHref={`#${id}-border-path`} className={cx(classes.rainbowBorder, classes.borderPath)} />
                 <g className={classes.text}>
                     <Text
                         xlinkHref={`#${id}-name-path`}
-                        fill={`url(#${id}-gradient)`}
+                        fill={`url(#${id}-pattern)`}
                         dominantBaseline={process.env.engine === 'firefox' ? 'text-before-edge' : 'mathematical'}
                         text={name}
                     />
                 </g>
                 <g className={classes.price}>
                     <Text
-                        fill={`url(#${id}-gradient)`}
+                        fill={`url(#${id}-pattern)`}
                         xlinkHref={`#${id}-price-path`}
                         dominantBaseline={process.env.engine === 'firefox' ? 'central' : 'mathematical'}
                         text={price}
@@ -194,7 +239,7 @@ export function NFTAvatarMiniClip(props: NFTAvatarMiniClipProps) {
                 <BorderPath id={id} transform={`scale(${size / viewBoxWidth})`} />
             </clipPath>
             <g>
-                <use xlinkHref={`#${id}-border-path`} className={classes.miniBorder} />
+                <use xlinkHref={`#${id}-border-path`} className={cx(classes.rainbowBorder, classes.miniBorder)} />
             </g>
         </svg>
     )
