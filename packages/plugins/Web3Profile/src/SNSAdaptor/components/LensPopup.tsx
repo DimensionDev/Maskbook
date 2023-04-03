@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     popup: {
         position: 'absolute',
         zIndex: 99,
+        borderRadius: 16,
         boxShadow:
             theme.palette.mode === 'light'
                 ? '0px 4px 30px rgba(0, 0, 0, 0.1)'
