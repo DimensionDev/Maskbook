@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { NFTScanNonFungibleTokenAPI_Solana } from '../index.js'
+import { NFTScanNonFungibleTokenAPI_Solana } from '../apis/NonFungibleTokenAPI_Solana.js'
 
 describe('NFTScan Solana', () => {
     const provider = new NFTScanNonFungibleTokenAPI_Solana()

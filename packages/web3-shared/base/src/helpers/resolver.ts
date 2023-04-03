@@ -189,6 +189,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.ENS]: 'https://ens.domains/',
         [SocialAddressType.SPACE_ID]: 'https://space.id/',
         [SocialAddressType.RSS3]: 'https://rss3.bio/',
+        [SocialAddressType.Crossbell]: 'https://crossbell.io/',
         [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
         [SocialAddressType.NEXT_ID]: 'https://next.id/',
         [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',

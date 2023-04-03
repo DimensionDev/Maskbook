@@ -221,13 +221,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const specificTokens = (
             await Promise.allSettled([
                 fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
+                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json', { mode: 'cors' }),
                 ),
                 fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json'),
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json', { mode: 'cors' }),
                 ),
                 fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json', { mode: 'cors' }),
                 ),
             ])
         ).flatMap(
