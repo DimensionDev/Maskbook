@@ -22,6 +22,9 @@ import {
     TWITTER_HANDLER_VERIFY_URL,
 } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
+import PRESET_LENS from './preset-lens.json'
+
+type PresetLensTwitter = keyof typeof PRESET_LENS
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -47,7 +50,7 @@ interface CreatePayloadResponse {
  * Lens account queried from next id
  */
 export interface LensAccount {
-    lens: string
+    handle: string
     displayName: string
     address: string
 }
@@ -332,6 +335,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryAllLens(twitterId: string): Promise<LensAccount[]> {
+        const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchJSON<{
             data: {
                 identity: {
@@ -344,14 +348,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                         from: NextIDIdentity
                         to: NextIDIdentity
                     }>
-                }
+                } | null
             }
         }>(RELATION_SERVICE_URL, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_LENS_PROFILES',
-                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                variables: { platform: 'twitter', identity: lowerCaseId },
                 query: `
                     query GET_LENS_PROFILES($platform: String, $identity: String) {
                       identity(platform: $platform, identity: $identity) {
@@ -380,16 +384,21 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             }),
         })
 
-        const connections = data.identity.neighborWithTraversal.filter((x) => {
-            return (
-                x.source === NextIDPlatform.LENS &&
-                x.from.platform === NextIDPlatform.Ethereum &&
-                x.to.platform === NextIDPlatform.LENS
-            )
-        })
+        const connections =
+            data.identity?.neighborWithTraversal.filter((x) => {
+                return (
+                    x.source === NextIDPlatform.LENS &&
+                    x.from.platform === NextIDPlatform.Ethereum &&
+                    x.to.platform === NextIDPlatform.LENS
+                )
+            }) || []
+
+        if (connections.length === 0 && PRESET_LENS[lowerCaseId as PresetLensTwitter]) {
+            return PRESET_LENS[lowerCaseId as PresetLensTwitter]
+        }
 
         return connections.map((x) => ({
-            lens: x.to.identity,
+            handle: x.to.identity,
             displayName: x.to.displayName,
             address: x.from.identity,
         }))

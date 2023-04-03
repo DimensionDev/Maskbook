@@ -1,0 +1,32 @@
+{
+    "lensprotocol": [
+        {
+            "handle": "lensprotocol",
+            "displayName": "lensprotocol",
+            "address": "0x05092cF69BDD435f7Ba4B8eF97c9CAecF2BA69AD"
+        }
+    ],
+    "lensprotocol_cn": [
+        {
+            "handle": "lensprotocol_cn.lens",
+            "displayName": "lensprotocol_cn",
+            "address": "0x2da8adDa8D145a7310CdbbfCAf3e1a8B315b5cB8"
+        }
+    ],
+    "stanikulechov": [
+        { "handle": "stani.lens", "displayName": "stani", "address": "0x7241DDDec3A6aF367882eAF9651b87E1C7549Dff" },
+        { "handle": "lilgho.lens", "displayName": "lilgho", "address": "0x7241DDDec3A6aF367882eAF9651b87E1C7549Dff" },
+        {
+            "handle": "lensofficial.lens",
+            "displayName": "lensofficial",
+            "address": "0x7241DDDec3A6aF367882eAF9651b87E1C7549Dff"
+        }
+    ],
+    "realmasknetwork": [
+        {
+            "handle": "masknetworkofficial.lens",
+            "displayName": "masknetworkofficial",
+            "address": "0x6745926875Fa12f59370cCB77aaaDc31B9c37Cb7"
+        }
+    ]
+}

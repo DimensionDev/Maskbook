@@ -75,7 +75,7 @@ export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
             {accounts.map((account) => (
                 <ListItem className={classes.listItem} key={account.displayName}>
                     <Icons.Lens size={20} />
-                    <Typography className={classes.name}>{account.displayName || account.lens}</Typography>
+                    <Typography className={classes.name}>{account.displayName || account.handle}</Typography>
                     <Button
                         variant="text"
                         className={classes.followButton}
@@ -83,7 +83,7 @@ export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
                         onClick={() => {
                             CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
                                 open: true,
-                                handle: account.lens,
+                                handle: account.handle,
                             })
                         }}>
                         {t.follow()}
