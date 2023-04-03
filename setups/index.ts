@@ -9,6 +9,31 @@ globalThis.fetch = fetch
 globalThis.Headers = Headers
 globalThis.Request = Request
 globalThis.Response = Response
+globalThis.localStorage = (() => {
+    const map = new Map()
+
+    return {
+        getItem(key: string) {
+            return map.get(key)
+        },
+        setItem(key: string, value: unknown) {
+            map.set(key, value)
+        },
+        removeItem(key: string) {
+            map.delete(key)
+        },
+        clear() {
+            map.clear()
+        },
+        key(index: number) {
+            // TODO: implement it when we need it.
+            return ''
+        },
+        get length() {
+            return map.size
+        },
+    }
+})()
 
 // Add `navigator` polyfill.
 Reflect.set(globalThis, 'navigator', {

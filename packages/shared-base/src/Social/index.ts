@@ -15,6 +15,7 @@ export enum SocialAddressType {
     TwitterBlue = 'TwitterBlue',
     Mask = 'Mask Network',
     Lens = 'Lens',
+    Crossbell = 'Crossbell',
 }
 
 export interface SocialIdentity {

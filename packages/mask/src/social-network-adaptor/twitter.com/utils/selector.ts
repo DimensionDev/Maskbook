@@ -190,6 +190,8 @@ export const timelinePostContentSelector = () =>
         ].join(','),
     )
 
+export const toastLinkSelector = () => querySelector<HTMLLinkElement>('[data-testid="toast"] a')
+
 export const postsContentSelector = () =>
     querySelectorAll(
         [
