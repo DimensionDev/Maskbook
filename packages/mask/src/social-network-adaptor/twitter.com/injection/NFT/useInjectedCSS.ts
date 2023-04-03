@@ -22,11 +22,14 @@ export function useInjectedCSS(showAvatar: boolean, updatedAvatar: boolean) {
                 const style = document.createElement('style')
                 style.innerText = `
                 ${rainbowBorderKeyFrames.styles}
-
+                
                 .rainbowBorder {
-                    box-shadow: 0px 4px 6px rgba(0, 255, 41, 0.2);
+                    animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
+                    box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
+                    transition: none;
                     border: 0 solid #00f8ff;
                 }
+            
             `
                 rainbowElement.current = linkDom.firstElementChild.nextElementSibling
                 linkDom.firstElementChild.nextElementSibling?.classList.add('rainbowBorder')

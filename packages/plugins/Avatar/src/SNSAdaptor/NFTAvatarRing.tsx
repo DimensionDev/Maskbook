@@ -1,15 +1,20 @@
 import { isFirefox } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { RainbowBox } from './RainbowBox.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         overflow: 'unset',
     },
-    name: {
-        transform: 'translate(0px, 3px)',
-    },
-    border: {
-        transform: 'translate(0px, 1px)',
+    container: {
+        boxShadow: '0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2)',
+        transition: 'none',
+        borderRadius: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        lineHeight: 0,
+        border: '2px solid #00f8ff',
     },
 }))
 interface NFTAvatarRingProps {
@@ -26,7 +31,7 @@ interface NFTAvatarRingProps {
 
 export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { classes } = useStyles()
-    const { stroke, strokeWidth, fontSize, text, width, id, price, hasRainbow = false, borderSize = 2 } = props
+    const { stroke, strokeWidth, fontSize, text, width, id, price, hasRainbow = true, borderSize = 2 } = props
 
     const avatarSize = hasRainbow ? width - borderSize : width + 1
     const R = avatarSize / 2
@@ -35,7 +40,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const y1 = R
     const x2 = R + path_r
 
-    return (
+    const svgNode = (
         <svg className={classes.root} width="100%" height="100%" viewBox={`0 0 ${avatarSize} ${avatarSize}`} id={id}>
             <defs>
                 <path
@@ -52,9 +57,13 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     strokeWidth="0"
                     d={`M${x1} ${y1} A${path_r} ${path_r} 0 1 0 ${x2} ${y1}`}
                 />
-                <linearGradient id={`${id}-gradient`} x1="100%" y1="0%" x2="0%" y2="0%">
-                    <stop offset="0%" stopColor="#24FF00" />
-                    <stop offset="100%" stopColor="#00E4C9 " />
+                <linearGradient id={`${id}-gradient`} x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#00f8ff" />
+                    <stop offset="20%" stopColor="#a4ff00" />
+                    <stop offset="40%" stopColor="#f7275e" />
+                    <stop offset="60%" stopColor="#ffd300" />
+                    <stop offset="80%" stopColor="#ff8a00" />
+                    <stop offset="100%" stopColor="#00f8ff" />
                 </linearGradient>
             </defs>
 
@@ -67,11 +76,27 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     stroke={stroke}
                     strokeWidth={strokeWidth}
                 />
-                <g className={classes.border}>
-                    <circle cx={R} cy={R} r={R - 2} fill="none" stroke="#24FF00" strokeWidth={2} />
-                </g>
-                <g className={classes.name}>
-                    <text x="0%" textAnchor="middle" fill={`url(#${id}-gradient)`} fontFamily="sans-serif">
+                <pattern
+                    id={`${id}-pattern`}
+                    x="0"
+                    y="0"
+                    width="300%"
+                    height="100%"
+                    patternUnits={process.env.engine === 'firefox' ? '' : 'userSpaceOnUse'}>
+                    <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
+                        <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            attributeType="XML"
+                            dur="10s"
+                            repeatCount="indefinite"
+                            from={`0 ${R} ${R}`}
+                            to={`360 ${R} ${R}`}
+                        />
+                    </circle>
+                </pattern>
+                <g>
+                    <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
                         <textPath xlinkHref={`#${id}-path-name`} startOffset="50%" rotate="auto">
                             <tspan fontWeight="bold" fontSize={fontSize}>
                                 {text}
@@ -82,7 +107,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 <text
                     x="0%"
                     textAnchor="middle"
-                    fill={isFirefox() ? 'currentColor' : `url(#${id}-gradient)`}
+                    fill={isFirefox() ? 'currentColor' : `url(#${id}-pattern)`}
                     fontFamily="sans-serif">
                     <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
                         <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
@@ -92,5 +117,11 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 </text>
             </g>
         </svg>
+    )
+
+    return hasRainbow ? (
+        <RainbowBox borderSize={borderSize}>{svgNode}</RainbowBox>
+    ) : (
+        <div className={classes.container}>{svgNode}</div>
     )
 }
