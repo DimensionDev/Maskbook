@@ -1,15 +1,16 @@
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
-import { useI18N } from '../../../locales/index.js'
 import { Translate } from '../../../locales/i18n_generated.js'
+import { useI18N } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { formatValue, Label } from './common.js'
+import { CardType } from '../share.js'
+import { Label, formatValue } from './common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
     summary: {
@@ -88,7 +89,7 @@ export const StakingCard: FC<StakingFeedCardProps> = ({ feed, ...rest }) => {
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Image
                         classes={{ container: classes.tokenIcon }}
-                        src={metadata?.token.image}
+                        src={resolveResourceURL(metadata?.token.image)}
                         height={40}
                         width={40}
                     />

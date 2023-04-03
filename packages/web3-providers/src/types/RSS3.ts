@@ -202,7 +202,7 @@ export namespace RSS3BaseAPI {
         created_at?: string
         target_url?: string
         media: Array<{
-            /** URL */
+            /** URL or IPFS */
             address: string
             mime_type: 'image/png' | string
         }>
