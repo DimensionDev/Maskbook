@@ -217,10 +217,10 @@ export default class WalletConnectProvider
         }
     }
 
-    // It doesn't widely implement for switching chains with WalletConnect.
-    override async switchChain(chainId?: ChainId | undefined): Promise<void> {
-        throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
-    }
+    // // It doesn't widely implement for switching chains with WalletConnect.
+    // override async switchChain(chainId?: ChainId | undefined): Promise<void> {
+    //     throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+    // }
 
     override async connect(chainId: ChainId) {
         const account = await this.login(chainId)

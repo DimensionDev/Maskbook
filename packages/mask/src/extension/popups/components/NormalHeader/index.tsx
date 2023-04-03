@@ -90,7 +90,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose }) => 
             className={classes.container}
             style={{
                 justifyContent: showTitle ? 'center' : 'flex-start',
-                ...(matchDeleteWallet ? { fixed: 0, position: 'fixed', width: '100%', top: 0 } : {}),
+                ...(matchDeleteWallet ? { fixed: 0, position: 'fixed', width: '100%', top: 0, zIndex: 1 } : {}),
             }}>
             {showTitle ? (
                 <>

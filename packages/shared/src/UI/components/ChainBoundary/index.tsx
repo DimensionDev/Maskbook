@@ -21,6 +21,8 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useSharedI18N } from '../../../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { useAsyncFn } from 'react-use'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -72,7 +74,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const plugin = useActivatedPlugin(actualPluginID, 'any')
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
-    const { Others: actualOthers } = useWeb3State(actualPluginID)
+    const { Others: actualOthers, Connection } = useWeb3State(actualPluginID)
 
     const {
         account,
@@ -104,6 +106,17 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
             network: expectedNetworkDescriptor,
         })
     }, [expectedNetworkDescriptor])
+
+    const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
+        if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
+        const connection = Connection?.getConnection?.()
+        if (!connection) return
+
+        await connection.switchChain?.(expectedChainId)
+        await delay(1500)
+
+        return 'complete'
+    }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Connection])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
@@ -181,7 +194,8 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                         size={18}
                     />
                 }
-                disabled
+                onClick={onSwitchChain}
+                loading={loading}
                 className={classes.switchButton}
                 sx={props.ActionButtonPromiseProps?.sx}
                 {...props.ActionButtonPromiseProps}>

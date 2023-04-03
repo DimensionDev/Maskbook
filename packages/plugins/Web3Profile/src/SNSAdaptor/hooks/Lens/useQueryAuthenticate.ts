@@ -1,6 +1,6 @@
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import isBefore from 'date-fns/isBefore'
 import add from 'date-fns/add'
 import { useAsyncFn } from 'react-use'
@@ -11,17 +11,21 @@ export function useQueryAuthenticate(address: string) {
     const connection = useWeb3Connection()
 
     return useAsyncFn(async () => {
-        if (!address || !connection || chainId !== ChainId.Matic) return
+        if (!address || !connection || chainId !== ChainId.Matic || !isValidAddress(address)) return
 
-        if (storage.accessToken?.value?.token && isBefore(new Date(), storage.accessToken.value.expireDate)) {
-            return storage.accessToken.value.token
-        } else if (storage.refreshToken?.value?.token && isBefore(new Date(), storage.refreshToken.value.expireDate)) {
-            const authenticate = await Lens.refresh(storage.refreshToken.value.token)
+        const accessToken = storage.accessToken?.value?.[address]
+        const refreshToken = storage.refreshToken?.value?.[address]
+        if (accessToken && isBefore(new Date(), accessToken.expireDate)) {
+            return accessToken.token
+        } else if (refreshToken && isBefore(new Date(), refreshToken.expireDate)) {
+            const authenticate = await Lens.refresh(refreshToken.token)
             if (!authenticate) return
             // Only reset accessToken
             await storage.accessToken?.setValue({
-                token: authenticate.accessToken,
-                expireDate: add(new Date(), { minutes: 30 }),
+                [address]: {
+                    token: authenticate.accessToken,
+                    expireDate: add(new Date(), { minutes: 30 }),
+                },
             })
             return authenticate.accessToken
         }
@@ -40,13 +44,17 @@ export function useQueryAuthenticate(address: string) {
          */
 
         await storage.accessToken?.setValue({
-            token: authenticate.accessToken,
-            expireDate: add(new Date(), { minutes: 30 }),
+            [address]: {
+                token: authenticate.accessToken,
+                expireDate: add(new Date(), { minutes: 30 }),
+            },
         })
 
         await storage.refreshToken?.setValue({
-            token: authenticate.refreshToken,
-            expireDate: add(new Date(), { days: 7 }),
+            [address]: {
+                token: authenticate.refreshToken,
+                expireDate: add(new Date(), { days: 7 }),
+            },
         })
 
         return authenticate.accessToken

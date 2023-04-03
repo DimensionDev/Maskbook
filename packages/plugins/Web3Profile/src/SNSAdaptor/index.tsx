@@ -13,6 +13,8 @@ import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import { LensBadge } from './components/LensBadge.js'
 import { LensPopup } from './components/LensPopup.js'
+import { ChainContextProvider } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -25,7 +27,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <SNSAdaptorContext.Provider value={context}>
                 <Web3ProfileDialog />
-                <FollowLensDialog />
+                <ChainContextProvider value={{ chainId: ChainId.Matic }}>
+                    <FollowLensDialog />
+                </ChainContextProvider>
                 <LensPopup />
             </SNSAdaptorContext.Provider>
         )

@@ -1,13 +1,18 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
+import {
+    ChainBoundary,
+    EthereumERC20TokenApprovedBoundary,
+    InjectedDialog,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useFungibleTokenBalance, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan, resolveIPFS_URL } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, isLessThan, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
+import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { useMemo, useState } from 'react'
@@ -87,8 +92,8 @@ export function FollowLensDialog() {
     const [handle, setHandle] = useState('')
     const { classes } = useStyles()
     const wallet = useWallet()
-    const { account, chainId } = useChainContext()
-
+    const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { pluginID } = useNetworkContext()
     const { open, closeDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.followLensDialogEvent,
         (ev) => {
@@ -139,6 +144,18 @@ export function FollowLensDialog() {
     }, [profile, defaultProfile])
     // #endregion
 
+    const approved = useMemo(() => {
+        if (!profile?.followModule?.amount?.asset) return { amount: ZERO.toFixed() }
+        const { address, name, symbol, decimals } = profile.followModule.amount.asset
+        const token = createERC20Token(chainId, address, name, symbol, decimals)
+        const amount = formatAmount(profile.followModule.amount.value, decimals)
+
+        return {
+            token,
+            amount,
+        }
+    }, [profile?.followModule?.amount, chainId])
+
     // #region follow and unfollow event handler
     const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, followModule, !!defaultProfile, retry)
     const [{ loading: unfollowLoading }, handleUnfollow] = useUnfollow(profile?.id, retry)
@@ -152,7 +169,8 @@ export function FollowLensDialog() {
     const disabled = useMemo(() => {
         if (
             !!wallet?.owner ||
-            chainId !== ChainId.Matic ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM ||
+            providerType === ProviderType.Fortmatic ||
             followLoading ||
             unfollowLoading ||
             (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile) ||
@@ -166,8 +184,9 @@ export function FollowLensDialog() {
             profile?.followModule?.type === FollowModuleType.RevertFollowModule
         )
             return true
+
         return false
-    }, [wallet?.owner, chainId, followLoading, unfollowLoading, feeTokenBalance, profile?.followModule])
+    }, [wallet?.owner, chainId, followLoading, unfollowLoading, feeTokenBalance, profile?.followModule, pluginID])
 
     const [element] = useHover((isHovering) => {
         const getButtonText = () => {
@@ -186,20 +205,36 @@ export function FollowLensDialog() {
             return t.follow()
         }
         return (
-            <ActionButton
-                variant="roundedContained"
-                className={classes.followAction}
-                disabled={disabled}
-                loading={followLoading || unfollowLoading || loading}
-                onClick={isFollowing ? handleUnfollow : handleFollow}>
-                {getButtonText()}
-            </ActionButton>
+            <EthereumERC20TokenApprovedBoundary
+                spender={value?.profile.followModule?.contractAddress}
+                amount={approved.amount}
+                token={approved.token}
+                showHelperToken={false}
+                ActionButtonProps={{
+                    variant: 'roundedContained',
+                    className: classes.followAction,
+                }}
+                infiniteUnlockContent={t.unlock_token_tips({
+                    value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
+                    symbol: approved.token?.symbol ?? '',
+                })}>
+                <ChainBoundary expectedPluginID={pluginID} expectedChainId={ChainId.Matic}>
+                    <ActionButton
+                        variant="roundedContained"
+                        className={classes.followAction}
+                        disabled={disabled}
+                        loading={followLoading || unfollowLoading || loading}
+                        onClick={isFollowing ? handleUnfollow : handleFollow}>
+                        {getButtonText()}
+                    </ActionButton>
+                </ChainBoundary>
+            </EthereumERC20TokenApprovedBoundary>
         )
     })
 
     const tips = useMemo(() => {
-        if (wallet?.owner) return t.follow_wallet_tips()
-        else if (chainId !== ChainId.Matic) return t.follow_chain_tips()
+        if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
+            return t.follow_wallet_tips()
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
             return t.follow_with_profile_tips()
         else if (
@@ -217,7 +252,7 @@ export function FollowLensDialog() {
             return t.follow_gas_tips()
         }
         return
-    }, [wallet?.owner, chainId, profile, feeTokenBalance])
+    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType])
 
     const avatar = useMemo(() => {
         if (!profile?.picture?.original) return
