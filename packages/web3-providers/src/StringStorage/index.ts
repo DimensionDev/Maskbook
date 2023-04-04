@@ -20,6 +20,7 @@ export class StringStorageAPI implements StringStorageBaseAPI.Provider {
                 address,
             }),
         )
+        if (!response.metaData?.value) return
         return parseJSON<T>(response.metaData.value)
     }
 
