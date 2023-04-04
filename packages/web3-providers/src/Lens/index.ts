@@ -1,5 +1,6 @@
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
+import { first } from 'lodash-es'
 import { fetchJSON } from '../entry-helpers.js'
 import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
 import { LENS_ROOT_API } from './constants.js'
@@ -482,5 +483,35 @@ export class LensAPI implements LensBaseAPI.Provider {
         })
 
         return data.broadcast
+    }
+
+    async queryApprovedModuleAllowanceAmount(
+        currency: string,
+        options?: {
+            token: string
+        },
+    ) {
+        if (!options?.token) return
+        const { data } = await fetchJSON<{
+            data: { approvedModuleAllowanceAmount: LensBaseAPI.ApprovedModuleAllowanceAmount[] }
+        }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: `query ApprovedModuleAllowanceAmount {
+              approvedModuleAllowanceAmount(request: { currencies: "${currency}", followModules: [FeeFollowModule] }) {
+                currency
+                module
+                allowance
+                contractAddress
+              }
+            }`,
+            }),
+        })
+
+        return first(data.approvedModuleAllowanceAmount)
     }
 }
