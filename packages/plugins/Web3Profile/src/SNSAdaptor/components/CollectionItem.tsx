@@ -11,9 +11,6 @@ const useStyles = makeStyles()((theme) => ({
         ':hover': {
             cursor: 'pointer',
         },
-        '&:first-child:hover': {
-            cursor: 'default',
-        },
     },
     arrowIcon: {
         alignSelf: 'center',
@@ -21,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectionItemProps extends withClasses<'root' | 'list' | 'collectionWrap'> {
+interface CollectionItemProps {
     title: string
     walletsNum: number
     collectionNum: number
@@ -29,7 +26,7 @@ interface CollectionItemProps extends withClasses<'root' | 'list' | 'collectionW
 }
 export function CollectionItem(props: CollectionItemProps) {
     const { title, walletsNum, collectionNum, onClick } = props
-    const { classes } = useStyles(undefined, { props })
+    const { classes } = useStyles()
     const t = useI18N()
 
     return (
