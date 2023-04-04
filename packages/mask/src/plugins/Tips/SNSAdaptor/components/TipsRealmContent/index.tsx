@@ -39,6 +39,7 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: theme.palette.maskColor.borderSecondary,
+        boxSizing: 'border-box',
         verticalAlign: 'top',
         color: theme.palette.text.primary,
         '&:hover': {
