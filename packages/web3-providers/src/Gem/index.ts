@@ -32,6 +32,8 @@ export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>
             }),
         )
 
+        if (!response) return
+
         for (const sourceType of RARITY_SOURCE_TYPE) {
             const rarity = response[resolveRarityId(sourceType)]
             if (rarity) return rarity

@@ -395,11 +395,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 token_id: tokenId,
                 cursor: indicator?.id,
                 limit: size,
-                event_type: side === OrderSide.Buy ? 'created' : undefined,
+                event_type: side === OrderSide.Sell ? 'created' : side === OrderSide.Buy ? 'offer_entered' : '',
             }),
             chainId,
         )
-        if (side === OrderSide.Sell) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
         const offers = response?.asset_events?.map((x) => createOrder(chainId, x, side)) ?? EMPTY_LIST
 
