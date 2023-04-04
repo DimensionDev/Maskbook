@@ -105,6 +105,12 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             overflow: 'hidden',
             width: 380,
         },
+        empty: {
+            fontSize: 14,
+            lineHeight: '18px',
+            color: theme.palette.maskColor.second,
+            paddingLeft: 4,
+        },
     }
 })
 
@@ -145,6 +151,15 @@ export function Collectible(props: CollectibleProps) {
                 <Typography>{t.loading()}</Typography>
             </Box>
         )
+
+    if (!asset.value && !asset.error) {
+        return (
+            <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" minHeight={148}>
+                <Icons.EmptySimple variant="light" size={24} />
+                <Typography className={classes.empty}>{t.nft_minted()}</Typography>
+            </Box>
+        )
+    }
 
     if (!asset.value) {
         return (
