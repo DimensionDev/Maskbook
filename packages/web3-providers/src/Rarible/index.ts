@@ -22,7 +22,7 @@ import {
 import { ChainId, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
-import { getPaymentToken, getAssetFullName, resolveActivityType, fetchJSON } from '../entry-helpers.js'
+import { getPaymentToken, getAssetFullName, resolveActivityType, fetchJSON2 } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
@@ -34,7 +34,7 @@ const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
 )
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
-    return fetchJSON<T>(`${url}${path.slice(1)}`, {
+    return fetchJSON2<T>(`${url}${path.slice(1)}`, {
         method: 'GET',
         mode: 'cors',
         headers: { 'content-type': 'application/json' },
