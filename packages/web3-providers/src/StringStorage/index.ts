@@ -38,8 +38,11 @@ export class StringStorageAPI implements StringStorageBaseAPI.Provider {
                 key: genKey(namespace, userId),
             }),
         })
-        const result = await response.json()
-        if (result !== 200) throw new Error(result.message)
+        const result: {
+            code: number
+            message: string
+        } = await response.json()
+        if (result.code !== 200) throw new Error(result.message)
         return
     }
 }
