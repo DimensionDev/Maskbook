@@ -30,6 +30,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
         maxWidth: 260,
     },
+    arrow: {
+        color: theme.palette.common.black,
+    },
     connectWallet: {
         '& > .MuiButton-startIcon': {
             lineHeight: 1,
@@ -116,7 +119,11 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
-            <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
+            <ShadowRootTooltip
+                title={tips ?? ''}
+                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                arrow
+                placement="top">
                 <Box className={props.className} display="flex" flexDirection="column" width="100%">
                     {children}
                 </Box>
