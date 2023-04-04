@@ -8,11 +8,14 @@ export interface ActionButtonProps extends ButtonProps {
     loading?: boolean
 }
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     loading: {
         ['& > *']: {
             opacity: 0.3,
         },
+        backgroundColor: theme.palette.maskColor.publicThirdMain,
+        color: theme.palette.maskColor.publicMain,
+        opacity: 0.5,
     },
 }))
 
