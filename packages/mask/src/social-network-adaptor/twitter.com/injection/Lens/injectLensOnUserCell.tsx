@@ -53,7 +53,7 @@ const createRootElement = () => {
         height: '21px',
         alignItems: 'center',
         justifyContent: 'center',
-        display: 'inline-flex',
+        display: 'flex',
     } as CSSStyleDeclaration)
     return span
 }

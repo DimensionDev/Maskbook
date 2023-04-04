@@ -11,9 +11,6 @@ import { useI18N } from '../../../locales/index.js'
 import { useTipsUserGuide } from '../../../storage/index.js'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
-    focusingPostButtonWrapper: {
-        height: 46,
-    },
     postButtonWrapper: {
         display: 'flex',
         alignItems: 'center',
@@ -81,7 +78,6 @@ export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
         [TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
-        [TipsSlot.FocusingPost]: classes.postTipsButton,
         [TipsSlot.Post]: classes.postTipsButton,
         [TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
         [TipsSlot.MirrorMenu]: classes.profileTipsButton,
@@ -123,12 +119,11 @@ export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
         )
     }
 
-    if (slot === TipsSlot.Post || slot === TipsSlot.FocusingPost || slot === TipsSlot.MirrorEntry) {
+    if (slot === TipsSlot.Post || slot === TipsSlot.MirrorEntry) {
         return (
             <div
                 className={cx(
                     classes.postButtonWrapper,
-                    slot === TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
                     slot === TipsSlot.MirrorEntry ? classes.mirrorEntryTipsButtonWrapper : undefined,
                 )}>
                 {button}

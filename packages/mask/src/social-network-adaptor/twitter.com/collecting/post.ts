@@ -49,7 +49,7 @@ function isQuotedTweet(tweetNode: HTMLElement | null) {
 
 function isDetailTweet(tweetNode: HTMLElement) {
     // We can see the retweets status in detail tweet.
-    const isDetail = !!tweetNode.querySelector('a[role="link"][href$=retweets]')
+    const isDetail = !!tweetNode.querySelector('a[role="link"][href$=retweets],a[role="link"][href$=likes]')
     return isDetail
 }
 

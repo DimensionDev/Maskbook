@@ -718,7 +718,6 @@ export namespace Plugin.SNSAdaptor {
 
     export enum TipsSlot {
         FollowButton = 'follow',
-        FocusingPost = 'focusing-post',
         Post = 'post',
         Profile = 'profile',
         MirrorMenu = 'mirror-menu',

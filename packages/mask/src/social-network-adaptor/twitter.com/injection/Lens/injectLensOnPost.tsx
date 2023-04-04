@@ -49,8 +49,8 @@ interface Props {
 const createRootElement = () => {
     const span = document.createElement('span')
     Object.assign(span.style, {
-        verticalAlign: 'bottom',
-        display: 'inline-flex',
+        alignItems: 'center',
+        display: 'flex',
     } as CSSStyleDeclaration)
     return span
 }
