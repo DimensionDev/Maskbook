@@ -40,12 +40,15 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { fetchJSON2, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
+import { fetchGlobal, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    return fetchJSON2<T>(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    const response = await fetchGlobal(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    if (response.status === 404) return {} as T
+    if (!response.ok) throw new Error('Failed to fetch as JSON.')
+    return response.json() as T
 }
 
 function createTokenDetailed(

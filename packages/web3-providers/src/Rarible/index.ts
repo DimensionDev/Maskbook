@@ -22,7 +22,7 @@ import {
 import { ChainId, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
-import { getPaymentToken, getAssetFullName, resolveActivityType, fetchJSON2 } from '../entry-helpers.js'
+import { getPaymentToken, getAssetFullName, resolveActivityType, fetchGlobal } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
@@ -34,11 +34,14 @@ const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
 )
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
-    return fetchJSON2<T>(`${url}${path.slice(1)}`, {
+    const response = await fetchGlobal(`${url}${path.slice(1)}`, {
         method: 'GET',
         mode: 'cors',
         headers: { 'content-type': 'application/json' },
     })
+    if (response.status === 404) return {} as T
+    if (!response.ok) throw new Error('Failed to fetch as JSON.')
+    return response.json() as T
 }
 
 function createAddress(address?: string) {
