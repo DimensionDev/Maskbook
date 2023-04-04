@@ -28,7 +28,7 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
         const chain = resolveChain(chainId)
-        if (!chain || !account || !isValidChainId(chainId)) {
+        if (!account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
         const path = urlcat('/api/v0/nfts/owners', {

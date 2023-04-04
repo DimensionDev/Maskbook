@@ -36,10 +36,20 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     ActionButtonProps?: ActionButtonProps
     onlyInfiniteUnlock?: boolean
     contractName?: string
+    showHelperToken?: boolean
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const { children = null, amount, spender, token, fallback, infiniteUnlockContent, contractName } = props
+    const {
+        children = null,
+        amount,
+        spender,
+        token,
+        fallback,
+        infiniteUnlockContent,
+        contractName,
+        showHelperToken = true,
+    } = props
 
     const t = useSharedI18N()
     const { classes } = useStyles(undefined, { props })
@@ -98,19 +108,21 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     />
                 }
                 endIcon={
-                    <ShadowRootTooltip
-                        title={t.plugin_wallet_token_infinite_unlock_tips({
-                            provider: contractName ?? '',
-                            symbol: token.symbol,
-                        })}
-                        placement="top"
-                        arrow
-                        leaveDelay={2000}
-                        disableInteractive
-                        disableFocusListener
-                        disableTouchListener>
-                        <HelpOutline className={classes.helpIcon} />
-                    </ShadowRootTooltip>
+                    showHelperToken ? (
+                        <ShadowRootTooltip
+                            title={t.plugin_wallet_token_infinite_unlock_tips({
+                                provider: contractName ?? '',
+                                symbol: token.symbol,
+                            })}
+                            placement="top"
+                            arrow
+                            leaveDelay={2000}
+                            disableInteractive
+                            disableFocusListener
+                            disableTouchListener>
+                            <HelpOutline className={classes.helpIcon} />
+                        </ShadowRootTooltip>
+                    ) : null
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>

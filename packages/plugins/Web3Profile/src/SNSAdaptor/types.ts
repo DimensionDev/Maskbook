@@ -111,14 +111,20 @@ export interface UnlistedConfig {
 }
 
 export interface LensTokenStorageType {
-    accessToken?: {
-        token: string
-        expireDate: Date
-    }
-    refreshToken?: {
-        token: string
-        expireDate: Date
-    }
+    accessToken?: Record<
+        string,
+        {
+            token: string
+            expireDate: Date
+        }
+    >
+    refreshToken?: Record<
+        string,
+        {
+            token: string
+            expireDate: Date
+        }
+    >
 }
 
 /**

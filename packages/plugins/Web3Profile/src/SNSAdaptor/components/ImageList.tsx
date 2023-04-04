@@ -29,11 +29,9 @@ const useStyles = makeStyles<void, 'list'>()((theme, _, refs) => {
             padding: 0,
             maxHeight: 492,
             position: 'relative',
-            backgroundColor: theme.palette.background.paper,
             overflow: 'hidden',
         },
         actions: {
-            backgroundColor: theme.palette.background.paper,
             boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
             height: '72px',
             zIndex: 1,

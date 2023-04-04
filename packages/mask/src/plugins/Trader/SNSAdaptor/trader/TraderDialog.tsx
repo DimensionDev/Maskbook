@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: 0,
-        minHeight: 560,
+        minHeight: 564,
         display: 'flex',
         flexDirection: 'column',
         '&::-webkit-scrollbar': {

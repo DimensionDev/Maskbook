@@ -102,7 +102,7 @@ export function Web3ProfileDialog() {
     const { value: NFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getNFTList(wallets, [ChainId.Mainnet, ChainId.Matic])
-    }, [wallets])
+    }, [wallets, currentPersona])
 
     const { value: donationList } = useAsyncRetry(async () => getDonationList(wallets), [wallets])
 

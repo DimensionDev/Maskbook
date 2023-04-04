@@ -4,7 +4,7 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
 import { useSaveToNextID } from './useSaveToNextID.js'
-import { useSaveStringStorage } from '../index.js'
+import { useSaveKV, useSaveStringStorage } from '../index.js'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
     avatarId: string
@@ -13,6 +13,7 @@ export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
 export function useSave(pluginID: NetworkPluginID) {
     const saveToNextID = useSaveToNextID()
     const saveToStringStorage = useSaveStringStorage(pluginID)
+    const saveToKV = useSaveKV(pluginID)
 
     return useAsyncFn(
         async (
@@ -37,12 +38,21 @@ export function useSave(pluginID: NetworkPluginID) {
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,
             }
 
-            if (isBindAccount && NetworkPluginID.PLUGIN_EVM) {
-                return await saveToNextID(info, account, persona, proof)
+            try {
+                switch (pluginID) {
+                    case NetworkPluginID.PLUGIN_EVM: {
+                        if (isBindAccount) {
+                            return await saveToNextID(info, account, persona, proof)
+                        }
+                        return await saveToStringStorage(data.userId, account, info)
+                    }
+                    default:
+                        return await saveToKV(info, account, persona, proof)
+                }
+            } catch {
+                return
             }
-
-            return await saveToStringStorage(data.userId, account, info)
         },
-        [saveToNextID, saveToStringStorage, pluginID],
+        [saveToNextID, saveToStringStorage, pluginID, saveToKV],
     )
 }

@@ -69,12 +69,19 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         address: {
-            fontSize: '10px',
-            lineHeight: '10px',
             color: MaskColors.light.text.secondary,
             marginTop: 2,
             display: 'flex',
             alignItems: 'center',
+            whiteSpace: 'nowrap',
+            overflow: 'auto',
+        },
+        addressText: {
+            fontSize: '10px',
+            lineHeight: '10px',
+            overflow: 'auto',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
         },
         copyButton: {
             marginLeft: theme.spacing(0.5),
@@ -145,7 +152,7 @@ const ENSAddress = memo(({ domain }: { domain: string }) => {
 
     return (
         <div className={classes.address}>
-            {address}
+            <div className={classes.addressText}>{address}</div>
             <CopyButton text={address} size={14} className={classes.copyButton} />
         </div>
     )

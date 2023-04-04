@@ -1,32 +1,32 @@
-import { useState, useMemo, type ReactNode } from 'react'
-import { useTimeout } from 'react-use'
-import type { Constant } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
+import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, useCustomSnackbar, ShadowRootPopper, ActionButton, LoadingBase } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import type { Constant } from '@masknet/web3-shared-base'
 import {
-    Typography,
+    Autocomplete,
     Box,
+    Checkbox,
+    FormControlLabel,
     Grid,
+    InputBase,
     MenuItem,
     Snackbar,
-    Autocomplete,
-    FormControlLabel,
-    Checkbox,
+    Typography,
     useTheme,
-    InputBase,
 } from '@mui/material'
-import { PluginPetMessages } from '../messages.js'
-import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants.js'
-import { PreviewBox } from './PreviewBox.js'
-import { type PetMetaDB, type FilterContract, type OwnerERC721TokenInfo, ImageType } from '../types.js'
-import { useUser, useNFTs } from '../hooks/index.js'
-import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
+import { useMemo, useState, type ReactNode } from 'react'
+import { useTimeout } from 'react-use'
+import { GLB3DIcon, PetsPluginID, initCollection, initMeta } from '../constants.js'
+import { useNFTs, useUser } from '../hooks/index.js'
 import { useI18N } from '../locales/index.js'
-import { ImageLoader } from './ImageLoader.js'
+import { PluginPetMessages } from '../messages.js'
 import { petShowSettings } from '../settings.js'
-import { useWallet, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
+import { ImageType, type FilterContract, type OwnerERC721TokenInfo, type PetMetaDB } from '../types.js'
+import { ImageLoader } from './ImageLoader.js'
+import { PreviewBox } from './PreviewBox.js'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -113,11 +113,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const checked = useValueRef<boolean>(petShowSettings)
     const [isReady, cancel] = useTimeout(2000)
 
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
-    const { nfts, state } = useNFTs(user)
+    const { nfts, state } = useNFTs()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)

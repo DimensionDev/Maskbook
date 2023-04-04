@@ -8,7 +8,6 @@ import {
     useAllowTestnet,
     useWeb3State,
     useChainIdValid,
-    useProviderDescriptor,
     ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -18,9 +17,10 @@ import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useSharedI18N } from '../../../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { useAsyncFn } from 'react-use'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         padding: 10,
         maxWidth: 260,
+    },
+    arrow: {
+        color: theme.palette.common.black,
     },
     connectWallet: {
         '& > .MuiButton-startIcon': {
@@ -52,6 +55,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     actualNetworkPluginID?: T
+    switchText?: string
 }
 
 export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
@@ -60,6 +64,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         expectedChainId,
         expectedAccount,
         actualNetworkPluginID,
+        switchText,
         forceShowingWrongNetworkButton = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
@@ -69,18 +74,14 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const { classes } = useStyles(undefined, { props })
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
-    const plugin = useActivatedPlugin(actualPluginID, 'any')
-    const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
-    const { Others: actualOthers } = useWeb3State(actualPluginID)
+    const { Others: actualOthers, Connection } = useWeb3State(actualPluginID)
 
     const {
         account,
         chainId: actualChainId,
         providerType: actualProviderType,
     } = useChainContext({ account: expectedAccount })
-    const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
-    const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
@@ -105,9 +106,24 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         })
     }, [expectedNetworkDescriptor])
 
+    const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
+        if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
+        const connection = Connection?.getConnection?.()
+        if (!connection) return
+
+        await connection.switchChain?.(expectedChainId)
+        await delay(1500)
+
+        return 'complete'
+    }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Connection])
+
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
-            <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
+            <ShadowRootTooltip
+                title={tips ?? ''}
+                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                arrow
+                placement="top">
                 <Box className={props.className} display="flex" flexDirection="column" width="100%">
                     {children}
                 </Box>
@@ -181,11 +197,12 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                         size={18}
                     />
                 }
-                disabled
+                onClick={onSwitchChain}
+                loading={loading}
                 className={classes.switchButton}
                 sx={props.ActionButtonPromiseProps?.sx}
                 {...props.ActionButtonPromiseProps}>
-                {t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
+                {switchText ?? t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
             </ActionButton>,
             t.plugin_wallet_connect_tips(),
         )

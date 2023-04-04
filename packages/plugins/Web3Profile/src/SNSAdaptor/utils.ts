@@ -133,10 +133,11 @@ export const getNFTList = async (walletList: WalletTypes[], chainIds: ChainId[])
             )
             return collections
         })
-        const collections = await Promise.all(chainPromises)
+        const collections = await Promise.allSettled(chainPromises)
+
         return {
             address,
-            collections: collections.flat(),
+            collections: collections.map((x) => (x.status === 'fulfilled' ? x.value : [])).flat(),
         }
     })
     const collections = await Promise.all(promises)

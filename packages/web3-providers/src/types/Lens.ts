@@ -153,6 +153,13 @@ export namespace LensBaseAPI {
 
     export type Broadcast = RelayerResult | RelayError
 
+    export interface ApprovedModuleAllowanceAmount {
+        allowance: string
+        contractAddress: string
+        currency: string
+        module: string
+    }
+
     export interface Provider {
         getProfileByHandle: (handle: string) => Promise<Profile>
         queryDefaultProfileByAddress: (address: string) => Promise<Profile | undefined>
@@ -179,5 +186,9 @@ export namespace LensBaseAPI {
                 fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
             },
         ) => Promise<Broadcast | undefined>
+        queryApprovedModuleAllowanceAmount: (
+            currency: string,
+            options?: { token: string },
+        ) => Promise<ApprovedModuleAllowanceAmount | undefined>
     }
 }

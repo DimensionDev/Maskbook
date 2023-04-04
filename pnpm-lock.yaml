@@ -3590,6 +3590,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)
+      rss3-next:
+        specifier: ^0.6.17
+        version: 0.6.17(patch_hash=db27yqpr4wdtpwfyvaxcqd4jpi)(typescript@5.1.0-dev.20230308)
       socket.io-client:
         specifier: 2.4.0
         version: 2.4.0

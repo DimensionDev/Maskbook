@@ -3,7 +3,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
-import { Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -120,7 +120,7 @@ const DeleteWallet = memo(() => {
     useTitle(t('popups_delete_wallet'))
 
     return (
-        <>
+        <Box style={{ maxHeight: 502, overflowY: 'auto' }}>
             <div className={classes.content}>
                 <div className={classes.warning}>
                     <Icons.Warning size={48} />
@@ -173,7 +173,7 @@ const DeleteWallet = memo(() => {
                     {t('delete')}
                 </Button>
             </div>
-        </>
+        </Box>
     )
 })
 
