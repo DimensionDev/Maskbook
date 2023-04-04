@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { uniqBy } from 'lodash-es'
+import { isEmpty, uniqBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
@@ -293,7 +293,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
-        if (!response) return
+        if (!response || isEmpty(response)) return
         return createNFTAsset(chainId, response)
     }
 

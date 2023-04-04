@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-es'
+import { first, isEmpty } from 'lodash-es'
 import compareDesc from 'date-fns/compareDesc'
 import {
     createPageable,
@@ -189,7 +189,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         if (!isValidChainId(chainId)) return
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
-        if (!asset) return
+        if (!asset || isEmpty(asset)) return
         return createAsset(chainId, asset)
     }
 
