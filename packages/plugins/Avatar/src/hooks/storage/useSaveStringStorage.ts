@@ -16,9 +16,13 @@ export function useSaveStringStorage(pluginID: NetworkPluginID) {
                 `${PLUGIN_NAME}-${(getSiteType() || EnhanceableSite.Twitter).replace('.com', '')}`,
                 address,
             )
-            await stringStorage.set?.(userId, nft)
-            await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
-            return nft
+            try {
+                await stringStorage.set?.(userId, nft)
+                await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
+                return nft
+            } catch {
+                return
+            }
         },
         [Storage, saveAddress],
     )
