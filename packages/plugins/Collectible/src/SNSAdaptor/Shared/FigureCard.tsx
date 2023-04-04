@@ -5,7 +5,7 @@ import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isENSContractAddress } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCard }) => ({
     root: {
         width: '100%',
         display: 'flex',
@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 0,
         paddingBottom: '100%',
-        marginBottom: 36,
+        marginBottom: hidePriceCard ? 0 : 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
         overflow: 'hidden',
@@ -73,13 +73,14 @@ const useStyles = makeStyles()((theme) => ({
 export interface FigureCardProps {
     hideSubTitle?: boolean
     timeline?: boolean
+    hidePriceCard?: boolean
     asset: Web3Helper.NonFungibleAssetScope
 }
 
 export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
-    const { asset, hideSubTitle, timeline } = props
-    const { classes, cx } = useStyles()
+    const { asset, hideSubTitle, timeline, hidePriceCard = false } = props
+    const { classes, cx } = useStyles({ hidePriceCard })
 
     return (
         <div className={classes.root}>

@@ -3,7 +3,6 @@ import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
-import { useI18N } from '../../locales/i18n_generated.js'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
 import { Stack } from '@mui/system'
@@ -54,8 +53,7 @@ export interface PriceCardProps {
 
 export function PriceCard(props: PriceCardProps) {
     const { topOffer } = props
-    const { setSourceType, sourceType, orders } = Context.useContainer()
-    const t = useI18N()
+    const { setSourceType, orders } = Context.useContainer()
     const { classes } = useStyles()
 
     if (!topOffer && orders.error) return null
