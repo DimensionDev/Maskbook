@@ -8,6 +8,7 @@ import { Icons } from '@masknet/icons'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
+import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,15 +18,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Danger size={36} />
+
             return {
                 ApplicationEntryID: base.ID,
                 icon,
                 category: 'dapp',
-                description: {
-                    i18nKey: '__plugin_description',
-                    fallback: PLUGIN_DESCRIPTION,
-                },
-                name: { i18nKey: '__plugin_name', fallback: PLUGIN_NAME },
+                name: <Trans i18nKey="__plugin_name" defaults={PLUGIN_NAME} />,
+                description: <Trans i18nKey="__plugin_description" defaults={PLUGIN_DESCRIPTION} ns={base.ID} />,
             }
         })(),
     ],

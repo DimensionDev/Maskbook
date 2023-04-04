@@ -110,8 +110,6 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1.5),
             translate: theme.spacing(1.9, 1),
             background: theme.palette.maskColor.bottom,
-            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
-            scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -189,7 +187,15 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
                             className={classes.listItem}
                             disableRipple
                             disabled={false}
-                            onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))}>
+                            onClick={() => {
+                                if (x.platform === NextIDPlatform.ENS) {
+                                    ENS.lookup(x.identity).then((address) => {
+                                        openWindow(`https://app.ens.domains/address/${address}`)
+                                    })
+                                    return
+                                }
+                                return openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))
+                            }}>
                             <div className={classes.content}>
                                 {Icon ? <Icon size={20} /> : null}
                                 <Typography className={cx(classes.socialName, classes.accountName)} component="div">
@@ -247,6 +253,11 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
             },
             MenuListProps: {
                 className: classes.menuList,
+                // Remove space for scrollbar
+                style: {
+                    paddingRight: 0,
+                    width: '100%',
+                },
             },
         },
         ref,

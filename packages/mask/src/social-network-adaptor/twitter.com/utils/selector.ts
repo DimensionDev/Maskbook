@@ -123,8 +123,6 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
-export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] nav[role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
@@ -189,6 +187,8 @@ export const timelinePostContentSelector = () =>
             '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
         ].join(','),
     )
+
+export const toastLinkSelector = () => querySelector<HTMLLinkElement>('[data-testid="toast"] a')
 
 export const postsContentSelector = () =>
     querySelectorAll(

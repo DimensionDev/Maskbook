@@ -1,4 +1,5 @@
 const devOnly = process.env.NODE_ENV === 'development'
+const prodOnly = process.env.NODE_ENV === 'production'
 const insiderOnly = process.env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
@@ -39,6 +40,15 @@ export const flags = {
     sandboxedPluginRuntime: insiderOnly,
 
     simplehash_ab_percentage: 50,
+
+    /** The earliest version for the sentry to watch events and exceptions. */
+    sentry_earliest_version: process.env.VERSION,
+    sentry_sample_rate: 0.1,
+    sentry_enabled: prodOnly,
+    sentry_event_enabled: prodOnly,
+    sentry_exception_enabled: prodOnly,
+    sentry_fetch_transaction_enabled: prodOnly,
+    sentry_async_transaction_enabled: devOnly,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

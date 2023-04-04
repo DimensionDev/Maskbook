@@ -1,101 +1,112 @@
 import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { type FC, useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label } from './common.js'
+import { Label, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 import { Icons } from '@masknet/icons'
+import Linkify from 'linkify-react'
 
-const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'body' | 'center'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-    },
-    title: {
-        fontWeight: 700,
-        marginTop: theme.spacing(1),
-        color: theme.palette.maskColor.main,
-    },
-    info: {},
-    center: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    image: {
-        [`& + .${refs.info}`]: {
-            marginLeft: theme.spacing(1.5),
+const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'body' | 'center' | 'playButton'>()(
+    (theme, _, refs) => ({
+        summary: {
+            color: theme.palette.maskColor.third,
         },
-        img: {
-            objectFit: 'cover',
+        title: {
+            fontWeight: 700,
+            marginTop: theme.spacing(1),
+            color: theme.palette.maskColor.main,
         },
-    },
-    playButton: {
-        color: theme.palette.maskColor.main,
-        width: 64,
-        height: 64,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: theme.palette.maskColor.bg,
-        [`& + .${refs.info}`]: {
-            marginLeft: theme.spacing(1.5),
+        info: {},
+        center: {
+            display: 'flex',
+            alignItems: 'center',
         },
-    },
-    body: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: theme.spacing(0.5),
-        [`.${refs.image}`]: {
-            width: 64,
-            aspectRatio: '1 / 1',
-            borderRadius: 8,
-            overflow: 'hidden',
-            flexShrink: 0,
-        },
-    },
-    content: {
-        marginTop: theme.spacing(1),
-        fontSize: 14,
-        color: theme.palette.maskColor.main,
-        lineHeight: '18px',
-        maxHeight: 80,
-        overflow: 'hidden',
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 3,
-        wordBreak: 'break-all',
-    },
-    verbose: {
-        [`.${refs.title}`]: {
-            lineHeight: '18px',
-            marginBottom: theme.spacing(1.5),
-        },
-        [`.${refs.body}`]: {
-            display: 'block',
-        },
-        [`.${refs.content}`]: {
-            display: 'block',
-            maxHeight: 'none',
-            overflow: 'unset',
-        },
-        [`.${refs.image}`]: {
-            width: 552,
-            marginTop: theme.spacing(1.5),
+        image: {
             [`& + .${refs.info}`]: {
-                marginTop: theme.spacing(1.5),
-                marginLeft: 0,
+                marginLeft: theme.spacing(1.5),
+            },
+            img: {
+                objectFit: 'cover',
             },
         },
-        [`.${refs.info}`]: {
-            marginLeft: 0,
+        playButton: {
+            color: theme.palette.maskColor.main,
+            width: 64,
+            height: 64,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: theme.palette.maskColor.bg,
+            [`& + .${refs.info}`]: {
+                marginLeft: theme.spacing(1.5),
+            },
         },
-    },
-}))
+        body: {
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: theme.spacing(0.5),
+            [`.${refs.image}`]: {
+                width: 64,
+                aspectRatio: '1 / 1',
+                borderRadius: 8,
+                overflow: 'hidden',
+                flexShrink: 0,
+            },
+        },
+        content: {
+            marginTop: theme.spacing(1),
+            fontSize: 14,
+            color: theme.palette.maskColor.main,
+            lineHeight: '18px',
+            maxHeight: 80,
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 3,
+            wordBreak: 'break-all',
+        },
+        verbose: {
+            [`.${refs.title}`]: {
+                lineHeight: '18px',
+                marginBottom: theme.spacing(1.5),
+            },
+            [`.${refs.body}`]: {
+                display: 'block',
+            },
+            [`.${refs.content}`]: {
+                display: 'block',
+                maxHeight: 'none',
+                overflow: 'unset',
+            },
+            [`.${refs.image}`]: {
+                width: 552,
+                marginTop: theme.spacing(1.5),
+                [`& + .${refs.info}`]: {
+                    marginTop: theme.spacing(1.5),
+                    marginLeft: 0,
+                },
+                aspectRatio: 'auto',
+                img: {
+                    objectFit: 'unset',
+                },
+            },
+            [`.${refs.info}`]: {
+                marginLeft: 0,
+            },
+            [`.${refs.playButton}`]: {
+                marginLeft: 'auto',
+                marginRight: 'auto',
+            },
+        },
+    }),
+)
 
 const { Tag, Type } = RSS3BaseAPI
 export function isNoteFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.NoteFeed {
@@ -167,14 +178,14 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 {media?.mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        src={media.address}
+                        src={resolveResourceURL(media.address)}
                         height={imageSize}
                         width={imageSize}
                     />
                 ) : media?.mime_type.startsWith('video/') ? (
                     <Link
                         className={classes.playButton}
-                        href={media.address}
+                        href={resolveResourceURL(media.address)}
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>
                         <Icons.Play size={64} />
@@ -191,7 +202,11 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                             {metadata.body}
                         </Markdown>
                     ) : (
-                        <Typography className={classes.content}>{metadata?.summary || metadata?.body}</Typography>
+                        <Typography className={classes.content}>
+                            <Linkify options={LinkifyOptions}>
+                                {htmlToPlain(metadata?.summary || metadata?.body)}
+                            </Linkify>
+                        </Typography>
                     )}
                 </div>
             </div>

@@ -77,9 +77,10 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         const { result, cursor } = await fetchJSON<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    async getNameInfo(id: string) {
-        if (!id) return
-        const url = urlcat('https://rss3.domains/name/:id', { id })
+    /** get .csb handle info */
+    async getNameInfo(handle: string) {
+        if (!handle) return
+        const url = urlcat('https://pregod.rss3.dev/v1/ns/:id', { id: handle })
         return fetchJSON<RSS3BaseAPI.NameInfo>(url)
     }
 

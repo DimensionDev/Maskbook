@@ -269,7 +269,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         tokenDetailedList.map((value) => value.tokenId),
     )
 
-    const { isAvailableGasBalance } = useAvailableBalance('', gasOption, { chainId })
+    const { isAvailableGasBalance } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, '', gasOption, { chainId })
 
     const {
         value: assets_ = EMPTY_LIST,

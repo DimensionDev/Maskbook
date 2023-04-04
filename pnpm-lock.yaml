@@ -2233,6 +2233,12 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      linkify-react:
+        specifier: ^4.1.1
+        version: 4.1.1(linkifyjs@4.1.1)(react@0.0.0-experimental-d1e35c703-20221110)
+      linkifyjs:
+        specifier: ^4.1.1
+        version: 4.1.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)
@@ -3476,6 +3482,9 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -24395,6 +24404,23 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
+  /linkify-react@4.1.1(linkifyjs@4.1.1)(react@0.0.0-experimental-d1e35c703-20221110):
+    resolution: {integrity: sha512-2K9Y1cUdvq40dFWqCJ//X+WP19nlzIVITFGI93RjLnA0M7KbnxQ/ffC3AZIZaEIrLangF9Hjt3i0GQ9/anEG5A==}
+    peerDependencies:
+      linkifyjs: ^4.0.0
+      react: '>= 15.0.0 || 0.0.0-experimental-d1e35c703-20221110'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      linkifyjs: 4.1.1
+      react: 0.0.0-experimental-d1e35c703-20221110
+    dev: false
+
+  /linkifyjs@4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
+    dev: false
+
   /lint-staged@13.1.2:
     resolution: {integrity: sha512-K9b4FPbWkpnupvK3WXZLbgu9pchUJ6N7TtVZjbaPsoizkqFUDkUReUL25xdrCljJs7uLUF3tZ7nVPeo/6lp+6w==}
     engines: {node: ^14.13.1 || >=16.0.0}
@@ -34895,6 +34921,8 @@ time:
   /iframe-resizer-react@1.1.0: '2021-01-05T22:32:47.844Z'
   /json-stable-stringify@1.0.2: '2022-11-08T17:21:21.117Z'
   /json2csv@5.0.6: '2021-02-03T15:23:57.794Z'
+  /linkify-react@4.1.1: '2023-03-25T15:06:24.522Z'
+  /linkifyjs@4.1.1: '2023-03-25T15:05:16.391Z'
   /lint-staged@13.1.2: '2023-02-13T17:52:20.376Z'
   /lodash-es@4.17.21: '2021-02-20T15:43:35.756Z'
   /lru-cache@7.10.1: '2022-05-11T22:51:48.451Z'

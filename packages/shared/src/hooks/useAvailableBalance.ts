@@ -5,7 +5,6 @@ import {
     useFungibleTokenBalance,
     useMaskTokenAddress,
     useNativeTokenBalance,
-    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
@@ -21,13 +20,13 @@ import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 
 export function useAvailableBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    pluginID: T,
     address?: string,
     gasOption?: GasConfig,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext(options)
-    const { value: nativeTokenBalance = '0' } = useNativeTokenBalance()
+    const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID)
     const maskTokenAddress = useMaskTokenAddress()
     const { value: maskBalance = '0' } = useFungibleTokenBalance(undefined, maskTokenAddress)
 
@@ -51,25 +50,30 @@ export function useAvailableBalance<S extends 'all' | void = void, T extends Net
         if (!gasOption.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency)) return result
         if (!currencyRatio) return ZERO
         return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
-    }, [gasOption, chainId])
+    }, [gasOption, chainId, pluginID])
 
     const isAvailableBalance = useMemo(
-        () => isSameAddress(address, gasOption?.gasCurrency) || isNativeTokenAddress(address),
-        [address, gasOption?.gasCurrency],
+        () =>
+            isSameAddress(address, gasOption?.gasCurrency) ||
+            isNativeTokenAddress(address) ||
+            pluginID !== NetworkPluginID.PLUGIN_EVM,
+        [address, gasOption?.gasCurrency, pluginID],
     )
 
     const isAvailableGasBalance = useMemo(() => {
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return true
         if (!gasOption?.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency))
             return isGreaterThan(nativeTokenBalance, gasFee)
 
         return isGreaterThan(maskBalance, gasFee)
-    }, [gasOption?.gasCurrency, nativeTokenBalance, maskBalance, gasFee])
+    }, [gasOption?.gasCurrency, nativeTokenBalance, maskBalance, gasFee, pluginID])
 
     return {
         isAvailableBalance,
         isAvailableGasBalance,
-        balance: isAvailableBalance
-            ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
-            : tokenBalance,
+        balance:
+            isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
+                ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
+                : tokenBalance,
     }
 }

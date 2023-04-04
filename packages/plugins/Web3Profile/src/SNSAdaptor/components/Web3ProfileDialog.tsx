@@ -31,14 +31,12 @@ const useStyles = makeStyles()((theme) => ({
         width: 568,
         height: 494,
         padding: '0px 16px',
-        backgroundColor: theme.palette.background.paper,
         '::-webkit-scrollbar': {
             display: 'none',
         },
     },
     actions: {
         padding: '0px !important',
-        backgroundColor: theme.palette.background.paper,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     titleTailButton: {

@@ -202,7 +202,7 @@ export namespace RSS3BaseAPI {
         created_at?: string
         target_url?: string
         media: Array<{
-            /** URL */
+            /** URL or IPFS */
             address: string
             mime_type: 'image/png' | string
         }>
@@ -437,8 +437,13 @@ export namespace RSS3BaseAPI {
     export type LegacyTag = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry' | 'ETH'
 
     export interface NameInfo {
-        rnsName: string
-        ensName: string | null
+        ens: string
+        crossbell: string
+        lens: string
+        spaceid: string
+        unstoppable_domains: string
+        bit: string
+        avvy: string
         address: string
     }
 

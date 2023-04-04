@@ -7,8 +7,9 @@ import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label } from './common.js'
+import { Label, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
+import Linkify from 'linkify-react'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -81,7 +82,9 @@ export const VoteCard: FC<VoteCardProps> = ({ feed, ...rest }) => {
                             {metadata.proposal.body}
                         </Markdown>
                     ) : (
-                        <Typography className={classes.content}>{metadata.proposal.body}</Typography>
+                        <Typography className={classes.content}>
+                            <Linkify>{htmlToPlain(metadata.proposal.body)}</Linkify>
+                        </Typography>
                     )}
                 </>
             ) : null}

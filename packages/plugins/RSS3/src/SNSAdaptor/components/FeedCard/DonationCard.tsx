@@ -49,11 +49,15 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
             flexShrink: 0,
         },
     },
-    image: {},
+    image: {
+        img: {
+            objectFit: 'cover',
+        },
+    },
     verbose: {
         [`.${refs.image}`]: {
             marginTop: theme.spacing(1),
-            aspectRatio: '1/1',
+            aspectRatio: 'auto',
         },
     },
     info: {

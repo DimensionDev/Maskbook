@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
@@ -11,16 +12,20 @@ type TipValidateOptions = Pick<
     'tipType' | 'amount' | 'token' | 'nonFungibleTokenId' | 'nonFungibleTokenAddress' | 'isAvailableGasBalance'
 >
 
-export function useTipValidate({
-    tipType,
-    amount,
-    token,
-    nonFungibleTokenId: tokenId,
-    nonFungibleTokenAddress: tokenAddress,
-    isAvailableGasBalance,
-}: TipValidateOptions): ValidationTuple {
-    const { account, chainId } = useChainContext()
-    const { pluginID } = useNetworkContext()
+export function useTipValidate(
+    pluginID: NetworkPluginID,
+    chainId: Web3Helper.ChainIdAll,
+    {
+        tipType,
+        amount,
+        token,
+        nonFungibleTokenId: tokenId,
+        nonFungibleTokenAddress: tokenAddress,
+        isAvailableGasBalance,
+    }: TipValidateOptions,
+): ValidationTuple {
+    const { account } = useChainContext()
+
     const { value: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
     const t = useI18N()
 

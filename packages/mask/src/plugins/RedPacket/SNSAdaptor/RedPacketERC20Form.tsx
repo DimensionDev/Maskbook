@@ -142,9 +142,14 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [token])
 
     // balance
-    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(token?.address, gasOption, {
-        chainId,
-    })
+    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        token?.address,
+        gasOption,
+        {
+            chainId,
+        },
+    )
     // #endregion
 
     const validationMessage = useMemo(() => {
