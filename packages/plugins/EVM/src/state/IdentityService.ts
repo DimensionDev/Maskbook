@@ -23,7 +23,7 @@ import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const ADDRESS_FULL = /0x\w{40,}/i
-const CROSSBELL_HANDLE_RE = /(?<name>[\w.]+)\.csb/
+const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 const LENS_DOMAIN_RE = /[a-z][\d_a-z]{4,25}\.lens/
@@ -46,8 +46,8 @@ export function getSIDNames(userId: string, nickname: string, bio: string) {
 
 function getCrossBellHandles(nickname: string, bio: string) {
     return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
-        .map((result) => result?.groups?.name)
-        .filter(Boolean) as string[]
+        .flatMap((result) => result || [])
+        .map((x) => x.toLowerCase())
 }
 
 function getAddress(text: string) {
