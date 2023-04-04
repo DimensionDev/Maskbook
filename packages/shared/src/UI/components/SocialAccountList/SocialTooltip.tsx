@@ -12,6 +12,10 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { hidden = false }) => {
     return {
+        title: {
+            padding: '6px 2px',
+            whiteSpace: 'nowrap',
+        },
         tooltip: {
             visibility: hidden ? 'hidden' : 'visible',
         },
@@ -28,10 +32,11 @@ export function SocialTooltip({ children, hidden = false, platform = NextIDPlatf
     return (
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
+            disableInteractive
             arrow
             placement="top"
             title={
-                <Typography style={{ padding: '6px 2px', whiteSpace: 'nowrap' }} fontSize={14}>
+                <Typography className={classes.title} fontSize={14}>
                     {t.account_icon_tooltips({ source: resolveNextIDPlatformName(platform) })}
                 </Typography>
             }>
