@@ -34651,7 +34651,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e(webpack-cli@5.0.1):
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
+    resolution: {commit: fabb7660f23f2252c141077e32193d281036299e, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     id: github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e
     name: wyvern-js
     version: 3.2.0
@@ -34704,7 +34704,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
+    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
