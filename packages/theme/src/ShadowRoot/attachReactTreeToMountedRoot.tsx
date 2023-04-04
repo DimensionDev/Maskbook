@@ -5,7 +5,7 @@ import { shadowEnvironmentMountingRoots, type WrapJSX } from './ShadowRootSetup.
 
 export interface AttachInShadowRootOptions {
     /** Root tag. @default "main" */
-    tag?: keyof HTMLElementTagNameMap
+    tag?: keyof HTMLElementTagNameMap | (() => HTMLDivElement | HTMLSpanElement)
     /** Used to distinguish multiple React root within a same ShadowRoot */
     key?: string
     /** The AbortSignal to stop the render */
@@ -39,7 +39,7 @@ function attachReactTreeToMountedRoot(
     const tag = options.tag || 'main'
     const key = options.key || 'main'
 
-    if (shadow.querySelector(`${tag}.${key}`)) {
+    if (shadow.querySelector(`.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, 'which is already used. Skip rendering.')
         return {
             destroy: noop,
@@ -47,9 +47,10 @@ function attachReactTreeToMountedRoot(
         }
     }
 
-    const container = shadow.appendChild(document.createElement(tag))
+    const child = typeof tag === 'function' ? tag() : document.createElement(tag)
+    const container = shadow.appendChild(child)
     const instanceKey = `${key}(${Math.random().toString(36).slice(2)})`
-    container.className = key
+    container.classList.add(key)
 
     const controller = new AbortController()
     const signal = controller.signal

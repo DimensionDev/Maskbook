@@ -8,7 +8,7 @@ import { openPopup } from '../emitter.js'
 
 const LensIconSizeMap: Record<Plugin.SNSAdaptor.LensSlot, number> = {
     [Plugin.SNSAdaptor.LensSlot.Post]: 18,
-    [Plugin.SNSAdaptor.LensSlot.ProfileName]: 20,
+    [Plugin.SNSAdaptor.LensSlot.ProfileName]: 18,
     [Plugin.SNSAdaptor.LensSlot.Sidebar]: 16,
 }
 
@@ -16,10 +16,6 @@ const useStyles = makeStyles()({
     badge: {
         padding: 0,
         verticalAlign: 'baseline',
-    },
-    badgeAtPost: {
-        position: 'relative',
-        top: -1,
     },
 })
 interface Props {
@@ -29,7 +25,7 @@ interface Props {
 
 export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     useEffect(() => {
         const button = buttonRef.current
@@ -53,10 +49,7 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
     }, [accounts])
 
     return (
-        <IconButton
-            disableRipple
-            className={cx(classes.badge, slot === Plugin.SNSAdaptor.LensSlot.Post ? classes.badgeAtPost : null)}
-            ref={buttonRef}>
+        <IconButton disableRipple className={classes.badge} ref={buttonRef}>
             <Icons.Lens size={LensIconSizeMap[slot]} />
         </IconButton>
     )

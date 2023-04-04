@@ -10,13 +10,8 @@ const ActionsRenderer = createInjectHooksRenderer(
     (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 
-export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
+export function PostActions() {
     const identifier = usePostInfoDetails.author()
     if (!identifier) return null
-    return (
-        <ActionsRenderer
-            identity={identifier}
-            slot={isFocusing ? Plugin.SNSAdaptor.TipsSlot.FocusingPost : Plugin.SNSAdaptor.TipsSlot.Post}
-        />
-    )
+    return <ActionsRenderer identity={identifier} slot={Plugin.SNSAdaptor.TipsSlot.Post} />
 }

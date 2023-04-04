@@ -14,11 +14,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { hidden = false }) => {
     return {
         tooltip: {
             visibility: hidden ? 'hidden' : 'visible',
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
-        },
-        arrow: {
-            color: theme.palette.maskColor.publicMain,
         },
     }
 })
@@ -32,7 +27,7 @@ export function SocialTooltip({ children, hidden = false, platform = NextIDPlatf
     const t = useSharedI18N()
     return (
         <ShadowRootTooltip
-            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+            classes={{ tooltip: classes.tooltip }}
             arrow
             placement="top"
             title={
