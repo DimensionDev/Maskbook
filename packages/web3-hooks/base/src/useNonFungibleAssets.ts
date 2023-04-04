@@ -82,7 +82,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     // clear assets after account updated
     useUpdateEffect(() => {
-        setAssets([])
+        setAssets(EMPTY_LIST)
     }, [account])
 
     const retry = useCallback(() => {
@@ -91,8 +91,12 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         setDone(false)
     }, [])
 
+    const value = useMemo(() => {
+        return assets.filter((x) => (options?.chainId ? x.chainId === options.chainId : true))
+    }, [assets, options?.chainId])
+
     return {
-        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
+        value,
         next,
         loading,
         done,

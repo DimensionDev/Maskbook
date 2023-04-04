@@ -122,7 +122,10 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
-        const networkDescriptor = useNetworkDescriptor(defaultPluginId, !isNextIdWallet ? chainId : defaultChainId)
+        const networkDescriptor = useNetworkDescriptor(
+            defaultPluginId,
+            !isNextIdWallet ? globalChainId : defaultChainId,
+        )
 
         const pendingTransactions = useRecentTransactions(currentPluginID, TransactionStatusType.NOT_DEPEND)
 

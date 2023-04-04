@@ -56,6 +56,14 @@ const useStyles = makeStyles<{
     },
     retryButton: {
         fontSize: 12,
+        backgroundColor: theme.palette.maskColor.publicThirdMain,
+        color: theme.palette.maskColor.publicMain,
+        opacity: 0.5,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.publicThirdMain,
+            color: theme.palette.maskColor.publicMain,
+            opacity: 0.5,
+        },
     },
 }))
 
