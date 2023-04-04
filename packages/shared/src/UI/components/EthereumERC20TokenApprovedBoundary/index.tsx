@@ -37,6 +37,7 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     onlyInfiniteUnlock?: boolean
     contractName?: string
     showHelperToken?: boolean
+    failedContent?: React.ReactNode
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
@@ -49,6 +50,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         infiniteUnlockContent,
         contractName,
         showHelperToken = true,
+        failedContent,
     } = props
 
     const t = useSharedI18N()
@@ -84,7 +86,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 onClick={resetApproveCallback}
                 {...props.ActionButtonProps}>
-                {t.wallet_load_retry({ symbol: token.symbol ?? token.name ?? 'Token' })}
+                {failedContent ?? t.wallet_load_retry({ symbol: token.symbol ?? token.name ?? 'Token' })}
             </ActionButton>
         )
     if (

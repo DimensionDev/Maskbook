@@ -24,7 +24,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         flexDirection: 'column',
         maxWidth: 350,
-        paddingTop: 58,
     },
     warning: {
         padding: '27px 0 13px 0',
