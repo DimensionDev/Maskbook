@@ -1,9 +1,9 @@
-import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Button, Typography, Box } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
+import { useCallback } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { useI18N } from '../locales/index.js'
 import { Share_Twitter_TXT } from '../constants.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
