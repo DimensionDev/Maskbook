@@ -30,21 +30,23 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let closeTimer: NodeJS.Timeout
         let openTimer: NodeJS.Timeout
         const enter = () => {
             clearTimeout(openTimer)
-            clearTimeout(closeTimer)
 
             openTimer = setTimeout(() => {
                 openPopup(button.getBoundingClientRect().toJSON(), accounts)
             }, 200)
         }
+        const leave = () => {
+            clearTimeout(openTimer)
+        }
         button.addEventListener('mouseenter', enter)
+        button.addEventListener('mouseleave', leave)
         return () => {
-            clearTimeout(closeTimer)
             clearTimeout(openTimer)
             button.removeEventListener('mouseenter', enter)
+            button.removeEventListener('mouseleave', leave)
         }
     }, [accounts])
 
