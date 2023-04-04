@@ -49,18 +49,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PriceCardProps {
-    topOffer?: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    topListing?: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function PriceCard(props: PriceCardProps) {
-    const { topOffer } = props
+    const { topListing } = props
     const { setSourceType, sourceType, orders } = Context.useContainer()
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (!topOffer && orders.error) return null
+    if (!topListing && orders.error) return null
 
-    if (!topOffer && !orders.loading)
+    if (!topListing && !orders.loading)
         return (
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
@@ -74,7 +74,7 @@ export function PriceCard(props: PriceCardProps) {
             </div>
         )
 
-    const priceUSD = formatCurrency(topOffer?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
+    const priceUSD = formatCurrency(topListing?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
 
     return (
         <div className={classes.wrapper}>
@@ -83,39 +83,39 @@ export function PriceCard(props: PriceCardProps) {
                     <PriceLoadingSkeleton />
                 ) : (
                     <div className={classes.offerBox}>
-                        {topOffer?.priceInToken?.token.symbol.toUpperCase() === 'ETH' ? (
+                        {topListing?.priceInToken?.token.symbol.toUpperCase() === 'ETH' ? (
                             <Icons.ETH size={18} />
                         ) : (
-                            (topOffer?.priceInToken?.token.logoURL && (
-                                <img width={18} height={18} src={topOffer.priceInToken.token.logoURL} alt="" />
+                            (topListing?.priceInToken?.token.logoURL && (
+                                <img width={18} height={18} src={topListing.priceInToken.token.logoURL} alt="" />
                             )) ||
-                            (topOffer?.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
+                            (topListing?.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
                                 <Icons.WETH size={18} />
                             ) : (
                                 <Typography className={classes.fallbackSymbol}>
-                                    {topOffer?.priceInToken?.token.symbol || topOffer?.priceInToken?.token.name}
+                                    {topListing?.priceInToken?.token.symbol || topListing?.priceInToken?.token.name}
                                 </Typography>
                             ))
                         )}
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: '18px', lineHeight: '18px' }}>
                                 {formatBalance(
-                                    topOffer?.priceInToken?.amount,
-                                    topOffer?.priceInToken?.token.decimals || 18,
+                                    topListing?.priceInToken?.amount,
+                                    topListing?.priceInToken?.token.decimals || 18,
                                     6,
                                 )}
                             </strong>
                         </Typography>
-                        {topOffer?.price?.usd ? (
+                        {topListing?.price?.usd ? (
                             <Typography className={classes.textBase}>
-                                ({priceUSD.includes('<') || isZero(topOffer?.price?.usd) ? '' : '\u2248'}
+                                ({priceUSD.includes('<') || isZero(topListing?.price?.usd) ? '' : '\u2248'}
                                 {priceUSD})
                             </Typography>
                         ) : null}
                     </div>
                 )}
-                {topOffer?.source ? (
-                    <SourceProviderSwitcher selected={topOffer?.source} onSelect={setSourceType} />
+                {topListing?.source ? (
+                    <SourceProviderSwitcher selected={topListing?.source} onSelect={setSourceType} />
                 ) : null}
             </div>
         </div>

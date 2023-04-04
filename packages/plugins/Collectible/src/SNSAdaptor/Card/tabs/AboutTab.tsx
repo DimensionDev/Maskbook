@@ -22,13 +22,13 @@ const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCa
     },
 }))
 
-const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
+const resolveTopListing = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
             const value_a = new BigNumber(a.priceInToken?.amount ?? 0)
             const value_b = new BigNumber(b.priceInToken?.amount ?? 0)
-            return Number(value_a.lt(value_b))
+            return Number(value_b.lt(value_a))
         }),
     )
 }
@@ -40,8 +40,8 @@ export interface AboutTabProps {
 export function AboutTab(props: AboutTabProps) {
     const { asset } = props
     const { orders } = Context.useContainer()
-    const topOffer = resolveTopOffer(orders?.value)
-    const hidePriceCard = !topOffer && Boolean(orders.error)
+    const topListing = resolveTopListing(orders?.value)
+    const hidePriceCard = !topListing && Boolean(orders.error)
     const { classes } = useStyles({ hidePriceCard })
 
     if (asset.loading || !asset.value)
@@ -58,7 +58,7 @@ export function AboutTab(props: AboutTabProps) {
                 <div className={classes.basic}>
                     <FigureCard hideSubTitle asset={asset.value} />
                 </div>
-                <PriceCard topOffer={topOffer} />
+                <PriceCard topListing={topListing} />
             </div>
         </CollectibleCard>
     )

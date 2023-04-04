@@ -182,6 +182,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         return attemptUntil(
             providers.map((x) => () => x.getOrders?.(address, tokenId, side, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+            (result) => !result?.data.length,
         )
     }
 

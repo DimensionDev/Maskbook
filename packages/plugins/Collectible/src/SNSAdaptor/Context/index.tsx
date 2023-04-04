@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import {
     useNonFungibleAsset,
-    useNonFungibleOrders,
+    useNonFungibleListings,
     useNonFungibleEvents,
     useNonFungibleRarity,
 } from '@masknet/web3-hooks-base'
@@ -28,7 +28,7 @@ function useContext(initialState?: InitialState) {
         chainId,
         account: ownerAddress,
     })
-    const orders = useNonFungibleOrders(pluginID, tokenAddress, tokenId, {
+    const orders = useNonFungibleListings(pluginID, tokenAddress, tokenId, {
         chainId,
         account: ownerAddress,
         sourceType,
