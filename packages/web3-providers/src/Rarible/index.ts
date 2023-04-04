@@ -238,6 +238,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             continuation: string
             orders: RaribleOrder[]
         }>(RaribleURL, requestPath)
+        if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const orders = response.orders.map(
             (order): NonFungibleTokenOrder<ChainId, SchemaType> => ({
                 ...createOrder(chainId, order),
@@ -275,6 +276,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             continuation: string
             orders: RaribleOrder[]
         }>(RaribleURL, requestPath)
+        if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const orders = response.orders.map(
             (order): NonFungibleTokenOrder<ChainId, SchemaType> => ({
                 ...createOrder(chainId, order),
@@ -321,6 +323,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             activities: RaribleHistory[]
         }>(RaribleURL, requestPath)
 
+        if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const events = response.activities.map((history) => createEvent(chainId, history))
 
         return createPageable(
