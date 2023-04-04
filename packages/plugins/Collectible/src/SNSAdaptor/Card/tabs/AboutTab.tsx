@@ -41,7 +41,7 @@ export function AboutTab(props: AboutTabProps) {
     const { asset } = props
     const { orders } = Context.useContainer()
     const topOffer = resolveTopOffer(orders?.value)
-    const hidePriceCard = !topOffer && (Boolean(orders.error) || !orders.loading)
+    const hidePriceCard = !topOffer && Boolean(orders.error)
     const { classes } = useStyles({ hidePriceCard })
 
     if (asset.loading || !asset.value)
@@ -56,7 +56,7 @@ export function AboutTab(props: AboutTabProps) {
         <CollectibleCard>
             <div className={classes.body}>
                 <div className={classes.basic}>
-                    <FigureCard hideSubTitle asset={asset.value} hidePriceCard={hidePriceCard} />
+                    <FigureCard hideSubTitle asset={asset.value} />
                 </div>
                 <PriceCard topOffer={topOffer} />
             </div>

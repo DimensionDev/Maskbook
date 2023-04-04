@@ -5,7 +5,7 @@ import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isENSContractAddress } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCard }) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         display: 'flex',
@@ -16,7 +16,6 @@ const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCa
         width: '100%',
         height: 0,
         paddingBottom: '100%',
-        marginBottom: hidePriceCard ? 0 : 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
         overflow: 'hidden',
@@ -27,6 +26,7 @@ const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCa
         position: 'absolute',
     },
     nameSm: {
+        marginTop: 36,
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
@@ -73,14 +73,13 @@ const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCa
 export interface FigureCardProps {
     hideSubTitle?: boolean
     timeline?: boolean
-    hidePriceCard?: boolean
     asset: Web3Helper.NonFungibleAssetScope
 }
 
 export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
-    const { asset, hideSubTitle, timeline, hidePriceCard = false } = props
-    const { classes, cx } = useStyles({ hidePriceCard })
+    const { asset, hideSubTitle, timeline } = props
+    const { classes, cx } = useStyles()
 
     return (
         <div className={classes.root}>
