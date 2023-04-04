@@ -1,4 +1,4 @@
-import { compact, debounce, first, isEqual, uniqWith } from 'lodash-es'
+import { compact, debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
@@ -62,7 +62,10 @@ export class MaskWalletProvider
             const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
             // speed up first paint
-            this.ref.value = uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address))
+            this.ref.value = sortBy(
+                uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
+                (x) => !!x.owner,
+            )
 
             const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
             if (!isRecovery) {
@@ -99,7 +102,7 @@ export class MaskWalletProvider
                 if (!isEqual(result, super.wallets)) {
                     await this.updateWallets(result)
                 }
-                this.ref.value = result
+                this.ref.value = sortBy(result, (x) => !!x.owner)
             }
         }, 1000)
 
