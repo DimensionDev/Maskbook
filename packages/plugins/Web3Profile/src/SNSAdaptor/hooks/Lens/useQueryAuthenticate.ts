@@ -3,14 +3,14 @@ import { Lens } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import isBefore from 'date-fns/isBefore'
 import add from 'date-fns/add'
-import { useAsyncFn } from 'react-use'
 import { context, lensTokenStorage as storage } from '../../context.js'
+import { useCallback } from 'react'
 
 export function useQueryAuthenticate(address: string) {
     const { chainId } = useChainContext()
     const connection = useWeb3Connection()
 
-    return useAsyncFn(async () => {
+    return useCallback(async () => {
         if (!address || !connection || chainId !== ChainId.Matic || !isValidAddress(address)) return
 
         const accessToken = storage.accessToken?.value?.[address]

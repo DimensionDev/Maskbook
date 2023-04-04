@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react'
 import { Box } from '@mui/material'
-import { makeStyles, ShadowRootTooltip, ActionButton } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, ActionButton, useCustomSnackbar } from '@masknet/theme'
 import {
     useNetworkContext,
     useChainContext,
@@ -77,6 +77,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const { Others: actualOthers, Connection } = useWeb3State(actualPluginID)
 
+    const { showSnackbar } = useCustomSnackbar()
     const {
         account,
         chainId: actualChainId,
@@ -107,14 +108,26 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     }, [expectedNetworkDescriptor])
 
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
-        if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
-        const connection = Connection?.getConnection?.()
-        if (!connection) return
+        try {
+            if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
+            const connection = Connection?.getConnection?.()
+            if (!connection) return
 
-        await connection.switchChain?.(expectedChainId)
-        await delay(1500)
+            await connection.switchChain?.(expectedChainId)
+            await delay(1500)
 
-        return 'complete'
+            return 'complete'
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Chain currently not supported') {
+                showSnackbar(t.plugin_wallet_unsupported_network(), {
+                    processing: false,
+                    variant: 'error',
+                    message: t.plugin_wallet_unsupported_chain(),
+                    autoHideDuration: 5000,
+                })
+            }
+            return 'failed'
+        }
     }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Connection])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {

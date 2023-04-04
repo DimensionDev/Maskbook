@@ -31,7 +31,7 @@ export function useFollow(
     const t = useI18N()
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [, handleQueryAuthenticate] = useQueryAuthenticate(account)
+    const handleQueryAuthenticate = useQueryAuthenticate(account)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
     const lensHub = useContract<LensHub>(chainId, LENS_HUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
     const { fetchJSON } = useSNSAdaptorContext()
@@ -140,7 +140,9 @@ export function useFollow(
             if (
                 error instanceof Error &&
                 !error.message.includes('Transaction was rejected') &&
-                !error.message.includes('Signature canceled')
+                !error.message.includes('Signature canceled') &&
+                !error.message.includes('User rejected the request') &&
+                !error.message.includes('User rejected transaction')
             )
                 showSingletonSnackbar(t.follow_lens_handle(), {
                     processing: false,
