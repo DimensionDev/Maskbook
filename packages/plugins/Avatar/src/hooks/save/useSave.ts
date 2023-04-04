@@ -38,10 +38,10 @@ export function useSave(pluginID: NetworkPluginID) {
             }
 
             if (isBindAccount && NetworkPluginID.PLUGIN_EVM) {
-                return saveToNextID(info, account, persona, proof)
+                return await saveToNextID(info, account, persona, proof)
             }
 
-            return saveToStringStorage(data.userId, account, info)
+            return await saveToStringStorage(data.userId, account, info)
         },
         [saveToNextID, saveToStringStorage, pluginID],
     )
