@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, isEmpty } from 'lodash-es'
+import { first } from 'lodash-es'
 import compareDesc from 'date-fns/compareDesc'
 import {
     createPageable,
@@ -39,7 +39,7 @@ async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit
         mode: 'cors',
         headers: { 'content-type': 'application/json' },
     })
-    if (response.status === 404) return {} as T
+    if (response.status === 404) return
     if (!response.ok) throw new Error('Failed to fetch as JSON.')
     return response.json() as T
 }
@@ -192,7 +192,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         if (!isValidChainId(chainId)) return
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
-        if (!asset || isEmpty(asset)) return
+        if (!asset) return
         return createAsset(chainId, asset)
     }
 

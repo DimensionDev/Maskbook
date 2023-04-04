@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { isEmpty, uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
@@ -46,8 +46,8 @@ import type { NonFungibleTokenAPI } from '../entry-types.js'
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
     const response = await fetchGlobal(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
-    if (response.status === 404) return {} as T
-    if (!response.ok) throw new Error('Failed to fetch as JSON.')
+    if (response.status === 404) return
+    if (!response.ok && response.status !== 404) throw new Error('Failed to fetch as JSON.')
     return response.json() as T
 }
 
@@ -296,7 +296,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
-        if (!response || isEmpty(response)) return
+        if (!response) return
         return createNFTAsset(chainId, response)
     }
 
