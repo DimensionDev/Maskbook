@@ -213,8 +213,13 @@ export function FollowLensDialog() {
                 ActionButtonProps={{
                     variant: 'roundedContained',
                     className: classes.followAction,
+                    disabled,
                 }}
                 infiniteUnlockContent={t.unlock_token_tips({
+                    value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
+                    symbol: approved.token?.symbol ?? '',
+                })}
+                failedContent={t.unlock_token_tips({
                     value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
                     symbol: approved.token?.symbol ?? '',
                 })}>
