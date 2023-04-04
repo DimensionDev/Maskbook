@@ -90,13 +90,13 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
 
     return (
         <>
-            {actions.map((action, index) => {
+            {actions.map((action) => {
                 const metadata = action.metadata
                 const isUp = !!metadata?.action && ['supply', 'add', 'repay', 'collect'].includes(metadata?.action)
 
                 return (
                     <CardFrame
-                        key={index}
+                        key={`${feed.hash}/${action.index}`}
                         type={CardType.TokenLiquidity}
                         feed={feed}
                         className={cx(className, verbose ? classes.verbose : null)}
