@@ -11,8 +11,12 @@ export function useEssay(user: User, refresh?: number) {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value } = useAsync(async () => {
         if (!Storage || !user.address) return null
-        const storage = Storage.createStringStorage('Pets', user.address)
-        const result = await storage.get<EssayRSSNode>('pet')
+        const stringStorage = Storage.createStringStorage('Pets', user.address)
+        let result = await stringStorage.get<EssayRSSNode>('pet')
+        if (!result) {
+            const rss3Storage = Storage.createRSS3Storage(user.address)
+            result = await rss3Storage.get<EssayRSSNode>('_pet')
+        }
         return result?.essay.userId === user.userId ? result.essay : null
     }, [user, refresh])
 

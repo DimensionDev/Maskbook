@@ -2,11 +2,12 @@ import urlcat, { query } from 'urlcat'
 import { type HubOptions } from '@masknet/web3-shared-base'
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap } from '../constants.js'
+import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_ENDPOINT } from '../constants.js'
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { RSS3BaseAPI } from '../../entry-types.js'
+import RSS3 from 'rss3-next'
 
 interface RSS3Result<T> {
     cursor?: string
@@ -15,6 +16,36 @@ interface RSS3Result<T> {
 }
 
 export class RSS3API implements RSS3BaseAPI.Provider {
+    createRSS3(
+        address: string,
+        sign: (message: string) => Promise<string> = () => {
+            throw new Error('Not supported.')
+        },
+    ): RSS3 {
+        return new RSS3({
+            endpoint: RSS3_LEGACY_ENDPOINT,
+            address,
+            sign,
+        })
+    }
+    async getFileData<T>(rss3: RSS3, address: string, key: string) {
+        const file = await rss3.files.get(address)
+        if (!file) throw new Error('The account was not found.')
+        const descriptor = Object.getOwnPropertyDescriptor(file, key)
+        return descriptor?.value as T | undefined
+    }
+    async setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T> {
+        const file = await rss3.files.get(address)
+        if (!file) throw new Error('The account was not found.')
+        const descriptor = Object.getOwnPropertyDescriptor(file, key)
+        const value = {
+            ...(descriptor?.value as T | undefined),
+            ...data,
+        }
+        rss3.files.set(Object.assign(file, { [key]: value }))
+        await rss3.files.sync()
+        return value
+    }
     async getDonations(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
