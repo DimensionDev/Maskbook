@@ -9,7 +9,7 @@ import { FigureCard } from '../../Shared/FigureCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
 import { Context } from '../../Context/index.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCard }) => ({
     body: {
         display: 'flex',
         flexDirection: 'column',
@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     basic: {
         width: '100%',
-        marginBottom: 16,
+        marginBottom: hidePriceCard ? 0 : 16,
     },
 }))
 
@@ -40,9 +40,9 @@ export interface AboutTabProps {
 export function AboutTab(props: AboutTabProps) {
     const { asset } = props
     const { orders } = Context.useContainer()
-    const { classes } = useStyles()
-
     const topOffer = resolveTopOffer(orders?.value)
+    const hidePriceCard = !topOffer && Boolean(orders.error)
+    const { classes } = useStyles({ hidePriceCard })
 
     if (asset.loading || !asset.value)
         return (

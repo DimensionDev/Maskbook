@@ -2,8 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
 import { Stack } from '@mui/system'
@@ -60,7 +60,19 @@ export function PriceCard(props: PriceCardProps) {
 
     if (!topOffer && orders.error) return null
 
-    if (!topOffer && !orders.loading) return null
+    if (!topOffer && !orders.loading)
+        return (
+            <div className={classes.wrapper}>
+                <div className={classes.priceZone}>
+                    <div className={classes.offerBox}>
+                        <Typography textAlign="left" fontSize={14} fontWeight={400}>
+                            {t.plugin_collectible_no_listings()}
+                        </Typography>
+                    </div>
+                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
+                </div>
+            </div>
+        )
 
     const priceUSD = formatCurrency(topOffer?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
 

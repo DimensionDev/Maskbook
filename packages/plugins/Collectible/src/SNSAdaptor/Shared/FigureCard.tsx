@@ -16,7 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 0,
         paddingBottom: '100%',
-        marginBottom: 36,
         boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         borderRadius: 20,
         overflow: 'hidden',
@@ -27,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
     },
     nameSm: {
+        marginTop: 36,
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
