@@ -17,6 +17,8 @@ function createStorage(
     switch (providerType) {
         case StorageProviderType.KV:
             return new KVStorage(options.namespace)
+        case StorageProviderType.RSS3:
+            throw new Error('RSS3 storage is not support flow')
         case StorageProviderType.NextID:
             if (!options?.platform || !options.signerOrPublicKey) throw new Error('Instantiation parameter error.')
             return new NextIDStorage(
