@@ -162,7 +162,8 @@ export class SolanaFungibleAPI
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const maskTokenList = await fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0])
         const rayDiumTokenList = await fetchRayDiumTokenList(RAYDIUM_TOKEN_LIST)
-        return uniqBy([...maskTokenList, ...rayDiumTokenList], (x) => x.address)
+
+        return uniqBy([...maskTokenList, ...rayDiumTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
     }
 
     async getNonFungibleTokenList(
