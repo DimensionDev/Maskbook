@@ -56,6 +56,12 @@ const useStyles = makeStyles<{
     },
     retryButton: {
         fontSize: 12,
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
     },
 }))
 
