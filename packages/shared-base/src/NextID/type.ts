@@ -25,7 +25,6 @@ export enum NextIDPlatform {
 export interface NextIDEnsRecord {
     category: 'ENS'
     chain: string
-    address: string
     id: string
 }
 

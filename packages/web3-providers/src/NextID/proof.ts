@@ -322,7 +322,19 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 ),
             )
         const ensList: NextIDEnsRecord[] = data.identity.neighborWithTraversal.reduce((list: NextIDEnsRecord[], x) => {
-            return [...list, ...x.from.nft, ...x.to.nft]
+            const result = [...x.from.nft, ...x.to.nft]
+            const endNodes = [x.from, x.to]
+            endNodes
+                .filter((node) => node.platform === NextIDPlatform.Ethereum && node.displayName.endsWith('.eth'))
+                .forEach((node) => {
+                    // Prepend the parent ens
+                    result.unshift({
+                        category: 'ENS',
+                        chain: 'ethereum',
+                        id: node.displayName,
+                    } as NextIDEnsRecord)
+                })
+            return [...list, ...result]
         }, [])
 
         if (ensList.length) {

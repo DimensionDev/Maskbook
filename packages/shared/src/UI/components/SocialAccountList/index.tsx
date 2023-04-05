@@ -78,7 +78,6 @@ const useStyles = makeStyles()((theme) => {
         },
         addressText: {
             fontSize: '10px',
-            lineHeight: '10px',
             overflow: 'auto',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
@@ -94,12 +93,21 @@ const useStyles = makeStyles()((theme) => {
         related: {
             whiteSpace: 'break-spaces',
             lineBreak: 'anywhere',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 4,
         },
         ens: {
             whiteSpace: 'nowrap',
             padding: theme.spacing(0.25, 0.5),
             marginRight: 6,
             fontSize: 12,
+            maxWidth: '100%',
+            display: 'inline-block',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            backgroundColor: theme.palette.maskColor.bottom,
+            borderRadius: 4,
         },
         linkIcon: {
             display: 'flex',
