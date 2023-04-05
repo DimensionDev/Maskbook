@@ -283,6 +283,7 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.Farcaster]: undefined,
         [NextIDPlatform.Bit]: undefined,
         [NextIDPlatform.Unstoppable]: undefined,
+        [NextIDPlatform.CyberConnect]: undefined,
     },
     () => {
         return undefined
@@ -306,6 +307,7 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.Farcaster]: 'Farcaster',
         [NextIDPlatform.Bit]: 'Bit',
         [NextIDPlatform.Unstoppable]: 'Unstoppable',
+        [NextIDPlatform.CyberConnect]: 'CyberConnect',
     },
     () => {
         return ''

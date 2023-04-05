@@ -19,6 +19,7 @@ export enum NextIDPlatform {
     Farcaster = 'farcaster',
     Bit = 'dotbit',
     Unstoppable = 'unstoppabledomains',
+    CyberConnect = 'cyberconnect',
 }
 
 export interface NextIDEnsRecord {

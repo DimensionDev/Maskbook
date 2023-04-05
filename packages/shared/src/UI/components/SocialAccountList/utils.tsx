@@ -18,6 +18,7 @@ export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.Farcaster]: Icons.Farcaster,
         [NextIDPlatform.Bit]: Icons.Bit,
         [NextIDPlatform.Unstoppable]: Icons.Unstoppable,
+        [NextIDPlatform.CyberConnect]: Icons.CyberConnect,
     },
     null,
 )
