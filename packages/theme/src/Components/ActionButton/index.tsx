@@ -13,9 +13,6 @@ const useStyles = makeStyles()((theme) => ({
         ['& > *']: {
             opacity: 0.3,
         },
-        backgroundColor: theme.palette.maskColor.publicThirdMain,
-        color: theme.palette.maskColor.publicMain,
-        opacity: 0.5,
     },
 }))
 
