@@ -7,7 +7,7 @@ function useMap() {
     const setPair = useCallback((address: string, domain: string) => {
         setMap((map) => {
             const key = address.toLowerCase()
-            if (map[key] === domain) return map
+            if (map[key] === domain || !domain.includes('.')) return map
             return { ...map, [key]: domain }
         })
     }, [])

@@ -28,10 +28,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
             }
         }
 
-        return {
-            ...identity,
-            sns_handle: identity.web3_addr,
-        }
+        return identity
     }
 
     private async getResponse(response: MaskX_BaseAPI.Response) {
