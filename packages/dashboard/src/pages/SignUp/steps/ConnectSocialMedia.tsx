@@ -14,7 +14,6 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js
 import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { ActionCard } from '../../../components/ActionCard/index.js'
-import { useEffect } from 'react'
 
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
@@ -25,12 +24,8 @@ export const ConnectSocialMedia = () => {
         if (currentPersona) {
             await connectPersona(currentPersona.identifier, networkIdentifier)
         }
+        navigate(DashboardRoutes.Personas, { replace: true })
     }
-    useEffect(() => {
-        if (currentPersona && currentPersona?.linkedProfiles.length > 0) {
-            navigate(DashboardRoutes.Personas, { replace: true })
-        }
-    }, [currentPersona])
 
     return (
         <ColumnContentLayout>
