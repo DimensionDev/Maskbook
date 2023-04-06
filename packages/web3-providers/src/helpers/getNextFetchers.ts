@@ -2,17 +2,17 @@ import { Duration, createFetchCached, fetchCached } from './fetchCached.js'
 import { createFetchSquashed, fetchSquashed } from './fetchSquashed.js'
 
 export interface NextFetchersOptions {
-    squashed?: boolean
-    cached?: boolean
-    squashedExpiration?: number
-    cachedDuration?: number
+    enableSquash?: boolean
+    enableCache?: boolean
+    squashExpiration?: number
+    cacheDuration?: number
 }
 
 export function getNextFetchers({
-    squashed = false,
-    cached = false,
-    squashedExpiration = 600,
-    cachedDuration = Duration.SHORT,
+    enableSquash: squashed = false,
+    enableCache: cached = false,
+    squashExpiration: squashedExpiration = 600,
+    cacheDuration: cachedDuration = Duration.SHORT,
 }: NextFetchersOptions = {}) {
     return [
         squashed

@@ -50,8 +50,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
             undefined,
             {
-                cached: true,
-                squashed: true,
+                enableCache: true,
+                enableSquash: true,
             },
         )
         if (!response) return Err('User not found')
@@ -80,8 +80,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
             undefined,
             {
-                cached: true,
-                squashed: true,
+                enableCache: true,
+                enableSquash: true,
             },
         )
         if (!response) return Err('User not found')
@@ -91,8 +91,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     }
     async get<T>(personaPublicKey: string): Promise<T> {
         return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, {
-            cached: true,
-            squashed: true,
+            enableCache: true,
+            enableSquash: true,
         })
     }
     /**

@@ -11,7 +11,7 @@ export class CryptoScamDB_API implements ScamWarningAPI.Provider {
     async getBloomFilter() {
         if (this.bloomFilter) return this.bloomFilter
         const filter = await fetchJSON<JSON>(urlcat(BASE_URL, 'filter/config.json'), undefined, {
-            squashed: true,
+            enableSquash: true,
         })
 
         const { ScalableBloomFilter } = await import('bloom-filters')
@@ -28,7 +28,7 @@ export class CryptoScamDB_API implements ScamWarningAPI.Provider {
             if (!filter.has(url.host)) return
 
             const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(BASE_URL, `${url.host}.json`), undefined, {
-                squashed: true,
+                enableSquash: true,
             })
             if (!result) return
 

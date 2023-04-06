@@ -19,7 +19,7 @@ export class JSON_Storage<T> implements StorageAPI.Storage<T> {
                     },
                 },
                 {
-                    squashed: true,
+                    enableSquash: true,
                 },
             )
         } catch {

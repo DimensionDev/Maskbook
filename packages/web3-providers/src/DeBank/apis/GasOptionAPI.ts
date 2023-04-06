@@ -30,7 +30,7 @@ export class DeBankGasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOpt
             urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }),
             undefined,
             {
-                squashed: true,
+                enableSquash: true,
             },
         )
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')

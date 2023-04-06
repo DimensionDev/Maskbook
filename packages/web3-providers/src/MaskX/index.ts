@@ -7,8 +7,8 @@ import { fetchJSON } from '../entry-helpers.js'
 export class MaskX_API implements MaskX_BaseAPI.Provider {
     private async fetchFromMaskX(pathname: string) {
         return fetchJSON<MaskX_BaseAPI.Response>(urlcat(MASK_X_ROOT_URL, pathname), undefined, {
-            cached: true,
-            squashed: true,
+            enableCache: true,
+            enableSquash: true,
         })
     }
 

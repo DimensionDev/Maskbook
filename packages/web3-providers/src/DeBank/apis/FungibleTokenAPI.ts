@@ -21,9 +21,9 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
             }),
             undefined,
             {
-                squashed: true,
-                cached: true,
-                cachedDuration: Duration.LONG,
+                enableSquash: true,
+                enableCache: true,
+                cacheDuration: Duration.LONG,
             },
         )
 

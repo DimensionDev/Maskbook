@@ -14,9 +14,9 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
                 method: 'GET',
             },
             {
-                cached: true,
-                squashed: true,
-                cachedDuration: Duration.LONG,
+                enableCache: true,
+                enableSquash: true,
+                cacheDuration: Duration.LONG,
             },
         )
     }

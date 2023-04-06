@@ -47,8 +47,8 @@ export async function getUserViaTwitterIdentity(screenName: string): Promise<Twi
         }),
         undefined,
         {
-            cached: true,
-            squashed: true,
+            enableCache: true,
+            enableSquash: true,
         },
     )
     return identityToLegacyUser(identity)

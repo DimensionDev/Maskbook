@@ -19,8 +19,8 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
             urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }),
             undefined,
             {
-                squashed: true,
-                cached: true,
+                enableSquash: true,
+                enableCache: true,
             },
         )
     }
@@ -43,8 +43,8 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
                 urlcat(FUNDER_PROD, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
                 undefined,
                 {
-                    squashed: true,
-                    cached: true,
+                    enableSquash: true,
+                    enableCache: true,
                 },
             )
             const web3 = this.web3.getWeb3(chainId)

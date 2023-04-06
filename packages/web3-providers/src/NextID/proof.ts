@@ -117,7 +117,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const { ids } = await fetchJSON<NextIDBindings>(url, undefined, { squashed: true })
+        const { ids } = await fetchJSON<NextIDBindings>(url, undefined, { enableSquash: true })
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
@@ -135,7 +135,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 order: 'desc',
             }),
             undefined,
-            { squashed: true },
+            { enableSquash: true },
         )
 
         return response.ids
@@ -168,7 +168,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     order: 'desc',
                 }),
                 undefined,
-                { squashed: true },
+                { enableSquash: true },
             )
 
             const personaBindings = result.ids
@@ -188,7 +188,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             if (!platform && !identity) return false
 
             const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-            const result = await fetchJSON<BindingProof | undefined>(url, undefined, { squashed: true })
+            const result = await fetchJSON<BindingProof | undefined>(url, undefined, { enableSquash: true })
             return !!result?.is_valid
         } catch {
             return false
@@ -243,7 +243,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 `,
                 }),
             },
-            { squashed: true },
+            { enableSquash: true },
         )
 
         const bindings = data.identity.neighborWithTraversal
@@ -325,7 +325,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 `,
                 }),
             },
-            { squashed: true },
+            { enableSquash: true },
         )
 
         const bindings = data.identity.neighborWithTraversal
@@ -411,7 +411,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 `,
                 }),
             },
-            { squashed: true },
+            { enableSquash: true },
         )
 
         const connections =

@@ -26,7 +26,7 @@ export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType
             }),
             undefined,
             {
-                squashed: true,
+                enableSquash: true,
             },
         )
         const transactions = formatTransactions(chainId, result)
