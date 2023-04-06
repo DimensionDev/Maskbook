@@ -18,10 +18,6 @@ const RULES = {
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
 
-    // chainbase
-    'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
-    'https://chainbase-proxy.r2d2.to/v1/space-id': Duration.SHORT,
-
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
 

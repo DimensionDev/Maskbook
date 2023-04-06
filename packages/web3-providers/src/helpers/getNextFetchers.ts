@@ -9,20 +9,20 @@ export interface NextFetchersOptions {
 }
 
 export function getNextFetchers({
-    enableSquash: squashed = false,
-    enableCache: cached = false,
-    squashExpiration: squashedExpiration = 600,
-    cacheDuration: cachedDuration = Duration.SHORT,
+    enableSquash = false,
+    enableCache = false,
+    squashExpiration = 600,
+    cacheDuration = Duration.SHORT,
 }: NextFetchersOptions = {}) {
     return [
-        squashed
+        enableSquash
             ? createFetchSquashed({
-                  expiration: squashedExpiration,
+                  expiration: squashExpiration,
               })
             : fetchSquashed,
-        cached
+        enableCache
             ? createFetchCached({
-                  duration: cachedDuration,
+                  duration: cacheDuration,
               })
             : fetchCached,
     ]

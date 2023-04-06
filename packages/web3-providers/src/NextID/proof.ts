@@ -13,7 +13,7 @@ import {
     type NextIDPersonaBindings,
     type NextIDEnsRecord,
 } from '@masknet/shared-base'
-import { fetchJSON, createFetchSquashed } from '../entry-helpers.js'
+import { fetchJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import {
     PROOF_BASE_URL_DEV,
@@ -69,8 +69,6 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
-    private fetchSquashedFromNextID = createFetchSquashed()
-
     async bindProof(
         uuid: string,
         personaPublicKey: string,
