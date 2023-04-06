@@ -58,19 +58,13 @@ export class MaskWalletProvider
             }
         })
 
-        const initWallets = () => {
+        const update = async () => {
             const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
             this.ref.value = sortBy(
                 uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
                 (x) => !!x.owner,
             )
-            return wallets
-        }
-
-        const update = debounce(async () => {
-            const wallets = initWallets()
-
             const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
             if (!isRecovery) {
                 const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
@@ -108,12 +102,15 @@ export class MaskWalletProvider
                 }
                 this.ref.value = sortBy(result, (x) => !!x.owner)
             }
-        }, 1000)
-        initWallets()
+        }
+
         await update()
-        this.context?.wallets.subscribe(update)
-        this.context?.allPersonas?.subscribe(update)
-        CrossIsolationMessages.events.renameWallet.on(update)
+
+        const debounceUpdate = debounce(update, 1000)
+
+        this.context?.wallets.subscribe(debounceUpdate)
+        this.context?.allPersonas?.subscribe(debounceUpdate)
+        CrossIsolationMessages.events.renameWallet.on(debounceUpdate)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {

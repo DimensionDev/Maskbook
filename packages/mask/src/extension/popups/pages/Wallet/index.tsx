@@ -14,6 +14,9 @@ import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
 import { MaskMessages } from '../../../../utils/messages.js'
+import { TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
+import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -65,7 +68,38 @@ export default function Wallet() {
             ].some((item) => item === location.pathname)
         )
             return
-    }, [location.search, location.pathname, chainId, TransactionFormatter, Provider?.untilReady])
+
+        const payload = await WalletRPC.topUnconfirmedRequest()
+        if (!payload) return
+
+        if (payload) {
+            switch (payload.method) {
+                case EthereumMethodType.ETH_SIGN:
+                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                case EthereumMethodType.PERSONAL_SIGN:
+                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
+                    break
+                case EthereumMethodType.MASK_DEPLOY:
+                    navigate(PopupRoutes.ContractInteraction, { replace: true })
+                    break
+                default:
+                    break
+            }
+        }
+
+        const computedPayload = PayloadEditor.fromPayload(payload)
+        if (!computedPayload.config) return
+
+        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload.config)
+        if (
+            formatterTransaction &&
+            [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
+                formatterTransaction.type,
+            )
+        ) {
+            navigate(PopupRoutes.ContractInteraction, { replace: true })
+        }
+    }, [location.search, location.pathname, chainId, TransactionFormatter])
 
     useEffect(() => {
         if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return
@@ -77,7 +111,7 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
 
-        const cleanInitListener = MaskMessages.events.allPluginReady.on(() => {
+        const cleanInitListener = MaskMessages.events.allPluginsReady.on(() => {
             setInitLoading(false)
         })
 
