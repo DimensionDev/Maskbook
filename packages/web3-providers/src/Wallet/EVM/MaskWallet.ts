@@ -35,13 +35,17 @@ export class MaskWalletProvider
         super(ProviderType.MaskWallet)
     }
 
-    async update() {
+    async init() {
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         this.ref.value = sortBy(
             uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
             (x) => !!x.owner,
         )
+    }
+    async update() {
+        const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
+
         const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
         if (!isRecovery) {
             const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
@@ -104,7 +108,7 @@ export class MaskWalletProvider
             }
         })
 
-        await this.update()
+        await this.init()
 
         const debounceUpdate = debounce(this.update.bind(this), 1000)
 
