@@ -1,15 +1,15 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import { RSS3API } from '../RSS3/index.js'
 import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
 import { MaskX_BaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
 
 export class MaskX_API implements MaskX_BaseAPI.Provider {
-    private RSS3 = new RSS3API()
-
     private async fetchFromMaskX(pathname: string) {
-        return fetchJSON<MaskX_BaseAPI.Response>(urlcat(MASK_X_ROOT_URL, pathname))
+        return fetchJSON<MaskX_BaseAPI.Response>(urlcat(MASK_X_ROOT_URL, pathname), undefined, {
+            cached: true,
+            squashed: true,
+        })
     }
 
     private getOptions({ size = 20, page = 1 }: MaskX_BaseAPI.Options = MASK_X_DEFAULT_PAGINATION) {

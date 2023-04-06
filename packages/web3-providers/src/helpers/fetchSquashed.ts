@@ -28,9 +28,6 @@ const RULES = [
     'https://coinmarketcap-agent.r2d2.to',
     'https://kv.r2d2.to',
 
-    // mask-x
-    'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com',
-
     // twitter-identity
     'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com',
 
