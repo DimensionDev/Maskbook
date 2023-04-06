@@ -36,7 +36,6 @@ const RULES = {
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
     'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
-    'https://yb0w3z63oa.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
@@ -51,7 +50,7 @@ function openCaches(url: string) {
     return
 }
 
-async function fetchCachedFearless(duration: number, request: Request, init?: RequestInit, next = originalFetch) {
+async function __fetch__(duration: number, request: Request, init?: RequestInit, next = originalFetch) {
     // hit a cached request
     const cache = await openCaches(request.url)
     const hit = await cache?.match(request)
@@ -103,7 +102,7 @@ export async function fetchCached(
     const rule = URLS.find((x) => url.includes(x))
     if (!rule) return next(request, init)
 
-    return fetchCachedFearless(RULES[rule], request, init, next)
+    return __fetch__(RULES[rule], request, init, next)
 }
 
 export async function staleCached(info: RequestInfo | URL, init?: RequestInit): Promise<Response | void> {
@@ -131,7 +130,11 @@ export function createFetchCached({
     next?: Fetcher
     duration?: number
 } = {}) {
-    return async (input: RequestInfo | URL, init?: RequestInit, _next = next): Promise<Response> => {
+    return async function createFetchCached(
+        input: RequestInfo | URL,
+        init?: RequestInit,
+        _next = next,
+    ): Promise<Response> {
         // why: the caches doesn't define in test env
         if (process.env.NODE_ENV === 'test') return _next(input, init)
 
@@ -143,6 +146,6 @@ export function createFetchCached({
         const url = request.url
         if (!url.startsWith('http')) return _next(request, init)
 
-        return fetchCachedFearless(duration, request, init, _next)
+        return __fetch__(duration, request, init, _next)
     }
 }

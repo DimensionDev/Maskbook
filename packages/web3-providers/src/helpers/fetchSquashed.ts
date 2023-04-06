@@ -45,16 +45,9 @@ const RULES = [
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com',
     'https://uldpla73li.execute-api.ap-east-1.amazonaws.com',
-    'https://yb0w3z63oa.execute-api.us-east-1.amazonaws.com',
 ]
 
-function fetchSquashedFearless(
-    key: string,
-    expiration: number,
-    request: Request,
-    init?: RequestInit,
-    next = originalFetch,
-) {
+function __fetch__(key: string, expiration: number, request: Request, init?: RequestInit, next = originalFetch) {
     const hit = CACHE.get(key)
     if (hit && hit.timestamp + expiration > Date.now()) return hit.response.then((x) => x.clone())
 
@@ -87,7 +80,7 @@ export async function fetchSquashed(
     const rule = RULES.find((x) => url.includes(x))
     if (!rule) return next(request, init)
 
-    return fetchSquashedFearless(url, 600, request, init, next)
+    return __fetch__(url, 600, request, init, next)
 }
 
 export function createFetchSquashed({
@@ -109,6 +102,6 @@ export function createFetchSquashed({
 
         const key = `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
 
-        return fetchSquashedFearless(key, expiration, request, init, _next)
+        return __fetch__(key, expiration, request, init, _next)
     }
 }
