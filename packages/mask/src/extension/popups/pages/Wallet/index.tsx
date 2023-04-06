@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
@@ -13,7 +13,6 @@ import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
-import { MaskMessages } from '../../../../utils/messages.js'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
@@ -48,8 +47,8 @@ export default function Wallet() {
     const wallet = useWallet()
     const location = useLocation()
     const navigate = useNavigate()
-    const [initLoading, setInitLoading] = useState(true)
-    const { smartPayChainId } = PopupContext.useContainer()
+
+    const { smartPayChainId, initLoading } = PopupContext.useContainer()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
     })
@@ -107,18 +106,9 @@ export default function Wallet() {
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
-        const cleanRequestListener = WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
-
-        const cleanInitListener = MaskMessages.events.allPluginsReady.on(() => {
-            setInitLoading(false)
-        })
-
-        return () => {
-            cleanRequestListener()
-            cleanInitListener()
-        }
     }, [retry])
 
     return (
