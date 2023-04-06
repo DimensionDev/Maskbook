@@ -8,11 +8,13 @@ export namespace TokenListAPI {
         symbol: string
         decimals: number
         logoURI?: string
+        originLogoURI?: string
     }
 
     export interface TokenList<ChainId> {
         keywords: string[]
         logoURI: string
+        originLogoURI: string
         name: string
         timestamp: string
         tokens: Array<Token<ChainId>>

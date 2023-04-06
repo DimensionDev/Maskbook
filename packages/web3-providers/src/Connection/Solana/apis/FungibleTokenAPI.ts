@@ -69,7 +69,7 @@ const fetchMaskTokenList = memoizePromise(
                 name: token.name,
                 symbol: token.symbol,
                 decimals: token.decimals,
-                logoURL: token.logoURI,
+                logoURL: token.originLogoURI || token.logoURI,
             }
         })
         return tokens
