@@ -35,6 +35,52 @@ export class MaskWalletProvider
         super(ProviderType.MaskWallet)
     }
 
+    async update() {
+        const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
+
+        this.ref.value = sortBy(
+            uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
+            (x) => !!x.owner,
+        )
+        const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
+        if (!isRecovery) {
+            const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
+            const chainId = await SmartPayBundler.getSupportedChainId()
+            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
+                ...wallets.map((x) => x.address),
+                ...compact(allPersonas.map((x) => x.address)),
+            ])
+
+            const now = new Date()
+            const smartPayWallets = accounts
+                .filter((x) => x.deployed)
+                .map((x) => ({
+                    id: x.address,
+                    name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                    address: x.address,
+                    hasDerivationPath: false,
+                    hasStoredKeyInfo: false,
+                    configurable: true,
+                    createdAt: now,
+                    updatedAt: now,
+                    owner: x.owner,
+                    deployed: x.deployed,
+                    identifier: allPersonas
+                        .find((persona) => isSameAddress(x.owner, persona.address))
+                        ?.identifier.toText(),
+                }))
+
+            const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
+                isSameAddress(a.address, b.address),
+            )
+
+            if (!isEqual(result, super.wallets)) {
+                await this.updateWallets(result)
+            }
+            this.ref.value = sortBy(result, (x) => !!x.owner)
+        }
+    }
+
     override get subscription() {
         return {
             ...super.subscription,
@@ -58,55 +104,9 @@ export class MaskWalletProvider
             }
         })
 
-        const update = async () => {
-            const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
+        await this.update()
 
-            this.ref.value = sortBy(
-                uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
-                (x) => !!x.owner,
-            )
-            const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
-            if (!isRecovery) {
-                const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
-                const chainId = await SmartPayBundler.getSupportedChainId()
-                const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
-                    ...wallets.map((x) => x.address),
-                    ...compact(allPersonas.map((x) => x.address)),
-                ])
-
-                const now = new Date()
-                const smartPayWallets = accounts
-                    .filter((x) => x.deployed)
-                    .map((x) => ({
-                        id: x.address,
-                        name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
-                        address: x.address,
-                        hasDerivationPath: false,
-                        hasStoredKeyInfo: false,
-                        configurable: true,
-                        createdAt: now,
-                        updatedAt: now,
-                        owner: x.owner,
-                        deployed: x.deployed,
-                        identifier: allPersonas
-                            .find((persona) => isSameAddress(x.owner, persona.address))
-                            ?.identifier.toText(),
-                    }))
-
-                const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
-                    isSameAddress(a.address, b.address),
-                )
-
-                if (!isEqual(result, super.wallets)) {
-                    await this.updateWallets(result)
-                }
-                this.ref.value = sortBy(result, (x) => !!x.owner)
-            }
-        }
-
-        await update()
-
-        const debounceUpdate = debounce(update, 1000)
+        const debounceUpdate = debounce(this.update.bind(this), 1000)
 
         this.context?.wallets.subscribe(debounceUpdate)
         this.context?.allPersonas?.subscribe(debounceUpdate)
