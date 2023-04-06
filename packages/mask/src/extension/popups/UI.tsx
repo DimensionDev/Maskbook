@@ -43,6 +43,7 @@ const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: Pr
 export default function Popups() {
     const [title, setTitle] = useState('')
     const titleContext = useMemo(() => ({ title, setTitle }), [title])
+
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
     useMountReport(TelemetryAPI.EventID.AccessPopups)
 
