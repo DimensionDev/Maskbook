@@ -13,18 +13,18 @@ const RULES = {
     // twitter shorten links
     'https://t.co': Duration.MEDIUM,
     'https://gitcoin.co/grants/v1/api/grant': Duration.SHORT,
-    'https://vcent-agent.r2d2.to': Duration.SHORT,
     'https://rss3.domains/name': Duration.SHORT,
 
-    // avatar on RSS3 kv queries
-    'https://kv.r2d2.to/api/com.maskbook': Duration.LONG,
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
+
     // chainbase
     'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
     'https://chainbase-proxy.r2d2.to/v1/space-id': Duration.SHORT,
+
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
+
     // Mask Token List
     'https://tokens.r2d2.to': Duration.LONG,
 }

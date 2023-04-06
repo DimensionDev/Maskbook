@@ -20,7 +20,6 @@ const RULES = [
     'https://nftscan-proxy.r2d2.to',
     'https://simplehash-proxy.r2d2.to',
     'https://alchemy-proxy.r2d2.to',
-    'https://vcent-agent.r2d2.to',
     'https://tokens.r2d2.to',
     'https://chainbase-proxy.r2d2.to',
     'https://coingecko-agent.r2d2.to',
