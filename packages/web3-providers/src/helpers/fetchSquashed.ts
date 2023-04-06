@@ -28,10 +28,6 @@ const RULES = [
     'https://coinmarketcap-agent.r2d2.to',
     'https://kv.r2d2.to',
 
-    // attrace
-    'attrace.com/v1/logsearch',
-    'https://discovery.attrace.com',
-
     // twitter post images
     'https://pbs.twimg.com/media',
 ]

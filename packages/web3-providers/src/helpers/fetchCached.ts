@@ -18,7 +18,6 @@ const RULES = {
 
     // avatar on RSS3 kv queries
     'https://kv.r2d2.to/api/com.maskbook': Duration.LONG,
-    'https://discovery.attrace.com': Duration.SHORT,
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
     // chainbase
