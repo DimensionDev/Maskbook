@@ -98,14 +98,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<NextIDErrorBody | undefined>(
-            urlcat(BASE_URL, '/v1/proof'),
-            {
-                body: JSON.stringify(requestBody),
-                method: 'POST',
-            },
-            this.fetchSquashedFromNextID,
-        )
+        const result = await fetchJSON<NextIDErrorBody | undefined>(urlcat(BASE_URL, '/v1/proof'), {
+            body: JSON.stringify(requestBody),
+            method: 'POST',
+        })
 
         if (result?.message) throw new Error(result.message)
 
@@ -454,14 +450,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
 
-        const response = await fetchJSON<CreatePayloadResponse>(
-            urlcat(BASE_URL, '/v1/proof/payload'),
-            {
-                body: JSON.stringify(requestBody),
-                method: 'POST',
-            },
-            this.fetchSquashedFromNextID,
-        )
+        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
+            body: JSON.stringify(requestBody),
+            method: 'POST',
+        })
 
         return response
             ? {

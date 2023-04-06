@@ -116,14 +116,10 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             patch: formatPatchData(pluginID, patchData),
         }
 
-        const response = await fetchJSON<CreatePayloadResponse>(
-            urlcat(BASE_URL, '/v1/kv/payload'),
-            {
-                body: JSON.stringify(requestBody),
-                method: 'POST',
-            },
-            this.fetchSquashedFromNextID,
-        )
+        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/kv/payload'), {
+            body: JSON.stringify(requestBody),
+            method: 'POST',
+        })
 
         return response
             ? Ok({
@@ -167,14 +163,10 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<T>(
-            urlcat(BASE_URL, '/v1/kv'),
-            {
-                body: JSON.stringify(requestBody),
-                method: 'POST',
-            },
-            this.fetchSquashedFromNextID,
-        )
+        const result = await fetchJSON<T>(urlcat(BASE_URL, '/v1/kv'), {
+            body: JSON.stringify(requestBody),
+            method: 'POST',
+        })
 
         if (result) {
             await staleNextIDCached(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
