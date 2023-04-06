@@ -303,10 +303,10 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.REDDIT]: 'Reddit',
         [NextIDPlatform.SYBIL]: 'Sybil',
         [NextIDPlatform.EthLeaderboard]: 'EthLeaderboard',
-        [NextIDPlatform.SpaceId]: 'SpaceId',
+        [NextIDPlatform.SpaceId]: 'Space ID',
         [NextIDPlatform.Farcaster]: 'Farcaster',
-        [NextIDPlatform.Bit]: 'Bit',
-        [NextIDPlatform.Unstoppable]: 'Unstoppable',
+        [NextIDPlatform.Bit]: '.bit',
+        [NextIDPlatform.Unstoppable]: 'Unstoppable Domains',
         [NextIDPlatform.CyberConnect]: 'CyberConnect',
     },
     () => {
