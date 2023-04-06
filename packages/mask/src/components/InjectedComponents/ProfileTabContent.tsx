@@ -227,7 +227,14 @@ function Content(props: ProfileTabContentProps) {
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAccounts.length))
-
+    console.log({
+        isTwitterPlatform,
+        isWeb3ProfileDisable,
+        personaStatusVerified: personaStatus.verified,
+        doesOwnerHaveNoAddress,
+        isOwnerIdentity,
+        socialAccountsLength: socialAccounts.length,
+    })
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
     const contentComponent = useMemo(() => {
