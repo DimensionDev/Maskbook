@@ -8,7 +8,7 @@ import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { createFetchSquashed, fetchJSON } from '../entry-helpers.js'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -26,6 +26,8 @@ function formatPatchData(pluginID: string, data: unknown) {
 }
 
 export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
+    private fetchSquashedFromNextID = createFetchSquashed()
+
     /**
      * Get current KV of a persona
      * @param personaPublicKey
@@ -48,6 +50,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         }
         const response = await fetchJSON<Response | undefined>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+            undefined,
+            this.fetchSquashedFromNextID,
         )
         if (!response) return Err('User not found')
 
@@ -71,14 +75,22 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         interface Response {
             values: Proof[]
         }
-        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }))
+        const response = await fetchJSON<Response>(
+            urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
+            undefined,
+            this.fetchSquashedFromNextID,
+        )
         if (!response) return Err('User not found')
 
         const result = compact(response.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<T> {
-        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        return fetchJSON<T>(
+            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+            undefined,
+            this.fetchSquashedFromNextID,
+        )
     }
     /**
      * Get signature payload for updating
@@ -104,10 +116,14 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             patch: formatPatchData(pluginID, patchData),
         }
 
-        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/kv/payload'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const response = await fetchJSON<CreatePayloadResponse>(
+            urlcat(BASE_URL, '/v1/kv/payload'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            this.fetchSquashedFromNextID,
+        )
 
         return response
             ? Ok({
@@ -151,10 +167,14 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<T>(urlcat(BASE_URL, '/v1/kv'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const result = await fetchJSON<T>(
+            urlcat(BASE_URL, '/v1/kv'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            this.fetchSquashedFromNextID,
+        )
 
         if (result) {
             await staleNextIDCached(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))

@@ -1,3 +1,5 @@
+import type { Fetcher } from './fetch.js'
+
 /* cspell:disable */
 const { fetch: originalFetch } = globalThis
 
@@ -13,6 +15,7 @@ const RULES = {
     'https://gitcoin.co/grants/v1/api/grant': Duration.SHORT,
     'https://vcent-agent.r2d2.to': Duration.SHORT,
     'https://rss3.domains/name': Duration.SHORT,
+
     // avatar on RSS3 kv queries
     'https://kv.r2d2.to/api/com.maskbook': Duration.LONG,
     'https://discovery.attrace.com': Duration.SHORT,
@@ -36,10 +39,10 @@ const RULES = {
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
-function openCaches(key: string) {
+function openCaches(url: string) {
     if ('caches' in globalThis) {
         try {
-            return caches.open(key)
+            return caches.open(new URL(url).host)
         } catch {
             return
         }
@@ -47,33 +50,14 @@ function openCaches(key: string) {
     return
 }
 
-export async function fetchCached(
-    input: RequestInfo | URL,
-    init?: RequestInit,
-    next = originalFetch,
-): Promise<Response> {
-    // why: the caches doesn't define in test env
-    if (process.env.NODE_ENV === 'test') return next(input, init)
-
-    // skip all side effect requests
-    const request = new Request(input, init)
-    if (request.method !== 'GET') return next(request, init)
-
-    // skip all non-http requests
-    const url = request.url
-    if (!url.startsWith('http')) return next(request, init)
-
-    // no need to cache
-    const rule = URLS.find((x) => url.includes(x))
-    if (!rule) return next(request, init)
-
+async function fetchCachedFearless(duration: number, request: Request, init?: RequestInit, next = originalFetch) {
     // hit a cached request
-    const cache = await openCaches(rule)
+    const cache = await openCaches(request.url)
     const hit = await cache?.match(request)
     const date = hit?.headers.get('x-cache-date')
 
     if (hit && date) {
-        const expired = new Date(date).getTime() + RULES[rule] < Date.now()
+        const expired = new Date(date).getTime() + duration < Date.now()
         if (!expired) return hit
     }
 
@@ -98,6 +82,29 @@ export async function fetchCached(
     return response
 }
 
+export async function fetchCached(
+    input: RequestInfo | URL,
+    init?: RequestInit,
+    next = originalFetch,
+): Promise<Response> {
+    // why: the caches doesn't define in test env
+    if (process.env.NODE_ENV === 'test') return next(input, init)
+
+    // skip all side effect requests
+    const request = new Request(input, init)
+    if (request.method !== 'GET') return next(request, init)
+
+    // skip all non-http requests
+    const url = request.url
+    if (!url.startsWith('http')) return next(request, init)
+
+    // no need to cache
+    const rule = URLS.find((x) => url.includes(x))
+    if (!rule) return next(request, init)
+
+    return fetchCachedFearless(RULES[rule], request, init, next)
+}
+
 export async function staleCached(info: RequestInfo | URL, init?: RequestInit): Promise<Response | void> {
     const request = new Request(info, init)
     if (request.method !== 'GET') return
@@ -114,4 +121,27 @@ export async function staleCached(info: RequestInfo | URL, init?: RequestInit): 
 
     await cache?.delete(request)
     return hit
+}
+
+export async function createFetchCached({
+    next = originalFetch,
+    duration = Duration.SHORT,
+}: {
+    next?: Fetcher
+    duration?: number
+} = {}) {
+    return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+        // why: the caches doesn't define in test env
+        if (process.env.NODE_ENV === 'test') return next(input, init)
+
+        // skip all side effect requests
+        const request = new Request(input, init)
+        if (request.method !== 'GET') return next(request, init)
+
+        // skip all non-http requests
+        const url = request.url
+        if (!url.startsWith('http')) return next(request, init)
+
+        return fetchCachedFearless(duration, request, init, next)
+    }
 }

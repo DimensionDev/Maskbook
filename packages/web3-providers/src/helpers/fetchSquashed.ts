@@ -1,5 +1,4 @@
-import urlcat from 'urlcat'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from '../NextID/constants.js'
+import type { Fetcher } from './fetch.js'
 
 const { fetch: originalFetch } = globalThis
 
@@ -11,12 +10,6 @@ const CACHE = new Map<
     }
 >()
 const RULES = [
-    // NextID
-    urlcat(PROOF_BASE_URL_PROD, '/v1/proof'),
-    urlcat(PROOF_BASE_URL_DEV, '/v1/proof'),
-    urlcat(PROOF_BASE_URL_DEV, '/v1/kv'),
-    urlcat(PROOF_BASE_URL_DEV, '/v1/kv'),
-
     // GitCoin
     'https://gitcoin.co',
 
@@ -25,6 +18,7 @@ const RULES = [
     'https://gem-proxy.r2d2.to',
     'https://opensea-proxy.r2d2.to',
     'https://nftscan-proxy.r2d2.to',
+    'https://simplehash-proxy.r2d2.to',
     'https://alchemy-proxy.r2d2.to',
     'https://debank-proxy.r2d2.to',
     'https://vcent-agent.r2d2.to',
@@ -51,7 +45,30 @@ const RULES = [
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com',
     'https://uldpla73li.execute-api.ap-east-1.amazonaws.com',
+    'https://yb0w3z63oa.execute-api.ap-east-1.amazonaws.com',
 ]
+
+function fetchSquashedFearless(
+    key: string,
+    cache: typeof CACHE,
+    expiration: number,
+    request: Request,
+    init?: RequestInit,
+    next = originalFetch,
+) {
+    const hit = cache.get(key)
+    if (hit && hit.timestamp + expiration > Date.now()) return hit.response.then((x) => x.clone())
+
+    const responsePromise = next(request, init)
+
+    // setup cache for merging subsequent requests
+    cache.set(key, {
+        timestamp: Date.now(),
+        response: responsePromise,
+    })
+
+    return responsePromise.then((x) => x.clone())
+}
 
 export async function fetchSquashed(
     input: RequestInfo | URL,
@@ -71,16 +88,36 @@ export async function fetchSquashed(
     const rule = RULES.find((x) => url.includes(x))
     if (!rule) return next(request, init)
 
-    const hit = CACHE.get(url)
-    if (hit && hit.timestamp + 600 > Date.now()) return hit.response.then((x) => x.clone())
+    return fetchSquashedFearless(url, CACHE, 600, request, init, next)
+}
 
-    const responsePromise = next(request, init)
+export function createFetchSquashed({
+    next = originalFetch,
+    expiration = 600,
+}: {
+    next?: Fetcher
+    expiration?: number
+} = {}) {
+    const cache = new Map<
+        string,
+        {
+            timestamp: number
+            response: Promise<Response>
+        }
+    >()
 
-    // setup cache for merging subsequent requests
-    CACHE.set(url, {
-        timestamp: Date.now(),
-        response: responsePromise,
-    })
+    return async (input: RequestInfo | URL, init?: RequestInit) => {
+        const request = new Request(input, init)
 
-    return responsePromise.then((x) => x.clone())
+        // skip not cacheable requests
+        if (request.method !== 'GET' && request.method !== 'POST') return next(request, init)
+
+        // skip all non-http requests
+        const url = request.url
+        if (!url.startsWith('http')) return next(request, init)
+
+        const key = `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
+
+        return fetchSquashedFearless(key, cache, expiration, request, init)
+    }
 }
