@@ -73,5 +73,6 @@ export interface MaskToken {
     name: string
     symbol: string
     logoURI: string
+    originLogoURI: string
     decimals: number
 }

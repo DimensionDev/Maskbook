@@ -42,7 +42,7 @@ async function fetchCommonERC20TokensFromTokenList(
             type: TokenType.Fungible,
             schema: SchemaType.ERC20,
             ...x,
-            logoURL: x.logoURI,
+            logoURL: x.originLogoURI || x.logoURI,
         }))
 }
 
