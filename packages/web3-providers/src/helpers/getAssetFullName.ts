@@ -8,6 +8,7 @@ export function getAssetFullName(contract_address: string, contractName: string,
             ? `#${tokenId}`
             : contractName
     if (isENSContractAddress(contract_address)) return `ENS #${name}`
+    if (name.toLowerCase().includes('.lens') || name.includes('lensprotocol')) return name
 
     const [first, next] = name.split('#').map((x) => x.trim())
     if (first && next) return `${first} #${next}`

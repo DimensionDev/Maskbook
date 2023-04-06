@@ -113,8 +113,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
-    const { Others } = useWeb3State(pluginID)
-    const caption = Others?.formatTokenId(token.tokenId, 4)
     const captionRef = useRef<HTMLDivElement>(null)
 
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
@@ -140,11 +138,13 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
                     root: classes.root,
                 }}
             />
-            <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
+            <ShadowRootTooltip
+                title={showTooltip ? token.metadata?.name : undefined}
+                placement="bottom"
+                disableInteractive
+                arrow>
                 <Typography ref={captionRef} className={classes.caption}>
-                    {Others?.isValidDomain(token.metadata?.name) || pluginID === NetworkPluginID.PLUGIN_SOLANA
-                        ? token.metadata?.name
-                        : caption}
+                    {token.metadata?.name}
                 </Typography>
             </ShadowRootTooltip>
         </div>
