@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import { GasOptionType, multipliedBy, toFixed } from '@masknet/web3-shared-base'
+import { GasOptionType, isZero, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '../helpers/formatter.js'
 import { chainResolver } from '../helpers/resolver.js'
 import type {
@@ -48,7 +48,10 @@ export class GasEditor {
                     toHex(this.EIP1559GasOptionConfig.maxPriorityFeePerGas) ||
                     toHex(config?.maxPriorityFeePerGas || '1'),
                 gasCurrency: this.EIP1559GasOptionConfig?.gasCurrency || fallback?.gasCurrency,
-                gas: this.EIP1559GasOptionConfig.gas ? toHex(this.EIP1559GasOptionConfig.gas) : undefined,
+                gas:
+                    this.EIP1559GasOptionConfig.gas && !isZero(this.EIP1559GasOptionConfig.gas)
+                        ? toHex(this.EIP1559GasOptionConfig.gas)
+                        : undefined,
             }
         }
 
