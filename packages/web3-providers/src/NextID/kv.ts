@@ -48,6 +48,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         }
         const response = await fetchJSON<Response | undefined>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+            undefined,
+            {
+                enableCache: true,
+                enableSquash: true,
+            },
         )
         if (!response) return Err('User not found')
 
@@ -71,14 +76,24 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         interface Response {
             values: Proof[]
         }
-        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }))
+        const response = await fetchJSON<Response>(
+            urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
+            undefined,
+            {
+                enableCache: true,
+                enableSquash: true,
+            },
+        )
         if (!response) return Err('User not found')
 
         const result = compact(response.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<T> {
-        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, {
+            enableCache: true,
+            enableSquash: true,
+        })
     }
     /**
      * Get signature payload for updating

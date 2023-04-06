@@ -6,10 +6,9 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleTokenAPI as EVM_FungibleTokenAPI } from '../../Connection/index.js'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
 import type { WalletTokenRecord } from '../types.js'
-import { fetchJSON, getNativeAssets } from '../../entry-helpers.js'
+import { DEBANK_OPEN_API } from '../constants.js'
+import { Duration, fetchJSON, getNativeAssets } from '../../entry-helpers.js'
 import type { FungibleTokenAPI } from '../../entry-types.js'
-
-const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     private fungibleToken = new EVM_FungibleTokenAPI()
@@ -20,6 +19,12 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
                 id: address,
                 is_all: false,
             }),
+            undefined,
+            {
+                enableSquash: true,
+                enableCache: true,
+                cacheDuration: Duration.LONG,
+            },
         )
 
         return createPageable(

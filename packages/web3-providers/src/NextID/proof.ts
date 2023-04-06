@@ -1,3 +1,5 @@
+import urlcat from 'urlcat'
+import { first, uniqBy, uniqWith } from 'lodash-es'
 import {
     NextIDPlatform,
     fromHex,
@@ -11,8 +13,6 @@ import {
     type NextIDPersonaBindings,
     type NextIDEnsRecord,
 } from '@masknet/shared-base'
-import { first, uniqBy, uniqWith } from 'lodash-es'
-import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import {
@@ -115,7 +115,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const { ids } = await fetchJSON<NextIDBindings>(url)
+        const { ids } = await fetchJSON<NextIDBindings>(url, undefined, { enableSquash: true })
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
@@ -132,6 +132,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 sort: 'activated_at',
                 order: 'desc',
             }),
+            undefined,
+            { enableSquash: true },
         )
 
         return response.ids
@@ -163,6 +165,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     page,
                     order: 'desc',
                 }),
+                undefined,
+                { enableSquash: true },
             )
 
             const personaBindings = result.ids
@@ -182,7 +186,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             if (!platform && !identity) return false
 
             const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-            const result = await fetchJSON<BindingProof | undefined>(url)
+            const result = await fetchJSON<BindingProof | undefined>(url, undefined, { enableSquash: true })
             return !!result?.is_valid
         } catch {
             return false
@@ -201,13 +205,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     }>
                 }
             }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_PROFILES_QUERY',
-                variables: { platform: 'ethereum', identity: address.toLowerCase() },
-                query: `
+        }>(
+            RELATION_SERVICE_URL,
+            {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify({
+                    operationName: 'GET_PROFILES_QUERY',
+                    variables: { platform: 'ethereum', identity: address.toLowerCase() },
+                    query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                         identity(platform: $platform, identity: $identity) {
                             nft(category: ["ENS"]) {
@@ -233,8 +239,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                         }
                     }
                 `,
-            }),
-        })
+                }),
+            },
+            { enableSquash: true },
+        )
 
         const bindings = data.identity.neighborWithTraversal
             .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
@@ -265,13 +273,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     }>
                 }
             }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
-                query: `
+        }>(
+            RELATION_SERVICE_URL,
+            {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify({
+                    operationName: 'GET_PROFILES_BY_TWITTER_ID',
+                    variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                    query: `
                     query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
                         identity(platform: $platform, identity: $identity) {
                             nft(category: ["ENS"]) {
@@ -311,8 +321,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                         }
                     }
                 `,
-            }),
-        })
+                }),
+            },
+            { enableSquash: true },
+        )
 
         const bindings = data.identity.neighborWithTraversal
             .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
@@ -362,13 +374,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     }>
                 } | null
             }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_LENS_PROFILES',
-                variables: { platform: 'twitter', identity: lowerCaseId },
-                query: `
+        }>(
+            RELATION_SERVICE_URL,
+            {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify({
+                    operationName: 'GET_LENS_PROFILES',
+                    variables: { platform: 'twitter', identity: lowerCaseId },
+                    query: `
                     query GET_LENS_PROFILES($platform: String, $identity: String) {
                       identity(platform: $platform, identity: $identity) {
                         uuid
@@ -393,8 +407,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                       }
                     }
                 `,
-            }),
-        })
+                }),
+            },
+            { enableSquash: true },
+        )
 
         const connections =
             data.identity?.neighborWithTraversal.filter((x) => {

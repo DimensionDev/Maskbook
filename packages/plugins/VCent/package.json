@@ -16,6 +16,7 @@
     "@masknet/theme": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
+    "@masknet/web3-providers": "workspace:^",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
     "urlcat": "^2.0.4"

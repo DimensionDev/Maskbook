@@ -2,10 +2,9 @@ import urlcat from 'urlcat'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, type GasOption } from '@masknet/web3-shared-evm'
 import type { GasPriceDictResponse } from '../types.js'
+import { DEBANK_OPEN_API } from '../constants.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { GasOptionAPI } from '../../entry-types.js'
-
-const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 /**
  * Debank's data might be outdated, like gas price for aurora which requires 1 Gwei at least
@@ -29,6 +28,10 @@ export class DeBankGasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOpt
 
         const result = await fetchJSON<GasPriceDictResponse>(
             urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }),
+            undefined,
+            {
+                enableSquash: true,
+            },
         )
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
