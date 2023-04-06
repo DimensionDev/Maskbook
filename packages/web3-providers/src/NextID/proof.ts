@@ -268,10 +268,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryProfilesByTwitterId(twitterId: string) {
-        console.log('DEBUG: queryProfilesByRelationService')
-        console.log({
-            twitterId,
-        })
         const { data } = await fetchJSON<{
             data: {
                 identity: {
