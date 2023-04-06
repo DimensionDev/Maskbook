@@ -1268,6 +1268,7 @@ export namespace Plugin.__Host {
 
         signal?: AbortSignal
         permission: PermissionReporter
+        onInitialComplete?: () => void
     }
 
     export interface PermissionReporter {

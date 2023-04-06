@@ -48,7 +48,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
     hostPermissionChanged: void
     personasChanged: void
-
+    allPluginsReady: boolean
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
     maskSDKHotModuleReload: void

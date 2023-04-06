@@ -1,21 +1,22 @@
 import urlcat from 'urlcat'
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
-import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletContext } from './hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
+import { MaskMessages } from '../../../../utils/messages.js'
+import { TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
+import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -47,12 +48,14 @@ export default function Wallet() {
     const wallet = useWallet()
     const location = useLocation()
     const navigate = useNavigate()
+    const [initLoading, setInitLoading] = useState(true)
     const { smartPayChainId } = PopupContext.useContainer()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
     })
 
-    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter, Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
@@ -104,16 +107,25 @@ export default function Wallet() {
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+        const cleanRequestListener = WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
+
+        const cleanInitListener = MaskMessages.events.allPluginsReady.on(() => {
+            setInitLoading(false)
+        })
+
+        return () => {
+            cleanRequestListener()
+            cleanInitListener()
+        }
     }, [retry])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
                 <WalletHeader />
-                {loading ? (
+                {loading || initLoading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Routes>
