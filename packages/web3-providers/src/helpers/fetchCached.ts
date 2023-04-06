@@ -32,7 +32,6 @@ const RULES = {
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
     // Mask Token List
     'https://tokens.r2d2.to': Duration.LONG,
-    'https://debank-proxy.r2d2.to/v1/user/all_token_list': Duration.LONG,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
