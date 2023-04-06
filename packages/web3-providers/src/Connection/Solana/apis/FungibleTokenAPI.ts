@@ -163,7 +163,9 @@ export class SolanaFungibleAPI
         const maskTokenList = await fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0])
         const rayDiumTokenList = await fetchRayDiumTokenList(RAYDIUM_TOKEN_LIST)
 
-        return uniqBy([...maskTokenList, ...rayDiumTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
+        return uniqBy([...maskTokenList, ...rayDiumTokenList], (x) => x.address)
+            .filter((x) => x.name && x.symbol)
+            .map((x) => ({ ...x, symbol: x.symbol.toLowerCase() === x.symbol ? x.symbol.toUpperCase() : x.symbol }))
     }
 
     async getNonFungibleTokenList(
