@@ -10,6 +10,7 @@ import { TokenType, type Transaction } from '@masknet/web3-shared-base'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
 import { TransactionIcon } from '../TransactionIcon/index.js'
+import { formatKeccakHash } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -149,7 +150,11 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
                         <Typography variant="body2">
-                            {domain ? Others?.formatDomainName?.(domain) : Others?.formatAddress?.(transaction.to, 4)}
+                            {domain
+                                ? Others?.formatDomainName?.(domain)
+                                : transaction.to
+                                ? Others?.formatAddress?.(transaction.to, 4)
+                                : formatKeccakHash(transaction.id, 4)}
                         </Typography>
                         <Link
                             sx={{ height: 21 }}

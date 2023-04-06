@@ -40,12 +40,15 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { fetchJSON, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
+import { fetchGlobal, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    return fetchJSON<T>(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    const response = await fetchGlobal(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    if (response.status === 404) return
+    if (!response.ok && response.status !== 404) throw new Error('Failed to fetch as JSON.')
+    return response.json() as T
 }
 
 function createTokenDetailed(
@@ -395,7 +398,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 token_id: tokenId,
                 cursor: indicator?.id,
                 limit: size,
-                event_type: side === OrderSide.Sell ? 'created' : 'offer_entered',
+                event_type: side === OrderSide.Sell ? 'created' : side === OrderSide.Buy ? 'offer_entered' : '',
             }),
             chainId,
         )

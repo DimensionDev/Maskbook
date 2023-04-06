@@ -6,8 +6,8 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Typography, alpha, type MenuProps } from '@mui/material'
-import { debounce, uniqBy } from 'lodash-es'
-import { type HTMLProps, useEffect, useMemo, useRef, useState, memo } from 'react'
+import { uniqBy } from 'lodash-es'
+import { type HTMLProps, useEffect, useMemo, useRef, memo } from 'react'
 import { useAsync, useWindowScroll } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
@@ -78,10 +78,12 @@ const useStyles = makeStyles()((theme) => {
         },
         addressText: {
             fontSize: '10px',
-            lineHeight: '10px',
             overflow: 'auto',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         copyButton: {
             marginLeft: theme.spacing(0.5),
@@ -91,12 +93,21 @@ const useStyles = makeStyles()((theme) => {
         related: {
             whiteSpace: 'break-spaces',
             lineBreak: 'anywhere',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 4,
         },
         ens: {
             whiteSpace: 'nowrap',
             padding: theme.spacing(0.25, 0.5),
             marginRight: 6,
             fontSize: 12,
+            maxWidth: '100%',
+            display: 'inline-block',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            backgroundColor: theme.palette.maskColor.bottom,
+            borderRadius: 4,
         },
         linkIcon: {
             display: 'flex',
@@ -167,21 +178,7 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
     const t = useSharedI18N()
     const { classes, cx } = useStyles()
     const position = useWindowScroll()
-    const [hideToolTip, setHideToolTip] = useState(false)
     const ref = useRef<HTMLDivElement | null>(null)
-
-    useEffect(() => {
-        const handleEndScroll = debounce(() => setHideToolTip(false), 3000)
-
-        const onScroll = () => {
-            setHideToolTip(true)
-            handleEndScroll()
-        }
-
-        const menu = ref.current?.querySelector('[role="menu"]')?.parentElement
-        menu?.addEventListener('scroll', onScroll)
-        return () => menu?.removeEventListener('scroll', onScroll)
-    }, [ref.current, nextIdBindings])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
         nextIdBindings
@@ -189,7 +186,7 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
             .map((x, i) => {
                 const Icon = resolveNextIDPlatformIcon(x.platform)
                 return (
-                    <SocialTooltip key={i} platform={x.source} hidden={hideToolTip}>
+                    <SocialTooltip key={i} platform={x.source}>
                         <MenuItem
                             className={classes.listItem}
                             disableRipple

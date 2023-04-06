@@ -28,10 +28,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
             }
         }
 
-        return {
-            ...identity,
-            sns_handle: identity.web3_addr,
-        }
+        return identity
     }
 
     private async getResponse(response: MaskX_BaseAPI.Response) {
@@ -41,10 +38,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
                     case MaskX_BaseAPI.SourceType.RSS3:
                         return this.getRNSIdentity(x)
                     default:
-                        return {
-                            ...x,
-                            sns_handle: x.web3_addr,
-                        }
+                        return x
                 }
             }),
         )

@@ -13,7 +13,7 @@ export function useEssay(user: User, refresh?: number) {
         if (!Storage || !user.address) return null
         const stringStorage = Storage.createStringStorage('Pets', user.address)
         let result = await stringStorage.get<EssayRSSNode>('pet')
-        if (!result) {
+        if (!result?.essay || result.essay.userId !== user.userId) {
             const rss3Storage = Storage.createRSS3Storage(user.address)
             result = await rss3Storage.get<EssayRSSNode>('_pet')
         }

@@ -56,13 +56,11 @@ const useStyles = makeStyles<{
     },
     retryButton: {
         fontSize: 12,
-        backgroundColor: theme.palette.maskColor.publicThirdMain,
-        color: theme.palette.maskColor.publicMain,
-        opacity: 0.5,
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.publicThirdMain,
-            color: theme.palette.maskColor.publicMain,
-            opacity: 0.5,
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
         },
     },
 }))
@@ -125,6 +123,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         </Box>
                         {!connected && error ? (
                             <ActionButton
+                                loading={loading}
                                 color="primary"
                                 onClick={retry}
                                 disabled={loading}

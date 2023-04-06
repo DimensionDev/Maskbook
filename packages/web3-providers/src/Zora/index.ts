@@ -297,30 +297,4 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         const events_ = events.length ? events.map((x) => this.createNonFungibleEventFromEvent(chainId, x)) : EMPTY_LIST
         return this.createPageable(events_, indicator)
     }
-
-    async getOffers(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {
-        return this.getOrders(address, tokenId, OrderSide.Buy, options)
-    }
-
-    async getListings(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {
-        return this.getOrders(address, tokenId, OrderSide.Sell, options)
-    }
-
-    async getOrders(
-        address: string,
-        tokenId: string,
-        side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
-    ) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-
-        const events = await this.getEventsFiltered<SaleEventProperty | V3AskEventProperty>(
-            chainId,
-            address,
-            tokenId,
-            side === OrderSide.Buy ? [EventType.V3_ASK_EVENT] : [EventType.SALE_EVENT],
-        )
-        const orders = events.length ? events.map((x) => this.createNonFungibleOrderFromEvent(chainId, x)) : EMPTY_LIST
-        return this.createPageable(orders, indicator)
-    }
 }

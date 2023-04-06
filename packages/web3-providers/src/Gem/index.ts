@@ -19,7 +19,7 @@ const resolveRarityId = createLookupTableResolver<
 )
 
 async function fetchFromGem<T>(pathname: string, init?: RequestInit) {
-    const { data } = await fetchJSON<{ data: T }>(urlcat(GEM_API_URL, pathname), init)
+    const { data } = await fetchJSON<{ data: T | undefined }>(urlcat(GEM_API_URL, pathname), init)
     return data
 }
 
@@ -31,6 +31,8 @@ export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>
                 tokenId: tokenId.toLowerCase(),
             }),
         )
+
+        if (!response) return
 
         for (const sourceType of RARITY_SOURCE_TYPE) {
             const rarity = response[resolveRarityId(sourceType)]

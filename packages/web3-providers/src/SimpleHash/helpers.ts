@@ -5,6 +5,7 @@ import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { isEmpty } from 'lodash-es'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return fetchJSON<T>(`${SIMPLE_HASH_URL}${path}`, {
@@ -15,6 +16,7 @@ export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
 }
 
 export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
+    if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155

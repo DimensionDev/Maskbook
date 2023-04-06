@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
             gap: 16,
         },
         badge: {
-            transform: 'translateX(40px) translateY(2.5px)',
+            transform: 'translateX(50px) translateY(2.5px)',
         },
         avatarWrapper: {
             marginRight: 8,
