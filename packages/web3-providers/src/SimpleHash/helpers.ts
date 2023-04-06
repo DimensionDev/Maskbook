@@ -1,11 +1,19 @@
-import { type NonFungibleAsset, TokenType, SourceType, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, chainResolver, WNATIVE, isValidDomain, isValidChainId } from '@masknet/web3-shared-evm'
+import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    SchemaType,
+    WNATIVE,
+    chainResolver,
+    isValidChainId,
+    isValidDomain,
+    resolveImageURL,
+} from '@masknet/web3-shared-evm'
+import { isEmpty } from 'lodash-es'
+import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON } from '../entry-helpers.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
-import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { getAssetFullName } from '../helpers/getAssetFullName.js'
-import { isEmpty } from 'lodash-es'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return fetchJSON<T>(`${SIMPLE_HASH_URL}${path}`, {
@@ -21,6 +29,9 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     const address = asset.contract_address
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
+    const name = isValidDomain(asset.name)
+        ? asset.name
+        : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
     return {
         id: address,
         chainId,
@@ -48,12 +59,10 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             : undefined,
         metadata: {
             chainId,
-            name: isValidDomain(asset.name)
-                ? asset.name
-                : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id),
+            name,
             symbol: asset.contract.symbol,
             description: asset.description,
-            imageURL: asset.image_url || asset.previews.image_large_url,
+            imageURL: resolveImageURL(asset.image_url || asset.previews.image_large_url, name, asset.contract_address),
             mediaURL: asset.image_url || asset.previews.image_large_url,
         },
         contract: {
