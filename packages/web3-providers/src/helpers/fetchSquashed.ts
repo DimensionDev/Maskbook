@@ -41,10 +41,6 @@ const RULES = [
 
     // twitter post images
     'https://pbs.twimg.com/media',
-
-    // Smart Pay
-    'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com',
-    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com',
 ]
 
 function __fetch__(key: string, expiration: number, request: Request, init?: RequestInit, next = originalFetch) {

@@ -4,13 +4,21 @@ import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex } from '@masknet/shared-base'
 import { BUNDLER_PROD } from '../constants.js'
 import type { BundlerAPI } from '../../types/Bundler.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { Duration, fetchJSON } from '../../entry-helpers.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private healthz() {
-        return fetchJSON<BundlerAPI.Healthz>(urlcat(BUNDLER_PROD, '/healthz'), {
-            method: 'GET',
-        })
+        return fetchJSON<BundlerAPI.Healthz>(
+            urlcat(BUNDLER_PROD, '/healthz'),
+            {
+                method: 'GET',
+            },
+            {
+                cached: true,
+                squashed: true,
+                cachedDuration: Duration.LONG,
+            },
+        )
     }
 
     private async handle(userOperation: UserOperation) {
