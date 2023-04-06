@@ -35,7 +35,7 @@ export function NextIdPage() {
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
-
+    console.log({ isOwn, currentProfileIdentifier, visitingPersonaIdentifier })
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
