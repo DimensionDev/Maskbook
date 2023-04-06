@@ -3,7 +3,7 @@ import type { Fetcher } from './fetch.js'
 /* cspell:disable */
 const { fetch: originalFetch } = globalThis
 
-enum Duration {
+export enum Duration {
     SHORT = 60000, // 1 min
     MEDIUM = 1800000, // 30 mins
     LONG = 43200000, // 12 hours
@@ -36,6 +36,7 @@ const RULES = {
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
     'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
+    'https://yb0w3z63oa.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
@@ -123,25 +124,25 @@ export async function staleCached(info: RequestInfo | URL, init?: RequestInit): 
     return hit
 }
 
-export async function createFetchCached({
+export function createFetchCached({
     next = originalFetch,
     duration = Duration.SHORT,
 }: {
     next?: Fetcher
     duration?: number
 } = {}) {
-    return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    return async (input: RequestInfo | URL, init?: RequestInit, _next = next): Promise<Response> => {
         // why: the caches doesn't define in test env
-        if (process.env.NODE_ENV === 'test') return next(input, init)
+        if (process.env.NODE_ENV === 'test') return _next(input, init)
 
         // skip all side effect requests
         const request = new Request(input, init)
-        if (request.method !== 'GET') return next(request, init)
+        if (request.method !== 'GET') return _next(request, init)
 
         // skip all non-http requests
         const url = request.url
-        if (!url.startsWith('http')) return next(request, init)
+        if (!url.startsWith('http')) return _next(request, init)
 
-        return fetchCachedFearless(duration, request, init, next)
+        return fetchCachedFearless(duration, request, init, _next)
     }
 }

@@ -8,7 +8,7 @@ import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { createFetchSquashed, fetchJSON } from '../entry-helpers.js'
+import { createFetchCached, createFetchSquashed, fetchJSON } from '../entry-helpers.js'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -27,6 +27,7 @@ function formatPatchData(pluginID: string, data: unknown) {
 
 export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     private fetchSquashedFromNextID = createFetchSquashed()
+    private fetchCachedFromNextID = createFetchCached()
 
     /**
      * Get current KV of a persona
@@ -51,7 +52,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         const response = await fetchJSON<Response | undefined>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
             undefined,
-            this.fetchSquashedFromNextID,
+            [this.fetchSquashedFromNextID, this.fetchCachedFromNextID],
         )
         if (!response) return Err('User not found')
 
@@ -78,7 +79,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         const response = await fetchJSON<Response>(
             urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
             undefined,
-            this.fetchSquashedFromNextID,
+            [this.fetchSquashedFromNextID, this.fetchCachedFromNextID],
         )
         if (!response) return Err('User not found')
 
@@ -86,11 +87,10 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<T> {
-        return fetchJSON<T>(
-            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
-            undefined,
+        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, [
             this.fetchSquashedFromNextID,
-        )
+            this.fetchCachedFromNextID,
+        ])
     }
     /**
      * Get signature payload for updating
