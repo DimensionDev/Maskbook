@@ -58,14 +58,18 @@ export class MaskWalletProvider
             }
         })
 
-        const update = debounce(async () => {
+        const initWallets = () => {
             const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
-            // speed up first paint
             this.ref.value = sortBy(
                 uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
                 (x) => !!x.owner,
             )
+            return wallets
+        }
+
+        const update = debounce(async () => {
+            const wallets = initWallets()
 
             const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
             if (!isRecovery) {
@@ -105,8 +109,8 @@ export class MaskWalletProvider
                 this.ref.value = sortBy(result, (x) => !!x.owner)
             }
         }, 1000)
-
-        update()
+        initWallets()
+        await update()
         this.context?.wallets.subscribe(update)
         this.context?.allPersonas?.subscribe(update)
         CrossIsolationMessages.events.renameWallet.on(update)

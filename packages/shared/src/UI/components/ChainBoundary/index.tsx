@@ -56,6 +56,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     actualNetworkPluginID?: T
     switchText?: string
+    disableConnectWallet?: boolean
 }
 
 export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
@@ -66,6 +67,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         actualNetworkPluginID,
         switchText,
         forceShowingWrongNetworkButton = false,
+        disableConnectWallet = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -147,7 +149,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         )
 
     // No wallet connected
-    if (!account)
+    if (!account && !disableConnectWallet)
         return renderBox(
             <>
                 {!props.hiddenConnectButton ? (

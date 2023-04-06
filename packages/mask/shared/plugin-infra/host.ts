@@ -40,6 +40,9 @@ export function createPluginHost<Context>(
     )
     MaskMessages.events.hostPermissionChanged.on(() => permission.events.emit('changed'), { signal })
 
+    const callback = () => {
+        MaskMessages.events.allPluginReady.sendToAll(true)
+    }
     return {
         signal,
         minimalMode,
@@ -48,5 +51,6 @@ export function createPluginHost<Context>(
         },
         createContext,
         permission,
+        callback,
     }
 }

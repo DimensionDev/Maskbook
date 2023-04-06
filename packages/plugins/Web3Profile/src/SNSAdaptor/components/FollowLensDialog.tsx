@@ -23,7 +23,7 @@ import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     profile: {
-        marginTop: 24,
+        marginTop: account ? 24 : 44,
         width: '100%',
     },
     tips: {
@@ -90,8 +90,9 @@ export function FollowLensDialog() {
     const t = useI18N()
 
     const [handle, setHandle] = useState('')
-    const { classes } = useStyles()
+
     const wallet = useWallet()
+    const { classes } = useStyles({ account: !!wallet })
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
     const { open, closeDialog } = useRemoteControlledDialog(
@@ -168,6 +169,7 @@ export function FollowLensDialog() {
 
     const disabled = useMemo(() => {
         if (
+            !wallet ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
             providerType === ProviderType.Fortmatic ||
@@ -224,12 +226,14 @@ export function FollowLensDialog() {
                     symbol: approved.token?.symbol ?? '',
                 })}>
                 <ChainBoundary
+                    disableConnectWallet
                     expectedPluginID={pluginID}
                     expectedChainId={ChainId.Matic}
                     ActionButtonPromiseProps={{
                         variant: 'roundedContained',
                         className: classes.followAction,
                         startIcon: null,
+                        disabled,
                     }}
                     switchText={t.switch_network_tips()}>
                     <ActionButton
