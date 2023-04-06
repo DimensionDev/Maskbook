@@ -17,7 +17,7 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
     const t = useI18N()
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [, handleQueryAuthenticate] = useQueryAuthenticate(account)
+    const handleQueryAuthenticate = useQueryAuthenticate(account)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { fetchJSON } = useSNSAdaptorContext()
 
@@ -82,7 +82,13 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
 
             onSuccess?.()
         } catch (error) {
-            if (error instanceof Error && !error.message.includes('Transaction was rejected'))
+            if (
+                error instanceof Error &&
+                !error.message.includes('Transaction was rejected') &&
+                !error.message.includes('Signature canceled') &&
+                !error.message.includes('User rejected the request') &&
+                !error.message.includes('User rejected transaction')
+            )
                 showSingletonSnackbar(t.unfollow_lens_handle(), {
                     processing: false,
                     variant: 'error',
