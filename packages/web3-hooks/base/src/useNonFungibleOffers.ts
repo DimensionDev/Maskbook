@@ -4,7 +4,7 @@ import { useChainContext } from './useContext.js'
 import { usePageableAsync } from './usePageableAsync.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
-export function useNonFungibleOrders<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useNonFungibleOffers<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,
     id?: string,

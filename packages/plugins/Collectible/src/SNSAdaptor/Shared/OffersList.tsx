@@ -91,9 +91,11 @@ export function OffersListWrapper(props: OffersListProps) {
     const { setSourceType, sourceType } = Context.useContainer()
     return (
         <div>
-            <Box mb={2}>
-                <SourceProviderSwitcher selected={sourceType!} onSelect={setSourceType} />
-            </Box>
+            {!props.offers.value.length && !sourceType ? null : (
+                <Box mb={2}>
+                    <SourceProviderSwitcher selected={sourceType!} onSelect={setSourceType} />
+                </Box>
+            )}
             <OffersList offers={props.offers} />
         </div>
     )

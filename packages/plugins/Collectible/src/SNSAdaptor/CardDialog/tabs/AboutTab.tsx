@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
+const resolveTopListing = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
@@ -42,13 +42,13 @@ export interface AboutTabProps {
 export const AboutTab = memo(function AboutTab({ asset, orders }: AboutTabProps) {
     const { classes } = useStyles()
 
-    const topOffer = resolveTopOffer(orders)
+    const topListing = resolveTopListing(orders)
     const { rarity } = Context.useContainer()
 
     if (!asset) return null
     return (
         <div className={classes.root}>
-            <PriceCard topOffer={topOffer} />
+            <PriceCard topListing={topListing} />
             <DetailsCard asset={asset} />
             <DescriptionCard asset={asset} />
             <PropertiesCard timeline asset={asset} rank={rarity.value?.rank} />
