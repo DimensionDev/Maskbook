@@ -41,18 +41,27 @@ function identityToLegacyUser(response: TwitterBaseAPI.IdentifyResponse): Twitte
     }
 }
 export async function getUserViaTwitterIdentity(screenName: string): Promise<TwitterBaseAPI.User | null> {
-    const url = urlcat(TWITTER_IDENTITY_URL, {
-        screenName,
-    })
-    const identity = await fetchJSON<TwitterBaseAPI.IdentifyResponse>(url)
+    const identity = await fetchJSON<TwitterBaseAPI.IdentifyResponse>(
+        urlcat(TWITTER_IDENTITY_URL, {
+            screenName,
+        }),
+        undefined,
+        {
+            enableCache: true,
+            enableSquash: true,
+        },
+    )
     return identityToLegacyUser(identity)
 }
 
 export async function staleUserViaIdentity(screenName: string): Promise<TwitterBaseAPI.User | null> {
-    const url = urlcat(TWITTER_IDENTITY_URL, {
-        screenName,
-    })
-    const response = await staleCached(new URL(url))
+    const response = await staleCached(
+        new URL(
+            urlcat(TWITTER_IDENTITY_URL, {
+                screenName,
+            }),
+        ),
+    )
     if (!response?.ok) return null
 
     const identity: TwitterBaseAPI.IdentifyResponse = await response.json()

@@ -10,6 +10,9 @@ export async function fetchFromChainbase<T>(pathname: string) {
               data: T
           }
         | undefined
-    >(urlcat(CHAINBASE_API_URL, pathname))
+    >(urlcat(CHAINBASE_API_URL, pathname), undefined, {
+        enableCache: true,
+        enableSquash: true,
+    })
     return data?.code === 0 ? data.data : undefined
 }

@@ -18,6 +18,9 @@ export class JSON_Storage<T> implements StorageAPI.Storage<T> {
                         'Content-Type': 'text/plain',
                     },
                 },
+                {
+                    enableSquash: true,
+                },
             )
         } catch {
             return

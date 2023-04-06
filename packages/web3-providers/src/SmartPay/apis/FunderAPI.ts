@@ -15,7 +15,14 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     }
 
     private async getWhiteList(handler: string) {
-        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }))
+        return fetchJSON<FunderAPI.WhiteList>(
+            urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }),
+            undefined,
+            {
+                enableSquash: true,
+                enableCache: true,
+            },
+        )
     }
 
     async getRemainFrequency(handler: string) {
@@ -34,6 +41,11 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
         try {
             const operations = await fetchJSON<FunderAPI.Operation[]>(
                 urlcat(FUNDER_PROD, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
+                undefined,
+                {
+                    enableSquash: true,
+                    enableCache: true,
+                },
             )
             const web3 = this.web3.getWeb3(chainId)
             const allSettled = await Promise.allSettled(
