@@ -61,7 +61,7 @@ export function PriceCard(props: PriceCardProps) {
     if (!topListing && orders.error) return null
 
     if (!topListing && !orders.loading)
-        return (
+        return sourceType ? (
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
                     <div className={classes.offerBox}>
@@ -72,7 +72,7 @@ export function PriceCard(props: PriceCardProps) {
                     {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
                 </div>
             </div>
-        )
+        ) : null
 
     const priceUSD = formatCurrency(topListing?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
 

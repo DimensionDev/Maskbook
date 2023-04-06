@@ -19,7 +19,7 @@ import {
     scale10,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, createNativeToken, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import { getPaymentToken, getAssetFullName, resolveActivityType, fetchGlobal } from '../entry-helpers.js'
@@ -114,11 +114,12 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
 }
 
 function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrder<ChainId, SchemaType> {
-    const paymentToken = getPaymentToken(chainId, {
-        name: order.make.type['@type'],
-        symbol: order.make.type['@type'],
-        address: createAddress(order.make.type.contract),
-    })
+    const paymentToken =
+        getPaymentToken(chainId, {
+            name: order.make.type['@type'],
+            symbol: order.make.type['@type'],
+            address: createAddress(order.make.type.contract),
+        }) ?? createNativeToken(chainId)
     return {
         id: order.id,
         chainId,
