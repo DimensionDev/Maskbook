@@ -6,9 +6,9 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleTokenAPI as EVM_FungibleTokenAPI } from '../../Connection/index.js'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
 import type { WalletTokenRecord } from '../types.js'
+import { DEBANK_OPEN_API } from '../constants.js'
 import { Duration, fetchJSON, getNativeAssets } from '../../entry-helpers.js'
 import type { FungibleTokenAPI } from '../../entry-types.js'
-import { DEBANK_OPEN_API } from '../constants.js'
 
 export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     private fungibleToken = new EVM_FungibleTokenAPI()
