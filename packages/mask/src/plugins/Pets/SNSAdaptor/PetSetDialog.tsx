@@ -160,7 +160,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             const kvStorage = Storage.createKVStorage(PetsPluginID)
             await kvStorage.set(user.userId, user.address)
             const storage = Storage.createStringStorage('Pets', user.address)
-            storage.set('pet', { address: user.address, essay: meta })
+            await storage.set('pet', { address: user.address, essay: meta })
             closeDialogHandle()
         } catch {
             showSnackbar(t.pets_dialog_fail(), { variant: 'error' })
