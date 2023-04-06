@@ -139,6 +139,8 @@
     "plugin_wallet_no_gas_fee": "crwdns18912:0crwdne18912:0",
     "plugin_wallet_invalid_network": "crwdns18914:0crwdne18914:0",
     "plugin_wallet_wrong_network": "crwdns18900:0crwdne18900:0",
+    "plugin_wallet_unsupported_network": "crwdns19987:0crwdne19987:0",
+    "plugin_wallet_unsupported_chain": "crwdns19989:0crwdne19989:0",
     "plugin_wallet_switch_network": "crwdns18866:0{{network}}crwdne18866:0",
     "plugin_wallet_not_support_network": "crwdns18868:0crwdne18868:0",
     "plugin_wallet_switch_network_under_going": "crwdns18870:0{{network}}crwdne18870:0",
