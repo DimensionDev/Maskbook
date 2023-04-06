@@ -79,7 +79,6 @@ export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaTy
                 return uniqBy(tokens, (x) => x.address.toLowerCase()).map((token) => {
                     return {
                         ...token,
-                        symbol: token.symbol.toLowerCase() === token.symbol ? token.symbol.toUpperCase() : token.symbol,
                         address: formatEthereumAddress(token.address),
                     }
                 })
