@@ -28,7 +28,7 @@ export const useSocialAccountsBySettings = (
         error: loadingHiddenAddressError,
         retry: retryLoadHiddenAddress,
     } = useHiddenAddressSettings(PluginID.Web3Profile, identity?.publicKey)
-
+    console.log({ identity, hiddenAddress, socialAccounts })
     const addresses = useMemo(() => {
         if (loadingSocialAccounts || loadingHiddenAddress) return EMPTY_LIST
         if (!hiddenAddress?.length) return socialAccounts
