@@ -3,14 +3,16 @@ import type { ScalableBloomFilter } from 'bloom-filters'
 import type { ScamWarningAPI } from '../types/ScamWarning.js'
 import { fetchJSON } from '../entry-helpers.js'
 
-const baseURL = 'https://scam.mask.r2d2.to/cryptoscam-db'
+const BASE_URL = 'https://scam.mask.r2d2.to/cryptoscam-db'
 
 export class CryptoScamDB_API implements ScamWarningAPI.Provider {
     bloomFilter?: ScalableBloomFilter
 
     async getBloomFilter() {
         if (this.bloomFilter) return this.bloomFilter
-        const filter = await fetchJSON<JSON>(urlcat(baseURL, 'filter/config.json'))
+        const filter = await fetchJSON<JSON>(urlcat(BASE_URL, 'filter/config.json'), undefined, {
+            squashed: true,
+        })
 
         const { ScalableBloomFilter } = await import('bloom-filters')
         this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
@@ -25,7 +27,9 @@ export class CryptoScamDB_API implements ScamWarningAPI.Provider {
             const url = new URL(link)
             if (!filter.has(url.host)) return
 
-            const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(baseURL, `${url.host}.json`))
+            const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(BASE_URL, `${url.host}.json`), undefined, {
+                squashed: true,
+            })
             if (!result) return
 
             const scamURL = new URL(result.url)
