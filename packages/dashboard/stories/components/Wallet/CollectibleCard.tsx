@@ -20,6 +20,7 @@ export const CollectibleCard = of({
             },
             metadata: {
                 chainId: 1,
+                tokenId: '1',
                 name: 'Rarible 1155',
                 symbol: 'RAB',
                 description: '',

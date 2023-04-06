@@ -65,9 +65,12 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         metadata: {
             chainId,
             name,
+            tokenId: asset.token_id,
             symbol: asset.contract.symbol,
             description: asset.description,
             imageURL: resolveImageURL(asset.image_url || asset.previews.image_large_url, name, asset.contract_address),
+            previewImageURL: resolveImageURL(asset.previews.image_small_url, name, asset.contract_address),
+            blurhash: asset.previews.blurhash,
             mediaURL: asset.image_url || asset.previews.image_large_url,
         },
         contract: {
@@ -84,7 +87,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             description: asset.collection.description,
             address: asset.contract_address,
             iconURL: asset.collection.image_url,
-            verified: Boolean(asset.collection.marketplace_pages.some((x) => x.verified)),
+            verified: Boolean(asset.collection.marketplace_pages?.some((x) => x.verified)),
             createdAt: new Date(asset.created_date).getTime(),
         },
         source: SourceType.SimpleHash,
@@ -97,6 +100,7 @@ export function createNonFungibleCollection(
     const chainId = resolveChainId(collection.chain)
 
     if (!isValidChainId(chainId) || collection.spam_score === 100) return
+    const verifiedMarketplaces = collection.marketplace_pages?.filter((x) => x.verified) || []
     return {
         id: collection.id,
         chainId,
@@ -108,6 +112,8 @@ export function createNonFungibleCollection(
         ownersTotal: collection.total_quantity,
         source: SourceType.SimpleHash,
         address: collection.top_contracts?.[0]?.split('.')?.[1] ?? '',
+        verified: verifiedMarketplaces.length > 0,
+        verifiedBy: verifiedMarketplaces.map((x) => x.marketplace_name),
     }
 }
 
@@ -133,6 +139,17 @@ export function resolveChainId(chain: string): ChainId | undefined {
     }
 }
 
+export const allChainNames = [
+    ChainId.Mainnet,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.Optimism,
+    ChainId.Optimism,
+    ChainId.xDai,
+    ChainId.BSC,
+]
+    .map(resolveChain)
+    .join(',')
 export function resolveChain(chainId: ChainId): string | undefined {
     switch (chainId) {
         case ChainId.Mainnet:

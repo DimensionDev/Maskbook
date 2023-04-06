@@ -1534,6 +1534,9 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      immer:
+        specifier: ^9.0.21
+        version: 9.0.21
       opensea-js:
         specifier: ^1.2.7
         version: 1.2.7(webpack-cli@5.0.1)
@@ -22199,6 +22202,10 @@ packages:
     dev: false
     patched: true
 
+  /immer@9.0.21:
+    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
+    dev: false
+
   /immutable@3.8.1:
     resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
@@ -34925,6 +34932,7 @@ time:
   /i18next@22.0.6: '2022-11-17T13:45:22.319Z'
   /idb@7.1.1: '2022-11-04T10:28:55.720Z'
   /iframe-resizer-react@1.1.0: '2021-01-05T22:32:47.844Z'
+  /immer@9.0.21: '2023-03-23T17:41:49.995Z'
   /json-stable-stringify@1.0.2: '2022-11-08T17:21:21.117Z'
   /json2csv@5.0.6: '2021-02-03T15:23:57.794Z'
   /linkify-react@4.1.1: '2023-03-25T15:06:24.522Z'

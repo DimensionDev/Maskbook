@@ -20,6 +20,7 @@ import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
 import { CollectionList } from './List/CollectionList.js'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { UserAssetsProvider } from './Context/UserAssetsContext.js'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
@@ -27,15 +28,18 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 1,
     UI: {
         TabContent({ socialAccount, identity }) {
+            useMountReport(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
             if (!socialAccount) return null
             return (
                 <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
                     <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                        <CollectionList
-                            socialAccount={socialAccount}
-                            persona={identity?.publicKey}
-                            profile={identity}
-                        />
+                        <UserAssetsProvider
+                            pluginID={socialAccount.pluginID}
+                            userAddress={socialAccount.address}
+                            userId={identity?.identifier?.userId!}
+                            persona={identity?.publicKey!}>
+                            <CollectionList socialAccount={socialAccount} />
+                        </UserAssetsProvider>
                     </Web3ContextProvider>
                 </SNSAdaptorContext.Provider>
             )
@@ -89,21 +93,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 1,
             UI: {
                 TabContent({ socialAccount, identity }) {
-                    useMountReport(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
+                    useMountReport(TelemetryAPI.EventID.AccessWeb3ProfileDialogNFTsTab)
 
                     if (!socialAccount) return null
 
                     return (
                         <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
-                            <Box pr={1.5}>
-                                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                                    <CollectionList
-                                        socialAccount={socialAccount}
-                                        persona={identity?.publicKey}
-                                        profile={identity}
-                                    />
-                                </Web3ContextProvider>
-                            </Box>
+                            <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                                <UserAssetsProvider
+                                    pluginID={socialAccount.pluginID}
+                                    userAddress={socialAccount.address}
+                                    userId={identity?.identifier?.userId!}
+                                    persona={identity?.publicKey!}>
+                                    <CollectionList socialAccount={socialAccount} />
+                                </UserAssetsProvider>
+                            </Web3ContextProvider>
                         </SNSAdaptorContext.Provider>
                     )
                 },
@@ -136,13 +140,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                     return (
                         <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
-                            <Box pr={1.5} style={{ minHeight: 300 }}>
+                            <Box style={{ minHeight: 300 }}>
                                 <Web3ContextProvider value={{ pluginID: result.pluginID }}>
-                                    <CollectionList
-                                        socialAccount={socialAccount}
-                                        persona={undefined}
-                                        profile={undefined}
-                                    />
+                                    <UserAssetsProvider pluginID={result.pluginID} userAddress={socialAccount.address}>
+                                        <CollectionList socialAccount={socialAccount} />
+                                    </UserAssetsProvider>
                                 </Web3ContextProvider>
                             </Box>
                         </SNSAdaptorContext.Provider>

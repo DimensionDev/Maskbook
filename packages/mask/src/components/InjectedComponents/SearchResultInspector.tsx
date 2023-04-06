@@ -44,8 +44,8 @@ export interface SearchResultInspectorProps {
     keyword?: string
     identity?: SocialIdentity
     isProfilePage?: boolean
-    collectionList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    currentCollection?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    searchResults?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    currentSearchResult?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
@@ -59,40 +59,40 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const resultList = useAsyncRetry(async () => {
         if (!keyword) return
-        return props.collectionList ?? DSearch.search(keyword)
-    }, [keyword, JSON.stringify(props.collectionList)])
+        return props.searchResults ?? DSearch.search(keyword)
+    }, [keyword, props.searchResults])
 
-    const currentCollection = props.currentCollection ?? resultList.value?.[0]
+    const currentResult = props.currentSearchResult ?? resultList.value?.[0]
 
-    const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentCollection?.type })
+    const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentResult?.type })
     const contentComponent = useMemo(() => {
-        if (!currentCollection || !resultList.value?.length) return null
-        const Component = getSearchResultContent(currentCollection)
+        if (!currentResult || !resultList.value?.length) return null
+        const Component = getSearchResultContent(currentResult)
         return (
             <Component
                 resultList={resultList.value}
-                currentResult={currentCollection}
+                currentResult={currentResult}
                 isProfilePage={props.isProfilePage}
                 identity={props.identity}
             />
         )
-    }, [currentCollection, resultList.value, props.isProfilePage, props.identity])
+    }, [currentResult, resultList.value, props.isProfilePage, props.identity])
 
     const tabs = useMemo(() => {
-        if (!currentCollection) return EMPTY_LIST
-        return getSearchResultTabs(activatedPlugins, currentCollection, translate)
+        if (!currentResult) return EMPTY_LIST
+        return getSearchResultTabs(activatedPlugins, currentResult, translate)
     }, [activatedPlugins, resultList.value, translate])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const tabContentComponent = useMemo(() => {
-        if (!currentCollection) return null
+        if (!currentResult) return null
         const Component = getSearchResultTabContent(currentTab)
-        return <Component result={currentCollection} />
+        return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
     if (!dSearchEnabled) return null
-    if (!keyword && !currentCollection) return null
+    if (!keyword && !currentResult) return null
     if (!contentComponent) return null
 
     return (

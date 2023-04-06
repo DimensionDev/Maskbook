@@ -10,6 +10,7 @@ const useStyles = makeStyles()({
         padding: '6px 2px',
     },
 })
+
 interface SocialTooltipProps {
     platform?: NextIDPlatform
     children: ReactElement

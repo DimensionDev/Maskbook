@@ -9,7 +9,13 @@ import {
 } from '@masknet/shared-base'
 import { type HubOptions, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import { fetchFromSimpleHash, createNonFungibleAsset, resolveChain, createNonFungibleCollection } from './helpers.js'
+import {
+    fetchFromSimpleHash,
+    createNonFungibleAsset,
+    resolveChain,
+    createNonFungibleCollection,
+    allChainNames,
+} from './helpers.js'
 import { type Asset, type Collection } from './type.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
@@ -76,9 +82,9 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
 
     async getCollectionsByOwner(
         account: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId, indicator, allChains }: HubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
-        const chain = resolveChain(chainId)
+        const chain = allChains || !chainId ? allChainNames : resolveChain(chainId)
         if (!chain || !account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
@@ -90,9 +96,10 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
 
         const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
 
-        const collections = response.collections.map((x) => createNonFungibleCollection(x)).filter(Boolean) as Array<
-            NonFungibleCollection<ChainId, SchemaType>
-        >
+        const collections = response.collections
+            .map((x) => createNonFungibleCollection(x))
+            // Might got bad data responded including id field and other fields empty
+            .filter((x) => x?.id) as Array<NonFungibleCollection<ChainId, SchemaType>>
 
         return createPageable(collections, createIndicator(indicator))
     }
@@ -111,6 +118,7 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
             wallet_addresses: owner,
             collection_ids: collectionId,
             cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+            limit: size,
         })
 
         const response = await fetchFromSimpleHash<{ nfts: Asset[]; next_cursor: string }>(path)
@@ -124,5 +132,15 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
             createIndicator(indicator),
             response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
         )
+    }
+
+    async getCollectionVerifiedBy(id: string) {
+        const path = urlcat('/api/v0/nfts/collections/ids', {
+            collection_ids: id,
+        })
+        const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+        if (!response.collections.length) return []
+        const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
+        return marketplaces.map((x) => x.marketplace_name)
     }
 }

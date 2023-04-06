@@ -14,7 +14,7 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     pluginID?: T,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
+    const { account } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry<
@@ -32,5 +32,5 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
                 })
             }),
         )
-    }, [account, hub, chainId, JSON.stringify(options)])
+    }, [account, hub, JSON.stringify(options)])
 }
