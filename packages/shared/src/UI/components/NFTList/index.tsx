@@ -114,7 +114,11 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
     const captionRef = useRef<HTMLDivElement>(null)
-
+    const { Others } = useWeb3State(pluginID)
+    const caption =
+        token.metadata?.name.includes('.lens') || token.metadata?.name.includes('lensprotocol')
+            ? token.metadata?.name
+            : Others?.formatTokenId(token.tokenId, 4)
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
 
     const onClick = useCallback(() => {
@@ -138,13 +142,11 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
                     root: classes.root,
                 }}
             />
-            <ShadowRootTooltip
-                title={showTooltip ? token.metadata?.name : undefined}
-                placement="bottom"
-                disableInteractive
-                arrow>
+            <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
                 <Typography ref={captionRef} className={classes.caption}>
-                    {token.metadata?.name}
+                    {Others?.isValidDomain(token.metadata?.name) || pluginID === NetworkPluginID.PLUGIN_SOLANA
+                        ? token.metadata?.name
+                        : caption}
                 </Typography>
             </ShadowRootTooltip>
         </div>
