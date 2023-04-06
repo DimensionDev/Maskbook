@@ -58,7 +58,7 @@ export function PriceCard(props: PriceCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (!topListing && orders.error) return null
+    if ((!topListing && orders.error) || (!sourceType && orders.loading)) return null
 
     if (!topListing && !orders.loading)
         return sourceType ? (
