@@ -24,6 +24,7 @@ export const ConnectSocialMedia = () => {
         if (currentPersona) {
             await connectPersona(currentPersona.identifier, networkIdentifier)
         }
+        navigate(DashboardRoutes.Personas, { replace: true })
     }
 
     return (
