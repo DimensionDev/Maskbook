@@ -14,9 +14,6 @@ const RULES = {
     'https://t.co': Duration.MEDIUM,
     'https://rss3.domains/name': Duration.SHORT,
 
-    // coingecko
-    'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
-
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
 
