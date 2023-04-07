@@ -29,6 +29,9 @@ export async function fetchSquashed(
     next = originalFetch,
     expiration = 600,
 ): Promise<Response> {
+    // why: the caches doesn't define in test env
+    if (process.env.NODE_ENV === 'test') return next(input, init)
+
     const request = new Request(input, init)
 
     // skip not cacheable requests

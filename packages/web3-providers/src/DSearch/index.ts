@@ -221,13 +221,16 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const specificTokens = (
             await Promise.allSettled([
                 fetchFromDSearch<Array<FungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json', { mode: 'cors' }),
+                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
+                    { mode: 'cors' },
                 ),
                 fetchFromDSearch<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json', { mode: 'cors' }),
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json'),
+                    { mode: 'cors' },
                 ),
                 fetchFromDSearch<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json', { mode: 'cors' }),
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
+                    { mode: 'cors' },
                 ),
             ])
         ).flatMap(
@@ -380,7 +383,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { specificTokens, normalTokens } = await this.searchTokens()
-
         const specificResult_ = await this.searchTokenByHandler(
             specificTokens.map((x) => ({ ...x, alias: x.alias?.filter((x) => !x.isPin) })),
             name,

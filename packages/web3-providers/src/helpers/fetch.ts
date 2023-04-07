@@ -5,8 +5,6 @@ const { fetch: originalFetch } = globalThis
 export type Fetcher<T = Response> = (input: RequestInfo | URL, init?: RequestInit, next?: Fetcher) => Promise<T>
 
 export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetchers: Fetcher[] = []): Promise<Response> {
-    if (!fetchers.length) throw new Error('No fetcher found.')
-
     const fetcher = fetchers.reduceRight<Fetcher>(
         (ff, f) => (r, i) => f(r, i, ff),
         (input: RequestInfo | URL, init?: RequestInit | undefined) => {
