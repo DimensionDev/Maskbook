@@ -4,9 +4,9 @@ import { createIndicator, createPageable, type PageIndicator, type Pageable } fr
 import { type Transaction, attemptUntil, type HubOptions, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
+import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
-import { fetchJSON } from '../entry-helpers.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
@@ -50,10 +50,9 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         account: string,
         { chainId, indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
-        const url = urlcat(DSEARCH_BASE_URL, '/nft-lucky-drop/specific-list.json')
-        const result = await fetchJSON<{
+        const result = await fetchFromDSearch<{
             [owner: string]: Array<NonFungibleCollection<ChainId, SchemaType>>
-        }>(url)
+        }>(urlcat(DSEARCH_BASE_URL, '/nft-lucky-drop/specific-list.json'))
         const list = mapKeys(result, (_v, k) => k.toLowerCase())?.[account.toLowerCase()].filter(
             (x) => x.chainId === chainId,
         )
