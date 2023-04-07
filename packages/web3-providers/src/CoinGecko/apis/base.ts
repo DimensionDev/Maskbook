@@ -5,20 +5,20 @@ import type { TrendingAPI } from '../../entry-types.js'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
 
+function fetchFromCoinGecko<T>(request: RequestInfo | URL, init?: RequestInit) {
+    return fetchJSON<T>(request, init, {
+        enableCache: true,
+        enableSquash: true,
+    })
+}
+
 // #region coins
 export async function getAllCoins() {
-    return fetchJSON<TrendingAPI.Coin[]>(
-        urlcat(COINGECKO_URL_BASE, '/coins/list'),
-        { cache: 'force-cache' },
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
-    )
+    return fetchFromCoinGecko<TrendingAPI.Coin[]>(urlcat(COINGECKO_URL_BASE, '/coins/list'), { cache: 'force-cache' })
 }
 
 export async function getCoinInfo(coinId: string) {
-    return fetchJSON<
+    return fetchFromCoinGecko<
         | CoinInfo
         | {
               error: string
@@ -32,16 +32,12 @@ export async function getCoinInfo(coinId: string) {
         {
             cache: 'default',
         },
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
     )
 }
 
 export async function getThumbCoins(keyword: string) {
     if (!keyword) return []
-    const response = await fetchJSON<
+    const response = await fetchFromCoinGecko<
         | {
               categories: Category[]
               coins: ThumbCoin[]
@@ -50,15 +46,11 @@ export async function getThumbCoins(keyword: string) {
           }
         | { error: string }
     >(
-        urlcat(`${COINGECKO_URL_BASE}/search`, {
+        urlcat(COINGECKO_URL_BASE, '/search', {
             query: keyword,
         }),
         {
             cache: 'default',
-        },
-        {
-            enableCache: true,
-            enableSquash: true,
         },
     )
     if ('error' in response) throw new Error(response.error)
@@ -70,7 +62,7 @@ export async function getThumbCoins(keyword: string) {
 export type Stat = [number, number]
 
 export async function getPriceStats(coinId: string, currencyId: string, days: number) {
-    return fetchJSON<{
+    return fetchFromCoinGecko<{
         market_caps: Stat[]
         prices: Stat[]
         total_volumes: Stat[]
@@ -81,10 +73,6 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
         }),
         {
             cache: 'default',
-        },
-        {
-            enableCache: true,
-            enableSquash: true,
         },
     )
 }
@@ -97,16 +85,12 @@ export async function getTokenPrice(platform_id: string, address: string, curren
 }
 
 export async function getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {
-    const response = await fetchJSON<Record<string, Record<CurrencyType, number>>>(
+    const response = await fetchFromCoinGecko<Record<string, Record<CurrencyType, number>>>(
         urlcat(COINGECKO_URL_BASE, '/simple/price', {
             ids: listOfAddress,
             vs_currencies: currencyType,
         }),
         undefined,
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
     )
 
     return Object.fromEntries(
@@ -115,28 +99,20 @@ export async function getTokensPrice(listOfAddress: string[], currencyType = Cur
 }
 
 export async function getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
-    return fetchJSON<Record<string, Price>>(
+    return fetchFromCoinGecko<Record<string, Price>>(
         urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform_id', {
             platform_id,
             contract_addresses: contractAddresses.join(','),
             vs_currencies: currency,
         }),
         undefined,
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
     )
 }
 
 export async function getTokenPriceByCoinId(coin_id: string, currency = CurrencyType.USD) {
-    const price = await fetchJSON<Record<string, Record<CurrencyType, number>>>(
-        urlcat(`${COINGECKO_URL_BASE}/simple/price`, { ids: coin_id, vs_currencies: currency }),
+    const price = await fetchFromCoinGecko<Record<string, Record<CurrencyType, number>>>(
+        urlcat(COINGECKO_URL_BASE, '/simple/price', { ids: coin_id, vs_currencies: currency }),
         undefined,
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
     )
     return price[coin_id][currency]
 }

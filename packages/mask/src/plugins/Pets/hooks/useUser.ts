@@ -18,20 +18,17 @@ export function useUser() {
     }, [account, whoAmI])
 }
 
+const DEFAULT_USER = { userId: '', address: '' }
+
 export function useCurrentVisitingUser(flag?: number) {
     const identity = useCurrentVisitingIdentity()
     const { Storage } = useWeb3State()
-    const { value: user } = useAsync(async () => {
+    const { value: user = DEFAULT_USER } = useAsync(async () => {
         const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
             ? identity.identifier?.userId ?? ''
             : ''
         try {
-            if (!Storage || !userId || userId === '$unknown') {
-                return {
-                    userId: '',
-                    address: '',
-                }
-            }
+            if (!Storage || !userId || userId === '$unknown') return DEFAULT_USER
             const storage = Storage.createKVStorage(PetsPluginID)
             const address = (await storage.get<string>(userId)) ?? ''
             return {

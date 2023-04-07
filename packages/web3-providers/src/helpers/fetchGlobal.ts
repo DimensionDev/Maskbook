@@ -1,7 +1,10 @@
 import { fetch } from './fetch.js'
-import { fetchCached } from './fetchCached.js'
-import { fetchSquashed } from './fetchSquashed.js'
+import { getNextFetchers, type NextFetchersOptions } from './getNextFetchers.js'
 
-export async function fetchGlobal(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    return fetch(input, init, [fetchSquashed, fetchCached])
+export async function fetchGlobal(
+    input: RequestInfo,
+    init?: RequestInit,
+    options?: NextFetchersOptions,
+): Promise<Response> {
+    return fetch(input, init, getNextFetchers(options))
 }

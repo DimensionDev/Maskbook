@@ -1,5 +1,7 @@
-import { Duration, createFetchCached, fetchCached } from './fetchCached.js'
-import { createFetchSquashed, fetchSquashed } from './fetchSquashed.js'
+import { curryRight } from 'lodash-es'
+import type { Fetcher } from './fetch.js'
+import { fetchSquashed } from './fetchSquashed.js'
+import { Duration, fetchCached } from './fetchCached.js'
 
 export interface NextFetchersOptions {
     enableSquash?: boolean
@@ -14,16 +16,8 @@ export function getNextFetchers({
     squashExpiration = 600,
     cacheDuration = Duration.SHORT,
 }: NextFetchersOptions = {}) {
-    return [
-        enableSquash
-            ? createFetchSquashed({
-                  expiration: squashExpiration,
-              })
-            : fetchSquashed,
-        enableCache
-            ? createFetchCached({
-                  duration: cacheDuration,
-              })
-            : fetchCached,
-    ]
+    const fetchers: Fetcher[] = []
+    if (enableSquash) fetchers.push(curryRight(fetchSquashed, squashExpiration))
+    if (enableCache) fetchers.push(curryRight(fetchCached, cacheDuration))
+    return fetchers
 }

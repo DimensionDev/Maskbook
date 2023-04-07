@@ -45,7 +45,13 @@ import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const response = await fetchGlobal(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    const response = await fetchGlobal(
+        urlcat(OPENSEA_API_URL, url),
+        { method: 'GET', ...init },
+        {
+            enableSquash: true,
+        },
+    )
     if (response.status === 404) return
     if (!response.ok && response.status !== 404) throw new Error('Failed to fetch as JSON.')
     return response.json() as T

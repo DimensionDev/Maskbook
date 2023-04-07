@@ -9,13 +9,12 @@ import {
     isValidAddress,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
-import { resolveCoinMarketCapChainId } from '../helpers.js'
+import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
+import { fetchFromCoinMarketCap, resolveCoinMarketCapChainId } from '../helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
 import { FuseCoinAPI } from '../../Fuse/index.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
-import { fetchJSON } from '../../entry-helpers.js'
 import { TrendingAPI } from '../../entry-types.js'
 
 // #regin get quote info
@@ -25,7 +24,7 @@ export async function getQuotesInfo(id: string, currency: string) {
     params.append('convert', currency)
 
     try {
-        return await fetchJSON<{
+        return await fetchFromCoinMarketCap<{
             data: Record<string, QuotesInfo>
             status: Status
         }>(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
@@ -44,11 +43,11 @@ export async function getCoinInfo(id: string) {
     const params = new URLSearchParams('aux=urls,logo,description,tags,platform,date_added,notice,status')
     params.append('id', id)
 
-    const response = await fetchJSON<{
+    const response = await fetchFromCoinMarketCap<{
         /** id, coin-info pair */
         data: Record<string, CoinInfo>
         status: Status
-    }>(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
+    }>(`${CMC_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
         cache: 'default',
     })
     return {
@@ -68,7 +67,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
     params.append('id', id)
 
     try {
-        return await fetchJSON<{
+        return await fetchFromCoinMarketCap<{
             data: {
                 id: number
                 market_pairs: Pair[]
@@ -77,7 +76,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
                 symbol: string
             }
             status: Status
-        }>(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
+        }>(`${CMC_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
             cache: 'default',
         })
     } catch {
@@ -110,9 +109,9 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         params.append('time_end', getUnixTime(endDate).toString())
         params.append('time_start', getUnixTime(startDate).toString())
 
-        const response = await fetchJSON<
+        const response = await fetchFromCoinMarketCap<
             ResultData<Record<string, Record<string, TrendingAPI.Stat>> | TrendingAPI.HistoricalCoinInfo>
-        >(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
+        >(`${CMC_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
             cache: 'default',
         })
 
@@ -120,8 +119,8 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        const response = await fetchJSON<ResultData<Coin[]>>(
-            `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
+        const response = await fetchFromCoinMarketCap<ResultData<Coin[]>>(
+            `${CMC_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
             { cache: 'force-cache' },
         )
         if (!response.data) return []

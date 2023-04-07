@@ -1,6 +1,3 @@
-import type { Fetcher } from './fetch.js'
-
-/* cspell:disable */
 const { fetch: originalFetch } = globalThis
 
 export enum Duration {
@@ -9,20 +6,7 @@ export enum Duration {
     LONG = 43200000, // 12 hours
 }
 
-const RULES = {
-    // twitter shorten links
-    'https://t.co': Duration.MEDIUM,
-    'https://rss3.domains/name': Duration.SHORT,
-
-    // Mask Search List
-    'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
-
-    // Mask Token List
-    'https://tokens.r2d2.to': Duration.LONG,
-}
-const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
-
-function openCaches(url: string) {
+function __open__(url: string) {
     if ('caches' in globalThis) {
         try {
             return caches.open(new URL(url).host)
@@ -35,7 +19,7 @@ function openCaches(url: string) {
 
 async function __fetch__(duration: number, request: Request, init?: RequestInit, next = originalFetch) {
     // hit a cached request
-    const cache = await openCaches(request.url)
+    const cache = await __open__(request.url)
     const hit = await cache?.match(request)
     const date = hit?.headers.get('x-cache-date')
 
@@ -69,6 +53,7 @@ export async function fetchCached(
     input: RequestInfo | URL,
     init?: RequestInit,
     next = originalFetch,
+    duration = Duration.SHORT,
 ): Promise<Response> {
     // why: the caches doesn't define in test env
     if (process.env.NODE_ENV === 'test') return next(input, init)
@@ -81,11 +66,7 @@ export async function fetchCached(
     const url = request.url
     if (!url.startsWith('http')) return next(request, init)
 
-    // no need to cache
-    const rule = URLS.find((x) => url.includes(x))
-    if (!rule) return next(request, init)
-
-    return __fetch__(RULES[rule], request, init, next)
+    return __fetch__(duration, request, init, next)
 }
 
 export async function staleCached(info: RequestInfo | URL, init?: RequestInit): Promise<Response | void> {
@@ -95,40 +76,10 @@ export async function staleCached(info: RequestInfo | URL, init?: RequestInit): 
     const url = request.url
     if (!url.startsWith('http')) return
 
-    const rule = URLS.find((x) => url.includes(x))
-    if (!rule) return
-
-    const cache = await openCaches(rule)
+    const cache = await __open__(url)
     const hit = await cache?.match(request)
     if (!hit) return
 
     await cache?.delete(request)
     return hit
-}
-
-export function createFetchCached({
-    next = originalFetch,
-    duration = Duration.SHORT,
-}: {
-    next?: Fetcher
-    duration?: number
-} = {}) {
-    return async function createFetchCached(
-        input: RequestInfo | URL,
-        init?: RequestInit,
-        _next = next,
-    ): Promise<Response> {
-        // why: the caches doesn't define in test env
-        if (process.env.NODE_ENV === 'test') return _next(input, init)
-
-        // skip all side effect requests
-        const request = new Request(input, init)
-        if (request.method !== 'GET') return _next(request, init)
-
-        // skip all non-http requests
-        const url = request.url
-        if (!url.startsWith('http')) return _next(request, init)
-
-        return __fetch__(duration, request, init, _next)
-    }
 }
