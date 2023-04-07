@@ -1,9 +1,9 @@
+import { isEqual } from 'lodash-es'
 import { ALL_EVENTS } from '@servie/events'
+import { ValueRefWithReady } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import type { Plugin } from '../types.js'
-import { ValueRefWithReady } from '@masknet/shared-base'
-import { isEqual } from 'lodash-es'
-import { useValueRef } from '@masknet/shared-base-ui'
 
 const { activated, startDaemon, events, minimalMode } = createManager((def) => def.Dashboard)
 
