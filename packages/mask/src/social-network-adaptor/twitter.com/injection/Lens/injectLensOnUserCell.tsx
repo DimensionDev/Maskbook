@@ -70,6 +70,7 @@ function UserCellLensSlot({ userId }: Props) {
             undefined,
             createRootElement,
         )
+        if (userId.includes('/')) return null
         const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
         if (!identifier) return null
 
