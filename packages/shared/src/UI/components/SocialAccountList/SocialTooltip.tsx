@@ -5,13 +5,10 @@ import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import type { ReactElement } from 'react'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        title: {
-            padding: '6px 2px',
-            whiteSpace: 'nowrap',
-        },
-    }
+const useStyles = makeStyles()({
+    title: {
+        padding: '6px 2px',
+    },
 })
 interface SocialTooltipProps {
     platform?: NextIDPlatform
