@@ -1,3 +1,6 @@
+import urlcat from 'urlcat'
+import { toChecksumAddress } from 'web3-utils'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type {
     BancorApiErrorResponse,
     ExpectedTargetAmountResponse,
@@ -5,12 +8,9 @@ import type {
     SwapBancorRequest,
     TradeTransactionCreationResponse,
 } from '../../types/bancor.js'
-import urlcat from 'urlcat'
 import { BANCOR_API_BASE_URL } from '../../constants/index.js'
 import { calculateMinimumReturn } from './calculateMinimumReturn.js'
-import { toChecksumAddress } from 'web3-utils'
 import { TradeStrategy } from '../../types/index.js'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)

@@ -1972,6 +1972,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base

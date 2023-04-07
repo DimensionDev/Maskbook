@@ -10,9 +10,6 @@ const CACHE = new Map<
     }
 >()
 const RULES = [
-    // GitCoin
-    'https://gitcoin.co',
-
     // r2d2
     'https://x2y2-proxy.r2d2.to',
     'https://gem-proxy.r2d2.to',
@@ -82,7 +79,6 @@ export function createFetchSquashed({
         if (!url.startsWith('http')) return _next(request, init)
 
         const key = `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
-
         return __fetch__(key, expiration, request, init, _next)
     }
 }

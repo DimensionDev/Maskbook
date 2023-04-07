@@ -12,7 +12,6 @@ export enum Duration {
 const RULES = {
     // twitter shorten links
     'https://t.co': Duration.MEDIUM,
-    'https://gitcoin.co/grants/v1/api/grant': Duration.SHORT,
     'https://rss3.domains/name': Duration.SHORT,
 
     // coingecko
