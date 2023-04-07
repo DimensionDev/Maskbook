@@ -5,6 +5,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { createLookupTableResolver } from '@masknet/shared-base'
+import { isTronAddress } from './isTronAddress.js'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -44,7 +45,7 @@ export function isValidAddress(address?: string, strict?: boolean): address is s
     if (!length || length < 32 || length > 44) return false
     try {
         const buffer = bs58.decode(address)
-        return strict === false ? true : Web3.PublicKey.isOnCurve(buffer)
+        return strict === false ? true : Web3.PublicKey.isOnCurve(buffer) && !isTronAddress(address)
     } catch {
         return false
     }
