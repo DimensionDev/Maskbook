@@ -7,6 +7,7 @@ import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
+import { isLens } from '@masknet/web3-shared-evm'
 
 interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
@@ -115,10 +116,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
     const captionRef = useRef<HTMLDivElement>(null)
     const { Others } = useWeb3State(pluginID)
-    const caption =
-        token.metadata?.name.includes('.lens') || token.metadata?.name.includes('lensprotocol')
-            ? token.metadata?.name
-            : Others?.formatTokenId(token.tokenId, 4)
+    const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others?.formatTokenId(token.tokenId, 4)
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
 
     const onClick = useCallback(() => {
