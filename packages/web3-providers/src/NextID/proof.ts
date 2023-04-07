@@ -46,7 +46,7 @@ interface CreatePayloadResponse {
     created_at: string
 }
 
-type Neighbor = Array<{
+type NeighborList = Array<{
     sources?: NextIDPlatform[]
     identity: NextIDIdentity
 }>
@@ -202,7 +202,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
-                    neighbor: Neighbor
+                    neighbor: NeighborList
                 }
             }
         }>(
@@ -251,7 +251,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
-                    neighbor: Neighbor
+                    neighbor: NeighborList
                 }
             }
         }>(
@@ -301,7 +301,7 @@ query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
-                    neighbor: Neighbor
+                    neighbor: NeighborList
                 } | null
             }
         }>(
@@ -427,8 +427,8 @@ function groupEnsBinding(ensList: NextIDEnsRecord[]) {
     )
 }
 
-function createENSListFromNeighbor(neighbor: Neighbor): NextIDEnsRecord[] {
-    const ethereumIdentity = neighbor.find((x) => x.identity.platform === NextIDPlatform.Ethereum)
+function createENSListFromNeighbor(neighborList: NeighborList): NextIDEnsRecord[] {
+    const ethereumIdentity = neighborList.find((x) => x.identity.platform === NextIDPlatform.Ethereum)
     // Prepend the parent ens
     return ethereumIdentity
         ? [
@@ -442,10 +442,10 @@ function createENSListFromNeighbor(neighbor: Neighbor): NextIDEnsRecord[] {
         : []
 }
 
-function createBindProofsFromNeighbor(neighbor: Neighbor): BindingProof[] {
-    const ensList = createENSListFromNeighbor(neighbor)
+function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[] {
+    const ensList = createENSListFromNeighbor(neighborList)
 
-    const bindings = neighbor.map(({ identity }) =>
+    const bindings = neighborList.map(({ identity }) =>
         createBindingProofFromProfileQuery(
             identity.platform,
             identity.platform,
