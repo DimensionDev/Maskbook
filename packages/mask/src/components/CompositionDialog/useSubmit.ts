@@ -46,10 +46,8 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 else encrypted = rawEncrypted
 
                 const decoratedText = decorateEncryptedText('', t, content.meta)
-                const defaultText = t('additional_post_box__steganography_post_pre', {
-                    random: new Date().toLocaleString(),
-                })
-                await pasteImage(decoratedText || defaultText, encrypted, reason)
+                const defaultText = t('additional_post_box__encrypted_post_pre', { encrypted })
+                await pasteImage(decoratedText || defaultText, '', reason)
             } else {
                 const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
                 const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
