@@ -10,6 +10,7 @@ const features = {
     responsive_web_twitter_blue_new_verification_copy_is_enabled: false,
     responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
     responsive_web_graphql_timeline_navigation_enabled: true,
+    blue_business_profile_image_shape_enabled: false,
 }
 async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
