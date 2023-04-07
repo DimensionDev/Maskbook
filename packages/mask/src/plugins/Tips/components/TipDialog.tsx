@@ -19,6 +19,7 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
+import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -83,7 +84,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     } = useTip()
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
-    const { chainId, setChainId } = useChainContext()
+    const { chainId } = useChainContext()
 
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
@@ -141,9 +142,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
+    const { setTargetChainId } = TargetRuntimeContext.useContainer()
+
     useUpdateEffect(() => {
-        if (wallet?.owner && smartPayChainId) setChainId(smartPayChainId)
-    }, [wallet?.owner, smartPayChainId])
+        if (!!wallet?.owner && smartPayChainId) setTargetChainId(smartPayChainId)
+    }, [!!wallet?.owner, smartPayChainId])
 
     return (
         <TabContext value={currentTab}>

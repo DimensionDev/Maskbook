@@ -1,5 +1,5 @@
 import { type FC, type HTMLProps, useCallback } from 'react'
-import { useChainId, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -23,7 +23,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount, isAvailableBalance, balance } = useTip()
     const { pluginID } = useNetworkContext()
-    const chainId = useChainId(pluginID)
+    const { chainId } = useChainContext()
 
     const selectFungibleToken = useSelectFungibleToken()
     const onSelectTokenChipClick = useCallback(async () => {

@@ -4,6 +4,7 @@ import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { makeStyles } from '@masknet/theme'
 import { NetworkTab } from '@masknet/shared'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { TargetRuntimeContext } from '../../contexts/TargetRuntimeContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -31,6 +32,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
+    const { setTargetChainId } = TargetRuntimeContext.useContainer()
 
     const { pluginID } = useNetworkContext()
     const definition = useActivatedPlugin(PluginID.Tips, 'any')
@@ -48,6 +50,7 @@ export const NetworkSection: FC<Props> = () => {
                 }}
                 chains={chainIdList}
                 pluginID={pluginID}
+                onChange={setTargetChainId}
             />
         </div>
     )
