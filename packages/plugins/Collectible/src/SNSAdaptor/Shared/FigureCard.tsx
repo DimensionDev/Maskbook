@@ -53,20 +53,6 @@ const useStyles = makeStyles()((theme) => ({
     unset: {
         color: 'unset',
     },
-    name: {
-        color: theme.palette.maskColor.white,
-        fontSize: 18,
-        fontWeight: 700,
-        wordBreak: 'break-word',
-        padding: theme.spacing(2),
-    },
-    nameBox: {
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-    },
 }))
 
 export interface FigureCardProps {
