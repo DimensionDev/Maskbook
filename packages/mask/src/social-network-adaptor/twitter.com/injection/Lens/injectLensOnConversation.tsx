@@ -3,7 +3,7 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
-import { createReactRootShadowed } from '../../../../utils/index.js'
+import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
@@ -30,7 +30,9 @@ export function injectLensOnConversation(signal: AbortSignal) {
             return ''
         }, '')
         if (!userId) return
-        createReactRootShadowed(proxy.afterShadow, { signal }).render(<ConversationLensSlot userId={userId} />)
+        attachReactTreeToGlobalContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
+            <ConversationLensSlot userId={userId} />,
+        )
     })
 }
 
