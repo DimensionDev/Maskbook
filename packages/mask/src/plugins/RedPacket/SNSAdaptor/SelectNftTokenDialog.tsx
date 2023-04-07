@@ -98,10 +98,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         flexDirection: 'column',
         borderRadius: 8,
         padding: 0,
-        marginBottom: theme.spacing(2.5),
+        marginBottom: theme.spacing(1),
         background: theme.palette.background.paper,
         width: 120,
-        height: 180,
+        height: 150,
         overflow: 'hidden',
     },
     selectWrapperNftNameWrapper: {
@@ -219,7 +219,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         color: theme.palette.mode === 'dark' ? '#000' : '#fff',
     },
     imageWrapper: {
-        height: 150,
+        height: 120,
         width: '100%',
         overflow: 'hidden',
     },

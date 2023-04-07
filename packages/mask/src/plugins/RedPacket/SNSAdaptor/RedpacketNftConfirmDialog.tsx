@@ -75,10 +75,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         borderRadius: 6,
         padding: 0,
-        marginBottom: theme.spacing(2.5),
+        marginBottom: theme.spacing(1),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
         width: 120,
-        height: 180,
+        height: 150,
         overflow: 'hidden',
     },
     nftNameWrapper: {
