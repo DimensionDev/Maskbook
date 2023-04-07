@@ -3,7 +3,7 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { createReactRootShadowed } from '../../../../utils/index.js'
+import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelector } from '../../utils/selector.js'
 
@@ -13,7 +13,7 @@ export const selector: () => LiveSelector<HTMLElement, true> = () =>
 export function injectLensOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileLensSlot />)
+    attachReactTreeToGlobalContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileLensSlot />)
 }
 
 const useStyles = makeStyles()((theme) => ({
