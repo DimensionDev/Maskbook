@@ -89,7 +89,7 @@ function attachReactTreeToMountedRoot(
     }
 }
 let observer: IntersectionObserver
-const callbacks = new Map<Element, Record<string, () => void>>()
+const callbacks = new WeakMap<Element, Record<string, () => void>>()
 function observe(element: Element, key: string, callback: () => void, signal: AbortSignal) {
     if (signal.aborted) return
     if (!observer)
@@ -117,8 +117,9 @@ function observe(element: Element, key: string, callback: () => void, signal: Ab
 function isElementPartiallyInViewport(element: Element) {
     const { top, left, height, width } = element.getBoundingClientRect()
 
-    const vertInView = top <= document.documentElement.clientHeight && top + height >= 0
-    const horInView = left <= document.documentElement.clientWidth && left + width >= 0
+    const { clientHeight, clientWidth } = document.documentElement
+    const vertInView = top <= clientHeight && top + height >= 0
+    const horInView = left <= clientWidth && left + width >= 0
 
     return vertInView && horInView
 }
