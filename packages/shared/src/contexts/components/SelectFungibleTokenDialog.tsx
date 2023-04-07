@@ -115,7 +115,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                {loadingTokens || loadingAssets ? (
+                {(loadingTokens || loadingAssets) && mode !== TokenListMode.Manage ? (
                     <Stack
                         height={500}
                         width={'100%'}

@@ -139,14 +139,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             [token, trustOrBlockTokenToLocal],
         )
 
-        const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
-            e.stopPropagation()
-            e.preventDefault()
-            if (mode === TokenListMode.List) {
-                onSelect(token)
-            }
-        }
-
         const explorerLink = useMemo(() => {
             return Others?.explorerResolver.fungibleTokenLink(token.chainId, token.address)
         }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
@@ -203,7 +195,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     key={address}
                     button
                     className={`${classes.list} dashboard token-list`}
-                    onClick={handleTokenSelect}
+                    onClick={mode === TokenListMode.List ? () => onSelect(token) : undefined}
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <TokenIcon
