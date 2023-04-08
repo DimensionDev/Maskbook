@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, uniqBy, uniqWith } from 'lodash-es'
+import { first, sortBy, uniqBy, uniqWith } from 'lodash-es'
 import {
     NextIDPlatform,
     fromHex,
@@ -134,14 +134,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 identity,
                 page,
                 exact: true,
-                sort: 'activated_at',
-                order: 'desc',
+                // TODO workaround for the API, and will sort the result manually
+                // sort: 'activated_at',
+                // order: 'desc',
             }),
             undefined,
             { enableSquash: true },
         )
 
-        return response.ids
+        return sortBy(response.ids, (x) => -x.activated_at)
     }
 
     async queryLatestBindingByPlatform(
