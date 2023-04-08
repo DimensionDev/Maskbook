@@ -35,7 +35,6 @@ import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
 import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/index.js'
 import { CoinGeckoTrendingAPI } from '../CoinGecko/apis/TrendingAPI.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
-import { fetchJSON } from '../helpers/fetchJSON.js'
 import { RSS3API } from '../RSS3/index.js'
 import { ENS_API } from '../ENS/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
@@ -43,6 +42,7 @@ import { NextIDProofAPI } from '../NextID/proof.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
+import { fetchFromDSearch } from './helpers.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -220,14 +220,17 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private async searchTokens() {
         const specificTokens = (
             await Promise.allSettled([
-                fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json', { mode: 'cors' }),
+                fetchFromDSearch<Array<FungibleTokenResult<ChainId, SchemaType>>>(
+                    urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
+                    { mode: 'cors' },
                 ),
-                fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json', { mode: 'cors' }),
+                fetchFromDSearch<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json'),
+                    { mode: 'cors' },
                 ),
-                fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
-                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json', { mode: 'cors' }),
+                fetchFromDSearch<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
+                    urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
+                    { mode: 'cors' },
                 ),
             ])
         ).flatMap(
@@ -380,7 +383,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { specificTokens, normalTokens } = await this.searchTokens()
-
         const specificResult_ = await this.searchTokenByHandler(
             specificTokens.map((x) => ({ ...x, alias: x.alias?.filter((x) => !x.isPin) })),
             name,

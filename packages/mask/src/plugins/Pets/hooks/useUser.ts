@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import type { User } from '../types.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
-import { PetsPluginID } from '../constants.js'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { PetsPluginID } from '../constants.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 
 export function useUser() {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -19,33 +18,28 @@ export function useUser() {
     }, [account, whoAmI])
 }
 
+const DEFAULT_USER = { userId: '', address: '' }
+
 export function useCurrentVisitingUser(flag?: number) {
-    const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
     const { Storage } = useWeb3State()
-    useAsync(async () => {
+    const { value: user = DEFAULT_USER } = useAsync(async () => {
         const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
             ? identity.identifier?.userId ?? ''
             : ''
         try {
-            if (!Storage || !userId || userId === '$unknown') {
-                setUser({
-                    userId: '',
-                    address: '',
-                })
-                return
-            }
+            if (!Storage || !userId || userId === '$unknown') return DEFAULT_USER
             const storage = Storage.createKVStorage(PetsPluginID)
             const address = (await storage.get<string>(userId)) ?? ''
-            setUser({
+            return {
                 userId,
                 address,
-            })
+            }
         } catch {
-            setUser({
+            return {
                 userId,
                 address: '',
-            })
+            }
         }
     }, [identity, flag, location.href, Storage])
     return user

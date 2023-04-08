@@ -6,7 +6,6 @@ import {
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
-    resolveCrossOriginURL,
     resolveIPFS_URL,
     scale10,
     SourceType,
@@ -23,22 +22,24 @@ export function createPermalink(chainId: ChainId, address?: string) {
     })
 }
 
-export async function fetchFromNFTScan<T>(url: string) {
-    return fetchJSON<T>(resolveCrossOriginURL(url)!)
-}
-
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
     if (chainId !== ChainId.Mainnet) return
 
-    return fetchJSON<T>(urlcat(NFTSCAN_URL, pathname), {
-        ...init,
-        headers: {
-            'content-type': 'application/json',
-            ...init?.headers,
-            'x-app-chainid': 'solana',
+    return fetchJSON<T>(
+        urlcat(NFTSCAN_URL, pathname),
+        {
+            ...init,
+            headers: {
+                'content-type': 'application/json',
+                ...init?.headers,
+                'x-app-chainid': 'solana',
+            },
+            cache: 'no-cache',
         },
-        cache: 'no-cache',
-    })
+        {
+            enableSquash: true,
+        },
+    )
 }
 
 export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): NonFungibleAsset<ChainId, SchemaType> {

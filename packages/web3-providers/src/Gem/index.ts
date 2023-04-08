@@ -19,7 +19,9 @@ const resolveRarityId = createLookupTableResolver<
 )
 
 async function fetchFromGem<T>(pathname: string, init?: RequestInit) {
-    const { data } = await fetchJSON<{ data: T | undefined }>(urlcat(GEM_API_URL, pathname), init)
+    const { data } = await fetchJSON<{ data: T | undefined }>(urlcat(GEM_API_URL, pathname), init, {
+        enableCache: true,
+    })
     return data
 }
 

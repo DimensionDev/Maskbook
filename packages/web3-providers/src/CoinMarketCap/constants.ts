@@ -1,6 +1,5 @@
 // proxy: https://web-api.coinmarketcap.com/v1
-export const CMC_V1_BASE_URL = 'https://coinmarketcap-agent.r2d2.to/v1'
-export const CMC_V2_BASE_URL = 'https://coinmarketcap-agent.r2d2.to/v2'
+export const CMC_BASE_URL = 'https://coinmarketcap-agent.r2d2.to/v1'
 export const CMC_STATIC_BASE_URL = 'https://s2.coinmarketcap.com/static'
 
 // the bitcoin ledger started at 03 Jan 2009

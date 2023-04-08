@@ -1,4 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
+import { fetchJSON } from '../entry-helpers.js'
 
 const NETWORK_NAME_MAP: {
     [key in string]: ChainId
@@ -13,4 +14,10 @@ const NETWORK_NAME_MAP: {
 
 export function resolveCoinMarketCapChainId(name: string) {
     return NETWORK_NAME_MAP[name]
+}
+
+export function fetchFromCoinMarketCap<T>(request: RequestInfo | URL, init?: RequestInit) {
+    return fetchJSON<T>(request, init, {
+        enableSquash: true,
+    })
 }

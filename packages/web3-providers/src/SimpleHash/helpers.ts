@@ -16,11 +16,17 @@ import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
-    return fetchJSON<T>(`${SIMPLE_HASH_URL}${path}`, {
-        method: 'GET',
-        mode: 'cors',
-        headers: { 'content-type': 'application/json' },
-    })
+    return fetchJSON<T>(
+        `${SIMPLE_HASH_URL}${path}`,
+        {
+            method: 'GET',
+            mode: 'cors',
+            headers: { 'content-type': 'application/json' },
+        },
+        {
+            enableSquash: true,
+        },
+    )
 }
 
 export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {

@@ -40,15 +40,21 @@ import { fetchJSON } from '../../entry-helpers.js'
 const Web3 = new Web3API()
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    return fetchJSON<T>(urlcat(NFTSCAN_URL, pathname), {
-        ...init,
-        headers: {
-            'content-type': 'application/json',
-            ...init?.headers,
-            ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
+    return fetchJSON<T>(
+        urlcat(NFTSCAN_URL, pathname),
+        {
+            ...init,
+            headers: {
+                'content-type': 'application/json',
+                ...init?.headers,
+                ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
+            },
+            cache: 'no-cache',
         },
-        cache: 'no-cache',
-    })
+        {
+            enableSquash: true,
+        },
+    )
 }
 
 export async function getContractSymbol(chainId: ChainId, address: string) {

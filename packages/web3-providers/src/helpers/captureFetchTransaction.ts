@@ -20,8 +20,6 @@ function isIgnoredRequest(request: Request) {
         'https://kv.r2d2.to/api/com.maskbook.user',
         // ScamDB
         'https://scam.mask.r2d2.to',
-        // RSS3 domain query
-        'https://rss3.domains/name',
         // CDN
         /* cspell:disable-next-line */
         'cdninstagram.com',
