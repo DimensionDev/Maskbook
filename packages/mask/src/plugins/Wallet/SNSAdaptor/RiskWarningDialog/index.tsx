@@ -17,7 +17,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: 0,
         paddingLeft: 16,
         paddingRight: 16,
-        height: 472,
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,

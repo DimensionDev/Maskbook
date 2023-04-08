@@ -88,7 +88,7 @@ export function OffersList(props: OffersListProps) {
 }
 
 export function OffersListWrapper(props: OffersListProps) {
-    const { setSourceType, sourceType = props.offers.value[0].source } = Context.useContainer()
+    const { setSourceType, sourceType = props.offers.value[0]?.source } = Context.useContainer()
 
     return (
         <div>
