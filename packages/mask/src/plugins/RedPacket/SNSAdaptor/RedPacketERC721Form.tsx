@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => {
             marginBottom: theme.spacing(2.5),
             background: theme.palette.background.paper,
             width: 120,
-            height: 180,
+            height: 150,
             overflow: 'hidden',
         },
         tokenSelectorParent: {
