@@ -18,6 +18,7 @@ import {
 import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useGasSchema } from './hooks/index.js'
+import { BigNumber } from 'bignumber.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {
@@ -108,6 +109,7 @@ export function GasForm(props: GasFormProps) {
         'maxFeePerGas',
         'maxPriorityFeePerGas',
     ])
+
     const [gasPriceByUser, setGasPriceByUser] = useState<string>()
     const [maxFeePerGasByUser, setMaxFeePerGasByUser] = useState<string>()
 
@@ -222,7 +224,7 @@ export function GasForm(props: GasFormProps) {
                                 inputProps={{
                                     pattern: '^[0-9]*[.,]?[0-9]*$',
                                 }}
-                                value={isZero(gasLimit) ? defaultGasLimit : gasLimit}
+                                value={isZero(gasLimit) ? defaultGasLimit : new BigNumber(gasLimit).toString()}
                                 label={
                                     <Typography className={classes.caption}>
                                         {t.gas_settings_label_gas_limit()}
