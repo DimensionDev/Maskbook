@@ -314,7 +314,7 @@ query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
                     operationName: 'GET_LENS_PROFILES',
                     variables: { platform: 'twitter', identity: lowerCaseId },
                     query: `
-query GET_PROFILES_QUERY($platform: String, $identity: String) {
+query GET_LENS_PROFILES($platform: String, $identity: String) {
   identity(platform: $platform, identity: $identity) {
     neighbor(depth: 2) {
       identity {
