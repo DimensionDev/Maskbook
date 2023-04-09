@@ -71,7 +71,7 @@ export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, stri
         [NetworkType.Ethereum]: 'eth',
         [NetworkType.Binance]: 'bsc',
         [NetworkType.Polygon]: 'matic',
-        [NetworkType.Arbitrum]: 'arbitrum',
+        [NetworkType.Arbitrum]: 'arb',
         [NetworkType.xDai]: 'xdai',
         [NetworkType.Avalanche]: 'avax',
         [NetworkType.Fantom]: 'ftm',
