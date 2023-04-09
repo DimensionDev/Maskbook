@@ -141,8 +141,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                         </Markdown>
                     ) : (
                         <Typography className={classes.content}>
-                            {/* There might be leading spaces */}
-                            <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body?.trimStart())}</Linkify>
+                            <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
                         </Typography>
                     )}
                 </div>
