@@ -154,7 +154,6 @@ const useStyles = makeStyles()((theme) => {
         fallbackImage: {
             minHeight: '0 !important',
             maxWidth: 'none',
-            transform: 'translateY(10px)',
             width: 64,
             height: 64,
         },
@@ -201,7 +200,7 @@ const useStyles = makeStyles()((theme) => {
             pointerEvents: 'none',
         },
         assetImgWrapper: {
-            maxHeight: 155,
+            maxHeight: 120,
             overflow: 'hidden',
         },
         approveButton: {
