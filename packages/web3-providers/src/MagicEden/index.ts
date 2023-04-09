@@ -30,6 +30,7 @@ async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     return fetchJSON<T>(url, {
         method: 'GET',
         headers: { Accept: 'application/json' },
+        mode: 'cors',
     })
 }
 
@@ -251,6 +252,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
     ) {
+        const token = await this.getToken(address, tokenId)
+
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const limit = size || 20
         const offers = await fetchFromMagicEden<WalletOffer[]>(
