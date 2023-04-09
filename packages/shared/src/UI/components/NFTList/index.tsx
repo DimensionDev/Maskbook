@@ -7,7 +7,7 @@ import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
-import { isENSContractAddress, isLens } from '@masknet/web3-shared-evm'
+import { isLens } from '@masknet/web3-shared-evm'
 
 interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
@@ -91,10 +91,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 30,
             height: 30,
         },
-        ens: {
-            width: '100%',
-            height: '100%',
-        },
         image: {
             background: 'transparent !important',
             width: 126,
@@ -139,10 +135,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
-                    fallbackImage:
-                        isLens(token.metadata?.name) || isENSContractAddress(token.contract?.address || '')
-                            ? classes.ens
-                            : classes.fallbackImage,
+                    fallbackImage: classes.fallbackImage,
                     container: classes.image,
                     root: classes.root,
                 }}
