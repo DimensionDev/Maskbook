@@ -36,6 +36,8 @@ const useStyles = makeStyles()((theme) => ({
     nameLg: {
         fontSize: 20,
         fontWeight: 700,
+        wordBreak: 'break-word',
+        alignItems: 'center',
     },
     nameLgBox: {
         display: 'flex',
@@ -87,8 +89,10 @@ export function FigureCard(props: FigureCardProps) {
 
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
-                    <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
-                    {asset.collection?.verified ? <VerifiedUserIcon color="primary" fontSize="small" /> : null}
+                    <Typography className={classes.nameLg}>
+                        {asset.collection?.name}
+                        {asset.collection?.verified ? <VerifiedUserIcon color="primary" fontSize="small" /> : null}
+                    </Typography>
                 </div>
             )}
         </div>
