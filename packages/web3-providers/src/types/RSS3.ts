@@ -264,7 +264,7 @@ export namespace RSS3BaseAPI {
     }
     export interface VoteMetadata {
         type_on_platform: Type[]
-        /** option index, start from 1 */
+        /** option index, start from 1, could be multiple in format like `[1, 2, 3]` */
         choice: string
         proposal: ProposeMetadata
     }
