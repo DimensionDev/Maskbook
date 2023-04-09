@@ -145,7 +145,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
-        transform: 'translateY(10px)',
         width: 64,
         height: 64,
     },

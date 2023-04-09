@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: 6,
+        borderRadius: 8,
         padding: 0,
         marginBottom: theme.spacing(1),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
@@ -106,7 +106,6 @@ const useStyles = makeStyles()((theme) => ({
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
-        transform: 'translateY(10px)',
         width: 64,
         height: 64,
     },
@@ -116,7 +115,7 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
     },
     assetImgWrapper: {
-        maxHeight: 155,
+        maxHeight: 120,
         overflow: 'hidden',
     },
 }))
