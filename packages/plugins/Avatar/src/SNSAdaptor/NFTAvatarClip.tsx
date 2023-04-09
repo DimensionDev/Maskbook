@@ -224,7 +224,6 @@ export function NFTAvatarMiniClip(props: NFTAvatarMiniClipProps) {
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
 
     if (loading || !avatarMetadata?.address || !avatarMetadata?.token_id) return null
-
     return (
         <svg
             className={cx(classes.root, className)}

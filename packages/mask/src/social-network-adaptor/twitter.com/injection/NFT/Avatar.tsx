@@ -1,7 +1,7 @@
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
-import { postAvatarSelector } from '../../utils/selector.js'
+import { followUserAvatarSelector, postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 
@@ -65,4 +65,5 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
 
 export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
     inject(postAvatarSelector, signal)
+    inject(followUserAvatarSelector, signal)
 }
