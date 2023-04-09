@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import type { z as zod } from 'zod'
-import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
+import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -16,7 +17,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useGasSchema } from './hooks/index.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
@@ -34,17 +34,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         unit: {
             color: theme.palette.maskColor.third,
-        },
-        textfield: {
-            '& input[type=number]': {
-                MozAppearance: 'textfield',
-            },
-            '& input[type=number]::-webkit-outer-spin-button': {
-                WebkitAppearance: 'none',
-            },
-            '& input[type=number]::-webkit-inner-spin-button': {
-                WebkitAppearance: 'none',
-            },
         },
         caption: {
             color: theme.palette.maskColor.second,
@@ -195,7 +184,6 @@ export function GasForm(props: GasFormProps) {
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    className={classes.textfield}
                                     InputProps={{
                                         type: 'number',
                                         endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
@@ -227,7 +215,6 @@ export function GasForm(props: GasFormProps) {
                         render={({ field }) => (
                             <MaskTextField
                                 {...field}
-                                className={classes.textfield}
                                 InputProps={{
                                     type: 'number',
                                 }}
@@ -261,7 +248,6 @@ export function GasForm(props: GasFormProps) {
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    className={classes.textfield}
                                     InputProps={{
                                         type: 'number',
                                         endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
@@ -296,7 +282,6 @@ export function GasForm(props: GasFormProps) {
                             render={({ field }) => (
                                 <MaskTextField
                                     {...field}
-                                    className={classes.textfield}
                                     InputProps={{
                                         type: 'number',
                                         endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
