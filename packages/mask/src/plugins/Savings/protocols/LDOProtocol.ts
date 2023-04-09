@@ -10,8 +10,8 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
-import { fetchText } from '@masknet/web3-providers/helpers'
 import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
+import { Lido as LidoAPI } from '@masknet/web3-providers'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import { ProtocolType, type SavingsProtocol } from '../types.js'
 
@@ -41,8 +41,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     async updateApr(chainId: ChainId, web3: Web3): Promise<void> {
         try {
-            const text = await fetchText('https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr')
-            this._apr = text.replace(/"/g, '')
+            this._apr = await LidoAPI.getStEthAPR()
         } catch {
             // the default APR is 5.30%
             this._apr = '5.30'
