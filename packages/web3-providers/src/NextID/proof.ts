@@ -390,7 +390,7 @@ query GET_LENS_PROFILES($platform: String, $identity: String) {
 
         if (response.error || !handler || !address) return false
 
-        return response.data?.includes(handler) || response.data?.length === 0
+        return response.data?.includes(handler) || response.data?.filter((x) => x).length === 0
     }
 }
 
