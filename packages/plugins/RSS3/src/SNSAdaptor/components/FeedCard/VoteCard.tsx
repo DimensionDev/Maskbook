@@ -2,14 +2,14 @@ import { Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
+import Linkify from 'linkify-react'
 import { useMemo, type FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, htmlToPlain } from './common.js'
+import { Label, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
-import Linkify from 'linkify-react'
 
 const useStyles = makeStyles<void, 'summary'>()((theme, _, refs) => ({
     verbose: {
@@ -107,7 +107,7 @@ export const VoteCard: FC<VoteCardProps> = ({ feed, className, ...rest }) => {
                         </Markdown>
                     ) : (
                         <Typography className={classes.content}>
-                            <Linkify>{htmlToPlain(metadata.proposal.body)}</Linkify>
+                            <Linkify options={LinkifyOptions}>{htmlToPlain(metadata.proposal.body)}</Linkify>
                         </Typography>
                     )}
                 </>
