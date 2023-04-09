@@ -301,7 +301,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         if (!getNextIDPlatform() || !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
             return identities
         }
-
+        const identitiesFromNextID = await this.getSocialAddressesFromNextID(identity)
         const allSettledIdentitiesVerified = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const isVerified = await NextIDProof.verifyTwitterHandlerByAddress(
@@ -312,8 +312,13 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             }),
         )
 
-        return allSettledIdentitiesVerified
-            .flatMap((x) => (x.status === 'fulfilled' && x.value.isVerified ? x.value : undefined))
-            .filter(Boolean) as Array<SocialAddress<ChainId>>
+        return uniqBy(
+            (
+                allSettledIdentitiesVerified
+                    .flatMap((x) => (x.status === 'fulfilled' && x.value.isVerified ? x.value : undefined))
+                    .filter(Boolean) as Array<SocialAddress<ChainId>>
+            ).concat(identitiesFromNextID),
+            (x) => x.address.toLowerCase(),
+        )
     }
 }
