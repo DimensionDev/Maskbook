@@ -19,6 +19,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
+import { uniqBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -58,7 +59,11 @@ export function PersonaPage() {
     )
 
     const bindingProofs = useMemo(
-        () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
+        () =>
+            uniqBy(
+                bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
+                'identity',
+            ),
         [bindingPersonas, network],
     )
     const handleSelect = useCallback(
