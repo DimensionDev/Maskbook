@@ -1,4 +1,6 @@
 import { type ForwardedRef, forwardRef } from 'react'
+import { omit } from 'lodash-es'
+import type { BoxProps } from '@mui/system'
 import {
     Box,
     formHelperTextClasses,
@@ -8,11 +10,9 @@ import {
     Typography,
     InputBase,
 } from '@mui/material'
+import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
-import { isDashboardPage } from '@masknet/shared-base'
-import { omit } from 'lodash-es'
-import type { BoxProps } from '@mui/system'
 
 const isDashboard = isDashboardPage()
 
@@ -38,6 +38,16 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '2px',
             fontSize: 12,
             lineHeight: '16px',
+        },
+        '& input[type=number]': {
+            MozAppearance: 'textfield',
+            WebkitAppearance: 'none',
+        },
+        '& input[type=number]::-webkit-outer-spin-button': {
+            WebkitAppearance: 'none',
+        },
+        '& input[type=number]::-webkit-inner-spin-button': {
+            WebkitAppearance: 'none',
         },
         '& input::-webkit-input-placeholder': {
             color: !isDashboard ? theme.palette.maskColor.second : undefined,
@@ -74,7 +84,7 @@ export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'var
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
     const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
-    const inputProps = (props.InputProps as InputProps) ?? {}
+    const InputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
     return (
         <Box sx={sx} {...wrapperProps}>
@@ -103,13 +113,17 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                         classes: {
                             disabled: classes.inputDisabled,
                             focused: classes.inputFocused,
-                            ...inputProps.classes,
+                            ...InputProps.classes,
                         },
-                        ...inputProps,
+                        ...InputProps,
                     }}
                 />
             ) : (
-                <InputBase {...inputProps} {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps')} />
+                <InputBase
+                    className={classes.field}
+                    {...InputProps}
+                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps')}
+                />
             )}
         </Box>
     )
