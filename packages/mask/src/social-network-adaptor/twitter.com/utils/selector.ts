@@ -240,7 +240,7 @@ export const selfInfoSelectors = () => ({
 export const searchSelfHandleSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] [tabindex="-1"] [dir="ltr"] span',
+            '[data-testid="SideNav_AccountSwitcher_Button"] > div:nth-child(2) > div > div:nth-child(2) span', // desktop
             '#layers [role="group"] [role="dialog"] [tabindex="-1"] [dir="ltr"] > span', // sidebar opened in mobile
         ].join(','),
     )
