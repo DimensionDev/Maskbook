@@ -26,7 +26,7 @@ export interface RedPacketSettings {
     token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
-type ParamsObjType = {
+export type ParamsObjType = {
     publicKey: string
     shares: number
     isRandom: boolean
@@ -40,7 +40,7 @@ type ParamsObjType = {
     token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
-function checkParams(paramsObj: ParamsObjType) {
+export function checkParams(paramsObj: ParamsObjType) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
         throw new Error('At least [number of lucky drops] tokens to your lucky drop.')
     }
@@ -52,7 +52,7 @@ function checkParams(paramsObj: ParamsObjType) {
     return true
 }
 
-type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
+export type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
 interface CreateParams {
     gas: string | undefined
     params: MethodParameters
