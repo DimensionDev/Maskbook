@@ -169,7 +169,7 @@ export function FollowLensDialog() {
 
     const disabled = useMemo(() => {
         if (
-            !wallet ||
+            !account ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
             providerType === ProviderType.Fortmatic ||
@@ -188,7 +188,16 @@ export function FollowLensDialog() {
             return true
 
         return false
-    }, [wallet?.owner, chainId, followLoading, unfollowLoading, feeTokenBalance, profile?.followModule, pluginID])
+    }, [
+        account,
+        wallet?.owner,
+        chainId,
+        followLoading,
+        unfollowLoading,
+        feeTokenBalance,
+        profile?.followModule,
+        pluginID,
+    ])
 
     const [element] = useHover((isHovering) => {
         const getButtonText = () => {
