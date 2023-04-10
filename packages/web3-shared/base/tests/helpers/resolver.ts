@@ -18,8 +18,8 @@ const IMAGE_DATA_PARTIAL = 'data:image/png;base64,iVB'
 describe('resolveCrossOriginURL', () => {
     test.each([
         { give: '', expected: '' },
-        { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
-        { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
+        { give: MASK_URL, expected: `https://cors-next.r2d2.to?${encodeURIComponent(MASK_URL)}` },
+        { give: MASK_URL, expected: `https://cors-next.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: CHROME_EXTENSION_URL, expected: CHROME_EXTENSION_URL },
         { give: MOZ_EXTENSION_URL, expected: MOZ_EXTENSION_URL },
         { give: IMAGE_DATA_PARTIAL, expected: IMAGE_DATA_PARTIAL },
@@ -112,7 +112,7 @@ describe('resolveIPFS_URL', () => {
             // { give: `https://${cid}.ipfs.dweb.link/460.png?ext=png`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}/460.png`},
         ].map(({ give, expected }) => [
             { give, expected },
-            { give: `https://cors.r2d2.to?${encodeURIComponent(give)}`, expected },
+            { give: `https://cors-next.r2d2.to?${encodeURIComponent(give)}`, expected },
         ])
     })
     test.each(cases)('.resolveIPFS_URL($give)', ({ give, expected }) => {
