@@ -49,8 +49,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         },
         priceInToken: asset.last_sale
             ? {
-                   
-                  amount: asset.last_sale.total_price,
+                  amount: asset.last_sale.total_price?.toString() || '',
                   // FIXME: cannot get payment token
                   token:
                       asset.last_sale.payment_token?.symbol === 'ETH'
