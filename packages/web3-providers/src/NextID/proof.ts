@@ -24,10 +24,9 @@ import {
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 
-type PresetLensTwitter = keyof typeof PRESET_LENS
-
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
+
 interface CreatePayloadBody {
     action: string
     platform: string
@@ -74,6 +73,10 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
+    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
+        return fetchJSON<T>(request, init, { enableSquash: true, enableCache: true })
+    }
+
     async bindProof(
         uuid: string,
         personaPublicKey: string,
@@ -119,8 +122,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
-        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const { ids } = await fetchJSON<NextIDBindings>(url, undefined, { enableSquash: true })
+        const { ids } = await this.fetchFromProofService<NextIDBindings>(
+            getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
+        )
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
@@ -128,7 +132,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(
+        const response = await this.fetchFromProofService<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', {
                 platform,
                 identity,
@@ -138,8 +142,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 // sort: 'activated_at',
                 // order: 'desc',
             }),
-            undefined,
-            { enableSquash: true },
         )
 
         return sortBy(response.ids, (x) => -x.activated_at)
@@ -163,7 +165,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const result = await fetchJSON<NextIDBindings>(
+            const result = await this.fetchFromProofService<NextIDBindings>(
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
                     identity,
@@ -171,8 +173,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     page,
                     order: 'desc',
                 }),
-                undefined,
-                { enableSquash: true },
             )
 
             const personaBindings = result.ids
@@ -191,8 +191,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         try {
             if (!platform && !identity) return false
 
-            const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-            const result = await fetchJSON<BindingProof | undefined>(url, undefined, { enableSquash: true })
+            const result = await this.fetchFromProofService<BindingProof | undefined>(
+                getExistedBindingQueryURL(platform, identity, personaPublicKey),
+            )
             return !!result?.is_valid
         } catch {
             return false
@@ -332,9 +333,10 @@ query GET_LENS_PROFILES($platform: String, $identity: String) {
         )
 
         const connections = data.identity?.neighbor.filter((x) => x.identity.platform === NextIDPlatform.LENS) || []
+        const id = lowerCaseId as keyof typeof PRESET_LENS
 
-        if (connections.length === 0 && PRESET_LENS[lowerCaseId as PresetLensTwitter]) {
-            return PRESET_LENS[lowerCaseId as PresetLensTwitter]
+        if (connections.length === 0 && PRESET_LENS[id]) {
+            return PRESET_LENS[id]
         }
 
         return connections.map(({ identity }) => ({

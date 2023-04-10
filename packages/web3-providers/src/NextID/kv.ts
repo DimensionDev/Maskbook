@@ -50,7 +50,6 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
             undefined,
             {
-                enableCache: true,
                 enableSquash: true,
             },
         )
@@ -80,7 +79,6 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
             undefined,
             {
-                enableCache: true,
                 enableSquash: true,
             },
         )
@@ -91,7 +89,6 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     }
     async get<T>(personaPublicKey: string): Promise<T> {
         return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, {
-            enableCache: true,
             enableSquash: true,
         })
     }
