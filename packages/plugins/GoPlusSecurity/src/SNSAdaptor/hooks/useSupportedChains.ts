@@ -14,10 +14,12 @@ export const useSupportedChains = () => {
 
     return useAsync(async () => {
         const chains = await GoPlusLabs.getSupportedChain()
-        return chains.map((x) => {
-            const network = networks.find((n) => n.chainId === x.chainId)
-            const icon: URL | undefined = unIntegrationChainLogos[x.chainId]
-            return { ...x, icon, ...network }
-        })
+        return chains
+            .sort((a, b) => (a.chainId > b.chainId ? 0 : -1))
+            .map((x) => {
+                const network = networks.find((n) => n.chainId === x.chainId)
+                const icon: URL | undefined = unIntegrationChainLogos[x.chainId]
+                return { ...x, icon, ...network }
+            })
     }, [networks])
 }
