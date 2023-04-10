@@ -48,6 +48,8 @@
     "nft_select_all_option": "ALL ({{total}} NFT)",
     "nft_search_placeholder": "Token ID separated by comma, e.g. 1224, 7873, 8948",
     "erc721_insufficient_balance": "Insufficient Balance",
+    "erc721_create_lucky_drop": "Create the Lucky Drop",
+    "erc721_gas_cap": "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of 1 {{symbol}}. Please reduce the number of NFTs selected.",
     "erc721_tab_title": "Collectibles",
     "erc20_tab_title": "Tokens",
     "claimed": "Claimed {{- amount}}",
