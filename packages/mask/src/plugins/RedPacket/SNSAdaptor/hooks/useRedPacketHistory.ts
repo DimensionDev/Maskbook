@@ -97,7 +97,10 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
     }, [address, chainId, wallet?.owner])
 
-    const value = useMemo(() => result.value?.filter((x) => x.chainId === chainId), [chainId, result.value])
+    const value = useMemo(
+        () => result.value?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
+        [chainId, result.value],
+    )
 
     return { ...result, value }
 }
