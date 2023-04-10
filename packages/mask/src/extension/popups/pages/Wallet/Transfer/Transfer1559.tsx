@@ -407,9 +407,12 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             return {
                 ...selectedAsset,
                 balance: toFixed(
-                    minus(
-                        selectedAsset?.balance,
-                        new BigNumber(formatGweiToWei(maxFeePerGas)).multipliedBy('210000').integerValue(),
+                    BigNumber.max(
+                        0,
+                        minus(
+                            selectedAsset?.balance,
+                            new BigNumber(formatGweiToWei(maxFeePerGas)).multipliedBy('210000').integerValue(),
+                        ),
                     ),
                     0,
                 ),
