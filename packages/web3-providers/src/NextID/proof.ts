@@ -316,7 +316,7 @@ query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
                     query: `
 query GET_LENS_PROFILES($platform: String, $identity: String) {
   identity(platform: $platform, identity: $identity) {
-    neighbor(depth: 2) {
+    neighbor(depth: 3) {
       identity {
         platform
         identity

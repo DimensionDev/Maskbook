@@ -56,3 +56,5 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
         </IconButton>
     )
 })
+
+LensBadge.displayName = 'LensBadge'
