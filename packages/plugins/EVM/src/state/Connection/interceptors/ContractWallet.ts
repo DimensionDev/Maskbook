@@ -1,4 +1,4 @@
-import type { AbiItem } from 'web3-utils'
+import { toHex, type AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { type ECKeyIdentifier, type NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
@@ -125,7 +125,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider?.hostedChainId)
+                context.write(provider?.hostedChainId ? toHex(provider?.hostedChainId) : undefined)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 if (isValidAddress(provider?.hostedAccount)) {

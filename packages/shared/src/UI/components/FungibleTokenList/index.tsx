@@ -1,4 +1,4 @@
-import { memo, type ReactNode, useCallback, useMemo, useState } from 'react'
+import { memo, type ReactNode, useCallback, useMemo, useState, useTransition } from 'react'
 import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps, SearchableList } from '@masknet/theme'
@@ -321,9 +321,11 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         [searchError, JSON.stringify(props.SearchTextFieldProps)],
     )
 
+    const [isPending, startTransition] = useTransition()
+
     const handleSelect = useCallback(
         (token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> | null) =>
-            onSelect?.(token),
+            startTransition(() => onSelect?.(token)),
         [onSelect],
     )
 

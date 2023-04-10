@@ -22,6 +22,8 @@ interface ChainContextGetter<T extends NetworkPluginID = NetworkPluginID> {
     chainId?: Web3Helper.Definition[T]['ChainId']
     networkType?: Web3Helper.Definition[T]['NetworkType']
     providerType?: Web3Helper.Definition[T]['ProviderType']
+    // If it's controlled, we prefer passed value over state inside
+    controlled?: boolean
 }
 
 interface ChainContextSetter<T extends NetworkPluginID = NetworkPluginID> {
@@ -58,43 +60,34 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
 
 export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
+    const { controlled } = value
 
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
     const globalNetworkType = useNetworkType(pluginID)
     const globalProviderType = useProviderType(pluginID)
-    const [account, setAccount] = useState<string>()
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
-    const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
+    const [_account, setAccount] = useState<string>()
+    const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
+    const [_networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
+    const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
+
+    const account = (controlled ? value.account : _account ?? value.account) ?? globalAccount
+    const chainId = (controlled ? value.chainId : _chainId ?? value.chainId) ?? globalChainId
+    const networkType = (controlled ? value.networkType : _networkType ?? value.networkType) ?? globalNetworkType
+    const providerType = (controlled ? value.providerType : _providerType ?? value.providerType) ?? globalProviderType
 
     const context = useMemo(
         () => ({
-            ...value,
-            account: account ?? value.account ?? globalAccount,
-            chainId: chainId ?? value.chainId ?? globalChainId,
-            networkType: networkType ?? value.networkType ?? globalNetworkType,
-            providerType: providerType ?? value.providerType ?? globalProviderType,
+            account,
+            chainId,
+            networkType,
+            providerType,
             setAccount,
             setChainId,
             setNetworkType,
             setProviderType,
         }),
-        [
-            value,
-            value.account,
-            value.chainId,
-            value.networkType,
-            value.providerType,
-            account,
-            globalAccount,
-            chainId,
-            globalChainId,
-            networkType,
-            globalNetworkType,
-            providerType,
-            globalProviderType,
-        ],
+        [account, chainId, networkType, providerType],
     )
     return <ChainContext.Provider value={context}>{children}</ChainContext.Provider>
 }

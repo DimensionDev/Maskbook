@@ -3,7 +3,7 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
-import { createReactRootShadowed } from '../../../../utils/index.js'
+import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
@@ -23,7 +23,9 @@ export function injectLensOnPost(signal: AbortSignal) {
         const href = link?.getAttribute('href')
         const userId = href?.split('/')[1]
         if (!userId) return
-        createReactRootShadowed(proxy.afterShadow, { signal }).render(<PostLensSlot userId={userId} />)
+        attachReactTreeToGlobalContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
+            <PostLensSlot userId={userId} />,
+        )
     })
 }
 

@@ -44,6 +44,7 @@ export async function getAllPoolsAsSeller(
             startBlock,
             endBlock,
             address: ITO2_CONTRACT_ADDRESS,
+            chain_id: chainId,
         }),
     )
     if (!response.ok) return []
@@ -186,6 +187,7 @@ export async function getClaimAllPools(
             startBlock,
             endBlock,
             address: ITO2_CONTRACT_ADDRESS,
+            chain_id: chainId,
         }),
     )
     if (!response.ok) return []

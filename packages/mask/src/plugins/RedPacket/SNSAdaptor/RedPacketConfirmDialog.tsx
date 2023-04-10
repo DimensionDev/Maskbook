@@ -50,6 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     ellipsis: {
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
 }))
 

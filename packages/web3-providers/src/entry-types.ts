@@ -36,6 +36,7 @@ export * from './types/RedPacket.js'
 export * from './types/NameService.js'
 export * from './types/Wallet.js'
 export * from './types/Lens.js'
+export * from './types/Lido.js'
 
 // Implementations
 export * from './DeBank/types.js'

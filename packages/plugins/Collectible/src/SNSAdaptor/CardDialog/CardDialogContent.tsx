@@ -47,7 +47,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             paddingBottom: 72,
         },
         tabWrapper: {
-            width: 'calc( 100% - 336px)',
+            width: 'calc(100% - 336px)',
             marginLeft: 36,
             overflowY: 'auto',
             '&::-webkit-scrollbar': {

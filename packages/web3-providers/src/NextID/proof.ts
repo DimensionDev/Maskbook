@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, uniqBy, uniqWith } from 'lodash-es'
+import { first, sortBy, uniqBy, uniqWith } from 'lodash-es'
 import {
     NextIDPlatform,
     fromHex,
@@ -45,6 +45,11 @@ interface CreatePayloadResponse {
     uuid: string
     created_at: string
 }
+
+type NeighborList = Array<{
+    sources?: NextIDPlatform[]
+    identity: NextIDIdentity
+}>
 
 /**
  * Lens account queried from next id
@@ -129,14 +134,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 identity,
                 page,
                 exact: true,
-                sort: 'activated_at',
-                order: 'desc',
+                // TODO workaround for the API, and will sort the result manually
+                // sort: 'activated_at',
+                // order: 'desc',
             }),
             undefined,
             { enableSquash: true },
         )
 
-        return response.ids
+        return sortBy(response.ids, (x) => -x.activated_at)
     }
 
     async queryLatestBindingByPlatform(
@@ -197,12 +203,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: Array<{
-                        source: NextIDPlatform
-                        to: NextIDIdentity
-                        from: NextIDIdentity
-                    }>
+                    neighbor: NeighborList
                 }
             }
         }>(
@@ -216,24 +217,20 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                         identity(platform: $platform, identity: $identity) {
-                            nft(category: ["ENS"]) {
-                              uuid
-                              category
-                              chain
-                              address
-                              id
-                            }
-                            neighborWithTraversal(depth: 5) {
-                                source
-                                to {
+                            neighbor(depth: 3) {
+                                sources
+                                identity {
+                                    uuid
                                     platform
                                     identity
                                     displayName
-                                }
-                                from {
-                                    platform
-                                    identity
-                                    displayName
+                                    nft(category: ["ENS"]) {
+                                        uuid
+                                        category
+                                        chain
+                                        address
+                                        id
+                                    }
                                 }
                             }
                         }
@@ -244,17 +241,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             { enableSquash: true },
         )
 
-        const bindings = data.identity.neighborWithTraversal
-            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
-            .concat(
-                data.identity.neighborWithTraversal.map((x) =>
-                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.identity, x.to.displayName),
-                ),
-            )
-        const ensList = data.identity.nft
-        if (ensList?.length) {
-            bindings.unshift(groupEnsBinding(ensList))
-        }
+        const bindings = createBindProofsFromNeighbor(data.identity.neighbor)
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
@@ -265,12 +252,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: Array<{
-                        source: NextIDPlatform
-                        to: NextIDIdentity
-                        from: NextIDIdentity
-                    }>
+                    neighbor: NeighborList
                 }
             }
         }>(
@@ -282,76 +264,33 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     operationName: 'GET_PROFILES_BY_TWITTER_ID',
                     variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
                     query: `
-                    query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
-                        identity(platform: $platform, identity: $identity) {
-                            nft(category: ["ENS"]) {
-                              uuid
-                              category
-                              chain
-                              address
-                              id
-                            }
-                            neighborWithTraversal(depth: 5) {
-                                source
-                                from {
-                                    platform
-                                    identity
-                                    displayName
-                                    nft(category: ["ENS"]) {
-                                      uuid
-                                      category
-                                      chain
-                                      address
-                                      id
-                                    }
-                                }
-                                to {
-                                    platform
-                                    identity
-                                    displayName
-                                    nft(category: ["ENS"]) {
-                                      uuid
-                                      category
-                                      chain
-                                      address
-                                      id
+                        query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
+                            identity(platform: $platform, identity: $identity) {
+                                neighbor(depth: 3) {
+                                    sources
+                                    identity {
+                                        uuid
+                                        platform
+                                        identity
+                                        displayName
+                                        nft(category: ["ENS"]) {
+                                            uuid
+                                            category
+                                            chain
+                                            address
+                                            id
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
                 `,
                 }),
             },
             { enableSquash: true },
         )
 
-        const bindings = data.identity.neighborWithTraversal
-            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
-            .concat(
-                data.identity.neighborWithTraversal.map((x) =>
-                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.identity, x.to.displayName),
-                ),
-            )
-        const ensList: NextIDEnsRecord[] = data.identity.neighborWithTraversal.reduce((list: NextIDEnsRecord[], x) => {
-            const result = [...x.from.nft, ...x.to.nft]
-            const endNodes = [x.from, x.to]
-            endNodes
-                .filter((node) => node.platform === NextIDPlatform.Ethereum && node.displayName.endsWith('.eth'))
-                .forEach((node) => {
-                    // Prepend the parent ens
-                    result.unshift({
-                        category: 'ENS',
-                        chain: 'ethereum',
-                        id: node.displayName,
-                    } as NextIDEnsRecord)
-                })
-            return [...list, ...result]
-        }, [])
-
-        if (ensList.length) {
-            bindings.unshift(groupEnsBinding(uniqBy(ensList, (x) => x.id)))
-        }
+        const bindings = createBindProofsFromNeighbor(data.identity.neighbor)
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
@@ -363,15 +302,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
-                    uuid: string
-                    platform: 'twitter'
-                    identity: string
-                    displayName: string
-                    neighborWithTraversal: Array<{
-                        source: NextIDPlatform
-                        from: NextIDIdentity
-                        to: NextIDIdentity
-                    }>
+                    neighbor: NeighborList
                 } | null
             }
         }>(
@@ -383,52 +314,33 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     operationName: 'GET_LENS_PROFILES',
                     variables: { platform: 'twitter', identity: lowerCaseId },
                     query: `
-                    query GET_LENS_PROFILES($platform: String, $identity: String) {
-                      identity(platform: $platform, identity: $identity) {
-                        uuid
-                        platform
-                        identity
-                        displayName
-                        neighborWithTraversal(depth: 5) {
-                          source
-                          from {
-                            uuid
-                            platform
-                            identity
-                            displayName
-                          }
-                          to {
-                            uuid
-                            platform
-                            identity
-                            displayName
-                          }
+                        query GET_LENS_PROFILES($platform: String, $identity: String) {
+                            identity(platform: $platform, identity: $identity) {
+                                neighbor(depth: 3) {
+                                identity {
+                                    platform
+                                    identity
+                                    displayName
+                                }
+                                }
+                            }
                         }
-                      }
-                    }
                 `,
                 }),
             },
             { enableSquash: true },
         )
 
-        const connections =
-            data.identity?.neighborWithTraversal.filter((x) => {
-                return (
-                    x.source === NextIDPlatform.LENS &&
-                    x.from.platform === NextIDPlatform.Ethereum &&
-                    x.to.platform === NextIDPlatform.LENS
-                )
-            }) || []
+        const connections = data.identity?.neighbor.filter((x) => x.identity.platform === NextIDPlatform.LENS) || []
 
         if (connections.length === 0 && PRESET_LENS[lowerCaseId as PresetLensTwitter]) {
             return PRESET_LENS[lowerCaseId as PresetLensTwitter]
         }
 
-        return connections.map((x) => ({
-            handle: x.to.identity,
-            displayName: x.to.displayName,
-            address: x.from.identity,
+        return connections.map(({ identity }) => ({
+            handle: identity.identity,
+            displayName: identity.displayName,
+            address: identity.identity,
         }))
     }
 
@@ -478,7 +390,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         if (response.error || !handler || !address) return false
 
-        return response.data?.includes(handler) || response.data?.length === 0
+        return response.data?.includes(handler) || response.data?.filter((x) => x).length === 0
     }
 }
 
@@ -514,4 +426,38 @@ function groupEnsBinding(ensList: NextIDEnsRecord[]) {
             .slice(1)
             .map((x) => createBindingProofFromProfileQuery(NextIDPlatform.NextID, NextIDPlatform.ENS, x.id, x.id)),
     )
+}
+
+function createENSListFromNeighbor(neighborList: NeighborList): NextIDEnsRecord[] {
+    const ethereumIdentity = neighborList.find((x) => x.identity.platform === NextIDPlatform.Ethereum)
+    // Prepend the parent ens
+    return ethereumIdentity
+        ? [
+              {
+                  category: 'ENS',
+                  chain: 'ethereum',
+                  id: ethereumIdentity.identity.displayName,
+              },
+              ...ethereumIdentity.identity.nft,
+          ]
+        : []
+}
+
+function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[] {
+    const ensList = createENSListFromNeighbor(neighborList)
+
+    const bindings = neighborList.map(({ identity }) =>
+        createBindingProofFromProfileQuery(
+            identity.platform,
+            identity.platform,
+            identity.identity,
+            identity.displayName,
+        ),
+    )
+
+    if (ensList.length) {
+        bindings.unshift(groupEnsBinding(uniqBy(ensList, (x) => x.id)))
+    }
+
+    return bindings
 }

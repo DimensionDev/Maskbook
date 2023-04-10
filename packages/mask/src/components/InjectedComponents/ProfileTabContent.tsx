@@ -249,6 +249,7 @@ function Content(props: ProfileTabContentProps) {
 
     useUpdateEffect(() => {
         onChange(undefined, first(tabs)?.id)
+        setSelectedAddress(undefined)
     }, [currentVisitingUserId])
 
     useEffect(() => {

@@ -38,6 +38,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     const name = isValidDomain(asset.name)
         ? asset.name
         : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
+
     return {
         id: address,
         chainId,
@@ -80,7 +81,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         },
         collection: {
             chainId,
-            name: asset.contract.name,
+            name: asset.collection.name,
             slug: asset.contract.name,
             description: asset.collection.description,
             address: asset.contract_address,

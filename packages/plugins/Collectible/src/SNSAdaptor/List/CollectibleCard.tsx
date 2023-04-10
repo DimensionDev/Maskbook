@@ -25,8 +25,8 @@ const useStyles = makeStyles()((theme) => ({
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
-        width: '100%',
-        height: '100%',
+        width: 30,
+        height: 30,
     },
     blocker: {
         position: 'absolute',

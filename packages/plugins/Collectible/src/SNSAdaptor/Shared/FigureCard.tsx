@@ -1,9 +1,8 @@
 import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Stack, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isENSContractAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -37,6 +36,8 @@ const useStyles = makeStyles()((theme) => ({
     nameLg: {
         fontSize: 20,
         fontWeight: 700,
+        wordBreak: 'break-word',
+        alignItems: 'center',
     },
     nameLgBox: {
         display: 'flex',
@@ -53,20 +54,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     unset: {
         color: 'unset',
-    },
-    name: {
-        color: theme.palette.maskColor.white,
-        fontSize: 18,
-        fontWeight: 700,
-        wordBreak: 'break-word',
-        padding: theme.spacing(2),
-    },
-    nameBox: {
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
     },
 }))
 
@@ -90,29 +77,22 @@ export function FigureCard(props: FigureCardProps) {
                             root: classes.image,
                             fallbackImage: classes.fallbackImage,
                         }}
-                        url={
-                            isENSContractAddress(asset.contract?.address || '')
-                                ? new URL('./ensCard.svg', import.meta.url).toString()
-                                : asset.metadata?.imageURL
-                        }
+                        url={asset.metadata?.imageURL}
                         fallbackImage={NFTFallbackImage}
                     />
                 </div>
-                {isENSContractAddress(asset.contract?.address || '') ? (
-                    <Stack className={classes.nameBox}>
-                        <Typography className={classes.name}>{asset.metadata?.name}</Typography>
-                    </Stack>
-                ) : null}
             </div>
-            {isENSContractAddress(asset.contract?.address || '') ? null : (
-                <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                    {asset.metadata?.name ?? '-'}
-                </Typography>
-            )}
+
+            <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
+                {asset.metadata?.name ?? '-'}
+            </Typography>
+
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
-                    <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
-                    {asset.collection?.verified ? <VerifiedUserIcon color="primary" fontSize="small" /> : null}
+                    <Typography className={classes.nameLg}>
+                        {asset.collection?.name}
+                        {asset.collection?.verified ? <VerifiedUserIcon color="primary" fontSize="small" /> : null}
+                    </Typography>
                 </div>
             )}
         </div>

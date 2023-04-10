@@ -20,5 +20,5 @@ export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.Unstoppable]: Icons.Unstoppable,
         [NextIDPlatform.CyberConnect]: Icons.CyberConnect,
     },
-    null,
+    Icons.Web,
 )

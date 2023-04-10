@@ -26,8 +26,11 @@ export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
 }
 
 export function resolveImageURL(image?: string, name?: string, address?: string) {
-    if (name?.includes('.lens') || name?.includes('lensprotocol'))
-        return new URL('./lens.svg', import.meta.url).toString()
+    if (isLens(name)) return new URL('./lens.svg', import.meta.url).toString()
     if (isENSContractAddress(address || '')) return new URL('./ens.svg', import.meta.url).toString()
     return image
+}
+
+export function isLens(name?: string) {
+    return name?.toLowerCase().includes('.lens') || name?.toLowerCase().includes('lensprotocol')
 }
