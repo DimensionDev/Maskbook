@@ -49,7 +49,7 @@ export interface Asset {
         from_address: string
         to_address: string
         marketplace_id: string
-        total_price: BigNumber.Value
+        total_price?: BigNumber.Value
         unit_price: BigNumber.Value
         transaction: string // tx hash
         marketplace_name: string
