@@ -28,6 +28,7 @@ type PresetLensTwitter = keyof typeof PRESET_LENS
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
+
 interface CreatePayloadBody {
     action: string
     platform: string
@@ -119,8 +120,11 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
-        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const { ids } = await fetchJSON<NextIDBindings>(url, undefined, { enableSquash: true })
+        const { ids } = await fetchJSON<NextIDBindings>(
+            getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
+            undefined,
+            { enableSquash: true },
+        )
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
