@@ -1,2 +1,4 @@
-export const ZORA_MAINNET_GRAPHQL_URL = 'https://cors.r2d2.to?https://api.zora.co/graphql'
+import { resolveCrossOriginURL } from '@masknet/web3-shared-base'
+
+export const ZORA_MAINNET_GRAPHQL_URL = resolveCrossOriginURL('https://api.zora.co/graphql')
 export const ZORA_PAGE_SiZE = 20
