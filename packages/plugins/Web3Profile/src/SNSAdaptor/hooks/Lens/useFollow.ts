@@ -1,3 +1,7 @@
+import { useCallback, useRef } from 'react'
+import { useAsyncFn } from 'react-use'
+import { type AbiItem } from 'web3-utils'
+import { delay } from '@masknet/kit'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
 import { Lens } from '@masknet/web3-providers'
@@ -8,18 +12,13 @@ import {
     splitSignature,
     useLensConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
-import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
-import { type AbiItem } from 'web3-utils'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, ProxyActionType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
-import { useCallback, useRef } from 'react'
-import { delay } from '@masknet/kit'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
+import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
 export function useFollow(
