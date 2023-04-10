@@ -15,6 +15,7 @@ import {
     formatGweiToEther,
     formatGweiToWei,
     formatWeiToGwei,
+    isNativeTokenAddress,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
@@ -402,6 +403,18 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const actualSelected = useMemo(() => {
         if (!selectedAsset) return
+        if (isNativeTokenAddress(selectedAsset.address)) {
+            return {
+                ...selectedAsset,
+                balance: toFixed(
+                    minus(
+                        selectedAsset?.balance,
+                        new BigNumber(formatGweiToWei(maxFeePerGas)).multipliedBy('210000').integerValue(),
+                    ),
+                    0,
+                ),
+            }
+        }
         if (
             !wallet?.owner ||
             chainId !== smartPayChainId ||
@@ -569,9 +582,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         <FormProvider {...methods}>
             <Transfer1559TransferUI
                 isAvailableBalance={
-                    !!wallet?.owner &&
-                    chainId === smartPayChainId &&
-                    isSameAddress(selectedAsset?.address, maskTokenAddress)
+                    (!!wallet?.owner &&
+                        chainId === smartPayChainId &&
+                        isSameAddress(selectedAsset?.address, maskTokenAddress)) ||
+                    isNativeTokenAddress(selectedAsset?.address)
                 }
                 accountName={wallet?.name ?? ''}
                 openAccountMenu={openMenu}
