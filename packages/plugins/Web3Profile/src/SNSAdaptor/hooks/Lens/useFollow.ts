@@ -1,3 +1,4 @@
+import { useAsyncFn } from 'react-use'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
 import { Lens } from '@masknet/web3-providers'
@@ -8,7 +9,6 @@ import {
     splitSignature,
     useLensConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
