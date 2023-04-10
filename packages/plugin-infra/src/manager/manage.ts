@@ -139,8 +139,6 @@ export function createManager<
             context: _host.createContext(id, abort.signal),
         }
         activated.set(id, activatedPlugin)
-        // Note: do not await this.
-        // TODO: we should have an extra state to indicate startup failed.
         await timeout(
             Promise.resolve(definition.init(activatedPlugin.controller.signal, activatedPlugin.context)),
             1000,

@@ -30,6 +30,8 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             const fallbackProfile: ProfileIdentifier | undefined = globalUIState.profiles.value[0]?.identifier
             if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
+            // rawEncrypted is either string or Uint8Array
+            // string is the old format, Uint8Array is the new format.
             const rawEncrypted = await Services.Crypto.encryptTo(
                 info.version,
                 content,
@@ -37,19 +39,20 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
                 activatedSocialNetworkUI.encryptionNetwork,
             )
+            // Since we cannot directly send binary on the SNS, we need to encode it into a string.
+            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
 
             if (encode === 'image') {
-                let encrypted: string | Uint8Array
-
-                if (typeof rawEncrypted === 'string')
-                    encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
-                else encrypted = rawEncrypted
-
-                const decoratedText = decorateEncryptedText('', t, content.meta)
+                const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 const defaultText = t('additional_post_box__encrypted_post_pre', { encrypted })
-                await pasteImage(decoratedText || defaultText, '', reason)
+                await pasteImage(
+                    decoratedText || defaultText,
+                    // We can send raw binary through the image, but for the text we still use the old way.
+                    // For text, it must send the text _after_ socialNetworkEncoder, otherwise it will break backward compatibility.
+                    typeof rawEncrypted === 'string' ? encrypted : rawEncrypted,
+                    reason,
+                )
             } else {
-                const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
                 const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
             }
