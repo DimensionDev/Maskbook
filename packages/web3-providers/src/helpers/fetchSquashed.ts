@@ -31,14 +31,6 @@ const RULES = [
 function __fetch__(key: string, expiration: number, request: Request, init?: RequestInit, next = originalFetch) {
     const hit = CACHE.get(key)
     if (hit && hit.timestamp + expiration > Date.now()) return hit.response.then((x) => x.clone())
-    else {
-        console.log('DEBUG: cache miss')
-        console.log({
-            key,
-            expiration,
-            span: Date.now() - (hit?.timestamp ?? 0),
-        })
-    }
 
     const responsePromise = next(request, init)
 
