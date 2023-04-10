@@ -148,7 +148,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                             }}
                             className={classes.nftImage}
                         />
-                        <Typography fontSize={12}>{Others?.formatTokenId(x.token_id || x.token_address, 4)}</Typography>
+                        <Typography fontSize={12}>{Others?.formatTokenId(x.token_id || x.token_address, 3)}</Typography>
                     </div>
                 ),
                 method: (
@@ -166,7 +166,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                         <FormattedAddress
                             address={x.send ?? x.from ?? x.source}
                             formatter={(address) =>
-                                Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
+                                Others?.formatAddress(Others?.formatDomainName(address, 12), 3) ?? address
                             }
                         />
                     </Typography>
@@ -176,7 +176,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                         <FormattedAddress
                             address={x.receive ?? x.destination}
                             formatter={(address) =>
-                                Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
+                                Others?.formatAddress(Others?.formatDomainName(address, 12), 3) ?? address
                             }
                         />
                     </Typography>
