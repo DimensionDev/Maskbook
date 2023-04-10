@@ -13,6 +13,7 @@ export enum Duration {
 const RULES = {
     'https://kv-service.nextnext.id/': Duration.IMMEDIATELY,
     'https://kv-service.next.id/': Duration.IMMEDIATELY,
+
     // twitter shorten links
     'https://t.co': Duration.MEDIUM,
     'https://gitcoin.co/grants/v1/api/grant': Duration.SHORT,
