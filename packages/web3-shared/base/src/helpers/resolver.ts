@@ -361,23 +361,23 @@ const MATCH_LOCAL_RESOURCE_URL_RE = /^(data|blob:|\w+-extension:\/\/|<svg\s)/
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
-export const isIPFS_CID = (cid: string) => {
+export function isIPFS_CID(cid: string) {
     return MATCH_IPFS_CID_STRICT_RE.test(cid)
 }
 
-export const isIPFS_Resource = (str: string) => {
+export function isIPFS_Resource(str: string) {
     return MATCH_IPFS_CID_RE.test(str)
 }
 
-export const isArweaveResource = (str: string) => {
+export function isArweaveResource(str: string) {
     return str.startsWith('ar:')
 }
 
-export const isLocaleResource = (url: string): boolean => {
+export function isLocaleResource(url: string) {
     return MATCH_LOCAL_RESOURCE_URL_RE.test(url)
 }
 
-export const resolveLocalURL = (url: string): string => {
+export function resolveLocalURL(url: string) {
     if (url.startsWith('<svg ')) return `data:image/svg+xml;base64,${btoa(url)}`
     return url
 }
@@ -389,11 +389,11 @@ export const resolveLocalURL = (url: string): string => {
  * are set to two different NFTs, but according to the same CID,
  * they are exactly the same.
  */
-const trimQuery = (url: string) => {
+export function trimQuery(url: string) {
     return url.replace(/\?.+$/, '')
 }
 
-export const resolveIPFS_CID = (str: string) => {
+export function resolveIPFS_CID(str: string) {
     return str.match(MATCH_IPFS_CID_RE)?.[1]
 }
 
@@ -454,8 +454,8 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
     return cidOrURL
 }
 
-export function resolveArweaveURL(url: string | undefined) {
-    if (!url) return
+export function resolveArweaveURL<T extends string | undefined>(url: T) {
+    if (!url) return url
     if (url.startsWith('https://')) return url
     return urlcat('https://arweave.net/:str', { str: url })
 }
@@ -464,14 +464,14 @@ export function resolveArweaveURL(url: string | undefined) {
  * Please do not use to resolve an image or an video resource, because that's
  * not allowed by the cors agent server
  */
-export function resolveCrossOriginURL(url: string | undefined) {
-    if (!url) return
+export function resolveCrossOriginURL<T extends string | undefined>(url: T) {
+    if (!url) return url
     if (isLocaleResource(url)) return url
     if (url.startsWith(CORS_HOST)) return url
     return `${CORS_HOST}?${encodeURIComponent(url)}`
 }
 
-export function resolveResourceURL(url: string | undefined) {
+export function resolveResourceURL<T extends string | undefined>(url: T) {
     if (!url) return url
     if (isLocaleResource(url)) return resolveLocalURL(url)
     if (isArweaveResource(url)) return resolveArweaveURL(url)
