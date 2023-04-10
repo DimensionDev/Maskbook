@@ -4,16 +4,12 @@ import type { Fetcher } from './fetch.js'
 const { fetch: originalFetch } = globalThis
 
 export enum Duration {
-    IMMEDIATELY = 0,
     SHORT = 60000, // 1 min
     MEDIUM = 1800000, // 30 mins
     LONG = 43200000, // 12 hours
 }
 
 const RULES = {
-    'https://kv-service.nextnext.id/': Duration.IMMEDIATELY,
-    'https://kv-service.next.id/': Duration.IMMEDIATELY,
-
     // twitter shorten links
     'https://t.co': Duration.MEDIUM,
     'https://gitcoin.co/grants/v1/api/grant': Duration.SHORT,
