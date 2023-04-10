@@ -191,7 +191,11 @@ export function PluginProviderRender({
                 (provider.type === ProviderType.WalletConnect
                     ? ChainId.Mainnet
                     : await connection?.getChainId({ providerType: provider.type }))
-            const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
+
+            // use the currently connected network (if known to mask). otherwise, use the default mainnet
+            const networkDescriptor =
+                descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId) ??
+                descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === ChainId.Mainnet)
 
             if (!chainId || !networkDescriptor) return
 

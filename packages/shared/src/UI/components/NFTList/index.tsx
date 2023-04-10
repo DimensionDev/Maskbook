@@ -7,6 +7,7 @@ import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
+import { isLens } from '@masknet/web3-shared-evm'
 
 interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
@@ -87,8 +88,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             opacity: 0.5,
         },
         fallbackImage: {
-            width: '100%',
-            height: '100%',
+            width: 30,
+            height: 30,
         },
         image: {
             background: 'transparent !important',
@@ -114,7 +115,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
     const captionRef = useRef<HTMLDivElement>(null)
-
+    const { Others } = useWeb3State(pluginID)
+    const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others?.formatTokenId(token.tokenId, 4)
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
 
     const onClick = useCallback(() => {
@@ -138,13 +140,11 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
                     root: classes.root,
                 }}
             />
-            <ShadowRootTooltip
-                title={showTooltip ? token.metadata?.name : undefined}
-                placement="bottom"
-                disableInteractive
-                arrow>
+            <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
                 <Typography ref={captionRef} className={classes.caption}>
-                    {token.metadata?.name}
+                    {Others?.isValidDomain(token.metadata?.name) || pluginID === NetworkPluginID.PLUGIN_SOLANA
+                        ? token.metadata?.name
+                        : caption}
                 </Typography>
             </ShadowRootTooltip>
         </div>

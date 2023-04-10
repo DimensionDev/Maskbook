@@ -1,15 +1,15 @@
+import { useMemo } from 'react'
+import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 import { Typography, Button, Box, Stack } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { SourceProviderSwitcher, RetryHint } from '@masknet/shared'
 import { OfferCard } from './OfferCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { SourceProviderSwitcher, RetryHint } from '@masknet/shared'
 import { Context } from '../Context/index.js'
-import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
-import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -88,8 +88,8 @@ export function OffersList(props: OffersListProps) {
 }
 
 export function OffersListWrapper(props: OffersListProps) {
-    const { setSourceType, sourceType: sourceType_ } = Context.useContainer()
-    const sourceType = sourceType_ ?? props.offers.value[0].source
+    const { setSourceType, sourceType = props.offers.value[0]?.source } = Context.useContainer()
+
     return (
         <div>
             {!props.offers.value.length && !sourceType ? null : (

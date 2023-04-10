@@ -1,9 +1,10 @@
+import { createLookupTableResolver } from '@masknet/shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { createLookupTableResolver } from '@masknet/shared-base'
-import { isValidDomain } from './isValidDomain.js'
-import { isValidAddress } from './address.js'
 import { SchemaType } from '../types/index.js'
+import { isValidAddress } from './address.js'
+import { isValidDomain } from './isValidDomain.js'
 
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
     return new BigNumber(amount).shiftedBy(decimals).toFixed()
@@ -74,6 +75,13 @@ export function formatGweiToWei(value: BigNumber.Value) {
 
 export function formatEtherToGwei(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(9).integerValue()
+}
+
+export function formatGas(value?: BigNumber.Value) {
+    if (!value || isZero(value)) return ''
+    const gwei = formatWeiToGwei(value)
+    if (gwei.lt('0.01')) return '<0.01 Gwei'
+    return `${gwei.toFixed(2)} Gwei`
 }
 
 export function formatEtherToWei(value: BigNumber.Value) {

@@ -25,6 +25,7 @@ export class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
                     startBlock,
                     endBlock,
                     address: contractAddress,
+                    chain_id: chainId,
                 }),
             )
 

@@ -10,10 +10,12 @@ const useStyles = makeStyles()((theme) => ({
     mainTitle: {
         color: theme.palette.text.primary,
         fontWeight: 700,
+        fontSize: 14,
     },
     subTitle: {
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
+        fontSize: 14,
     },
     pointer: {
         cursor: 'pointer',

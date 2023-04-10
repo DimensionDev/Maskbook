@@ -47,6 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     loadingText: {
         marginTop: theme.spacing(1),
+        fontSize: 14,
     },
     collectibleList: {
         paddingRight: 0,
@@ -168,9 +169,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                         return (
                             <div className={classes.statusBox}>
                                 <LoadingBase size={36} />
-                                <Typography fontSize={14} className={classes.loadingText}>
-                                    {t.tip_loading()}
-                                </Typography>
+                                <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
                             </div>
                         )
                     }

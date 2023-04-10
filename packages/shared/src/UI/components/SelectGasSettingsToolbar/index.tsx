@@ -22,11 +22,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainId,
     DepositPaymaster,
-    formatEtherToGwei,
     formatWeiToEther,
-    formatWeiToGwei,
     type GasConfig,
     GasEditor,
+    formatGas,
 } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -206,24 +205,21 @@ export function SelectGasSettingsToolbarUI({
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
             .reverse()
-            .map(([type, option]) => (
-                <MenuItem
-                    key={type}
-                    className={cx(classes.menuItem, classes.menuItemBorder)}
-                    onClick={() => {
-                        setIsCustomGas(false)
-                        setCurrentGasOptionType(type as GasOptionType)
-                    }}>
-                    <Typography className={classes.title}>{GAS_OPTION_NAMES[type as GasOptionType]}</Typography>
-                    <Typography className={classes.estimateGas}>
-                        {!isZero(option.suggestedMaxFeePerGas)
-                            ? `${formatWeiToGwei(option.suggestedMaxFeePerGas).toFixed(2)} Gwei`
-                            : !isZero(option.estimatedBaseFee ?? 0)
-                            ? `${formatEtherToGwei(option.estimatedBaseFee!).toFixed(2)} Gwei`
-                            : ''}
-                    </Typography>
-                </MenuItem>
-            ))
+            .map(([type, { suggestedMaxFeePerGas, estimatedBaseFee }]) => {
+                const gas = formatGas(isZero(suggestedMaxFeePerGas) ? estimatedBaseFee : suggestedMaxFeePerGas)
+                return (
+                    <MenuItem
+                        key={type}
+                        className={cx(classes.menuItem, classes.menuItemBorder)}
+                        onClick={() => {
+                            setIsCustomGas(false)
+                            setCurrentGasOptionType(type as GasOptionType)
+                        }}>
+                        <Typography className={classes.title}>{GAS_OPTION_NAMES[type as GasOptionType]}</Typography>
+                        <Typography className={classes.estimateGas}>{gas}</Typography>
+                    </MenuItem>
+                )
+            })
             .concat(
                 <MenuItem key="setting" className={cx(classes.menuItem)} onClick={openCustomGasSettingsDialog}>
                     <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>

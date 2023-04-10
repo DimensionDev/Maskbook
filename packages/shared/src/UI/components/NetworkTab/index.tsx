@@ -13,13 +13,13 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
     chains: Web3Helper.ChainIdAll[]
     hideArrowButton?: boolean
     pluginID: NetworkPluginID
+    onChange?(chainId: Web3Helper.ChainIdAll): void
 }
 
-export function NetworkTab(props: NetworkTabProps) {
-    const { chains } = props
-    const { pluginID } = useNetworkContext(props.pluginID)
+export function NetworkTab({ chains, pluginID, hideArrowButton, onChange }: NetworkTabProps) {
+    const { pluginID: networkPluginID } = useNetworkContext(pluginID)
     const { chainId, setChainId } = useChainContext()
-    const networks = useNetworkDescriptors(pluginID)
+    const networks = useNetworkDescriptors(networkPluginID)
     const wallet = useWallet()
     const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
@@ -49,10 +49,12 @@ export function NetworkTab(props: NetworkTabProps) {
             <MaskTabList
                 variant="flexible"
                 onChange={(_, v) => {
-                    setChainId?.(Number.parseInt(v, 10))
+                    const chainId = Number.parseInt(v, 10)
+                    setChainId?.(chainId)
+                    onChange?.(chainId)
                     setTab(v)
                 }}
-                hideArrowButton={props.hideArrowButton}
+                hideArrowButton={hideArrowButton}
                 aria-label="Network Tabs">
                 {usedNetworks.map((x) => {
                     return (

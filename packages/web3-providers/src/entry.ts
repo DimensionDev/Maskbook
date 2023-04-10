@@ -66,8 +66,10 @@ import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { SimpleHashProviderAPI } from './SimpleHash/index.js'
 import { RSS3API } from './RSS3/index.js'
+import { LidoAPI } from './Lido/index.js'
 
 export const OpenSea = new OpenSeaAPI()
+export const Lido = new LidoAPI()
 export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()

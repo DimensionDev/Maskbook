@@ -3,9 +3,9 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
-import { createReactRootShadowed } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
+import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
 
 const selector = () => {
     // [href^="/search"] is a hash tag
@@ -23,7 +23,8 @@ export function injectLensOnUserCell(signal: AbortSignal) {
     watcher.useForeach((node, _, proxy) => {
         const userId = node.closest('[role=link]')?.getAttribute('href')?.slice(1)
         if (!userId) return
-        createReactRootShadowed(proxy.afterShadow, { signal }).render(<UserCellLensSlot userId={userId} />)
+        // Intended to set `untilVisible` to true, but mostly user cells are fixed and visible
+        attachReactTreeToGlobalContainer(proxy.afterShadow, { signal }).render(<UserCellLensSlot userId={userId} />)
     })
 }
 
@@ -69,6 +70,7 @@ function UserCellLensSlot({ userId }: Props) {
             undefined,
             createRootElement,
         )
+        if (userId.includes('/')) return null
         const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
         if (!identifier) return null
 

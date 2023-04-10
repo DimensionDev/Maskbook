@@ -11,7 +11,7 @@ import {
     useState,
 } from 'react'
 import { useSubscription } from 'use-subscription'
-import { useFungibleToken, useNonFungibleTokenContract, useChainContext, useChainId } from '@masknet/web3-hooks-base'
+import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
@@ -55,7 +55,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { targetPluginID, setTargetPluginID } = TargetRuntimeContext.useContainer()
-    const targetChainId = useChainId(targetPluginID)
+    const { chainId: targetChainId } = useChainContext()
 
     const [gasOption, setGasOption] = useState<GasConfig>()
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')

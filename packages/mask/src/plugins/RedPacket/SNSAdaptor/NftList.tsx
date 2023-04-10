@@ -27,8 +27,8 @@ const useStyles = makeStyles()((theme) => {
         nft: {
             position: 'relative',
             display: 'flex',
-            width: 120,
-            height: 185,
+            width: 140,
+            height: 164,
             flexDirection: 'column',
             backgroundColor: theme.palette.background.paper,
             margin: '0 auto',
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             boxShadow: '0 8px 20px rgba(0, 0, 0, 0.04)',
             [smallQuery]: {
                 width: 90,
-                height: 140,
+                height: 114,
             },
         },
         claimedBadge: {

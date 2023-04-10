@@ -64,7 +64,7 @@ export function DialogInspector(props: DialogInspectorProps) {
                     ownerAddress,
                     origin: originType,
                 }}>
-                <CardDialog open={open} setOpen={setOpen} />
+                <CardDialog key={`${tokenAddress}.${tokenId}`} open={open} setOpen={setOpen} />
             </Context.Provider>
         </Web3ContextProvider>
     )

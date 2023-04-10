@@ -17,8 +17,17 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: 0,
         paddingLeft: 16,
         paddingRight: 16,
-        height: 472,
-        overflowY: 'hidden',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     buttons: {
         padding: `${theme.spacing(2)} !important`,
@@ -36,6 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         fontWeight: 700,
         lineHeight: '28.8px',
+        color: theme.palette.maskColor.danger,
     },
     icon: {
         display: 'flex',
@@ -46,6 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontWeight: 400,
         marginBottom: theme.spacing(2),
+        color: theme.palette.maskColor.danger,
     },
 }))
 
@@ -105,6 +116,7 @@ export function WalletRiskWarningDialog() {
                     variant="body2"
                     children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
                 />
+                <Typography className={classes.article}>{t('wallet_risk_warning_confirm_tips')}</Typography>
                 <WalletStatusBox disableChange withinRiskWarningDialog />
             </DialogContent>
             <DialogActions className={classes.buttons}>

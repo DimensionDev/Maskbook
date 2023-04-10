@@ -1,17 +1,17 @@
 import { Icons } from '@masknet/icons'
 import { isNonNull } from '@masknet/kit'
-import { type BindingProof, NextIDPlatform, CrossIsolationMessages } from '@masknet/shared-base'
 import { CopyButton, useMenuConfig, useSharedI18N } from '@masknet/shared'
+import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { MaskColors, makeStyles } from '@masknet/theme'
+import { ENS } from '@masknet/web3-providers'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
-import { Button, MenuItem, Typography, alpha, type MenuProps } from '@mui/material'
+import { Button, MenuItem, Typography, type MenuProps } from '@mui/material'
 import { uniqBy } from 'lodash-es'
-import { type HTMLProps, useEffect, useMemo, useRef, memo } from 'react'
+import { memo, useEffect, useMemo, useRef, type HTMLProps } from 'react'
 import { useAsync, useWindowScroll } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
-import { ENS } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -25,14 +25,13 @@ const useStyles = makeStyles()((theme) => {
             height: 28,
             padding: theme.spacing(0.5),
             boxSizing: 'border-box',
-            backgroundColor: alpha(theme.palette.common.white, 0.4),
             borderRadius: 8,
             minWidth: 'auto',
             '&:hover': {
-                backgroundColor: alpha(theme.palette.common.white, 0.4),
+                backgroundColor: 'transparent',
             },
             '&:active': {
-                backgroundColor: alpha(theme.palette.common.white, 0.4),
+                backgroundColor: 'transparent',
             },
         },
         icon: {
