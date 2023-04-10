@@ -53,7 +53,7 @@
     "profile_link$follow": "crwdns19031:0{{user}}crwdnd19031:0{{other}}crwdnd19031:0{{platform}}crwdne19031:0",
     "profile_link$unfollow": "crwdns19033:0{{user}}crwdnd19033:0{{other}}crwdnd19033:0{{platform}}crwdne19033:0",
     "profile_proxy": "crwdns19901:0{{user}}crwdnd19901:0{{platform}}crwdne19901:0",
-    "vote": "crwdns18977:0{{user}}crwdnd18977:0{{option}}crwdne18977:0",
+    "vote": "crwdns18977:0{{user}}crwdnd18977:0{{- option}}crwdnd18977:0{{- platform }}crwdne18977:0",
     "propose": "crwdns19009:0{{user}}crwdne19009:0",
     "original": "crwdns18979:0crwdne18979:0",
     "details": "crwdns18981:0crwdne18981:0",
