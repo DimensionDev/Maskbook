@@ -66,6 +66,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
 
     const onClose = useCallback(() => {
+        CrossIsolationMessages.events.compositionDialogEvent.sendToAll({
+            open: false,
+            reason: 'popup',
+        })
         setOpen(false)
         setInitialMetas(EMPTY_OBJECT)
 
