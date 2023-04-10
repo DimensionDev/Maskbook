@@ -22,9 +22,13 @@ export interface TweetDataResponse {
 }
 
 export async function getTweetData(tweetAddress: string) {
-    const { results } = await fetchJSON<TweetDataResponse>(urlcat(TWEET_BASE_URL, tweetAddress), undefined, {
-        enableCache: true,
-        enableSquash: true,
-    })
+    const { results } = await fetchJSON<TweetDataResponse>(
+        urlcat(TWEET_BASE_URL, { tweetID: tweetAddress }),
+        undefined,
+        {
+            enableCache: true,
+            enableSquash: true,
+        },
+    )
     return results
 }
