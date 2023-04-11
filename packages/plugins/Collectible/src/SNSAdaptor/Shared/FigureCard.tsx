@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     nameLg: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 700,
         wordBreak: 'break-word',
         alignItems: 'center',
