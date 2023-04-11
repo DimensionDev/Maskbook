@@ -36,7 +36,7 @@ import {
     type NonFungibleTokenContract,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { EVM_Providers, Web3 } from '@masknet/web3-providers'
+import { EVM_Composers, EVM_Providers, Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 import { createContext } from './context.js'
@@ -70,7 +70,7 @@ class Connection implements EVM_Connection {
                 const context = createContext(Web3StateSettings.value, this, requestArguments, options)
 
                 try {
-                    await dispatch(context, async () => {
+                    await EVM_Composers.dispatch(context, async () => {
                         if (!context.writeable) return
                         try {
                             switch (context.method) {
@@ -884,6 +884,5 @@ export function createConnection(
     },
 ) {
     const { chainId = ChainId.Mainnet, account = '', providerType = ProviderType.MaskWallet } = options ?? {}
-
     return new Connection(chainId, account, providerType, context)
 }

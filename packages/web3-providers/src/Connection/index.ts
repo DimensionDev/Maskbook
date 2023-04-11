@@ -4,6 +4,7 @@ export * from './EVM/apis/Web3GasOptionAPI.js'
 export * from './EVM/apis/Web3SignerAPI.js'
 export * from './EVM/apis/FungibleTokenAPI.js'
 export * from './EVM/providers/BaseContractWallet.js'
+export { Composers as EVM_Composers } from './EVM/middleware/index.js'
 export { Providers as EVM_Providers } from './EVM/providers/index.js'
 
 // Flow

@@ -101,7 +101,13 @@ export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 export const SimpleHash = new SimpleHashProviderAPI()
 
 // Wallet
-export { BaseContractWalletProvider, EVM_Providers, FlowProviders, SolanaProviders } from './Connection/index.js'
+export {
+    BaseContractWalletProvider,
+    EVM_Providers,
+    FlowProviders,
+    SolanaProviders,
+    EVM_Composers,
+} from './Connection/index.js'
 
 // EVM Connection
 export const Web3 = new Web3API()
