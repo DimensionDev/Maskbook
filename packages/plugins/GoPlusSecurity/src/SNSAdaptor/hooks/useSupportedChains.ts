@@ -21,7 +21,9 @@ export const useSupportedChains = () => {
             return { ...x, icon, ...network }
         })
 
-        const sortedChain = SupportedChainList.map((n) => supportedChain.find((x) => x.name === n)).filter(Boolean)
+        const sortedChain = SupportedChainList.map((n) => supportedChain.find((x) => x.name === n)).filter(
+            Boolean,
+        ) as []
         const unsortedChain = supportedChain.filter((x) => !SupportedChainList.includes(x.name))
 
         return [...sortedChain, ...unsortedChain]
