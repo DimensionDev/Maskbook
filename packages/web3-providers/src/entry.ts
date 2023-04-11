@@ -189,8 +189,8 @@ export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
 
-export * from './Storage/index.js'
-
 // RSS3
 export const RSS3 = new RSS3API()
-export * from './helpers/parseJSON.js'
+
+// Storage
+export * from './Storage/index.js'
