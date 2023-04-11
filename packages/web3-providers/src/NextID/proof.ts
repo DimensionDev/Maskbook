@@ -13,8 +13,6 @@ import {
     type NextIDPersonaBindings,
     type NextIDEnsRecord,
 } from '@masknet/shared-base'
-import { fetchJSON } from '../entry-helpers.js'
-import type { NextIDBaseAPI } from '../entry-types.js'
 import {
     PROOF_BASE_URL_DEV,
     PROOF_BASE_URL_PROD,
@@ -23,6 +21,8 @@ import {
 } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
+import { fetchJSON } from '../entry-helpers.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
 
 type PresetLensTwitter = keyof typeof PRESET_LENS
 

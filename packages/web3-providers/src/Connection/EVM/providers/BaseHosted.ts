@@ -16,7 +16,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
-import { Web3API } from '../../../Connection/index.js'
+import { Web3API } from '../apis/Web3API.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseHostedProvider
