@@ -17,19 +17,6 @@ type DefineMapping = {
     }
 }
 
-export const SupportedChainList = [
-    'Ethereum',
-    'BNB Chain',
-    'Polygon',
-    'Arbitrum One',
-    'Optimism',
-    'Gnosis',
-    'Fantom',
-    'Avalanche',
-    'OKC',
-    'Cronos',
-    'HECO',
-]
 export const DefineMapping: DefineMapping = {
     [SecurityMessageLevel.High]: {
         i18nKey: 'high_risk',

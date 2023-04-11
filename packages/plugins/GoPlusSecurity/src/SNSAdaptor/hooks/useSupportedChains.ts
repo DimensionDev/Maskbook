@@ -1,8 +1,22 @@
+import { compact } from 'lodash-es'
 import { useAsync } from 'react-use'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SupportedChainList } from '../constants.js'
+
+export const SupportedChainList = [
+    'Ethereum',
+    'BNB Chain',
+    'Polygon',
+    'Arbitrum One',
+    'Optimism',
+    'Gnosis',
+    'Fantom',
+    'Avalanche',
+    'OKC',
+    'Cronos',
+    'HECO',
+]
 
 const unIntegrationChainLogos: Record<number, URL> = {
     128: new URL('../../assets/chain-heco.png', import.meta.url),
@@ -21,11 +35,9 @@ export const useSupportedChains = () => {
             return { ...x, icon, ...network }
         })
 
-        const sortedChain = SupportedChainList.map((n) => supportedChain.find((x) => x.name === n)).filter(
-            Boolean,
-        ) as []
+        const sortedChain = SupportedChainList.map((n) => supportedChain.find((x) => x.name === n))
         const unsortedChain = supportedChain.filter((x) => !SupportedChainList.includes(x.name))
 
-        return [...sortedChain, ...unsortedChain]
+        return compact<(typeof supportedChain)[0]>([...sortedChain, ...unsortedChain])
     }, [networks])
 }
