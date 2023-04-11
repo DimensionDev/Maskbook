@@ -23,14 +23,12 @@ import {
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
-import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private Bundler = new SmartPayBundlerAPI()
     private Owner = new SmartPayOwnerAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)

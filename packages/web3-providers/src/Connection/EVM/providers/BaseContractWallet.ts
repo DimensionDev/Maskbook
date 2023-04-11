@@ -4,8 +4,8 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { type ProviderType, isValidAddress, type ChainId, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseHostedProvider } from './BaseHosted.js'
-import type { WalletAPI } from '../../../entry-types.js'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 /**
  * EIP-4337 compatible smart contract based wallet.
@@ -14,7 +14,7 @@ export class BaseContractWalletProvider
     extends BaseHostedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private Bunder = new SmartPayBundlerAPI()
+    protected Bundler = new SmartPayBundlerAPI()
 
     private ownerStorage:
         | StorageItem<{
@@ -43,7 +43,7 @@ export class BaseContractWalletProvider
         this.subscription.wallets?.subscribe(async () => {
             if (!this.hostedAccount) return
             const target = this.wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
-            const smartPayChainId = await this.Bunder.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (target?.owner) {
                 await this.ownerStorage?.setValue({
                     account: target.owner,

@@ -24,12 +24,12 @@ const DEFAULT_PAYMENT_TOKEN_STATE = {
 }
 
 export class Popups implements Middleware<ConnectionContext> {
-    private Bunder = new SmartPayBundlerAPI()
+    private Bundler = new SmartPayBundlerAPI()
     private Web3 = new Web3API()
 
     private async getPaymentToken(context: ConnectionContext) {
         try {
-            const smartPayChainId = await this.Bunder.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
