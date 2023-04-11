@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js'
-import type { FuseBaseAPI } from '../../types/Fuse.js'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { FuseBaseAPI } from '../../entry-types.js'
 
 export class FuseNonFungibleCollectionAPI implements FuseBaseAPI.Provider {
     create<T = NonFungibleCollection<ChainId, SchemaType>>(items: T[]) {

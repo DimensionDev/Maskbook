@@ -4,8 +4,6 @@ import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, getGoPlusLabsConstants, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { type FungibleTokenSpender, isSameAddress, type NonFungibleContractSpender } from '@masknet/web3-shared-base'
-import type { AuthorizationAPI } from '../types/Authorization.js'
-import type { SecurityAPI } from '../types/Security.js'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
 import {
     type GoPlusNFTInfo,
@@ -17,6 +15,7 @@ import {
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
 import { fetchJSON } from '../entry-helpers.js'
+import type { AuthorizationAPI, SecurityAPI } from '../entry-types.js'
 
 function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
     const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)

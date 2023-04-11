@@ -10,9 +10,9 @@ import {
     isDeviceOnWhitelist,
 } from '@masknet/shared-base'
 import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
-import { TelemetryAPI } from '../types/Telemetry.js'
 import { isNewerThan } from '../helpers/isNewerThan.js'
 import { isSameVersion } from '../helpers/isSameVersion.js'
+import { TelemetryAPI } from '../entry-types.js'
 
 const IGNORE_ERRORS = [
     // FIXME

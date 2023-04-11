@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
 import type { SourceType, FungibleTokenResult } from '@masknet/web3-shared-base'
-import type { DSearchBaseAPI } from '../../types/DSearch.js'
 import { DSEARCH_BASE_URL } from '../../DSearch/constants.js'
 import { fetchFromDSearch } from '../../DSearch/helpers.js'
+import type { DSearchBaseAPI } from '../../entry-types.js'
 
 export interface FungibleToken {
     id: string | number

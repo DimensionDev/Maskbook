@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { isSameAddress, type Transaction } from '@masknet/web3-shared-base'
 import { EtherscanURL } from '@masknet/web3-shared-evm'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { RedPacketBaseAPI } from '../../types/RedPacket.js'
+import type { RedPacketBaseAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
 export class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
