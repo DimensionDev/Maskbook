@@ -43,8 +43,8 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
 
             if (encode === 'image') {
-                const decoratedText = decorateEncryptedText('Mask', t, content.meta)
-                const defaultText = t('additional_post_box__encrypted_post_pre', { encrypted: 'Mask' })
+                const decoratedText = decorateEncryptedText('', t, content.meta)
+                const defaultText = t('additional_post_box__encrypted_post_pre', { encrypted: '' })
                 await pasteImage(
                     decoratedText || defaultText,
                     // We can send raw binary through the image, but for the text we still use the old way.
