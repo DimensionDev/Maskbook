@@ -64,8 +64,6 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     >()
     const [searchContent, setSearchSearchContent] = useState<string>()
     const { value: supportedChains = [] } = useSupportedChains()
-
-    console.log()
     const [menu, openMenu] = useMenuConfig(
         supportedChains
             .filter((x) => x?.icon)
