@@ -22,8 +22,8 @@ export const useSupportedChains = () => {
         })
 
         const sortedChain = SupportedChainList.map((n) => supportedChain.find((x) => x.name === n)).filter(Boolean)
-        const unsortChain = supportedChain.filter((x) => !SupportedChainList.includes(x.name))
+        const unsortedChain = supportedChain.filter((x) => !SupportedChainList.includes(x.name))
 
-        return [...sortedChain, ...unsortChain]
+        return [...sortedChain, ...unsortedChain]
     }, [networks])
 }
