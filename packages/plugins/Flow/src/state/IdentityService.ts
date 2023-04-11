@@ -1,8 +1,8 @@
 import { compact } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { type ChainId, isValidAddress } from '@masknet/web3-shared-flow'
+import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 
 function getFlowAddress(bio: string) {
     const addressMatched = bio.match(/\b0x\w{16}\b/) ?? null
