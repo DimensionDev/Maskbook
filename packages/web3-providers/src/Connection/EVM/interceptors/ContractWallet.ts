@@ -15,8 +15,8 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import { Web3API } from '../apis/Web3API.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
-import { EVM_Providers } from '../../index.js'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '../../../entry-types.js'
+import { Providers } from '../providers/index.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
     constructor(
@@ -122,7 +122,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return
         }
 
-        const provider = EVM_Providers[context.providerType] as BaseContractWalletProvider | undefined
+        const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
         if (!provider?.ownerAccount && !context.owner) {

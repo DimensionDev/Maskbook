@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { SmartPayBundlerAPI } from '../../src/SmartPay/index.js'
+import { SmartPayBundlerAPI } from '../../src/SmartPay/apis/BundlerAPI.js'
 
 describe('SmartPayBundlerAPI', () => {
     const SmartPayBundler = new SmartPayBundlerAPI()
