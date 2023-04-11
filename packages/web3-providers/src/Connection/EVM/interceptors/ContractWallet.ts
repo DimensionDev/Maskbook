@@ -33,8 +33,12 @@ export class ContractWallet implements Middleware<ConnectionContext> {
 
     private getSigner(context: ConnectionContext) {
         if (context.identifier)
-            return new Signer(context.identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
-                SharedContextSettings.value.signWithPersona(type, message, identifier, true),
+            return new Signer(
+                context.identifier,
+                async <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) => {
+                    if (!context.bridge.signWithPersona) return ''
+                    return context.bridge.signWithPersona(type, message, identifier, true)
+                },
             )
         if (context.owner)
             return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {

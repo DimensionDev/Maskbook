@@ -2,7 +2,7 @@ import type { RequestArguments } from 'web3-core'
 import { ProviderType, ConnectionContext, ChainId } from '@masknet/web3-shared-evm'
 import { type BaseContractWalletProvider, EVM_Providers } from '@masknet/web3-providers'
 import type { EVM_Connection, EVM_ConnectionOptions, EVM_Web3State } from './types.js'
-import { Web3StateSettings } from '../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 const initializer = {
     getDefaultAccount(providerType: ProviderType) {
@@ -34,5 +34,9 @@ export function createContext(
     requestArguments: RequestArguments,
     options?: EVM_ConnectionOptions,
 ) {
-    return new ConnectionContext(state, connection, requestArguments, options, initializer)
+    return new ConnectionContext(state, connection, requestArguments, options, {
+        ...initializer,
+        mask_send: SharedContextSettings.value.send,
+        mask_signWithPersona: SharedContextSettings.value.signWithPersona,
+    })
 }
