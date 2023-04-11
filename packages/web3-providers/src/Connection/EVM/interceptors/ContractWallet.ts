@@ -1,5 +1,4 @@
 import { toHex, type AbiItem } from 'web3-utils'
-import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { type ECKeyIdentifier, type NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
     type ChainId,
@@ -12,9 +11,12 @@ import {
     Signer,
     type Transaction,
 } from '@masknet/web3-shared-evm'
-import { type BaseContractWalletProvider, EVM_Providers, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
+import { Web3API } from '../apis/Web3API.js'
+import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
+import { EVM_Providers } from '../../index.js'
+import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '../../../entry-types.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
     constructor(
@@ -24,8 +26,10 @@ export class ContractWallet implements Middleware<ConnectionContext> {
         protected funder: FunderAPI.Provider<ChainId>,
     ) {}
 
+    private Web3 = new Web3API()
+
     private async getNonce(context: ConnectionContext) {
-        const web3 = Web3.getWeb3(context.chainId)
+        const web3 = this.Web3.getWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract.methods.nonce().call()

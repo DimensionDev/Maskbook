@@ -12,7 +12,6 @@ import {
     isExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import {
     ChainId,
     chainResolver,
@@ -23,12 +22,17 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
+import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
+import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
+    private Bundler = new SmartPayBundlerAPI()
+    private Owner = new SmartPayOwnerAPI()
+
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
 
     constructor() {
@@ -49,8 +53,8 @@ export class MaskWalletProvider
         const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
         if (!isRecovery) {
             const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
-            const chainId = await SmartPayBundler.getSupportedChainId()
-            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
+            const chainId = await this.Bundler.getSupportedChainId()
+            const accounts = await this.Owner.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
                 ...compact(allPersonas.map((x) => x.address)),
             ])
@@ -101,7 +105,7 @@ export class MaskWalletProvider
 
         this.subscription?.wallets?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
-            const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)

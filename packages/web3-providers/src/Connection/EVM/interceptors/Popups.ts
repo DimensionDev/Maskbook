@@ -13,8 +13,10 @@ import {
     ProviderType,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
-import { EVM_Providers, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
+import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
+import { Web3API } from '../apis/Web3API.js'
+import { Providers } from '../providers/index.js'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,
@@ -22,9 +24,12 @@ const DEFAULT_PAYMENT_TOKEN_STATE = {
 }
 
 export class Popups implements Middleware<ConnectionContext> {
+    private Bunder = new SmartPayBundlerAPI()
+    private Web3 = new Web3API()
+
     private async getPaymentToken(context: ConnectionContext) {
         try {
-            const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+            const smartPayChainId = await this.Bunder.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
@@ -32,7 +37,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             const maskAddress = getMaskTokenAddress(context.chainId)
 
-            const contract = Web3.getERC20Contract(context.chainId, maskAddress)
+            const contract = this.Web3.getERC20Contract(context.chainId, maskAddress)
 
             if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
 
@@ -57,7 +62,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 0,
             )
 
-            const maskBalance = await Web3.getFungibleTokenBalance(context.chainId, maskAddress, context.account)
+            const maskBalance = await this.Web3.getFungibleTokenBalance(context.chainId, maskAddress, context.account)
 
             const maskAllowance = await contract.methods
                 .allowance(context.account, PAYMASTER_MASK_CONTRACT_ADDRESS)
@@ -82,7 +87,7 @@ export class Popups implements Middleware<ConnectionContext> {
         if (context.risky && context.writeable) {
             const currentChainId = await context.connection.getChainId()
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
-                await EVM_Providers[ProviderType.MaskWallet].switchChain(context.chainId)
+                await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
             }
 
             const paymentToken = await this.getPaymentToken(context)
