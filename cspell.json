@@ -12,6 +12,7 @@
         ".prettierignore",
         "*.snap",
         "**/*.json",
+        "**/*.tsbuildinfo",
         "**/dist/**",
         "**/node_modules/**",
         "*generated*",
