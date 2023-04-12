@@ -2,7 +2,7 @@ import { memo, type ReactNode, useEffect, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { GoPlusLabs, Nomics } from '@masknet/web3-providers'
+import { CoinGeckoPriceEVM, GoPlusLabs } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
@@ -73,7 +73,7 @@ export function CheckSecurityDialog() {
     const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
     const { value: tokenMarketCapInfo } = useAsync(async () => {
         if (!value?.token_symbol) return
-        return Nomics.getCoinMarketInfo(value.token_symbol)
+        return CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId.Mainnet, value.token_symbol)
     }, [value])
 
     const onClose = () => setOpen(false)
