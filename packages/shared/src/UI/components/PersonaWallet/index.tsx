@@ -1,10 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { type PersonaInformation, formatPersonaFingerprint, type Wallet } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { Box, Stack, Typography, ListItem, List, Link } from '@mui/material'
 import { FormattedAddress } from '../../../index.js'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
     persona: {
