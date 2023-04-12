@@ -14,6 +14,7 @@ import {
     type GasConfig,
     GasEditor,
     isNativeTokenAddress,
+    formatEtherToWei,
 } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
@@ -52,6 +53,13 @@ export function useAvailableBalance<S extends 'all' | void = void, T extends Net
         return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
     }, [gasOption, chainId, pluginID])
 
+    const isGasFeeGreaterThanOneETH = useMemo(() => {
+        if (!gasOption?.gas || pluginID !== NetworkPluginID.PLUGIN_EVM) return false
+        return GasEditor.fromConfig(chainId as ChainId, gasOption)
+            .getGasFee(gasOption.gas)
+            .gte(formatEtherToWei(1))
+    }, [gasOption, chainId, pluginID])
+
     const isAvailableBalance = useMemo(
         () =>
             isSameAddress(address, gasOption?.gasCurrency) ||
@@ -71,6 +79,7 @@ export function useAvailableBalance<S extends 'all' | void = void, T extends Net
     return {
         isAvailableBalance,
         isAvailableGasBalance,
+        isGasFeeGreaterThanOneETH,
         balance:
             isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
                 ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()

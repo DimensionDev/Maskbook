@@ -83,11 +83,6 @@ export function DetailsCard(props: DetailsCardProps) {
     infos.push(
         { title: t.plugin_collectible_block_chain(), value: Others?.chainResolver.chainFullName(asset.chainId) },
         { title: t.token_standard(), value: Others?.formatSchemaType(asset.schema || asset.contract?.schema) },
-        {
-            title: t.plugin_collectible_creator_earning(),
-            value: asset.contract?.creatorEarning ?? '-',
-            tooltip: t.plugin_collectible_creator_earning_tooltip(),
-        },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {
         infos.push({

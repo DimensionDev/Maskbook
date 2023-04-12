@@ -213,16 +213,17 @@ function Content(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
+    // the owner persona and sns not verify on next ID
+    const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
     const showNextID =
-        isTwitterPlatform &&
+        isOnTwitter &&
         // enabled the plugin
         (isWeb3ProfileDisable ||
-            // the owner persona and sns not verify on next ID
-            (isOwnerIdentity && !personaStatus.verified) ||
+            myPersonaNotVerifiedYet ||
             // the owner persona and sns verified on next ID but not verify the wallet
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
@@ -371,7 +372,7 @@ function Content(props: ProfileTabContentProps) {
     }
 
     // Maybe should merge in NextIdPage
-    if (socialAccounts.length === 0 && !showNextID && !isTwitterPlatform) {
+    if (socialAccounts.length === 0 && !showNextID && !isOnTwitter) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -468,7 +469,7 @@ function Content(props: ProfileTabContentProps) {
                                 color={(theme) => theme.palette.maskColor.dark}>
                                 {t('mask_network')}
                             </Typography>
-                            {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
+                            {isOwnerIdentity && isOnTwitter ? (
                                 <ConnectPersonaBoundary
                                     personas={allPersonas}
                                     identity={lastRecognized}

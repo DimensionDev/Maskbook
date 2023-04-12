@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Box, Typography, List, ListItem } from '@mui/material'
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
@@ -268,7 +268,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         tokenDetailedList.map((value) => value.tokenId),
     )
 
-    const { isAvailableGasBalance } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, '', gasOption, { chainId })
+    const { isAvailableGasBalance, isGasFeeGreaterThanOneETH } = useAvailableBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        '',
+        gasOption,
+        { chainId },
+    )
 
     const {
         value: assets_ = EMPTY_LIST,
@@ -351,9 +356,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
-
+        if (isGasFeeGreaterThanOneETH) return t.erc721_create_lucky_drop()
         return ''
-    }, [isAvailableGasBalance, tr])
+    }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH, tr])
 
     setIsNFTRedPacketLoaded?.(balance > 0)
 
@@ -485,14 +490,30 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 collection={collection}
                                 classes={{ approveButton: classes.approveButton }}
                                 operator={RED_PACKET_NFT_ADDRESS}>
-                                <ActionButton
-                                    style={{ height: 40, padding: 0, margin: 0 }}
-                                    size="large"
-                                    disabled={!!validationMessage || !!gasValidationMessage}
-                                    fullWidth
-                                    onClick={() => setOpenNFTConfirmDialog(true)}>
-                                    {gasValidationMessage || t.next()}
-                                </ActionButton>
+                                <ShadowRootTooltip
+                                    title={
+                                        isGasFeeGreaterThanOneETH
+                                            ? t.erc721_gas_cap({ symbol: nativeTokenDetailed?.symbol || 'ETH' })
+                                            : ''
+                                    }
+                                    arrow
+                                    disableInteractive
+                                    placement="top"
+                                    PopperProps={{
+                                        disablePortal: true,
+                                        placement: 'top',
+                                    }}>
+                                    <div style={{ width: '100%' }}>
+                                        <ActionButton
+                                            style={{ height: 40, padding: 0, margin: 0 }}
+                                            size="large"
+                                            disabled={!!validationMessage || !!gasValidationMessage}
+                                            fullWidth
+                                            onClick={() => setOpenNFTConfirmDialog(true)}>
+                                            {gasValidationMessage || t.next()}
+                                        </ActionButton>
+                                    </div>
+                                </ShadowRootTooltip>
                             </EthereumERC721TokenApprovedBoundary>
                         </WalletConnectedBoundary>
                     </ChainBoundary>

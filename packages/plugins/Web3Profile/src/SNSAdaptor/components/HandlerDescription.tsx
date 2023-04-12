@@ -8,12 +8,13 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWallet,
+    useWeb3Connection,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -60,6 +61,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
     const { account, providerType } = useChainContext()
+    const connection = useWeb3Connection()
     const { Others } = useWeb3State()
 
     const { value: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
@@ -83,6 +85,8 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
+    const handleDisconnect = useCallback(() => connection?.disconnect(), [connection])
 
     const avatarUrl = useMemo(() => {
         if (!props.profile?.avatar) return
@@ -108,7 +112,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                     <Typography className={classes.address}>{Others?.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
-            <Button variant="text" onClick={openSelectProviderDialog}>
+            <Button variant="text" onClick={props.profile ? handleDisconnect : openSelectProviderDialog}>
                 {props.profile ? t.plugin_wallet_disconnect() : t.wallet_status_button_change()}
             </Button>
         </Box>

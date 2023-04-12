@@ -147,6 +147,12 @@ function resolveCurrentVisitingIdentityInner(
     const slug = getFirstSlug()
     if (slug && !TWITTER_RESERVED_SLUGS.includes(slug)) {
         update(slug)
+        if (!ownerRef.value.identifier) {
+            const unsubscribe = ownerRef.addListener((val) => {
+                update(slug)
+                if (val) unsubscribe()
+            })
+        }
     }
 
     window.addEventListener(
