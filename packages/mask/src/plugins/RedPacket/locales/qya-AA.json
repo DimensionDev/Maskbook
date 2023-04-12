@@ -48,6 +48,8 @@
     "nft_select_all_option": "crwdns16818:0{{total}}crwdne16818:0",
     "nft_search_placeholder": "crwdns18548:0crwdne18548:0",
     "erc721_insufficient_balance": "crwdns16820:0crwdne16820:0",
+    "erc721_create_lucky_drop": "crwdns19993:0crwdne19993:0",
+    "erc721_gas_cap": "crwdns19995:0{{symbol}}crwdne19995:0",
     "erc721_tab_title": "crwdns16822:0crwdne16822:0",
     "erc20_tab_title": "crwdns16824:0crwdne16824:0",
     "claimed": "crwdns16826:0{{- amount}}crwdne16826:0",
