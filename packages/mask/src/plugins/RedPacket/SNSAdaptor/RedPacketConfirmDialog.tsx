@@ -77,12 +77,13 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     //  otherwise password in database would be different from creating red-packet.
     const contract_version = 4
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
+
+    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { address: publicKey, privateKey } = useMemo(
         () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
         [web3],
     )!
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // #region amount minus estimate gas fee
     const { value: createParams } = useCreateParams(settings!, contract_version, publicKey)

@@ -9,6 +9,7 @@ import {
     multipliedBy,
     rightShift,
     formatBalance,
+    ZERO,
 } from '@masknet/web3-shared-base'
 import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
@@ -31,6 +32,7 @@ import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -141,11 +143,53 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         setRawAmount('0')
     }, [token])
 
+    const creatingParams = useMemo(
+        () => ({
+            duration,
+            isRandom: !!isRandom,
+            name: senderName,
+            message: message || t.best_wishes(),
+            shares: shares || 0,
+            token: token
+                ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
+                : undefined,
+            total: totalAmount.toFixed(),
+        }),
+        [isRandom, senderName, message, t, shares, token, totalAmount],
+    )
+
+    const onClick = useCallback(() => {
+        onChange(creatingParams)
+        onNext()
+    }, [creatingParams, onChange, onNext])
+
+    // #region gas
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
+    const contract_version = 4
+    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
+    // #endregion
+
     // balance
+    const { value: defaultGas = ZERO } = useDefaultCreateGas(
+        {
+            duration,
+            isRandom: !!isRandom,
+            name: senderName,
+            message: message || t.best_wishes(),
+            shares: shares || 0,
+            token: token
+                ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
+                : undefined,
+            total: rightShift(0.01, token?.decimals).toFixed(),
+        },
+        contract_version,
+        publicKey,
+    )
     const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(
         NetworkPluginID.PLUGIN_EVM,
         token?.address,
-        gasOption,
+        gasOption ? { ...gasOption, gas: new BigNumber(defaultGas).toString() } : undefined,
         {
             chainId,
         },
@@ -177,33 +221,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
         return ''
     }, [isAvailableBalance, totalAmount, balance, token?.symbol])
-
-    const creatingParams = useMemo(
-        () => ({
-            duration,
-            isRandom: !!isRandom,
-            name: senderName,
-            message: message || t.best_wishes(),
-            shares: shares || 0,
-            token: token
-                ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
-                : undefined,
-            total: totalAmount.toFixed(),
-        }),
-        [isRandom, senderName, message, t, shares, token, totalAmount],
-    )
-
-    const onClick = useCallback(() => {
-        onChange(creatingParams)
-        onNext()
-    }, [creatingParams, onChange, onNext])
-
-    // #region gas
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
-    const contract_version = 4
-    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
-    // #endregion
 
     const selectRef = useRef(null)
 

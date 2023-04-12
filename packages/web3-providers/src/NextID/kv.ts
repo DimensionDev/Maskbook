@@ -50,7 +50,6 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
             undefined,
             {
-                enableCache: true,
                 enableSquash: true,
             },
         )

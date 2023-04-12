@@ -1,7 +1,7 @@
 import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
+import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     nameLg: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 700,
         wordBreak: 'break-word',
         alignItems: 'center',
@@ -91,7 +91,9 @@ export function FigureCard(props: FigureCardProps) {
                 <div className={classes.nameLgBox}>
                     <Typography className={classes.nameLg}>
                         {asset.collection?.name}
-                        {asset.collection?.verified ? <VerifiedUserIcon color="primary" fontSize="small" /> : null}
+                        {asset.collection?.verified ? (
+                            <Icons.Verified style={{ transform: 'translate(4px, 5px)' }} />
+                        ) : null}
                     </Typography>
                 </div>
             )}
