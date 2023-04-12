@@ -34,11 +34,10 @@ export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> =
 
 export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
-
 // #endregion facebook nft avatar
 
 export const searchFacebookAvatarListSelector = () =>
-    querySelector('[role="dialog"] > div > div > div > input[type=file] + [role="button"]')
+    querySelector('[role="dialog"] > div:nth-child(3)  input[type=file] + [role="button"]')
         .closest(3)
         .querySelector('div')
 
