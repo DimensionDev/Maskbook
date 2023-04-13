@@ -401,12 +401,15 @@ function groupEnsBinding(ensList: NextIDEnsRecord[]) {
     const first = ensList[0]
     return createBindingProofFromProfileQuery(
         NextIDPlatform.ENS,
+        first.id,
+        first.id,
+        undefined,
         NextIDPlatform.ENS,
-        first.id,
-        first.id,
         ensList
             .slice(1)
-            .map((x) => createBindingProofFromProfileQuery(NextIDPlatform.NextID, NextIDPlatform.ENS, x.id, x.id)),
+            .map((x) =>
+                createBindingProofFromProfileQuery(NextIDPlatform.NextID, x.id, x.id, undefined, NextIDPlatform.ENS),
+            ),
     )
 }
 
@@ -431,9 +434,10 @@ function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[
     const bindings = neighborList.map(({ identity }) =>
         createBindingProofFromProfileQuery(
             identity.platform,
-            identity.platform,
             identity.identity,
             identity.displayName,
+            undefined,
+            identity.platform,
         ),
     )
 

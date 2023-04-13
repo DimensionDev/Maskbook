@@ -37,11 +37,11 @@ export function resolveNextIDIdentityToProfile(nextIDIdentity: string, platform:
 
 export function createBindingProofFromProfileQuery(
     platform: NextIDPlatform,
-    source: NextIDPlatform | undefined,
     identity: string,
     name: string,
-    relatedList?: BindingProof[],
     link?: string,
+    source?: NextIDPlatform,
+    relatedList?: BindingProof[],
 ): BindingProof {
     return {
         platform,

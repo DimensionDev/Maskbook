@@ -20,7 +20,7 @@ export class Web3BioAPI implements Web3BioBaseAPI.Profile {
                 const platform = x[0] as NextIDPlatform
                 if (!Object.values(NextIDPlatform).includes(platform)) return
                 const { handle, link } = x[1]
-                return createBindingProofFromProfileQuery(platform, undefined, handle, handle, undefined, link)
+                return createBindingProofFromProfileQuery(platform, handle, handle, link)
             })
             .filter(Boolean) as BindingProof[]
 
