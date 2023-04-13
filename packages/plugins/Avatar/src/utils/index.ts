@@ -135,7 +135,7 @@ export async function getNFTAvatarByUserId(
 ): Promise<NextIDAvatarMeta | undefined> {
     const platform = getSiteType() === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
     if (!platform) return
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
+    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, true)
 
     if (persona) {
         const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())?.[0]
