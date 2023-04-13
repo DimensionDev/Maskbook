@@ -124,7 +124,8 @@ export interface Web3Connection
         TransactionDetailed,
         TransactionSignature,
         Web3,
-        Web3Provider
+        Web3Provider,
+        Web3ConnectionOptions
     > {
     getAccountInfo(account: string): Promise<AccountInfo<Buffer> | null>
 }

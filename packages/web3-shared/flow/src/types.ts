@@ -105,7 +105,8 @@ export type Web3Connection = Connection<
     TransactionDetailed,
     TransactionSignature,
     Web3,
-    Web3Provider
+    Web3Provider,
+    Web3ConnectionOptions
 >
 
 export type Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>
