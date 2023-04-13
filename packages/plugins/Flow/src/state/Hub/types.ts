@@ -1,4 +1,3 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Hub } from '@masknet/web3-shared-flow'
 
-export interface FlowHub extends Web3Helper.Web3Hub<NetworkPluginID.PLUGIN_FLOW> {}
+export interface FlowHub extends Web3Hub {}

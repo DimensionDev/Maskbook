@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3State } from '@masknet/web3-shared-evm'
 import { AddressBook } from './AddressBook.js'
 import { Hub } from './Hub.js'
 import { RiskWarning } from './RiskWarning.js'
@@ -11,16 +12,12 @@ import { Others } from './Others.js'
 import { Settings } from './Settings.js'
 import { TransactionFormatter } from './TransactionFormatter.js'
 import { TransactionWatcher } from './TransactionWatcher.js'
-import type { EVM_Web3State } from './Connection/types.js'
 import { IdentityService } from './IdentityService.js'
 import { BalanceNotifier } from './BalanceNotifier.js'
 import { BlockNumberNotifier } from './BlockNumberNotifier.js'
 import { Storage } from './Storage/index.js'
 
-export async function createWeb3State(
-    signal: AbortSignal,
-    context: Plugin.Shared.SharedUIContext,
-): Promise<EVM_Web3State> {
+export async function createWeb3State(signal: AbortSignal, context: Plugin.Shared.SharedUIContext): Promise<Web3State> {
     const Provider_ = new Provider(context)
     await Provider_.setup()
 

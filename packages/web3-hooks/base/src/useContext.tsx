@@ -156,7 +156,7 @@ export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(d
     }
 }
 
-export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: ChainContextGetter) {
+export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: ChainContextGetter<T>) {
     const context = useContext(ChainContext)
     return {
         ...context,

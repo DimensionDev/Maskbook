@@ -1,7 +1,7 @@
 import LRU from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
-import { type NetworkPluginID, SignType } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { SignType } from '@masknet/shared-base'
+import type { Web3Connection } from '@masknet/web3-shared-evm'
 import { StringStorageAPI } from '../StringStorage/index.js'
 
 const caches = new Map<string, LRU<string, unknown>>()
@@ -12,7 +12,7 @@ export class StringStorage implements Storage {
     constructor(
         private namespace: string,
         private address: string,
-        private getConnection?: () => Web3Helper.Web3Connection<NetworkPluginID> | undefined,
+        private getConnection?: () => Web3Connection | undefined,
     ) {
         const cache = caches.get(this.getKey())
         if (cache) {

@@ -1535,8 +1535,7 @@ export interface ConnectionState<
         TransactionDetailed,
         TransactionSignature,
         Web3,
-        Web3Provider,
-        Web3ConnectionOptions
+        Web3Provider
     >,
 > {
     /** Get web3 SDK */

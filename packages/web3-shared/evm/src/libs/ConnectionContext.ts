@@ -1,7 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { ECKeyIdentifier, SignType } from '@masknet/shared-base'
-import type { Connection, ConnectionOptions, Web3State } from '@masknet/web3-shared-base'
 import { ErrorEditor } from './ErrorEditor.js'
 import { PayloadEditor } from './PayloadEditor.js'
 import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/provider.js'
@@ -9,21 +8,11 @@ import {
     ChainId,
     EthereumMethodType,
     ProviderType,
-    type AddressType,
-    type SchemaType,
-    type NetworkType,
-    type Signature,
-    type Block,
-    type UserOperation,
     type Transaction,
-    type TransactionReceipt,
-    type TransactionDetailed,
-    type TransactionSignature,
-    type Web3,
-    type Web3Provider,
-    type GasOption,
-    type TransactionParameter,
     type TransactionOptions,
+    type Web3State,
+    type Web3Connection,
+    type Web3ConnectionOptions,
 } from '../types/index.js'
 
 let pid = 0
@@ -38,41 +27,10 @@ export class ConnectionContext {
     private _providerType = ProviderType.MaskWallet
 
     constructor(
-        private _state: Web3State<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            Signature,
-            GasOption,
-            Block,
-            UserOperation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            TransactionParameter,
-            Web3,
-            Web3Provider
-        >,
-        private _connection: Connection<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            Signature,
-            Block,
-            UserOperation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            Web3,
-            Web3Provider
-        >,
+        private _state: Web3State,
+        private _connection: Web3Connection,
         private _requestArguments: RequestArguments,
-        private _options?: ConnectionOptions<ChainId, ProviderType, Transaction>,
+        private _options?: Web3ConnectionOptions,
         private _init?: {
             getDefaultAccount?: (providerType: ProviderType) => string | undefined
             getDefaultChainId?: (providerType: ProviderType) => ChainId | undefined

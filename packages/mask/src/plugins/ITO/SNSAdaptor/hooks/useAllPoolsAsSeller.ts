@@ -1,7 +1,6 @@
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { type ChainId, getITOConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, getITOConstants, type Web3Connection } from '@masknet/web3-shared-evm'
 import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { PoolFromNetwork } from '../../types.js'
@@ -31,12 +30,7 @@ export function useAllPoolsAsSeller(address: string) {
     }, [address, chainId, connection])
 }
 
-async function getAllPoolsAsSeller(
-    address: string,
-    endBlock: number,
-    chainId: ChainId,
-    connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
-) {
+async function getAllPoolsAsSeller(address: string, endBlock: number, chainId: ChainId, connection: Web3Connection) {
     if (!connection) return EMPTY_LIST
 
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
