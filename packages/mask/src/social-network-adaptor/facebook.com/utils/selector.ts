@@ -111,19 +111,19 @@ export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E, 
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] a[aria-selected="false"]')
+    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] a[aria-selected="false"]')
 
 // for getting activated tab style
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] [aria-selected="true"]')
+    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] [aria-selected="true"]')
 
 // for inserting web3 tab
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] a:nth-child(7)')
+    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] a:nth-child(7)')
 
 // for getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('[role="main"] a:nth-child(7)+span')
+    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTabs"] [role="tablist"] a:nth-child(7)+span')
 
 // for inserting web3 tab content
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
