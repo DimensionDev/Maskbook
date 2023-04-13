@@ -11,7 +11,6 @@ import {
     type Transaction,
     type TransactionOptions,
     type Web3State,
-    type Web3Connection,
     type Web3ConnectionOptions,
 } from '../types/index.js'
 
@@ -28,7 +27,6 @@ export class ConnectionContext {
 
     constructor(
         private _state: Web3State,
-        private _connection: Web3Connection,
         private _requestArguments: RequestArguments,
         private _options?: Web3ConnectionOptions,
         private _init?: {
@@ -135,10 +133,6 @@ export class ConnectionContext {
 
     get proof() {
         return this.payloadEditor.proof
-    }
-
-    get connection() {
-        return this._connection
     }
 
     get state() {

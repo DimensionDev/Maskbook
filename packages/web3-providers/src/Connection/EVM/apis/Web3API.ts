@@ -1,12 +1,13 @@
-import { memoize } from 'lodash-es'
+import { identity, memoize, pickBy } from 'lodash-es'
 import Web3 from 'web3'
-import type { HttpProvider } from 'web3-core'
+import type { HttpProvider, RequestArguments } from 'web3-core'
 import { type AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { delay } from '@masknet/kit'
+import type { PartialRequired } from '@masknet/shared-base'
 import {
     AddressType,
     SchemaType,
-    type ChainId,
+    ChainId,
     createContract,
     createWeb3Provider,
     createWeb3Request,
@@ -30,6 +31,11 @@ import {
     ProviderURL,
     getAverageBlockDelay,
     isCryptoPunksContractAddress,
+    ProviderType,
+    type Web3Connection,
+    type Web3ConnectionOptions,
+    ConnectionContext,
+    PayloadEditor,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -63,6 +69,7 @@ import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { Web3BaseAPI } from '../../../entry-types.js'
 import { fetchJSON } from '../../../entry-helpers.js'
+import { EVM_Composers, EVM_Providers } from '../../index.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -87,6 +94,90 @@ export class Web3API
             Web3
         >
 {
+    constructor(
+        private createContext?: (
+            requestArguments: RequestArguments,
+            options: Web3ConnectionOptions,
+        ) => ConnectionContext,
+    ) {}
+
+    private async request<T>(requestArguments: RequestArguments, initial?: Web3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        const context = this.createContext?.(requestArguments, options)
+        if (!context) throw new Error('Failed to create context.')
+
+        try {
+            await EVM_Composers.dispatch(context, async () => {
+                if (!context.writeable) return
+                try {
+                    switch (context.method) {
+                        case EthereumMethodType.MASK_LOGIN:
+                            context.write(
+                                await context.state.Provider?.connect?.(
+                                    options.providerType,
+                                    options.chainId,
+                                    options.account,
+                                    options.owner
+                                        ? {
+                                              account: options.owner,
+                                              identifier: options.identifier,
+                                          }
+                                        : undefined,
+                                    options.silent,
+                                ),
+                            )
+                            break
+                        case EthereumMethodType.MASK_LOGOUT:
+                            context.write(await context.state.Provider?.disconnect(options.providerType))
+                            break
+                        default: {
+                            const provider =
+                                EVM_Providers[
+                                    PayloadEditor.fromPayload(context.request).readonly
+                                        ? ProviderType.MaskWallet
+                                        : options.providerType
+                                ]
+
+                            const web3Provider = provider.createWeb3Provider({
+                                account: options.account,
+                                chainId: options.chainId,
+                            })
+
+                            // send request and set result in the context
+                            context.write((await web3Provider.request(context.requestArguments)) as T)
+                            break
+                        }
+                    }
+                } catch (error) {
+                    context.abort(error)
+                }
+            })
+        } catch (error) {
+            context.abort(error)
+        } finally {
+            if (context.error) throw context.error
+            return context.result as T
+        }
+    }
+
+    private getOptions(
+        initial?: Web3ConnectionOptions,
+        overrides?: Partial<Web3ConnectionOptions>,
+    ): PartialRequired<Web3ConnectionOptions, 'chainId' | 'providerType'> {
+        return {
+            account: '',
+            chainId: ChainId.Mainnet,
+            providerType: ProviderType.MaskWallet,
+            ...pickBy(initial, identity),
+            overrides: {
+                from: initial?.account,
+                chainId: initial?.chainId,
+                ...pickBy(initial?.overrides, identity),
+                ...pickBy(overrides?.overrides, identity),
+            },
+        }
+    }
+
     getWeb3(chainId: ChainId) {
         return createWeb3SDK(ProviderURL.from(chainId))
     }
