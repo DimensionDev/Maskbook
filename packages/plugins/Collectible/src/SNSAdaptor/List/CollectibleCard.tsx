@@ -1,8 +1,8 @@
-import { useCallback } from 'react'
-import { Box, Card } from '@mui/material'
+import { type HTMLProps } from 'react'
+import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '8px 8px 0 0',
+        borderRadius: 8,
         position: 'absolute',
         zIndex: 1,
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
@@ -36,37 +36,40 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CollectibleCardProps {
-    className?: string
+export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     pluginID?: NetworkPluginID
     asset: Web3Helper.NonFungibleAssetAll
+    disableNetworkIcon?: boolean
+    /** disable inspect NFT details */
+    disableInspect?: boolean
 }
 
-export function CollectibleCard({ className, pluginID, asset }: CollectibleCardProps) {
+export function CollectibleCard({
+    className,
+    pluginID,
+    asset,
+    disableNetworkIcon,
+    disableInspect,
+    ...rest
+}: CollectibleCardProps) {
     const { classes, cx } = useStyles()
-    const onClick = useCallback(() => {
-        if (!asset.chainId || !pluginID) return
-        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
-            open: true,
-            chainId: asset.chainId,
-            pluginID,
-            tokenId: asset.tokenId,
-            tokenAddress: asset.address,
-        })
-    }, [pluginID, asset.chainId, asset.tokenId, asset.address])
+
+    const icon = pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null
+    const { metadata } = asset
+    const url = metadata?.previewImageURL || metadata?.imageURL || metadata?.mediaURL
 
     return (
-        <Box className={cx(classes.root, className)} onClick={onClick}>
+        <div className={cx(classes.root, className)} {...rest}>
             <div className={classes.blocker} />
             <Card className={classes.card}>
                 <AssetPreviewer
                     classes={{
                         fallbackImage: classes.fallbackImage,
                     }}
-                    url={asset.metadata?.imageURL ?? asset.metadata?.mediaURL}
-                    icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
+                    url={url}
+                    icon={icon}
                 />
             </Card>
-        </Box>
+        </div>
     )
 }

@@ -496,6 +496,7 @@ export class Web3API
             return createNonFungibleTokenMetadata(
                 chainId,
                 response.name,
+                tokenId ?? '',
                 '',
                 response.description,
                 undefined,
@@ -512,6 +513,7 @@ export class Web3API
         return createNonFungibleTokenMetadata(
             chainId,
             response.name,
+            tokenId ?? '',
             '',
             response.description,
             undefined,

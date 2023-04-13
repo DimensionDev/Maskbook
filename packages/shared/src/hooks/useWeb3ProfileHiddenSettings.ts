@@ -8,7 +8,7 @@ import type { Web3ProfileStorage } from '../types.js'
 
 export function useWeb3ProfileHiddenSettings(
     identity?: string,
-    publicKeyAsHex?: string,
+    publicKeyAsHex?: string | null,
     options?: {
         address?: string
         hiddenAddressesKey?: 'NFTs' | 'donations' | 'footprints'

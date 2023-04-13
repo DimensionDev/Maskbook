@@ -22,7 +22,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     // create iterator
     const iterator = useMemo(() => {
         const hub = Hub?.getHub?.({ account, chainId, ...options })
-        if (!account || !hub?.getNonFungibleAssets || !networks) return
+        if (!account || !hub?.getNonFungibleAssets) return
         setAssets(EMPTY_LIST)
         setDone(false)
 
@@ -40,7 +40,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                     })
                 }),
         )
-    }, [Hub, account, JSON.stringify(options), networks.length, chainId])
+    }, [Hub, account, JSON.stringify(options), networks, chainId])
 
     const next = useCallback(async () => {
         if (!iterator || done) return

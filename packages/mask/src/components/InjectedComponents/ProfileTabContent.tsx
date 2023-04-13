@@ -312,8 +312,8 @@ function Content(props: ProfileTabContentProps) {
                 <SearchResultInspector
                     keyword={keyword}
                     isProfilePage
-                    currentCollection={trendingResult}
-                    collectionList={collectionList}
+                    currentSearchResult={trendingResult}
+                    searchResults={collectionList}
                     identity={identity}
                 />
             </div>

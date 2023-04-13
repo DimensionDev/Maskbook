@@ -1,35 +1,37 @@
 import { type BigNumber } from 'bignumber.js'
+
+export interface Collection {
+    banner_image_url: string
+    collection_id: number
+    description: string
+    spam_score?: number
+    discord_url: string
+    floor_prices: Array<{
+        marketplace_id: string // opensea
+        marketplace_name: string // Opensea
+        payment_token: PaymentToken
+    }>
+    image_url: string
+    marketplace_pages?: Array<{
+        collection_url: string
+        nft_url: string
+        marketplace_collection_id: string
+        marketplace_id: string
+        marketplace_name: string
+        verified: boolean
+    }>
+    distinct_nfts_owned: number
+    total_copies_owned: number
+    distinct_owner_count: number
+    distinct_nft_count: number
+    name: string
+    top_contracts: string[] // ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"]
+    total_quantity: number
+    twitter_username: string // twitter handler
+}
 export interface Asset {
     chain: string // ethereum
-    collection: {
-        banner_image_url: string
-        collection_id: number
-        description: string
-        spam_score?: number
-        discord_url: string
-        floor_prices: Array<{
-            marketplace_id: string // opensea
-            marketplace_name: string // Opensea
-            payment_token: PaymentToken
-        }>
-        image_url: string
-        marketplace_pages: Array<{
-            collection_url: string
-            nft_url: string
-            marketplace_collection_id: string
-            marketplace_id: string
-            marketplace_name: string
-            verified: boolean
-        }>
-        distinct_nfts_owned: number
-        total_copies_owned: number
-        distinct_owner_count: number
-        distinct_nft_count: number
-        name: string
-        top_contracts: string[] // ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"]
-        total_quantity: number
-        twitter_username: string // twitter handler
-    }
+    collection: Collection
     contract: {
         deployed_by: string // EOA
         deployed_via_contract: string | null
@@ -60,7 +62,12 @@ export interface Asset {
         owner_address: string
     }>
     previews: {
-        image_large_url?: string
+        blurhash: string
+        image_large_url: string
+        image_medium_url: string
+        image_opengraph_url: string
+        image_small_url: string
+        predominant_color: string
     }
 }
 

@@ -54,8 +54,6 @@
     "plugin_collectible_not_been_reviewed_by_opensea": "This item has not been reviewed by OpenSea.",
     "plugin_collectible_reviewed_tips": "You should proceed with extra caution. Anyone can create a digital item on a blockchain with any\n                        name, including fake versions of existing items. Please take extra caution and do your research\n                        when interacting with this item to ensure it's what it chains to be.",
     "plugin_collectible_total": "Total",
-    "plugin_collectible_subtotal": "Subtotal",
-    "plugin_collectible_item": "Item",
     "plugin_collectible_refresh": "Refresh",
     "plugin_collectible_failed_load": "Failed to load your collectible on {{source}}.",
     "plugin_collectible_approved_tips": "By checking this box, I acknowledge that this item has not been reviewed\n                                                or approved by OpenSea.",
@@ -113,5 +111,6 @@
     "price": "Price",
     "no_NFTs_found": "No NFTs found.",
     "load_more": "Load More",
-    "nft_minted": "NFT is not minted yet."
+    "nft_minted": "NFT is not minted yet.",
+    "verified_by": "Verified by {{ marketplace }}"
 }

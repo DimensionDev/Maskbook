@@ -198,6 +198,14 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         )
     }
 
+    async getNonFungibleCollectionVerifiedBy(id: string): Promise<string[]> {
+        const providers = this.getProviders()
+        return attemptUntil(
+            providers.map((x) => () => x.getCollectionVerifiedBy?.(id)),
+            [],
+        )
+    }
+
     async getNonFungibleTokenSecurity(
         chainId: ChainId,
         address: string,
