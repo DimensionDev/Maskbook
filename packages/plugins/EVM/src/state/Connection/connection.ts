@@ -67,7 +67,7 @@ class Connection implements EVM_Connection {
         return <T>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.getOptions(initial)
-                const context = createContext(Web3StateSettings.value, this, requestArguments, options)
+                const context = createContext(this, requestArguments, options)
 
                 try {
                     await EVM_Composers.dispatch(context, async () => {
