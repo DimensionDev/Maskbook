@@ -197,7 +197,7 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
                                     })
                                     return
                                 }
-                                return openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))
+                                return openWindow(x.link ?? resolveNextIDPlatformLink(x.platform, x.identity, x.name))
                             }}>
                             <div className={classes.content}>
                                 {Icon ? <Icon size={20} /> : null}

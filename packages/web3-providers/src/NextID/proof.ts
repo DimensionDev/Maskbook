@@ -12,6 +12,7 @@ import {
     type NextIDPayload,
     type NextIDPersonaBindings,
     type NextIDEnsRecord,
+    createBindingProofFromProfileQuery,
 } from '@masknet/shared-base'
 import {
     PROOF_BASE_URL_DEV,
@@ -200,7 +201,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByRelationService(address: string) {
+    async queryProfilesByAddress(address: string) {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
@@ -392,26 +393,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         if (response.error || !handler || !address) return false
 
         return response.data?.includes(handler) || response.data?.filter((x) => x).length === 0
-    }
-}
-
-function createBindingProofFromProfileQuery(
-    platform: NextIDPlatform,
-    source: NextIDPlatform,
-    identity: string,
-    name: string,
-    relatedList?: BindingProof[],
-): BindingProof {
-    return {
-        platform,
-        source,
-        identity,
-        name,
-        created_at: '',
-        invalid_reason: '',
-        last_checked_at: '',
-        is_valid: true,
-        relatedList,
     }
 }
 

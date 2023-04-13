@@ -67,6 +67,7 @@ import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { SimpleHashProviderAPI } from './SimpleHash/index.js'
 import { RSS3API } from './RSS3/index.js'
 import { LidoAPI } from './Lido/index.js'
+import { Web3BioAPI } from './Web3Bio/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -132,6 +133,8 @@ export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorageProvider = new NextIDStorageAPI()
 export type { LensAccount } from './NextID/index.js'
 
+// Web3Bio
+export const Web3Bio = new Web3BioAPI()
 // GoPlusLabs
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()

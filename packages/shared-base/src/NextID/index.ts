@@ -1,5 +1,5 @@
 import { ProfileIdentifier } from '@masknet/base'
-import { NextIDPlatform } from '../NextID/type.js'
+import { NextIDPlatform, type BindingProof } from '../NextID/type.js'
 import { EnhanceableSite } from '../Site/type.js'
 import { createLookupTableResolver } from '../utils/index.js'
 
@@ -33,4 +33,25 @@ export function resolveNextIDIdentityToProfile(nextIDIdentity: string, platform:
     return ProfileIdentifier.of(network, nextIDIdentity).expect(
         `${network} and ${nextIDIdentity} should compose a valid ProfileIdentifier`,
     )
+}
+
+export function createBindingProofFromProfileQuery(
+    platform: NextIDPlatform,
+    source: NextIDPlatform | undefined,
+    identity: string,
+    name: string,
+    relatedList?: BindingProof[],
+    link?: string,
+): BindingProof {
+    return {
+        platform,
+        source,
+        identity,
+        name,
+        created_at: '',
+        last_checked_at: '',
+        is_valid: true,
+        relatedList,
+        link,
+    }
 }
