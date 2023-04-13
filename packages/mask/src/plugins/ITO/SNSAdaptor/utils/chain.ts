@@ -3,14 +3,7 @@ import { BigNumber } from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'
 import { isSameAddress, type FungibleToken, TokenType } from '@masknet/web3-shared-base'
-import {
-    type ChainId,
-    EtherscanURL,
-    getITOConstants,
-    SchemaType,
-    type Web3Connection,
-    type Web3ConnectionOptions,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, EtherscanURL, getITOConstants, SchemaType, type Web3Connection } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { PoolFromNetwork, JSON_PayloadFromChain, SwappedTokenType } from '../../types.js'
@@ -176,7 +169,7 @@ export async function getClaimAllPools(
     chainId: ChainId,
     endBlock: number,
     swapperAddress: string,
-    connection: Web3ConnectionOptions,
+    connection: Web3Connection,
 ) {
     const { ITO2_CONTRACT_ADDRESS, ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: startBlock } = getITOConstants(chainId)
 

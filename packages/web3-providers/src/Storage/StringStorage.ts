@@ -1,8 +1,8 @@
 import LRU from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
 import { SignType } from '@masknet/shared-base'
-import { StringStorageAPI } from '../StringStorage/index.js'
 import type { Web3Connection } from '@masknet/web3-shared-evm'
+import { StringStorageAPI } from '../StringStorage/index.js'
 
 const caches = new Map<string, LRU<string, unknown>>()
 
