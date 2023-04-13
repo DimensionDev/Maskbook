@@ -1,6 +1,5 @@
 import Fuse from 'fuse.js'
-import type { FuseBaseAPI } from '../../types/Fuse.js'
-import type { TrendingAPI } from '../../entry-types.js'
+import type { FuseBaseAPI, TrendingAPI } from '../../entry-types.js'
 
 export class FuseCoinAPI implements FuseBaseAPI.Provider {
     create<T = TrendingAPI.Coin>(items: T[]) {

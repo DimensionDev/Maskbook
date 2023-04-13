@@ -37,11 +37,10 @@ export * from './types/NameService.js'
 export * from './types/Wallet.js'
 export * from './types/Lens.js'
 export * from './types/Lido.js'
+export * from './types/StringStorage.js'
 
 // Implementations
 export * from './DeBank/types.js'
 export * from './Zerion/types.js'
 export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
-
-export * from './StringStorage/index.js'

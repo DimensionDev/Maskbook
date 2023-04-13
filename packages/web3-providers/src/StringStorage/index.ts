@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import { FIREFLY_API_URL } from './constants.js'
 import { fetchJSON, parseJSON } from '../entry-helpers.js'
-import type { StringStorageBaseAPI } from '../types/StringStorage.js'
+import type { StringStorageBaseAPI } from '../entry-types.js'
 
-interface responseData {
+interface ResponseData {
     code: number
     reason: string
     message: string
@@ -14,7 +14,7 @@ const genKey = (namespace: string, userId: string) => `${namespace}-${userId}`
 export class StringStorageAPI implements StringStorageBaseAPI.Provider {
     async get<T>(namespace: string, userId: string, address: string) {
         if (!userId || !address) return
-        const response = await fetchJSON<responseData>(
+        const response = await fetchJSON<ResponseData>(
             urlcat(`${FIREFLY_API_URL}/get`, {
                 key: genKey(namespace, userId),
                 address,

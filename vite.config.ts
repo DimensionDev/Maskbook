@@ -21,6 +21,7 @@ export default defineConfig({
             '@masknet/public-api': createURL('./packages/public-api/src/index.ts'),
             '@masknet/typed-message': createURL('./packages/typed-message/base/src/index.ts'),
             '@masknet/encryption': createURL('./packages/encryption/src/index.ts'),
+            '@masknet/injected-script': createURL('./packages/injected-script/sdk/index.ts'),
         },
         setupFiles: ['./setups/index.ts', './packages/encryption/test-setup.js'],
     },

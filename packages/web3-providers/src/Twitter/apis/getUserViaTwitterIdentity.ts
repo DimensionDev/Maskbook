@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
-import { staleCached } from '../../helpers/fetchCached.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON, staleCached } from '../../entry-helpers.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
 const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'

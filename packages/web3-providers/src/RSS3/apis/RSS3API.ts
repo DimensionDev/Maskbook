@@ -1,3 +1,4 @@
+import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import { type HubOptions } from '@masknet/web3-shared-base'
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
@@ -7,7 +8,6 @@ import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } fr
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { RSS3BaseAPI } from '../../entry-types.js'
-import RSS3 from 'rss3-next'
 
 interface RSS3Result<T> {
     cursor?: string

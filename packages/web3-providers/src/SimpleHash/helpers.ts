@@ -10,8 +10,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isEmpty } from 'lodash-es'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { fetchJSON } from '../entry-helpers.js'
-import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
 

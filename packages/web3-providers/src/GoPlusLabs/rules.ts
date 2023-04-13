@@ -1,5 +1,5 @@
 import { parseInt } from 'lodash-es'
-import type { SecurityAPI } from '../types/Security.js'
+import type { SecurityAPI } from '../entry-types.js'
 import { type SecurityMessage, SecurityType, SecurityMessageLevel } from './types.js'
 
 const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100

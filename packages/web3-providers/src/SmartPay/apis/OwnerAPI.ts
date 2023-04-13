@@ -29,20 +29,20 @@ type OwnerShip = {
 }
 
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
-    private web3 = new Web3API()
-    private multicall = new MulticallAPI()
-    private bundler = new SmartPayBundlerAPI()
-    private funder = new SmartPayFunderAPI()
+    private Web3 = new Web3API()
+    private Multicall = new MulticallAPI()
+    private Bundler = new SmartPayBundlerAPI()
+    private Funder = new SmartPayFunderAPI()
 
     private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
+        const entryPoints = await this.Bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
     }
 
     private createWalletContract(chainId: ChainId, address: string) {
-        return createContract<Wallet>(this.web3.getWeb3(chainId), address, WalletABI as AbiItem[])
+        return createContract<Wallet>(this.Web3.getWeb3(chainId), address, WalletABI as AbiItem[])
     }
 
     private async createContractWallet(chainId: ChainId, owner: string) {
@@ -103,8 +103,8 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     private async getAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
         const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
-        const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
-        const results = await this.multicall.call(chainId, contracts, names, calls)
+        const calls = this.Multicall.createMultipleContractSingleData(contracts, names, [])
+        const results = await this.Multicall.call(chainId, contracts, names, calls)
         const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
         if (!accounts.length) {
@@ -178,7 +178,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         const contractWallet = await this.createContractWallet(chainId, owner)
         const address = create2Factory.derive(contractWallet.initCode, nonce)
 
-        const operations = await this.funder.getOperationsByOwner(chainId, owner)
+        const operations = await this.Funder.getOperationsByOwner(chainId, owner)
 
         // TODO: ensure account is deployed
         return this.createContractAccount(
@@ -198,7 +198,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     ): Promise<Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const create2Factory = await this.createCreate2Factory(chainId, owner)
         const contractWallet = await this.createContractWallet(chainId, owner)
-        const operations = await this.funder.getOperationsByOwner(chainId, owner)
+        const operations = await this.Funder.getOperationsByOwner(chainId, owner)
 
         const allSettled = await Promise.allSettled([
             this.getAccountsFromMulticall(

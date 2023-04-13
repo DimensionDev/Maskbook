@@ -12,18 +12,18 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Web3API } from '../../Connection/index.js'
+import { Web3API } from '../../Connection/EVM/apis/Web3API.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayOwnerAPI } from './OwnerAPI.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
 
 export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
-    private web3 = new Web3API()
-    private owner = new SmartPayOwnerAPI()
-    private bundler = new SmartPayBundlerAPI()
+    private Web3 = new Web3API()
+    private Owner = new SmartPayOwnerAPI()
+    private Bundler = new SmartPayBundlerAPI()
 
     private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
+        const entryPoints = await this.Bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
@@ -56,7 +56,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     ) {
         const getOverrides = async () => {
             if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                const accounts = await this.owner.getAccountsByOwner(chainId, owner, false)
+                const accounts = await this.Owner.getAccountsByOwner(chainId, owner, false)
                 const target = accounts.find((x) => isSameAddress(x.address, userTransaction.operation.sender))
                 const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
@@ -75,12 +75,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             return
         }
 
-        await userTransaction.fillUserOperation(this.web3.getWeb3(chainId), await getOverrides())
-        return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
+        await userTransaction.fillUserOperation(this.Web3.getWeb3(chainId), await getOverrides())
+        return this.Bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
-        await userTransaction.fillUserOperation(this.web3.getWeb3(chainId))
+        await userTransaction.fillUserOperation(this.Web3.getWeb3(chainId))
         return userTransaction.estimateUserOperation()
     }
 
@@ -132,7 +132,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
 
         const initCode = await this.getInitCode(chainId, owner)
-        const accounts = await this.owner.getAccountsByOwner(chainId, owner, false)
+        const accounts = await this.Owner.getAccountsByOwner(chainId, owner, false)
         const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
         return this.sendUserOperation(

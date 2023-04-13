@@ -9,6 +9,13 @@ globalThis.fetch = fetch
 globalThis.Headers = Headers
 globalThis.Request = Request
 globalThis.Response = Response
+
+// @ts-ignore
+globalThis.location = {
+    pathname: 'nodejs',
+    protocol: 'https',
+}
+
 globalThis.localStorage = (() => {
     const map = new Map()
 

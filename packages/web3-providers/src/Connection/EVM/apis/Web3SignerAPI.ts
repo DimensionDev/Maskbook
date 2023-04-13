@@ -5,7 +5,7 @@ import { Web3API } from './Web3API.js'
 import type { SignerAPI } from '../../../entry-types.js'
 
 export class Web3SignerAPI implements SignerAPI.Provider {
-    private web3 = new Web3API()
+    private Web3 = new Web3API()
 
     async sign<T>(type: SignType, key: Buffer, message: T): Promise<string> {
         switch (type) {
@@ -26,9 +26,10 @@ export class Web3SignerAPI implements SignerAPI.Provider {
                 const chainId = transaction.chainId
                 if (!chainId) throw new Error('Invalid chain id.')
 
-                const { rawTransaction } = await this.web3
-                    .getWeb3(chainId)
-                    .eth.accounts.signTransaction(transaction, toHex(key))
+                const { rawTransaction } = await this.Web3.getWeb3(chainId).eth.accounts.signTransaction(
+                    transaction,
+                    toHex(key),
+                )
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
 
                 return rawTransaction

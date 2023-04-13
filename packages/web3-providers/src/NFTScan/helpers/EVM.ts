@@ -30,12 +30,8 @@ import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import { Web3API } from '../../Connection/index.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
-import { getAssetFullName } from '../../helpers/getAssetFullName.js'
-import { resolveActivityType } from '../../helpers/resolveActivityType.js'
-import { getPaymentToken } from '../../helpers/getPaymentToken.js'
-import { parseJSON } from '../../helpers/parseJSON.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON, parseJSON, getAssetFullName, resolveActivityType, getPaymentToken } from '../../entry-helpers.js'
 
 const Web3 = new Web3API()
 

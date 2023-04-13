@@ -2,12 +2,14 @@ import LRU from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { RSS3 } from '@masknet/web3-providers'
+import { RSS3API } from '../RSS3/index.js'
 
 const caches = new Map<string, LRU<string, unknown>>()
 
 export class RSS3Storage implements Storage {
+    private RSS3 = new RSS3API()
     private cache: LRU<string, unknown> | undefined
+
     constructor(
         private address: string,
         private getConnection?: () => Web3Helper.Web3Connection<NetworkPluginID> | undefined,
@@ -29,7 +31,7 @@ export class RSS3Storage implements Storage {
 
     private async getRSS3<T>() {
         const connection = this.getConnection?.()
-        return RSS3.createRSS3(
+        return this.RSS3.createRSS3(
             this.address,
             connection
                 ? (message: string) => connection.signMessage('message', message, { account: this.address })
@@ -45,12 +47,12 @@ export class RSS3Storage implements Storage {
         const cacheKey = `${this.address}_${key}`
         const rss3 = await this.getRSS3<T>()
         const cache = this.cache?.get<T>(cacheKey)
-        return cache ?? RSS3.getFileData(rss3, this.address, key)
+        return cache ?? this.RSS3.getFileData(rss3, this.address, key)
     }
 
     async set<T>(key: string, value: T) {
         const rss3 = await this.getRSS3<T>()
-        await RSS3.setFileData<T>(rss3, this.address, key, value)
+        await this.RSS3.setFileData<T>(rss3, this.address, key, value)
 
         this.delete(key)
         return

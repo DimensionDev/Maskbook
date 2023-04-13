@@ -101,7 +101,13 @@ export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 export const SimpleHash = new SimpleHashProviderAPI()
 
 // Wallet
-export * from './Wallet/index.js'
+export {
+    BaseContractWalletProvider,
+    EVM_Providers,
+    FlowProviders,
+    SolanaProviders,
+    EVM_Composers,
+} from './Connection/index.js'
 
 // EVM Connection
 export const Web3 = new Web3API()
@@ -183,8 +189,8 @@ export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
 
-export * from './Storage/index.js'
-
 // RSS3
 export const RSS3 = new RSS3API()
-export * from './helpers/parseJSON.js'
+
+// Storage
+export * from './Storage/index.js'

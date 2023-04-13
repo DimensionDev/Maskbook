@@ -1,15 +1,17 @@
 import type { RequestArguments } from 'web3-core'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
-import type { Connection, ConnectionOptions } from '@masknet/web3-shared-base'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { ECKeyIdentifier, SignType } from '@masknet/shared-base'
+import type { Connection, ConnectionOptions, Web3State } from '@masknet/web3-shared-base'
 import { ErrorEditor } from './ErrorEditor.js'
 import { PayloadEditor } from './PayloadEditor.js'
 import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/provider.js'
 import {
-    EthereumMethodType,
     ChainId,
+    EthereumMethodType,
+    ProviderType,
     type AddressType,
     type SchemaType,
-    ProviderType,
+    type NetworkType,
     type Signature,
     type Block,
     type UserOperation,
@@ -19,6 +21,9 @@ import {
     type TransactionSignature,
     type Web3,
     type Web3Provider,
+    type GasOption,
+    type TransactionParameter,
+    type TransactionOptions,
 } from '../types/index.js'
 
 let pid = 0
@@ -33,6 +38,24 @@ export class ConnectionContext {
     private _providerType = ProviderType.MaskWallet
 
     constructor(
+        private _state: Web3State<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            Signature,
+            GasOption,
+            Block,
+            UserOperation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            TransactionParameter,
+            Web3,
+            Web3Provider
+        >,
         private _connection: Connection<
             ChainId,
             AddressType,
@@ -56,6 +79,13 @@ export class ConnectionContext {
             getDefaultProviderType: () => ProviderType | undefined
             getDefaultOwner?: (providerType: ProviderType) => string | undefined
             getDefaultIdentifier?: (providerType: ProviderType) => ECKeyIdentifier | undefined
+            mask_send?: (request: JsonRpcPayload, options: TransactionOptions) => Promise<JsonRpcResponse>
+            mask_signWithPersona?: <T>(
+                type: SignType,
+                message: T,
+                identifier?: ECKeyIdentifier,
+                silent?: boolean,
+            ) => Promise<string>
         },
     ) {
         // increase pid
@@ -151,6 +181,17 @@ export class ConnectionContext {
 
     get connection() {
         return this._connection
+    }
+
+    get state() {
+        return this._state
+    }
+
+    get bridge() {
+        return {
+            send: this._init?.mask_send,
+            signWithPersona: this._init?.mask_signWithPersona,
+        }
     }
 
     get requestId() {

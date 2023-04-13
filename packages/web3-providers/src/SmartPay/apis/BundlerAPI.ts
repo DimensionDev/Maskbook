@@ -3,7 +3,7 @@ import { omit } from 'lodash-es'
 import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex } from '@masknet/shared-base'
 import { BUNDLER_PROD } from '../constants.js'
-import type { BundlerAPI } from '../../types/Bundler.js'
+import type { BundlerAPI } from '../../entry-types.js'
 import { Duration, fetchJSON } from '../../entry-helpers.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {

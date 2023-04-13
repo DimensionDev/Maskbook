@@ -16,7 +16,7 @@ import { Web3API } from '../Connection/index.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI implements MulticallBaseAPI.Provider {
-    private web3 = new Web3API()
+    private Web3 = new Web3API()
 
     private results: {
         [chainId: number]: {
@@ -26,7 +26,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
     } = {}
 
     private createWeb3(chainId: ChainId) {
-        return this.web3.getWeb3(chainId)
+        return this.Web3.getWeb3(chainId)
     }
 
     private createContract(chainId: ChainId) {
