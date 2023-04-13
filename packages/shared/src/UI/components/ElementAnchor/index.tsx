@@ -26,3 +26,5 @@ export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children }) =
         </Stack>
     )
 })
+
+ElementAnchor.displayName = 'ElementAnchor'

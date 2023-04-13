@@ -1,9 +1,9 @@
 import { unreachable } from '@masknet/kit'
+import { StorageState } from '@masknet/web3-state'
 import { StorageProviderType } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
-import { StorageState } from '@masknet/web3-state'
-import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
-import { KVStorage, NextIDStorage, StringStorage } from '@masknet/web3-providers'
+import { KVStorage, NextIDStorage } from '@masknet/web3-providers'
+import { SharedContextSettings } from '../../settings/index.js'
 
 function createStorage(
     providerType: StorageProviderType,
@@ -28,9 +28,7 @@ function createStorage(
                 SharedContextSettings.value.signWithPersona,
             )
         case StorageProviderType.String:
-            return new StringStorage(options.namespace, options.address || '', () =>
-                Web3StateSettings.value.Connection?.getConnection?.(),
-            )
+            throw new Error('Not supported.')
         default:
             unreachable(providerType)
     }

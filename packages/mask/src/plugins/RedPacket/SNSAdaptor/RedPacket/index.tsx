@@ -1,6 +1,10 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
 import { Card, Typography, Box } from '@mui/material'
+import { Stack } from '@mui/system'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
+import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useTransactionConfirmDialog } from '../context/TokenTransactionConfirmDialogContext.js'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
@@ -15,10 +19,6 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
-import { Stack } from '@mui/system'
 
 export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {

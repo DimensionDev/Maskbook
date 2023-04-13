@@ -305,10 +305,14 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     /** Might be the format `TheName #42` */
     name: string
+    tokenId?: string
     symbol?: string
     description?: string
-    /** preview image url */
+    /** image url */
     imageURL?: string
+    previewImageURL?: string
+    /** Useful for progress loading */
+    blurhash?: string
     /** source media url */
     mediaURL?: string
     /** source media type */
@@ -336,6 +340,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     slug: string
     symbol?: string
     description?: string
+    /** some providers define id, while others don't. For those don't, we will fallback to contract address */
     id?: string
     address?: string
     schema?: SchemaType
@@ -346,6 +351,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     ownersTotal?: number
     /** verified by provider */
     verified?: boolean
+    verifiedBy?: string[]
     /** unix timestamp */
     createdAt?: number
     /** source type */
@@ -1075,6 +1081,7 @@ export interface HubOptions<ChainId, Indicator = PageIndicator> {
     size?: number
     /** The page index. */
     indicator?: Indicator
+    allChains?: boolean
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
@@ -1226,6 +1233,8 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
+    /** Get collection verified-by by provider-defined id. */
+    getNonFungibleCollectionVerifiedBy?: (id: string) => Promise<string[]>
     getNonFungibleRarity?: (
         address: string,
         tokenId: string,
@@ -1526,8 +1535,7 @@ export interface ConnectionState<
         TransactionDetailed,
         TransactionSignature,
         Web3,
-        Web3Provider,
-        Web3ConnectionOptions
+        Web3Provider
     >,
 > {
     /** Get web3 SDK */

@@ -1,6 +1,14 @@
 import { first, identity, pickBy } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
-import { AddressType, ChainId, ProviderType, type SchemaType, type TransactionReceipt } from '@masknet/web3-shared-flow'
+import {
+    AddressType,
+    ChainId,
+    ProviderType,
+    type SchemaType,
+    type TransactionReceipt,
+    type Web3Connection,
+    type Web3ConnectionOptions,
+} from '@masknet/web3-shared-flow'
 import type {
     FungibleToken,
     NonFungibleToken,
@@ -12,10 +20,9 @@ import type {
 import type { Plugin } from '@masknet/plugin-infra'
 import { type Account, type PartialRequired, toHex } from '@masknet/shared-base'
 import { FlowProviders, FlowWeb3 } from '@masknet/web3-providers'
-import type { FlowConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
-class Connection implements FlowConnection {
+class Connection implements Web3Connection {
     constructor(
         private chainId: ChainId,
         private account: string,
@@ -24,9 +31,9 @@ class Connection implements FlowConnection {
     ) {}
 
     private getOptions(
-        initial?: FlowConnectionOptions,
-        overrides?: Partial<FlowConnectionOptions>,
-    ): PartialRequired<FlowConnectionOptions, 'account' | 'chainId' | 'providerType'> {
+        initial?: Web3ConnectionOptions,
+        overrides?: Partial<Web3ConnectionOptions>,
+    ): PartialRequired<Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
         return {
             account: this.account,
             chainId: this.chainId,
@@ -36,20 +43,20 @@ class Connection implements FlowConnection {
         }
     }
 
-    private _getWeb3Provider(initial?: FlowConnectionOptions) {
+    private _getWeb3Provider(initial?: Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return FlowProviders[options.providerType]
     }
 
-    getWeb3(initial?: FlowConnectionOptions) {
+    getWeb3(initial?: Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this._getWeb3Provider(options).createWeb3(options)
     }
-    getWeb3Provider(initial?: FlowConnectionOptions) {
+    getWeb3Provider(initial?: Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this._getWeb3Provider(options).createWeb3Provider(options)
     }
-    async connect(initial?: FlowConnectionOptions): Promise<Account<ChainId>> {
+    async connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>> {
         const options = this.getOptions(initial)
         return {
             account: '',
@@ -57,38 +64,38 @@ class Connection implements FlowConnection {
             ...(await Web3StateSettings.value.Provider?.connect(options.providerType, options.chainId)),
         }
     }
-    async disconnect(initial?: FlowConnectionOptions): Promise<void> {
+    async disconnect(initial?: Web3ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
         await Web3StateSettings.value.Provider?.disconnect(options.providerType)
     }
-    getGasPrice(initial?: FlowConnectionOptions): Promise<string> {
+    getGasPrice(initial?: Web3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getAddressType() {
         return Promise.resolve(AddressType.Default)
     }
-    getSchemaType(address: string, initial?: FlowConnectionOptions): Promise<SchemaType> {
+    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
         address: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    async getBlock(no: number, initial?: FlowConnectionOptions): Promise<BlockObject | null> {
+    async getBlock(no: number, initial?: Web3ConnectionOptions): Promise<BlockObject | null> {
         const options = this.getOptions(initial)
         return FlowWeb3.getBlock(options.chainId, no)
     }
-    async getBlockTimestamp(initial?: FlowConnectionOptions): Promise<number> {
+    async getBlockTimestamp(initial?: Web3ConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
         return FlowWeb3.getBlockTimestamp(options.chainId)
     }
@@ -96,7 +103,7 @@ class Connection implements FlowConnection {
         address: string,
         recipient: string,
         amount: string,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -105,7 +112,7 @@ class Connection implements FlowConnection {
         recipient: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -114,7 +121,7 @@ class Connection implements FlowConnection {
         recipient: string,
         approved: boolean,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -123,7 +130,7 @@ class Connection implements FlowConnection {
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -133,18 +140,18 @@ class Connection implements FlowConnection {
         recipient: string,
         amount: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNativeToken(initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return FlowWeb3.getNativeToken(options.chainId)
     }
-    getNativeTokenBalance(initial?: FlowConnectionOptions): Promise<string> {
+    getNativeTokenBalance(initial?: Web3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: FlowConnectionOptions): Promise<string> {
+    getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         return FlowWeb3.getFungibleTokenBalance(options.chainId, address, options.account, schema)
     }
@@ -152,26 +159,26 @@ class Connection implements FlowConnection {
         address: string,
         tokenId?: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<Record<string, string>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<Record<string, string>> {
         throw new Error('Method not implemented.')
     }
-    getCode(address: string, initial?: FlowConnectionOptions): Promise<string> {
+    getCode(address: string, initial?: Web3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getFungibleToken(address: string, initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    getFungibleToken(address: string, initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return FlowWeb3.getFungibleToken(options.chainId, address)
     }
@@ -179,7 +186,7 @@ class Connection implements FlowConnection {
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
@@ -187,7 +194,7 @@ class Connection implements FlowConnection {
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -196,7 +203,7 @@ class Connection implements FlowConnection {
         tokenId: string,
         owner: string,
         schema?: SchemaType | undefined,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
@@ -204,49 +211,49 @@ class Connection implements FlowConnection {
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
 
-    async getAccount(initial?: FlowConnectionOptions): Promise<string> {
+    async getAccount(initial?: Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
         return web3.currentUser().addr ?? ''
     }
-    async getChainId(initial?: FlowConnectionOptions): Promise<ChainId> {
+    async getChainId(initial?: Web3ConnectionOptions): Promise<ChainId> {
         const options = this.getOptions(initial)
         return options.chainId
     }
-    async getBlockNumber(initial?: FlowConnectionOptions): Promise<number> {
+    async getBlockNumber(initial?: Web3ConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
         return FlowWeb3.getBlockNumber(options.chainId)
     }
-    async getBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {
+    async getBalance(address: string, initial?: Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         return FlowWeb3.getBalance(options.chainId, address)
     }
-    async getTransaction(id: string, initial?: FlowConnectionOptions) {
+    async getTransaction(id: string, initial?: Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransaction(options.chainId, id)
     }
-    async getTransactionReceipt(id: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt | null> {
+    async getTransactionReceipt(id: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt | null> {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransactionReceipt(options.chainId, id)
     }
-    async getTransactionStatus(id: string, initial?: FlowConnectionOptions): Promise<TransactionStatusType> {
+    async getTransactionStatus(id: string, initial?: Web3ConnectionOptions): Promise<TransactionStatusType> {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransactionStatus(options.chainId, id)
     }
-    async getTransactionNonce(address: string, initial?: FlowConnectionOptions): Promise<number> {
+    async getTransactionNonce(address: string, initial?: Web3ConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransactionNonce(options.chainId, address)
     }
-    async switchChain(chainId: ChainId, initial?: FlowConnectionOptions): Promise<void> {
+    async switchChain(chainId: ChainId, initial?: Web3ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
         await FlowProviders[options.providerType].switchChain(chainId)
     }
-    async signMessage(type: string, message: string, initial?: FlowConnectionOptions) {
+    async signMessage(type: string, message: string, initial?: Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
         const data = new TextEncoder().encode(message)
@@ -258,7 +265,7 @@ class Connection implements FlowConnection {
         type: string,
         message: string,
         signature: string,
-        initial?: FlowConnectionOptions,
+        initial?: Web3ConnectionOptions,
     ): Promise<boolean> {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
@@ -271,33 +278,33 @@ class Connection implements FlowConnection {
             },
         ])
     }
-    async callTransaction(query: QueryOptions, initial?: FlowConnectionOptions) {
+    async callTransaction(query: QueryOptions, initial?: Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return FlowWeb3.callTransaction(options.chainId, query)
     }
-    async sendTransaction(mutation: MutateOptions, initial?: FlowConnectionOptions): Promise<string> {
+    async sendTransaction(mutation: MutateOptions, initial?: Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
         const id = await web3.mutate(mutation)
         await web3.tx(id).onceSealed()
         return id
     }
-    signTransaction(mutation: MutateOptions, initial?: FlowConnectionOptions): Promise<never> {
+    signTransaction(mutation: MutateOptions, initial?: Web3ConnectionOptions): Promise<never> {
         throw new Error('Method not implemented.')
     }
-    signTransactions(mutations: MutateOptions[], initial?: FlowConnectionOptions): Promise<never> {
+    signTransactions(mutations: MutateOptions[], initial?: Web3ConnectionOptions): Promise<never> {
         throw new Error('Method not implemented.')
     }
-    sendSignedTransaction(signature: never, initial?: FlowConnectionOptions): Promise<string> {
+    sendSignedTransaction(signature: never, initial?: Web3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    confirmTransaction(hash: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt> {
+    confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
-    replaceTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
+    replaceTransaction(hash: string, config: MutateOptions, initial?: Web3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
+    cancelTransaction(hash: string, config: MutateOptions, initial?: Web3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

@@ -144,6 +144,8 @@ export namespace NonFungibleTokenAPI {
             account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
+        /** Get collection verified-by by provider-defined id. */
+        getCollectionVerifiedBy?: (id: string) => Promise<string[]>
 
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>

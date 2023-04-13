@@ -13,8 +13,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         position: 'absolute',
-        top: theme.spacing(1.5),
-        right: theme.spacing(1.5),
+        top: theme.spacing(0.5),
+        left: theme.spacing(0.5),
     },
 }))
 
@@ -42,7 +42,7 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
                 src={url}
                 fallback={fallbackImage}
             />
-            <div className={classes.icon}>{icon}</div>
+            {icon ? <div className={classes.icon}>{icon}</div> : null}
         </div>
     )
 }

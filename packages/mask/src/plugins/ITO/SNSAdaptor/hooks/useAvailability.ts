@@ -2,15 +2,10 @@ import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { useITOConstants } from '@masknet/web3-shared-evm'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { useITOConstants, type Web3ConnectionOptions } from '@masknet/web3-shared-evm'
 import { checkAvailability } from '../utils/checkAvailability.js'
 
-export function useAvailability(
-    id: string,
-    contractAddress: string,
-    options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
-) {
+export function useAvailability(id: string, contractAddress: string, options?: Web3ConnectionOptions) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         account: options?.account,
         chainId: options?.chainId,

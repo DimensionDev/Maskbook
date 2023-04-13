@@ -33,6 +33,7 @@ export function createFungibleToken<ChainId, SchemaType>(
 export function createNonFungibleTokenMetadata<ChainId>(
     chainId: ChainId,
     name: string,
+    tokenId: string,
     symbol: string,
     description?: string,
     mediaType?: string,
@@ -42,6 +43,7 @@ export function createNonFungibleTokenMetadata<ChainId>(
     return {
         chainId,
         name,
+        tokenId,
         symbol,
         description,
         mediaURL,
@@ -66,6 +68,7 @@ export function createNonFungibleTokenContract<ChainId, SchemaType>(
 }
 export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     chainId: ChainId,
+    address: string,
     name: string,
     slug: string,
     description?: string,
@@ -74,6 +77,7 @@ export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     createdAt?: number,
 ): NonFungibleCollection<ChainId, SchemaType> {
     return {
+        id: address,
         chainId,
         name,
         slug,

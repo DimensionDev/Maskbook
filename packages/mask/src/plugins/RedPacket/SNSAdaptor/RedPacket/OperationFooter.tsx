@@ -5,18 +5,13 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Box, keyframes, useTheme } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
-import { ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const useStyles = makeStyles()((theme) => {
-    const spinningAnimationKeyFrames = keyframes`
-to {
-  transform: rotate(360deg)
-}`
     return {
         footer: {
             width: '100%',
@@ -35,7 +30,7 @@ to {
 })
 
 interface OperationFooterProps {
-    chainId?: Web3Helper.ChainIdAll
+    chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
     isClaiming: boolean
