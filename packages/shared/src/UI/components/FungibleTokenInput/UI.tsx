@@ -107,6 +107,9 @@ const useStyles = makeStyles()((theme) => ({
     arrowIcon: {
         color: `${theme.palette.maskColor.second}!important`,
     },
+    chipLabel: {
+        maxWidth: 150,
+    },
 }))
 
 export interface FungibleTokenInputUIProps extends InputBaseProps {
@@ -174,6 +177,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             size="small"
                                             onClick={onSelectToken}
                                             className={classes.chip}
+                                            classes={{ label: classes.chipLabel }}
                                             icon={
                                                 <TokenIcon
                                                     className={classes.tokenIcon}
