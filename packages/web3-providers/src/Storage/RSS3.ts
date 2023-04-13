@@ -1,7 +1,6 @@
 import LRU from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type { Web3Connection } from '@masknet/web3-shared-evm'
 import { RSS3API } from '../RSS3/index.js'
 
 const caches = new Map<string, LRU<string, unknown>>()
@@ -10,10 +9,7 @@ export class RSS3Storage implements Storage {
     private RSS3 = new RSS3API()
     private cache: LRU<string, unknown> | undefined
 
-    constructor(
-        private address: string,
-        private getConnection?: () => Web3Helper.Web3Connection<NetworkPluginID> | undefined,
-    ) {
+    constructor(private address: string, private getConnection?: () => Web3Connection | undefined) {
         const cache = caches.get(address)
         if (cache) {
             this.cache = cache

@@ -1,10 +1,8 @@
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, Web3Connection } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { Availability } from '../../types.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 const interFaceV1 = new Interface(ITO_ABI)
 const interFaceV2 = new Interface(ITO2_ABI)
@@ -15,7 +13,7 @@ export async function checkAvailability(
     from: string,
     to: string,
     chainId: ChainId,
-    connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
+    connection: Web3Connection,
     isV1 = false,
 ) {
     const callData = (isV1 ? interFaceV1 : interFaceV2).encodeFunctionData('check_availability', [pid])
