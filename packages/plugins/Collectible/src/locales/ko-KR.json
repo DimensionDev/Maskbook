@@ -54,8 +54,6 @@
     "plugin_collectible_not_been_reviewed_by_opensea": "해당 아이템은 OpenSea에게 리뷰하지 않습니다.",
     "plugin_collectible_reviewed_tips": "주의: 블록체인에서 임의\n                        이름으로 디지털 아이템을 만드는 것을 누구나 할 수 있습니다(기존 아이템의 가짜 버전도 포함됨). 해당 아이템과 상호작용할 때 주의하시고 사전 조사\n                        많이 하셔야 합니다.",
     "plugin_collectible_total": "전체",
-    "plugin_collectible_subtotal": "소계",
-    "plugin_collectible_item": "아이템",
     "plugin_collectible_refresh": "새로고침",
     "plugin_collectible_failed_load": "{{source}} 에서 수집품이 로딩될 수 없습니다.",
     "plugin_collectible_approved_tips": "이 박스를 체크하면 해당 아이템은 아직 OpenSea에게 리뷰되거나 \n                                                인증되지 않는 것을 인정합니다.",
