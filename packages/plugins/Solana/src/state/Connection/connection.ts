@@ -116,12 +116,12 @@ class Connection implements Web3Connection {
     ): Promise<string> {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('No payer provides.')
-        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
 
         const payerPubkey = new PublicKey(options.account)
         const recipientPubkey = new PublicKey(recipient)
         const mintPubkey = new PublicKey(address)
         const signTransaction = this.signTransaction.bind(this)
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
         const formatTokenAccount = await getOrCreateAssociatedTokenAccount(
             connection,
             payerPubkey,
