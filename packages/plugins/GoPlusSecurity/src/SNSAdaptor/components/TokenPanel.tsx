@@ -37,7 +37,7 @@ const DEFAULT_PLACEHOLDER = '--'
 
 interface TokenPanelProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
-    tokenMarketCap?: string
+    tokenMarketCap?: number
 }
 
 export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {

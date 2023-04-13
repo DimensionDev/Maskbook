@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { useTheme } from '@mui/system'
 import { TokenIcon } from '@masknet/shared'
-import type { SecurityAPI, TrendingAPI } from '@masknet/web3-providers/types'
+import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, type FungibleToken } from '@masknet/web3-shared-base'
@@ -19,7 +19,7 @@ interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
     tokenPrice?: number
-    tokenMarketCap?: TrendingAPI.MarketInfo
+    tokenMarketCap?: number
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,7 +63,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const t = useI18N()
     const theme = useTheme()
 
-    const price = tokenMarketCap?.price ?? tokenPrice
+    const price = tokenMarketCap ?? tokenPrice
 
     const [isCollapse, setCollapse] = useState(false)
     const {
@@ -169,7 +169,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Collapse in={!isCollapse}>
-                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap?.market_cap} />
+                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap} />
                 </Collapse>
             </Stack>
             <Stack spacing={1.5} flex={1}>
