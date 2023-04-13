@@ -2,19 +2,10 @@ import { useAsyncRetry } from 'react-use'
 import { isUndefined } from 'lodash-es'
 import type { SourceType } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../messages.js'
 import type { Currency } from '../types/index.js'
-
-interface Options {
-    chainId: ChainId
-    coinId?: string
-    currency?: Currency
-    days?: TrendingAPI.Days
-    dataProvider?: SourceType
-}
 
 export function usePriceStats({
     chainId: expectedChainId,
@@ -22,8 +13,14 @@ export function usePriceStats({
     currency,
     days = TrendingAPI.Days.MAX,
     dataProvider,
-}: Options) {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+}: {
+    chainId: Web3Helper.ChainIdAll
+    coinId?: string
+    currency?: Currency
+    days?: TrendingAPI.Days
+    dataProvider?: SourceType
+}) {
+    const { chainId } = useChainContext({
         chainId: expectedChainId,
     })
     return useAsyncRetry(async () => {

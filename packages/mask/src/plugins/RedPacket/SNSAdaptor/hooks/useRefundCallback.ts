@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
+import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export function useRefundCallback(version: number, from: string, id?: string, expectedChainId?: ChainId) {
