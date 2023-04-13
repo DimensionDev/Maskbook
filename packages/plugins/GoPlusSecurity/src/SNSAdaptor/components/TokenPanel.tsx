@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link, Stack, Tooltip, Typography } from '@mui/material'
+import { Link, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
-import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
@@ -27,10 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
     },
-    tooltip: {
-        color: theme.palette.text.buttonText,
-        fontSize: 12,
-    },
 }))
 
 const DEFAULT_PLACEHOLDER = '--'
@@ -44,22 +40,6 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
     const t = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
-
-    const totalSupply = usePortalShadowRoot((container) => {
-        const supply = tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER
-        return (
-            <Tooltip
-                PopperProps={{ container }}
-                arrow
-                title={
-                    <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
-                        {supply}
-                    </Typography>
-                }>
-                <Typography className={classes.cardValue}>{supply}</Typography>
-            </Tooltip>
-        )
-    })
 
     return (
         <Stack className={classes.card} spacing={2}>
@@ -135,7 +115,9 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
-                    <Typography className={classes.cardValue}>{totalSupply}</Typography>
+                    <Typography className={classes.cardValue}>
+                        {tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER}
+                    </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
