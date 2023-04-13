@@ -50,6 +50,12 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         color: theme.palette.maskColor.second,
     },
+    nameText: {
+        maxWidth: 400,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
     symbol: {
         lineHeight: '20px',
         fontSize: 16,
@@ -210,7 +216,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         <Typography className={classes.primary} color="textPrimary" component="span">
                             <span className={classes.symbol}>{symbol}</span>
                             <span className={`${classes.name} dashboard token-list-symbol`}>
-                                {name}
+                                <span className={classes.nameText}>{name}</span>
                                 <Link
                                     onClick={(event) => event.stopPropagation()}
                                     href={explorerLink}
