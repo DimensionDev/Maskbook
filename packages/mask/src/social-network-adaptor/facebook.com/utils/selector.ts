@@ -115,11 +115,11 @@ export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
 
 // for getting activated tab style
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] [aria-selected="true"]')
+    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] a[aria-selected="true"]')
 
 // for inserting web3 tab
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] a:nth-child(7)')
+    querySelector<E>('[data-pagelet="ProfileTabs"] [role="tablist"] > div > div > :last-child')
 
 // for getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>

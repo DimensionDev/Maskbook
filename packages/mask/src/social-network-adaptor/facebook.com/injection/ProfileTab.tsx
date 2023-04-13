@@ -25,7 +25,7 @@ function getStyleProps() {
         font: spanStyle.font,
         fontSize: spanStyle.fontSize,
         padding: divStyle.paddingLeft,
-        height: divStyle.height,
+        height: divStyle.height ?? '60px',
         hover: 'var(--hover-overlay)',
         line: selectedSpanStyle.color,
     }
