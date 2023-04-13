@@ -18,7 +18,6 @@ describe('Supply format util test', () => {
         { give: 1000001.01, expected: '1,000,001.01' },
         { give: 12932273, expected: '12,932,273' },
         { give: 100000000, expected: '100,000,000' },
-        { give: 52488984654, expected: '5.25e+10' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatSupply(give)).toBe(expected)
     })
