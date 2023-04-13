@@ -30,63 +30,9 @@ import type * as Solana from '@masknet/web3-shared-solana'
 
 export declare namespace Web3Helper {
     export type Definition = {
-        [NetworkPluginID.PLUGIN_EVM]: {
-            ChainId: EVM.ChainId
-            AddressType: EVM.AddressType
-            SchemaType: EVM.SchemaType
-            ProviderType: EVM.ProviderType
-            NetworkType: EVM.NetworkType
-            Signature: EVM.Signature
-            GasOption: EVM.GasOption
-            Block: EVM.Block
-            Operation: EVM.UserOperation
-            Transaction: EVM.Transaction
-            TransactionReceipt: EVM.TransactionReceipt
-            TransactionDetailed: EVM.TransactionDetailed
-            TransactionSignature: EVM.TransactionSignature
-            TransactionParameter: EVM.TransactionParameter
-            UserOperation: EVM.UserOperation
-            Web3Provider: EVM.Web3Provider
-            Web3: EVM.Web3
-        }
-        [NetworkPluginID.PLUGIN_FLOW]: {
-            ChainId: Flow.ChainId
-            AddressType: Flow.AddressType
-            SchemaType: Flow.SchemaType
-            ProviderType: Flow.ProviderType
-            NetworkType: Flow.NetworkType
-            Signature: Flow.Signature
-            GasOption: Flow.GasOption
-            Block: Flow.Block
-            Operation: Flow.Operation
-            Transaction: Flow.Transaction
-            TransactionReceipt: Flow.TransactionReceipt
-            TransactionDetailed: Flow.TransactionDetailed
-            TransactionSignature: Flow.TransactionSignature
-            TransactionParameter: Flow.TransactionParameter
-            UserOperation: Flow.Operation
-            Web3Provider: Flow.Web3Provider
-            Web3: Flow.Web3
-        }
-        [NetworkPluginID.PLUGIN_SOLANA]: {
-            ChainId: Solana.ChainId
-            AddressType: Solana.AddressType
-            SchemaType: Solana.SchemaType
-            ProviderType: Solana.ProviderType
-            NetworkType: Solana.NetworkType
-            Signature: Solana.Signature
-            GasOption: Solana.GasOption
-            Block: Solana.Block
-            Operation: Solana.Operation
-            Transaction: Solana.Transaction
-            TransactionReceipt: Solana.TransactionReceipt
-            TransactionDetailed: Solana.TransactionDetailed
-            TransactionSignature: Solana.TransactionSignature
-            TransactionParameter: Solana.TransactionParameter
-            UserOperation: Solana.Operation
-            Web3Provider: Solana.Web3Provider
-            Web3: Solana.Web3
-        }
+        [NetworkPluginID.PLUGIN_EVM]: EVM.Web3Definition
+        [NetworkPluginID.PLUGIN_FLOW]: Flow.Web3Definition
+        [NetworkPluginID.PLUGIN_SOLANA]: Solana.Web3Definition
     }
 
     export type Web3ProviderDescriptor<T extends NetworkPluginID = never> = T extends never
@@ -103,81 +49,26 @@ export declare namespace Web3Helper {
         ? never
         : Definition[T]['Web3Provider']
 
-    export type Web3ProviderState<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : ProviderState<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
-
     export type Web3ConnectionState<T extends NetworkPluginID = never> = T extends never
         ? never
-        : ConnectionState<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['Signature'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
+        : Definition[T]['Web3Connection']
 
     export type Web3ConnectionOptions<T extends NetworkPluginID = never> = T extends never
         ? never
-        : ConnectionOptions<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['Transaction']>
+        : Definition[T]['Web3ConnectionOptions']
 
     export type Web3Connection<T extends NetworkPluginID = never> = T extends never
         ? never
-        : Connection<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['Signature'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
+        : Definition[T]['Web3Connection']
     export type Web3HubOptions<T extends NetworkPluginID = never, Indicator = PageIndicator> = T extends never
         ? never
         : HubOptions<Definition[T]['ChainId'], Indicator>
 
-    export type Web3Hub<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
+    export type Web3Hub<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3Hub']
 
-    export type Web3State<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Web3StateShared<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['NetworkType'],
-              Definition[T]['Signature'],
-              Definition[T]['GasOption'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['TransactionParameter'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
+    export type Web3State<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3State']
 
-    export type Web3UI<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
+    export type Web3UI<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3UI']
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
     export type AddressTypeAll = Definition[NetworkPluginID]['AddressType']
@@ -386,58 +277,19 @@ export declare namespace Web3Helper {
     export type Web3StateScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3StateAll
-        : Web3StateShared<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['NetworkType'],
-              Definition[T]['Signature'],
-              Definition[T]['GasOption'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['TransactionParameter'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
+    > = S extends 'all' ? Web3StateAll : Definition[T]['Web3State']
     export type Web3ConnectionOptionsScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3ConnectionOptionsAll
-        : ConnectionOptions<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['Transaction']>
+    > = S extends 'all' ? Web3ConnectionOptionsAll : Definition[T]['Web3ConnectionOptions']
     export type Web3ConnectionScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3ConnectionAll
-        : Connection<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['Signature'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
+    > = S extends 'all' ? Web3ConnectionAll : Definition[T]['Web3Connection']
     export type Web3UIScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3UIAll
-        : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
+    > = S extends 'all' ? Web3UIAll : Definition[T]['Web3UI']
     export type Web3HubOptionsScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
@@ -446,7 +298,5 @@ export declare namespace Web3Helper {
     export type Web3HubScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3HubAll
-        : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
+    > = S extends 'all' ? Web3HubAll : Definition[T]['Web3Hub']
 }

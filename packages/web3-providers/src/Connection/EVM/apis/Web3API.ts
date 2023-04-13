@@ -45,6 +45,7 @@ import {
     isSameAddress,
     resolveIPFS_URL,
     resolveCrossOriginURL,
+    type Web3State,
 } from '@masknet/web3-shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
