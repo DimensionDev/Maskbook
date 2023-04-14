@@ -146,12 +146,6 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
             const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
 
-            // the currently selected chain id
-            if (a.chainId !== z.chainId) {
-                if (a.chainId === chainId) return -1
-                if (z.chainId === chainId) return 1
-            }
-
             // native token
             if (isNativeTokenA) return -1
             if (isNativeTokenZ) return 1
@@ -159,6 +153,9 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             // mask token with position value
             if (isMaskTokenA) return -1
             if (isMaskTokenZ) return 1
+
+            if (z.rank && (!a.rank || a.rank - z.rank > 0)) return 1
+            if (a.rank && (!z.rank || z.rank - a.rank > 0)) return -1
 
             // alphabet
             if (a.name !== z.name) return a.name < z.name ? -1 : 1
@@ -217,6 +214,9 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
                 // mask token with position value
                 if (isMaskTokenA) return -1
                 if (isMaskTokenZ) return 1
+
+                if (z.rank && (!a.rank || a.rank - z.rank > 0)) return 1
+                if (a.rank && (!z.rank || z.rank - a.rank > 0)) return -1
 
                 // alphabet
                 if (a.name !== z.name) return a.name < z.name ? -1 : 1
