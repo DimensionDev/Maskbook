@@ -605,7 +605,7 @@ export interface Result<ChainId> {
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
     domain?: string
-    bindingProofList?: BindingProof[]
+    bindingProofs?: BindingProof[]
     address: string
 }
 

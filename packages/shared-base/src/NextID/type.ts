@@ -68,7 +68,6 @@ export interface BindingProof {
     identity: string
     name: string
     created_at: string
-    invalid_reason: string
     latest_checked_at?: string
     is_valid: boolean
     last_checked_at: string
@@ -84,6 +83,7 @@ export interface BindingProof {
     isPublic?: 0 | 1
     // Some other related bindings, like some other ens
     relatedList?: BindingProof[]
+    link?: string
 }
 
 interface Pagination {

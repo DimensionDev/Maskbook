@@ -199,16 +199,16 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ]
         }
 
-        const bindingProofList = await this.NextIDProof.queryProfilesByRelationService(address)
+        const bindingProofs = await this.NextIDProof.queryProfilesByAddress(address)
 
-        if (bindingProofList?.length > 0) {
+        if (bindingProofs?.length > 0) {
             return [
                 {
                     type: SearchResultType.EOA,
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                     chainId: chainId as ChainId,
                     keyword: address,
-                    bindingProofList,
+                    bindingProofs,
                     address,
                 },
             ]

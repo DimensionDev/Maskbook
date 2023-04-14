@@ -12,6 +12,7 @@ import {
     type NextIDPayload,
     type NextIDPersonaBindings,
     type NextIDEnsRecord,
+    createBindingProofFromProfileQuery,
 } from '@masknet/shared-base'
 import {
     PROOF_BASE_URL_DEV,
@@ -200,7 +201,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByRelationService(address: string) {
+    async queryProfilesByAddress(address: string) {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
@@ -395,37 +396,20 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 }
 
-function createBindingProofFromProfileQuery(
-    platform: NextIDPlatform,
-    source: NextIDPlatform,
-    identity: string,
-    name: string,
-    relatedList?: BindingProof[],
-): BindingProof {
-    return {
-        platform,
-        source,
-        identity,
-        name,
-        created_at: '',
-        invalid_reason: '',
-        last_checked_at: '',
-        is_valid: true,
-        relatedList,
-    }
-}
-
 // Group all ens
 function groupEnsBinding(ensList: NextIDEnsRecord[]) {
     const first = ensList[0]
     return createBindingProofFromProfileQuery(
         NextIDPlatform.ENS,
+        first.id,
+        first.id,
+        undefined,
         NextIDPlatform.ENS,
-        first.id,
-        first.id,
         ensList
             .slice(1)
-            .map((x) => createBindingProofFromProfileQuery(NextIDPlatform.NextID, NextIDPlatform.ENS, x.id, x.id)),
+            .map((x) =>
+                createBindingProofFromProfileQuery(NextIDPlatform.NextID, x.id, x.id, undefined, NextIDPlatform.ENS),
+            ),
     )
 }
 
@@ -450,9 +434,10 @@ function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[
     const bindings = neighborList.map(({ identity }) =>
         createBindingProofFromProfileQuery(
             identity.platform,
-            identity.platform,
             identity.identity,
             identity.displayName,
+            undefined,
+            identity.platform,
         ),
     )
 
