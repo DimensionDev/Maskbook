@@ -152,7 +152,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                                     <Typography fontWeight={700} fontSize={16} mx="7px">
                                         {uiTokenId}
                                     </Typography>
-                                    {nonFungibleToken.collection?.verified ? <Icons.Verified size={21.43} /> : null}
+                                    {nonFungibleToken.collection?.verified ? <Icons.Verification size={21.43} /> : null}
                                 </div>
                             </>
                         ) : null}

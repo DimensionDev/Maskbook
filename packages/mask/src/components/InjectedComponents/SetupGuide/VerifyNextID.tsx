@@ -126,7 +126,7 @@ export const VerifyNextID = ({
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
                                     <img src={avatar} className={cx(classes.avatar, 'connected')} />
-                                    <Icons.Verified className={classes.verified} />
+                                    <Icons.Verification className={classes.verified} />
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}

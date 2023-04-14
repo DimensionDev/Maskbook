@@ -92,7 +92,7 @@ export function FigureCard(props: FigureCardProps) {
                     <Typography className={classes.nameLg}>
                         {asset.collection?.name}
                         {asset.collection?.verified ? (
-                            <Icons.Verified style={{ transform: 'translate(4px, 5px)' }} />
+                            <Icons.Verification style={{ transform: 'translate(4px, 5px)' }} />
                         ) : null}
                     </Typography>
                 </div>
