@@ -27,16 +27,16 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
             let remover = noop
             const remove = () => remover()
+
             const check = () => {
-                ifUsingMask(
-                    ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(
-                        null,
-                    ),
-                ).then(() => {
-                    const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal })
-                    root.render(<Icon size={size} />)
-                    remover = root.destroy
-                }, remove)
+                ifUsingMask(ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector()).unwrapOr(null)).then(
+                    () => {
+                        const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal })
+                        root.render(<Icon size={size} />)
+                        remover = root.destroy
+                    },
+                    remove,
+                )
             }
             check()
             return {

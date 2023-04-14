@@ -162,11 +162,11 @@ export const profileBioSelector = () => querySelector<HTMLDivElement>('[data-tes
 export const personalHomepageSelector = () => querySelector<HTMLDivElement>('[data-testid="UserUrl"]')
 
 export const bioPageUserNickNameSelector = () =>
-    querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
-        .map((x) => x.parentElement?.parentElement?.previousElementSibling)
-        .querySelector<HTMLDivElement>('div[dir]')
-export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
-    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
+    querySelector<HTMLDivElement>('[data-testid="UserName"]').querySelector<HTMLDivElement>('div[dir]')
+export const bioPageUserIDSelector = () =>
+    querySelector<HTMLSpanElement>('[data-testid="UserName"] [tabindex="-1"] span')
+        .evaluate()
+        ?.innerText.replace('@', '')
 export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(
         '[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]',
