@@ -35,7 +35,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
                     <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                         <UserAssetsProvider
                             pluginID={socialAccount.pluginID}
-                            userAddress={socialAccount.address}
+                            address={socialAccount.address}
                             userId={identity?.identifier?.userId!}
                             persona={identity?.publicKey!}>
                             <CollectionList socialAccount={socialAccount} />
@@ -102,7 +102,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                                 <UserAssetsProvider
                                     pluginID={socialAccount.pluginID}
-                                    userAddress={socialAccount.address}
+                                    address={socialAccount.address}
                                     userId={identity?.identifier?.userId!}
                                     persona={identity?.publicKey!}>
                                     <CollectionList socialAccount={socialAccount} />
@@ -142,7 +142,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
                             <Box style={{ minHeight: 300 }}>
                                 <Web3ContextProvider value={{ pluginID: result.pluginID }}>
-                                    <UserAssetsProvider pluginID={result.pluginID} userAddress={socialAccount.address}>
+                                    <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>
                                         <CollectionList socialAccount={socialAccount} />
                                     </UserAssetsProvider>
                                 </Web3ContextProvider>

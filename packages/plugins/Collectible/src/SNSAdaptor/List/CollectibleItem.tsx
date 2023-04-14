@@ -1,7 +1,9 @@
-import { forwardRef, type HTMLProps, useRef, useLayoutEffect, useState, useCallback, memo } from 'react'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { isENSContractAddress } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
+import { forwardRef, memo, useCallback, useLayoutEffect, useMemo, useRef, useState, type HTMLProps } from 'react'
+import { isLensCollect, isLensFollower } from '../../helpers/index.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -10,34 +12,42 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
+        background: theme.palette.maskColor.bg,
+        borderRadius: 8,
+        overflow: 'hidden',
         zIndex: 0,
+    },
+    fadeIn: {
+        '@keyframes fade-in': {
+            '0%': { opacity: 0 },
+            '100%': { opacity: 1 },
+        },
+        animation: 'fade-in 500ms ease-in-out',
     },
     collectibleCard: {
         width: '100%',
         aspectRatio: '1/1',
     },
     info: {
-        background: theme.palette.maskColor.bg,
-        alignSelf: 'stretch',
-        borderRadius: '0 0 8px 8px',
         padding: theme.spacing('6px', '2px', '6px', '6px'),
+        overflow: 'auto',
+        boxSizing: 'border-box',
+        width: '100%',
     },
     name: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        lineHeight: '16px',
-        minHeight: '16px',
-        textIndent: '8px',
+        lineHeight: theme.spacing(2),
+        minHeight: theme.spacing(2),
         color: theme.palette.maskColor.second,
     },
-    tokenId: {
+    identity: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        lineHeight: '16px',
-        minHeight: '16px',
-        textIndent: '8px',
+        lineHeight: theme.spacing(2),
+        minHeight: theme.spacing(2),
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
@@ -74,6 +84,14 @@ export const CollectibleItem = memo(
             })
         }, [pluginID, asset.chainId, asset.tokenId, asset.address])
 
+        const identity = useMemo(() => {
+            if (!asset.collection) return
+            if (isLensCollect(asset.collection.name) || isLensFollower(asset.collection.name))
+                return asset.collection.name
+            if (isENSContractAddress(asset.address)) return asset.metadata?.name
+            return asset.tokenId ? `#${asset.tokenId}` : ''
+        }, [asset.collection])
+
         return (
             <ShadowRootTooltip
                 title={showTooltip ? name : undefined}
@@ -83,7 +101,7 @@ export const CollectibleItem = memo(
                 PopperProps={{
                     disablePortal: true,
                 }}>
-                <div className={cx(classes.card, className)} {...rest} ref={ref}>
+                <div className={cx(classes.card, className, classes.fadeIn)} {...rest} ref={ref}>
                     <CollectibleCard
                         className={classes.collectibleCard}
                         pluginID={pluginID}
@@ -97,8 +115,8 @@ export const CollectibleItem = memo(
                                 {name}
                             </Typography>
                         )}
-                        <Typography className={classes.tokenId} variant="body2" component="div">
-                            {asset.metadata?.tokenId ? `#${asset.metadata?.tokenId}` : ''}
+                        <Typography className={classes.identity} variant="body2" component="div">
+                            {identity}
                         </Typography>
                     </div>
                 </div>
@@ -119,7 +137,7 @@ export function CollectibleItemSkeleton({ className, omitInfo, omitName, ...rest
     return (
         <div className={cx(classes.card, className)} {...rest}>
             <div className={classes.collectibleCard}>
-                <Skeleton animation="wave" variant="rounded" style={{ borderRadius: 8 }} height="100%" />
+                <Skeleton animation="wave" variant="rectangular" height="100%" />
             </div>
             {omitInfo ? null : (
                 <div className={classes.info}>
@@ -128,7 +146,7 @@ export function CollectibleItemSkeleton({ className, omitInfo, omitName, ...rest
                             <Skeleton animation="wave" variant="text" width="80%" />
                         </Typography>
                     )}
-                    <Typography className={classes.tokenId} variant="body2" component="div">
+                    <Typography className={classes.identity} variant="body2" component="div">
                         <Skeleton animation="wave" variant="text" width={'40%'} />
                     </Typography>
                 </div>

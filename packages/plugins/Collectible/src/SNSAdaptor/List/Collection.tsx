@@ -4,7 +4,7 @@ import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useRef, useState, type FC, type HTMLProps } from 'react'
+import { memo, useEffect, useRef, useState, type FC, type HTMLProps, useLayoutEffect } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
@@ -15,6 +15,8 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         overflow: 'auto',
         cursor: 'pointer',
         container: 'folder',
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 8,
     },
     grid: {
         display: 'grid',
@@ -23,15 +25,11 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         // TODO Unfortunately, we can't use @container query in shadow DOM yet.
         gridGap: theme.spacing(compact ? 0.5 : 1),
         padding: theme.spacing(compact ? 0.5 : 1),
-        backgroundColor: theme.palette.maskColor.bg,
-        borderRadius: 8,
         aspectRatio: '1 / 1',
         cursor: 'pointer',
     },
     info: {
-        background: theme.palette.maskColor.bg,
         alignSelf: 'stretch',
-        borderRadius: '0 0 8px 8px',
         padding: theme.spacing('6px', '2px', '6px', '6px'),
     },
     nameRow: {
@@ -43,18 +41,16 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        lineHeight: '16px',
-        minHeight: '16px',
-        textIndent: '8px',
+        lineHeight: theme.spacing(2),
+        minHeight: theme.spacing(2),
         color: theme.palette.maskColor.second,
     },
     tokenId: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        lineHeight: '16px',
-        minHeight: '16px',
-        textIndent: '8px',
+        lineHeight: theme.spacing(2),
+        minHeight: theme.spacing(2),
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
@@ -78,7 +74,6 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
 
 export interface CollectionProps extends HTMLProps<HTMLDivElement> {
     pluginID: NetworkPluginID
-    owner: string
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
     loading: boolean
@@ -86,7 +81,7 @@ export interface CollectionProps extends HTMLProps<HTMLDivElement> {
     /** set collection expanded */
     expanded?: boolean
     onExpand?(id: string): void
-    onRender?(collection: Web3Helper.NonFungibleCollectionAll): void
+    onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
 }
 
 /**
@@ -96,23 +91,22 @@ export const Collection: FC<CollectionProps> = memo(
     ({
         className,
         collection,
-        owner,
         pluginID,
         loading,
         assets = EMPTY_LIST,
         verifiedBy,
         expanded,
         onExpand,
-        onRender,
+        onInitialRender,
         ...rest
     }) => {
         const t = useI18N()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
 
-        useEffect(() => {
-            onRender?.(collection)
-        }, [onRender, collection])
+        useLayoutEffect(() => {
+            onInitialRender?.(collection)
+        }, [])
 
         if (loading && !assets.length) {
             return <CollectionSkeleton id={collection.id!} count={collection.balance!} expanded={expanded} />
@@ -121,14 +115,14 @@ export const Collection: FC<CollectionProps> = memo(
         const hasExtra = collection.balance! > 4 && !expanded
         const assetsSlice = hasExtra ? assets.slice(0, 3) : assets
 
-        if (assetsSlice.length <= 2 || expanded) {
+        if (collection.balance! <= 2 || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
                     className={className}
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    key={`${collection.id}.${asset.tokenId}`}
+                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
                 />
             ))
             return <>{renderAssets}</>

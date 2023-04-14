@@ -1,2 +1,3 @@
 # Ignores for rg or ag
 patches/
+packages/dashboard/src/assets/images/SetupTutorial.svg

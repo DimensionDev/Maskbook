@@ -1,6 +1,11 @@
 import { type BigNumber } from 'bignumber.js'
 
+// TODO: Contract address will be added in SimpleHash v1 release.
+// TODO: Asking SimpleHash to add schema in SimpleHash v1 release.
 export interface Collection {
+    // TODO: the collection id key name may change in SimpleHash v1 release.
+    id: string
+    chain: string
     banner_image_url: string
     collection_id: number
     description: string
@@ -25,9 +30,11 @@ export interface Collection {
     distinct_owner_count: number
     distinct_nft_count: number
     name: string
-    top_contracts: string[] // ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"]
+    /** e.g ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"] */
+    top_contracts: string[]
     total_quantity: number
-    twitter_username: string // twitter handler
+    /** twitter handler */
+    twitter_username: string
 }
 export interface Asset {
     chain: string // ethereum
@@ -69,28 +76,6 @@ export interface Asset {
         image_small_url: string
         predominant_color: string
     }
-}
-
-// Todo: contract address will be added in SimpleHash v1 release.
-// Todo: Asking SimpleHash to add schema in SimpleHash v1 release.
-export interface Collection {
-    // Todo: the collection id key name may change in SimpleHash v1 release.
-    id: string
-    spam_score?: number
-    name: string
-    image_url: string
-    chain: string
-    distinct_nfts_owned: number // owner balance
-    total_copies_owned: number
-    distinct_owner_count: number
-    distinct_nft_count: number
-    total_quantity: number
-    floor_prices: Array<{
-        marketplace_id: string // opensea
-        marketplace_name: string // Opensea
-        payment_token: PaymentToken
-    }>
-    top_contracts: string[] // ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"]
 }
 
 interface PaymentToken {
