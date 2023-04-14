@@ -266,6 +266,8 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     symbol: string
     decimals: number
     logoURL?: string
+    // Sorted by market cap.
+    rank?: number
 }
 
 export interface FungibleTokenStats {}
