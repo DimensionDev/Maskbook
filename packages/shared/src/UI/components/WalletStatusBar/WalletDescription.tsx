@@ -102,7 +102,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>{name}</span>
-                        {verified ? <Icons.NextIdPersonaVerified size={18} /> : null}
+                        {verified ? <Icons.Verification size={18} /> : null}
                         {onPendingClick ? <Icons.ArrowDrop /> : null}
                     </Typography>
                     <Typography className={classes.address}>
