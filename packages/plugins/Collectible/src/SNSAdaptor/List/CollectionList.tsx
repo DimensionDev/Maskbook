@@ -237,7 +237,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                                 {currentCollectionVerifiedBy.length ? (
                                     <ShadowRootTooltip
                                         title={t.verified_by({ marketplace: currentCollectionVerifiedBy.join(', ') })}>
-                                        <Icons.NextIdPersonaVerified size={16} />
+                                        <Icons.Verification size={16} />
                                     </ShadowRootTooltip>
                                 ) : null}
                             </Box>
@@ -273,7 +273,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                                             owner={account}
                                             pluginID={socialAccount.pluginID}
                                             collection={collection}
-                                            key={collection.id}
+                                            key={`${collection.chainId}.${collection.id}`}
                                             assets={assetsState.assets}
                                             verifiedBy={getVerifiedBy(collection.id!)}
                                             loading={assetsState.loading}

@@ -115,7 +115,7 @@ export function FindUsername({
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
                                     <img src={avatar} className={cx(classes.avatar, connected ? 'connected' : '')} />
-                                    {connected ? <Icons.Verified className={classes.verified} /> : null}
+                                    {connected ? <Icons.Verification className={classes.verified} /> : null}
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}

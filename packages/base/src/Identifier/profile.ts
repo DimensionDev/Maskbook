@@ -18,6 +18,8 @@ export class ProfileIdentifier extends Identifier {
     static of(network: string | undefined | null, userID: string | undefined | null): Option<ProfileIdentifier> {
         if (!userID || !network) return None
         if (network === 'localhost' && userID === '$unknown') return None
+        if (network.includes('/') || userID.includes('/')) return None
+        if (network.includes('\n') || userID.includes('\n')) return None
         return Some(new ProfileIdentifier(network, userID))
     }
 
@@ -25,12 +27,12 @@ export class ProfileIdentifier extends Identifier {
     declare readonly network: string
     declare readonly userId: string
     private constructor(network: string, userID: string) {
+        network = String(network).toLowerCase()
+        userID = String(userID)
+
         if (network === 'localhost' && userID === '$unknown') {
             throw new TypeError('[@masknet/base] Use null instead.')
         }
-
-        network = String(network).toLowerCase()
-        userID = String(userID)
         if (!userID) throw new TypeError('[@masknet/base] userID cannot be empty.')
 
         const networkCache = (id[network] ??= {})
