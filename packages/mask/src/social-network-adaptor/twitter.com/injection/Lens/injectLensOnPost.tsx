@@ -8,7 +8,9 @@ import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
 const selector = () => {
-    return querySelectorAll<HTMLElement>('[data-testid=User-Name] div :has(a[role=link]:not([tabindex]))')
+    return querySelectorAll<HTMLElement>('[data-testid=User-Name] div').filter((node) => {
+        return node.firstElementChild?.matches('a[role=link]:not([tabindex])')
+    })
 }
 
 // structure: <user-name> <user-id> <timestamp>
