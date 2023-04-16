@@ -26,7 +26,6 @@ export class StringStorageAPI implements StringStorageBaseAPI.Provider {
 
     async set<T>(namespace: string, userId: string, address: string, value: T, signature: string): Promise<void> {
         if (!userId || !address || !value || !signature) return
-
         const response = await fetch(`${FIREFLY_API_URL}/set`, {
             method: 'POST',
             headers: {

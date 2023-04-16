@@ -1,6 +1,6 @@
 import { Twitter } from '@masknet/web3-providers'
-import { AvatarType } from '../constant.js'
-import { getAvatarType } from './useAvatarType.js'
+import { getAvatarType } from './AvatarType.js'
+import { AvatarType } from '@masknet/plugin-avatar'
 
 export function getInjectNodeInfo(ele: HTMLElement) {
     const imgEle = ele.querySelector('img')
