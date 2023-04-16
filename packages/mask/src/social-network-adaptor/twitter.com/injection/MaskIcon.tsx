@@ -21,32 +21,26 @@ function Icon(props: { size: number }) {
     )
 }
 function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: AbortSignal) {
-    // TODO: for unknown reason the MutationObserverWatcher doesn't work well
-    // To reproduce, open a profile and switch to another profile.
-    startWatch(
-        new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            let remover = noop
-            const remove = () => remover()
-            const check = () => {
-                ifUsingMask(
-                    ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(
-                        null,
-                    ),
-                ).then(() => {
-                    const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal })
-                    root.render(<Icon size={size} />)
-                    remover = root.destroy
-                }, remove)
-            }
-            check()
-            return {
-                onNodeMutation: check,
-                onTargetChanged: check,
-                onRemove: remove,
-            }
-        }),
-        signal,
-    )
+    const watcher = new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
+        let remover = noop
+        const remove = () => remover()
+        const check = () => {
+            ifUsingMask(
+                ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(null),
+            ).then(() => {
+                const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal })
+                root.render(<Icon size={size} />)
+                remover = root.destroy
+            }, remove)
+        }
+        check()
+        return {
+            onNodeMutation: check,
+            onTargetChanged: check,
+            onRemove: remove,
+        }
+    })
+    startWatch(watcher, signal)
 }
 
 export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {

@@ -44,15 +44,23 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
         .startWatch({ subtree: true, childList: true }, signal)
     return watcher
 }
-export type MissingReportRuleBasic = URL | RegExp
+/**
+ * string will be startsWith match, RegExp will be partial match
+ */
+export type MissingReportRuleBasic = string | RegExp
 export type MissingReportRule = MissingReportRuleBasic | MissingReportRuleBasic[] | (() => boolean | Promise<boolean>)
+
+export interface MissingReportRuleOptions {
+    name: string
+    rule: MissingReportRule
+}
 
 export interface WatchOptions {
     signal: AbortSignal
-    missingReportRule?: [name: string, rule: MissingReportRule]
+    missingReportRule?: MissingReportRuleOptions
 }
 
-const watchers = new Map<MutationObserverWatcher<any>, [name: string, rule: MissingReportRule]>()
+const watchers = new Map<MutationObserverWatcher<any>, MissingReportRuleOptions>()
 if (typeof window === 'object') {
     window.addEventListener('locationchange', () => {
         setTimeout(check, 2000)
@@ -65,7 +73,7 @@ export function configureSelectorMissReporter(newReporter: typeof reporter) {
     reporter = newReporter
 }
 function check() {
-    for (const [watcher, [name, rule]] of watchers) {
+    for (const [watcher, { name, rule }] of watchers) {
         // protected API
         // eslint-disable-next-line @typescript-eslint/dot-notation
         if (watcher['lastKeyList'].length) continue
@@ -88,5 +96,5 @@ function hitBasic(rule: MissingReportRuleBasic) {
     if (rule instanceof RegExp) {
         return rule.test(location.href)
     }
-    return rule.href === location.href
+    return location.href.startsWith(rule)
 }

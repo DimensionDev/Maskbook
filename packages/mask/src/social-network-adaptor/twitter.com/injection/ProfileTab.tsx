@@ -15,6 +15,7 @@ import {
     searchProfileTabSelector,
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
+    isBioPageLike,
 } from '../utils/selector.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
@@ -221,5 +222,5 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
         }
     })
 
-    startWatch(contentWatcher, signal)
+    startWatch(contentWatcher, { signal, missingReportRule: { name: 'ProfileTab', rule: isBioPageLike } })
 }

@@ -19,14 +19,10 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
     const watcher = new MutationObserverWatcher(toolboxInSidebarSelector())
         .addListener('onAdd', updateStyle)
         .addListener('onChange', updateStyle)
-        .startWatch(
-            {
-                childList: true,
-                subtree: true,
-            },
-            signal,
-        )
 
+    startWatch(watcher, {
+        signal,
+    })
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxHintAtTwitter category={category} />,
     )

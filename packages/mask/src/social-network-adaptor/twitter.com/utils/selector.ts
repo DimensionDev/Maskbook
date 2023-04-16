@@ -165,6 +165,13 @@ export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
         .querySelector<HTMLDivElement>('div[dir]')
+
+export function isBioPageLike() {
+    return !(
+        location.pathname.match(/^\/(home|explore|notifications|messages|i\/|settings|compose)/) &&
+        location.pathname.match(/\/(topics|recommended|not_interested|lists)$/)
+    )
+}
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
     selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
 export const floatingBioCardSelector = () =>
