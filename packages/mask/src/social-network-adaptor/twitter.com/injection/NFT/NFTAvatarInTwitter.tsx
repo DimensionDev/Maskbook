@@ -1,10 +1,5 @@
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
-import {
-    searchAvatarMetaSelector,
-    searchAvatarSelector,
-    searchTwitterAvatarNormalSelector,
-    searchTwitterAvatarSelector,
-} from '../../utils/selector.js'
+import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
@@ -33,28 +28,7 @@ import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { getAvatarType, getInjectedDom } from '../../utils/AvatarType.js'
 
-function updateAvatarToSquare() {
-    const dom = searchTwitterAvatarNormalSelector().evaluate()
-    const children = dom?.firstElementChild as HTMLDivElement
-    if (!children) return
-    children.style.clipPath = 'url("#shape-square")'
-    children.style.overflow = 'visible'
-    const parent = dom?.parentElement as HTMLDivElement
-    if (!parent) return
-    parent.style.clipPath = 'url("#shape-square")'
-    parent.style.overflow = 'visible'
-    const next = children.nextSibling as HTMLDivElement
-    if (!next) return
-    next.style.overflow = 'visible'
-
-    const next1 = next.nextSibling as HTMLDivElement
-    if (!next1) return
-    next1.style.overflow = 'visible'
-}
-
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    updateAvatarToSquare()
-
     const watcher = new MutationObserverWatcher(getInjectedDom()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
 
