@@ -87,10 +87,6 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
         const { classes, cx } = useStyles()
         const { Others } = useWeb3State()
 
-        const burn = isSameAddress(transaction.tokens[0]?.to_addr, ZERO_ADDRESS)
-            ? Others?.formatAddress(transaction.tokens[0].contract_address || '', 4)
-            : ''
-
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">
@@ -153,7 +149,9 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                     })}
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
-                    {burn}
+                    {isSameAddress(transaction.tokens[0]?.to_addr, ZERO_ADDRESS)
+                        ? Others?.formatAddress(transaction.tokens[0].contract_address || '', 4)
+                        : ''}
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
