@@ -27,9 +27,7 @@ export const searchProfileActiveTabSelector = () =>
         .querySelector<E>('section main  div[role="tablist"] a[aria-selected="true"]')
 
 export const bioDescriptionSelector = () =>
-    querySelector('#ssrb_root_start')
-        .closest(1)
-        .querySelector<E>('section main header section > div:last-child > :nth-child(3)')
+    querySelector('#ssrb_root_start').closest(1).querySelector<E>('section main header section > div:last-child h1')
 
 export const personalHomepageSelector = () =>
     querySelector('#ssrb_root_start').closest(1).querySelector<E>(' section main header section > div:last-child  a')
