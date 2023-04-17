@@ -70,7 +70,7 @@ export function formatTransactions(
             to: transaction.other_addr,
             status: transaction.tx?.status,
             tokens: [
-                ...transaction.sends.map(({ amount, token_id }) => ({
+                ...transaction.sends.map(({ amount, token_id, to_addr }) => ({
                     id: token_id,
                     chainId,
                     type: token_dict[token_id]?.decimals ? TokenType.Fungible : TokenType.NonFungible,
@@ -81,6 +81,8 @@ export function formatTransactions(
                     direction: DebankTransactionDirection.SEND,
                     amount: amount?.toString(),
                     logoURI: token_dict[token_id]?.logo_url,
+                    to_addr,
+                    contract_address: token_dict[token_id].contract_id,
                 })),
                 ...transaction.receives.map(({ amount, token_id }) => ({
                     id: token_id,
