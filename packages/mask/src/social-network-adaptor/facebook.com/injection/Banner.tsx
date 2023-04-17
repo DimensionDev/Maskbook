@@ -1,7 +1,7 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
-import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt.js'
+import { Banner } from '../../../components/Welcomes/Banner.js'
 import { startWatch } from '../../../utils/watcher.js'
 
 let composeBox: LiveSelector<Element>
@@ -15,7 +15,7 @@ if (isMobileFacebook) {
         .at(-1)
 }
 
-export function injectSetupPromptFacebook(signal: AbortSignal) {
+export function injectBannerAtFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
@@ -25,7 +25,7 @@ export function injectSetupPromptFacebook(signal: AbortSignal) {
                 padding: '0 16px',
                 marginTop: 0,
             }}>
-            <NotSetupYetPrompt />
+            <Banner />
         </span>,
     )
 }

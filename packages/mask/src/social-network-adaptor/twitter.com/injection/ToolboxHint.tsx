@@ -22,6 +22,13 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
 
     startWatch(watcher, {
         signal,
+        missingReportRule: {
+            name: 'Sidebar toolbox',
+            rule() {
+                // retrun false where the page should not match. maybe on mobile size?
+                return true
+            },
+        },
     })
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxHintAtTwitter category={category} />,

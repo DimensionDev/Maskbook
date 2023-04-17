@@ -24,7 +24,7 @@ import { injectProfileTabAtTwitter } from './injection/ProfileTab.js'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent.js'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
-import { injectSetupPromptAtTwitter } from './injection/SetupPrompt.js'
+import { injectBannerAtTwitter } from './injection/Banner.js'
 import { injectPostBoxComposed } from './injection/inject.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
@@ -181,7 +181,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         postActions: injectPostActionsAtTwitter,
-        setupPrompt: injectSetupPromptAtTwitter,
+        banner: injectBannerAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
             supportedInputTypes: {
@@ -220,7 +220,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             getPostIdFromNewPostToast,
         },
         steganography: {
-            // ! Change this might be a breaking change !
+            // ! Change this is a breaking change !
             password() {
                 const id =
                     IdentityProviderTwitter.recognized.value.identifier?.userId ||

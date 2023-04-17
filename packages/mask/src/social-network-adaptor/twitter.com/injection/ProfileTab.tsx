@@ -15,7 +15,7 @@ import {
     searchProfileTabSelector,
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
-    isBioPageLike,
+    isProfilePageLike,
 } from '../utils/selector.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
@@ -216,11 +216,20 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
-            startWatch(watcher, signal)
+            startWatch(watcher, {
+                signal,
+                missingReportRule: {
+                    name: 'Last tab in the profile page',
+                    rule: isProfilePageLike,
+                },
+            })
             createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtTwitter />)
             tabInjected = true
         }
     })
 
-    startWatch(contentWatcher, { signal, missingReportRule: { name: 'ProfileTab', rule: isBioPageLike } })
+    startWatch(contentWatcher, {
+        signal,
+        missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
+    })
 }
