@@ -1,9 +1,8 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { isENSContractAddress } from '@masknet/web3-shared-evm'
+import { isENSContractAddress, isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useLayoutEffect, useMemo, useRef, useState, type HTMLProps } from 'react'
-import { isLensCollect, isLensFollower } from '../../helpers/index.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
