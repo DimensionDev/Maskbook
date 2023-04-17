@@ -2934,8 +2934,8 @@ importers:
         specifier: ^7.39.2
         version: 7.39.2(react@0.0.0-experimental-21021fb0f-20230412)
       react-markdown:
-        specifier: ^8.0.3
-        version: 8.0.3(@types/react@18.0.25)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^8.0.7
+        version: 8.0.7(@types/react@18.0.25)(react@0.0.0-experimental-21021fb0f-20230412)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -28584,8 +28584,8 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
-  /react-markdown@8.0.3(@types/react@18.0.25)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-We36SfqaKoVNpN1QqsZwWSv/OZt5J15LNgTLWynwAN5b265hrQrsjMtlRNwUvS+YyR3yDM8HpTNc4pK9H/Gc0A==}
+  /react-markdown@8.0.7(@types/react@18.0.25)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-bvWbzG4MtOU62XqBx3Xx+zB2raaFFsq4mYiAzfjXJMEz2sixgeAfraA3tvzULF02ZdOMUOKTBFFaZJDDrq+BJQ==}
     peerDependencies:
       '@types/react': '>=16'
       react: '>=16 || 0.0.0-experimental-21021fb0f-20230412'
@@ -28606,7 +28606,7 @@ packages:
       remark-parse: 10.0.1
       remark-rehype: 10.1.0
       space-separated-tokens: 2.0.1
-      style-to-object: 0.3.0
+      style-to-object: 0.4.1
       unified: 10.1.2
       unist-util-visit: 4.1.1
       vfile: 5.3.5
@@ -30993,6 +30993,12 @@ packages:
     resolution: {integrity: sha512-CzFnRRXhzWIdItT3OmF8SQfWyahHhjq3HwcMNCNLn+N7klOOqPjMeG/4JSu77D7ypZdGvSzvkrbyeTMizz2VrA==}
     dependencies:
       inline-style-parser: 0.1.1
+
+  /style-to-object@0.4.1:
+    resolution: {integrity: sha512-HFpbb5gr2ypci7Qw+IOhnP2zOU7e77b+rzM+wTzXzfi1PrtBCX0E7Pk4wL4iTLnhzZ+JgEGAhX81ebTg/aYjQw==}
+    dependencies:
+      inline-style-parser: 0.1.1
+    dev: false
 
   /stylehacks@5.1.1(postcss@8.4.21):
     resolution: {integrity: sha512-sBpcd5Hx7G6seo7b1LkpttvTz7ikD0LlH5RmdcBNb6fFR0Fl7LQwHDFr300q4cwUqi+IYrFGmsIHieMBfnN/Bw==}
@@ -34969,7 +34975,7 @@ time:
   /react-hook-form@7.39.2: '2022-11-09T23:10:53.221Z'
   /react-i18next@12.0.0: '2022-10-20T16:10:10.963Z'
   /react-i18next@12.2.0: '2023-02-23T16:58:56.177Z'
-  /react-markdown@8.0.3: '2022-04-20T13:01:26.369Z'
+  /react-markdown@8.0.7: '2023-04-12T10:09:37.701Z'
   /react-qrcode-logo@2.7.0: '2022-03-29T20:53:55.986Z'
   /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
   /react-router-dom@6.4.3: '2022-11-01T15:08:22.965Z'
