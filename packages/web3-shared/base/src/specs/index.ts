@@ -698,8 +698,12 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     snackbar?: {
         /** a human-readable description for successful transaction. */
         successfulDescription?: string
+        /** a human-readable title for successful transaction. */
+        successfulTitle?: string
         /** a human-readable description for failed transaction. */
         failedDescription?: string
+        /** a human-readable title for failed transaction. */
+        failedTitle?: string
     }
     popup?: {
         /** The custom token description */

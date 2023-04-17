@@ -121,31 +121,36 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         )
         if (!computed || computed.title === 'followWithSig' || computed.title === 'burnWithSig') return
 
-        showSingletonSnackbar(computed.title, {
-            ...resolveSnackbarConfig(progress.status),
-            ...{
-                message: (
-                    <Link
-                        sx={{ wordBreak: 'break-word' }}
-                        className={classes.link}
-                        color="inherit"
-                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        {progress.status === TransactionStatusType.SUCCEED
-                            ? computed.snackbar?.successfulDescription ?? computed.description
-                            : computed.description}{' '}
-                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                    </Link>
-                ),
+        showSingletonSnackbar(
+            progress.status === TransactionStatusType.SUCCEED
+                ? computed.snackbar?.successfulTitle ?? computed.title
+                : computed.title,
+            {
+                ...resolveSnackbarConfig(progress.status),
+                ...{
+                    message: (
+                        <Link
+                            sx={{ wordBreak: 'break-word' }}
+                            className={classes.link}
+                            color="inherit"
+                            href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {progress.status === TransactionStatusType.SUCCEED
+                                ? computed.snackbar?.successfulDescription ?? computed.description
+                                : computed.description}{' '}
+                            <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                        </Link>
+                    ),
+                },
             },
-        })
+        )
     }, [progress])
 
     useAsync(async () => {
         const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
-        const title = computed?.title
+        const title = computed?.snackbar?.failedTitle ?? computed?.title
         const message = errorInfo?.error.isRecognized ? errorInfo?.error.message : computed?.snackbar?.failedDescription
 
         if (!title) return
