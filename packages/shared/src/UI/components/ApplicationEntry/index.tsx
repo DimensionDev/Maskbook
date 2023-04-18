@@ -47,8 +47,8 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             marginLeft: '12px !important',
         },
         recommendFeatureApplicationBox: {
-            width: 221,
-            minWidth: 221,
+            width: 257,
+            minWidth: 257,
             height: 97,
             marginRight: 9.5,
             cursor: 'pointer',
