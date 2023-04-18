@@ -43,8 +43,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 12,
-                marketListSortingPriority: 12,
+                appBoardSortingDefaultPriority: 13,
+                marketListSortingPriority: 13,
                 icon,
                 description: <Trans i18nKey="plugin_pets_description" />,
                 name,

@@ -56,8 +56,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 8,
-                marketListSortingPriority: 4,
+                appBoardSortingDefaultPriority: 14,
+                marketListSortingPriority: 14,
                 icon,
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
                 description: <Trans i18nKey="plugin_mask_box_description" />,
