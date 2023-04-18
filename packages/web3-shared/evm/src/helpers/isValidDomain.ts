@@ -1,7 +1,10 @@
 import punycode from 'punycode'
 
+const DOMAIN_RE = /\.(eth|bnb|arb)$/
+
 export function isValidDomain(domain?: string) {
-    if (!domain?.includes('.eth') && !domain?.includes('.bnb')) return false
+    if (!domain) return false
+    if (!DOMAIN_RE.test(domain)) return false
     const match = punycode
         .toASCII(domain)
         .toLowerCase()

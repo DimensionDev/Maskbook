@@ -3,9 +3,11 @@ import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
+    getArbConstants,
     getCryptoPunksConstants,
     getENSConstants,
     getRedPacketConstants,
+    getSpaceIdConstants,
     getTokenConstant,
     ZERO_ADDRESS,
 } from '../constants/index.js'
@@ -95,6 +97,20 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
 export function isENSContractAddress(contract_address: string) {
     const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+}
+
+export function isArbContractAddress(contract_address: string) {
+    const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
+    return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
+}
+
+export function isSpaceIdContractAddress(contract_address: string) {
+    const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
+    return isSameAddress(contract_address, SID_CONTRACT_ADDRESS)
+}
+
+export function isXnsContractAddress(address: string) {
+    return isENSContractAddress(address) || isArbContractAddress(address) || isSpaceIdContractAddress(address)
 }
 
 export function isCryptoPunksContractAddress(contract_address: string) {
