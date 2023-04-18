@@ -6,11 +6,11 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { TokenType, type Transaction } from '@masknet/web3-shared-base'
+import { TokenType, isSameAddress, type Transaction } from '@masknet/web3-shared-base'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
 import { TransactionIcon } from '../TransactionIcon/index.js'
-import { formatKeccakHash } from '@masknet/web3-shared-evm'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -86,6 +86,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes, cx } = useStyles()
         const { Others } = useWeb3State()
+
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">
@@ -148,13 +149,14 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                     })}
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
+                    {isSameAddress(transaction.tokens[0]?.to_addr, ZERO_ADDRESS)
+                        ? Others?.formatAddress(transaction.tokens[0].contract_address || '', 4)
+                        : ''}
+                </TableCell>
+                <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
                         <Typography variant="body2">
-                            {domain
-                                ? Others?.formatDomainName?.(domain)
-                                : transaction.to
-                                ? Others?.formatAddress?.(transaction.to, 4)
-                                : formatKeccakHash(transaction.id, 4)}
+                            {domain ? Others?.formatDomainName?.(domain) : Others?.formatAddress?.(transaction.to, 4)}
                         </Typography>
                         <Link
                             sx={{ height: 21 }}

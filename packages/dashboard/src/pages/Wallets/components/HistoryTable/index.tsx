@@ -105,6 +105,9 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, isL
                                 <TableCell key="Value" align="center" variant="head" className={classes.header}>
                                     {t.wallets_history_value()}
                                 </TableCell>
+                                <TableCell key="Burn" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_history_burn()}
+                                </TableCell>
                                 <TableCell key="Receiver" align="center" variant="head" className={classes.header}>
                                     {t.wallets_history_receiver()}
                                 </TableCell>
