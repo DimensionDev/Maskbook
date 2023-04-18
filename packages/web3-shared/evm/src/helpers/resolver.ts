@@ -26,13 +26,23 @@ export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
 }
 
 export function resolveImageURL(image?: string, name?: string, address?: string) {
-    if (isLens(name)) return new URL('./lens.svg', import.meta.url).toString()
+    if (name) {
+        if (isLensFollower(name)) return new URL('./lens-follower.svg', import.meta.url).href
+        if (isLensCollect(name)) return new URL('./lens-collect.svg', import.meta.url).href
+        if (isLensComment(name)) return new URL('./lens-comment.svg', import.meta.url).href
+        if (isLensPost(name)) return new URL('./lens-post.svg', import.meta.url).href
+        if (isLens(name)) return new URL('./lens.svg', import.meta.url).href
+    }
     if (isENSContractAddress(address || '')) return new URL('./ens.svg', import.meta.url).toString()
     return image
 }
 
+/**
+ * @param {string} name - Lens metadata name
+ */
 export function isLens(name?: string) {
-    return name?.toLowerCase().includes('.lens') || name?.toLowerCase().includes('lensprotocol')
+    if (!name) return false
+    return name.toLowerCase().endsWith('.lens') || name.toLowerCase() === 'lensprotocol'
 }
 
 export function isLensFollower(name: string) {
@@ -41,5 +51,13 @@ export function isLensFollower(name: string) {
 }
 
 export function isLensCollect(name: string) {
-    return /\.lens-Collect-\d+$/.test(name)
+    return /\.lens-Collect-\d+$/.test(name) || /^lensprotocol-Collect-\d+$/.test(name)
+}
+
+export function isLensPost(name: string) {
+    return /\.lens-Post-\d+$/.test(name) || /^lensprotocol-Post-\d+$/.test(name)
+}
+
+export function isLensComment(name: string) {
+    return /\.lens-Comment-\d+$/.test(name) || /^lensprotocol-Comment-\d+$/.test(name)
 }

@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     },
     info: {
         alignSelf: 'stretch',
-        padding: theme.spacing('6px', '2px', '6px', '6px'),
+        padding: 6,
     },
     nameRow: {
         display: 'flex',
@@ -156,7 +156,7 @@ export const Collection: FC<CollectionProps> = memo(
                         {renderAssets}
                         {hasExtra ? (
                             <Typography component="div" className={classes.extraCount}>
-                                +{Math.min(collection.balance! - 3, 999)}
+                                {collection.balance! > 1002 ? '>999' : `+${collection.balance! - 3}`}
                             </Typography>
                         ) : null}
                     </div>
@@ -184,9 +184,9 @@ export const Collection: FC<CollectionProps> = memo(
 Collection.displayName = 'Collection'
 
 export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
+    id: string
     /** Render variants according to count */
     count: number
-    id: string
     expanded?: boolean
 }
 export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, count, id, expanded, ...rest }) => {
