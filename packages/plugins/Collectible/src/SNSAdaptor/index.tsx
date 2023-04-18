@@ -105,7 +105,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                     address={socialAccount.address}
                                     userId={identity?.identifier?.userId!}
                                     persona={identity?.publicKey!}>
-                                    <CollectionList socialAccount={socialAccount} />
+                                    <CollectionList height={392} socialAccount={socialAccount} />
                                 </UserAssetsProvider>
                             </Web3ContextProvider>
                         </SNSAdaptorContext.Provider>
@@ -143,7 +143,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <Box style={{ minHeight: 300 }}>
                                 <Web3ContextProvider value={{ pluginID: result.pluginID }}>
                                     <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>
-                                        <CollectionList socialAccount={socialAccount} />
+                                        <CollectionList height={479} socialAccount={socialAccount} />
                                     </UserAssetsProvider>
                                 </Web3ContextProvider>
                             </Box>

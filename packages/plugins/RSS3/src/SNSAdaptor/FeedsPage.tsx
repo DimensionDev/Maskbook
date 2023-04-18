@@ -94,12 +94,15 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     return (
         <FeedOwnerContext.Provider value={feedOwner}>
             <FeedDetailsProvider>
-                {feeds.map((feed, index) => (
-                    <FeedCard key={index} className={classes.feedCard} feed={feed} />
-                ))}
-                <ElementAnchor callback={next}>
-                    {loading ? <LoadingBase className={classes.loading} /> : null}
-                </ElementAnchor>
+                {/* padding for profile card footer */}
+                <Box paddingBottom="48px">
+                    {feeds.map((feed, index) => (
+                        <FeedCard key={index} className={classes.feedCard} feed={feed} />
+                    ))}
+                    <ElementAnchor callback={next}>
+                        {loading ? <LoadingBase className={classes.loading} /> : null}
+                    </ElementAnchor>
+                </Box>
             </FeedDetailsProvider>
         </FeedOwnerContext.Provider>
     )

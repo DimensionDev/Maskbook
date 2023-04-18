@@ -4,7 +4,7 @@ import { EMPTY_OBJECT, type SocialAccount } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { Box, Button, Stack, Typography, styled } from '@mui/material'
+import { Box, Button, Typography, styled } from '@mui/material'
 import { range } from 'lodash-es'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -14,6 +14,7 @@ import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useCollections } from './useCollections.js'
+import type { BoxProps } from '@mui/system'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -32,6 +33,28 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
     return {
         container: {
             boxSizing: 'border-box',
+            overflow: 'auto',
+        },
+        columns: {
+            height: '100%',
+            boxSizing: 'border-box',
+            overflow: 'auto',
+            flexDirection: 'row',
+            display: 'flex',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        main: {
+            flexGrow: 1,
+            height: '100%',
+            boxSizing: 'border-box',
+            overflow: 'auto',
+            // For profile-card footer
+            paddingBottom: 48,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
         },
         grid: {
@@ -77,6 +100,15 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             width: 24,
             flexShrink: 0,
             marginRight: theme.spacing(1.5),
+            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
+            boxSizing: 'border-box',
+            height: '100%',
+            overflow: 'auto',
+            // For profile-card footer
+            paddingBottom: 48,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         networkButton: {
             display: 'flex',
@@ -97,15 +129,15 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
     }
 })
 
-export interface CollectionListProps {
+export interface CollectionListProps extends BoxProps {
     socialAccount: SocialAccount<Web3Helper.ChainIdAll>
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: CollectionListProps) {
+export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, className, ...rest }: CollectionListProps) {
     const { address: account, pluginID } = socialAccount
     const t = useI18N()
-    const { classes } = useStyles(gridProps)
+    const { classes, cx } = useStyles(gridProps)
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
 
@@ -178,19 +210,19 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
 
     if (!collections.length && loading && !error && account)
         return (
-            <Box className={classes.container}>
-                <Stack direction="row">
-                    <Box sx={{ flexGrow: 1 }} width="100%">
+            <Box className={cx(classes.container, className)} {...rest}>
+                <div className={classes.columns}>
+                    <div className={classes.main}>
                         <LoadingSkeleton className={classes.grid} />
-                    </Box>
+                    </div>
                     {sidebar}
-                </Stack>
+                </div>
             </Box>
         )
 
     if (!collections.length && error && account)
         return (
-            <Box className={classes.container}>
+            <Box className={cx(classes.container, className)} {...rest}>
                 <Box mt="200px" color={(theme) => theme.palette.maskColor.main}>
                     <RetryHint retry={retry} />
                 </Box>
@@ -199,9 +231,9 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
 
     if ((!loading && !collections.length) || !account || isHiddenAddress)
         return (
-            <Box className={classes.container}>
-                <Stack direction="row">
-                    <Box sx={{ flexGrow: 1 }} width="100%">
+            <Box className={cx(classes.container, className)} {...rest}>
+                <div className={classes.columns}>
+                    <div className={classes.main}>
                         <Box
                             display="flex"
                             flexDirection="column"
@@ -216,18 +248,18 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                                 {t.no_NFTs_found()}
                             </Typography>
                         </Box>
-                    </Box>
+                    </div>
                     {sidebar}
-                </Stack>
+                </div>
             </Box>
         )
 
     const currentVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
 
     return (
-        <Box className={classes.container} ref={containerRef}>
-            <Stack direction="row">
-                <Box sx={{ flexGrow: 1 }} width="100%">
+        <Box className={cx(classes.container, className)} ref={containerRef} {...rest}>
+            <div className={classes.columns}>
+                <div className={classes.main}>
                     {currentCollection ? (
                         <div className={classes.currentCollection}>
                             <Box className={classes.info}>
@@ -285,9 +317,9 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                         </Box>
                     )}
                     {error ? <RetryHint hint={false} retry={retry} /> : null}
-                </Box>
+                </div>
                 {sidebar}
-            </Stack>
+            </div>
         </Box>
     )
 }
