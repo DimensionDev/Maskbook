@@ -19,12 +19,18 @@ import {
     FungibleTokenInput,
     PluginWalletStatusBar,
     ChainBoundary,
-    WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
     SelectGasSettingsToolbar,
     useAvailableBalance,
 } from '@masknet/shared'
-import { useChainContext, useWeb3, useWallet, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useWeb3,
+    useWallet,
+    useNativeToken,
+    useNativeTokenPrice,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
@@ -79,6 +85,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { onChange, onNext, origin, gasOption, onGasOptionChange } = props
     // context
     const wallet = useWallet()
+    const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
@@ -307,36 +314,37 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             ) : null}
 
             <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
-                <PluginWalletStatusBar>
-                    <WalletConnectedBoundary expectedChainId={chainId}>
-                        <EthereumERC20TokenApprovedBoundary
-                            onlyInfiniteUnlock
-                            amount={totalAmount.toFixed()}
-                            classes={{ container: classes.unlockContainer }}
-                            ActionButtonProps={{
-                                size: 'medium',
-                            }}
-                            token={
-                                token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
-                                    ? token
-                                    : undefined
-                            }
-                            spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                            <ChainBoundary
-                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={chainId}
-                                forceShowingWrongNetworkButton>
-                                <ActionButton
-                                    size="medium"
-                                    className={classes.button}
-                                    fullWidth
-                                    disabled={!!validationMessage || !!gasValidationMessage}
-                                    onClick={onClick}>
-                                    {validationMessage || gasValidationMessage || t.next()}
-                                </ActionButton>
-                            </ChainBoundary>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
+                <PluginWalletStatusBar
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    actualPluginID={pluginID}>
+                    <EthereumERC20TokenApprovedBoundary
+                        onlyInfiniteUnlock
+                        amount={totalAmount.toFixed()}
+                        classes={{ container: classes.unlockContainer }}
+                        ActionButtonProps={{
+                            size: 'medium',
+                        }}
+                        token={
+                            token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
+                                ? token
+                                : undefined
+                        }
+                        spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                        <ChainBoundary
+                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                            expectedChainId={chainId}
+                            forceShowingWrongNetworkButton>
+                            <ActionButton
+                                size="medium"
+                                className={classes.button}
+                                fullWidth
+                                disabled={!!validationMessage || !!gasValidationMessage}
+                                onClick={onClick}>
+                                {validationMessage || gasValidationMessage || t.next()}
+                            </ActionButton>
+                        </ChainBoundary>
+                    </EthereumERC20TokenApprovedBoundary>
                 </PluginWalletStatusBar>
             </Box>
         </>

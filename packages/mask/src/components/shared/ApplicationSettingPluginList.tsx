@@ -11,7 +11,6 @@ export interface Application {
     pluginID: PluginID
     enabled?: boolean
     isWalletConnectedRequired?: boolean
-    isWalletConnectedEVMRequired?: boolean
 }
 
 // #region kv storage

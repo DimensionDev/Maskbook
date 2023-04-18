@@ -58,7 +58,6 @@
     "application_tooltip_hint_create_persona": "페르소나를 생성하고 이용하세요.",
     "application_tooltip_hint_connect_persona": "페르소나를 연결하세요.",
     "application_tooltip_hint_connect_wallet": "월렛을 연결하세요",
-    "application_tooltip_hint_switch_to_evm_wallet": "EVM 체인만 지원합니다. 다른 체인을 앞으로 지원할 예정입니다.",
     "application_settings_tab_app_list": "앱 리스트",
     "application_settings_tab_plug_in_switch": "플러그인 전환",
     "application_settings_tab_plug_app-list-listed": "Listed",
