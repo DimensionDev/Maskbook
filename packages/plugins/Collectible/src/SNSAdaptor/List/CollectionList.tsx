@@ -1,19 +1,19 @@
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, Image, NetworkIcon, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST, EMPTY_OBJECT, type SocialAccount } from '@masknet/shared-base'
+import { EMPTY_OBJECT, type SocialAccount } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkDescriptors, useNonFungibleCollections } from '@masknet/web3-hooks-base'
-import { SourceType } from '@masknet/web3-shared-base'
+import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
 import { range } from 'lodash-es'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import type { CollectibleGridProps } from '../../types.js'
 import { useUserAssets } from '../Context/UserAssetsContext.js'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
+import { useCollections } from './useCollections.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -103,38 +103,26 @@ export interface CollectionListProps {
 }
 
 export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: CollectionListProps) {
-    const { address: account } = socialAccount
+    const { address: account, pluginID } = socialAccount
     const t = useI18N()
     const { classes } = useStyles(gridProps)
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
 
-    const {
-        value: allCollections = EMPTY_LIST,
-        loading,
-        error,
-        retry,
-    } = useNonFungibleCollections(socialAccount.pluginID, {
-        account,
-        allChains: true,
-        sourceType: SourceType.SimpleHash,
-    })
-
-    const [currentCollectionId, setCurrentCollectionId] = useState<string>()
-    const collections = useMemo(
-        () => (chainId ? allCollections.filter((x) => x.chainId === chainId) : allCollections),
-        [allCollections, chainId],
-    )
-    const currentCollection = allCollections.find((x) => x.id === currentCollectionId)
+    const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
+        useCollections(pluginID, chainId, account)
 
     const networks = useNetworkDescriptors(socialAccount.pluginID)
 
-    const { getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress } = useUserAssets()
+    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress } = useUserAssets()
 
-    const handleCollectionRender = useCallback(
+    const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
+            const id = collection.id!
+            // To reduce requests, check if has been initialized
+            if (assetsMapRef.current[id]) return
             loadAssets(collection)
-            loadVerifiedBy(collection.id!)
+            loadVerifiedBy(id)
         },
         [loadAssets, loadVerifiedBy],
     )
@@ -174,6 +162,19 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                 ))}
         </div>
     )
+
+    const containerRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (!currentCollectionId) return
+        const rect = containerRef.current?.getBoundingClientRect()
+        if (!rect) return
+        // 53, height of the sticky bar of Twitter,
+        // 96, height of the header of web3 tab
+        const offset = 53 + 96
+        if (Math.abs(rect.top - offset) < 50) return
+        const top = rect.top + window.scrollY - offset
+        window.scroll({ top, behavior: 'smooth' })
+    }, [!currentCollectionId])
 
     if (!collections.length && loading && !error && account)
         return (
@@ -221,10 +222,10 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
             </Box>
         )
 
-    const currentCollectionVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
+    const currentVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
 
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container} ref={containerRef}>
             <Stack direction="row">
                 <Box sx={{ flexGrow: 1 }} width="100%">
                     {currentCollection ? (
@@ -234,9 +235,9 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                                     <Image className={classes.icon} size={24} src={currentCollection.iconURL} />
                                 ) : null}
                                 <Typography mx={1}>{currentCollection.name}</Typography>
-                                {currentCollectionVerifiedBy.length ? (
+                                {currentVerifiedBy.length ? (
                                     <ShadowRootTooltip
-                                        title={t.verified_by({ marketplace: currentCollectionVerifiedBy.join(', ') })}>
+                                        title={t.verified_by({ marketplace: currentVerifiedBy.join(', ') })}>
                                         <Icons.Verification size={16} />
                                     </ShadowRootTooltip>
                                 ) : null}
@@ -252,7 +253,6 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                     {currentCollection ? (
                         <ExpandedCollection
                             gridProps={gridProps}
-                            owner={account}
                             pluginID={socialAccount.pluginID}
                             collection={currentCollection}
                             key={currentCollection.id}
@@ -260,7 +260,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection.id!).loading}
                             expanded
-                            onRender={handleCollectionRender}
+                            onInitialRender={handleInitialRender}
                         />
                     ) : (
                         <Box width="100%">
@@ -270,7 +270,6 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                                     return (
                                         <LazyCollection
                                             className={classes.gridItem}
-                                            owner={account}
                                             pluginID={socialAccount.pluginID}
                                             collection={collection}
                                             key={`${collection.chainId}.${collection.id}`}
@@ -278,7 +277,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT }: Coll
                                             verifiedBy={getVerifiedBy(collection.id!)}
                                             loading={assetsState.loading}
                                             onExpand={setCurrentCollectionId}
-                                            onRender={handleCollectionRender}
+                                            onInitialRender={handleInitialRender}
                                         />
                                     )
                                 })}

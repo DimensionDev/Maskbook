@@ -82,7 +82,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         },
         collection: {
             chainId,
-            name: asset.collection.name,
+            name: asset.collection.name || '',
             slug: asset.contract.name,
             description: asset.collection.description,
             address: asset.contract_address,
@@ -94,17 +94,14 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     }
 }
 
-export function createNonFungibleCollection(
-    collection: Collection,
-): NonFungibleCollection<ChainId, SchemaType> | undefined {
-    const chainId = resolveChainId(collection.chain)
+export function createNonFungibleCollection(collection: Collection): NonFungibleCollection<ChainId, SchemaType> {
+    const chainId = resolveChainId(collection.chain)!
 
-    if (!isValidChainId(chainId) || collection.spam_score === 100) return
     const verifiedMarketplaces = collection.marketplace_pages?.filter((x) => x.verified) || []
     return {
         id: collection.id,
         chainId,
-        name: collection.name,
+        name: collection.name || '',
         slug: collection.name,
         schema: SchemaType.ERC721,
         balance: collection.distinct_nfts_owned,

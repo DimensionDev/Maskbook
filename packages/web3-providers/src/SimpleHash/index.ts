@@ -15,6 +15,7 @@ import {
     resolveChain,
     createNonFungibleCollection,
     allChainNames,
+    resolveChainId,
 } from './helpers.js'
 import { type Asset, type Collection } from './type.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
@@ -97,9 +98,9 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
         const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
 
         const collections = response.collections
-            .map((x) => createNonFungibleCollection(x))
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id) as Array<NonFungibleCollection<ChainId, SchemaType>>
+            .filter((x) => x?.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
+            .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
     }

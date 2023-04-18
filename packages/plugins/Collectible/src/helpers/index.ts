@@ -26,3 +26,12 @@ export function isWyvernSchemaName(name: unknown): name is WyvernSchemaName {
     ]
     return schemas.includes(name)
 }
+
+export function isLensFollower(name: string) {
+    // vitalik.lens-Follower, lensprotocol-Follower V2
+    return name.endsWith('.lens-Follower') || name.startsWith('lensprotocol-Follower')
+}
+
+export function isLensCollect(name: string) {
+    return /\.lens-Collect-\d+$/.test(name)
+}
