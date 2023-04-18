@@ -78,8 +78,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 2,
-                marketListSortingPriority: 2,
+                appBoardSortingDefaultPriority: 3,
+                marketListSortingPriority: 3,
                 icon,
                 category: 'dapp',
                 description: <Trans ns={PluginID.FileService} i18nKey="__plugin_description" />,

@@ -50,8 +50,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             ApplicationEntryID: PLUGIN_ID,
-            appBoardSortingDefaultPriority: 3,
-            marketListSortingPriority: 3,
+            appBoardSortingDefaultPriority: 2,
+            marketListSortingPriority: 2,
             name: <Trans ns={PluginID.SmartPay} i18nKey="__plugin_name" />,
             icon: <Icons.SmartPay size={36} />,
             category: 'other',

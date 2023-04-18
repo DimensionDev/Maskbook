@@ -92,8 +92,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 4,
-                marketListSortingPriority: 4,
+                appBoardSortingDefaultPriority: 6,
+                marketListSortingPriority: 6,
                 icon,
                 iconFilterColor,
                 description: (
@@ -133,7 +133,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 5,
+                appBoardSortingDefaultPriority: 15,
                 icon,
                 name,
                 iconFilterColor,
