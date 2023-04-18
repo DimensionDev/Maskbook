@@ -1,8 +1,9 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { isENSContractAddress, isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
+import { isArbContractAddress, isENSContractAddress, isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
-import { forwardRef, memo, useCallback, useLayoutEffect, useMemo, useRef, useState, type HTMLProps } from 'react'
+import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
+import { useDetectOverflow } from '../Shared/useDetectOverflow.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,14 +64,7 @@ export const CollectibleItem = memo(
     forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
         const { className, asset, pluginID, disableNetworkIcon, disableName, ...rest } = props
         const { classes, cx } = useStyles()
-        const name = asset.metadata?.name ?? ''
-        const textRef = useRef<HTMLDivElement>(null)
-        const [showTooltip, setShowTooltip] = useState(false)
-        useLayoutEffect(() => {
-            if (textRef.current) {
-                setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
-            }
-        }, [textRef.current])
+        const name = asset.collection?.name ?? ''
 
         const handleClick = useCallback(() => {
             if (!asset.chainId || !pluginID) return
@@ -87,19 +81,22 @@ export const CollectibleItem = memo(
             if (!asset.collection) return
             if (isLensCollect(asset.collection.name) || isLensFollower(asset.collection.name))
                 return asset.collection.name
-            if (isENSContractAddress(asset.address)) return asset.metadata?.name
+            if (isENSContractAddress(asset.address) || isArbContractAddress(asset.address)) return asset.metadata?.name
             return asset.tokenId ? `#${asset.tokenId}` : ''
         }, [asset.collection])
 
+        const [nameOverflow, nameRef] = useDetectOverflow()
+        const [identityOverflow, identityRef] = useDetectOverflow()
+        const tooltip =
+            nameOverflow || identityOverflow ? (
+                <div>
+                    {disableName ? null : <div>{name}</div>}
+                    {identity}
+                </div>
+            ) : undefined
+
         return (
-            <ShadowRootTooltip
-                title={showTooltip ? name : undefined}
-                placement="top"
-                disableInteractive
-                arrow
-                PopperProps={{
-                    disablePortal: true,
-                }}>
+            <ShadowRootTooltip title={tooltip} placement="top" disableInteractive arrow>
                 <div className={cx(classes.card, className, classes.fadeIn)} {...rest} ref={ref}>
                     <CollectibleCard
                         className={classes.collectibleCard}
@@ -110,11 +107,11 @@ export const CollectibleItem = memo(
                     />
                     <div className={cx(classes.info, name ? '' : classes.hidden)}>
                         {disableName ? null : (
-                            <Typography ref={textRef} className={classes.name} variant="body2">
+                            <Typography ref={nameRef} className={classes.name} variant="body2">
                                 {name}
                             </Typography>
                         )}
-                        <Typography className={classes.identity} variant="body2" component="div">
+                        <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
                             {identity}
                         </Typography>
                     </div>

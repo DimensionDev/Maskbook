@@ -3,6 +3,7 @@ import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
+    getArbConstants,
     getCryptoPunksConstants,
     getENSConstants,
     getRedPacketConstants,
@@ -95,6 +96,11 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
 export function isENSContractAddress(contract_address: string) {
     const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+}
+
+export function isArbContractAddress(contract_address: string, chainId?: number) {
+    const { ARB_CONTRACT_ADDRESS } = getArbConstants(chainId)
+    return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
 }
 
 export function isCryptoPunksContractAddress(contract_address: string) {

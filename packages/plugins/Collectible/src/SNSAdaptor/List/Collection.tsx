@@ -9,6 +9,7 @@ import { useI18N } from '../../locales/i18n_generated.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
+import { useDetectOverflow } from '../Shared/useDetectOverflow.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -108,6 +109,8 @@ export const Collection: FC<CollectionProps> = memo(
             onInitialRender?.(collection)
         }, [])
 
+        const [nameOverflow, nameRef] = useDetectOverflow()
+
         if (loading && !assets.length) {
             return <CollectionSkeleton id={collection.id!} count={collection.balance!} expanded={expanded} />
         }
@@ -138,37 +141,43 @@ export const Collection: FC<CollectionProps> = memo(
             />
         ))
         return (
-            <div
-                className={cx(className, classes.folder)}
-                {...rest}
-                onClick={() => {
-                    onExpand?.(collection.id!)
-                }}
-                ref={containerRef}>
-                <div className={classes.grid}>
-                    {renderAssets}
-                    {hasExtra ? (
-                        <Typography component="div" className={classes.extraCount}>
-                            +{Math.min(collection.balance! - 3, 999)}
-                        </Typography>
-                    ) : null}
-                </div>
-                <div className={classes.info}>
-                    <div className={classes.nameRow}>
-                        <Typography className={classes.name} variant="body2">
-                            {collection.name}
-                        </Typography>
-                        {verifiedBy?.length ? (
-                            <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
-                                <Icons.Verification size={16} />
-                            </ShadowRootTooltip>
+            <ShadowRootTooltip
+                title={nameOverflow ? collection.name : undefined}
+                placement="top"
+                disableInteractive
+                arrow>
+                <div
+                    className={cx(className, classes.folder)}
+                    {...rest}
+                    onClick={() => {
+                        onExpand?.(collection.id!)
+                    }}
+                    ref={containerRef}>
+                    <div className={classes.grid}>
+                        {renderAssets}
+                        {hasExtra ? (
+                            <Typography component="div" className={classes.extraCount}>
+                                +{Math.min(collection.balance! - 3, 999)}
+                            </Typography>
                         ) : null}
                     </div>
-                    <Typography className={classes.tokenId} variant="body2" component="div">
-                        {collection?.symbol || ''}
-                    </Typography>
+                    <div className={classes.info}>
+                        <div className={classes.nameRow}>
+                            <Typography ref={nameRef} className={classes.name} variant="body2">
+                                {collection.name}
+                            </Typography>
+                            {verifiedBy?.length ? (
+                                <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                    <Icons.Verification size={16} />
+                                </ShadowRootTooltip>
+                            ) : null}
+                        </div>
+                        <Typography className={classes.tokenId} variant="body2" component="div">
+                            {collection?.symbol || ''}
+                        </Typography>
+                    </div>
                 </div>
-            </div>
+            </ShadowRootTooltip>
         )
     },
 )
