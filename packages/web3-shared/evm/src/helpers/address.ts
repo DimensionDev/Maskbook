@@ -7,6 +7,7 @@ import {
     getCryptoPunksConstants,
     getENSConstants,
     getRedPacketConstants,
+    getSpaceIdConstants,
     getTokenConstant,
     ZERO_ADDRESS,
 } from '../constants/index.js'
@@ -98,9 +99,18 @@ export function isENSContractAddress(contract_address: string) {
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }
 
-export function isArbContractAddress(contract_address: string, chainId?: number) {
-    const { ARB_CONTRACT_ADDRESS } = getArbConstants(chainId)
+export function isArbContractAddress(contract_address: string) {
+    const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
     return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
+}
+
+export function isSpaceIdContractAddress(contract_address: string) {
+    const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
+    return isSameAddress(contract_address, SID_CONTRACT_ADDRESS)
+}
+
+export function isXnsContractAddress(address: string) {
+    return isENSContractAddress(address) || isArbContractAddress(address) || isSpaceIdContractAddress(address)
 }
 
 export function isCryptoPunksContractAddress(contract_address: string) {

@@ -1,6 +1,6 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { isArbContractAddress, isENSContractAddress, isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
+import { isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { useDetectOverflow } from '../Shared/useDetectOverflow.js'
@@ -81,7 +81,7 @@ export const CollectibleItem = memo(
             if (!asset.collection) return
             if (isLensCollect(asset.collection.name) || isLensFollower(asset.collection.name))
                 return asset.collection.name
-            if (isENSContractAddress(asset.address) || isArbContractAddress(asset.address)) return asset.metadata?.name
+            if (isXnsContractAddress(asset.address)) return asset.metadata?.name
             return asset.tokenId ? `#${asset.tokenId}` : ''
         }, [asset.collection])
 
@@ -89,10 +89,10 @@ export const CollectibleItem = memo(
         const [identityOverflow, identityRef] = useDetectOverflow()
         const tooltip =
             nameOverflow || identityOverflow ? (
-                <div>
+                <Typography>
                     {disableName ? null : <div>{name}</div>}
                     {identity}
-                </div>
+                </Typography>
             ) : undefined
 
         return (
