@@ -7,7 +7,6 @@ import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@maskne
 import {
     InjectedDialog,
     FormattedBalance,
-    useOpenShareTxDialog,
     PluginWalletStatusBar,
     ChainBoundary,
     NetworkTab,
@@ -208,17 +207,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-    const openShareTxDialog = useOpenShareTxDialog()
     const claim = useCallback(async () => {
         const hash = await claimCallback()
         if (typeof hash !== 'string') return
-        openShareTxDialog({
-            hash,
-            onShare() {
-                retry()
-            },
-        })
-    }, [claimCallback, openShareTxDialog, retry])
+        retry()
+    }, [claimCallback, retry])
     const { classes, cx } = useStyles({
         shortITOwrapper: !swappedTokens || swappedTokens.length === 0,
     })
