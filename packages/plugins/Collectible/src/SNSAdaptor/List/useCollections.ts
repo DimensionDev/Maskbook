@@ -2,11 +2,11 @@ import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
+import { isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
 import { produce } from 'immer'
 import type { WritableDraft } from 'immer/dist/internal.js'
 import { sum } from 'lodash-es'
 import { useMemo, useState } from 'react'
-import { isLensCollect, isLensFollower } from '../../helpers/index.js'
 
 export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll | undefined, account: string) {
     const [currentCollectionId, setCurrentCollectionId] = useState<string>()

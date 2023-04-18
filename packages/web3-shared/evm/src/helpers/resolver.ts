@@ -34,3 +34,12 @@ export function resolveImageURL(image?: string, name?: string, address?: string)
 export function isLens(name?: string) {
     return name?.toLowerCase().includes('.lens') || name?.toLowerCase().includes('lensprotocol')
 }
+
+export function isLensFollower(name: string) {
+    // vitalik.lens-Follower, lensprotocol-Follower V2
+    return name.endsWith('.lens-Follower') || name.startsWith('lensprotocol-Follower')
+}
+
+export function isLensCollect(name: string) {
+    return /\.lens-Collect-\d+$/.test(name)
+}

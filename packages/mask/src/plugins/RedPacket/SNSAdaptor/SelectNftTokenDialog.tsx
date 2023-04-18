@@ -322,12 +322,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         const tokenIdList = uniq(searchTokenListInput.split(/,|\uFF0C/u).map((v) => v.trim()))
         setLoadingToken(true)
         const allSettled = await Promise.allSettled(
-            tokenIdList.map(
-                async (tokenId) =>
-                    (await connection?.getNonFungibleToken(contract?.address ?? '', tokenId, SchemaType.ERC721, {
-                        account,
-                        chainId,
-                    })) as NonFungibleToken<ChainId, SchemaType.ERC721>,
+            tokenIdList.map((tokenId) =>
+                connection?.getNonFungibleToken(contract?.address ?? '', tokenId, SchemaType.ERC721, {
+                    account,
+                    chainId,
+                }),
             ),
         )
 
