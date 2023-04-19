@@ -1071,8 +1071,8 @@ importers:
         specifier: ^0.1.5
         version: 0.1.5
       pure-react-carousel:
-        specifier: ^1.28.1
-        version: 1.28.1(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^1.30.1
+        version: 1.30.1(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-avatar-editor:
         specifier: ^13.0.0
         version: 13.0.0(@babel/core@7.21.0)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -27140,11 +27140,11 @@ packages:
       escape-goat: 4.0.0
     dev: true
 
-  /pure-react-carousel@1.28.1(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-adOMhlGLxHiQxHwJvBgFJ6SXTM2UPuMv6tO10wsJzvQCdnCXcN5bRYIem5f55WQpwr9X0Bbb9ORw41KbGpAJWQ==}
+  /pure-react-carousel@1.30.1(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-B1qi62hZk0OFqRR4cTjtgIeOn/Ls5wo+HsLtrXT4jVf5et8ldBHSt+6LsYRJN86Or8dm+XbnJNEHy6WDJ0/DQw==}
     peerDependencies:
-      react: 15.x || 16.x || 17.x || 0.0.0-experimental-21021fb0f-20230412
-      react-dom: 15.x || 16.x || 17.x || 0.0.0-experimental-21021fb0f-20230412
+      react: 15.x || 16.x || 17.x || 18.x || 0.0.0-experimental-21021fb0f-20230412
+      react-dom: 15.x || 16.x || 17.x || 18.x || 0.0.0-experimental-21021fb0f-20230412
     peerDependenciesMeta:
       react:
         optional: true
@@ -33441,7 +33441,7 @@ time:
   /promievent@0.1.5: '2020-12-21T22:00:08.601Z'
   /proper-lockfile@4.1.2: '2021-01-25T18:55:18.544Z'
   /punycode@2.3.0: '2023-01-19T17:57:59.553Z'
-  /pure-react-carousel@1.28.1: '2022-02-14T21:13:57.872Z'
+  /pure-react-carousel@1.30.1: '2022-10-13T02:02:21.395Z'
   /purgecss@5.0.0: '2022-09-13T20:19:53.516Z'
   /pvtsutils@1.3.2: '2022-05-05T08:41:08.420Z'
   /qrcode@1.5.0: '2021-11-23T20:03:19.010Z'
