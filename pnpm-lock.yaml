@@ -1122,8 +1122,8 @@ importers:
         specifier: ^2.8.3
         version: 2.8.3
       tss-react:
-        specifier: ^4.4.4
-        version: 4.4.4(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^4.8.2
+        version: 4.8.2(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412)
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -3094,8 +3094,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       tss-react:
-        specifier: ^4.4.4
-        version: 4.4.4(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^4.8.2
+        version: 4.8.2(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412)
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -30720,8 +30720,8 @@ packages:
     resolution: {integrity: sha512-Tyrf5mxF8Ofs1tNoxA13lFeZ2Zrbd6cKbuH3V+MQ5sb6DtBj5FjrXVsRWT8YvNAQTqNoz66dz1WsbigI22aEnw==}
     dev: false
 
-  /tss-react@4.4.4(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-Bzyg99bIQq3Lk4Rwc5XMOps58c1biw1rghCkApIX5XkAB+/VjGCIFSl63PePhmiRNvKRxJRpawGPPxHytiw1TA==}
+  /tss-react@4.8.2(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-VT2tvbnfyG5oEMUsJjyp9KPa/A+lahCju+usy8of9SnvNOWFhkVKOMcvTn8KF10ncBF0T+O+XlkcCR4Eoqw1mw==}
     peerDependencies:
       '@emotion/react': ^11.4.1
       '@emotion/server': ^11.4.0
@@ -33496,7 +33496,7 @@ time:
   /ts-results-es@3.6.0: '2023-03-14T13:51:58.281Z'
   /ts-results@3.3.0: '2021-05-23T18:25:35.300Z'
   /tslib@2.5.0: '2023-01-26T20:40:14.611Z'
-  /tss-react@4.4.4: '2022-11-05T17:25:30.715Z'
+  /tss-react@4.8.2: '2023-03-18T13:50:54.199Z'
   /typechain@8.1.1: '2022-11-01T22:04:27.752Z'
   /typescript@5.1.0-dev.20230418: '2023-04-18T07:16:09.318Z'
   /typeson-registry@3.0.0: '2022-04-25T03:42:05.754Z'
