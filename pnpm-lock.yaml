@@ -3698,8 +3698,8 @@ importers:
         specifier: 6.6.2
         version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
       punycode:
-        specifier: ^2.1.1
-        version: 2.1.1
+        specifier: ^2.3.0
+        version: 2.3.0
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -25982,7 +25982,7 @@ packages:
     dependencies:
       is-ip: 3.1.0
       node-fetch: 2.6.9
-      punycode: 2.1.1
+      punycode: 2.3.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -27129,8 +27129,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /punycode@2.1.1:
-    resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
+  /punycode@2.3.0:
+    resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
 
   /pupa@3.1.0:
@@ -30480,14 +30480,14 @@ packages:
     engines: {node: '>=0.8'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.1.1
+      punycode: 2.3.0
 
   /tough-cookie@4.1.2:
     resolution: {integrity: sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==}
     engines: {node: '>=6'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.1.1
+      punycode: 2.3.0
       universalify: 0.2.0
       url-parse: 1.5.10
     dev: false
@@ -30499,7 +30499,7 @@ packages:
     resolution: {integrity: sha512-l7FvfAHlcmulp8kr+flpQZmVwtu7nfRV7NZujtN0OqES8EL4O4e0qqzL0DC5gAvx/ZC/9lk6rhcUwYvkBnBnYA==}
     engines: {node: '>=12'}
     dependencies:
-      punycode: 2.1.1
+      punycode: 2.3.0
     dev: false
 
   /trim-lines@3.0.1:
@@ -31310,7 +31310,7 @@ packages:
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
-      punycode: 2.1.1
+      punycode: 2.3.0
 
   /urix@0.1.0:
     resolution: {integrity: sha512-Am1ousAhSLBeB9cG/7k7r2R0zj50uDRlZHPGbazid5s9rlF1F/QKYObEKSIunSjIOkJZqwRRLpvewjEkM7pSqg==}
@@ -33440,7 +33440,7 @@ time:
   /prettier@2.8.7: '2023-03-24T08:15:19.994Z'
   /promievent@0.1.5: '2020-12-21T22:00:08.601Z'
   /proper-lockfile@4.1.2: '2021-01-25T18:55:18.544Z'
-  /punycode@2.1.1: '2018-05-22T02:46:47.304Z'
+  /punycode@2.3.0: '2023-01-19T17:57:59.553Z'
   /pure-react-carousel@1.28.1: '2022-02-14T21:13:57.872Z'
   /purgecss@5.0.0: '2022-09-13T20:19:53.516Z'
   /pvtsutils@1.3.2: '2022-05-05T08:41:08.420Z'
