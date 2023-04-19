@@ -3019,8 +3019,8 @@ importers:
         specifier: 9.1.1
         version: 9.1.1
       dompurify:
-        specifier: ^2.4.1
-        version: 2.4.1
+        specifier: ^3.0.2
+        version: 3.0.2
       i18next-browser-languagedetector:
         specifier: ^7.0.1
         version: 7.0.1
@@ -18749,8 +18749,8 @@ packages:
     dependencies:
       domelementtype: 2.3.0
 
-  /dompurify@2.4.1:
-    resolution: {integrity: sha512-ewwFzHzrrneRjxzmK6oVz/rZn9VWspGFRDb4/rRtIsM1n36t9AKma/ye8syCpcw+XJ25kOK/hOG7t1j2I2yBqA==}
+  /dompurify@3.0.2:
+    resolution: {integrity: sha512-B8c6JdiEpxAKnd8Dm++QQxJL4lfuc757scZtcapj6qjTjrQzyq5iAyznLKVvK+77eYNiFblHBlt7MM0fOeqoKw==}
     dev: false
 
   /domutils@2.8.0:
@@ -35248,7 +35248,7 @@ time:
   /cssnano@6.0.0: '2023-03-27T16:41:02.008Z'
   /d3@5.16.0: '2020-04-20T17:59:07.964Z'
   /date-fns@2.29.3: '2022-09-13T12:36:12.348Z'
-  /dompurify@2.4.1: '2022-11-10T14:01:38.603Z'
+  /dompurify@3.0.2: '2023-04-14T17:09:54.873Z'
   /dotenv@16.0.3: '2022-09-29T17:28:10.605Z'
   /ef.js@0.16.0: '2022-11-09T20:10:17.298Z'
   /elliptic@6.5.4: '2021-02-02T18:22:21.969Z'
