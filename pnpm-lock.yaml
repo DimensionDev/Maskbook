@@ -2779,8 +2779,8 @@ importers:
         specifier: ^2.3.6
         version: 2.3.6
       fs-extra:
-        specifier: ^11.1.0
-        version: 11.1.0
+        specifier: ^11.1.1
+        version: 11.1.1
       glob:
         specifier: ^8.1.0
         version: 8.1.0
@@ -6476,7 +6476,7 @@ packages:
     dependencies:
       '@commitlint/top-level': 17.4.0
       '@commitlint/types': 17.4.4
-      fs-extra: 11.1.0
+      fs-extra: 11.1.1
       git-raw-commits: 2.0.11
       minimist: 1.2.7
     dev: true
@@ -21038,6 +21038,14 @@ packages:
       jsonfile: 6.1.0
       universalify: 2.0.0
 
+  /fs-extra@11.1.1:
+    resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
+    engines: {node: '>=14.14'}
+    dependencies:
+      graceful-fs: 4.2.10
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+
   /fs-extra@4.0.3:
     resolution: {integrity: sha512-q6rbdDd1o2mAnQreO7YADIxf/Whx4AHBiRf6d+/cVT8h44ss+lHgxf1FemcqDnQt9X3ct4McHr+JMGlYSsK7Cg==}
     dependencies:
@@ -35291,7 +35299,7 @@ time:
   /ethereum-blockies@0.1.1: '2017-06-12T21:12:31.823Z'
   /ethers@5.7.2: '2022-10-19T22:59:23.032Z'
   /event-iterator@2.0.0: '2020-06-12T12:26:39.825Z'
-  /fs-extra@11.1.0: '2022-11-29T23:39:46.795Z'
+  /fs-extra@11.1.1: '2023-03-20T14:56:50.321Z'
   /glob-promise@6.0.2: '2023-01-20T15:03:03.462Z'
   /glob@8.1.0: '2023-01-14T22:35:33.626Z'
   /graphql-request@3.5.0: '2021-07-27T18:37:58.778Z'
