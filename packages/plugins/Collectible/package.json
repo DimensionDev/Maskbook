@@ -24,7 +24,7 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
-    "bignumber.js": "9.1.0",
+    "bignumber.js": "9.1.1",
     "date-fns": "^2.29.3",
     "immer": "^9.0.21",
     "opensea-js": "^1.2.7",

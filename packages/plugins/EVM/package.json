@@ -30,7 +30,7 @@
     "@siddomains/sidjs": "^0.1.16",
     "@walletconnect/client": "1.7.8",
     "@walletconnect/types": "^1.7.8",
-    "bignumber.js": "9.1.0",
+    "bignumber.js": "9.1.1",
     "ethereumjs-util": "^7.1.4",
     "fortmatic": "^2.2.1",
     "react-use": "^17.4.0",

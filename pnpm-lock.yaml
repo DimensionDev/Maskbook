@@ -374,8 +374,8 @@ importers:
         specifier: ^6.1.5
         version: 6.1.5
       autoprefixer:
-        specifier: ^10.4.13
-        version: 10.4.13(postcss@8.4.21)
+        specifier: ^10.4.14
+        version: 10.4.14(postcss@8.4.21)
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -573,8 +573,8 @@ importers:
         specifier: ^6.1.5
         version: 6.1.5
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       color:
         specifier: ^4.2.3
         version: 4.2.3
@@ -1011,8 +1011,8 @@ importers:
         specifier: ^6.1.5
         version: 6.1.5
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       bip39:
         specifier: ^3.0.4
         version: 3.0.4
@@ -1313,8 +1313,8 @@ importers:
         specifier: ^6.1.5
         version: 6.1.5
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       ethereum-blockies:
         specifier: ^0.1.1
         version: 0.1.1
@@ -1391,8 +1391,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-shared/evm
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       opensea-js:
         specifier: ^1.2.7
         version: 1.2.7(webpack-cli@5.0.1)
@@ -1457,8 +1457,8 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       lru-cache:
         specifier: ^7.10.1
         version: 7.10.1
@@ -1529,8 +1529,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-telemetry
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -1673,8 +1673,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-telemetry
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -1757,8 +1757,8 @@ importers:
         specifier: ^1.7.8
         version: 1.7.8
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       ethereumjs-util:
         specifier: ^7.1.4
         version: 7.1.4
@@ -1930,8 +1930,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -1985,8 +1985,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-shared/evm
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       quill-delta-to-html:
         specifier: ^0.12.1
         version: 0.12.1
@@ -2087,8 +2087,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-shared/evm
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       opensea-js:
         specifier: ^1.2.7
         version: 1.2.7(webpack-cli@5.0.1)
@@ -2153,8 +2153,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -2234,8 +2234,8 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -2465,8 +2465,8 @@ importers:
         specifier: ^1.44.2
         version: 1.44.2
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       bn.js:
         specifier: ^4.12.0
         version: 4.12.0
@@ -2586,8 +2586,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-shared/evm
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -2907,8 +2907,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: 2.29.3
         version: 2.29.3
@@ -3016,8 +3016,8 @@ importers:
         specifier: ^6.1.5
         version: 6.1.5
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       dompurify:
         specifier: ^2.4.1
         version: 2.4.1
@@ -3233,8 +3233,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -3327,8 +3327,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       ethereum-blockies:
         specifier: ^0.1.1
         version: 0.1.1
@@ -3375,8 +3375,8 @@ importers:
         specifier: workspace:^
         version: link:../../web3-shared/solana
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3450,8 +3450,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -3567,8 +3567,8 @@ importers:
         specifier: ^1.7.8
         version: 1.7.8
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       bloom-filters:
         specifier: ^3.0.0
         version: 3.0.0(patch_hash=2etetjrjxbcye2oktxqpij75ey)
@@ -3658,8 +3658,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -3710,8 +3710,8 @@ importers:
         specifier: workspace:^
         version: link:../base
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       ethereum-blockies:
         specifier: ^0.1.1
         version: 0.1.1
@@ -3798,8 +3798,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3825,8 +3825,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.1
+        version: 9.1.1
       bs58:
         specifier: ^4.0.1
         version: 4.0.1
@@ -5854,7 +5854,7 @@ packages:
       '@ethersproject/providers': 5.7.2
       '@ethersproject/solidity': 5.7.0
       '@ethersproject/units': 5.7.0
-      bignumber.js: 9.1.0
+      bignumber.js: 9.1.1
       isomorphic-fetch: 2.2.1
     transitivePeerDependencies:
       - bufferutil
@@ -14333,7 +14333,7 @@ packages:
       asn1.js: 5.4.1
       axios: 0.27.2
       base64-js: 1.5.1
-      bignumber.js: 9.1.0
+      bignumber.js: 9.1.1
       util: 0.12.4
     transitivePeerDependencies:
       - debug
@@ -14476,15 +14476,15 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /autoprefixer@10.4.13(postcss@8.4.21):
-    resolution: {integrity: sha512-49vKpMqcZYsJjwotvt4+h/BCjJVnhGwcLpDt5xkcaOG3eLrG/HUYLagrihYsQ+qrIBgIzX1Rw7a6L8I/ZA1Atg==}
+  /autoprefixer@10.4.14(postcss@8.4.21):
+    resolution: {integrity: sha512-FQzyfOsTlwVzjHxKEqRIAdJx9niO6VCBCoEwax/VLSoQF29ggECcPuBqUMZ+u8jCZOPSy8b8/8KnuFbp0SaFZQ==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.5
-      caniuse-lite: 1.0.30001458
+      caniuse-lite: 1.0.30001480
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -14497,7 +14497,7 @@ packages:
     hasBin: true
     dependencies:
       browserslist: 4.21.5
-      caniuse-lite: 1.0.30001458
+      caniuse-lite: 1.0.30001480
       normalize-range: 0.1.2
       num2fraction: 1.2.2
       picocolors: 0.2.1
@@ -15494,8 +15494,8 @@ packages:
     deprecated: Custom ALPHABET bug fixed in v7.0.2
     dev: false
 
-  /bignumber.js@9.1.0:
-    resolution: {integrity: sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A==}
+  /bignumber.js@9.1.1:
+    resolution: {integrity: sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==}
 
   /binary-extensions@1.13.1:
     resolution: {integrity: sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==}
@@ -15646,7 +15646,7 @@ packages:
     resolution: {integrity: sha512-Sy9eoUi4OiKzq7VovMn246iTo17kzuyHJKomCfpWMlI6RpfN1gk95w7d7gH264nApVLg0HZfcpz62/g4VH1Y4w==}
     engines: {node: '>=4'}
     dependencies:
-      bignumber.js: 9.1.0
+      bignumber.js: 9.1.1
       buffer: 5.7.1
       commander: 2.20.3
       ieee754: 1.2.1
@@ -15862,7 +15862,7 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001458
+      caniuse-lite: 1.0.30001480
       electron-to-chromium: 1.4.284
     dev: false
 
@@ -15871,7 +15871,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001458
+      caniuse-lite: 1.0.30001480
       electron-to-chromium: 1.4.284
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10(browserslist@4.21.5)
@@ -16230,13 +16230,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.21.5
-      caniuse-lite: 1.0.30001458
+      caniuse-lite: 1.0.30001480
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: false
 
-  /caniuse-lite@1.0.30001458:
-    resolution: {integrity: sha512-lQ1VlUUq5q9ro9X+5gOEyH7i3vm+AYVT1WDCVB69XOZ17KZRhnZ9J0Sqz7wTHQaLBJccNCHq8/Ww5LlOIZbB0w==}
+  /caniuse-lite@1.0.30001480:
+    resolution: {integrity: sha512-q7cpoPPvZYgtyC4VaBSN0Bt+PJ4c4EYRf0DrduInOz2SkFpHD5p3LnvEpqBp7UnJn+8x1Ogl1s38saUxe+ihQQ==}
 
   /canonicalize@1.0.8:
     resolution: {integrity: sha512-0CNTVCLZggSh7bc5VkX5WWPWO+cyZbNd07IHIsSXLia/eAq+r836hgk+8BKoEh7949Mda87VUOitx5OddVj64A==}
@@ -33594,7 +33594,7 @@ packages:
     dependencies:
       '@types/bn.js': 5.1.1
       '@types/node': 18.15.11
-      bignumber.js: 9.1.0
+      bignumber.js: 9.1.1
       web3-core-helpers: 1.8.0
       web3-core-method: 1.8.0
       web3-core-requestmanager: 1.8.0
@@ -35239,9 +35239,9 @@ time:
   /anchorme@2.1.2: '2020-05-08T13:17:56.752Z'
   /assert@2.0.0: '2019-05-12T11:00:27.859Z'
   /async-call-rpc@6.1.5: '2022-08-31T05:11:43.471Z'
-  /autoprefixer@10.4.13: '2022-10-27T20:30:36.946Z'
+  /autoprefixer@10.4.14: '2023-03-09T21:42:07.697Z'
   /babel-loader@9.1.2: '2023-01-04T18:09:58.474Z'
-  /bignumber.js@9.1.0: '2022-08-08T22:07:57.990Z'
+  /bignumber.js@9.1.1: '2022-12-04T12:43:57.430Z'
   /bip39@3.0.4: '2021-04-27T22:23:51.260Z'
   /bn.js@4.12.0: '2021-02-24T07:16:47.735Z'
   /boring-avatars@1.6.3: '2022-02-20T17:50:27.695Z'

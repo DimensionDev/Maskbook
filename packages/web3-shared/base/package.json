@@ -15,7 +15,7 @@
     "@masknet/public-api": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@servie/events": "^3.0.0",
-    "bignumber.js": "9.1.0",
+    "bignumber.js": "9.1.1",
     "date-fns": "^2.29.3",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
