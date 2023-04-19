@@ -55,7 +55,7 @@
     "react-avatar-editor": "^13.0.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-hook-form": "^7.39.2",
+    "react-hook-form": "^7.43.9",
     "react-qrcode-logo": "^2.7.0",
     "react-router-dom": "^6.4.3",
     "react-to-print": "^2.14.7",

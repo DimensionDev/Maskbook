@@ -39,7 +39,7 @@
     "lru-cache": "^9.1.0",
     "qrcode": "^1.5.1",
     "react-feather": "^2.0.10",
-    "react-hook-form": "^7.39.2",
+    "react-hook-form": "^7.43.9",
     "react-markdown": "^8.0.7",
     "react-use": "^17.4.0",
     "rehype-raw": "^6.1.1",
