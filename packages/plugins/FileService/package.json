@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
-    "@ethersphere/bee-js": "^5.0.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
