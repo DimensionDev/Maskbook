@@ -21,7 +21,7 @@
     }
   },
   "dependencies": {
-    "react-feather": "^2.0.9",
+    "react-feather": "^2.0.10",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
