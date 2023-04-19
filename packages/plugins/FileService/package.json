@@ -27,7 +27,7 @@
     "@servie/events": "^3.0.0",
     "arweave": "^1.11.4",
     "date-fns": "^2.29.3",
-    "ipfs-http-client": "^57.0.3",
+    "ipfs-http-client": "^60.0.0",
     "react-feather": "^2.0.9",
     "react-router-dom": "^6.4.3",
     "react-use": "^17.4.0",

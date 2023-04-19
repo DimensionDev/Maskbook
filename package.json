@@ -103,7 +103,6 @@
       "@storybook/react-docgen-typescript-plugin": "npm:react-docgen-typescript-plugin@1.0.2"
     },
     "override comments": {
-      "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
       "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit",
       "@ethersproject/providers": "@balancer-labs/sor is pinning a lower version which breaks the type check"
     },
@@ -134,7 +133,6 @@
       "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
       "gulp@4.0.2": "patches/gulp@4.0.2.patch",
       "urlcat@2.0.4": "patches/urlcat@2.0.4.patch",
-      "ipfs-http-client@57.0.3": "patches/ipfs-http-client@57.0.3.patch",
       "@ethersphere/bee-js@5.0.0": "patches/@ethersphere__bee-js@5.0.0.patch",
       "@emotion/use-insertion-effect-with-fallbacks@1.0.0": "patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch",
       "@emotion/cache@11.10.3": "patches/@emotion__cache@11.10.3.patch",
