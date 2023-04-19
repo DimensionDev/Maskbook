@@ -165,7 +165,7 @@
     "@types/color": "^3.0.3",
     "@types/react-devtools-inline": "^4.24.3",
     "copy-webpack-plugin": "^11.0.0",
-    "html-webpack-plugin": "^5.5.0",
+    "html-webpack-plugin": "^5.5.1",
     "react-devtools-inline": "4.27.4",
     "react-refresh": "^0.14.0",
     "rimraf": "^3.0.2",

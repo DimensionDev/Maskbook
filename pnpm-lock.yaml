@@ -414,8 +414,8 @@ importers:
         specifier: ^6.7.3
         version: 6.7.3(webpack@5.76.0)
       html-webpack-plugin:
-        specifier: ^5.5.0
-        version: 5.5.0(webpack@5.76.0)
+        specifier: ^5.5.1
+        version: 5.5.1(webpack@5.76.0)
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
@@ -1207,8 +1207,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0(webpack@5.76.0)
       html-webpack-plugin:
-        specifier: ^5.5.0
-        version: 5.5.0(webpack@5.76.0)
+        specifier: ^5.5.1
+        version: 5.5.1(webpack@5.76.0)
       react-devtools-inline:
         specifier: 4.27.4
         version: 4.27.4(patch_hash=eyxkhyqcinivkpr6loe6rg2jua)
@@ -11003,7 +11003,7 @@ packages:
       fork-ts-checker-webpack-plugin: 6.5.2(eslint@8.38.0)(typescript@5.1.0-dev.20230418)(webpack@5.76.0)
       glob: 7.2.3
       glob-promise: 3.4.0(glob@7.2.3)
-      html-webpack-plugin: 5.5.0(webpack@5.76.0)
+      html-webpack-plugin: 5.5.1(webpack@5.76.0)
       path-browserify: 1.0.1
       process: 0.11.10
       react: 0.0.0-experimental-21021fb0f-20230412
@@ -11554,7 +11554,7 @@ packages:
       express: 4.18.2(supports-color@6.1.0)
       find-up: 5.0.0
       fs-extra: 9.1.0
-      html-webpack-plugin: 5.5.0(webpack@5.76.0)
+      html-webpack-plugin: 5.5.1(webpack@5.76.0)
       node-fetch: 2.6.9
       process: 0.11.10
       react: 0.0.0-experimental-21021fb0f-20230412
@@ -22233,8 +22233,8 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /html-webpack-plugin@5.5.0(webpack@5.76.0):
-    resolution: {integrity: sha512-sy88PC2cRTVxvETRgUHFrL4No3UxvcH8G1NepGhqaTT+GXN2kTamqasot0inS5hXeg1cMbFDt27zzo9p35lZVw==}
+  /html-webpack-plugin@5.5.1(webpack@5.76.0):
+    resolution: {integrity: sha512-cTUzZ1+NqjGEKjmVgZKLMdiFg3m9MdRXkZW2OEe69WYVi5ONLMmlnSZdXzGGMOq0C8jGDrL6EWyEDDUioHO/pA==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
       webpack: ^5.20.0
@@ -35362,7 +35362,7 @@ time:
   /gulp-cli@2.3.0: '2020-06-04T00:14:30.257Z'
   /gun@0.2020.1234: '2021-08-26T04:44:56.538Z'
   /html-to-image@1.11.11: '2023-02-01T07:02:51.019Z'
-  /html-webpack-plugin@5.5.0: '2021-10-25T12:27:51.747Z'
+  /html-webpack-plugin@5.5.1: '2023-04-15T17:11:19.822Z'
   /https-browserify@1.0.0: '2017-04-04T23:35:16.037Z'
   /husky@8.0.3: '2023-01-03T08:01:18.807Z'
   /i18next-browser-languagedetector@7.0.1: '2022-11-03T20:33:22.733Z'
