@@ -61,9 +61,6 @@ patchedDependencies:
   '@walletconnect/client@1.7.8':
     hash: 2krbsxzv524dzcdemy7vploqza
     path: patches/@walletconnect__client@1.7.8.patch
-  arweave@1.11.4:
-    hash: lwxdtt2msovfmigiutpkaty3lq
-    path: patches/arweave@1.11.4.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
     path: patches/bloom-filters@3.0.0.patch
@@ -1848,8 +1845,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       arweave:
-        specifier: ^1.11.4
-        version: 1.11.4(patch_hash=lwxdtt2msovfmigiutpkaty3lq)
+        specifier: ^1.13.6
+        version: 1.13.6
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -14242,9 +14239,7 @@ packages:
   /arconnect@0.4.2:
     resolution: {integrity: sha512-Jkpd4QL3TVqnd3U683gzXmZUVqBUy17DdJDuL/3D9rkysLgX6ymJ2e+sR+xyZF5Rh42CBqDXWNMmCjBXeP7Gbw==}
     dependencies:
-      arweave: 1.11.4(patch_hash=lwxdtt2msovfmigiutpkaty3lq)
-    transitivePeerDependencies:
-      - debug
+      arweave: 1.13.6
     dev: false
 
   /are-we-there-yet@2.0.0:
@@ -14464,20 +14459,15 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /arweave@1.11.4(patch_hash=lwxdtt2msovfmigiutpkaty3lq):
-    resolution: {integrity: sha512-EPUms1OMet/VFmYMefgxIpj17PIlIZzIteiHAn0tetN+d/LRV6N9CCsrg/t22hL6yLGdGRHrYlDEdsWqjwSSYg==}
-    engines: {node: '>=12'}
+  /arweave@1.13.6:
+    resolution: {integrity: sha512-8IP0SQhithb+n/lu9Vfyyem97F+twQaELm+DspWC520X0DBwm2eMYI7lwT+eCzI2HjP/tsyc0lDxhokkFgo4IQ==}
+    engines: {node: '>=16.15.0'}
     dependencies:
       arconnect: 0.4.2
       asn1.js: 5.4.1
-      axios: 0.27.2
       base64-js: 1.5.1
       bignumber.js: 9.1.1
-      util: 0.12.4
-    transitivePeerDependencies:
-      - debug
     dev: false
-    patched: true
 
   /asap@2.0.6:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
@@ -14696,15 +14686,6 @@ packages:
     resolution: {integrity: sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==}
     dependencies:
       follow-redirects: 1.15.2(debug@4.3.4)
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
-  /axios@0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
-    dependencies:
-      follow-redirects: 1.15.2(debug@4.3.4)
-      form-data: 4.0.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -35540,6 +35521,7 @@ time:
   /@vitest/ui@0.30.1: '2023-04-11T11:27:59.267Z'
   /@walletconnect/types@1.7.8: '2022-04-26T10:08:17.821Z'
   /anchorme@2.1.2: '2020-05-08T13:17:56.752Z'
+  /arweave@1.13.6: '2023-04-17T13:00:31.872Z'
   /assert@2.0.0: '2019-05-12T11:00:27.859Z'
   /async-call-rpc@6.1.5: '2022-08-31T05:11:43.471Z'
   /autoprefixer@10.4.14: '2023-03-09T21:42:07.697Z'

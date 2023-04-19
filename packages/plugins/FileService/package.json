@@ -25,7 +25,7 @@
     "@msgpack/msgpack": "^2.8.0",
     "@remix-run/router": "^1.0.4",
     "@servie/events": "^3.0.0",
-    "arweave": "^1.11.4",
+    "arweave": "^1.13.6",
     "date-fns": "^2.29.3",
     "ipfs-http-client": "^60.0.0",
     "react-feather": "^2.0.9",

@@ -12,7 +12,6 @@
 
 ## Worker compatibility
 
-- arweave: try to access `window` in Worker. <https://github.com/ArweaveTeam/arweave/issues/379>
 - @snapshot-labs/snapshot.js: bundled outdated `__awaitor` and try to access `window`. <https://github.com/snapshot-labs/snapshot.js/issues/668>
 
 ## ESM-CJS compatibility
