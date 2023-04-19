@@ -968,9 +968,6 @@ importers:
       '@types/react-router-dom':
         specifier: ^5.3.3
         version: 5.3.3
-      '@types/react-virtualized-auto-sizer':
-        specifier: ^1.0.1
-        version: 1.0.1
       '@types/react-window':
         specifier: ^1.8.5
         version: 1.8.5
@@ -1103,9 +1100,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
-      react-virtualized-auto-sizer:
-        specifier: ^1.0.7
-        version: 1.0.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-window:
         specifier: ^1.8.8
         version: 1.8.8(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -12690,12 +12684,6 @@ packages:
 
   /@types/react-transition-group@4.4.5:
     resolution: {integrity: sha512-juKD/eiSM3/xZYzjuzH6ZwpP+/lejltmiS3QEzV/vmb/Q8+HfDmxu+Baga8UEMGBqV88Nbg4l2hY/K2DkyaLLA==}
-    dependencies:
-      '@types/react': 18.0.37
-    dev: false
-
-  /@types/react-virtualized-auto-sizer@1.0.1:
-    resolution: {integrity: sha512-GH8sAnBEM5GV9LTeiz56r4ZhMOUSrP43tAQNSRVxNexDjcNKLCEtnxusAItg1owFUFE6k0NslV26gqVClVvong==}
     dependencies:
       '@types/react': 18.0.37
     dev: false
@@ -27816,22 +27804,6 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /react-virtualized-auto-sizer@1.0.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-Mxi6lwOmjwIjC1X4gABXMJcKHsOo0xWl3E3ugOgufB8GJU+MqrtY35aBuvCYv/razQ1Vbp7h1gWJjGjoNN5pmA==}
-    engines: {node: '>8.0.0'}
-    peerDependencies:
-      react: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0-rc || 0.0.0-experimental-21021fb0f-20230412
-      react-dom: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0-rc || 0.0.0-experimental-21021fb0f-20230412
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      react: 0.0.0-experimental-21021fb0f-20230412
-      react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
-    dev: false
-
   /react-window@1.8.8(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
     resolution: {integrity: sha512-D4IiBeRtGXziZ1n0XklnFGu7h9gU684zepqyKzgPNzrsrk7xOCxni+TCckjg2Nr/DiaEEGVVmnhYSlT2rB47dQ==}
     engines: {node: '>8.0.0'}
@@ -33386,7 +33358,6 @@ time:
   /@types/react-devtools-inline@4.24.3: '2022-12-16T07:03:08.830Z'
   /@types/react-dom@18.0.11: '2023-02-15T00:33:03.209Z'
   /@types/react-router-dom@5.3.3: '2022-01-18T22:04:15.185Z'
-  /@types/react-virtualized-auto-sizer@1.0.1: '2021-07-07T18:36:20.680Z'
   /@types/react-window@1.8.5: '2021-07-27T04:01:45.463Z'
   /@types/react@18.0.37: '2023-04-17T17:02:48.297Z'
   /@types/remarkable@2.0.3: '2021-07-08T23:36:05.386Z'
@@ -33501,7 +33472,6 @@ time:
   /react-to-print@2.14.12: '2023-02-19T04:32:07.452Z'
   /react-transition-group@4.4.5: '2022-08-01T08:36:58.958Z'
   /react-use@17.4.0: '2022-05-20T12:10:53.726Z'
-  /react-virtualized-auto-sizer@1.0.7: '2022-09-12T02:25:50.256Z'
   /react-window@1.8.8: '2022-10-31T15:24:03.173Z'
   /react@0.0.0-experimental-21021fb0f-20230412: '2023-04-12T16:13:57.181Z'
   /regenerator-runtime@0.13.11: '2022-11-14T18:15:22.830Z'
