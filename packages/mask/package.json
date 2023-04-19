@@ -116,7 +116,7 @@
     "https-browserify": "^1.0.0",
     "idb": "^7.1.1",
     "iframe-resizer-react": "^1.1.0",
-    "immer": "9.0.16",
+    "immer": "^10.0.1",
     "json-stable-stringify": "^1.0.2",
     "json2csv": "^5.0.6",
     "lru-cache": "^7.10.1",

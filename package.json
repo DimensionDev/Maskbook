@@ -149,7 +149,6 @@
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
       "@types/react-highlight-words@0.16.4": "patches/@types__react-highlight-words@0.16.4.patch",
-      "immer@9.0.16": "patches/immer@9.0.16.patch",
       "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
       "fortmatic@2.2.1": "patches/fortmatic@2.2.1.patch",
       "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch",

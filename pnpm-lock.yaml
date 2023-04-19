@@ -79,9 +79,6 @@ patchedDependencies:
   gulp@4.0.2:
     hash: 2y5kpiugqogdejwrac5fzdim7y
     path: patches/gulp@4.0.2.patch
-  immer@9.0.16:
-    hash: 5xmqd5oohffxunmhptcxd5g33e
-    path: patches/immer@9.0.16.patch
   ipfs-http-client@57.0.3:
     hash: 7oiabyd5hzeabolk22o64jpd4i
     path: patches/ipfs-http-client@57.0.3.patch
@@ -1062,8 +1059,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       immer:
-        specifier: 9.0.16
-        version: 9.0.16(patch_hash=5xmqd5oohffxunmhptcxd5g33e)
+        specifier: ^10.0.1
+        version: 10.0.1
       json-stable-stringify:
         specifier: ^1.0.2
         version: 1.0.2
@@ -1535,8 +1532,8 @@ importers:
         specifier: ^2.29.3
         version: 2.29.3
       immer:
-        specifier: ^9.0.21
-        version: 9.0.21
+        specifier: ^10.0.1
+        version: 10.0.1
       opensea-js:
         specifier: ^1.2.7
         version: 1.2.7(webpack-cli@5.0.1)
@@ -3188,8 +3185,8 @@ importers:
         specifier: workspace:^
         version: link:../base
       immer:
-        specifier: ^9.0.16
-        version: 9.0.16(patch_hash=5xmqd5oohffxunmhptcxd5g33e)
+        specifier: ^10.0.1
+        version: 10.0.1
       react:
         specifier: ^18 || 0.0.0-experimental-21021fb0f-20230412
         version: 0.0.0-experimental-21021fb0f-20230412
@@ -22538,13 +22535,8 @@ packages:
     resolution: {integrity: sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==}
     dev: false
 
-  /immer@9.0.16(patch_hash=5xmqd5oohffxunmhptcxd5g33e):
-    resolution: {integrity: sha512-qenGE7CstVm1NrHQbMh8YaSzTZTFNP3zPqr3YU0S0UY441j4bJTg4A2Hh5KAhwgaiU6ZZ1Ar6y/2f4TblnMReQ==}
-    dev: false
-    patched: true
-
-  /immer@9.0.21:
-    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
+  /immer@10.0.1:
+    resolution: {integrity: sha512-zg++jJLsKKTwXGeSYIw0HgChSYQGtu0UDTnbKx5aGLYgte4CwTmH9eJDYyQ6FheyUtBe+lQW9FrGxya1G+Dtmg==}
     dev: false
 
   /immutable@3.8.1:
@@ -35369,7 +35361,7 @@ time:
   /i18next@22.4.14: '2023-04-02T11:28:23.091Z'
   /idb@7.1.1: '2022-11-04T10:28:55.720Z'
   /iframe-resizer-react@1.1.0: '2021-01-05T22:32:47.844Z'
-  /immer@9.0.21: '2023-03-23T17:41:49.995Z'
+  /immer@10.0.1: '2023-04-17T19:00:18.955Z'
   /json-stable-stringify@1.0.2: '2022-11-08T17:21:21.117Z'
   /json2csv@5.0.6: '2021-02-03T15:23:57.794Z'
   /linkify-react@4.1.1: '2023-03-25T15:06:24.522Z'
