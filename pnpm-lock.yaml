@@ -582,8 +582,8 @@ importers:
         specifier: 2.29.3
         version: 2.29.3
       html-to-image:
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.11.11
+        version: 1.11.11
       json-stable-stringify:
         specifier: ^1.0.2
         version: 1.0.2
@@ -22192,8 +22192,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /html-to-image@1.9.0:
-    resolution: {integrity: sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA==}
+  /html-to-image@1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
     dev: false
 
   /html-tokenize@2.0.1:
@@ -35361,7 +35361,7 @@ time:
   /graphql@16.6.0: '2022-08-16T19:26:38.481Z'
   /gulp-cli@2.3.0: '2020-06-04T00:14:30.257Z'
   /gun@0.2020.1234: '2021-08-26T04:44:56.538Z'
-  /html-to-image@1.9.0: '2021-10-09T06:42:53.388Z'
+  /html-to-image@1.11.11: '2023-02-01T07:02:51.019Z'
   /html-webpack-plugin@5.5.0: '2021-10-25T12:27:51.747Z'
   /https-browserify@1.0.0: '2017-04-04T23:35:16.037Z'
   /husky@8.0.3: '2023-01-03T08:01:18.807Z'
