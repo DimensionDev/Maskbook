@@ -136,7 +136,6 @@
       "@mui/base@5.0.0-alpha.100": "patches/@mui__base@5.0.0-alpha.100.patch",
       "micromark@3.1.0": "patches/micromark@3.1.0.patch",
       "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
-      "@hookform/resolvers@2.9.10": "patches/@hookform__resolvers@2.9.10.patch",
       "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
       "web3@1.8.0": "patches/web3@1.8.0.patch",
       "fuse.js@6.6.2": "patches/fuse.js@6.6.2.patch",

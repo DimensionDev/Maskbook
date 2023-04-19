@@ -13,7 +13,6 @@
 ## ESM-CJS compatibility
 
 - gulp: cannot be used with ts-node/esm mode.
-- @hookform/resolvers: <https://github.com/react-hook-form/resolvers/issues/460>
 - @types/react-avatar-editor: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63075>
 - web3: <https://github.com/web3/web3.js/issues/5543>
 - fuse.js: <https://github.com/krisk/Fuse/pull/692/>

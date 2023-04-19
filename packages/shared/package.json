@@ -11,7 +11,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@hookform/resolvers": "^2.9.10",
+    "@hookform/resolvers": "^3.1.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
