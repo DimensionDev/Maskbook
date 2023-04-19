@@ -2319,7 +2319,7 @@ importers:
     dependencies:
       '@bonfida/spl-name-service':
         specifier: ^0.1.50
-        version: 0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@4.12.0)(borsh@0.7.0)
+        version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@4.12.0)(borsh@0.7.0)
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -2363,8 +2363,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       '@solana/buffer-layout':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.0.1
+        version: 4.0.1
       '@solana/spl-token':
         specifier: ^0.1.8
         version: 0.1.8
@@ -3379,7 +3379,7 @@ importers:
     dependencies:
       '@bonfida/spl-name-service':
         specifier: ^0.1.50
-        version: 0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0)
+        version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0)
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
@@ -3441,8 +3441,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       '@solana/buffer-layout':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.0.1
+        version: 4.0.1
       '@solana/spl-token':
         specifier: ^0.1.8
         version: 0.1.8
@@ -5635,10 +5635,10 @@ packages:
       - google-protobuf
     dev: false
 
-  /@bonfida/name-offers@0.0.1(@solana/buffer-layout@4.0.0):
+  /@bonfida/name-offers@0.0.1(@solana/buffer-layout@4.0.1):
     resolution: {integrity: sha512-R0GJ/+R5OXfm4KfiKEjHx88QnQxw+kzDA8O4pHouev1voPJueOzzo5x+YLowMpk3/2maqEwkNPWiWIlSExjdug==}
     dependencies:
-      '@bonfida/spl-name-service': 0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.6.0)
+      '@bonfida/spl-name-service': 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.6.0)
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
       bn.js: 5.2.1
@@ -5651,7 +5651,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@4.12.0)(borsh@0.7.0):
+  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@4.12.0)(borsh@0.7.0):
     resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
     peerDependencies:
       '@solana/buffer-layout': ^4.0.0
@@ -5660,9 +5660,9 @@ packages:
       bn.js: ^5.1.3
       borsh: ^0.7.0
     dependencies:
-      '@bonfida/name-offers': 0.0.1(@solana/buffer-layout@4.0.0)
+      '@bonfida/name-offers': 0.0.1(@solana/buffer-layout@4.0.1)
       '@ethersproject/sha2': 5.7.0
-      '@solana/buffer-layout': 4.0.0
+      '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
       bn.js: 4.12.0
@@ -5673,7 +5673,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.6.0):
+  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.6.0):
     resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
     peerDependencies:
       '@solana/buffer-layout': ^4.0.0
@@ -5682,9 +5682,9 @@ packages:
       bn.js: ^5.1.3
       borsh: ^0.7.0
     dependencies:
-      '@bonfida/name-offers': 0.0.1(@solana/buffer-layout@4.0.0)
+      '@bonfida/name-offers': 0.0.1(@solana/buffer-layout@4.0.1)
       '@ethersproject/sha2': 5.7.0
-      '@solana/buffer-layout': 4.0.0
+      '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
       bn.js: 5.2.1
@@ -5695,7 +5695,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0):
+  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0):
     resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
     peerDependencies:
       '@solana/buffer-layout': ^4.0.0
@@ -5704,9 +5704,9 @@ packages:
       bn.js: ^5.1.3
       borsh: ^0.7.0
     dependencies:
-      '@bonfida/name-offers': 0.0.1(@solana/buffer-layout@4.0.0)
+      '@bonfida/name-offers': 0.0.1(@solana/buffer-layout@4.0.1)
       '@ethersproject/sha2': 5.7.0
-      '@solana/buffer-layout': 4.0.0
+      '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
       bn.js: 5.2.1
@@ -9922,8 +9922,8 @@ packages:
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
     dev: false
 
-  /@solana/buffer-layout@4.0.0:
-    resolution: {integrity: sha512-lR0EMP2HC3+Mxwd4YcnZb0smnaDw7Bl2IQWZiTevRH5ZZBZn6VRWn3/92E3qdU4SSImJkA6IDHawOHAnx/qUvQ==}
+  /@solana/buffer-layout@4.0.1:
+    resolution: {integrity: sha512-E1ImOIAD1tBZFRdjeM4/pzTiTApC0AOBGwyAMS4fwIodCWArzJ3DWdoh8cKxeFM2fElkxBh2Aqts1BPC373rHA==}
     engines: {node: '>=5.10'}
     dependencies:
       buffer: 6.0.3
@@ -9951,7 +9951,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.20.13
       '@ethersproject/sha2': 5.7.0
-      '@solana/buffer-layout': 4.0.0
+      '@solana/buffer-layout': 4.0.1
       bigint-buffer: 1.1.5
       bn.js: 5.2.1
       borsh: 0.7.0
@@ -32680,7 +32680,7 @@ time:
   /@sentry/types@7.48.0: '2023-04-14T09:51:14.281Z'
   /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
   /@sinonjs/text-encoding@0.7.2: '2022-07-27T11:54:25.384Z'
-  /@solana/buffer-layout@4.0.0: '2021-12-14T21:29:06.488Z'
+  /@solana/buffer-layout@4.0.1: '2022-12-09T16:49:55.927Z'
   /@solana/spl-token@0.1.8: '2021-08-16T19:07:32.336Z'
   /@solana/web3.js@1.44.2: '2022-06-21T17:42:13.385Z'
   /@storybook/addon-actions@6.5.13: '2022-10-24T04:02:38.942Z'

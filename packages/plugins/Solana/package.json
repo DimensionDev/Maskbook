@@ -24,7 +24,7 @@
     "@masknet/web3-shared-solana": "workspace:^",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@servie/events": "^3.0.0",
-    "@solana/buffer-layout": "^4.0.0",
+    "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.44.2",
     "bignumber.js": "9.1.1",

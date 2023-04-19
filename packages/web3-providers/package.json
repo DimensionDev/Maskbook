@@ -51,7 +51,7 @@
     "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
     "@metaplex/js": "^4.11.7",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
-    "@solana/buffer-layout": "^4.0.0",
+    "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.44.2",
     "@servie/events": "^3.0.0",
