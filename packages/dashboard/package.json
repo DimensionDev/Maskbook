@@ -58,7 +58,7 @@
     "react-hook-form": "^7.43.9",
     "react-qrcode-logo": "^2.7.0",
     "react-router-dom": "^6.10.0",
-    "react-to-print": "^2.14.7",
+    "react-to-print": "^2.14.12",
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",

@@ -597,8 +597,8 @@ importers:
         specifier: ^6.10.0
         version: 6.10.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-to-print:
-        specifier: ^2.14.7
-        version: 2.14.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^2.14.12
+        version: 2.14.12(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -27739,8 +27739,8 @@ packages:
       react: 0.0.0-experimental-21021fb0f-20230412
     dev: false
 
-  /react-to-print@2.14.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-lWVVAs9Co25uyE0toxcWeFsmaZObwUozXrJD9WMpDPclpBgk+WIzxlt3Q3omL/BCBG/cpf0XNvhayUWa+99YGw==}
+  /react-to-print@2.14.12(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-qFJAwvDFd95Z+FWNqitt+HaB1/z+Zdd0MMrNOPUSus3fG32vqv512yB+HXhQ94J3HKoyqaIg44v0Zfc6xUBqlg==}
     peerDependencies:
       react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-21021fb0f-20230412
       react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-21021fb0f-20230412
@@ -33498,7 +33498,7 @@ time:
   /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
   /react-router-dom@6.10.0: '2023-03-29T20:04:49.830Z'
   /react-router-dom@6.4.3: '2022-11-01T15:08:22.965Z'
-  /react-to-print@2.14.7: '2022-04-29T02:18:46.139Z'
+  /react-to-print@2.14.12: '2023-02-19T04:32:07.452Z'
   /react-transition-group@4.4.5: '2022-08-01T08:36:58.958Z'
   /react-use@17.4.0: '2022-05-20T12:10:53.726Z'
   /react-virtualized-auto-sizer@1.0.7: '2022-09-12T02:25:50.256Z'
