@@ -17,7 +17,7 @@
     "@masknet/encryption": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/typed-message": "workspace:^",
-    "@msgpack/msgpack": "^2.8.0",
+    "@msgpack/msgpack": "^3.0.0-beta2",
     "@mui/icons-material": "link:..\\empty",
     "@mui/lab": "link:..\\empty",
     "@mui/material": "link:..\\empty",
