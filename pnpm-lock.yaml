@@ -3091,8 +3091,8 @@ importers:
         specifier: ^1.8.8
         version: 1.8.8(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       tinycolor2:
-        specifier: ^1.4.2
-        version: 1.4.2
+        specifier: ^1.6.0
+        version: 1.6.0
       tss-react:
         specifier: ^4.4.4
         version: 4.4.4(@emotion/react@11.10.4)(@emotion/server@11.10.0)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -30370,8 +30370,8 @@ packages:
     resolution: {integrity: sha512-iyziEiyFxX4kyxSp+MtY1oCH/lvjH3PxFN8PGCDeqcZWAJ/i+9y+nL85w99PxVzrIvew/GSkSbDYtiGVa85Afg==}
     dev: true
 
-  /tinycolor2@1.4.2:
-    resolution: {integrity: sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==}
+  /tinycolor2@1.6.0:
+    resolution: {integrity: sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==}
     dev: false
 
   /tinypool@0.4.0:
@@ -33491,7 +33491,7 @@ time:
   /swc-loader@0.2.3: '2022-06-09T15:26:53.432Z'
   /tailwindcss@3.3.1: '2023-03-30T20:05:35.072Z'
   /tiny-secp256k1@2.2.1: '2022-02-21T07:50:25.372Z'
-  /tinycolor2@1.4.2: '2020-09-25T17:52:05.894Z'
+  /tinycolor2@1.6.0: '2023-02-03T23:33:07.774Z'
   /ts-node@10.9.1: '2022-07-14T02:33:44.792Z'
   /ts-results-es@3.5.0: '2022-05-06T17:25:00.438Z'
   /ts-results@3.3.0: '2021-05-23T18:25:35.300Z'
