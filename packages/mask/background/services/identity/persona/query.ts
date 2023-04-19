@@ -21,7 +21,7 @@ import {
 import { toPersonaInformation } from '../../__utils__/convert.js'
 import * as bip39 from 'bip39'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
-import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
+import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { decode } from '@msgpack/msgpack'
 import { decodeArrayBuffer } from '@masknet/kit'
 
