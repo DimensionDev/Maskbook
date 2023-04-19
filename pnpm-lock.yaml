@@ -1089,8 +1089,8 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10(react@0.0.0-experimental-21021fb0f-20230412)
       react-highlight-words:
-        specifier: ^0.18.0
-        version: 0.18.0(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^0.20.0
+        version: 0.20.0(react@0.0.0-experimental-21021fb0f-20230412)
       react-hook-form:
         specifier: 7.39.2
         version: 7.39.2(react@0.0.0-experimental-21021fb0f-20230412)
@@ -27514,8 +27514,8 @@ packages:
       react: 0.0.0-experimental-21021fb0f-20230412
     dev: false
 
-  /react-highlight-words@0.18.0(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-5z+46eLPjB4JWgOhuQ0E+6iUPTD1U3amiy5KKjzZmeJ5zyvHr91hnzBT3UHya/KlySm5KRTKpYpba9vs67oO2A==}
+  /react-highlight-words@0.20.0(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-asCxy+jCehDVhusNmCBoxDf2mm1AJ//D+EzDx1m5K7EqsMBIHdZ5G4LdwbSEXqZq1Ros0G0UySWmAtntSph7XA==}
     peerDependencies:
       react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0 || 0.0.0-experimental-21021fb0f-20230412
     peerDependenciesMeta:
@@ -33453,7 +33453,7 @@ time:
   /react-dom@0.0.0-experimental-21021fb0f-20230412: '2023-04-12T16:14:06.062Z'
   /react-draggable@4.4.5: '2022-04-26T18:04:09.131Z'
   /react-feather@2.0.10: '2022-05-30T14:20:50.600Z'
-  /react-highlight-words@0.18.0: '2022-04-07T21:04:05.898Z'
+  /react-highlight-words@0.20.0: '2023-01-22T22:11:15.972Z'
   /react-hook-form@7.39.2: '2022-11-09T23:10:53.221Z'
   /react-i18next@12.0.0: '2022-10-20T16:10:10.963Z'
   /react-i18next@12.2.0: '2023-02-23T16:58:56.177Z'
