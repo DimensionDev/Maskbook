@@ -1778,9 +1778,6 @@ importers:
       '@msgpack/msgpack':
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
-      '@remix-run/router':
-        specifier: ^1.0.4
-        version: 1.0.4
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -9600,11 +9597,6 @@ packages:
 
   /@remix-run/router@1.0.3:
     resolution: {integrity: sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==}
-    engines: {node: '>=14'}
-    dev: false
-
-  /@remix-run/router@1.0.4:
-    resolution: {integrity: sha512-gTL8H5USTAKOyVA4xczzDJnC3HMssdFa3tRlwBicXynx9XfiXwneHnYQogwSKpdCkjXISrEKSTtX62rLpNEVQg==}
     engines: {node: '>=14'}
     dev: false
 
@@ -32705,7 +32697,6 @@ time:
   /@nice-labs/git-rev@3.5.1: '2022-09-17T04:11:47.528Z'
   /@pmmmwh/react-refresh-webpack-plugin@0.5.10: '2022-11-24T13:38:27.856Z'
   /@react-hookz/web@23.0.0: '2023-03-23T11:33:35.599Z'
-  /@remix-run/router@1.0.4: '2022-11-30T20:03:14.364Z'
   /@rollup/plugin-commonjs@24.1.0: '2023-04-11T19:29:46.064Z'
   /@rollup/plugin-json@6.0.0: '2022-12-17T15:14:08.547Z'
   /@rollup/plugin-node-resolve@15.0.2: '2023-04-04T14:09:24.370Z'
