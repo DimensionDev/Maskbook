@@ -594,8 +594,8 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-router-dom:
-        specifier: ^6.4.3
-        version: 6.4.3(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-to-print:
         specifier: ^2.14.7
         version: 2.14.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1095,8 +1095,8 @@ importers:
         specifier: 7.43.9
         version: 7.43.9(react@0.0.0-experimental-21021fb0f-20230412)
       react-router-dom:
-        specifier: ^6.4.3
-        version: 6.4.3(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-transition-group:
         specifier: ^4.4.5
         version: 4.4.5(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1445,8 +1445,8 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0(@babel/core@7.21.0)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-router-dom:
-        specifier: ^6.4.3
-        version: 6.4.3(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1845,8 +1845,8 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10(react@0.0.0-experimental-21021fb0f-20230412)
       react-router-dom:
-        specifier: ^6.4.3
-        version: 6.4.3(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -9770,6 +9770,11 @@ packages:
 
   /@remix-run/router@1.0.4:
     resolution: {integrity: sha512-gTL8H5USTAKOyVA4xczzDJnC3HMssdFa3tRlwBicXynx9XfiXwneHnYQogwSKpdCkjXISrEKSTtX62rLpNEVQg==}
+    engines: {node: '>=14'}
+    dev: false
+
+  /@remix-run/router@1.5.0:
+    resolution: {integrity: sha512-bkUDCp8o1MvFO+qxkODcbhSqRa6P2GXgrGZVpt0dCXNW2HCSCqYI0ZoAqEOSAjRWmmlKcYgFvN4B4S+zo/f8kg==}
     engines: {node: '>=14'}
     dev: false
 
@@ -27672,6 +27677,24 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /react-router-dom@6.10.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-E5dfxRPuXKJqzwSe/qGcqdwa18QiWC6f3H3cWXM24qj4N0/beCIf/CWTipop2xm7mR0RCS99NnaqPNjHtrAzCg==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8 || 0.0.0-experimental-21021fb0f-20230412'
+      react-dom: '>=16.8 || 0.0.0-experimental-21021fb0f-20230412'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      '@remix-run/router': 1.5.0
+      react: 0.0.0-experimental-21021fb0f-20230412
+      react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
+      react-router: 6.10.0(react@0.0.0-experimental-21021fb0f-20230412)
+    dev: false
+
   /react-router-dom@6.4.3(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
     resolution: {integrity: sha512-MiaYQU8CwVCaOfJdYvt84KQNjT78VF0TJrA17SIQgNHRvLnXDJO6qsFqq8F/zzB1BWZjCFIrQpu4QxcshitziQ==}
     engines: {node: '>=14'}
@@ -27688,6 +27711,19 @@ packages:
       react: 0.0.0-experimental-21021fb0f-20230412
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
       react-router: 6.4.3(react@0.0.0-experimental-21021fb0f-20230412)
+    dev: false
+
+  /react-router@6.10.0(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-Nrg0BWpQqrC3ZFFkyewrflCud9dio9ME3ojHCF/WLsprJVzkq3q3UeEhMCAW1dobjeGbWgjNn/PVF6m46ANxXQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8 || 0.0.0-experimental-21021fb0f-20230412'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@remix-run/router': 1.5.0
+      react: 0.0.0-experimental-21021fb0f-20230412
     dev: false
 
   /react-router@6.4.3(react@0.0.0-experimental-21021fb0f-20230412):
@@ -33460,6 +33496,7 @@ time:
   /react-markdown@8.0.7: '2023-04-12T10:09:37.701Z'
   /react-qrcode-logo@2.7.0: '2022-03-29T20:53:55.986Z'
   /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
+  /react-router-dom@6.10.0: '2023-03-29T20:04:49.830Z'
   /react-router-dom@6.4.3: '2022-11-01T15:08:22.965Z'
   /react-to-print@2.14.7: '2022-04-29T02:18:46.139Z'
   /react-transition-group@4.4.5: '2022-08-01T08:36:58.958Z'
