@@ -83,7 +83,7 @@
     "@types/elliptic": "^6.4.14",
     "@types/json-stable-stringify": "^1.0.34",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "18.14.4",
+    "@types/node": "18.15.11",
     "@types/react-avatar-editor": "^13.0.0",
     "@types/react-highlight-words": "^0.16.4",
     "@types/react-router-dom": "^5.3.3",
