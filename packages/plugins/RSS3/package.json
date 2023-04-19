@@ -29,7 +29,7 @@
     "linkify-react": "^4.1.1",
     "linkifyjs": "^4.1.1",
     "react-use": "^17.4.0",
-    "urlcat": "^2.0.4",
+    "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "web3-utils": "1.8.0"

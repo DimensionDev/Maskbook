@@ -91,9 +91,6 @@ patchedDependencies:
   rss3-next@0.6.17:
     hash: db27yqpr4wdtpwfyvaxcqd4jpi
     path: patches/rss3-next@0.6.17.patch
-  urlcat@2.0.4:
-    hash: fggwetex7eobhq3hztj4obsulu
-    path: patches/urlcat@2.0.4.patch
   web3-core@1.8.0:
     hash: ie6z5nhvcuo3lg2pk6xeacwpbi
     path: patches/web3-core@1.8.0.patch
@@ -606,8 +603,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -693,8 +690,8 @@ importers:
   packages/flags:
     devDependencies:
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/gun-utils:
     dependencies:
@@ -1128,8 +1125,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1307,8 +1304,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1376,8 +1373,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/plugins/Avatar:
     dependencies:
@@ -1520,8 +1517,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: 2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/plugins/CrossChainBridge:
     dependencies:
@@ -1652,8 +1649,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
@@ -1739,8 +1736,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
@@ -1845,8 +1842,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1967,8 +1964,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
@@ -2015,8 +2012,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       wallet.ts:
         specifier: 1.0.1
         version: 1.0.1
@@ -2144,8 +2141,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: 2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       web3-eth-abi:
         specifier: 1.8.0
         version: 1.8.0
@@ -2216,8 +2213,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -2270,8 +2267,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       urlcat:
-        specifier: 2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/plugins/ScamWarning:
     dependencies:
@@ -2526,8 +2523,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/plugins/Wallet:
     dependencies:
@@ -2619,8 +2616,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -2910,8 +2907,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3203,8 +3200,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3420,8 +3417,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       web3:
         specifier: 1.8.0
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
@@ -3567,8 +3564,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3631,8 +3628,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3698,8 +3695,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3768,8 +3765,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/web3-shared/solana:
     dependencies:
@@ -3801,8 +3798,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+        specifier: ^3.1.0
+        version: 3.1.0
 
   packages/web3-state:
     dependencies:
@@ -18256,7 +18253,7 @@ packages:
       is-shared-array-buffer: 1.0.2
       is-string: 1.0.7
       is-weakref: 1.0.2
-      object-inspect: 1.12.2
+      object-inspect: 1.12.3
       object-keys: 1.1.1
       object.assign: 4.1.4
       regexp.prototype.flags: 1.4.3
@@ -25463,12 +25460,8 @@ packages:
     engines: {node: '>= 6'}
     dev: false
 
-  /object-inspect@1.12.2:
-    resolution: {integrity: sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==}
-
   /object-inspect@1.12.3:
     resolution: {integrity: sha512-geUvdk7c+eizMNUDkRpW1wJwgfOiOeHbxBR/hLXK1aT6zmVSO0jsQcs7fj6MGw89jC/cjGfLcNOrtMYtGqm81g==}
-    dev: true
 
   /object-is@1.1.5:
     resolution: {integrity: sha512-3cyDsyHgtmi7I7DfSSI2LDp6SK2lwvtbg0p0R1e0RvTqF5ceGx+K2dfSjm1bKDMVCFEDAQvy+o8c6a7VujOddw==}
@@ -29000,7 +28993,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       get-intrinsic: 1.1.3
-      object-inspect: 1.12.2
+      object-inspect: 1.12.3
 
   /siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
@@ -31362,9 +31355,10 @@ packages:
       punycode: 1.3.2
       querystring: 0.2.0
 
-  /urlcat@2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu):
-    resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
-    patched: true
+  /urlcat@3.1.0:
+    resolution: {integrity: sha512-qY6b94/aGMIHh70EEQ/4hfR2LUGZ+fPQNp64cf7yRX9kAp4XG2tx7LgYUU1Qkh17bFylME0u4n3lOezonougPw==}
+    dependencies:
+      qs: 6.11.0
 
   /use-subscription@1.6.0(react@0.0.0-experimental-21021fb0f-20230412):
     resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
@@ -33517,6 +33511,7 @@ time:
   /typeson-registry@5.0.0: '2023-04-09T17:53:21.717Z'
   /typeson@8.0.1: '2023-01-01T19:13:54.909Z'
   /unstated-next@1.1.0: '2019-05-13T23:34:47.580Z'
+  /urlcat@3.1.0: '2023-01-17T18:49:25.457Z'
   /use-subscription@1.6.0: '2022-03-29T16:02:10.348Z'
   /use-subscription@1.8.0: '2022-06-14T19:47:14.602Z'
   /uuid@9.0.0: '2022-09-05T20:03:54.869Z'
