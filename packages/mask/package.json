@@ -119,7 +119,7 @@
     "immer": "^10.0.1",
     "json-stable-stringify": "^1.0.2",
     "lru-cache": "^9.1.0",
-    "millify": "^4.0.0",
+    "millify": "^6.1.0",
     "next-tick": "^1.1.0",
     "opensea-js": "^1.2.7",
     "promievent": "^0.1.5",
