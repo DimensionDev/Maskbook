@@ -24,8 +24,8 @@
         ]
     },
     "dependencies": {
-        "@headlessui/react": "^1.7.12",
-        "@heroicons/react": "^2.0.16",
+        "@headlessui/react": "^1.7.14",
+        "@heroicons/react": "^2.0.17",
         "@masknet/base": "workspace:^",
         "@masknet/encryption": "workspace:^",
         "@masknet/plugin-evm": "workspace:^",
