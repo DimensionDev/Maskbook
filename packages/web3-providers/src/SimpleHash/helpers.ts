@@ -38,8 +38,6 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         ? asset.name
         : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
-    const collectionName = asset.collection.name
-
     return {
         id: address,
         chainId,
@@ -72,10 +70,10 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             description: asset.description,
             imageURL: resolveImageURL(
                 asset.image_url || asset.previews.image_large_url,
-                collectionName,
+                asset.name,
                 asset.contract_address,
             ),
-            previewImageURL: resolveImageURL(asset.previews.image_small_url, collectionName, asset.contract_address),
+            previewImageURL: resolveImageURL(asset.previews.image_small_url, asset.name, asset.contract_address),
             blurhash: asset.previews.blurhash,
             mediaURL: asset.image_url || asset.previews.image_large_url,
         },
