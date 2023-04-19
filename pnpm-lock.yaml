@@ -717,14 +717,14 @@ importers:
   packages/injected-script:
     devDependencies:
       rollup:
-        specifier: ^3.17.3
-        version: 3.17.3
+        specifier: ^3.20.6
+        version: 3.20.6
       rollup-plugin-swc3:
-        specifier: ^0.8.0
-        version: 0.8.0(@swc/core@1.3.37)(rollup@3.17.3)
+        specifier: ^0.8.1
+        version: 0.8.1(@swc/core@1.3.37)(rollup@3.20.6)
       rollup-plugin-terser:
         specifier: ^7.0.2
-        version: 7.0.2(rollup@3.17.3)
+        version: 7.0.2(rollup@3.20.6)
 
   packages/mask:
     dependencies:
@@ -1238,17 +1238,17 @@ importers:
         version: 6.1.5
     devDependencies:
       '@rollup/plugin-node-resolve':
-        specifier: ^15.0.1
-        version: 15.0.1(rollup@3.17.3)
+        specifier: ^15.0.2
+        version: 15.0.2(rollup@3.20.6)
       rollup:
-        specifier: ^3.17.3
-        version: 3.17.3
+        specifier: ^3.20.6
+        version: 3.20.6
       rollup-plugin-swc3:
-        specifier: ^0.8.0
-        version: 0.8.0(@swc/core@1.3.37)(rollup@3.17.3)
+        specifier: ^0.8.1
+        version: 0.8.1(@swc/core@1.3.37)(rollup@3.20.6)
       rollup-plugin-terser:
         specifier: ^7.0.2
-        version: 7.0.2(rollup@3.17.3)
+        version: 7.0.2(rollup@3.20.6)
 
   packages/plugin-infra:
     dependencies:
@@ -2689,14 +2689,14 @@ importers:
         version: 2.5.0
     devDependencies:
       '@rollup/plugin-commonjs':
-        specifier: ^24.0.1
-        version: 24.0.1(rollup@3.17.3)
+        specifier: ^24.1.0
+        version: 24.1.0(rollup@3.20.6)
       '@rollup/plugin-json':
         specifier: ^6.0.0
-        version: 6.0.0(rollup@3.17.3)
+        version: 6.0.0(rollup@3.20.6)
       '@rollup/plugin-node-resolve':
-        specifier: ^15.0.1
-        version: 15.0.1(rollup@3.17.3)
+        specifier: ^15.0.2
+        version: 15.0.2(rollup@3.20.6)
       '@types/node':
         specifier: 18.15.11
         version: 18.15.11
@@ -2707,14 +2707,14 @@ importers:
         specifier: ^0.13.11
         version: 0.13.11
       rollup:
-        specifier: ^3.17.3
-        version: 3.17.3
+        specifier: ^3.20.6
+        version: 3.20.6
       rollup-plugin-swc3:
-        specifier: ^0.8.0
-        version: 0.8.0(@swc/core@1.3.37)(rollup@3.17.3)
+        specifier: ^0.8.1
+        version: 0.8.1(@swc/core@1.3.37)(rollup@3.20.6)
       rollup-plugin-terser:
         specifier: ^7.0.2
-        version: 7.0.2(rollup@3.17.3)
+        version: 7.0.2(rollup@3.20.6)
 
   packages/polyfills/types: {}
 
@@ -2820,14 +2820,14 @@ importers:
         version: 7.37.2
     devDependencies:
       '@rollup/plugin-node-resolve':
-        specifier: ^15.0.1
-        version: 15.0.1(rollup@3.17.3)
+        specifier: ^15.0.2
+        version: 15.0.2(rollup@3.20.6)
       '@rollup/plugin-replace':
         specifier: ^5.0.2
-        version: 5.0.2(rollup@3.17.3)
+        version: 5.0.2(rollup@3.20.6)
       rollup:
-        specifier: ^3.17.3
-        version: 3.17.3
+        specifier: ^3.20.6
+        version: 3.20.6
 
   packages/shared:
     dependencies:
@@ -9951,8 +9951,8 @@ packages:
       '@rgba-image/create-image': 0.1.1
     dev: false
 
-  /@rollup/plugin-commonjs@24.0.1(rollup@3.17.3):
-    resolution: {integrity: sha512-15LsiWRZk4eOGqvrJyu3z3DaBu5BhXIMeWnijSRvd8irrrg9SHpQ1pH+BUK4H6Z9wL9yOxZJMTLU+Au86XHxow==}
+  /@rollup/plugin-commonjs@24.1.0(rollup@3.20.6):
+    resolution: {integrity: sha512-eSL45hjhCWI0jCCXcNtLVqM5N1JlBGvlFfY0m6oOYnLCJ6N0qEXoZql4sY2MOUArzhH4SA/qBpTxvvZp2Sc+DQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.68.0 || ^3.0.0 || 3
@@ -9960,16 +9960,16 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.17.3)
+      '@rollup/pluginutils': 5.0.2(rollup@3.20.6)
       commondir: 1.0.1
       estree-walker: 2.0.2
       glob: 8.1.0
       is-reference: 1.2.1
       magic-string: 0.27.0
-      rollup: 3.17.3
+      rollup: 3.20.6
     dev: true
 
-  /@rollup/plugin-json@6.0.0(rollup@3.17.3):
+  /@rollup/plugin-json@6.0.0(rollup@3.20.6):
     resolution: {integrity: sha512-i/4C5Jrdr1XUarRhVu27EEwjt4GObltD7c+MkCIpO2QIbojw8MUs+CCTqOphQi3Qtg1FLmYt+l+6YeoIf51J7w==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -9978,12 +9978,12 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.17.3)
-      rollup: 3.17.3
+      '@rollup/pluginutils': 5.0.2(rollup@3.20.6)
+      rollup: 3.20.6
     dev: true
 
-  /@rollup/plugin-node-resolve@15.0.1(rollup@3.17.3):
-    resolution: {integrity: sha512-ReY88T7JhJjeRVbfCyNj+NXAG3IIsVMsX9b5/9jC98dRP8/yxlZdz7mHZbHk5zHr24wZZICS5AcXsFZAXYUQEg==}
+  /@rollup/plugin-node-resolve@15.0.2(rollup@3.20.6):
+    resolution: {integrity: sha512-Y35fRGUjC3FaurG722uhUuG8YHOJRJQbI6/CkbRkdPotSpDj9NtIN85z1zrcyDcCQIW4qp5mgG72U+gJ0TAFEg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.78.0 || ^3.0.0 || 3
@@ -9991,16 +9991,16 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.17.3)
+      '@rollup/pluginutils': 5.0.2(rollup@3.20.6)
       '@types/resolve': 1.20.2
       deepmerge: 4.2.2
-      is-builtin-module: 3.2.0
+      is-builtin-module: 3.2.1
       is-module: 1.0.0
       resolve: 1.22.1
-      rollup: 3.17.3
+      rollup: 3.20.6
     dev: true
 
-  /@rollup/plugin-replace@5.0.2(rollup@3.17.3):
+  /@rollup/plugin-replace@5.0.2(rollup@3.20.6):
     resolution: {integrity: sha512-M9YXNekv/C/iHHK+cvORzfRYfPbq0RDD8r0G+bMiTXjNGKulPnCT9O3Ss46WfhI6ZOCgApOP7xAdmCQJ+U2LAA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -10009,9 +10009,9 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.17.3)
+      '@rollup/pluginutils': 5.0.2(rollup@3.20.6)
       magic-string: 0.27.0
-      rollup: 3.17.3
+      rollup: 3.20.6
     dev: true
 
   /@rollup/pluginutils@4.2.1:
@@ -10022,7 +10022,7 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@rollup/pluginutils@5.0.2(rollup@3.17.3):
+  /@rollup/pluginutils@5.0.2(rollup@3.20.6):
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -10034,7 +10034,7 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.17.3
+      rollup: 3.20.6
     dev: true
 
   /@scamsniffer/detector@0.0.21(@swc/core@1.3.37)(jest@28.1.3)(typescript@5.1.0-dev.20230418):
@@ -23111,6 +23111,13 @@ packages:
       builtin-modules: 3.3.0
     dev: true
 
+  /is-builtin-module@3.2.1:
+    resolution: {integrity: sha512-BSLE3HnV2syZ0FK0iMA/yUGplUeMmNz4AW5fnTunbCIqZi4vG3WjJT9FHMy5D69xmAYBHXQhJdALdpwVxV501A==}
+    engines: {node: '>=6'}
+    dependencies:
+      builtin-modules: 3.3.0
+    dev: true
+
   /is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
@@ -30106,8 +30113,8 @@ packages:
     dependencies:
       bn.js: 5.2.1
 
-  /rollup-plugin-swc3@0.8.0(@swc/core@1.3.37)(rollup@3.17.3):
-    resolution: {integrity: sha512-IJapqORpU4NgSJHaFvbTcUe4WQPzgE6v8Suu95ZO4Qw1VwGRcuurvSCuYX1fIzR+DLVlZH4zq/T6uqbmw3Bzxw==}
+  /rollup-plugin-swc3@0.8.1(@swc/core@1.3.37)(rollup@3.20.6):
+    resolution: {integrity: sha512-xoHRmrGamXrz4rNfmXiTNf/6pAYY2daFOJavVsrG/HvBgsoa8lx9rtas9XiqOl5DqD04tGn8MiUwarITOPyh8A==}
     engines: {node: '>=12'}
     peerDependencies:
       '@swc/core': '>=1.2.165'
@@ -30117,10 +30124,10 @@ packages:
       '@rollup/pluginutils': 4.2.1
       '@swc/core': 1.3.37
       get-tsconfig: 4.2.0
-      rollup: 3.17.3
+      rollup: 3.20.6
     dev: true
 
-  /rollup-plugin-terser@7.0.2(rollup@3.17.3):
+  /rollup-plugin-terser@7.0.2(rollup@3.20.6):
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
     deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
     peerDependencies:
@@ -30128,17 +30135,9 @@ packages:
     dependencies:
       '@babel/code-frame': 7.18.6
       jest-worker: 26.6.2
-      rollup: 3.17.3
+      rollup: 3.20.6
       serialize-javascript: 4.0.0
       terser: 5.15.1
-    dev: true
-
-  /rollup@3.17.3:
-    resolution: {integrity: sha512-p5LaCXiiOL/wrOkj8djsIDFmyU9ysUxcyW+EKRLHb6TKldJzXpImjcRSR+vgo09DBdofGcOoLOsRyxxG2n5/qQ==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-    optionalDependencies:
-      fsevents: 2.3.2
     dev: true
 
   /rollup@3.20.6:
@@ -35474,9 +35473,9 @@ time:
   /@pmmmwh/react-refresh-webpack-plugin@0.5.10: '2022-11-24T13:38:27.856Z'
   /@react-hookz/web@19.2.0: '2022-11-20T15:30:05.049Z'
   /@remix-run/router@1.0.4: '2022-11-30T20:03:14.364Z'
-  /@rollup/plugin-commonjs@24.0.1: '2023-01-20T23:43:24.795Z'
+  /@rollup/plugin-commonjs@24.1.0: '2023-04-11T19:29:46.064Z'
   /@rollup/plugin-json@6.0.0: '2022-12-17T15:14:08.547Z'
-  /@rollup/plugin-node-resolve@15.0.1: '2022-10-21T19:09:49.376Z'
+  /@rollup/plugin-node-resolve@15.0.2: '2023-04-04T14:09:24.370Z'
   /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
   /@scamsniffer/detector@0.0.21: '2022-08-15T06:05:49.379Z'
   /@sentry/browser@7.37.2: '2023-02-13T15:34:12.301Z'
@@ -35645,9 +35644,9 @@ time:
   /remark-gfm@3.0.1: '2021-11-03T18:15:59.082Z'
   /remarkable@2.0.1: '2020-05-25T11:32:44.241Z'
   /rimraf@3.0.2: '2020-02-09T06:18:37.504Z'
-  /rollup-plugin-swc3@0.8.0: '2022-12-11T13:00:36.740Z'
+  /rollup-plugin-swc3@0.8.1: '2023-03-24T08:29:22.165Z'
   /rollup-plugin-terser@7.0.2: '2020-09-04T18:39:17.900Z'
-  /rollup@3.17.3: '2023-02-25T20:30:42.831Z'
+  /rollup@3.20.6: '2023-04-18T11:37:09.925Z'
   /scrypt-js@3.0.1: '2020-05-19T07:06:27.834Z'
   /ses@0.18.1: '2022-12-23T21:59:16.440Z'
   /socket.io-client@2.4.0: '2021-01-04T22:41:40.900Z'
