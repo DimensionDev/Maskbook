@@ -8,7 +8,7 @@ import { useProposal } from './hooks/useProposal.js'
 import { useVotes } from './hooks/useVotes.js'
 import { useResults } from './hooks/useResults.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { parse } from 'json2csv'
+import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { LoadingCard } from './LoadingCard.js'
 
@@ -180,7 +180,8 @@ function Content() {
                     variant="roundedContained"
                     className={classes.resultButton}
                     onClick={() => {
-                        const csv = parse(dataForCsv)
+                        const parser = new Parser()
+                        const csv = parser.parse(dataForCsv)
                         const link = document.createElement('a')
                         // TODO: use URL.createObjectURL instead
                         link.setAttribute('href', `data:text/csv;charset=utf-8,${csv}`)
