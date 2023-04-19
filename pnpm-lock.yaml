@@ -1070,9 +1070,6 @@ importers:
       promievent:
         specifier: ^0.1.5
         version: 0.1.5
-      protobufjs:
-        specifier: ^6.11.2
-        version: 6.11.2
       pure-react-carousel:
         specifier: ^1.28.1
         version: 1.28.1(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -33443,7 +33440,6 @@ time:
   /prettier@2.8.7: '2023-03-24T08:15:19.994Z'
   /promievent@0.1.5: '2020-12-21T22:00:08.601Z'
   /proper-lockfile@4.1.2: '2021-01-25T18:55:18.544Z'
-  /protobufjs@6.11.2: '2021-04-30T17:31:06.132Z'
   /punycode@2.1.1: '2018-05-22T02:46:47.304Z'
   /pure-react-carousel@1.28.1: '2022-02-14T21:13:57.872Z'
   /purgecss@5.0.0: '2022-09-13T20:19:53.516Z'
