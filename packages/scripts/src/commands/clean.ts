@@ -1,11 +1,9 @@
 import { awaitChildProcess, printShell, ROOT_PATH, shell, task } from '../utils/index.js'
 import { join } from 'path'
-import { promisify } from 'util'
 import { fileURLToPath } from 'url'
 
 export async function clean() {
-    const rimraf = await import('rimraf')
-    const rm = promisify(rimraf.default)
+    const { rimraf: rm } = await import('rimraf')
     await awaitChildProcess(
         shell.cwd(
             ROOT_PATH,
