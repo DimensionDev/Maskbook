@@ -696,8 +696,8 @@ importers:
         specifier: workspace:^
         version: link:../theme
       ef.js:
-        specifier: ^0.16.0
-        version: 0.16.0
+        specifier: ^0.16.6
+        version: 0.16.6
 
   packages/flags:
     devDependencies:
@@ -18868,19 +18868,19 @@ packages:
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  /ef-core@0.16.0:
-    resolution: {integrity: sha512-GuqVYYJDe7GifWNC+lbLlb+re1L+kHWTahfCKDC8Gv98K80ZWyVfdUdYK7pAHNNIdVVXDBnhLrHC35pIYpPyqg==}
+  /ef-core@0.16.6:
+    resolution: {integrity: sha512-U+X9zMFu6DGkfsuP6ugpd3dUYxtezSWmEaJA83+eyyEGnyemajQ2kC6LOMyeI26el/Nyk8nkE7HbmMN1dsed7g==}
     dev: false
 
-  /ef.js@0.16.0:
-    resolution: {integrity: sha512-TUQE6MvcpzoZbnIM2EzuWR0SAhLHXfD6GmUf1Xq4XnuhBIU9OhLy6dYbIXXEDmGP8Pv57HJKxsjFCIStx/XNBQ==}
+  /ef.js@0.16.6:
+    resolution: {integrity: sha512-cMDCl7ZgnfVB/IEUKz5atTNh/r/4NYxqAjstYSZme/Xh9mPHF6x7gS7EloHQz26sXZ+7IM9xJv8LpRiekeOhTg==}
     dependencies:
-      ef-core: 0.16.0
-      eft-parser: 0.14.1
+      ef-core: 0.16.6
+      eft-parser: 0.16.5
     dev: false
 
-  /eft-parser@0.14.1:
-    resolution: {integrity: sha512-fos81YW7N6V1YowFx2ZJi6gF1/9zeAO/NwYSA+dRnzTb0vdCIwwJMBbvwAMeuzzhO0W5xnyc8srAxHX37rKFyw==}
+  /eft-parser@0.16.5:
+    resolution: {integrity: sha512-7fdg95/IOXs4nN8btfDorkkrY6N9vnC9y4V91bhnsNVHQSpeqQVA06EK12LrdpV5dYFTmCQMY0Gzzu9qSWsWXg==}
     dev: false
 
   /electron-fetch@1.7.4:
@@ -35250,7 +35250,7 @@ time:
   /date-fns@2.29.3: '2022-09-13T12:36:12.348Z'
   /dompurify@3.0.2: '2023-04-14T17:09:54.873Z'
   /dotenv@16.0.3: '2022-09-29T17:28:10.605Z'
-  /ef.js@0.16.0: '2022-11-09T20:10:17.298Z'
+  /ef.js@0.16.6: '2023-03-22T19:54:19.613Z'
   /elliptic@6.5.4: '2021-02-02T18:22:21.969Z'
   /enquirer@2.3.6: '2020-07-02T13:00:19.453Z'
   /eslint-plugin-import@2.27.5: '2023-01-16T19:44:39.790Z'
