@@ -28,15 +28,19 @@ async function main() {
     })
 
     // rename Qualification to QualificationEvent
-    const qualificationDefinition = join(GENERATED_PATH, 'Qualification.d.ts')
+    const qualificationDefinition = join(GENERATED_PATH, 'Qualification.ts')
     replaceFileAll(qualificationDefinition, [
         ['type Qualification', 'type QualificationEvent'],
         ['Callback<Qualification>', 'Callback<QualificationEvent>'],
     ])
 
-    run(GENERATED_PATH, 'npx', '@magic-works/ts-esm-migrate', '.')
+    run(GENERATED_PATH, 'npx', '-y', '@magic-works/ts-esm-migrate', '.')
     // format code
     run(GENERATED_PATH, 'npx', 'prettier', '.', '--write')
+    // rename .ts to .d.ts
+    for (const file of await fs.readdir(GENERATED_PATH)) {
+        await fs.rename(join(GENERATED_PATH, file), join(GENERATED_PATH, file.replace('.ts', '.d.ts')))
+    }
 
     // add to git stage
     run(ABIS_PATH, 'git', 'add', '.')
