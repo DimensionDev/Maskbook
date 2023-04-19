@@ -3001,11 +3001,11 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       typeson:
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^8.0.1
+        version: 8.0.1
       typeson-registry:
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: ^5.0.0
+        version: 5.0.0
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
@@ -30503,6 +30503,13 @@ packages:
       punycode: 2.3.0
     dev: false
 
+  /tr46@4.1.1:
+    resolution: {integrity: sha512-2lv/66T7e5yNyhAAC4NaKe5nVavzuGJQVVtRYLyQ2OI8tsJ61PMLlelehb0wi2Hx6+hT/OJUWZcw8MjlSRnxvw==}
+    engines: {node: '>=14'}
+    dependencies:
+      punycode: 2.3.0
+    dev: false
+
   /trim-lines@3.0.1:
     resolution: {integrity: sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==}
     dev: false
@@ -30928,17 +30935,17 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typeson-registry@3.0.0:
-    resolution: {integrity: sha512-xPBsm6LhQnU2HOQq1770MjbtIXMd7s7Q7VWFyexe9hRVSIvx+PXPXh/Snh2+HgT6fffxAADVHIBCSjrVrsbrhw==}
+  /typeson-registry@5.0.0:
+    resolution: {integrity: sha512-nlDboRKPzsXEjLr1866j7zxDq39OAkBshCtMxyzwP9Ng4wJRfjGJiomJR7K1AUhHEjfiI9OqfD87Ky78AvymtQ==}
     engines: {node: ^14.17.0 || >=16.0.0}
     dependencies:
       base64-arraybuffer-es6: 1.0.0
-      typeson: 7.0.2
-      whatwg-url: 11.0.0
+      typeson: 8.0.1
+      whatwg-url: 12.0.1
     dev: false
 
-  /typeson@7.0.2:
-    resolution: {integrity: sha512-Rc/BXqUq+pgAc9D3Na+A2iiTlenfzZW9VA2H9DzpYWKOqUMwUaLyu6OQWXCIEiFs1AQ6Fssbed1/subMY/cEag==}
+  /typeson@8.0.1:
+    resolution: {integrity: sha512-T0luclbtvUaH7vL4MPcisQ7BiyuBtlZYCE8Ye0d6gKNKj7amVNGdKfe2kdv2/njYHLWJrWSvI6ePsKFwLj30Zg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: false
 
@@ -32610,6 +32617,14 @@ packages:
       webidl-conversions: 7.0.0
     dev: false
 
+  /whatwg-url@12.0.1:
+    resolution: {integrity: sha512-Ed/LrqB8EPlGxjS+TrsXcpUond1mhccS3pchLhzSgPCnTimUCKj3IZE75pAs5m6heB2U2TMerKFUXheyHY+VDQ==}
+    engines: {node: '>=14'}
+    dependencies:
+      tr46: 4.1.1
+      webidl-conversions: 7.0.0
+    dev: false
+
   /whatwg-url@5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
     dependencies:
@@ -33499,8 +33514,8 @@ time:
   /tss-react@4.8.2: '2023-03-18T13:50:54.199Z'
   /typechain@8.1.1: '2022-11-01T22:04:27.752Z'
   /typescript@5.1.0-dev.20230418: '2023-04-18T07:16:09.318Z'
-  /typeson-registry@3.0.0: '2022-04-25T03:42:05.754Z'
-  /typeson@7.0.2: '2022-04-30T20:54:34.009Z'
+  /typeson-registry@5.0.0: '2023-04-09T17:53:21.717Z'
+  /typeson@8.0.1: '2023-01-01T19:13:54.909Z'
   /unstated-next@1.1.0: '2019-05-13T23:34:47.580Z'
   /use-subscription@1.6.0: '2022-03-29T16:02:10.348Z'
   /use-subscription@1.8.0: '2022-06-14T19:47:14.602Z'
