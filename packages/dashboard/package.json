@@ -67,7 +67,7 @@
     "wallet.ts": "^1.0.1",
     "web3-core-helpers": "1.8.0",
     "web3-utils": "1.8.0",
-    "zod": "^3.16.0"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",

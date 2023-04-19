@@ -151,8 +151,7 @@
     "web3-eth-contract": "1.8.0",
     "web3-utils": "1.8.0",
     "webextension-polyfill": "^0.10.0",
-    "z-schema": "^5.0.3",
-    "zod": "3.16.0"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@nice-labs/emit-file-webpack-plugin": "^1.1.3",
