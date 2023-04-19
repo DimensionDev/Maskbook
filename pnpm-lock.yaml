@@ -2319,7 +2319,7 @@ importers:
     dependencies:
       '@bonfida/spl-name-service':
         specifier: ^0.1.50
-        version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@4.12.0)(borsh@0.7.0)
+        version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@4.12.0)(borsh@0.7.0)
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -2358,7 +2358,7 @@ importers:
         version: link:../../web3-state
       '@project-serum/sol-wallet-adapter':
         specifier: ^0.2.6
-        version: 0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.44.2)
+        version: 0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.75.0)
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -2369,8 +2369,8 @@ importers:
         specifier: ^0.1.8
         version: 0.1.8
       '@solana/web3.js':
-        specifier: ^1.44.2
-        version: 1.44.2
+        specifier: ^1.75.0
+        version: 1.75.0
       bignumber.js:
         specifier: 9.1.1
         version: 9.1.1
@@ -2799,8 +2799,8 @@ importers:
         specifier: ^23.0.0
         version: 23.0.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       '@solana/web3.js':
-        specifier: ^1.44.2
-        version: 1.44.2
+        specifier: ^1.75.0
+        version: 1.75.0
       '@types/qrcode':
         specifier: ^1.5.0
         version: 1.5.0
@@ -3379,7 +3379,7 @@ importers:
     dependencies:
       '@bonfida/spl-name-service':
         specifier: ^0.1.50
-        version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0)
+        version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@5.2.1)(borsh@0.7.0)
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
@@ -3433,10 +3433,10 @@ importers:
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)
+        version: 4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)
       '@project-serum/sol-wallet-adapter':
         specifier: ^0.2.6
-        version: 0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.44.2)
+        version: 0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.75.0)
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -3447,8 +3447,8 @@ importers:
         specifier: ^0.1.8
         version: 0.1.8
       '@solana/web3.js':
-        specifier: ^1.44.2
-        version: 1.44.2
+        specifier: ^1.75.0
+        version: 1.75.0
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
@@ -3708,8 +3708,8 @@ importers:
         specifier: workspace:^
         version: link:../base
       '@solana/web3.js':
-        specifier: ^1.44.2
-        version: 1.44.2
+        specifier: ^1.75.0
+        version: 1.75.0
       '@types/bs58':
         specifier: ^4.0.1
         version: 4.0.1
@@ -5638,9 +5638,9 @@ packages:
   /@bonfida/name-offers@0.0.1(@solana/buffer-layout@4.0.1):
     resolution: {integrity: sha512-R0GJ/+R5OXfm4KfiKEjHx88QnQxw+kzDA8O4pHouev1voPJueOzzo5x+YLowMpk3/2maqEwkNPWiWIlSExjdug==}
     dependencies:
-      '@bonfida/spl-name-service': 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.6.0)
+      '@bonfida/spl-name-service': 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@5.2.1)(borsh@0.6.0)
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bn.js: 5.2.1
       borsh: 0.6.0
       bs58: 4.0.1
@@ -5648,10 +5648,11 @@ packages:
       - '@solana/buffer-layout'
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
-  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@4.12.0)(borsh@0.7.0):
+  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@4.12.0)(borsh@0.7.0):
     resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
     peerDependencies:
       '@solana/buffer-layout': ^4.0.0
@@ -5664,16 +5665,17 @@ packages:
       '@ethersproject/sha2': 5.7.0
       '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bn.js: 4.12.0
       borsh: 0.7.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
-  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.6.0):
+  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@5.2.1)(borsh@0.6.0):
     resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
     peerDependencies:
       '@solana/buffer-layout': ^4.0.0
@@ -5686,16 +5688,17 @@ packages:
       '@ethersproject/sha2': 5.7.0
       '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bn.js: 5.2.1
       borsh: 0.6.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
-  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0):
+  /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@5.2.1)(borsh@0.7.0):
     resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
     peerDependencies:
       '@solana/buffer-layout': ^4.0.0
@@ -5708,12 +5711,13 @@ packages:
       '@ethersproject/sha2': 5.7.0
       '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bn.js: 5.2.1
       borsh: 0.7.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8298,7 +8302,7 @@ packages:
   /@manypkg/find-root@1.1.0:
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@types/node': 18.15.11
       find-up: 4.1.0
       fs-extra: 8.1.0
@@ -8467,10 +8471,11 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8478,11 +8483,12 @@ packages:
     resolution: {integrity: sha512-UUJ4BlYiWdDegAWmjsNQiNehwYU3QfSFWs3sv4VX0J6/ZrQ28zqosGhQ+I2ZCTEy216finJ82sZWNjuwSWCYyQ==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     dependencies:
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bs58: 4.0.1
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8494,10 +8500,11 @@ packages:
       '@metaplex-foundation/mpl-token-metadata': 0.0.2
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8506,10 +8513,11 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8518,10 +8526,11 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8530,14 +8539,15 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
-  /@metaplex/js@4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2):
+  /@metaplex/js@4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0):
     resolution: {integrity: sha512-/8X04VEHMfWF84H2DZwLY3yg0xq75vgt/VtLuChTm8iUHkj99Whnq0NLTe0OqfhiEV0qFvT5dbLFh7x2CZqrEQ==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
@@ -8555,7 +8565,7 @@ packages:
       '@metaplex-foundation/mpl-token-metadata': 1.1.0
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       '@types/bs58': 4.0.1
       axios: 0.25.0
       bn.js: 5.2.1
@@ -8775,7 +8785,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@mui/utils': 5.10.6(react@0.0.0-experimental-21021fb0f-20230412)
       '@types/react': 18.0.37
       prop-types: 15.8.1
@@ -8797,7 +8807,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@emotion/cache': 11.10.3(patch_hash=anquw7u43yedhv6g6kmhzkdhze)
       '@emotion/react': 11.10.4(patch_hash=obcydjbogyjam4qag626nceajy)(@babel/core@7.21.4)(@types/react@18.0.37)(react@0.0.0-experimental-21021fb0f-20230412)
       '@emotion/styled': 11.10.4(@emotion/react@11.10.4)(@types/react@18.0.37)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -8858,7 +8868,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@types/prop-types': 15.7.5
       '@types/react-is': 17.0.3
       prop-types: 15.8.1
@@ -9053,6 +9063,10 @@ packages:
     resolution: {integrity: sha512-QVbXDN0q3VGD1X73lSKwsDVRxWi1F1ZLh8SjnkirFF0ZKzCZQmNKdLEDBlQ+/Vj6FDgDGAs4s75HRLxdCItLSw==}
     engines: {node: '>= 11'}
     dev: true
+
+  /@noble/ed25519@1.7.3:
+    resolution: {integrity: sha512-iR8GBkDt0Q3GyaVcIu7mSsVIqnFbkbRzGLWlvhwunacoLwt4J3swfKhfaM6rN6WY+TBGoYT1GtT1mIh2/jGbRQ==}
+    dev: false
 
   /@noble/hashes@1.2.0:
     resolution: {integrity: sha512-FZfhjEDbT5GRswV3C6uvLPHMiVD6lQBmpoX5+eSiPaMTXte/IKqI5dykDxzZB/WBeK/CDuQRBWarPdi3FNY2zQ==}
@@ -9505,13 +9519,13 @@ packages:
       - google-protobuf
     dev: false
 
-  /@project-serum/sol-wallet-adapter@0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.44.2):
+  /@project-serum/sol-wallet-adapter@0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.75.0):
     resolution: {integrity: sha512-cpIb13aWPW8y4KzkZAPDgw+Kb+DXjCC6rZoH74MGm3I/6e/zKyGnfAuW5olb2zxonFqsYgnv7ev8MQnvSgJ3/g==}
     engines: {node: '>=10'}
     peerDependencies:
       '@solana/web3.js': ^1.5.0
     dependencies:
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bs58: 4.0.1
       eventemitter3: 4.0.7
     dev: false
@@ -9934,7 +9948,7 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@babel/runtime': 7.20.13
-      '@solana/web3.js': 1.44.2
+      '@solana/web3.js': 1.75.0
       bn.js: 5.2.1
       buffer: 6.0.3
       buffer-layout: 1.2.2
@@ -9942,32 +9956,33 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
-  /@solana/web3.js@1.44.2:
-    resolution: {integrity: sha512-DvrJMoKonLuaX0/KyyJXcP/+w+9q8mve4gN3hC2Ptg51K/Gi1/cx6oQN2lbRZb4wYPBd2s2GDAJAJUAwZGsEug==}
-    engines: {node: '>=12.20.0'}
+  /@solana/web3.js@1.75.0:
+    resolution: {integrity: sha512-rHQgdo1EWfb+nPUpHe4O7i8qJPELHKNR5PAZRK+a7XxiykqOfbaAlPt5boDWAGPnYbSv0ziWZv5mq9DlFaQCxg==}
     dependencies:
-      '@babel/runtime': 7.20.13
-      '@ethersproject/sha2': 5.7.0
+      '@babel/runtime': 7.21.0
+      '@noble/ed25519': 1.7.3
+      '@noble/hashes': 1.2.0
+      '@noble/secp256k1': 1.7.1
       '@solana/buffer-layout': 4.0.1
+      agentkeepalive: 4.3.0
       bigint-buffer: 1.1.5
       bn.js: 5.2.1
       borsh: 0.7.0
       bs58: 4.0.1
-      buffer: 6.0.1
+      buffer: 6.0.3
       fast-stable-stringify: 1.0.0
       jayson: 3.6.5
-      js-sha3: 0.8.0
       node-fetch: 2.6.9
-      rpc-websockets: 7.4.16
-      secp256k1: 4.0.2
+      rpc-websockets: 7.5.1
       superstruct: 0.14.2
-      tweetnacl: 1.0.3
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - supports-color
       - utf-8-validate
     dev: false
 
@@ -10975,7 +10990,7 @@ packages:
       util-deprecate: 1.0.2
       watchpack: 2.4.0
       webpack: 4.46.0
-      ws: 8.13.0
+      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       x-default-browser: 0.4.0
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
@@ -13499,6 +13514,17 @@ packages:
       - supports-color
     dev: false
 
+  /agentkeepalive@4.3.0:
+    resolution: {integrity: sha512-7Epl1Blf4Sy37j4v9f9FjICCh4+KAQOyXgHEwlyBiAQLbhKdq/i2QQU3amQalS/wPhdPzDXPL5DMR5bkn+YeWg==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      debug: 4.3.4(supports-color@8.1.1)
+      depd: 2.0.0
+      humanize-ms: 1.2.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /aggregate-error@3.1.0:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
@@ -14957,13 +14983,6 @@ packages:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  /buffer@6.0.1:
-    resolution: {integrity: sha512-rVAXBwEcEoYtxnHSO5iWyhzV/O1WMtkUYWlfdLS7FjU4PnSJJHEfHXi/uHPI5EwltmOA794gN3bm3/pzuctWjQ==}
-    dependencies:
-      base64-js: 1.5.1
-      ieee754: 1.2.1
-    dev: false
-
   /buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
     dependencies:
@@ -15469,11 +15488,6 @@ packages:
     dependencies:
       inherits: 2.0.4
       safe-buffer: 5.2.1
-
-  /circular-json@0.5.9:
-    resolution: {integrity: sha512-4ivwqHpIFJZBuhN3g/pEcdbnGUywkBblloGbkglyloVjjR3uT6tieI89MVOfbP2tHX5sgb01FuLgAOzebNlJNQ==}
-    deprecated: CircularJSON is in maintenance only, flatted is its successor.
-    dev: false
 
   /cjs-module-lexer@1.2.2:
     resolution: {integrity: sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==}
@@ -20133,7 +20147,7 @@ packages:
     resolution: {integrity: sha512-RqlGDDze1U7gdRZCHx8VMBi0dzyJL4C6jQHwOuFjH9aldGcCQPN0HyVaKVn6jNHgS1AAbTBod4KCfMRXda+eZg==}
     engines: {node: '>=0.8.4'}
     dependencies:
-      ws: 7.5.7(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 7.5.7
     optionalDependencies:
       '@peculiar/webcrypto': 1.2.3
       emailjs: 2.2.0
@@ -20249,7 +20263,7 @@ packages:
       typescript: 5.1.0-dev.20230418
       undici: 5.20.0
       uuid: 8.3.2
-      ws: 7.5.7(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 7.5.7
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -20817,6 +20831,12 @@ packages:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}
     engines: {node: '>=14.18.0'}
     dev: true
+
+  /humanize-ms@1.2.1:
+    resolution: {integrity: sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==}
+    dependencies:
+      ms: 2.1.3
+    dev: false
 
   /husky@8.0.3:
     resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
@@ -21889,7 +21909,7 @@ packages:
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 7.5.7(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 7.5.7
     dev: false
 
   /isstream@0.1.2:
@@ -22031,7 +22051,7 @@ packages:
       json-stringify-safe: 5.0.1
       lodash: 4.17.21
       uuid: 3.4.0
-      ws: 7.5.7(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 7.5.7
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -22618,7 +22638,7 @@ packages:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
-      ws: 8.13.0
+      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -25822,7 +25842,7 @@ packages:
     resolution: {integrity: sha512-Sz2Lkdxz6F2Pgnpi9U5Ng/WdWAUZxmHrNPoVlm3aAemxoy2Qy7LGjQg4uf8qKelDAUW94F4np3iH2YPf2qefcQ==}
     engines: {node: '>=10'}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
     dev: true
 
   /posix-character-classes@0.1.1:
@@ -27077,7 +27097,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       is-dom: 1.1.0
       prop-types: 15.8.1
       react: 0.0.0-experimental-21021fb0f-20230412
@@ -27504,7 +27524,7 @@ packages:
   /redux@4.2.0:
     resolution: {integrity: sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
     dev: false
 
   /reflect-metadata@0.1.13(patch_hash=pnra5xi77mqlyipflqvcm4z6ga):
@@ -28042,14 +28062,13 @@ packages:
       nanoid: 3.3.6
     dev: false
 
-  /rpc-websockets@7.4.16:
-    resolution: {integrity: sha512-0b7OVhutzwRIaYAtJo5tqtaQTWKfwAsKnaThOSOy+VkhVdleNUgb8eZnWSdWITRZZEigV5uPEIDr5KZe4DBrdQ==}
+  /rpc-websockets@7.5.1:
+    resolution: {integrity: sha512-kGFkeTsmd37pHPMaHIgN1LVKXMi0JD782v4Ds9ZKtLlwdTKjn+CxM9A9/gLT2LaOuEcEFGL98h1QWQtlOIdW0w==}
     dependencies:
-      '@babel/runtime': 7.20.13
-      circular-json: 0.5.9
+      '@babel/runtime': 7.21.0
       eventemitter3: 4.0.7
       uuid: 8.3.2
-      ws: 7.5.7(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     optionalDependencies:
       bufferutil: 4.0.7
       utf-8-validate: 5.0.10
@@ -28083,7 +28102,7 @@ packages:
   /rtl-css-js@1.15.0:
     resolution: {integrity: sha512-99Cu4wNNIhrI10xxUaABHsdDqzalrSRTie4GeCmbGVuehm4oj+fIy8fTzB+16pmKe8Bv9rl+hxIBez6KxExTew==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
     dev: false
 
   /run-async@2.4.1:
@@ -31406,7 +31425,7 @@ packages:
       tmp: 0.2.1
       update-notifier: 6.0.2
       watchpack: 2.4.0
-      ws: 8.13.0
+      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       yargs: 17.7.1
       zip-dir: 2.0.0
     transitivePeerDependencies:
@@ -31852,7 +31871,7 @@ packages:
       webpack: 5.79.0(@swc/core@1.3.37)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.79.0)
       webpack-dev-middleware: 5.3.3(webpack@5.79.0)
-      ws: 8.13.0
+      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -32309,7 +32328,7 @@ packages:
         optional: true
     dev: false
 
-  /ws@7.5.7(bufferutil@4.0.7)(utf-8-validate@5.0.10):
+  /ws@7.5.7:
     resolution: {integrity: sha512-KMvVuFzpKBuiIXW3E4u3mySRO2/mCHSyZDJQM5NQ9Q9KHWHWh0NHgfbRMLLrceUK5qAL4ytALJbpRMjixFZh8A==}
     engines: {node: '>=8.3.0'}
     peerDependencies:
@@ -32320,12 +32339,9 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dependencies:
-      bufferutil: 4.0.7
-      utf-8-validate: 5.0.10
     dev: false
 
-  /ws@8.13.0:
+  /ws@8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10):
     resolution: {integrity: sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -32336,6 +32352,9 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dependencies:
+      bufferutil: 4.0.7
+      utf-8-validate: 5.0.10
 
   /x-default-browser@0.4.0:
     resolution: {integrity: sha512-7LKo7RtWfoFN/rHx1UELv/2zHGMx8MkZKDq1xENmOCTkfIqZJ0zZ26NEJX8czhnPXVcqS0ARjjfJB+eJ0/5Cvw==}
@@ -32682,7 +32701,7 @@ time:
   /@sinonjs/text-encoding@0.7.2: '2022-07-27T11:54:25.384Z'
   /@solana/buffer-layout@4.0.1: '2022-12-09T16:49:55.927Z'
   /@solana/spl-token@0.1.8: '2021-08-16T19:07:32.336Z'
-  /@solana/web3.js@1.44.2: '2022-06-21T17:42:13.385Z'
+  /@solana/web3.js@1.75.0: '2023-04-04T06:26:46.874Z'
   /@storybook/addon-actions@6.5.13: '2022-10-24T04:02:38.942Z'
   /@storybook/addon-essentials@6.5.13: '2022-10-24T04:04:16.548Z'
   /@storybook/addon-links@6.5.13: '2022-10-24T04:02:53.198Z'
