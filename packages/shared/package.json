@@ -37,7 +37,7 @@
     "iframe-resizer-react": "^1.1.0",
     "lodash-es": "^4.17.21",
     "lru-cache": "^9.1.0",
-    "qrcode": "^1.5.0",
+    "qrcode": "^1.5.1",
     "react-feather": "^2.0.9",
     "react-hook-form": "^7.39.2",
     "react-markdown": "^8.0.7",
@@ -51,7 +51,7 @@
     "zod": "^3.16.0"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.4.2",
+    "@types/qrcode": "^1.5.0",
     "@types/remarkable": "^2.0.3",
     "@types/use-subscription": "^1.0.0"
   }
