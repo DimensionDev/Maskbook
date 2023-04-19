@@ -47,7 +47,7 @@
     "@masknet/public-api": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/injected-script": "workspace:^",
-    "@metamask/eth-sig-util": "^4.0.0",
+    "@metamask/eth-sig-util": "^5.0.2",
     "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
     "@metaplex/js": "^4.11.7",
     "@project-serum/sol-wallet-adapter": "^0.2.6",

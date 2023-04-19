@@ -3429,8 +3429,8 @@ importers:
         specifier: workspace:^
         version: link:../web3-shared/solana
       '@metamask/eth-sig-util':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^5.0.2
+        version: 5.0.2
       '@metaplex-foundation/mpl-token-metadata':
         specifier: ^1.1.0
         version: 1.1.0
@@ -8416,6 +8416,18 @@ packages:
     dependencies:
       ethereumjs-abi: 0.6.8
       ethereumjs-util: 6.2.1
+      ethjs-util: 0.1.6
+      tweetnacl: 1.0.3
+      tweetnacl-util: 0.15.1
+    dev: false
+
+  /@metamask/eth-sig-util@5.0.2:
+    resolution: {integrity: sha512-RU6fG/H6/UlBol221uBkq5C7w3TwLK611nEZliO2u+kO0vHKGBXnIPlhI0tzKUigjhUeOd9mhCNbNvhh0LKt9Q==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@ethereumjs/util': 8.0.5
+      bn.js: 4.12.0
+      ethereum-cryptography: 1.2.0
       ethjs-util: 0.1.6
       tweetnacl: 1.0.3
       tweetnacl-util: 0.15.1
@@ -32681,7 +32693,7 @@ time:
   /@masknet/static-module-record-swc@0.4.1: '2022-10-31T06:11:09.670Z'
   /@masknet/stego-js@0.14.2: '2022-11-01T07:34:52.614Z'
   /@masknet/web-endowments@0.1.1: '2022-08-31T04:58:03.487Z'
-  /@metamask/eth-sig-util@4.0.0: '2021-09-22T12:27:28.380Z'
+  /@metamask/eth-sig-util@5.0.2: '2022-11-10T21:56:15.449Z'
   /@metaplex-foundation/mpl-token-metadata@1.1.0: '2022-01-11T05:47:46.383Z'
   /@metaplex/js@4.11.7: '2022-01-19T22:01:58.682Z'
   /@msgpack/msgpack@2.8.0: '2022-09-02T02:42:08.997Z'
