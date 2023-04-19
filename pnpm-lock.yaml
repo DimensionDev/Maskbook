@@ -172,8 +172,8 @@ importers:
         specifier: ^12.2.0
         version: 12.2.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       ses:
-        specifier: 0.18.1
-        version: 0.18.1
+        specifier: 0.18.3
+        version: 0.18.3
       ts-results-es:
         specifier: 3.5.0
         version: 3.5.0
@@ -28917,8 +28917,8 @@ packages:
       - supports-color
     dev: false
 
-  /ses@0.18.1:
-    resolution: {integrity: sha512-TySWbVcVDL7V/5lSoPz2EgTirn9APy6ib7lYMsiQ8OkEMA4dVwc1a3REHEzOqjQ8g7f0bLWErOt5IbIMsxf5aQ==}
+  /ses@0.18.3:
+    resolution: {integrity: sha512-deFT7cN12wE8FGDfXrZ/tUDkGofixzNl2bGc/PmF2oTAhh/x+Do6qfNhpmOMSAxnDdqtPinTcBAM94cKHvxjZg==}
     dev: false
 
   /set-blocking@2.0.0:
@@ -33471,7 +33471,7 @@ time:
   /rollup-plugin-terser@7.0.2: '2020-09-04T18:39:17.900Z'
   /rollup@3.20.6: '2023-04-18T11:37:09.925Z'
   /scrypt-js@3.0.1: '2020-05-19T07:06:27.834Z'
-  /ses@0.18.1: '2022-12-23T21:59:16.440Z'
+  /ses@0.18.3: '2023-04-14T18:04:21.054Z'
   /socket.io-client@2.4.0: '2021-01-04T22:41:40.900Z'
   /source-map-loader@4.0.1: '2022-10-07T16:54:15.119Z'
   /source-map@0.7.4: '2022-06-04T22:57:10.068Z'
