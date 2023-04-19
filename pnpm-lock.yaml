@@ -1014,8 +1014,8 @@ importers:
         specifier: 9.1.1
         version: 9.1.1
       bip39:
-        specifier: ^3.0.4
-        version: 3.0.4
+        specifier: ^3.1.0
+        version: 3.1.0
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -2471,8 +2471,8 @@ importers:
         specifier: ^4.12.0
         version: 4.12.0
       bs58:
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^5.0.0
+        version: 5.0.0
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -3573,8 +3573,11 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0(patch_hash=2etetjrjxbcye2oktxqpij75ey)
       bs58:
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^5.0.0
+        version: 5.0.0
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
@@ -3828,8 +3831,8 @@ importers:
         specifier: 9.1.1
         version: 9.1.1
       bs58:
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^5.0.0
+        version: 5.0.0
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -15388,6 +15391,10 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
 
+  /base-x@4.0.0:
+    resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
+    dev: false
+
   /base64-arraybuffer-es6@1.0.0:
     resolution: {integrity: sha512-cPau+CwFZLR/HeQrOCWhbmGcUiyfl8kvnKoazNX9zW/Tn7nKJCRe9Vfz2qOEf/rODgCTCvvCXMf0acV8vB0uOw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -15527,13 +15534,10 @@ packages:
       wif: 2.0.6
     dev: false
 
-  /bip39@3.0.4:
-    resolution: {integrity: sha512-YZKQlb752TrUWqHWj7XAwCSjYEgGAk+/Aas3V7NyjQeZYsztO8JnQUaCWhcnL4T+jL8nvB8typ2jRPzTlgugNw==}
+  /bip39@3.1.0:
+    resolution: {integrity: sha512-c9kiwdk45Do5GL0vJMe7tS95VjCii65mYAH7DfWl3uW8AVzXKQVUm64i3hzVybBDMp9r7j9iNxR85+ul8MdN/A==}
     dependencies:
-      '@types/node': 18.15.11
-      create-hash: 1.2.0
-      pbkdf2: 3.1.2
-      randombytes: 2.1.0
+      '@noble/hashes': 1.2.0
     dev: false
 
   /bl@4.1.0:
@@ -15887,6 +15891,12 @@ packages:
     resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
     dependencies:
       base-x: 3.0.9
+
+  /bs58@5.0.0:
+    resolution: {integrity: sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ==}
+    dependencies:
+      base-x: 4.0.0
+    dev: false
 
   /bs58check@2.1.2:
     resolution: {integrity: sha512-0TS1jicxdU09dwJMNZtVAfzPi6Q6QeN0pM1Fkzrjn+XYHvzMKPU3pHVpva+769iNVSfIYWf7LJ6WR+BuuMf8cA==}
@@ -35242,10 +35252,10 @@ time:
   /autoprefixer@10.4.14: '2023-03-09T21:42:07.697Z'
   /babel-loader@9.1.2: '2023-01-04T18:09:58.474Z'
   /bignumber.js@9.1.1: '2022-12-04T12:43:57.430Z'
-  /bip39@3.0.4: '2021-04-27T22:23:51.260Z'
+  /bip39@3.1.0: '2023-02-25T05:36:52.236Z'
   /bn.js@4.12.0: '2021-02-24T07:16:47.735Z'
   /boring-avatars@1.6.3: '2022-02-20T17:50:27.695Z'
-  /bs58@4.0.1: '2017-06-01T05:58:34.232Z'
+  /bs58@5.0.0: '2022-02-17T13:19:37.346Z'
   /buffer@6.0.3: '2020-11-23T02:51:27.107Z'
   /chalk@5.2.0: '2022-12-08T18:46:27.169Z'
   /clipboard-polyfill@3.0.3: '2021-04-03T22:29:46.525Z'
