@@ -73,7 +73,7 @@
     "@masknet/web3-state": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "@msgpack/msgpack": "^3.0.0-beta2",
-    "@react-hookz/web": "^19.2.0",
+    "@react-hookz/web": "^23.0.0",
     "@servie/events": "^3.0.0",
     "@sinonjs/text-encoding": "^0.7.1",
     "@types/bn.js": "^4.11.6",

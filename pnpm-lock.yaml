@@ -912,8 +912,8 @@ importers:
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
       '@react-hookz/web':
-        specifier: ^19.2.0
-        version: 19.2.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^23.0.0
+        version: 23.0.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -2799,8 +2799,8 @@ importers:
         specifier: workspace:^
         version: link:../web3-shared/solana
       '@react-hookz/web':
-        specifier: ^19.2.0
-        version: 19.2.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^23.0.0
+        version: 23.0.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       '@solana/web3.js':
         specifier: ^1.44.2
         version: 1.44.2
@@ -9575,12 +9575,12 @@ packages:
     resolution: {integrity: sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==}
     dev: false
 
-  /@react-hookz/deep-equal@1.0.3:
-    resolution: {integrity: sha512-lGZR5l3YRjzeIOHtJhiq96vQKrsq+9lsCyv+0fROMQeSNWtLLzX3R+psHNi6nsoP3XEhspiZ92nsiPmdNo8ztQ==}
+  /@react-hookz/deep-equal@1.0.4:
+    resolution: {integrity: sha512-N56fTrAPUDz/R423pag+n6TXWbvlBZDtTehaGFjK0InmN+V2OFWLE/WmORhmn6Ce7dlwH5+tQN1LJFw3ngTJVg==}
     dev: false
 
-  /@react-hookz/web@19.2.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-6DbL4FjqmjpHsfNAqmduDoseIg6ciDBv/AIaxDJldMl0GR77g6/fxU8dpXDT/E43FYTLepjt8K0TbyAoXZeOHQ==}
+  /@react-hookz/web@23.0.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-diBtlo17CJtZJ/Yb8veri7hZL7QPnqNZ+IAMHWWSb//nq+Z3XDHaXcozH7cyvMZj4gYwQeY/L/H4298etHxu1Q==}
     peerDependencies:
       js-cookie: ^3.0.1
       react: ^16.8 || ^17 || ^18 || 0.0.0-experimental-21021fb0f-20230412
@@ -9593,7 +9593,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@react-hookz/deep-equal': 1.0.3
+      '@react-hookz/deep-equal': 1.0.4
       react: 0.0.0-experimental-21021fb0f-20230412
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
     dev: false
@@ -32704,7 +32704,7 @@ time:
   /@nice-labs/emit-file-webpack-plugin@1.1.3: '2022-07-20T13:31:37.048Z'
   /@nice-labs/git-rev@3.5.1: '2022-09-17T04:11:47.528Z'
   /@pmmmwh/react-refresh-webpack-plugin@0.5.10: '2022-11-24T13:38:27.856Z'
-  /@react-hookz/web@19.2.0: '2022-11-20T15:30:05.049Z'
+  /@react-hookz/web@23.0.0: '2023-03-23T11:33:35.599Z'
   /@remix-run/router@1.0.4: '2022-11-30T20:03:14.364Z'
   /@rollup/plugin-commonjs@24.1.0: '2023-04-11T19:29:46.064Z'
   /@rollup/plugin-json@6.0.0: '2022-12-17T15:14:08.547Z'
