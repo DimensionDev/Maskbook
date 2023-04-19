@@ -175,8 +175,8 @@ importers:
         specifier: 0.18.3
         version: 0.18.3
       ts-results-es:
-        specifier: 3.5.0
-        version: 3.5.0
+        specifier: ^3.6.0
+        version: 3.6.0
     devDependencies:
       '@changesets/cli':
         specifier: ^2.26.1
@@ -463,8 +463,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       ts-results-es:
-        specifier: ^3.5.0
-        version: 3.5.0
+        specifier: ^3.6.0
+        version: 3.6.0
 
   packages/config: {}
 
@@ -3143,8 +3143,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       ts-results-es:
-        specifier: ^3.5.0
-        version: 3.5.0
+        specifier: ^3.6.0
+        version: 3.6.0
 
   packages/typed-message/react:
     dependencies:
@@ -30693,8 +30693,8 @@ packages:
       typescript: 5.1.0-dev.20230418
     dev: true
 
-  /ts-results-es@3.5.0:
-    resolution: {integrity: sha512-W7Vtg9u7QsutEfDbLEJNDlDrYGK7spxab6Je+K9+tjI/ixCM1ouniQmHJX0mZUok5WsWiCGxQy6lIrI//nBzTg==}
+  /ts-results-es@3.6.0:
+    resolution: {integrity: sha512-swha7PpeUNX93LzwhNtlk97FZZdTkCsI4j2ShletEmQ4cEi9SWy95x8XRTpfOP8gr16ikEBSi4U8xD43BYHDFg==}
     dev: false
 
   /ts-results@3.3.0:
@@ -33493,7 +33493,7 @@ time:
   /tiny-secp256k1@2.2.1: '2022-02-21T07:50:25.372Z'
   /tinycolor2@1.6.0: '2023-02-03T23:33:07.774Z'
   /ts-node@10.9.1: '2022-07-14T02:33:44.792Z'
-  /ts-results-es@3.5.0: '2022-05-06T17:25:00.438Z'
+  /ts-results-es@3.6.0: '2023-03-14T13:51:58.281Z'
   /ts-results@3.3.0: '2021-05-23T18:25:35.300Z'
   /tslib@2.5.0: '2023-01-26T20:40:14.611Z'
   /tss-react@4.4.4: '2022-11-05T17:25:30.715Z'
