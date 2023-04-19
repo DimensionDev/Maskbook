@@ -918,8 +918,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       '@sinonjs/text-encoding':
-        specifier: ^0.7.1
-        version: 0.7.1
+        specifier: ^0.7.2
+        version: 0.7.2
       '@types/bn.js':
         specifier: ^4.11.6
         version: 4.11.6
@@ -9918,8 +9918,8 @@ packages:
       '@sinonjs/commons': 1.8.6
     dev: false
 
-  /@sinonjs/text-encoding@0.7.1:
-    resolution: {integrity: sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==}
+  /@sinonjs/text-encoding@0.7.2:
+    resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
     dev: false
 
   /@solana/buffer-layout@4.0.0:
@@ -32679,7 +32679,7 @@ time:
   /@sentry/tracing@7.48.0: '2023-04-14T09:51:13.774Z'
   /@sentry/types@7.48.0: '2023-04-14T09:51:14.281Z'
   /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
-  /@sinonjs/text-encoding@0.7.1: '2019-02-18T13:28:59.439Z'
+  /@sinonjs/text-encoding@0.7.2: '2022-07-27T11:54:25.384Z'
   /@solana/buffer-layout@4.0.0: '2021-12-14T21:29:06.488Z'
   /@solana/spl-token@0.1.8: '2021-08-16T19:07:32.336Z'
   /@solana/web3.js@1.44.2: '2022-06-21T17:42:13.385Z'
