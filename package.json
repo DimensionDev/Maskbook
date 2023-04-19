@@ -45,7 +45,7 @@
     "@types/react": "18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript/lib-dom": "npm:@types/web@^0.0.99",
-    "i18next": "^22.0.6",
+    "i18next": "^22.4.14",
     "lodash-es": "^4.17.21",
     "react": "0.0.0-experimental-21021fb0f-20230412",
     "react-dom": "0.0.0-experimental-21021fb0f-20230412",

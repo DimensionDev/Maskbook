@@ -166,8 +166,8 @@ importers:
         specifier: npm:@types/web@^0.0.99
         version: /@types/web@0.0.99
       i18next:
-        specifier: ^22.0.6
-        version: 22.0.6
+        specifier: ^22.4.14
+        version: 22.4.14
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -179,7 +179,7 @@ importers:
         version: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
       react-i18next:
         specifier: ^12.2.0
-        version: 12.2.0(i18next@22.0.6)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        version: 12.2.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       ses:
         specifier: 0.18.1
         version: 0.18.1
@@ -1323,7 +1323,7 @@ importers:
         version: 7.10.1
       react-i18next:
         specifier: ^12
-        version: 12.0.0(i18next@22.0.6)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        version: 12.0.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -2757,7 +2757,7 @@ importers:
         version: 6.1.5
       react-i18next:
         specifier: ^12
-        version: 12.0.0(i18next@22.0.6)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        version: 12.0.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
 
   packages/sandboxed-plugins: {}
 
@@ -3066,7 +3066,7 @@ importers:
         version: 9.0.1
       react-i18next:
         specifier: ^12
-        version: 12.0.0(i18next@22.0.6)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        version: 12.0.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -22435,8 +22435,8 @@ packages:
       html-parse-stringify2: github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c
     dev: true
 
-  /i18next@22.0.6:
-    resolution: {integrity: sha512-RlreNGoPIdDP4QG+qSA9PxZKGwlzmcozbI9ObI6+OyUa/Rp0EjZZA9ubyBjw887zVNZsC+7FI3sXX8oiTzAfig==}
+  /i18next@22.4.14:
+    resolution: {integrity: sha512-VtLPtbdwGn0+DAeE00YkiKKXadkwg+rBUV+0v8v0ikEjwdiJ0gmYChVE4GIa9HXymY6wKapkL93vGT7xpq6aTw==}
     dependencies:
       '@babel/runtime': 7.20.13
     dev: false
@@ -28917,7 +28917,7 @@ packages:
       react: 0.0.0-experimental-21021fb0f-20230412
     dev: false
 
-  /react-i18next@12.0.0(i18next@22.0.6)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+  /react-i18next@12.0.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
     resolution: {integrity: sha512-/O7N6aIEAl1FaWZBNvhdIo9itvF/MO/nRKr9pYqRc9LhuC1u21SlfwpiYQqvaeNSEW3g3qUXLREOWMt+gxrWbg==}
     peerDependencies:
       i18next: '>= 19.0.0'
@@ -28934,12 +28934,12 @@ packages:
     dependencies:
       '@babel/runtime': 7.20.13
       html-parse-stringify: 3.0.1
-      i18next: 22.0.6
+      i18next: 22.4.14
       react: 0.0.0-experimental-21021fb0f-20230412
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
     dev: false
 
-  /react-i18next@12.2.0(i18next@22.0.6)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+  /react-i18next@12.2.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
     resolution: {integrity: sha512-5XeVgSygaGfyFmDd2WcXvINRw2WEC1XviW1LXY/xLOEMzsCFRwKqfnHN+hUjla8ZipbVJR27GCMSuTr0BhBBBQ==}
     peerDependencies:
       i18next: '>= 19.0.0'
@@ -28956,7 +28956,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.20.13
       html-parse-stringify: 3.0.1
-      i18next: 22.0.6
+      i18next: 22.4.14
       react: 0.0.0-experimental-21021fb0f-20230412
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
     dev: false
@@ -35366,7 +35366,7 @@ time:
   /https-browserify@1.0.0: '2017-04-04T23:35:16.037Z'
   /husky@8.0.3: '2023-01-03T08:01:18.807Z'
   /i18next-browser-languagedetector@7.0.1: '2022-11-03T20:33:22.733Z'
-  /i18next@22.0.6: '2022-11-17T13:45:22.319Z'
+  /i18next@22.4.14: '2023-04-02T11:28:23.091Z'
   /idb@7.1.1: '2022-11-04T10:28:55.720Z'
   /iframe-resizer-react@1.1.0: '2021-01-05T22:32:47.844Z'
   /immer@9.0.21: '2023-03-23T17:41:49.995Z'
