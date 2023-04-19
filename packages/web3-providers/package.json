@@ -69,7 +69,7 @@
     "fortmatic": "^2.2.1",
     "graphql-request": "^6.0.0",
     "json-stable-stringify": "^1.0.2",
-    "lru-cache": "^7.10.1",
+    "lru-cache": "^9.1.0",
     "react-use": "^17.4.0",
     "socket.io-client": "2.4.0",
     "urlcat": "^2.0.4",

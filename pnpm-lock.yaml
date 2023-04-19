@@ -1062,8 +1062,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       millify:
         specifier: ^4.0.0
         version: 4.0.0
@@ -1310,8 +1310,8 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       react-i18next:
         specifier: ^12
         version: 12.0.0(i18next@22.4.14)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -1451,8 +1451,8 @@ importers:
         specifier: 9.1.1
         version: 9.1.1
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       react-avatar-editor:
         specifier: ^13.0.0
         version: 13.0.0(@babel/core@7.21.0)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -2907,8 +2907,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       qrcode:
         specifier: ^1.5.0
         version: 1.5.0
@@ -3321,8 +3321,8 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3582,8 +3582,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -3852,8 +3852,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
+        specifier: ^9.1.0
+        version: 9.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -25208,11 +25208,6 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lru-cache@7.10.1:
-    resolution: {integrity: sha512-BQuhQxPuRl79J5zSXRP+uNzPOyZw2oFI9JLRQ80XswSvg21KMKNtQza9eF42rfI/3Z40RvzBdXgziEkudzjo8A==}
-    engines: {node: '>=12'}
-    dev: false
-
   /lru-cache@9.1.0:
     resolution: {integrity: sha512-qFXQEwchrZcMVen2uIDceR8Tii6kCJak5rzDStfEM0qA3YLMswaxIEZO0DhIbJ3aqaJiDjt+3crlplOb0tDtKQ==}
     engines: {node: 14 || >=16.14}
@@ -35518,7 +35513,7 @@ time:
   /linkifyjs@4.1.1: '2023-03-25T15:05:16.391Z'
   /lint-staged@13.2.1: '2023-04-07T12:41:19.271Z'
   /lodash-es@4.17.21: '2021-02-20T15:43:35.756Z'
-  /lru-cache@7.10.1: '2022-05-11T22:51:48.451Z'
+  /lru-cache@9.1.0: '2023-04-18T06:24:06.133Z'
   /millify@4.0.0: '2021-05-20T02:20:05.699Z'
   /mock-socket@9.2.1: '2023-02-14T12:46:15.982Z'
   /msw@0.49.1: '2022-11-28T00:30:26.349Z'

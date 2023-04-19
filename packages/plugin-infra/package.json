@@ -67,7 +67,7 @@
     "async-call-rpc": "^6.1.5",
     "bignumber.js": "9.1.1",
     "ethereum-blockies": "^0.1.1",
-    "lru-cache": "^7.10.1",
+    "lru-cache": "^9.1.0",
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",

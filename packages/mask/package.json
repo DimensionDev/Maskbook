@@ -118,7 +118,7 @@
     "iframe-resizer-react": "^1.1.0",
     "immer": "^10.0.1",
     "json-stable-stringify": "^1.0.2",
-    "lru-cache": "^7.10.1",
+    "lru-cache": "^9.1.0",
     "millify": "^4.0.0",
     "next-tick": "^1.1.0",
     "opensea-js": "^1.2.7",

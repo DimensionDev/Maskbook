@@ -26,7 +26,7 @@
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^9.0.1",
     "bignumber.js": "9.1.1",
-    "lru-cache": "^7.10.1",
+    "lru-cache": "^9.1.0",
     "react-avatar-editor": "^13.0.0",
     "react-router-dom": "^6.4.3",
     "react-use": "^17.4.0",
