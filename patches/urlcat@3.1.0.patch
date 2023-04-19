@@ -1,0 +1,30 @@
+diff --git a/dist/index.js b/dist/index.cjs
+similarity index 100%
+rename from dist/index.js
+rename to dist/index.cjs
+diff --git a/package.json b/package.json
+index 6c09937ee7c032c4cbdf8cae86d3ec7603b8a826..9c9dd58285c7a20cb6664fba5e75d206882b536b 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,7 @@
+ {
+   "name": "urlcat",
+   "version": "3.1.0",
++  "type": "module",
+   "description": "A library for concatenating URL's.",
+   "repository": {
+     "type": "git",
+@@ -9,13 +10,6 @@
+   "main": "dist/index.js",
+   "module": "dist/index.mjs",
+   "types": "dist/index.d.ts",
+-  "exports": {
+-    ".": {
+-      "import": "./dist/index.mjs",
+-      "require": "./dist/index.js"
+-    },
+-    "./package.json": "./package.json"
+-  },
+   "files": [
+     "dist"
+   ],

@@ -23,6 +23,7 @@
 - @cyberlab/cyberconnect: <https://github.com/cyberconnecthq/js-cyberconnect/issues/32>
 - fortmatic: No issue. Cannot find a GitHub repo. <https://github.com/fortmatic/fortmatic-js> is 404.
 - @walletconnect/client: <https://github.com/WalletConnect/walletconnect-monorepo/issues/1601>
+- urlcat: <https://github.com/balazsbotond/urlcat/issues/248>
 
 ## Other problems
 
