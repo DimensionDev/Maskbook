@@ -71,7 +71,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                                           : 'spender',
                                   })
                             : isZero(spendingCap)
-                            ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_zero_positive_cap', {
+                            ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
                                   symbol: token?.symbol,
                               })
                             : approveSuccessDescription

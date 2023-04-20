@@ -697,7 +697,7 @@
     "plugin_infra_descriptor_token_approve": "Unlock {{- tokenAmountDescription}}",
     "plugin_infra_descriptor_token_approve_success": "Unlock {{- tokenAmountDescription}} successfully",
     "plugin_infra_descriptor_token_revoke_but_set_positive_cap": "You've approved {{- tokenAmountDescription}} for {{spender}}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again.",
-    "plugin_infra_descriptor_token_approve_but_zero_positive_cap": "You didn't approve {{symbol}} successfully. Please do not set spending cap as 0 and try it again.",
+    "plugin_infra_descriptor_token_approve_but_set_zero_cap": "You didn't approve {{symbol}} successfully. Please do not set spending cap as 0 and try it again.",
     "plugin_infra_descriptor_token_fail": "Failed to unlock token contract.",
     "plugin_infra_descriptor_token_deposit_title": "Deposit token",
     "plugin_infra_descriptor_token_deposit": "Deposit {{- tokenAmountDescription}} for savings.",
