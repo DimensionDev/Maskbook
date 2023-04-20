@@ -32,7 +32,14 @@ import {
     xYUMI,
 } from '@masknet/web3-shared-evm'
 import { Percent } from '@uniswap/sdk-core'
-import type { ERC20TokenCustomizedBase } from './types.js'
+import type { ERC20TokenCustomizedBase } from '../types/Trader.js'
+
+export const UNISWAP_BIPS_BASE = 10000
+
+export const DEFAULT_TRANSACTION_DEADLINE = 30 /* minutes */ * 60 /* seconds */
+export const L2_TRANSACTION_DEADLINE = 60 /* minutes */ * 5 /* seconds */
+
+export const SLIPPAGE_DEFAULT = 50 // bips
 
 // used to ensure the user doesn't send so much ETH so they end up with <.01
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(50, 10000)

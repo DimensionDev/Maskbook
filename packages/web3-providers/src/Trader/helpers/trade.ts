@@ -5,7 +5,6 @@ import {
     ARTHSWAP_CUSTOM_BASES,
     ASTAREXCHANGE_BASE_AGAINST_TOKENS,
     ASTAREXCHANGE_CUSTOM_BASES,
-    CONSERVATIVE_BLOCK_GAS_LIMIT,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
     ONE_HUNDRED_PERCENT,
@@ -34,33 +33,7 @@ import {
 import { unreachable } from '@masknet/kit'
 import type { Trade } from '@uniswap/v2-sdk'
 import { type Currency, type Percent, type TradeType } from '@uniswap/sdk-core'
-import type { Call, TradeContext } from '../types.js'
-import { DEFAULT_GAS_REQUIRED } from '../../Multicall/constants.js'
-
-export function chunkArray(items: Call[], gasLimit = CONSERVATIVE_BLOCK_GAS_LIMIT * 10): Call[][] {
-    const chunks: Call[][] = []
-    let currentChunk: Call[] = []
-    let currentChunkCumulativeGas = 0
-
-    for (const item of items) {
-        // calculate the gas required by the current item
-        const gasRequired = item[1] ?? DEFAULT_GAS_REQUIRED
-
-        // if the current chunk is empty, or the current item wouldn't push it over the gas limit,
-        // append the current item and increment the cumulative gas
-        if (currentChunk.length === 0 || currentChunkCumulativeGas + gasRequired < gasLimit) {
-            currentChunk.push(item)
-            currentChunkCumulativeGas += gasRequired
-        } else {
-            // otherwise, push the current chunk and create a new chunk
-            chunks.push(currentChunk)
-            currentChunk = [item]
-            currentChunkCumulativeGas = gasRequired
-        }
-    }
-    if (currentChunk.length > 0) chunks.push(currentChunk)
-    return chunks
-}
+import type { TradeContext } from '../../types/Trader.js'
 
 export function getTradeContext(chainId: ChainId, tradeProvider?: TradeProvider): TradeContext | null {
     const DEX_TRADE = getTraderConstants(chainId)

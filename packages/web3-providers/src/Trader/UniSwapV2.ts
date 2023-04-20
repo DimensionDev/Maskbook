@@ -1,8 +1,10 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ZERO, isZero } from '@masknet/web3-shared-base'
-import { CurrencyAmount, type Currency, type Token, type TradeType, type Percent } from '@uniswap/sdk-core'
+import { ZERO, isZero, toFixed } from '@masknet/web3-shared-base'
+import { CurrencyAmount, type Currency, type Token, TradeType, Percent } from '@uniswap/sdk-core'
 import {
     computeRealizedLPFeePercent,
+    swapCallParameters,
+    swapErrorToUserReadableMessage,
     toUniswapCurrency,
     toUniswapCurrencyAmount,
     toUniswapToken,
@@ -11,39 +13,50 @@ import {
     uniswapPriceTo,
     uniswapTokenTo,
 } from './helpers/uniswap.js'
-import {
-    isValidChainId,
-    type ChainId,
-    createContract,
-    getEthereumConstants,
-    ContractTransaction,
-    decodeOutputString,
-    type UnboxTransactionObject,
-} from '@masknet/web3-shared-evm'
+import { isValidChainId, ChainId, createContract } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
-import { chunkArray, getTradeContext, isTradeBetter } from './helpers/trade.js'
-import { flatMap, isEmpty } from 'lodash-es'
+import { getTradeContext, isTradeBetter } from './helpers/trade.js'
+import { flatMap } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { getPairAddress } from './helpers/pair.js'
 import { Web3API } from '../Connection/index.js'
 import type { Pair } from '@masknet/web3-contracts/types/Pair.js'
 import PairABI from '@masknet/web3-contracts/abis/Pair.json'
-import { numberToHex, type AbiItem, type AbiOutput } from 'web3-utils'
-import { BETTER_TRADE_LESS_HOPS_THRESHOLD, DEFAULT_GAS_LIMIT, MAX_HOP } from './constants.js'
-import { PairState, type Call, type TokenPair, type Trade, TradeStrategy } from './types.js'
-import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
-import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
+import { type AbiItem, toHex } from 'web3-utils'
+import {
+    BETTER_TRADE_LESS_HOPS_THRESHOLD,
+    DEFAULT_TRANSACTION_DEADLINE,
+    L2_TRANSACTION_DEADLINE,
+    MAX_HOP,
+    SLIPPAGE_DEFAULT,
+    UNISWAP_BIPS_BASE,
+} from './constants.js'
+import {
+    PairState,
+    type TokenPair,
+    type Trade,
+    TradeStrategy,
+    type TradeComputed,
+    type SwapCallEstimate,
+    type SuccessfulCall,
+    type FailedCall,
+    type TraderAPI,
+} from '../types/Trader.js'
 import { Pair as UniSwapPair, Trade as UniSwapTrade } from '@uniswap/v2-sdk'
+import { BigNumber } from 'bignumber.js'
+import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
+import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2.js'
+import SwapRouterABI from '@masknet/web3-contracts/abis/SwapRouter.json'
+import type { SwapRouter } from '@masknet/web3-contracts/types/SwapRouter.js'
+import { SwapRouter as V3Router } from '@uniswap/v3-sdk'
+import { MulticallAPI } from '../Multicall/index.js'
 
-// [succeed, gasUsed, result]
-type Result = [boolean, string, string]
-
-class UniSwapV2Like {
-    private Web3 = new Web3API()
-
+export class UniSwapV2Like implements TraderAPI.Provider {
+    public Web3 = new Web3API()
+    public Multicall = new MulticallAPI()
     constructor(protected provider: TradeProvider) {}
 
-    private getAllCommonPairs(chainId: ChainId, currencyA?: Currency, currencyB?: Currency) {
+    public getAllCommonPairs(chainId: ChainId, currencyA?: Currency, currencyB?: Currency) {
         const chainIdValid = isValidChainId(chainId)
         const context = getTradeContext(chainId, this.provider)
         const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]
@@ -117,58 +130,10 @@ class UniSwapV2Like {
 
         const names = Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves')
 
-        const calls = contracts.map<Call>((contract, i) => [
-            contract.options.address,
-            DEFAULT_GAS_LIMIT,
-            contract.methods[names[i]]().encodeABI(),
-        ])
+        const calls = this.Multicall.createMultipleContractSingleData(contracts, names, [])
+        const results = await this.Multicall.call(chainId, contracts, names, calls)
 
-        const { MULTICALL_ADDRESS } = getEthereumConstants(chainId)
-
-        if (!MULTICALL_ADDRESS) return EMPTY_LIST
-
-        const multiCallContract = createContract<Multicall>(web3, MULTICALL_ADDRESS, MulticallABI as AbiItem[])
-
-        if (isEmpty(calls) || !multiCallContract || !chainId) return
-
-        const chunkResults = await Promise.all(
-            chunkArray(calls).map(async (chunk) => {
-                const tx = new ContractTransaction(multiCallContract).fill(multiCallContract.methods.multicall(chunk), {
-                    chainId: numberToHex(chainId),
-                })
-
-                const hex = await this.Web3.callTransaction(chainId, tx, { chainId: numberToHex(chainId) })
-
-                const outputType = multiCallContract.options.jsonInterface.find(
-                    ({ name }) => name === 'multicall',
-                )?.outputs
-
-                if (!outputType) return EMPTY_LIST
-
-                const decodeResult = decodeOutputString(web3, outputType, hex) as
-                    | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
-                    | undefined
-
-                if (!decodeResult) return EMPTY_LIST
-
-                return decodeResult.returnData
-            }),
-        )
-
-        const results = flatMap<Result>(chunkResults).map(([succeed, gasUsed, result], index) => {
-            const outputs: AbiOutput[] =
-                contracts[index].options.jsonInterface.find(
-                    ({ type, name }) => type === 'function' && name === names[index],
-                )?.outputs ?? []
-
-            try {
-                const value = decodeOutputString(web3, outputs, result)
-
-                return { succeed, gasUsed, value, error: null }
-            } catch (error) {
-                return { succeed: false, gasUsed, value: null, error }
-            }
-        })
+        if (!results) return EMPTY_LIST
 
         type ReserveResult = {
             id: string
@@ -210,6 +175,90 @@ class UniSwapV2Like {
         })
     }
 
+    private async getSwapParamters(
+        chainId: ChainId,
+        account: string,
+        trade: TradeComputed<Trade> | null,
+        allowedSlippage: number = SLIPPAGE_DEFAULT,
+    ) {
+        const web3 = this.Web3.getWeb3(chainId)
+        const context = getTradeContext(chainId, this.provider)
+        const timestamp = await this.Web3.getBlockTimestamp(chainId)
+        const timestamp_ = new BigNumber(timestamp ?? '0')
+        const deadline = timestamp_.plus(
+            chainId === ChainId.Mainnet ? DEFAULT_TRANSACTION_DEADLINE : L2_TRANSACTION_DEADLINE,
+        )
+
+        const routerV2Contract = createContract<RouterV2>(
+            web3,
+            context?.ROUTER_CONTRACT_ADDRESS ?? '',
+            RouterV2ABI as AbiItem[],
+        )
+
+        const swapRouterContract = createContract<SwapRouter>(
+            web3,
+            context?.ROUTER_CONTRACT_ADDRESS ?? '',
+            SwapRouterABI as AbiItem[],
+        )
+
+        if (!trade?.trade_) return []
+
+        const { trade_ } = trade
+        const allowedSlippage_ = new Percent(allowedSlippage, UNISWAP_BIPS_BASE)
+        if (trade_ instanceof UniSwapTrade) {
+            if (!routerV2Contract) return []
+            const parameters = [
+                swapCallParameters(
+                    trade_,
+                    {
+                        feeOnTransfer: false,
+                        allowedSlippage: allowedSlippage_,
+                        recipient: account,
+                        ttl: deadline.toNumber(),
+                    },
+                    this.provider,
+                ),
+            ]
+            if (trade_.tradeType === TradeType.EXACT_INPUT)
+                parameters.push(
+                    swapCallParameters(
+                        trade_,
+                        {
+                            feeOnTransfer: true,
+                            allowedSlippage: allowedSlippage_,
+                            recipient: account,
+                            ttl: deadline.toNumber(),
+                        },
+                        this.provider,
+                    ),
+                )
+            return parameters.map(({ methodName, args, value }) => {
+                return {
+                    address: routerV2Contract.options.address,
+                    calldata: routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](
+                        // @ts-expect-error unsafe call
+                        ...args,
+                    ).encodeABI(),
+                    value,
+                }
+            })
+        } else {
+            if (!swapRouterContract) return []
+            const { value, calldata } = V3Router.swapCallParameters(trade_, {
+                recipient: account,
+                slippageTolerance: allowedSlippage_,
+                deadline: deadline.toNumber(),
+            })
+            return [
+                {
+                    address: swapRouterContract.options.address,
+                    calldata,
+                    value,
+                },
+            ]
+        }
+    }
+
     public getTrade(
         inputAmount: string,
         chainId?: ChainId,
@@ -232,9 +281,9 @@ class UniSwapV2Like {
 
     public async getBestTradeExactIn(
         chainId: ChainId,
-        currencyAmountIn?: CurrencyAmount<Currency>,
-        currencyOut?: Currency,
-    ) {
+        currencyAmountIn: CurrencyAmount<Currency>,
+        currencyOut: Currency,
+    ): Promise<Trade | null> {
         const currencyA = currencyAmountIn?.currency
         const currencyB = currencyOut
 
@@ -277,12 +326,24 @@ class UniSwapV2Like {
         return null
     }
 
-    public getTradeComputed(
-        trade: Trade | null,
+    public async getTradeComputed(
+        chainId: ChainId,
+        inputAmount_: string,
         slippage: Percent,
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
+        const { isNotAvailable, tradeAmount, outputCurrency } = this.getTrade(
+            inputAmount_,
+            chainId,
+            inputToken,
+            outputToken,
+        )
+
+        if (!isNotAvailable || !tradeAmount || !outputCurrency) return null
+
+        const trade = await this.getBestTradeExactIn(chainId, tradeAmount, outputCurrency)
+
         if (!trade) return null
 
         const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
@@ -303,5 +364,66 @@ class UniSwapV2Like {
             fee: realizedLPFee ? uniswapCurrencyAmountTo(realizedLPFee) : ZERO,
             trade_: trade,
         }
+    }
+
+    public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<Trade> | null) {
+        const tradeParameters = await this.getSwapParamters(chainId, account, trade)
+
+        // step 1: estimate each trade parameter
+        const estimatedCalls: SwapCallEstimate[] = await Promise.all(
+            tradeParameters.map(async (x) => {
+                const { address, calldata, value } = x
+                const config = {
+                    from: account,
+                    to: address,
+                    data: calldata,
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value: toHex(value) }),
+                }
+
+                try {
+                    // const gas = await connection.estimateTransaction?.(config)
+                    const gas = this.Web3.estimateTransaction(chainId, config)
+                    return {
+                        call: x,
+                        gasEstimate: gas ?? '0',
+                    }
+                } catch (error) {
+                    return this.Web3.callTransaction(chainId, config)
+                        .then(() => {
+                            return {
+                                call: x,
+                                error: new Error('Gas estimate failed'),
+                            }
+                        })
+                        .catch((error) => {
+                            return {
+                                call: x,
+                                error: new Error(swapErrorToUserReadableMessage(error)),
+                            }
+                        })
+                }
+            }),
+        )
+
+        // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
+        let bestCallOption: SuccessfulCall | SwapCallEstimate | undefined = estimatedCalls.find(
+            (el, ix, list): el is SuccessfulCall =>
+                'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1]),
+        )
+
+        // check if any calls errored with a recognizable error
+        if (!bestCallOption) {
+            const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
+            if (errorCalls.length > 0) {
+                return
+            }
+            const firstNoErrorCall = estimatedCalls.find((call): call is SwapCallEstimate => !('error' in call))
+            if (!firstNoErrorCall) {
+                return
+            }
+            bestCallOption = firstNoErrorCall
+        }
+
+        return 'gasEstimate' in bestCallOption ? toFixed(bestCallOption.gasEstimate) : '0'
     }
 }
