@@ -110,12 +110,18 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
                     size,
                     chainId,
                 })
+                if (process.env.NODE_ENV === 'development' && collectionId) {
+                    console.assert(
+                        !pageable.nextIndicator,
+                        'Loading part of a merged collection, but see pageable result has nextIndicator',
+                    )
+                }
                 if (pageable.nextIndicator) {
                     indicatorMapRef.current.set(id, pageable.nextIndicator as PageIndicator)
                 }
                 dispatch({ type: 'APPEND_ASSETS', id, assets: pageable.data })
-                // If collectionId is set, that means we are loading part of a virtual collection.
-                // And we will let the virtual collection's iterator decide if it has ended
+                // If collectionId is set, that means we are loading part of a merged collection.
+                // And we will let the merged collection's iterator decide if it has ended
                 const finished = !collectionId && !pageable.nextIndicator
                 dispatch({ type: 'SET_LOADING_STATUS', id, finished, loading: false })
             },
@@ -136,6 +142,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
                 async function* generate(collection: Web3Helper.NonFungibleCollectionAll) {
                     const chunks = [take(allIds, 4), ...chunk(allIds.slice(4), CHUNK_SIZE)].map((x) => x.join(','))
                     for (const idChunk of chunks) {
+                        // TODO We assume that each individual collection in merged-collection has at most 2 assets
                         await loadAssetsViaHub(collection, idChunk)
                         yield
                     }
