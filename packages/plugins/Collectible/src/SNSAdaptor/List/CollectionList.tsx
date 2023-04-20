@@ -97,15 +97,13 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             backgroundColor: theme.palette.maskColor.thirdMain,
         },
         sidebar: {
-            width: 24,
+            width: 36,
             flexShrink: 0,
-            marginRight: theme.spacing(1.5),
+            paddingRight: theme.spacing(1.5),
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
             boxSizing: 'border-box',
             height: '100%',
             overflow: 'auto',
-            // For profile-card footer
-            paddingBottom: 48,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
