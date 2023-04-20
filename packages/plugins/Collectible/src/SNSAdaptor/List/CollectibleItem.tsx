@@ -1,9 +1,8 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import { isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
-import { useDetectOverflow } from '../Shared/useDetectOverflow.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
