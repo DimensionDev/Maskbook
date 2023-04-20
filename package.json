@@ -150,7 +150,8 @@
       "web3-core@1.8.0": "patches/web3-core@1.8.0.patch",
       "react-devtools-inline@4.27.4": "patches/react-devtools-inline@4.27.4.patch",
       "@sentry/core@7.48.0": "patches/@sentry__core@7.48.0.patch",
-      "urlcat@3.1.0": "patches/urlcat@3.1.0.patch"
+      "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
+      "@chainsafe/as-sha256@0.3.1": "patches/@chainsafe__as-sha256@0.3.1.patch"
     }
   }
 }
