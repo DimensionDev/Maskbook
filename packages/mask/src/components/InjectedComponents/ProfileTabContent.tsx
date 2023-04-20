@@ -20,7 +20,7 @@ import {
     TokenWithSocialGroupMenu,
     SocialAccountList,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, ProfileTabs } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
@@ -133,6 +133,7 @@ function Content(props: ProfileTabContentProps) {
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
+    const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
@@ -270,6 +271,7 @@ function Content(props: ProfileTabContentProps) {
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
+            data.type && setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
 

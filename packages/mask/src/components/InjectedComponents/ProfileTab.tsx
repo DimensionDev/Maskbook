@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { ProfileTabs } from '@masknet/shared-base'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -12,28 +13,29 @@ export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selecte
     // Required! This component don't have it own style.
     classes: Record<'root' | 'button' | 'selected', string>
     title: string
+    type?: ProfileTabs
     icon?: React.ReactNode
 }
 
 export function ProfileTab(props: ProfileTabProps) {
-    const { reset, clear, children, classes, title } = props
+    const { reset, clear, children, classes, title, type = ProfileTabs.WEB3 } = props
     const [active, setActive] = useState(false)
     const isMobile = useMatchXS()
 
     const switchToTab = useCallback(() => {
-        MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
+        MaskMessages.events.profileTabUpdated.sendToLocal({ show: true, type })
         setActive(true)
         clear()
-    }, [clear])
+    }, [clear, type])
 
     const onClick = useCallback(() => {
         // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
-        isTwitter(activatedSocialNetworkUI) && location.assign('#web3')
+        isTwitter(activatedSocialNetworkUI) && location.assign('#' + type)
         switchToTab()
-    }, [switchToTab])
+    }, [switchToTab, type])
 
     useMount(() => {
-        if (location.hash !== '#web3' || active || location.pathname === '/search') return
+        if (location.hash !== '#' + type || active || location.pathname === '/search') return
         switchToTab()
     })
 

@@ -5,6 +5,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
 import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
+import { ProfileTabs } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     searchAppBarBackSelector,
@@ -199,6 +200,7 @@ export function ProfileTabForTokenAndPersona() {
                     ? 'More'
                     : 'Web3'
             }
+            type={ProfileTabs.WEB3}
             classes={{
                 root: classes.root,
                 button: classes.button,
@@ -229,6 +231,7 @@ export function ProfileTabForDAO() {
     return hidden || loading || !spaceList?.length ? null : (
         <ProfileTab
             title="DAO"
+            type={ProfileTabs.DAO}
             classes={{
                 root: classes.root,
                 button: classes.button,

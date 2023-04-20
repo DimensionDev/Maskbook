@@ -3,7 +3,7 @@ export type {
     NFTAvatarEvent,
     UpdateEvent,
     AutoPasteFailedEvent,
-    ProfileNFTsPageEvent,
+    ProfileTabEvent,
     SettingsUpdateEvent,
 } from '@masknet/shared-base'
 export { MaskMessages } from '../../shared/index.js'
