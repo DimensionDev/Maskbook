@@ -25,7 +25,7 @@ import {
     DeBankGasOption,
     DeBankFungibleToken,
     DeBankHistory,
-    SimpleHash,
+    SimpleHash_EVM,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -157,13 +157,13 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2TokenList,
-                [SourceType.SimpleHash]: SimpleHash,
+                [SourceType.SimpleHash]: SimpleHash_EVM,
             },
             options.chainId === ChainId.Mainnet
                 ? [
                       X2Y2,
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? NFTScanNonFungibleTokenEVM : SimpleHash,
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? SimpleHash : NFTScanNonFungibleTokenEVM,
+                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? NFTScanNonFungibleTokenEVM : SimpleHash_EVM,
+                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? SimpleHash_EVM : NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       OpenSea,
@@ -176,8 +176,8 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       R2D2TokenList,
                   ]
                 : [
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? NFTScanNonFungibleTokenEVM : SimpleHash,
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? SimpleHash : NFTScanNonFungibleTokenEVM,
+                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? NFTScanNonFungibleTokenEVM : SimpleHash_EVM,
+                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? SimpleHash_EVM : NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,
