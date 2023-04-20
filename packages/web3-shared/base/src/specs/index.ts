@@ -767,8 +767,6 @@ export interface Transaction<ChainId, SchemaType> {
             symbol: string
             amount: string
             direction: string
-            to_addr?: string
-            contract_address?: string
         }
     >
     /** estimated tx fee */

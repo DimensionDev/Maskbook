@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
@@ -9,7 +9,6 @@ import { useI18N } from '../../locales/i18n_generated.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
-import { useDetectOverflow } from '../Shared/useDetectOverflow.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
