@@ -28,9 +28,10 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
                 return hub.getNonFungibleCollectionsByOwner(account, {
                     indicator,
                     size: 50,
+                    networkPluginId: pluginID,
                     ...options,
                 })
             }),
         )
-    }, [account, hub, JSON.stringify(options)])
+    }, [account, hub, pluginID, JSON.stringify(options)])
 }
