@@ -20,7 +20,7 @@ patchedDependencies:
     hash: subw5upjv36ceix3wmw66isn6u
     path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@chainsafe/as-sha256@0.3.1':
-    hash: uvouitucssrohqglv7nnd7pdoy
+    hash: 4kkjukh2xlhntgm37imygbirga
     path: patches/@chainsafe__as-sha256@0.3.1.patch
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
@@ -5882,7 +5882,7 @@ packages:
       - encoding
     dev: false
 
-  /@chainsafe/as-sha256@0.3.1(patch_hash=uvouitucssrohqglv7nnd7pdoy):
+  /@chainsafe/as-sha256@0.3.1(patch_hash=4kkjukh2xlhntgm37imygbirga):
     resolution: {integrity: sha512-hldFFYuf49ed7DAakWVXSJODuq3pzJEguD8tQ7h+sGkM18vja+OFoJI9krnGmgzyuZC2ETX0NOIcCTy31v2Mtg==}
     dev: false
     patched: true
@@ -5900,13 +5900,13 @@ packages:
   /@chainsafe/persistent-merkle-tree@0.4.2:
     resolution: {integrity: sha512-lLO3ihKPngXLTus/L7WHKaw9PnNJWizlOF1H9NNzHP6Xvh82vzg9F2bzkXhYIFshMZ2gTCEz8tq6STe7r5NDfQ==}
     dependencies:
-      '@chainsafe/as-sha256': 0.3.1(patch_hash=uvouitucssrohqglv7nnd7pdoy)
+      '@chainsafe/as-sha256': 0.3.1(patch_hash=4kkjukh2xlhntgm37imygbirga)
     dev: false
 
   /@chainsafe/ssz@0.9.4:
     resolution: {integrity: sha512-77Qtg2N1ayqs4Bg/wvnWfg5Bta7iy7IRh8XqXh7oNMeP2HBbBwx8m6yTpA8p0EHItWPEBkgZd5S5/LSlp3GXuQ==}
     dependencies:
-      '@chainsafe/as-sha256': 0.3.1(patch_hash=uvouitucssrohqglv7nnd7pdoy)
+      '@chainsafe/as-sha256': 0.3.1(patch_hash=4kkjukh2xlhntgm37imygbirga)
       '@chainsafe/persistent-merkle-tree': 0.4.2
       case: 1.6.3
     dev: false

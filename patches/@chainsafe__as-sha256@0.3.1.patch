@@ -1,6 +1,6 @@
 diff --git a/build/optimized.js b/build/optimized.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..154d722fe2f169f262dbb8b4d74c7f5844a97502
+index 0000000000000000000000000000000000000000..0d691fff119f53bcbedbba97911a427b43bcfd02
 --- /dev/null
 +++ b/build/optimized.js
 @@ -0,0 +1,555 @@
@@ -550,7 +550,7 @@ index 0000000000000000000000000000000000000000..154d722fe2f169f262dbb8b4d74c7f58
 + };
 +}
 +
-+export function newInstance() {
++module.exports.newInstance = function newInstance() {
 +  return asmFunc({
 +    "env": {
 +      abort: function (msg, file, line, col) {
@@ -590,6 +590,15 @@ index 0000000000000000000000000000000000000000..9b926a6edafcec07b7b788c4af7420b5
 +    resolution: {integrity: sha512-5QsGh9YIHRbwxa8qMe0FaG8QVpoS+fyQal1Wapdmd1UNs5hTxhJP5ROl3q1nT5egQVWffO9sKp6fshRQ4IhIHg==}
 +    hasBin: true
 +    dev: false
+diff --git a/lib/hashObject.d.ts.map b/lib/hashObject.d.ts.map
+deleted file mode 100644
+index 10e60529f8539a32fea0b5f01d7c8a4f12e88b5d..0000000000000000000000000000000000000000
+diff --git a/lib/hashObject.js.map b/lib/hashObject.js.map
+deleted file mode 100644
+index 5af8205a6314b980d05bdd8b77afb3d2ad3fad72..0000000000000000000000000000000000000000
+diff --git a/lib/index.d.ts.map b/lib/index.d.ts.map
+deleted file mode 100644
+index 56383ce91c40026cc9b7495c0ed54f9649be3359..0000000000000000000000000000000000000000
 diff --git a/lib/index.js b/lib/index.js
 index 6930b09b80bd220959c77477f220019b5b43ce7c..b349bc39fd1f40da21e7f310b674b08e70c4cb21 100644
 --- a/lib/index.js
@@ -624,6 +633,12 @@ index 6930b09b80bd220959c77477f220019b5b43ce7c..b349bc39fd1f40da21e7f310b674b08e
      if (data.length > INPUT_LENGTH) {
          for (let i = 0; i < data.length; i += INPUT_LENGTH) {
              const sliced = data.slice(i, i + INPUT_LENGTH);
+diff --git a/lib/index.js.map b/lib/index.js.map
+deleted file mode 100644
+index 551edb50412a4966e711a2b17748b322d8f18483..0000000000000000000000000000000000000000
+diff --git a/lib/sha256.d.ts.map b/lib/sha256.d.ts.map
+deleted file mode 100644
+index dc2ac276b2a8f94468e528e34f5e35f031202843..0000000000000000000000000000000000000000
 diff --git a/lib/sha256.js b/lib/sha256.js
 index 677488a013befc982b920d44436f388ae02d0f01..22e5cbd09cfa70ed54dd6c9e9a052f7fcc136376 100644
 --- a/lib/sha256.js
@@ -654,6 +669,9 @@ index 677488a013befc982b920d44436f388ae02d0f01..22e5cbd09cfa70ed54dd6c9e9a052f7f
          if (data.length > INPUT_LENGTH) {
              for (let i = 0; i < data.length; i += INPUT_LENGTH) {
                  const sliced = data.slice(i, i + INPUT_LENGTH);
+diff --git a/lib/sha256.js.map b/lib/sha256.js.map
+deleted file mode 100644
+index 142ba78308722028367ccc9439716ff4f006b209..0000000000000000000000000000000000000000
 diff --git a/lib/wasm.d.ts b/lib/wasm.d.ts
 deleted file mode 100644
 index f478a9f02d5af8b1a9f1a4345692292008f106ef..0000000000000000000000000000000000000000
