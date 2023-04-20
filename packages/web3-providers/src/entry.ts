@@ -99,7 +99,7 @@ export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
-export const SimpleHash_EVM = new SimpleHashAPI_EVM()
+export const SimpleHashEVM = new SimpleHashAPI_EVM()
 export const SimpleHashSolana = new SimpleHashAPI_Solana()
 
 // Wallet
