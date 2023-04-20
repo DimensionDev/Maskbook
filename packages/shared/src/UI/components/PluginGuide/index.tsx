@@ -110,8 +110,9 @@ export function PluginGuide({
     const stepVisible = !finished && currentStep === step && !!clientRect?.top && !!clientRect.left
 
     useLayoutEffect(() => {
-        document.body.style.overflow = open ? 'hidden' : ''
-    }, [open])
+        document.documentElement.style.overflow = stepVisible ? 'hidden' : ''
+        document.documentElement.style.paddingLeft = 'calc(100vw - 100%)'
+    }, [stepVisible])
 
     useEffect(() => {
         if (finished) return
