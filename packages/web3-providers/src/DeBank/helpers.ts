@@ -6,6 +6,7 @@ import {
     formatEthereumAddress,
     isNativeTokenAddress,
     SchemaType,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
@@ -15,6 +16,7 @@ import {
     toFixed,
     TokenType,
     type Transaction,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import { DebankTransactionDirection, type HistoryResponse, type WalletTokenRecord } from './types.js'
@@ -60,6 +62,10 @@ export function formatTransactions(
         } else if (type === '') {
             type = 'contract interaction'
         }
+
+        if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
+            type = 'burn'
+        }
         return {
             id: transaction.id,
             chainId,
@@ -70,7 +76,7 @@ export function formatTransactions(
             to: transaction.other_addr,
             status: transaction.tx?.status,
             tokens: [
-                ...transaction.sends.map(({ amount, token_id, to_addr }) => ({
+                ...transaction.sends.map(({ amount, token_id }) => ({
                     id: token_id,
                     chainId,
                     type: token_dict[token_id]?.decimals ? TokenType.Fungible : TokenType.NonFungible,
@@ -81,8 +87,6 @@ export function formatTransactions(
                     direction: DebankTransactionDirection.SEND,
                     amount: amount?.toString(),
                     logoURI: token_dict[token_id]?.logo_url,
-                    to_addr,
-                    contract_address: token_dict[token_id].contract_id,
                 })),
                 ...transaction.receives.map(({ amount, token_id }) => ({
                     id: token_id,
