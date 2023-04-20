@@ -1708,3 +1708,9 @@ export interface Web3UI<ChainId, ProviderType, NetworkType> {
         ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
 }
+
+export interface SnapshotTwitterBinding {
+    spaceId: string
+    spaceName: string
+    twitterHandler: string
+}
