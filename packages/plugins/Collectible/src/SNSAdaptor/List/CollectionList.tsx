@@ -4,7 +4,11 @@ import { EMPTY_OBJECT, NetworkPluginID, type SocialAccount } from '@masknet/shar
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
+import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
+import type { BoxProps } from '@mui/system'
 import { range, sortBy } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -14,10 +18,6 @@ import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useCollections } from './useCollections.js'
-import type { BoxProps } from '@mui/system'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
-import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -130,11 +130,6 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
     }
 })
 
-export interface CollectionListProps extends BoxProps {
-    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
-    gridProps?: CollectibleGridProps
-}
-
 const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_EVM]: [
         ChainId.Mainnet,
@@ -148,6 +143,10 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
     [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
 }
+export interface CollectionListProps extends BoxProps {
+    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
+    gridProps?: CollectibleGridProps
+}
 
 export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, className, ...rest }: CollectionListProps) {
     const { address: account, pluginID } = socialAccount
@@ -155,9 +154,6 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
     const { classes, cx } = useStyles(gridProps)
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-
-    const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
-        useCollections(pluginID, chainId, account)
 
     const allNetworks = useNetworkDescriptors(socialAccount.pluginID)
     const networks = useMemo(() => {
@@ -167,6 +163,10 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
             (x) => supported.indexOf(x.chainId),
         )
     }, [allNetworks, socialAccount.pluginID])
+
+    const currentChainId = chainId ?? networks.length === 1 ? networks[0].chainId : chainId
+    const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
+        useCollections(pluginID, currentChainId, account)
 
     const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress } = useUserAssets()
 
@@ -183,15 +183,17 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
 
     const sidebar = (
         <div className={classes.sidebar}>
-            <AllButton
-                className={classes.networkButton}
-                onClick={() => {
-                    setChainId(undefined)
-                    setCurrentCollectionId(undefined)
-                }}>
-                ALL
-                {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
-            </AllButton>
+            {networks.length > 1 ? (
+                <AllButton
+                    className={classes.networkButton}
+                    onClick={() => {
+                        setChainId(undefined)
+                        setCurrentCollectionId(undefined)
+                    }}>
+                    ALL
+                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                </AllButton>
+            ) : null}
             {networks.map((x) => (
                 <Button
                     variant="text"
@@ -203,7 +205,9 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                         setCurrentCollectionId(undefined)
                     }}>
                     <NetworkIcon pluginID={socialAccount.pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
-                    {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                    {currentChainId === x.chainId ? (
+                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
+                    ) : null}
                 </Button>
             ))}
         </div>
