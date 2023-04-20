@@ -18,24 +18,10 @@
     "@masknet/theme": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
-    "@masknet/web3-state": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
-    "@project-serum/sol-wallet-adapter": "^0.2.6",
-    "@servie/events": "^3.0.0",
-    "@solana/buffer-layout": "^4.0.1",
-    "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.75.0",
-    "bignumber.js": "9.1.1",
-    "bn.js": "^4.12.0",
-    "bs58": "^5.0.0",
-    "buffer": "^6.0.3",
     "react-use": "^17.4.0"
-  },
-  "devDependencies": {
-    "@types/bn.js": "^4.11.6",
-    "@types/bs58": "^4.0.1",
-    "@types/use-subscription": "^1.0.0"
   }
 }

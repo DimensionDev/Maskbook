@@ -1,18 +1,18 @@
+import { startCase } from 'lodash-es'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { List, ListItem, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { SnapshotProposal } from '@masknet/web3-providers/types'
+import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
 import { formatCount, formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
-import { startCase } from 'lodash-es'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { useIntersectionObserver } from '@react-hookz/web'
-import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { resolveSnapshotProposalUrl } from './helpers.js'
+import { useI18N } from '../../../utils/index.js'
+import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -142,7 +142,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
 })
 
 export interface ProfileProposalListProps {
-    proposalList: SnapshotProposal[]
+    proposalList: SnapshotBaseAPI.SnapshotProposal[]
 }
 
 export function ProfileProposalList(props: ProfileProposalListProps) {
@@ -159,7 +159,7 @@ export function ProfileProposalList(props: ProfileProposalListProps) {
 }
 
 interface ProfileProposalProps {
-    proposal: SnapshotProposal
+    proposal: SnapshotBaseAPI.SnapshotProposal
 }
 
 function ProfileProposalListItem(props: ProfileProposalProps) {

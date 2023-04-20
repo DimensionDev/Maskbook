@@ -7,20 +7,21 @@ import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
+import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { base } from '../base.js'
 import { TipTaskManager } from '../contexts/index.js'
 import { guideStorageDefaultValue, setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
-import { SharedContextSettings } from '../settings/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
+        SNSAdaptorPluginContext.setup(context)
+
         const storage = context.createKVStorage('memory', storageDefaultValue)
         const guideStorage = context.createKVStorage('persistent', guideStorageDefaultValue)
         setupStorage(storage, guideStorage)
-        SharedContextSettings.value = context
     },
     ApplicationEntries: [
         (() => {
@@ -103,7 +104,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         UI: {
             Content(props) {
                 return (
-                    <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                    <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                         <TipsRealmContent {...props} />
                     </SNSAdaptorContext.Provider>
                 )

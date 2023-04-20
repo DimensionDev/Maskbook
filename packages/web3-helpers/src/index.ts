@@ -27,7 +27,7 @@ import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
 
 export declare namespace Web3Helper {
-    export type Definition = {
+    export interface Definition {
         [NetworkPluginID.PLUGIN_EVM]: EVM.Web3Definition
         [NetworkPluginID.PLUGIN_FLOW]: Flow.Web3Definition
         [NetworkPluginID.PLUGIN_SOLANA]: Solana.Web3Definition

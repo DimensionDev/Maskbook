@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import {
     SNSAdaptorContext,
@@ -6,19 +8,18 @@ import {
     type Plugin,
 } from '@masknet/plugin-infra/content-script'
 import { CollectionList, UserAssetsProvider } from '@masknet/shared'
+import { Box } from '@mui/material'
 import { CrossIsolationMessages, NetworkPluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { Box } from '@mui/material'
-import { useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
-import { SharedContextSettings, setupContext } from '../context.js'
+import { setupContext } from '../context.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
 import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
@@ -52,7 +53,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
-                <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                     <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                         <UserAssetsProvider
                             pluginID={socialAccount.pluginID}
@@ -90,12 +91,13 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
+        SNSAdaptorPluginContext.setup(context)
+
         setupContext(context)
-        SharedContextSettings.value = context
     },
     GlobalInjection() {
         return (
-            <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+            <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                 <DialogInspector />
             </SNSAdaptorContext.Provider>
         )
@@ -125,7 +127,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     if (!socialAccount) return null
 
                     return (
-                        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                        <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                             <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                                 <UserAssetsProvider
                                     pluginID={socialAccount.pluginID}
@@ -174,7 +176,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
                     return (
-                        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                        <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                             <Box style={{ minHeight: 300 }}>
                                 <Web3ContextProvider value={{ pluginID: result.pluginID }}>
                                     <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>

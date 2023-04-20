@@ -16,9 +16,8 @@ import type {
     TransactionSignature,
     Web3,
 } from '@masknet/web3-shared-flow'
+import { FlowWeb3State, SharedUIPluginContext } from '@masknet/web3-providers'
 import { base } from '../../base.js'
-import { createWeb3State } from '../../state/index.js'
-import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 const dashboard: Plugin.Dashboard.Definition<
     ChainId,
@@ -39,12 +38,12 @@ const dashboard: Plugin.Dashboard.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        SharedContextSettings.value = context
+        SharedUIPluginContext.setup(context)
 
-        const Web3State = await createWeb3State(signal, context)
+        const state = await FlowWeb3State.create(context)
 
-        dashboard.Web3State = Web3State
-        Web3StateSettings.value = Web3State
+        FlowWeb3State.setup(state)
+        dashboard.Web3State = FlowWeb3State.state
     },
 }
 

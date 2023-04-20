@@ -17,6 +17,8 @@ import {
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '@masknet/flags'
+import { Sentry } from '@masknet/web3-providers'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
@@ -26,8 +28,6 @@ import { configureSelectorMissReporter, MaskMessages, setupReactShadowRootEnviro
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import { Sentry } from '@masknet/web3-providers'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {

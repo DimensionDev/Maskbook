@@ -50,10 +50,14 @@ import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './Connection/EVM/apis/Web3SignerAPI.js'
 import {
     Web3API,
+    Web3StateAPI,
     Web3GasOptionAPI,
     FlowWeb3API,
+    FlowWeb3StateAPI,
     FlowFungibleAPI,
+    SolanaDomainAPI,
     SolanaWeb3API,
+    SolanaWeb3StateAPI,
     SolanaFungibleAPI,
     SolanaNonFungibleAPI,
 } from './Connection/index.js'
@@ -73,6 +77,7 @@ import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
 import { SID_DomainAPI } from './SID/index.js'
+import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -118,17 +123,25 @@ export {
     EVM_Composers,
 } from './Connection/index.js'
 
+// Plugin Context
+export const SharedUIPluginContext = new SharedUIContextAPI()
+export const SNSAdaptorPluginContext = new SNSAdaptorContextAPI()
+
 // EVM Connection
 export const Web3 = new Web3API()
 export const Web3GasOption = new Web3GasOptionAPI()
 export const Web3Signer = new Web3SignerAPI()
+export const Web3State = new Web3StateAPI()
 
 // Flow Connection
 export const FlowWeb3 = new FlowWeb3API()
+export const FlowWeb3State = new FlowWeb3StateAPI()
 export const FlowFungible = new FlowFungibleAPI()
 
 // Solana Connection
+export const SolanaDomain = new SolanaDomainAPI()
 export const SolanaWeb3 = new SolanaWeb3API()
+export const SolanaWeb3State = new SolanaWeb3StateAPI()
 export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
