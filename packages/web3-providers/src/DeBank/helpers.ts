@@ -64,7 +64,7 @@ export function formatTransactions(
         }
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
-            type = 'Burn'
+            type = 'burn'
         }
         return {
             id: transaction.id,
