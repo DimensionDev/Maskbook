@@ -1,12 +1,16 @@
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, Image, NetworkIcon, RetryHint } from '@masknet/shared'
-import { EMPTY_OBJECT, type SocialAccount } from '@masknet/shared-base'
+import { EMPTY_OBJECT, NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
+import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
-import { range } from 'lodash-es'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import type { BoxProps } from '@mui/system'
+import { range, sortBy } from 'lodash-es'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import type { CollectibleGridProps } from '../../types.js'
 import { useUserAssets } from '../Context/UserAssetsContext.js'
@@ -14,7 +18,6 @@ import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useCollections } from './useCollections.js'
-import type { BoxProps } from '@mui/system'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -97,15 +100,13 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             backgroundColor: theme.palette.maskColor.thirdMain,
         },
         sidebar: {
-            width: 24,
+            width: 36,
             flexShrink: 0,
-            marginRight: theme.spacing(1.5),
+            paddingRight: theme.spacing(1.5),
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
             boxSizing: 'border-box',
             height: '100%',
             overflow: 'auto',
-            // For profile-card footer
-            paddingBottom: 48,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -129,6 +130,19 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
     }
 })
 
+const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
+    [NetworkPluginID.PLUGIN_EVM]: [
+        ChainId.Mainnet,
+        ChainId.BSC,
+        ChainId.Matic,
+        ChainId.Arbitrum,
+        ChainId.Optimism,
+        ChainId.Avalanche,
+        ChainId.xDai,
+    ],
+    [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
+    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
+}
 export interface CollectionListProps extends BoxProps {
     socialAccount: SocialAccount<Web3Helper.ChainIdAll>
     gridProps?: CollectibleGridProps
@@ -141,10 +155,18 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
 
-    const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
-        useCollections(pluginID, chainId, account)
+    const allNetworks = useNetworkDescriptors(socialAccount.pluginID)
+    const networks = useMemo(() => {
+        const supported = SimpleHashSupportedChains[socialAccount.pluginID]
+        return sortBy(
+            allNetworks.filter((x) => x.isMainnet && supported.includes(x.chainId)),
+            (x) => supported.indexOf(x.chainId),
+        )
+    }, [allNetworks, socialAccount.pluginID])
 
-    const networks = useNetworkDescriptors(socialAccount.pluginID)
+    const currentChainId = chainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
+    const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
+        useCollections(pluginID, currentChainId, account)
 
     const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress } = useUserAssets()
 
@@ -161,37 +183,33 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
 
     const sidebar = (
         <div className={classes.sidebar}>
-            <AllButton
-                className={classes.networkButton}
-                onClick={() => {
-                    setChainId(undefined)
-                    setCurrentCollectionId(undefined)
-                }}>
-                ALL
-                {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
-            </AllButton>
-            {networks
-                .filter((x) => x.isMainnet)
-                .map((x) => (
-                    <Button
-                        variant="text"
-                        key={x.chainId}
-                        className={classes.networkButton}
-                        disableRipple
-                        onClick={() => {
-                            setChainId(x.chainId)
-                            setCurrentCollectionId(undefined)
-                        }}>
-                        <NetworkIcon
-                            pluginID={socialAccount.pluginID}
-                            chainId={x.chainId}
-                            ImageIconProps={{ size: 24 }}
-                        />
-                        {chainId === x.chainId ? (
-                            <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                        ) : null}
-                    </Button>
-                ))}
+            {networks.length > 1 ? (
+                <AllButton
+                    className={classes.networkButton}
+                    onClick={() => {
+                        setChainId(undefined)
+                        setCurrentCollectionId(undefined)
+                    }}>
+                    ALL
+                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                </AllButton>
+            ) : null}
+            {networks.map((x) => (
+                <Button
+                    variant="text"
+                    key={x.chainId}
+                    className={classes.networkButton}
+                    disableRipple
+                    onClick={() => {
+                        setChainId(x.chainId)
+                        setCurrentCollectionId(undefined)
+                    }}>
+                    <NetworkIcon pluginID={socialAccount.pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
+                    {currentChainId === x.chainId ? (
+                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
+                    ) : null}
+                </Button>
+            ))}
         </div>
     )
 
