@@ -5,7 +5,7 @@ import { type Currency, Ether, Token, CurrencyAmount, Percent, Fraction, type Pr
 import { memoize } from 'lodash-es'
 import { Trade as V2Trade, Router } from '@uniswap/v2-sdk'
 import type { Trade } from '../../types/Trader.js'
-import { INPUT_FRACTION_AFTER_FEE, ONE_HUNDRED_PERCENT } from '../constants.js'
+import { INPUT_FRACTION_AFTER_FEE, ONE_HUNDRED_PERCENT } from '../constants/index.js'
 import { BigNumber } from 'bignumber.js'
 import { TradeProvider } from '@masknet/public-api'
 import { Route, type Pool } from '@uniswap/v3-sdk'
@@ -22,6 +22,10 @@ export function toUniswapToken(chainId: ChainId, token: Web3Helper.FungibleToken
         token.symbol,
         token.name,
     )
+}
+
+export function toUniswapPercent(numerator: number, denominator: number) {
+    return new Percent(numerator, denominator)
 }
 
 export function toUniswapCurrencyAmount(chainId?: ChainId, token?: Web3Helper.FungibleTokenAll, amount?: string) {

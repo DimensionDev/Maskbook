@@ -97,5 +97,21 @@ export enum PoolState {
 }
 
 export namespace TraderAPI {
-    export interface Provider {}
+    export interface TradeInfo {
+        value: TradeComputed | null
+        provider: TradeProvider
+        error?: Error
+        gas?: string
+        finalPrice?: BigNumber.Value
+    }
+    export interface Provider {
+        getTradeInfo: (
+            chainId: ChainId,
+            account: string,
+            inputAmount_: string,
+            slippage: number,
+            inputToken?: Web3Helper.FungibleTokenAll,
+            outputToken?: Web3Helper.FungibleTokenAll,
+        ) => Promise<TradeInfo | null>
+    }
 }

@@ -7,6 +7,7 @@ import {
     swapErrorToUserReadableMessage,
     toUniswapCurrency,
     toUniswapCurrencyAmount,
+    toUniswapPercent,
     toUniswapToken,
     uniswapCurrencyAmountTo,
     uniswapPercentTo,
@@ -30,7 +31,7 @@ import {
     MAX_HOP,
     SLIPPAGE_DEFAULT,
     UNISWAP_BIPS_BASE,
-} from './constants.js'
+} from './constants/index.js'
 import {
     PairState,
     type TokenPair,
@@ -326,43 +327,70 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         return null
     }
 
-    public async getTradeComputed(
+    public async getTradeInfo(
         chainId: ChainId,
+        account: string,
         inputAmount_: string,
-        slippage: Percent,
+        slippage: number,
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
-        const { isNotAvailable, tradeAmount, outputCurrency } = this.getTrade(
-            inputAmount_,
-            chainId,
-            inputToken,
-            outputToken,
-        )
+        try {
+            const { isNotAvailable, tradeAmount, outputCurrency } = this.getTrade(
+                inputAmount_,
+                chainId,
+                inputToken,
+                outputToken,
+            )
 
-        if (!isNotAvailable || !tradeAmount || !outputCurrency) return null
+            if (!isNotAvailable || !tradeAmount || !outputCurrency) return null
 
-        const trade = await this.getBestTradeExactIn(chainId, tradeAmount, outputCurrency)
+            const trade = await this.getBestTradeExactIn(chainId, tradeAmount, outputCurrency)
 
-        if (!trade) return null
+            if (!trade) return null
 
-        const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
-        const realizedLPFee = trade.inputAmount.multiply(realizedLPFeePercent)
-        const priceImpact = trade.priceImpact.subtract(realizedLPFeePercent)
+            const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
+            const realizedLPFee = trade.inputAmount.multiply(realizedLPFeePercent)
+            const priceImpact = trade.priceImpact.subtract(realizedLPFeePercent)
 
-        return {
-            strategy: TradeStrategy.ExactIn,
-            inputToken,
-            outputToken,
-            inputAmount: uniswapCurrencyAmountTo(trade.inputAmount),
-            outputAmount: uniswapCurrencyAmountTo(trade.outputAmount),
-            executionPrice: uniswapPriceTo(trade.executionPrice),
-            priceImpact: uniswapPercentTo(priceImpact ?? trade.priceImpact),
-            path: trade instanceof UniSwapTrade ? trade.route.path.map((x) => [uniswapTokenTo(x)]) : [],
-            maximumSold: uniswapCurrencyAmountTo(trade.maximumAmountIn(slippage)),
-            minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(slippage)),
-            fee: realizedLPFee ? uniswapCurrencyAmountTo(realizedLPFee) : ZERO,
-            trade_: trade,
+            const percent_ = toUniswapPercent(slippage, 1000)
+            const computed = {
+                strategy: TradeStrategy.ExactIn,
+                inputToken,
+                outputToken,
+                inputAmount: uniswapCurrencyAmountTo(trade.inputAmount),
+                outputAmount: uniswapCurrencyAmountTo(trade.outputAmount),
+                executionPrice: uniswapPriceTo(trade.executionPrice),
+                priceImpact: uniswapPercentTo(priceImpact ?? trade.priceImpact),
+                path: trade instanceof UniSwapTrade ? trade.route.path.map((x) => [uniswapTokenTo(x)]) : [],
+                maximumSold: uniswapCurrencyAmountTo(trade.maximumAmountIn(percent_)),
+                minimumReceived: uniswapCurrencyAmountTo(trade.minimumAmountOut(percent_)),
+                fee: realizedLPFee ? uniswapCurrencyAmountTo(realizedLPFee) : ZERO,
+                trade_: trade,
+            }
+
+            try {
+                const gas = await this.getTradeGasLimit(account, chainId, computed)
+                return {
+                    gas,
+                    value: computed,
+                    provider: this.provider,
+                }
+            } catch {
+                return {
+                    value: computed,
+                    provider: this.provider,
+                }
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                return {
+                    value: null,
+                    error,
+                    provider: this.provider,
+                }
+            }
+            return null
         }
     }
 

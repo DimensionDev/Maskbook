@@ -29,7 +29,7 @@ import {
     YUMISWAP_BASE_AGAINST_TOKENS,
     YUMISWAP_CUSTOM_BASES,
     ZERO_PERCENT,
-} from '../constants.js'
+} from '../constants/index.js'
 import { unreachable } from '@masknet/kit'
 import type { Trade } from '@uniswap/v2-sdk'
 import { type Currency, type Percent, type TradeType } from '@uniswap/sdk-core'
