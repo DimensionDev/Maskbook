@@ -1,27 +1,29 @@
+import urlcat from 'urlcat'
 import {
     EMPTY_LIST,
-    NetworkPluginID,
+    createPageable,
+    type Pageable,
+    type PageIndicator,
     createIndicator,
     createNextIndicator,
-    createPageable,
-    type PageIndicator,
-    type Pageable,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import { type HubOptions, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-solana'
-import urlcat from 'urlcat'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
-import { fetchFromSimpleHash, resolveChain } from './helpers.js'
-import { type Asset, type Collection } from './type.js'
+import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
-    createSolanaNonFungibleAsset,
-    createSolanaNonFungibleCollection,
-    resolveSolanaChainId,
-} from './solana-helpers.js'
+    fetchFromSimpleHash,
+    createNonFungibleAsset,
+    resolveChain,
+    createNonFungibleCollection,
+    resolveChainId,
+    getAllChainNames,
+} from '../helpers.js'
+import { type Asset, type Collection } from '../type.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
-export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
             chain,
@@ -29,11 +31,11 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
             tokenId,
         })
         const response = await fetchFromSimpleHash<Asset>(path)
-        return createSolanaNonFungibleAsset(response)
+        return createNonFungibleAsset(response)
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
-        const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
@@ -45,7 +47,7 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
         })
 
         const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
-        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
@@ -57,7 +59,7 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
     }
 
     async getAssetsByCollection(address: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
-        const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
@@ -69,7 +71,7 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
 
         const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
 
-        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
@@ -82,14 +84,16 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator }: HubOptions<ChainId> = {},
+        { chainId, indicator, allChains }: HubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
-        if (!account || !isValidChainId(chainId)) {
+        const pluginId = NetworkPluginID.PLUGIN_EVM
+        const chain = allChains || !chainId ? getAllChainNames(pluginId) : resolveChain(pluginId, chainId)
+        if (!chain || !account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
 
         const path = urlcat('/api/v0/nfts/collections_by_wallets', {
-            chains: 'solana',
+            chains: chain,
             wallet_addresses: account,
         })
 
@@ -97,8 +101,8 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
 
         const collections = response.collections
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveSolanaChainId(x.chain)) && x.spam_score !== 100)
-            .map((x) => createSolanaNonFungibleCollection(x))
+            .filter((x) => x?.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
+            .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
     }
@@ -108,7 +112,7 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
         owner: string,
         { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
-        const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !isValidChainId(chainId) || !collectionId || !owner)
             return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -122,7 +126,7 @@ export class SolanaSimpleHashProvider implements NonFungibleTokenAPI.Provider<Ch
 
         const response = await fetchFromSimpleHash<{ nfts: Asset[]; next_cursor: string }>(path)
 
-        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
