@@ -104,6 +104,8 @@ export enum SearchResultType {
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., realMaskNetwork
     CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
+    // e.g., realMaskNetwork
+    DAO = 'DAO',
 }
 
 export enum ActivityType {
@@ -611,6 +613,18 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
     address: string
 }
 
+export interface DAOResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.DAO
+    keyword: string
+    spaceId: string
+    spaceName: string
+    twitterHandler: string
+    alias?: Array<{
+        value: string
+        isPin?: boolean
+    }>
+}
+
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
     domain?: string
@@ -667,6 +681,7 @@ export type SearchResult<ChainId, SchemaType> =
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
     | NonFungibleCollectionResult<ChainId, SchemaType>
+    | DAOResult<ChainId>
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -1707,10 +1722,4 @@ export interface Web3UI<ChainId, ProviderType, NetworkType> {
         /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
         ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
-}
-
-export interface SnapshotTwitterBinding {
-    spaceId: string
-    spaceName: string
-    twitterHandler: string
 }

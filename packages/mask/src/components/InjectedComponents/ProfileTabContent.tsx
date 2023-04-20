@@ -25,7 +25,7 @@ import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from 
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -293,7 +293,14 @@ function Content(props: ProfileTabContentProps) {
         setMenuOpen(false)
     }
 
-    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(
+        profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '',
+    )
+
+    const { value: spaceList = EMPTY_LIST } = useSnapshotSpacesByTwitterHandler(
+        profileTabType === ProfileTabs.DAO ? currentVisitingUserId ?? '' : '',
+    )
+
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
     const trendingResult = collectionList?.[currentTrendingIndex]
 
@@ -306,7 +313,10 @@ function Content(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    const keyword = trendingResult?.address || trendingResult?.name
+    const keyword =
+        profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
+
+    const searchResults = profileTabType === ProfileTabs.WEB3 ? collectionList : spaceList
 
     if (keyword && !isHideInspector)
         return (
@@ -314,8 +324,9 @@ function Content(props: ProfileTabContentProps) {
                 <SearchResultInspector
                     keyword={keyword}
                     isProfilePage
+                    profileTabType={profileTabType}
                     currentSearchResult={trendingResult}
-                    searchResults={collectionList}
+                    searchResults={searchResults}
                     identity={identity}
                 />
             </div>

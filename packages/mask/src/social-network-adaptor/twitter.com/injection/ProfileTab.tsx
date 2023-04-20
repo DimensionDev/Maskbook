@@ -226,8 +226,6 @@ export function ProfileTabForDAO() {
         })
     }, [])
 
-    console.log({ spaceList })
-
     return hidden || loading || !spaceList?.length ? null : (
         <ProfileTab
             title="DAO"
