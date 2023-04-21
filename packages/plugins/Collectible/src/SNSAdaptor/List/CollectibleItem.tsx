@@ -1,8 +1,10 @@
+import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
+import { useI18N } from '../../locales/index.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,6 +35,11 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         width: '100%',
     },
+    nameRow: {
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'auto',
+    },
     name: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -57,12 +64,14 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {
     disableName?: boolean
+    verifiedBy: string[]
 }
 
 export const CollectibleItem = memo(
     forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
-        const { className, asset, pluginID, disableNetworkIcon, disableName, ...rest } = props
+        const { className, asset, pluginID, disableNetworkIcon, disableName, verifiedBy, ...rest } = props
         const { classes, cx } = useStyles()
+        const t = useI18N()
         const name = asset.collection?.name ?? ''
 
         const handleClick = useCallback(() => {
@@ -107,9 +116,16 @@ export const CollectibleItem = memo(
                     />
                     <div className={cx(classes.info, name ? '' : classes.hidden)}>
                         {disableName ? null : (
-                            <Typography ref={nameRef} className={classes.name} variant="body2">
-                                {name}
-                            </Typography>
+                            <div className={classes.nameRow}>
+                                <Typography ref={nameRef} className={classes.name} variant="body2">
+                                    {name}
+                                </Typography>
+                                {verifiedBy.length ? (
+                                    <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                        <Icons.Verification size={16} />
+                                    </ShadowRootTooltip>
+                                ) : null}
+                            </div>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
                             {identity}

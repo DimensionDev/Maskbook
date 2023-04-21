@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useEffect, useRef, useState, type FC, type HTMLProps, useLayoutEffect } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useI18N } from '../../locales/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
@@ -120,11 +120,12 @@ export const Collection: FC<CollectionProps> = memo(
         if (collection.balance! <= 2 || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
+                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
                     className={className}
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
+                    verifiedBy={verifiedBy}
                 />
             ))
             return <>{renderAssets}</>
@@ -165,7 +166,7 @@ export const Collection: FC<CollectionProps> = memo(
                             <Typography ref={nameRef} className={classes.name} variant="body2">
                                 {collection.name}
                             </Typography>
-                            {verifiedBy?.length ? (
+                            {verifiedBy.length ? (
                                 <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>
