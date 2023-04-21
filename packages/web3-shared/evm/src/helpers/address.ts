@@ -6,6 +6,7 @@ import {
     getArbConstants,
     getCryptoPunksConstants,
     getENSConstants,
+    getLensProfileConstants,
     getRedPacketConstants,
     getSpaceIdConstants,
     getTokenConstant,
@@ -97,6 +98,11 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
 export function isENSContractAddress(contract_address: string) {
     const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+}
+
+export function isLensProfileAddress(address: string) {
+    const { LENS_PROFILE_CONTRACT_ADDRESS } = getLensProfileConstants(ChainId.Matic)
+    return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
 }
 
 export function isArbContractAddress(contract_address: string) {

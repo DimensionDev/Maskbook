@@ -3,7 +3,7 @@ import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { supportPluginIds } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { NFTImage } from '../SNSAdaptor/NFTImage.js'
@@ -59,7 +59,7 @@ interface NFTListPageProps {
     onChange?: (token: AllChainsNonFungibleToken) => void
 }
 
-export function NFTListPage(props: NFTListPageProps) {
+export const NFTListPage = memo(function NFTListPage(props: NFTListPageProps) {
     const t = useI18N()
     const { onChange, tokenInfo, tokens, children, pluginID, nextPage, loadError, loadFinish } = props
     const { classes } = useStyles({ networkPluginID: pluginID })
@@ -114,4 +114,4 @@ export function NFTListPage(props: NFTListPageProps) {
             <ElementAnchor callback={nextPage}>{!loadFinish && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
         </Box>
     )
-}
+})

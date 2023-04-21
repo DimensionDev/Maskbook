@@ -6,7 +6,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
@@ -231,10 +231,17 @@ export const NFTListDialog: FC = () => {
         </Box>
     )
 
-    const tokensInList = uniqBy(
-        [...tokens.filter((x) => x.chainId === actualChainId), ...collectibles],
-        (x) => x.contract?.address?.toLowerCase() + x.tokenId,
-    ).filter((x) => (actualChainId ? x.chainId === actualChainId : true))
+    const tokensInList = useMemo(() => {
+        const filtered = [...tokens, ...collectibles].filter((x) => {
+            if (x.chainId !== actualChainId) return false
+            if (isLensProfileAddress(x.address)) return false
+            return
+        })
+        return uniqBy(
+            [...tokens.filter((x) => x.chainId === actualChainId), ...collectibles],
+            (x) => x.contract?.address?.toLowerCase() + x.tokenId,
+        ).filter((x) => (actualChainId ? x.chainId === actualChainId : true))
+    }, [tokens, collectibles, actualChainId])
 
     const getNoNFTList = () => {
         if (loadError && !collectibles.length) {
