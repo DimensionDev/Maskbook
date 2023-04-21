@@ -17,19 +17,8 @@ export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children }) =
     callbackRef.current = callback
     useEffect(() => {
         if (!intersection?.isIntersecting) return
-
         callbackRef.current(intersection)
     }, [intersection])
-
-    useEffect(() => {
-        const enter = () => {
-            callbackRef.current(undefined)
-        }
-        elementRef.current?.addEventListener('mouseenter', enter)
-        return () => {
-            elementRef.current?.removeEventListener('mouseenter', enter)
-        }
-    }, [])
 
     return (
         <Stack pt={1} ref={elementRef} justifyContent="center" direction="row">
