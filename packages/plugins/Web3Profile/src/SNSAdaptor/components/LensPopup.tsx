@@ -1,11 +1,11 @@
-import { memo, useEffect, useState, useRef } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { emitter } from '../emitter.js'
 import { isEqual } from 'lodash-es'
+import { memo, useEffect, useState, useRef } from 'react'
+import { Fade } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import { emitter } from '../emitter.js'
 import { LensList } from './LensList.js'
 import { useControlLensPopup } from '../hooks/Lens/useControlLensPopup.js'
-import { Fade } from '@mui/material'
-import type { FireflyLensAccount } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     popup: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 export const LensPopup = memo(() => {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
-    const [lens, setLens] = useState<FireflyLensAccount[]>([])
+    const [lens, setLens] = useState<FireflyBaseAPI.FireflyLensAccount[]>([])
     const { style, active } = useControlLensPopup(holderRef)
 
     useEffect(() => {

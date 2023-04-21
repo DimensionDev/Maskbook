@@ -1,10 +1,10 @@
 import { memo, type FC } from 'react'
 import { Button, List, ListItem, Typography, type ListProps, Avatar } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../locales/i18n_generated.js'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import type { FireflyLensAccount } from '@masknet/web3-providers/types'
+import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface Props extends ListProps {
-    accounts: FireflyLensAccount[]
+    accounts: FireflyBaseAPI.FireflyLensAccount[]
 }
 
 export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
