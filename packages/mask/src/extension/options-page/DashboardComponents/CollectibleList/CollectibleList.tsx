@@ -109,7 +109,7 @@ export function CollectibleList(props: CollectibleListProps) {
     return (
         <CollectibleListContext.Provider value={context}>
             <Box className={classes.list} ref={listRef}>
-                {loading ? <LoadingSkeleton className={classes.root} /> : null}
+                {loading && collectibles.length === 0 ? <LoadingSkeleton className={classes.root} /> : null}
                 {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
