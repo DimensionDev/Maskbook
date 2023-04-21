@@ -1,13 +1,15 @@
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { useMemo, Suspense } from 'react'
-import { Skeleton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Skeleton, ThemeProvider } from '@mui/material'
+import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { PostInspector } from './PostInspector.js'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
+import { ProfileViewSkeleton } from './ProfileViewSkeleton.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -83,13 +85,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultInspector: {
         ID: PluginID.Snapshot,
         UI: {
-            Content(result) {
-                return <>123</>
+            Content({ currentResult, resultList, isProfilePage, identity }) {
+                return (
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <ProfileViewSkeleton />
+                    </ThemeProvider>
+                )
             },
         },
         Utils: {
             shouldDisplay(result) {
-                return true
+                return result.type === SearchResultType.DAO
             },
         },
     },
