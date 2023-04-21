@@ -2,9 +2,9 @@ import { memo, type FC, useRef, useEffect } from 'react'
 import { IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Plugin } from '@masknet/plugin-infra'
-import { type LensAccount } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { openPopup } from '../emitter.js'
+import type { FireflyLensAccount } from '@masknet/web3-providers/types'
 
 const LensIconSizeMap: Record<Plugin.SNSAdaptor.LensSlot, number> = {
     [Plugin.SNSAdaptor.LensSlot.Post]: 18,
@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
 })
 interface Props {
     slot: Plugin.SNSAdaptor.LensSlot
-    accounts: LensAccount[]
+    accounts: FireflyLensAccount[]
 }
 
 export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {

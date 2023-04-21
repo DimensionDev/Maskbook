@@ -1,10 +1,10 @@
 import { memo, type FC } from 'react'
-import { Button, List, ListItem, Typography, type ListProps } from '@mui/material'
+import { Button, List, ListItem, Typography, type ListProps, Avatar } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { LensAccount } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import type { FireflyLensAccount } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface Props extends ListProps {
-    accounts: LensAccount[]
+    accounts: FireflyLensAccount[]
 }
 
 export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
@@ -73,9 +73,13 @@ export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
     return (
         <List className={cx(classes.list, className)} {...rest}>
             {accounts.map((account) => (
-                <ListItem className={classes.listItem} key={account.displayName}>
-                    <Icons.Lens size={20} />
-                    <Typography className={classes.name}>{account.displayName || account.handle}</Typography>
+                <ListItem className={classes.listItem} key={account.handle}>
+                    {account.profileUri.length ? (
+                        <Avatar src={account.profileUri[0]} sx={{ width: 20, height: 20 }} />
+                    ) : (
+                        <Icons.Lens size={20} />
+                    )}
+                    <Typography className={classes.name}>{account.name || account.handle}</Typography>
                     <Button
                         variant="text"
                         className={classes.followButton}
