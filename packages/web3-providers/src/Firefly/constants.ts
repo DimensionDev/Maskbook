@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://mask-network-dev.firefly.land/v1'
+export const BASE_URL = 'https://mask-network.firefly.land/v1'
