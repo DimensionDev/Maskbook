@@ -1,11 +1,11 @@
 import urlcat from 'urlcat'
-import { fetchJSON } from '../entry-helpers.js'
 import { BASE_URL } from './constants.js'
-import type { FireflyLensAccount, LensResult } from './types.js'
+import { fetchJSON } from '../entry-helpers.js'
+import type { FireflyBaseAPI } from '../entry-types.js'
 
-export class FireflyAPI {
-    async getLensByTwitterId(twitterHandle: string): Promise<FireflyLensAccount[]> {
-        const result = await fetchJSON<LensResult>(
+export class FireflyAPI implements FireflyBaseAPI.Provider {
+    async getLensByTwitterId(twitterHandle: string): Promise<FireflyBaseAPI.FireflyLensAccount[]> {
+        const result = await fetchJSON<FireflyBaseAPI.LensResult>(
             urlcat(BASE_URL, '/account/lens', {
                 twitterHandle,
             }),

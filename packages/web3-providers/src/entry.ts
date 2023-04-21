@@ -188,7 +188,6 @@ export * from './Storage/index.js'
 
 // RSS3
 export const RSS3 = new RSS3API()
-export * from './helpers/parseJSON.js'
 
 // Firefly
 export const Firefly = new FireflyAPI()
