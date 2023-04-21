@@ -72,7 +72,7 @@ export const CollectibleItem = memo(
         const { className, asset, pluginID, disableNetworkIcon, disableName, verifiedBy, ...rest } = props
         const { classes, cx } = useStyles()
         const t = useI18N()
-        const name = asset.collection?.name ?? ''
+        const name = asset.collection?.name || asset.metadata?.name || ''
 
         const handleClick = useCallback(() => {
             if (!asset.chainId || !pluginID) return

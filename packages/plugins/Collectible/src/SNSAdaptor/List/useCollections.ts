@@ -3,8 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
-import { produce } from 'immer'
-import type { WritableDraft } from 'immer/dist/internal.js'
+import { produce, type Draft } from 'immer'
 import { sum } from 'lodash-es'
 import { useMemo, useState } from 'react'
 
@@ -23,10 +22,7 @@ export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.Ch
 
     const mergedCollections = useMemo(() => {
         return produce(rawCollections, (draft) => {
-            const mergeBy = (
-                name: string,
-                filterFn: (c: WritableDraft<Web3Helper.NonFungibleCollectionAll>) => boolean,
-            ) => {
+            const mergeBy = (name: string, filterFn: (c: Draft<Web3Helper.NonFungibleCollectionAll>) => boolean) => {
                 const matchedCollections = draft.filter(filterFn)
                 if (matchedCollections.length <= 2) return
 

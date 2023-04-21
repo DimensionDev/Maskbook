@@ -313,25 +313,23 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                             onInitialRender={handleInitialRender}
                         />
                     ) : (
-                        <Box width="100%">
-                            <Box className={classes.grid}>
-                                {collections.map((collection) => {
-                                    const assetsState = getAssets(collection.id!)
-                                    return (
-                                        <LazyCollection
-                                            className={classes.gridItem}
-                                            pluginID={socialAccount.pluginID}
-                                            collection={collection}
-                                            key={`${collection.chainId}.${collection.id}`}
-                                            assets={assetsState.assets}
-                                            verifiedBy={getVerifiedBy(collection.id!)}
-                                            loading={assetsState.loading}
-                                            onExpand={setCurrentCollectionId}
-                                            onInitialRender={handleInitialRender}
-                                        />
-                                    )
-                                })}
-                            </Box>
+                        <Box className={classes.grid}>
+                            {collections.map((collection) => {
+                                const assetsState = getAssets(collection.id!)
+                                return (
+                                    <LazyCollection
+                                        className={classes.gridItem}
+                                        pluginID={socialAccount.pluginID}
+                                        collection={collection}
+                                        key={`${collection.chainId}.${collection.id}`}
+                                        assets={assetsState.assets}
+                                        verifiedBy={getVerifiedBy(collection.id!)}
+                                        loading={assetsState.loading}
+                                        onExpand={setCurrentCollectionId}
+                                        onInitialRender={handleInitialRender}
+                                    />
+                                )
+                            })}
                         </Box>
                     )}
                     {error ? <RetryHint hint={false} retry={retry} /> : null}
