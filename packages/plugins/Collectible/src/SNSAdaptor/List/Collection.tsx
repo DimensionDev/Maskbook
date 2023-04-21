@@ -136,7 +136,7 @@ export const Collection: FC<CollectionProps> = memo(
                 className={classes.collectibleCard}
                 asset={asset}
                 pluginID={pluginID}
-                key={`${collection.id}.${asset.tokenId}`}
+                key={`${collection.id}.${asset.address}.${asset.tokenId}`}
                 disableNetworkIcon
             />
         ))

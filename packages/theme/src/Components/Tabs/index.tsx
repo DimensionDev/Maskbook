@@ -284,3 +284,5 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         </ButtonGroupWrap>
     )
 })
+
+MaskTabList.displayName = 'MaskTabList'
