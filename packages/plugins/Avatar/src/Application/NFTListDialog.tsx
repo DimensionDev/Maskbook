@@ -6,7 +6,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, isLensProfileAddress } from '@masknet/web3-shared-evm'
+import { ChainId, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
@@ -235,12 +235,11 @@ export const NFTListDialog: FC = () => {
         const filtered = [...tokens, ...collectibles].filter((x) => {
             if (x.chainId !== actualChainId) return false
             if (isLensProfileAddress(x.address)) return false
-            return
+            if (x.metadata?.name && isLensFollower(x.metadata.name)) return false
+            if (x.collection?.name && isLensCollect(x.collection.name)) return false
+            return true
         })
-        return uniqBy(
-            [...tokens.filter((x) => x.chainId === actualChainId), ...collectibles],
-            (x) => x.contract?.address?.toLowerCase() + x.tokenId,
-        ).filter((x) => (actualChainId ? x.chainId === actualChainId : true))
+        return uniqBy(filtered, (x) => x.contract?.address?.toLowerCase() + x.tokenId)
     }, [tokens, collectibles, actualChainId])
 
     const getNoNFTList = () => {
@@ -283,6 +282,7 @@ export const NFTListDialog: FC = () => {
                         <NFTListPage
                             pluginID={selectedPluginId}
                             tokens={tokensInList}
+                            listLength={collectibles.length}
                             tokenInfo={selectedToken}
                             onChange={setSelectedToken}
                             children={getNoNFTList()}

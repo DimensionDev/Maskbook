@@ -57,11 +57,20 @@ interface NFTListPageProps {
     loadError?: boolean
     nextPage(): void
     onChange?: (token: AllChainsNonFungibleToken) => void
+    /**
+     * In the NFTListDialog, tokens got filtered before passing to NFTListPage.
+     * When there are some `bad` NFTs filling between the gaps of `good` ones,
+     * and the <ElementAnchor /> appears in the first render, that means its
+     * callback won't be triggered anymore, and more NFTs can't be loaded. We
+     * track the length of all NFTs, and set it as key of the <ElementAnchor />,
+     * to created a new one if it's still in the screen.
+     */
+    listLength: number
 }
 
 export const NFTListPage = memo(function NFTListPage(props: NFTListPageProps) {
     const t = useI18N()
-    const { onChange, tokenInfo, tokens, children, pluginID, nextPage, loadError, loadFinish } = props
+    const { onChange, tokenInfo, tokens, children, pluginID, nextPage, loadError, loadFinish, listLength } = props
     const { classes } = useStyles({ networkPluginID: pluginID })
     const [pendingToken, setPendingToken] = useState<AllChainsNonFungibleToken | undefined>()
     const selectedToken = pendingToken ?? tokenInfo
@@ -111,7 +120,9 @@ export const NFTListPage = memo(function NFTListPage(props: NFTListPageProps) {
                     <RetryHint hint={false} retry={nextPage} />
                 </Stack>
             ) : null}
-            <ElementAnchor callback={nextPage}>{!loadFinish && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
+            <ElementAnchor callback={nextPage} key={listLength}>
+                {!loadFinish && tokens.length !== 0 && <LoadingBase />}
+            </ElementAnchor>
         </Box>
     )
 })
