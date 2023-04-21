@@ -47,8 +47,8 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         },
         resolve: {
             extensionAlias: {
-                '.js': ['.tsx', '.ts', '.js'],
-                '.mjs': ['.mts', '.mjs'],
+                '.js': ['.js', '.tsx', '.ts'],
+                '.mjs': ['.mjs', '.mts'],
             },
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {

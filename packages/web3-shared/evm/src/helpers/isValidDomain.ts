@@ -1,4 +1,4 @@
-import punycode from 'punycode'
+import punycode from 'punycode/'
 
 const DOMAIN_RE = /\.(eth|bnb|arb)$/
 

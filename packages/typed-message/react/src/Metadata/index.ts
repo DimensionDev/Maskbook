@@ -2,7 +2,7 @@ import type { TypedMessage } from '@masknet/typed-message'
 import { type Result, Ok, Err, Some, type Option, None } from 'ts-results-es'
 import type { ReactElement, ReactNode } from 'react'
 import z_schema from 'z-schema'
-import draft, { enableMapSet, type Draft } from 'immer'
+import { produce, enableMapSet, type Draft } from 'immer'
 
 const metadataSchemaStore = new Map<string, object>()
 export function getKnownMetadataKeys() {
@@ -88,7 +88,7 @@ export function editTypedMessageMeta<T extends TypedMessage>(
         enableMapSet()
         immer_setup = true
     }
-    return draft(typedMessage, (e) => {
+    return produce(typedMessage, (e) => {
         if (!e.meta) e.meta = new Map()
         edit(e.meta)
         if (e.meta.size === 0) e.meta = undefined

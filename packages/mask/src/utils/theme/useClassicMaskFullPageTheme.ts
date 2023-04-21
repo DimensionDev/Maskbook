@@ -5,7 +5,7 @@ import { Appearance, MaskColors } from '@masknet/theme'
 import { type PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { MaskDarkTheme, MaskLightTheme } from './MaskTheme.js'
 import { useThemeLanguage } from './useThemeLanguage.js'
-import produce, { setAutoFreeze } from 'immer'
+import { produce, setAutoFreeze } from 'immer'
 
 /**
  * @deprecated Should migrate to \@masknet/theme

@@ -37,13 +37,13 @@
     "notistack": "2.0.8",
     "react-use": "^17.4.0",
     "react-window": "^1.8.8",
-    "tinycolor2": "^1.4.2",
-    "tss-react": "^4.4.4",
+    "tinycolor2": "^1.6.0",
+    "tss-react": "^4.8.2",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.0",
+    "@babel/core": "^7.21.4",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-links": "^6.5.13",
