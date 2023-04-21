@@ -1474,6 +1474,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-shared-flow':
+        specifier: workspace:^
+        version: link:../../web3-shared/flow
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../../web3-shared/solana

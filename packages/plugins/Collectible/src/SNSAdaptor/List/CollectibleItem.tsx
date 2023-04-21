@@ -1,8 +1,10 @@
+import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
-import { isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
+import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
+import { useI18N } from '../../locales/index.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -28,10 +30,15 @@ const useStyles = makeStyles()((theme) => ({
         aspectRatio: '1/1',
     },
     info: {
-        padding: theme.spacing('6px', '2px', '6px', '6px'),
+        padding: 6,
         overflow: 'auto',
         boxSizing: 'border-box',
         width: '100%',
+    },
+    nameRow: {
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'auto',
     },
     name: {
         whiteSpace: 'nowrap',
@@ -57,12 +64,14 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {
     disableName?: boolean
+    verifiedBy: string[]
 }
 
 export const CollectibleItem = memo(
     forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
-        const { className, asset, pluginID, disableNetworkIcon, disableName, ...rest } = props
+        const { className, asset, pluginID, disableNetworkIcon, disableName, verifiedBy, ...rest } = props
         const { classes, cx } = useStyles()
+        const t = useI18N()
         const name = asset.collection?.name ?? ''
 
         const handleClick = useCallback(() => {
@@ -78,8 +87,9 @@ export const CollectibleItem = memo(
 
         const identity = useMemo(() => {
             if (!asset.collection) return
-            if (isLensCollect(asset.collection.name) || isLensFollower(asset.collection.name))
-                return asset.collection.name
+            if (isLensCollect(asset.collection.name)) return asset.metadata?.name
+            if (isLensFollower(asset.collection.name)) return asset.collection.name
+            if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
             return asset.tokenId ? `#${asset.tokenId}` : ''
         }, [asset.collection])
@@ -88,7 +98,7 @@ export const CollectibleItem = memo(
         const [identityOverflow, identityRef] = useDetectOverflow()
         const tooltip =
             nameOverflow || identityOverflow ? (
-                <Typography>
+                <Typography component="div">
                     {disableName ? null : <div>{name}</div>}
                     {identity}
                 </Typography>
@@ -106,9 +116,16 @@ export const CollectibleItem = memo(
                     />
                     <div className={cx(classes.info, name ? '' : classes.hidden)}>
                         {disableName ? null : (
-                            <Typography ref={nameRef} className={classes.name} variant="body2">
-                                {name}
-                            </Typography>
+                            <div className={classes.nameRow}>
+                                <Typography ref={nameRef} className={classes.name} variant="body2">
+                                    {name}
+                                </Typography>
+                                {verifiedBy.length ? (
+                                    <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                        <Icons.Verification size={16} />
+                                    </ShadowRootTooltip>
+                                ) : null}
+                            </div>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
                             {identity}

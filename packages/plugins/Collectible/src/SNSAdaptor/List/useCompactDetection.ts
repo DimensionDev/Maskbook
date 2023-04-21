@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
-// TODO we can't use @container query in shadow DOM, so we check if it's
+// TODO we can't use @container query inside shadow DOM, so we check if it's
 // compact manually.
 export function useCompactDetection() {
     const containerRef = useRef<HTMLDivElement>(null)

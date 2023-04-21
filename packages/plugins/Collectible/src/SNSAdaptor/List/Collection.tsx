@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useEffect, useRef, useState, type FC, type HTMLProps, useLayoutEffect } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useI18N } from '../../locales/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     },
     info: {
         alignSelf: 'stretch',
-        padding: theme.spacing('6px', '2px', '6px', '6px'),
+        padding: 6,
     },
     nameRow: {
         display: 'flex',
@@ -120,11 +120,12 @@ export const Collection: FC<CollectionProps> = memo(
         if (collection.balance! <= 2 || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
+                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
                     className={className}
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
+                    verifiedBy={verifiedBy}
                 />
             ))
             return <>{renderAssets}</>
@@ -156,7 +157,7 @@ export const Collection: FC<CollectionProps> = memo(
                         {renderAssets}
                         {hasExtra ? (
                             <Typography component="div" className={classes.extraCount}>
-                                +{Math.min(collection.balance! - 3, 999)}
+                                {collection.balance! > 1002 ? '>999' : `+${collection.balance! - 3}`}
                             </Typography>
                         ) : null}
                     </div>
@@ -165,7 +166,7 @@ export const Collection: FC<CollectionProps> = memo(
                             <Typography ref={nameRef} className={classes.name} variant="body2">
                                 {collection.name}
                             </Typography>
-                            {verifiedBy?.length ? (
+                            {verifiedBy.length ? (
                                 <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>
@@ -184,9 +185,9 @@ export const Collection: FC<CollectionProps> = memo(
 Collection.displayName = 'Collection'
 
 export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
+    id: string
     /** Render variants according to count */
     count: number
-    id: string
     expanded?: boolean
 }
 export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, count, id, expanded, ...rest }) => {
