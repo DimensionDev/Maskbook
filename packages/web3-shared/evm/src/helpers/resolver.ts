@@ -25,17 +25,26 @@ export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
     return new BigNumber(keccak256(toUtf8Bytes(domain.replace(/\.\w+$/, '')))).toFixed()
 }
 
-export function resolveImageURL(image?: string, name?: string, address?: string) {
+const LENS_FOLLOWER_IMAGE = new URL('./lens-follower.svg', import.meta.url).href
+const LENS_COMMENT_IMAGE = new URL('./lens-comment.svg', import.meta.url).href
+const LENS_POST_IMAGE = new URL('./lens-post.svg', import.meta.url).href
+const LENS_COLLECT_IMAGE = new URL('./lens-collect.svg', import.meta.url).href
+const LENS_IMAGE = new URL('./lens.svg', import.meta.url).href
+const ENS_IMAGE = new URL('./ens.svg', import.meta.url).href
+
+export function resolveImageURL(image?: string, name?: string, collectionName?: string, address?: string) {
+    if (image) return image
     if (name) {
-        if (isLensFollower(name)) return new URL('./lens-follower.svg', import.meta.url).href
-        if (isLensComment(name)) return new URL('./lens-comment.svg', import.meta.url).href
-        if (isLensPost(name)) return new URL('./lens-post.svg', import.meta.url).href
+        if (isLensFollower(name)) return LENS_FOLLOWER_IMAGE
+        if (isLensComment(name)) return LENS_COMMENT_IMAGE
+        if (isLensPost(name)) return LENS_POST_IMAGE
         // Check collect after comment and post
-        if (isLensCollect(name)) return new URL('./lens-collect.svg', import.meta.url).href
-        if (isLens(name)) return new URL('./lens.svg', import.meta.url).href
+        if (isLensCollect(name)) return LENS_COLLECT_IMAGE
+        if (isLens(name)) return LENS_IMAGE
     }
-    if (isENSContractAddress(address || '')) return new URL('./ens.svg', import.meta.url).toString()
-    return image
+    if (collectionName && isLensCollect(collectionName)) return LENS_COLLECT_IMAGE
+    if (address && isENSContractAddress(address)) return ENS_IMAGE
+    return
 }
 
 export function isLens(name?: string) {
