@@ -58,6 +58,7 @@ export namespace EVM {
         items_total: number
         description: string | null
         assets: Asset[]
+        symbol: string | null
     }
 
     export interface Transaction {
