@@ -1,0 +1,819 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		372710E629F40845002F1A15 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 372710E529F40845002F1A15 /* AppDelegate.m */; };
+		372710EA29F40845002F1A15 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 372710E829F40845002F1A15 /* Main.html */; };
+		372710EC29F40845002F1A15 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 372710EB29F40845002F1A15 /* Icon.png */; };
+		372710EE29F40845002F1A15 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 372710ED29F40845002F1A15 /* Style.css */; };
+		372710F029F40845002F1A15 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 372710EF29F40845002F1A15 /* Script.js */; };
+		372710F329F40845002F1A15 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 372710F229F40845002F1A15 /* ViewController.m */; };
+		372710F629F40845002F1A15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 372710F429F40845002F1A15 /* Main.storyboard */; };
+		372710F829F40847002F1A15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 372710F729F40847002F1A15 /* Assets.xcassets */; };
+		372710FA29F40847002F1A15 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 372710F929F40847002F1A15 /* main.m */; };
+		3727110629F40847002F1A15 /* mask_safariTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3727110529F40847002F1A15 /* mask_safariTests.m */; };
+		3727111029F40847002F1A15 /* mask_safariUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3727110F29F40847002F1A15 /* mask_safariUITests.m */; };
+		3727111229F40847002F1A15 /* mask_safariUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3727111129F40847002F1A15 /* mask_safariUITestsLaunchTests.m */; };
+		3727111829F40847002F1A15 /* mask-safari Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3727111729F40847002F1A15 /* mask-safari Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3727111E29F40847002F1A15 /* SafariWebExtensionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3727111D29F40847002F1A15 /* SafariWebExtensionHandler.m */; };
+		3727112129F40847002F1A15 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 3727112029F40847002F1A15 /* _locales */; };
+		3727112329F40847002F1A15 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 3727112229F40847002F1A15 /* images */; };
+		3727112529F40847002F1A15 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 3727112429F40847002F1A15 /* manifest.json */; };
+		3727112729F40847002F1A15 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 3727112629F40847002F1A15 /* background.js */; };
+		3727112929F40847002F1A15 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 3727112829F40847002F1A15 /* content.js */; };
+		3727112B29F40847002F1A15 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 3727112A29F40847002F1A15 /* popup.html */; };
+		3727112D29F40847002F1A15 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 3727112C29F40847002F1A15 /* popup.css */; };
+		3727112F29F40847002F1A15 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 3727112E29F40847002F1A15 /* popup.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3727110229F40847002F1A15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 372710D929F40844002F1A15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 372710E029F40845002F1A15;
+			remoteInfo = "mask-safari";
+		};
+		3727110C29F40847002F1A15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 372710D929F40844002F1A15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 372710E029F40845002F1A15;
+			remoteInfo = "mask-safari";
+		};
+		3727111929F40847002F1A15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 372710D929F40844002F1A15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3727111629F40847002F1A15;
+			remoteInfo = "mask-safari Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3727113729F40847002F1A15 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3727111829F40847002F1A15 /* mask-safari Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		372710E129F40845002F1A15 /* mask-safari.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "mask-safari.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		372710E429F40845002F1A15 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		372710E529F40845002F1A15 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		372710E929F40845002F1A15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		372710EB29F40845002F1A15 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		372710ED29F40845002F1A15 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		372710EF29F40845002F1A15 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		372710F129F40845002F1A15 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		372710F229F40845002F1A15 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		372710F529F40845002F1A15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		372710F729F40847002F1A15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		372710F929F40847002F1A15 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		372710FB29F40847002F1A15 /* mask_safari.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mask_safari.entitlements; sourceTree = "<group>"; };
+		372710FC29F40847002F1A15 /* mask-safari.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "mask-safari.entitlements"; sourceTree = "<group>"; };
+		3727110129F40847002F1A15 /* mask-safariTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mask-safariTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3727110529F40847002F1A15 /* mask_safariTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mask_safariTests.m; sourceTree = "<group>"; };
+		3727110B29F40847002F1A15 /* mask-safariUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mask-safariUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3727110F29F40847002F1A15 /* mask_safariUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mask_safariUITests.m; sourceTree = "<group>"; };
+		3727111129F40847002F1A15 /* mask_safariUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mask_safariUITestsLaunchTests.m; sourceTree = "<group>"; };
+		3727111729F40847002F1A15 /* mask-safari Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "mask-safari Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3727111C29F40847002F1A15 /* SafariWebExtensionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SafariWebExtensionHandler.h; sourceTree = "<group>"; };
+		3727111D29F40847002F1A15 /* SafariWebExtensionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SafariWebExtensionHandler.m; sourceTree = "<group>"; };
+		3727112029F40847002F1A15 /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
+		3727112229F40847002F1A15 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		3727112429F40847002F1A15 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		3727112629F40847002F1A15 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		3727112829F40847002F1A15 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		3727112A29F40847002F1A15 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		3727112C29F40847002F1A15 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		3727112E29F40847002F1A15 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		3727113029F40847002F1A15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3727113129F40847002F1A15 /* mask_safari_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mask_safari_Extension.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		372710DE29F40845002F1A15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		372710FE29F40847002F1A15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3727110829F40847002F1A15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3727111429F40847002F1A15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		372710D829F40844002F1A15 = {
+			isa = PBXGroup;
+			children = (
+				372710E329F40845002F1A15 /* mask-safari */,
+				3727110429F40847002F1A15 /* mask-safariTests */,
+				3727110E29F40847002F1A15 /* mask-safariUITests */,
+				3727111B29F40847002F1A15 /* mask-safari Extension */,
+				372710E229F40845002F1A15 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		372710E229F40845002F1A15 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				372710E129F40845002F1A15 /* mask-safari.app */,
+				3727110129F40847002F1A15 /* mask-safariTests.xctest */,
+				3727110B29F40847002F1A15 /* mask-safariUITests.xctest */,
+				3727111729F40847002F1A15 /* mask-safari Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		372710E329F40845002F1A15 /* mask-safari */ = {
+			isa = PBXGroup;
+			children = (
+				372710E429F40845002F1A15 /* AppDelegate.h */,
+				372710E529F40845002F1A15 /* AppDelegate.m */,
+				372710F129F40845002F1A15 /* ViewController.h */,
+				372710F229F40845002F1A15 /* ViewController.m */,
+				372710F429F40845002F1A15 /* Main.storyboard */,
+				372710F729F40847002F1A15 /* Assets.xcassets */,
+				372710F929F40847002F1A15 /* main.m */,
+				372710FB29F40847002F1A15 /* mask_safari.entitlements */,
+				372710FC29F40847002F1A15 /* mask-safari.entitlements */,
+				372710E729F40845002F1A15 /* Resources */,
+			);
+			path = "mask-safari";
+			sourceTree = "<group>";
+		};
+		372710E729F40845002F1A15 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				372710E829F40845002F1A15 /* Main.html */,
+				372710EB29F40845002F1A15 /* Icon.png */,
+				372710ED29F40845002F1A15 /* Style.css */,
+				372710EF29F40845002F1A15 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3727110429F40847002F1A15 /* mask-safariTests */ = {
+			isa = PBXGroup;
+			children = (
+				3727110529F40847002F1A15 /* mask_safariTests.m */,
+			);
+			path = "mask-safariTests";
+			sourceTree = "<group>";
+		};
+		3727110E29F40847002F1A15 /* mask-safariUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3727110F29F40847002F1A15 /* mask_safariUITests.m */,
+				3727111129F40847002F1A15 /* mask_safariUITestsLaunchTests.m */,
+			);
+			path = "mask-safariUITests";
+			sourceTree = "<group>";
+		};
+		3727111B29F40847002F1A15 /* mask-safari Extension */ = {
+			isa = PBXGroup;
+			children = (
+				3727111C29F40847002F1A15 /* SafariWebExtensionHandler.h */,
+				3727111D29F40847002F1A15 /* SafariWebExtensionHandler.m */,
+				3727113029F40847002F1A15 /* Info.plist */,
+				3727113129F40847002F1A15 /* mask_safari_Extension.entitlements */,
+				3727111F29F40847002F1A15 /* Resources */,
+			);
+			path = "mask-safari Extension";
+			sourceTree = "<group>";
+		};
+		3727111F29F40847002F1A15 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3727112029F40847002F1A15 /* _locales */,
+				3727112229F40847002F1A15 /* images */,
+				3727112429F40847002F1A15 /* manifest.json */,
+				3727112629F40847002F1A15 /* background.js */,
+				3727112829F40847002F1A15 /* content.js */,
+				3727112A29F40847002F1A15 /* popup.html */,
+				3727112C29F40847002F1A15 /* popup.css */,
+				3727112E29F40847002F1A15 /* popup.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		372710E029F40845002F1A15 /* mask-safari */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3727113829F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safari" */;
+			buildPhases = (
+				372710DD29F40845002F1A15 /* Sources */,
+				372710DE29F40845002F1A15 /* Frameworks */,
+				372710DF29F40845002F1A15 /* Resources */,
+				3727113729F40847002F1A15 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3727111A29F40847002F1A15 /* PBXTargetDependency */,
+			);
+			name = "mask-safari";
+			productName = "mask-safari";
+			productReference = 372710E129F40845002F1A15 /* mask-safari.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3727110029F40847002F1A15 /* mask-safariTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3727113B29F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safariTests" */;
+			buildPhases = (
+				372710FD29F40847002F1A15 /* Sources */,
+				372710FE29F40847002F1A15 /* Frameworks */,
+				372710FF29F40847002F1A15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3727110329F40847002F1A15 /* PBXTargetDependency */,
+			);
+			name = "mask-safariTests";
+			productName = "mask-safariTests";
+			productReference = 3727110129F40847002F1A15 /* mask-safariTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3727110A29F40847002F1A15 /* mask-safariUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3727113E29F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safariUITests" */;
+			buildPhases = (
+				3727110729F40847002F1A15 /* Sources */,
+				3727110829F40847002F1A15 /* Frameworks */,
+				3727110929F40847002F1A15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3727110D29F40847002F1A15 /* PBXTargetDependency */,
+			);
+			name = "mask-safariUITests";
+			productName = "mask-safariUITests";
+			productReference = 3727110B29F40847002F1A15 /* mask-safariUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		3727111629F40847002F1A15 /* mask-safari Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3727113429F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safari Extension" */;
+			buildPhases = (
+				3727111329F40847002F1A15 /* Sources */,
+				3727111429F40847002F1A15 /* Frameworks */,
+				3727111529F40847002F1A15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mask-safari Extension";
+			productName = "mask-safari Extension";
+			productReference = 3727111729F40847002F1A15 /* mask-safari Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		372710D929F40844002F1A15 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					372710E029F40845002F1A15 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					3727110029F40847002F1A15 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 372710E029F40845002F1A15;
+					};
+					3727110A29F40847002F1A15 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 372710E029F40845002F1A15;
+					};
+					3727111629F40847002F1A15 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = 372710DC29F40844002F1A15 /* Build configuration list for PBXProject "mask-safari" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 372710D829F40844002F1A15;
+			productRefGroup = 372710E229F40845002F1A15 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				372710E029F40845002F1A15 /* mask-safari */,
+				3727110029F40847002F1A15 /* mask-safariTests */,
+				3727110A29F40847002F1A15 /* mask-safariUITests */,
+				3727111629F40847002F1A15 /* mask-safari Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		372710DF29F40845002F1A15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				372710EC29F40845002F1A15 /* Icon.png in Resources */,
+				372710F629F40845002F1A15 /* Main.storyboard in Resources */,
+				372710F029F40845002F1A15 /* Script.js in Resources */,
+				372710EA29F40845002F1A15 /* Main.html in Resources */,
+				372710F829F40847002F1A15 /* Assets.xcassets in Resources */,
+				372710EE29F40845002F1A15 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		372710FF29F40847002F1A15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3727110929F40847002F1A15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3727111529F40847002F1A15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3727112729F40847002F1A15 /* background.js in Resources */,
+				3727112D29F40847002F1A15 /* popup.css in Resources */,
+				3727112B29F40847002F1A15 /* popup.html in Resources */,
+				3727112329F40847002F1A15 /* images in Resources */,
+				3727112529F40847002F1A15 /* manifest.json in Resources */,
+				3727112129F40847002F1A15 /* _locales in Resources */,
+				3727112929F40847002F1A15 /* content.js in Resources */,
+				3727112F29F40847002F1A15 /* popup.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		372710DD29F40845002F1A15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				372710F329F40845002F1A15 /* ViewController.m in Sources */,
+				372710FA29F40847002F1A15 /* main.m in Sources */,
+				372710E629F40845002F1A15 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		372710FD29F40847002F1A15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3727110629F40847002F1A15 /* mask_safariTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3727110729F40847002F1A15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3727111229F40847002F1A15 /* mask_safariUITestsLaunchTests.m in Sources */,
+				3727111029F40847002F1A15 /* mask_safariUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3727111329F40847002F1A15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3727111E29F40847002F1A15 /* SafariWebExtensionHandler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3727110329F40847002F1A15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 372710E029F40845002F1A15 /* mask-safari */;
+			targetProxy = 3727110229F40847002F1A15 /* PBXContainerItemProxy */;
+		};
+		3727110D29F40847002F1A15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 372710E029F40845002F1A15 /* mask-safari */;
+			targetProxy = 3727110C29F40847002F1A15 /* PBXContainerItemProxy */;
+		};
+		3727111A29F40847002F1A15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3727111629F40847002F1A15 /* mask-safari Extension */;
+			targetProxy = 3727111929F40847002F1A15 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		372710E829F40845002F1A15 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				372710E929F40845002F1A15 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		372710F429F40845002F1A15 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				372710F529F40845002F1A15 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3727113229F40847002F1A15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3727113329F40847002F1A15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.6;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3727113529F40847002F1A15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "mask-safari Extension/mask_safari_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "mask-safari Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "mask-safari Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safari.Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		3727113629F40847002F1A15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "mask-safari Extension/mask_safari_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "mask-safari Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "mask-safari Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safari.Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		3727113929F40847002F1A15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "mask-safari/mask-safari.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "mask-safari";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safari";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		3727113A29F40847002F1A15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "mask-safari/mask-safari.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "mask-safari";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safari";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		3727113C29F40847002F1A15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safariTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mask-safari.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/mask-safari";
+			};
+			name = Debug;
+		};
+		3727113D29F40847002F1A15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safariTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mask-safari.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/mask-safari";
+			};
+			name = Release;
+		};
+		3727113F29F40847002F1A15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safariUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "mask-safari";
+			};
+			name = Debug;
+		};
+		3727114029F40847002F1A15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maskbook.Safari.mask-safariUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "mask-safari";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		372710DC29F40844002F1A15 /* Build configuration list for PBXProject "mask-safari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3727113229F40847002F1A15 /* Debug */,
+				3727113329F40847002F1A15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3727113429F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safari Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3727113529F40847002F1A15 /* Debug */,
+				3727113629F40847002F1A15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3727113829F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3727113929F40847002F1A15 /* Debug */,
+				3727113A29F40847002F1A15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3727113B29F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safariTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3727113C29F40847002F1A15 /* Debug */,
+				3727113D29F40847002F1A15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3727113E29F40847002F1A15 /* Build configuration list for PBXNativeTarget "mask-safariUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3727113F29F40847002F1A15 /* Debug */,
+				3727114029F40847002F1A15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 372710D929F40844002F1A15 /* Project object */;
+}
