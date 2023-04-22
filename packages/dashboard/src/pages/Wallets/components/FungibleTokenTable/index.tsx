@@ -171,29 +171,17 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, h
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
-    if (isEmpty || isLoading || !hasLowValueToken || !hasLowValueToken) return null
-    if (isExpand)
-        return (
-            <Typography className={classes.more}>
-                <span className={classes.moreBody} onClick={onSwitch}>
-                    <span>
-                        {t.wallets_assets_more_collapse({
-                            direction: '<',
-                        })}
-                    </span>
-                    <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
-                </span>
-            </Typography>
-        )
+    if (isEmpty || isLoading || !hasLowValueToken) return null
     return (
         <Typography className={classes.more}>
             <span className={classes.moreBody} onClick={onSwitch}>
                 <span>
-                    {t.wallets_assets_more_expand({
-                        direction: '<',
+                    {t.wallets_assets_more({
+                        symbol: '<',
+                        context: isExpand ? 'expanded' : 'collapsed',
                     })}
                 </span>
-                <Icons.ArrowDrop />
+                <Icons.ArrowDrop style={{ transform: isExpand ? 'rotate(180deg)' : undefined }} />
             </span>
         </Typography>
     )

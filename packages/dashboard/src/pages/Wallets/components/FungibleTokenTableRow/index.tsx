@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
@@ -71,9 +71,6 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const { pluginID: currentPluginId } = useNetworkContext()
     const isOnCurrentChain = chainId === asset.chainId
 
-    const handleSend = useCallback(() => onSend(asset), [onSend, asset])
-    const handleSwap = useCallback(() => onSwap(asset), [onSwap, asset])
-
     return (
         <TableRow className={classes.row}>
             <TableCell className={classes.cell} align="center" variant="body">
@@ -138,7 +135,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                                 color="secondary"
                                 sx={{ marginRight: 1 }}
                                 className={classes.button}
-                                onClick={handleSend}>
+                                onClick={() => onSend(asset)}>
                                 {t.wallets_balance_Send()}
                             </Button>
                         </span>
@@ -161,7 +158,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                                 disabled={!isOnCurrentChain || asset.chainId === ChainId.Conflux}
                                 variant="outlined"
                                 color="secondary"
-                                onClick={handleSwap}
+                                onClick={() => onSwap(asset)}
                                 className={classes.button}>
                                 {t.wallets_balance_Swap()}
                             </Button>
