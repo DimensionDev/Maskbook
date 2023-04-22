@@ -4,7 +4,7 @@ import { EMPTY_OBJECT, type SocialAccount } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { Box, Button, Typography, styled } from '@mui/material'
+import { Box, Button, Typography, styled, useTheme } from '@mui/material'
 import { range } from 'lodash-es'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -137,6 +137,7 @@ export interface CollectionListProps extends BoxProps {
 export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, className, ...rest }: CollectionListProps) {
     const { address: account, pluginID } = socialAccount
     const t = useI18N()
+    const theme = useTheme()
     const { classes, cx } = useStyles(gridProps)
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -270,7 +271,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                                 {currentVerifiedBy.length ? (
                                     <ShadowRootTooltip
                                         title={t.verified_by({ marketplace: currentVerifiedBy.join(', ') })}>
-                                        <Icons.Verification size={16} />
+                                        <Icons.Verification size={16} color={theme.palette.maskColor.primary} />
                                     </ShadowRootTooltip>
                                 ) : null}
                             </Box>

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Skeleton, Typography } from '@mui/material'
+import { Skeleton, Typography, useTheme } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useEffect, useRef, useState, type FC, type HTMLProps, useLayoutEffect } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -102,6 +102,7 @@ export const Collection: FC<CollectionProps> = memo(
         ...rest
     }) => {
         const t = useI18N()
+        const theme = useTheme()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
 
@@ -168,7 +169,7 @@ export const Collection: FC<CollectionProps> = memo(
                             </Typography>
                             {verifiedBy?.length ? (
                                 <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
-                                    <Icons.Verification size={16} />
+                                    <Icons.Verification size={16} color={theme.palette.maskColor.primary} />
                                 </ShadowRootTooltip>
                             ) : null}
                         </div>

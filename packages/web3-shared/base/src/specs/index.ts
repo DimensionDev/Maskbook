@@ -619,6 +619,8 @@ export interface DAOResult<ChainId> extends Result<ChainId> {
     spaceId: string
     spaceName: string
     twitterHandler: string
+    avatar: string
+    followersCount: number
     alias?: Array<{
         value: string
         isPin?: boolean

@@ -19,6 +19,11 @@ export class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
         return uniqBy(
             allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])),
             (x) => x.spaceId + x.twitterHandler,
-        ).map((x) => ({ ...x, type: SearchResultType.DAO, keyword: x.twitterHandler }))
+        ).map((x) => ({
+            ...x,
+            type: SearchResultType.DAO,
+            keyword: x.twitterHandler,
+            avatar: `https://cdn.stamp.fyi/space/${x.spaceId}?s=164`,
+        }))
     }
 }

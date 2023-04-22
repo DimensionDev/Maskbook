@@ -2,7 +2,10 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
+import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ProfileCard, type ProfileCardProps } from './ProfileCard.js'
+import type { DAOResult } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,18 +21,20 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ProfileViewSkeletonProps extends withClasses<'content' | 'footer'> {
-    TrendingCardProps?: Partial<ProfileCardProps>
+    ProfileCardProps?: Partial<ProfileCardProps>
+    spaceList: Array<DAOResult<ChainId.Mainnet>>
 }
 
 export function ProfileViewSkeleton(props: ProfileViewSkeletonProps) {
-    const { TrendingCardProps } = props
+    const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
     return (
-        <ProfileCard {...TrendingCardProps}>
+        <ProfileCard {...ProfileCardProps}>
             <Stack className={classes.root}>
                 <PluginDescriptor />
+                <ProfileSpaceHeader spaceList={spaceList} />
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />

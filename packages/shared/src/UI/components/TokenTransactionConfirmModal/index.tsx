@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, Typography, useTheme } from '@mui/material'
 import type { FC, PropsWithChildren } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 
@@ -98,6 +98,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
 }) => {
     const { Others } = useWeb3State()
     const { classes } = useStyles()
+    const theme = useTheme()
     const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'
     const isToken = tokenType === TokenType.Fungible
@@ -152,7 +153,9 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                                     <Typography fontWeight={700} fontSize={16} mx="7px">
                                         {uiTokenId}
                                     </Typography>
-                                    {nonFungibleToken.collection?.verified ? <Icons.Verification size={21.43} /> : null}
+                                    {nonFungibleToken.collection?.verified ? (
+                                        <Icons.Verification size={21.43} color={theme.palette.maskColor.primary} />
+                                    ) : null}
                                 </div>
                             </>
                         ) : null}

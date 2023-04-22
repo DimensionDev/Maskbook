@@ -1,6 +1,6 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
-import { alpha, Box, Link, Typography } from '@mui/material'
+import { alpha, Box, Link, Typography, useTheme } from '@mui/material'
 import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
@@ -81,6 +81,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
     }) => {
         const { classes } = useStyles()
         const t = useSharedI18N()
+        const theme = useTheme()
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -102,7 +103,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>{name}</span>
-                        {verified ? <Icons.Verification size={18} /> : null}
+                        {verified ? <Icons.Verification size={18} color={theme.palette.maskColor.primary} /> : null}
                         {onPendingClick ? <Icons.ArrowDrop /> : null}
                     </Typography>
                     <Typography className={classes.address}>

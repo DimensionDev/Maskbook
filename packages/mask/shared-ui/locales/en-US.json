@@ -747,6 +747,8 @@
     "plugin_snapshot_vote_choice": "Option(s)",
     "plugin_snapshot_vote_power": "Your voting power",
     "plugin_snapshot_vote_title": "Cast your vote",
+    "plugin_snapshot_space_info_followers_count": "{{followersCount}} members",
+    "plugin_snapshot_space": "Space",
     "plugin_snapshot_proposal": "Proposal",
     "plugin_snapshot_progress": "Progress",
     "plugin_snapshot_load_failed": "Loading fails due to Snapshot API service breakdown.",

@@ -4,12 +4,13 @@ import { useMemo, Suspense } from 'react'
 import { Skeleton, ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { PostInspector } from './PostInspector.js'
-import { SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResultType, type DAOResult } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ProfileViewSkeleton } from './ProfileViewSkeleton.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -85,10 +86,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultInspector: {
         ID: PluginID.Snapshot,
         UI: {
-            Content({ currentResult, resultList, isProfilePage, identity }) {
+            Content({ resultList }) {
                 return (
                     <ThemeProvider theme={MaskLightTheme}>
-                        <ProfileViewSkeleton />
+                        <ProfileViewSkeleton spaceList={resultList as Array<DAOResult<ChainId.Mainnet>>} />
                     </ThemeProvider>
                 )
             },
