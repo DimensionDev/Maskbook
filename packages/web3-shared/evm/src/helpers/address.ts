@@ -35,9 +35,9 @@ export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
+const nativeTokenSet = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
 export function isNativeTokenAddress(address?: string): address is string {
-    const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
-    return !!(address && set.has(address))
+    return !!(address && nativeTokenSet.has(address))
 }
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
