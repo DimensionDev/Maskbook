@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
 })
 interface Props {
     slot: Plugin.SNSAdaptor.LensSlot
-    accounts: FireflyBaseAPI.FireflyLensAccount[]
+    accounts: FireflyBaseAPI.LensAccount[]
 }
 
 export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
