@@ -67,6 +67,7 @@ import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { SimpleHashProviderAPI } from './SimpleHash/index.js'
 import { RSS3API } from './RSS3/index.js'
 import { LidoAPI } from './Lido/index.js'
+import { FireflyAPI } from './Firefly/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -187,4 +188,6 @@ export * from './Storage/index.js'
 
 // RSS3
 export const RSS3 = new RSS3API()
-export * from './helpers/parseJSON.js'
+
+// Firefly
+export const Firefly = new FireflyAPI()

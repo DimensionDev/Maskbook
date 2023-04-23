@@ -1,5 +1,4 @@
-import { EMPTY_LIST, isDeviceOnWhitelist, mixin } from '@masknet/shared-base'
-import { Flags } from '@masknet/flags'
+import { EMPTY_LIST, mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     AlchemyEVM,
@@ -162,8 +161,8 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             options.chainId === ChainId.Mainnet
                 ? [
                       X2Y2,
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? NFTScanNonFungibleTokenEVM : SimpleHash,
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? SimpleHash : NFTScanNonFungibleTokenEVM,
+                      SimpleHash,
+                      NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       OpenSea,
@@ -176,8 +175,8 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       R2D2TokenList,
                   ]
                 : [
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? NFTScanNonFungibleTokenEVM : SimpleHash,
-                      isDeviceOnWhitelist(Flags.simplehash_ab_percentage) ? SimpleHash : NFTScanNonFungibleTokenEVM,
+                      SimpleHash,
+                      NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,
