@@ -10,7 +10,7 @@ import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
 const selector = () => {
     // [href^="/search"] is a hash tag
     return querySelectorAll<HTMLElement>(
-        '[data-testid=sidebarColumn] [data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
+        '[data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
     )
 }
 
