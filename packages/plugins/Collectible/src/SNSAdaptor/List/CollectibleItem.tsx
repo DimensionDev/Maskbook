@@ -6,6 +6,7 @@ import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { useI18N } from '../../locales/index.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
+import { getAssetFullName } from '@masknet/web3-providers/helpers'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -91,7 +92,12 @@ export const CollectibleItem = memo(
             if (isLensFollower(asset.collection.name)) return asset.collection.name
             if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
-            return asset.tokenId ? `#${asset.tokenId}` : ''
+            return getAssetFullName(
+                asset.contract?.address || '',
+                asset.contract?.name || '',
+                asset.metadata?.name,
+                asset.tokenId,
+            )
         }, [asset.collection])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
