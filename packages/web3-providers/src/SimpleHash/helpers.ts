@@ -36,8 +36,8 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
-    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
+    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     const name = isValidDomain(asset.name)
         ? asset.name
         : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
