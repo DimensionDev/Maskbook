@@ -6,7 +6,7 @@ export namespace FireflyBaseAPI {
         data: T
     }
 
-    export interface FireflyLensAccount {
+    export interface LensAccount {
         address: string
         name: string
         handle: string
@@ -15,9 +15,9 @@ export namespace FireflyBaseAPI {
         profileUri: string[]
     }
 
-    export type LensResult = Result<FireflyLensAccount[]>
+    export type LensResult = Result<LensAccount[]>
 
     export interface Provider {
-        getLensByTwitterId(twitterHandle: string): Promise<FireflyLensAccount[]>
+        getLensByTwitterId(twitterHandle: string): Promise<LensAccount[]>
     }
 }

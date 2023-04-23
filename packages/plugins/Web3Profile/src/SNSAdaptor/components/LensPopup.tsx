@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 export const LensPopup = memo(() => {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
-    const [lens, setLens] = useState<FireflyBaseAPI.FireflyLensAccount[]>([])
+    const [lens, setLens] = useState<FireflyBaseAPI.LensAccount[]>([])
     const { style, active } = useControlLensPopup(holderRef)
 
     useEffect(() => {
