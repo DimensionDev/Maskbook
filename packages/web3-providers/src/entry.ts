@@ -70,6 +70,7 @@ import { LidoAPI } from './Lido/index.js'
 import { Web3BioAPI } from './Web3Bio/index.js'
 import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 import { AirdropAPI } from './Airdrop/index.js'
+import { FireflyAPI } from './Firefly/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -205,3 +206,6 @@ export * from './Storage/index.js'
 
 // Airdrop
 export const Airdrop = new AirdropAPI()
+
+// Firefly
+export const Firefly = new FireflyAPI()

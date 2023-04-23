@@ -10,7 +10,7 @@ import { context, setupContext, setupStorage } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { useAsync } from 'react-use'
-import { NextIDProof } from '@masknet/web3-providers'
+import { Firefly } from '@masknet/web3-providers'
 import { LensBadge } from './components/LensBadge.js'
 import { LensPopup } from './components/LensPopup.js'
 import { ChainContextProvider } from '@masknet/web3-hooks-base'
@@ -97,7 +97,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             Content({ identity, slot, onStatusUpdate }) {
                 const { value: accounts = EMPTY_LIST } = useAsync(async () => {
                     if (!identity?.userId) return
-                    return NextIDProof.queryAllLens(identity?.userId)
+                    return Firefly.getLensByTwitterId(identity.userId)
                 }, [identity?.userId])
 
                 const hasLens = !accounts.length
