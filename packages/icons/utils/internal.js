@@ -15,7 +15,7 @@ import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
     function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
         /* eslint-disable */
-        let { size = 24, variant, color, height, width, ...rest } = props
+        let { size = 24, variant, color, sx, height, width, ...rest } = props
 
         const hasClickHandler = rest.onClick
 
@@ -54,7 +54,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             ...rest,
             ref,
             'data-icon': name,
-            style: iconStyle,
+            sx: { ...iconStyle, ...sx },
             // To align icon center.
             fontSize: 0,
         }
