@@ -1,12 +1,5 @@
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
-import {
-    searchAvatarMetaSelector,
-    searchAvatarSelector,
-    searchTwitterAvatarNFTSelector,
-    searchTwitterAvatarSelector,
-    searchTwitterCircleAvatarSelector,
-    searchTwitterSquareAvatarSelector,
-} from '../../utils/selector.js'
+import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
@@ -20,6 +13,8 @@ import {
     useNFT,
     type NextIDAvatarMeta,
     useSaveStringStorage,
+    NFTAvatarSquare,
+    AvatarType,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
@@ -29,54 +24,18 @@ import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
 import { NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
-import { getAvatarType } from '../../utils/useAvatarType.js'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-import { AvatarType } from '../../constant.js'
-import { NFTSquareAvatarInTwitter } from './NFTAvatarSquare.js'
-import { NFTCircleAvatarInTwitter } from './NFTAvatarCircleInTwitter.js'
-import { NFTAvatarClipInTwitter } from './NFTAvatarClip.js'
+import { getAvatarType, getInjectedDom } from '../../utils/AvatarType.js'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    // inject default
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector()).useForeach((ele, _, proxy) => {
+    const watcher = new MutationObserverWatcher(getInjectedDom()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        const avatarType = getAvatarType()
-        if (avatarType === AvatarType.Default) root.render(<NFTAvatarInTwitter signal={signal} />)
+
+        root.render(<NFTAvatarInTwitter />)
         return () => root.destroy()
     })
     startWatch(watcher, signal)
-
-    // inject square
-    const watcherSquare = new MutationObserverWatcher(searchTwitterSquareAvatarSelector()).useForeach(
-        (ele, _, proxy) => {
-            const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-            const avatarType = getAvatarType()
-            if (avatarType === AvatarType.Square) root.render(<NFTSquareAvatarInTwitter />)
-            return () => root.destroy()
-        },
-    )
-    startWatch(watcherSquare, signal)
-
-    // inject nft circle
-    const watcherNftCircle = new MutationObserverWatcher(searchTwitterCircleAvatarSelector()).useForeach(
-        (ele, _, proxy) => {
-            const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-            const avatarType = getAvatarType()
-            if (avatarType === AvatarType.Circle) root.render(<NFTCircleAvatarInTwitter />)
-            return () => root.destroy()
-        },
-    )
-    startWatch(watcherNftCircle, signal)
-
-    // inject clip
-    const watcherClip = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        const avatarType = getAvatarType()
-        if (avatarType === AvatarType.Clip) root.render(<NFTAvatarClipInTwitter signal={signal} />)
-        return () => root.destroy()
-    })
-    startWatch(watcherClip, signal)
 }
 
 const useStyles = makeStyles()(() => ({
@@ -103,11 +62,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-interface NFTAvatarInTwitterProps {
-    signal: AbortSignal
-}
-
-export function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+export function NFTAvatarInTwitter() {
     const windowSize = useWindowSize()
     const _location = useLocation()
     const { classes } = useStyles()
@@ -149,16 +104,34 @@ export function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         return () => abortController.abort()
     }, [handlerWatcher])
     if (!showAvatar) return null
-    return (
-        <NFTBadge
-            nftInfo={nftInfo}
-            borderSize={5}
-            hasRainbow
-            size={size}
-            width={12}
-            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-        />
-    )
+
+    const avatarType = getAvatarType()
+    switch (avatarType) {
+        case AvatarType.Default:
+            return (
+                <NFTBadge
+                    nftInfo={nftInfo}
+                    borderSize={5}
+                    hasRainbow
+                    size={size}
+                    width={12}
+                    classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+                />
+            )
+        case AvatarType.Square:
+            return (
+                <NFTAvatarSquare
+                    stroke="black"
+                    strokeWidth={20}
+                    fontSize={9}
+                    name={nftInfo?.name ?? ''}
+                    price={nftInfo?.amount ?? ''}
+                    size={size}
+                />
+            )
+        default:
+            return null
+    }
 }
 
 function useNFTCircleAvatar(size: number) {

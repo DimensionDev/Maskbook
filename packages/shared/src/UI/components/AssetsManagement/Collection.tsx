@@ -1,13 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useRef, useState, type FC, type HTMLProps } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { memo, useEffect, useLayoutEffect, useRef, useState, type FC, type HTMLProps } from 'react'
+import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleCard } from './CollectibleCard.js'
-import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
+import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
@@ -15,6 +15,8 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         overflow: 'auto',
         cursor: 'pointer',
         container: 'folder',
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 8,
     },
     grid: {
         display: 'grid',
@@ -23,16 +25,12 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         // TODO Unfortunately, we can't use @container query in shadow DOM yet.
         gridGap: theme.spacing(compact ? 0.5 : 1),
         padding: theme.spacing(compact ? 0.5 : 1),
-        backgroundColor: theme.palette.maskColor.bg,
-        borderRadius: 8,
         aspectRatio: '1 / 1',
         cursor: 'pointer',
     },
     info: {
-        background: theme.palette.maskColor.bg,
         alignSelf: 'stretch',
-        borderRadius: '0 0 8px 8px',
-        padding: theme.spacing('6px', '2px', '6px', '6px'),
+        padding: 6,
     },
     nameRow: {
         display: 'flex',
@@ -43,18 +41,16 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        lineHeight: '16px',
-        minHeight: '16px',
-        textIndent: '8px',
+        lineHeight: theme.spacing(2),
+        minHeight: theme.spacing(2),
         color: theme.palette.maskColor.second,
     },
     tokenId: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        lineHeight: '16px',
-        minHeight: '16px',
-        textIndent: '8px',
+        lineHeight: theme.spacing(2),
+        minHeight: theme.spacing(2),
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
@@ -76,9 +72,10 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     },
 }))
 
-export interface CollectionProps extends HTMLProps<HTMLDivElement> {
+export interface CollectionProps
+    extends HTMLProps<HTMLDivElement>,
+        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
     pluginID: NetworkPluginID
-    owner: string
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
     loading: boolean
@@ -86,7 +83,7 @@ export interface CollectionProps extends HTMLProps<HTMLDivElement> {
     /** set collection expanded */
     expanded?: boolean
     onExpand?(id: string): void
-    onRender?(collection: Web3Helper.NonFungibleCollectionAll): void
+    onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
 }
 
 /**
@@ -96,23 +93,27 @@ export const Collection: FC<CollectionProps> = memo(
     ({
         className,
         collection,
-        owner,
         pluginID,
         loading,
         assets = EMPTY_LIST,
         verifiedBy,
         expanded,
         onExpand,
-        onRender,
+        onInitialRender,
+        disableAction,
+        onActionClick,
+        onItemClick,
         ...rest
     }) => {
-        const t = useI18N()
+        const t = useSharedI18N()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
 
-        useEffect(() => {
-            onRender?.(collection)
-        }, [onRender, collection])
+        useLayoutEffect(() => {
+            onInitialRender?.(collection)
+        }, [])
+
+        const [nameOverflow, nameRef] = useDetectOverflow()
 
         if (loading && !assets.length) {
             return <CollectionSkeleton id={collection.id!} count={collection.balance!} expanded={expanded} />
@@ -121,14 +122,18 @@ export const Collection: FC<CollectionProps> = memo(
         const hasExtra = collection.balance! > 4 && !expanded
         const assetsSlice = hasExtra ? assets.slice(0, 3) : assets
 
-        if (assetsSlice.length <= 2 || expanded) {
+        if (collection.balance! <= 2 || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
+                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
                     className={className}
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    key={`${collection.id}.${asset.tokenId}`}
+                    actionLabel={t.send()}
+                    disableAction={disableAction}
+                    onActionClick={onActionClick}
+                    onItemClick={onItemClick}
                 />
             ))
             return <>{renderAssets}</>
@@ -139,42 +144,48 @@ export const Collection: FC<CollectionProps> = memo(
                 className={classes.collectibleCard}
                 asset={asset}
                 pluginID={pluginID}
-                key={`${collection.id}.${asset.tokenId}`}
+                key={`${collection.id}.${asset.address}.${asset.tokenId}`}
                 disableNetworkIcon
             />
         ))
         return (
-            <div
-                className={cx(className, classes.folder)}
-                {...rest}
-                onClick={() => {
-                    onExpand?.(collection.id!)
-                }}
-                ref={containerRef}>
-                <div className={classes.grid}>
-                    {renderAssets}
-                    {hasExtra ? (
-                        <Typography component="div" className={classes.extraCount}>
-                            +{Math.min(collection.balance! - 3, 999)}
-                        </Typography>
-                    ) : null}
-                </div>
-                <div className={classes.info}>
-                    <div className={classes.nameRow}>
-                        <Typography className={classes.name} variant="body2">
-                            {collection.name}
-                        </Typography>
-                        {verifiedBy?.length ? (
-                            <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
-                                <Icons.Verification size={16} />
-                            </ShadowRootTooltip>
+            <ShadowRootTooltip
+                title={nameOverflow ? collection.name : undefined}
+                placement="top"
+                disableInteractive
+                arrow>
+                <div
+                    className={cx(className, classes.folder)}
+                    {...rest}
+                    onClick={() => {
+                        onExpand?.(collection.id!)
+                    }}
+                    ref={containerRef}>
+                    <div className={classes.grid}>
+                        {renderAssets}
+                        {hasExtra ? (
+                            <Typography component="div" className={classes.extraCount}>
+                                {collection.balance! > 1002 ? '>999' : `+${collection.balance! - 3}`}
+                            </Typography>
                         ) : null}
                     </div>
-                    <Typography className={classes.tokenId} variant="body2" component="div">
-                        {collection?.symbol || ''}
-                    </Typography>
+                    <div className={classes.info}>
+                        <div className={classes.nameRow}>
+                            <Typography ref={nameRef} className={classes.name} variant="body2">
+                                {collection.name}
+                            </Typography>
+                            {verifiedBy?.length ? (
+                                <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                    <Icons.Verification size={16} />
+                                </ShadowRootTooltip>
+                            ) : null}
+                        </div>
+                        <Typography className={classes.tokenId} variant="body2" component="div">
+                            {collection?.symbol || ''}
+                        </Typography>
+                    </div>
                 </div>
-            </div>
+            </ShadowRootTooltip>
         )
     },
 )
@@ -182,9 +193,9 @@ export const Collection: FC<CollectionProps> = memo(
 Collection.displayName = 'Collection'
 
 export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
+    id: string
     /** Render variants according to count */
     count: number
-    id: string
     expanded?: boolean
 }
 export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, count, id, expanded, ...rest }) => {

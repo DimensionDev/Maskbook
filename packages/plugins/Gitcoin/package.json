@@ -22,11 +22,11 @@
     "@masknet/web3-hooks-evm": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "bignumber.js": "9.1.0",
+    "bignumber.js": "9.1.1",
     "quill-delta-to-html": "^0.12.1",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
-    "urlcat": "^2.0.4",
+    "urlcat": "^3.1.0",
     "web3-utils": "1.8.0"
   }
 }

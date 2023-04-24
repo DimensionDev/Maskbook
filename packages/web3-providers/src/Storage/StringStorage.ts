@@ -1,13 +1,13 @@
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
 import { SignType } from '@masknet/shared-base'
 import type { Web3Connection } from '@masknet/web3-shared-evm'
 import { StringStorageAPI } from '../StringStorage/index.js'
 
-const caches = new Map<string, LRU<string, unknown>>()
+const caches = new Map<string, LRUCache<string, any>>()
 
 export class StringStorage implements Storage {
-    private cache: LRU<string, unknown> | undefined
+    private cache: LRUCache<string, any> | undefined
     private stringStorage = new StringStorageAPI()
     constructor(
         private namespace: string,
@@ -19,7 +19,7 @@ export class StringStorage implements Storage {
             this.cache = cache
             return
         } else {
-            const lru = new LRU<string, unknown>({
+            const lru = new LRUCache<string, any>({
                 max: 500,
                 ttl: 60_000,
             })

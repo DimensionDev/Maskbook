@@ -8,22 +8,20 @@ import { TabType } from '../../types.js'
 import { Context } from '../Context/index.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 
-const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
-    (theme, props) => ({
-        dialogRoot: {
-            width: 800,
-            height: 800,
-            maxWidth: 800,
-        },
-        dialogContent: {
-            width: '100%',
-            background: theme.palette.maskColor.bottom,
-            padding: 0,
-            height: '100%',
-            overflow: 'hidden',
-        },
-    }),
-)
+const useStyles = makeStyles()((theme) => ({
+    dialogRoot: {
+        width: 800,
+        height: 800,
+        maxWidth: 800,
+    },
+    dialogContent: {
+        width: '100%',
+        background: theme.palette.maskColor.bottom,
+        padding: 0,
+        height: '100%',
+        overflow: 'hidden',
+    },
+}))
 
 export interface CardDialogProps {
     open: boolean

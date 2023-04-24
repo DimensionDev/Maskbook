@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { useWindowSize } from 'react-use'
 import { NFTAvatarClipOrSquareInTwitter } from './NFTAvatarClip.js'
-import { AvatarType } from '../../constant.js'
 import { useInjectedCSS } from './useInjectedCSS.js'
+import { AvatarType } from '@masknet/plugin-avatar'
 
 export function NFTSquareAvatarInTwitter() {
     const identity = useCurrentVisitingIdentity()

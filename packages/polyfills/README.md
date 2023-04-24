@@ -32,4 +32,4 @@ Check and polyfill before using.
 
 ### Using polyfill
 
-- navigator.clipboard (with `ClipboardItem`) (Firefox not supported)
+- navigator.clipboard (with `ClipboardItem`) (Firefox not supported: <https://caniuse.com/mdn-api_clipboarditem>)

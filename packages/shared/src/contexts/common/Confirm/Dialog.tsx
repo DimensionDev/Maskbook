@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit'> {
+export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
     title?: string
     content: ReactNode | string
     confirmLabel?: string

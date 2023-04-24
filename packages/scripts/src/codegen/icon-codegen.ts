@@ -10,8 +10,12 @@ const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
 const iconRoot = new URL('icons/', PKG_PATH)
 const CODE_FILE = fileURLToPath(new URL('icon-generated-as', iconRoot))
 
-const currentColorRe = /\w=('|")currentColor\1/
+const dynamicColorRe = /(?:\w=('|")currentColor\1|var\(--icon-color)/
 
+const attr2KeyValue = (attr: string) => {
+    const index = attr.indexOf(':')
+    return [attr.slice(0, index).trim(), attr.slice(index + 1).trim()]
+}
 function svg2jsx(code: string) {
     return code
         .trim()
@@ -19,6 +23,14 @@ function svg2jsx(code: string) {
             return p.replace(m1, camelCase(m1))
         })
         .replaceAll('xlink:href', 'xlinkHref')
+        .replace(/\bstyle=('|")(.+?)\1/g, (_p: string, _m1: string, style: string) => {
+            const attributes = style
+                .split(';')
+                .map(attr2KeyValue)
+                .map(([k, v]) => `${JSON.stringify(k)}: ${JSON.stringify(v)}`)
+                .join(',')
+            return `style={{${attributes}}}`
+        })
 }
 function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
     if (typeof data === 'string') {
@@ -46,7 +58,7 @@ const SOURCEMAP_HEAD = '//# sourceMappingURL='
 async function generateIcons() {
     const { SourceMapGenerator } = await import('source-map')
     const { transform } = await import('@swc/core')
-    const glob = await import('glob-promise')
+    const { glob } = await import('glob')
     const asJSX = {
         js: [
             //
@@ -67,7 +79,7 @@ async function generateIcons() {
 
     const relativePrefix = iconRoot.toString().length
     /* cspell:disable-next-line */
-    const filePaths = await glob.promise(pattern, { cwd: fileURLToPath(ROOT_PATH), nodir: true })
+    const filePaths = await glob(pattern, { cwd: ROOT_PATH, nodir: true })
 
     const variants: Record<
         string,
@@ -77,37 +89,48 @@ async function generateIcons() {
         }>
     > = Object.create(null)
 
+    const sourceMap = new Map<string, string | null>()
     await Promise.all(
         filePaths.map(async (path) => {
-            const parsedPath = parsePath(path)
-
-            const base = getBase(parsedPath.name)
-            const currentVariant = getVariant(parsedPath.name)
-            variants[base] ??= []
-
-            // cross platform, use URL to calculate relative path
-            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
-            const identifier = snakeCase(parsedPath.name)
-
-            const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
-            asURL.js.push(`export const ${identifier}_url = ${url}`)
-
-            let currentLine = `/** ${createImage(importPath)} */ export const `
-            asURL.dtsMap.addMapping({
-                generated: { line: asURL.js.length + 1, column: currentLine.length },
-                original: voidMapping,
-                source: importPath,
-            })
-            currentLine += `${identifier}_url: string`
-            asURL.dts.push(currentLine)
-
-            const source = parsedPath.ext.toLowerCase() === '.svg' ? await readFile(path, 'utf8').then(svg2jsx) : null
-            variants[base].push({
-                args: [currentVariant, url, source, !!source?.match(currentColorRe)],
-                assetPath: importPath,
-            })
+            const { ext } = parsePath(path)
+            const code = ext.toLowerCase() === '.svg' ? await readFile(path, 'utf8') : ''
+            const isDynamicColor = code ? dynamicColorRe.test(code) : false
+            const source = isDynamicColor ? svg2jsx(code) : null
+            if (source) sourceMap.set(path, source)
         }),
     )
+
+    // Process in order of files
+    filePaths.forEach((path) => {
+        const { name } = parsePath(path)
+
+        const base = getBase(name)
+        const currentVariant = getVariant(name)
+        variants[base] ??= []
+
+        // cross platform, use URL to calculate relative path
+        const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
+        const identifier = snakeCase(name)
+
+        const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
+        asURL.js.push(`export const ${identifier}_url = ${url}`)
+
+        let currentLine = `/** ${createImage(importPath)} */ export const `
+        asURL.dtsMap.addMapping({
+            generated: { line: asURL.js.length + 1, column: currentLine.length },
+            original: voidMapping,
+            source: importPath,
+        })
+        currentLine += `${identifier}_url: string`
+        asURL.dts.push(currentLine)
+
+        const isDynamicColor = sourceMap.has(path)
+        const source = isDynamicColor ? sourceMap.get(path)! : null
+        variants[base].push({
+            args: [currentVariant, url, source, isDynamicColor],
+            assetPath: importPath,
+        })
+    })
 
     for (const [icon, variant] of Object.entries(variants)) {
         const Ident = upperFirst(icon.replace(/\.(\w)/, (_, c: string) => c.toUpperCase()))

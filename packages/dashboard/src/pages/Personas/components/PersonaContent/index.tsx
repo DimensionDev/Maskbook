@@ -1,5 +1,5 @@
-import { memo, useState } from 'react'
-import { ButtonGroupTabList, makeStyles } from '@masknet/theme'
+import { memo } from 'react'
+import { ButtonGroupTabList, makeStyles, useTabs } from '@masknet/theme'
 import { Box, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { ContactsTable } from '../ContactsTable/index.js'
@@ -20,32 +20,27 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-enum PersonaContentTab {
-    Posts = 'POST',
-    Contacts = 'Contacts',
-}
-
 export interface PersonaContentProps {
     network: string
 }
 export const PersonaContent = memo<PersonaContentProps>(({ network }) => {
     const { classes } = useStyles()
-    const [tab, setTab] = useState<string>(PersonaContentTab.Posts)
+    const [currentTab, onChange, tabs] = useTabs('post', 'contacts')
 
     return (
         <Box className={classes.container}>
-            <TabContext value={String(tab)}>
+            <TabContext value={currentTab}>
                 <ButtonGroupTabList
                     classes={{ root: classes.tabs }}
-                    onChange={(e, v) => setTab(v)}
+                    onChange={onChange}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={PersonaContentTab.Posts} label="Posts" />
-                    <Tab value={PersonaContentTab.Contacts} label="Contacts" />
+                    <Tab value={tabs.post} label="Posts" />
+                    <Tab value={tabs.contacts} label="Contacts" />
                 </ButtonGroupTabList>
-                <TabPanel value={PersonaContentTab.Posts} className={classes.tab}>
+                <TabPanel value={tabs.post} className={classes.tab}>
                     <PostHistory network={network} />
                 </TabPanel>
-                <TabPanel value={PersonaContentTab.Contacts} className={classes.tab}>
+                <TabPanel value={tabs.contacts} className={classes.tab}>
                     <ContactsTable network={network} />
                 </TabPanel>
             </TabContext>

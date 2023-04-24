@@ -25,9 +25,9 @@
         "@servie/events": "^3.0.0",
         "@types/use-subscription": "^1.0.0",
         "date-fns": "2.29.3",
-        "react-feather": "^2.0.9",
+        "react-feather": "^2.0.10",
         "react-use": "^17.4.0",
-        "urlcat": "^2.0.4",
+        "urlcat": "^3.1.0",
         "use-subscription": "^1.8.0",
         "web3-utils": "1.8.0"
     }

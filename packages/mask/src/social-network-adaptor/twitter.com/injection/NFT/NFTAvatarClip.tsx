@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import {
+    AvatarType,
     NFTAvatarClip,
     NFTAvatarSquare,
     formatPrice,
@@ -16,7 +17,6 @@ import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } fr
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { AvatarType } from '../../constant.js'
 
 const useStyles = makeStyles()(() => ({
     root: {

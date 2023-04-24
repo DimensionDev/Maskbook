@@ -275,12 +275,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         { chainId },
     )
 
-    const {
-        value: assets_ = EMPTY_LIST,
-        done,
-        next,
-        error: loadError,
-    } = useNonFungibleAssetsByCollectionAndOwner(
+    const { value: assets_ = EMPTY_LIST, next } = useNonFungibleAssetsByCollectionAndOwner(
         collection?.assets?.length
             ? ''
             : collection?.source === SourceType.SimpleHash

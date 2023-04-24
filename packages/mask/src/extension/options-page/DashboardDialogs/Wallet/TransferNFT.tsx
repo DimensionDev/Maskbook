@@ -8,7 +8,7 @@ import { CollectibleListContext } from '../../DashboardComponents/CollectibleLis
 import { DashboardDialogCore, DashboardDialogWrapper, type WrappedDialogProps } from '../Base.js'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { useTokenTransferCallback } from '@masknet/web3-hooks-evm'
-import { Image, useOpenShareTxDialog, MaskIconOutlined } from '@masknet/shared'
+import { Image, MaskIconOutlined } from '@masknet/shared'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
@@ -41,17 +41,13 @@ export function DashboardWalletTransferDialogNFT(
     // #region transfer tokens
     const [{ loading }, transferCallback] = useTokenTransferCallback(token.schema, token.address)
 
-    const openShareTxDialog = useOpenShareTxDialog()
     const onTransfer = useCallback(async () => {
         const hash = await transferCallback(token.tokenId, address)
         if (typeof hash === 'string') {
-            await openShareTxDialog({
-                hash,
-            })
             onClose()
         }
         collectiblesRetry()
-    }, [transferCallback, token.tokenId, address, collectiblesRetry, openShareTxDialog])
+    }, [transferCallback, token.tokenId, address, collectiblesRetry])
     // #endregion
 
     // #region validation

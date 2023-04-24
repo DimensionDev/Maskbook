@@ -6,8 +6,8 @@
     "start": "ts-node compile-contracts.ts"
   },
   "dependencies": {
-    "@typechain/web3-v1": "^3.0.0",
-    "typechain": "^5.1.2",
+    "@typechain/web3-v1": "^6.0.2",
+    "typechain": "^8.1.1",
     "web3-core": "1.8.0"
   },
   "devDependencies": {

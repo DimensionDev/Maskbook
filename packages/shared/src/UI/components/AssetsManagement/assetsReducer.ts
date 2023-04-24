@@ -16,13 +16,6 @@ export interface AssetsReducerState {
 
 type Action =
     | {
-          type: 'SET_ASSETS'
-          id: string
-          assets: Web3Helper.NonFungibleAssetScope[]
-          finished?: boolean
-          loading?: boolean
-      }
-    | {
           type: 'SET_LOADING_STATUS'
           id: string
           loading?: boolean
@@ -51,12 +44,6 @@ export const initialAssetsState: AssetsReducerState = { assetsMap: {}, verifiedM
 
 export function assetsReducer(state: AssetsReducerState, action: Action): AssetsReducerState {
     switch (action.type) {
-        case 'SET_ASSETS':
-            return produce(state, (draft) => {
-                const { id, assets } = action
-                if (!draft.assetsMap[id]) draft.assetsMap[id] = createAssetsState()
-                draft.assetsMap[id].assets = assets
-            })
         case 'SET_LOADING_STATUS':
             return produce(state, (draft) => {
                 const { id, loading, finished } = action
@@ -73,7 +60,7 @@ export function assetsReducer(state: AssetsReducerState, action: Action): Assets
                 const { id, assets } = action
                 if (!draft.assetsMap[id]) draft.assetsMap[id] = createAssetsState()
                 draft.assetsMap[id].assets = assets.length
-                    ? uniqBy([...draft.assetsMap[id].assets, ...assets], (x) => x.tokenId)
+                    ? uniqBy([...draft.assetsMap[id].assets, ...assets], (x) => `${x.id}.${x.tokenId}`)
                     : draft.assetsMap[id].assets ?? EMPTY_LIST
             })
         case 'SET_VERIFIED':

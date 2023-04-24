@@ -30,6 +30,7 @@ export interface TokenItem {
     price: number
     symbol: string
     time_at: number
+    contract_id: string
 }
 
 export interface HistoryItem {

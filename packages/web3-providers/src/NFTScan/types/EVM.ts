@@ -50,14 +50,15 @@ export namespace EVM {
 
     export interface AssetsGroup {
         contract_address: string
-        contract_name: string
+        contract_name: string | null
         verified?: boolean
         opensea_verified?: boolean
-        logo_url?: string
+        logo_url?: string | null
         owns_total: number
         items_total: number
-        description: string
+        description: string | null
         assets: Asset[]
+        symbol: string | null
     }
 
     export interface Transaction {

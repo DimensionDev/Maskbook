@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import { useAsync } from 'react-use'
 import { ListItem, List, Typography, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { useChainContext, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State, useNetworkDescriptor, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { type NetworkDescriptor, isGreaterThan, type FungibleTokenSpender } from '@masknet/web3-shared-base'
+import { type NetworkDescriptor, type FungibleTokenSpender, formatSpendingCap } from '@masknet/web3-shared-base'
 import { ChainBoundary, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
@@ -138,12 +136,9 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { value: spenders, loading } = useAsync(
-        async () => hub?.getFungibleTokenSpenders?.(chainId, account),
-        [chainId, account, hub],
-    )
+    const { value: spenders, loading, retry } = useFungibleTokenSpenders({ chainId, account })
+
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
@@ -157,7 +152,13 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     return (
         <List className={classes.approvalContentWrapper}>
             {spenders.map((spender, i) => (
-                <ApprovalTokenItem key={i} spender={spender} networkDescriptor={networkDescriptor} chainId={chainId} />
+                <ApprovalTokenItem
+                    key={i}
+                    spender={spender}
+                    networkDescriptor={networkDescriptor}
+                    chainId={chainId}
+                    retry={retry}
+                />
             ))}
         </List>
     )
@@ -167,11 +168,12 @@ interface ApprovalTokenItemProps {
     chainId: ChainId
     spender: FungibleTokenSpender<ChainId, SchemaType>
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
+    retry: () => void
 }
 
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
-    const { networkDescriptor, spender, chainId } = props
-    const [cancelled, setCancelled] = useState(false)
+    const { networkDescriptor, spender, chainId, retry } = props
+
     const t = useI18N()
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
@@ -183,10 +185,10 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         spender.tokenInfo.address,
         '0',
         spender.address,
-        () => setCancelled(true),
+        retry,
         chainId,
     )
-    return cancelled ? null : (
+    return (
         <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
@@ -215,9 +217,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                        <Typography className={classes.primaryText}>
-                            {isGreaterThan(spender.amount, '1e+10') ? t.infinite() : spender.amount}
-                        </Typography>
+                        <Typography className={classes.primaryText}>{formatSpendingCap(spender.amount)}</Typography>
                     </div>
                 </div>
                 <ChainBoundary

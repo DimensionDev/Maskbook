@@ -314,6 +314,8 @@ export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =
 export const searchTwitterAvatarSelector = () =>
     querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
 
+export const searchTwitterAvatarNormalSelector = () => querySelector<E>('a[href$="/photo"]')
+
 export const searchTwitterCircleAvatarSelector = () =>
     querySelector<E>('a[href$="/nft"]').querySelector('img').closest<E>(1)
 

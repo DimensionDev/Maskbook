@@ -100,6 +100,7 @@ export function ApplicationBoardDialog() {
                         </MaskTabList>
                     ) : null
                 }
+                titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
                 independent={personaDialogOpen}
                 title={openSettings ? t('application_settings') : t('applications')}
                 titleTail={

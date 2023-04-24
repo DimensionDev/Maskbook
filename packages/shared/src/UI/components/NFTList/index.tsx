@@ -1,8 +1,8 @@
-import { type FC, useCallback, useRef } from 'react'
+import { type FC, useCallback } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { LoadingBase, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -114,10 +114,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
-    const captionRef = useRef<HTMLDivElement>(null)
     const { Others } = useWeb3State(pluginID)
     const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others?.formatTokenId(token.tokenId, 4)
-    const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
 
     const onClick = useCallback(() => {
         if (!token.chainId || !pluginID) return
@@ -140,13 +138,13 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
                     root: classes.root,
                 }}
             />
-            <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
-                <Typography ref={captionRef} className={classes.caption}>
+            <TextOverflowTooltip as={ShadowRootTooltip} title={caption} disableInteractive arrow placement="bottom">
+                <Typography className={classes.caption}>
                     {Others?.isValidDomain(token.metadata?.name) || pluginID === NetworkPluginID.PLUGIN_SOLANA
                         ? token.metadata?.name
                         : caption}
                 </Typography>
-            </ShadowRootTooltip>
+            </TextOverflowTooltip>
         </div>
     )
 }
@@ -169,8 +167,6 @@ export const NFTList: FC<Props> = ({
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs && selectedPairs.length >= limit
-
-    const { Others } = useWeb3State(pluginID)
 
     const toggleItem = useCallback(
         (currentId: string | null, contractAddress?: string) => {
@@ -198,15 +194,6 @@ export const NFTList: FC<Props> = ({
                         : false
                     const inactive = selectedPairs ? selectedPairs.length > 0 && !selected : false
                     const disabled = selectable ? !isRadio && reachedLimit && !selected : false
-                    const link =
-                        token.link ??
-                        (token.contract
-                            ? Others?.explorerResolver?.nonFungibleTokenLink(
-                                  token?.contract?.chainId,
-                                  token?.contract?.address,
-                                  token.tokenId,
-                              )
-                            : undefined)
                     return (
                         <ListItem
                             key={token.tokenId + token.id}

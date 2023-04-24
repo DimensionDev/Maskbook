@@ -22,9 +22,8 @@
     "@masknet/plugin-wallet": "workspace:^",
     "@masknet/theme": "workspace:^",
     "react-use": "^17.4.0",
-    "urlcat": "^2.0.4",
-    "bignumber.js": "9.1.0",
-    "unstated-next": "^1.1.0",
-    "opensea-js": "^1.2.7"
+    "urlcat": "^3.1.0",
+    "bignumber.js": "9.1.1",
+    "unstated-next": "^1.1.0"
   }
 }

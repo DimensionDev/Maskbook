@@ -6,6 +6,7 @@ import {
     SolanaFungible,
     SolanaNonFungible,
     NFTScanNonFungibleTokenSolana,
+    SimpleHashSolana,
 } from '@masknet/web3-providers'
 import type { FungibleTokenAPI, NonFungibleTokenAPI, PriceAPI } from '@masknet/web3-providers/types'
 import {
@@ -63,8 +64,9 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.MagicEden]: MagicEden,
                 [SourceType.Solana]: SolanaNonFungible,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenSolana,
+                [SourceType.SimpleHash]: SimpleHashSolana,
             },
-            [NFTScanNonFungibleTokenSolana, MagicEden, SolanaNonFungible],
+            [NFTScanNonFungibleTokenSolana, MagicEden, SolanaNonFungible, SimpleHashSolana],
             initial,
         )
     }

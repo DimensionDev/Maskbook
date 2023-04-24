@@ -38,7 +38,8 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const { value: assets, next, retry, loading, done, error } = useIterator(iterator)
 
     const value = useMemo(() => {
-        return assets?.filter((x) => (options?.chainId ? x.chainId === options.chainId : true)) ?? EMPTY_LIST
+        if (!assets?.length) return EMPTY_LIST
+        return assets.filter((x) => (options?.chainId ? x.chainId === options.chainId : true))
     }, [assets, options?.chainId])
 
     return {

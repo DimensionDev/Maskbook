@@ -61,3 +61,10 @@ export type AvatarMeta = NextIDAvatarMeta & { sign: string }
 
 export type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID }
 export type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>
+
+export enum AvatarType {
+    Square = 'shape-square',
+    Clip = 'shape-hex',
+    Circle = 'circle',
+    Default = 'default',
+}

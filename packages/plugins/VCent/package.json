@@ -19,6 +19,6 @@
     "@masknet/web3-providers": "workspace:^",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
-    "urlcat": "^2.0.4"
+    "urlcat": "^3.1.0"
   }
 }
