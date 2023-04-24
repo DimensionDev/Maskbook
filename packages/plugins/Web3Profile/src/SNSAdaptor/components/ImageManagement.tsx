@@ -1,24 +1,24 @@
-import { useCallback, useMemo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../locales/index.js'
-import { WalletAssetsCard } from './WalletAssets.js'
+import { Icons } from '@masknet/icons'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import { InjectedDialog, type WalletTypes } from '@masknet/shared'
 import {
-    PluginID,
     CrossIsolationMessages,
     EMPTY_LIST,
-    type PersonaInformation,
+    PluginID,
     PopupRoutes,
+    type PersonaInformation,
 } from '@masknet/shared-base'
-import { ImageListDialog } from './ImageList.js'
-import { InjectedDialog, type WalletTypes } from '@masknet/shared'
-import { Box, Button, DialogContent } from '@mui/material'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { Box, Button, DialogContent } from '@mui/material'
+import { useMemo, useState } from 'react'
+import { Scene, SceneMap } from '../../constants.js'
+import { useI18N } from '../../locales/index.js'
+import { context } from '../context.js'
 import type { AccountType, UnlistedConfig } from '../types.js'
 import { Empty } from './Empty.js'
-import { context } from '../context.js'
-import { Icons } from '@masknet/icons'
-import { SceneMap, Scene } from '../../constants.js'
+import { ImageListDialog } from './ImageList.js'
+import { WalletAssetsCard } from './WalletAssets.js'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -109,6 +109,14 @@ export interface ImageManagementProps {
 async function openPopupsWindow() {
     await context.openPopupWindow(PopupRoutes.ConnectWallet)
 }
+
+function openSettingDialog() {
+    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+        open: true,
+        targetTab: PluginID.Web3Profile,
+    })
+}
+
 export function ImageManagement({
     scene,
     currentPersona,
@@ -128,15 +136,6 @@ export function ImageManagement({
     const wallets = useMemo(() => getWalletsByStatus(account, scene) ?? EMPTY_LIST, [account, scene])
     const categoryField = sceneToCollectionCategoryMap[scene]
 
-    const handleOpenSettingDialog = useCallback(
-        () =>
-            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
-                open: true,
-                targetTab: PluginID.Web3Profile,
-            }),
-        [],
-    )
-
     const hasConnectedWallets = allWallets.length > 0
 
     const unlistedKeys = useMemo(() => {
@@ -151,7 +150,7 @@ export function ImageManagement({
             classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
-            titleTail={<Icons.Gear className={classes.settingIcon} onClick={handleOpenSettingDialog} />}
+            titleTail={<Icons.Gear className={classes.settingIcon} onClick={openSettingDialog} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>

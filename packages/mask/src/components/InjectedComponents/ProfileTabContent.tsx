@@ -120,11 +120,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 }
 
-function handleOpenDialog() {
-    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
+function openWeb3ProfileSettingDialog() {
+    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
         open: true,
+        targetTab: PluginID.Web3Profile,
     })
 }
+
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
@@ -482,7 +484,7 @@ function Content(props: ProfileTabContentProps) {
                                     directTo={PluginID.Web3Profile}>
                                     <Icons.Gear
                                         variant="light"
-                                        onClick={handleOpenDialog}
+                                        onClick={openWeb3ProfileSettingDialog}
                                         className={classes.gearIcon}
                                         sx={{ cursor: 'pointer' }}
                                     />
