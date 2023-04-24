@@ -3,17 +3,23 @@ import { type ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { useState, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Typography, Avatar, IconButton, useTheme } from '@mui/material'
+import { Box, Typography, Avatar, IconButton, useTheme, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SpaceMenu } from './SpaceMenu.js'
+import { resolveSnapshotSpacePageUrl } from './helpers.js'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
+    currentSpace: DAOResult<ChainId.Mainnet>
+    setSpaceIndex: (x: number) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         marginTop: 16,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
     main: {
         display: 'flex',
@@ -47,18 +53,20 @@ const useStyles = makeStyles()((theme) => ({
     arrowIcon: {
         color: theme.palette.maskColor.dark,
     },
+    joinButton: {
+        marginLeft: 'auto',
+        width: 96,
+        height: 32,
+    },
 }))
 
 export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
-    const { spaceList } = props
+    const { spaceList, currentSpace, setSpaceIndex } = props
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles()
-    const [spaceIndex, setSpaceIndex] = useState(0)
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
-    const currentSpace = spaceList[spaceIndex]
     const spaceRef = useRef<HTMLDivElement>(null)
-    console.log({ currentSpace, spaceList })
 
     return (
         <Box className={classes.root}>
@@ -99,6 +107,14 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                     </Typography>
                 </div>
             </section>
+            <Button
+                color="primary"
+                className={classes.joinButton}
+                size="medium"
+                variant="roundedContained"
+                onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
+                {t('plugin_snapshot_space_join')}
+            </Button>
         </Box>
     )
 }
