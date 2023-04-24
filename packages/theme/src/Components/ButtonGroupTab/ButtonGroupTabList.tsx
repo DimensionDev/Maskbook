@@ -58,3 +58,5 @@ export const ButtonGroupTabList = forwardRef<HTMLDivElement, ButtonGroupTabListP
         </ButtonGroup>
     )
 })
+
+ButtonGroupTabList.displayName = 'ButtonGroupTabList'

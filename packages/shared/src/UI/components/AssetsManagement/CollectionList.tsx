@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, Image, NetworkIcon, RetryHint } from '@masknet/shared'
-import { EMPTY_OBJECT, NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
+import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
@@ -10,13 +10,13 @@ import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { range, sortBy } from 'lodash-es'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
-import type { CollectibleGridProps } from '../../types.js'
-import { useUserAssets } from '../Context/UserAssetsContext.js'
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react'
+import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
+import { useUserAssets } from './UserAssetsContext.js'
+import type { CollectibleGridProps } from './types.js'
 import { useCollections } from './useCollections.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
@@ -31,7 +31,7 @@ const AllButton = styled(Button)(({ theme }) => ({
     },
 }))
 
-export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
+const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
     return {
         container: {
@@ -63,14 +63,11 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
         grid: {
             width: '100%',
             display: 'grid',
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateColumns: typeof columns === 'string' ? columns : `repeat(${columns}, 1fr)`,
             gridGap: gapIsNumber ? theme.spacing(gap) : gap,
             padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
             paddingRight: theme.spacing(1),
             boxSizing: 'border-box',
-        },
-        gridItem: {
-            overflow: 'auto',
         },
         currentCollection: {
             display: 'flex',
@@ -143,28 +140,44 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
     [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
 }
-export interface CollectionListProps extends BoxProps {
-    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
+
+export interface CollectionListProps
+    extends BoxProps,
+        Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
+    account: string
+    pluginID: NetworkPluginID
+    defaultChainId?: Web3Helper.ChainIdAll
     gridProps?: CollectibleGridProps
+    disableSidebar?: boolean
 }
 
-export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, className, ...rest }: CollectionListProps) {
-    const { address: account, pluginID } = socialAccount
-    const t = useI18N()
+export function CollectionList({
+    className,
+    account,
+    pluginID,
+    defaultChainId,
+    gridProps = EMPTY_OBJECT,
+    disableSidebar,
+    disableAction,
+    onActionClick,
+    onItemClick,
+    ...rest
+}: CollectionListProps) {
+    const t = useSharedI18N()
     const { classes, cx } = useStyles(gridProps)
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
 
-    const allNetworks = useNetworkDescriptors(socialAccount.pluginID)
+    const allNetworks = useNetworkDescriptors(pluginID)
     const networks = useMemo(() => {
-        const supported = SimpleHashSupportedChains[socialAccount.pluginID]
+        const supported = SimpleHashSupportedChains[pluginID]
         return sortBy(
             allNetworks.filter((x) => x.isMainnet && supported.includes(x.chainId)),
             (x) => supported.indexOf(x.chainId),
         )
-    }, [allNetworks, socialAccount.pluginID])
+    }, [allNetworks, pluginID])
 
-    const currentChainId = chainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
+    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
         useCollections(pluginID, currentChainId, account)
 
@@ -182,7 +195,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
         [loadAssets, loadVerifiedBy],
     )
 
-    const sidebar = (
+    const sidebar = disableSidebar ? null : (
         <div className={classes.sidebar}>
             {networks.length > 1 ? (
                 <AllButton
@@ -205,7 +218,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                         setChainId(x.chainId)
                         setCurrentCollectionId(undefined)
                     }}>
-                    <NetworkIcon pluginID={socialAccount.pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
+                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
                     {currentChainId === x.chainId ? (
                         <Icons.BorderedSuccess className={classes.indicator} size={12} />
                     ) : null}
@@ -304,7 +317,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                     {currentCollection ? (
                         <ExpandedCollection
                             gridProps={gridProps}
-                            pluginID={socialAccount.pluginID}
+                            pluginID={pluginID}
                             collection={currentCollection}
                             key={currentCollection.id}
                             assets={getAssets(currentCollection.id!).assets}
@@ -312,6 +325,9 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                             loading={getAssets(currentCollection.id!).loading}
                             expanded
                             onInitialRender={handleInitialRender}
+                            disableAction={disableAction}
+                            onActionClick={onActionClick}
+                            onItemClick={onItemClick}
                         />
                     ) : (
                         <Box className={classes.grid}>
@@ -319,8 +335,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                                 const assetsState = getAssets(collection.id!)
                                 return (
                                     <LazyCollection
-                                        className={classes.gridItem}
-                                        pluginID={socialAccount.pluginID}
+                                        pluginID={pluginID}
                                         collection={collection}
                                         key={`${collection.chainId}.${collection.id}`}
                                         assets={assetsState.assets}
@@ -328,6 +343,9 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                                         loading={assetsState.loading}
                                         onExpand={setCurrentCollectionId}
                                         onInitialRender={handleInitialRender}
+                                        disableAction={disableAction}
+                                        onActionClick={onActionClick}
+                                        onItemClick={onItemClick}
                                     />
                                 )
                             })}
@@ -345,7 +363,8 @@ interface ExpandedCollectionProps extends CollectionProps {
     gridProps?: CollectibleGridProps
 }
 
-function ExpandedCollection({ gridProps = EMPTY_OBJECT, ...collectionProps }: ExpandedCollectionProps) {
+/** An ExpandedCollection tiles collectable cards */
+const ExpandedCollection: FC<ExpandedCollectionProps> = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps }) => {
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps
@@ -355,7 +374,7 @@ function ExpandedCollection({ gridProps = EMPTY_OBJECT, ...collectionProps }: Ex
         <>
             <Box width="100%">
                 <Box className={classes.grid}>
-                    <Collection className={classes.gridItem} {...collectionProps} />
+                    <Collection {...collectionProps} />
                     {loading ? range(20).map((i) => <CollectibleItemSkeleton omitName key={i} />) : null}
                 </Box>
             </Box>
@@ -368,4 +387,6 @@ function ExpandedCollection({ gridProps = EMPTY_OBJECT, ...collectionProps }: Ex
             </ElementAnchor>
         </>
     )
-}
+})
+
+ExpandedCollection.displayName = 'ExpandedCollection'

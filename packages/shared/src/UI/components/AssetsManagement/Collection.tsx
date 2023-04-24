@@ -4,10 +4,10 @@ import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useRef, useState, type FC, type HTMLProps, useLayoutEffect } from 'react'
-import { useI18N } from '../../locales/index.js'
+import { memo, useEffect, useLayoutEffect, useRef, useState, type FC, type HTMLProps } from 'react'
+import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleCard } from './CollectibleCard.js'
-import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
+import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
@@ -72,7 +72,9 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     },
 }))
 
-export interface CollectionProps extends HTMLProps<HTMLDivElement> {
+export interface CollectionProps
+    extends HTMLProps<HTMLDivElement>,
+        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
     pluginID: NetworkPluginID
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
@@ -98,9 +100,12 @@ export const Collection: FC<CollectionProps> = memo(
         expanded,
         onExpand,
         onInitialRender,
+        disableAction,
+        onActionClick,
+        onItemClick,
         ...rest
     }) => {
-        const t = useI18N()
+        const t = useSharedI18N()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
 
@@ -125,7 +130,10 @@ export const Collection: FC<CollectionProps> = memo(
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    verifiedBy={verifiedBy}
+                    actionLabel={t.send()}
+                    disableAction={disableAction}
+                    onActionClick={onActionClick}
+                    onItemClick={onItemClick}
                 />
             ))
             return <>{renderAssets}</>
@@ -166,7 +174,7 @@ export const Collection: FC<CollectionProps> = memo(
                             <Typography ref={nameRef} className={classes.name} variant="body2">
                                 {collection.name}
                             </Typography>
-                            {verifiedBy.length ? (
+                            {verifiedBy?.length ? (
                                 <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>

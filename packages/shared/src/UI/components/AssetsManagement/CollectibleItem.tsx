@@ -1,14 +1,10 @@
-import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
-import { Skeleton, Typography } from '@mui/material'
+import { Button, Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
-import { useI18N } from '../../locales/index.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
-import { getAssetFullName } from '@masknet/web3-providers/helpers'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
     card: {
         display: 'flex',
         flexDirection: 'column',
@@ -16,8 +12,27 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         background: theme.palette.maskColor.bg,
         borderRadius: 8,
-        overflow: 'hidden',
+        overflow: 'visible',
         zIndex: 0,
+    },
+    withAction: {
+        '&:hover': {
+            transform: 'translateY(19px)',
+            transitionDuration: '150ms',
+            [`.${refs.action}`]: {
+                marginTop: 8,
+                opacity: 1,
+            },
+            [`.${refs.collectibleCard}`]: {
+                transform: 'translateY(-38px)',
+            },
+            [`.${refs.info}`]: {
+                transform: 'translateY(-38px)',
+            },
+        },
+    },
+    ease: {
+        transition: 'all 300ms ease',
     },
     fadeIn: {
         '@keyframes fade-in': {
@@ -35,11 +50,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         boxSizing: 'border-box',
         width: '100%',
-    },
-    nameRow: {
-        display: 'flex',
-        alignItems: 'center',
-        overflow: 'auto',
     },
     name: {
         whiteSpace: 'nowrap',
@@ -61,30 +71,55 @@ const useStyles = makeStyles()((theme) => ({
     hidden: {
         visibility: 'hidden',
     },
+    action: {
+        width: '100%',
+        padding: theme.spacing(0, 1),
+        boxSizing: 'border-box',
+        textAlign: 'center',
+        opacity: 0,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 6,
+    },
+    actionButton: {
+        borderRadius: 28,
+        backgroundColor: theme.palette.maskColor.primary,
+        color: '#fff',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.primary,
+        },
+    },
 }))
 
-interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {
+export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {
     disableName?: boolean
-    verifiedBy: string[]
+    /** @default true */
+    disableAction?: boolean
+    actionLabel?: string
+    onActionClick?(asset: CollectibleCardProps['asset']): void
+    onItemClick?(asset: CollectibleCardProps['asset']): void
 }
 
 export const CollectibleItem = memo(
-    forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
-        const { className, asset, pluginID, disableNetworkIcon, disableName, verifiedBy, ...rest } = props
+    forwardRef<HTMLDivElement, CollectibleItemProps>((props, ref) => {
+        const {
+            className,
+            asset,
+            pluginID,
+            disableNetworkIcon,
+            disableName,
+            disableAction = true,
+            actionLabel,
+            onActionClick,
+            onItemClick,
+            ...rest
+        } = props
         const { classes, cx } = useStyles()
-        const t = useI18N()
-        const name = asset.collection?.name || asset.metadata?.name || ''
+        const name = asset.collection?.name ?? ''
 
         const handleClick = useCallback(() => {
-            if (!asset.chainId || !pluginID) return
-            CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
-                open: true,
-                chainId: asset.chainId,
-                pluginID,
-                tokenId: asset.tokenId,
-                tokenAddress: asset.address,
-            })
-        }, [pluginID, asset.chainId, asset.tokenId, asset.address])
+            onItemClick?.(asset)
+        }, [onItemClick, asset])
 
         const identity = useMemo(() => {
             if (!asset.collection) return
@@ -92,12 +127,7 @@ export const CollectibleItem = memo(
             if (isLensFollower(asset.collection.name)) return asset.collection.name
             if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
-            return getAssetFullName(
-                asset.contract?.address || '',
-                asset.contract?.name || '',
-                asset.metadata?.name,
-                asset.tokenId,
-            )
+            return asset.tokenId ? `#${asset.tokenId}` : ''
         }, [asset.collection])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
@@ -112,31 +142,39 @@ export const CollectibleItem = memo(
 
         return (
             <ShadowRootTooltip title={tooltip} placement="top" disableInteractive arrow>
-                <div className={cx(classes.card, className, classes.fadeIn)} {...rest} ref={ref}>
+                <div
+                    className={cx(classes.card, classes.fadeIn, className, disableAction ? null : classes.withAction)}
+                    {...rest}
+                    ref={ref}>
                     <CollectibleCard
-                        className={classes.collectibleCard}
+                        className={cx(classes.collectibleCard, classes.ease)}
                         pluginID={pluginID}
                         asset={asset}
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
                     />
-                    <div className={cx(classes.info, name ? '' : classes.hidden)}>
+                    <div className={cx(classes.info, name ? '' : classes.hidden, classes.ease)}>
                         {disableName ? null : (
-                            <div className={classes.nameRow}>
-                                <Typography ref={nameRef} className={classes.name} variant="body2">
-                                    {name}
-                                </Typography>
-                                {verifiedBy.length ? (
-                                    <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
-                                        <Icons.Verification size={16} />
-                                    </ShadowRootTooltip>
-                                ) : null}
-                            </div>
+                            <Typography ref={nameRef} className={classes.name} variant="body2">
+                                {name}
+                            </Typography>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
                             {identity}
                         </Typography>
                     </div>
+                    {disableAction ? null : (
+                        <div className={cx(classes.action, classes.ease)}>
+                            <Button
+                                fullWidth
+                                variant="text"
+                                className={classes.actionButton}
+                                size="small"
+                                onClick={() => onActionClick?.(asset)}>
+                                {actionLabel}
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </ShadowRootTooltip>
         )
@@ -155,7 +193,7 @@ export function CollectibleItemSkeleton({ className, omitInfo, omitName, ...rest
     return (
         <div className={cx(classes.card, className)} {...rest}>
             <div className={classes.collectibleCard}>
-                <Skeleton animation="wave" variant="rectangular" height="100%" />
+                <Skeleton animation="wave" variant="rectangular" sx={{ borderRadius: '8px' }} height="100%" />
             </div>
             {omitInfo ? null : (
                 <div className={classes.info}>
