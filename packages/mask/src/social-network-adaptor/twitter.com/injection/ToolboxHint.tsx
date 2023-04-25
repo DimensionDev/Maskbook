@@ -1,7 +1,7 @@
-import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
+import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { sideBarProfileSelector, toolBoxInSideBarSelector } from '../utils/selector'
+import { querySelector, sideBarProfileSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
 import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI'
 
@@ -9,8 +9,13 @@ const SideBarNativeItemTextMarginLeftRef = new ValueRef('20px')
 const SideBarNativeItemIconSize = new ValueRef('24px')
 const SideBarNativeItemPaddingRef = new ValueRef('11px')
 
+const toolboxInSidebarSelector: () => LiveSelector<HTMLElement, true> = () => {
+    // Organization account don't have a [data-testid=AppTabBar_More_Menu] in page. see MF-3866
+    return querySelector<HTMLElement>('[role="banner"] nav[role="navigation"] > div[data-testid=AppTabBar_More_Menu]')
+}
+
 export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'wallet' | 'application') {
-    const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
+    const watcher = new MutationObserverWatcher(toolboxInSidebarSelector())
         .addListener('onAdd', updateStyle)
         .addListener('onChange', updateStyle)
         .startWatch(

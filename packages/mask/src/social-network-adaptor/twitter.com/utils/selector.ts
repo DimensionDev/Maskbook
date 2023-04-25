@@ -1,7 +1,7 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { regexMatch } from '../../../utils/utils'
-import { isMobileTwitter } from './isMobile'
-import { isCompose } from './postBox'
+import { regexMatch } from '../../../utils/utils.js'
+import { isMobileTwitter } from './isMobile.js'
+import { isCompose } from './postBox.js'
 
 type E = HTMLElement
 
@@ -9,7 +9,7 @@ export const querySelector = <T extends E, SingleMode extends boolean = true>(se
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
-const querySelectorAll = <T extends E>(selector: string) => {
+export const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
@@ -22,10 +22,10 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
         '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
     )
 
-export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        '[data-testid="primaryColumn"] [role="navigation"] + * > div[aria-label]:not([role="progressbar"])',
-    )
+export const searchProfileTabPageSelector = () =>
+    searchProfileTabListLastChildSelector()
+        .closest(3)
+        .querySelector<E>('section > div[aria-label]:not([role="progressbar"])')
 
 export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -63,25 +63,37 @@ export const searchAvatarSelector = () =>
 export const searchNFTAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('head > meta[property="og:image"]:last-child')
+    querySelector<E>('head meta[property="og:image"]')
 
 export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
+
+export const normalFollowButtonSelector = () =>
+    // Follow button and unfollow button in following and followers list
+    querySelectorAll('[data-testid="primaryColumn"] [role="button"][data-testid="UserCell"] [data-testid$="follow"]')
+
+export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
+    ).closest(1)
 // To get margin bottom of menu button, and apply it to tip button to align it.
 export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')
 
 export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[href="/settings/profile"]')
+    querySelector<E>('[data-testid="primaryColumn"] [data-testid^="UserAvatar-Container-"]')
+        .closest(1)
+        .querySelector('a[href="/settings/profile"]')
+
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
-            '.profile', // legacy twitter
-            'a[href*="header_photo"] ~ div', // new twitter
+            '.profile',
+            'a[href*="header_photo"] ~ div',
             'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
-        ].join(),
+        ].join(','),
         singleMode,
     )
 // #endregion
@@ -96,7 +108,7 @@ export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> 
             'aside a[href="/compose/tweet"]',
             // can't see the compose button on share popup, use the tweetButton instead
             '[role=main] [role=button][data-testid=tweetButton]',
-        ].join(),
+        ].join(','),
     )
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>(
@@ -111,8 +123,6 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
-export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
@@ -134,7 +144,8 @@ export const postEditorDraftContentSelector = () => {
 }
 
 export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] [data-testid="primaryColumn"] [role="region"] > [role="heading"]')
+    // To match the scenario with no results in timeline.
+    querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > :nth-child(2)')
 
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
@@ -164,41 +175,47 @@ export const floatingBioCardSelector = () =>
 export const postsImageSelector = (node: HTMLElement) =>
     new LiveSelector([node]).querySelectorAll<HTMLElement>(
         [
-            '[data-testid="tweet"] > div > div img[src*="media"]', // image in timeline page for new twitter
+            '[data-testid="tweet"] > div > div img[src*="media"]',
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
-        ].join(),
+        ].join(','),
     )
 
 export const timelinePostContentSelector = () =>
     querySelectorAll(
         [
-            '[data-testid="tweet"] div + div div[lang]', // text tweets
+            '[data-testid="tweet"] div + div div[lang]',
             '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
-        ].join(),
+        ].join(','),
     )
+
+export const toastLinkSelector = () => querySelector<HTMLLinkElement>('[data-testid="toast"] a')
 
 export const postsContentSelector = () =>
     querySelectorAll(
         [
             // tweets on timeline page
-            '[data-testid="tweet"] div + div div[lang]', // text tweets
-            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
+            '[data-testid="tweet"] div + div div[lang]',
+            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]',
 
             // tweets on detailed page
-            '[data-testid="tweet"] + div > div:first-child div[lang]', // text tweets
-            '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]', // link box tweets
+            '[data-testid="tweet"] + div > div:first-child div[lang]',
+            '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]',
 
-            // quoted tweets
-            '[data-testid="tweet"] + div div[role="link"] div[lang]',
+            // quoted tweets in timeline
+            '[data-testid="tweet"] [aria-labelledby] div[role="link"] div[lang]',
+            // quoted tweets in detail page
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
 
             // reply-tweets
             '[data-testid="tweet"] + div div div[lang][dir]',
-        ].join(),
+        ].join(','),
     )
 
-export const postAvatarsContentSelector = () =>
-    querySelectorAll('[data-testid="tweet"] [data-testid^="UserAvatar-Container-"]')
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
+
+export const postAvatarSelector = () => querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
+export const followUserAvatarSelector = () =>
+    querySelectorAll('[data-testid=UserCell] [data-testid^=UserAvatar-Container-]')
 
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/
@@ -223,18 +240,18 @@ export const selfInfoSelectors = () => ({
 export const searchSelfHandleSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="ltr"] span', // desktop
-            '#layers [role="group"] [role="dialog"] [role="link"] [dir="ltr"] span', // sidebar opened in mobile
-        ].join(),
+            '[data-testid="SideNav_AccountSwitcher_Button"] > div:nth-child(2) > div > div:nth-child(2) span', // desktop
+            '#layers [role="group"] [role="dialog"] [tabindex="-1"] [dir="ltr"] > span', // sidebar opened in mobile
+        ].join(','),
     )
 }
 
 export const searchSelfNicknameSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span', // desktop
-            '#layers [role="group"] [role="dialog"] [role="link"] span span', // sidebar opened in mobile
-        ].join(),
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span',
+            '#layers [role="group"] [role="dialog"] [role="link"] span > span', // sidebar opened in mobile
+        ].join(','),
     )
 }
 
@@ -244,17 +261,20 @@ export const searchWatcherAvatarSelector = () =>
 export const searchSelfAvatarSelector = () => {
     return querySelector<HTMLImageElement>(
         [
-            '#layers ~ div [role="banner"] [role="button"] img', // desktop
-            '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img', // topbar in mobile
+            '#layers ~ div [role="banner"] [role="button"] img',
+            '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img',
             '#layers [role="group"] [role="dialog"] [role="link"] img', // sidebar opened in mobile
-        ].join(),
+        ].join(','),
     )
 }
 // #endregion
 
 // #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {
-    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+    return querySelector<E>('[data-testid="Profile_Save_Button"]')
+        .closest<E>(8)
+        .querySelector('[data-testid="UserAvatar-Container-unknown"]')
+        .closest<E>(3)
 }
 
 export const searchProfileAvatarParentSelector = () =>
@@ -289,11 +309,19 @@ export const searchProfileSetAvatarSelector = () =>
 
 // #region avatar selector
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
+    querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
 export const searchTwitterAvatarSelector = () =>
-    querySelector<E, true>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+    querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+
+export const searchTwitterAvatarNormalSelector = () => querySelector<E>('a[href$="/photo"]')
+
+export const searchTwitterCircleAvatarSelector = () =>
+    querySelector<E>('a[href$="/nft"]').querySelector('img').closest<E>(1)
+
 // #endregion
+
+export const searchTwitterSquareAvatarSelector = () => querySelector<E>('a[href$="/nft"] > div img')
 
 // #region twitter avatar
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
@@ -307,7 +335,19 @@ export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-
 export const searchTwitterAvatarNFTSelector = () =>
     querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
 
+export const searchTwitterAvatarNFTStyleSelector = () => querySelector<E>('a[href$="/nft"] > div')
+
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
+
+export const inpageAvatarSelector = () =>
+    querySelectorAll<HTMLDivElement>(
+        [
+            // Avatars in post
+            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
+            // Avatars in side panel
+            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
+        ].join(','),
+    )
 
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
@@ -316,3 +356,8 @@ export const searchReplyToolbarSelector = () =>
 
 export const searchRejectReplyTextSelector = () =>
     querySelector<E>('div[data-testid="tweetTextarea_0"] > div > div > div > span')
+
+// nameTag dom
+export const searchNameTag = () => querySelector<E>('#nft-gallery')
+
+export const searchHomeLinkName = () => querySelector<E>('[data-testid="AppTabBar_Home_Link"] span')
