@@ -110,5 +110,6 @@
     "token_standard": "代币标准",
     "price": "价格",
     "no_NFTs_found": "没有找到任何NFT。",
-    "load_more": "加载更多"
+    "load_more": "加载更多",
+    "nft_minted": "NFT还没有被铸造。"
 }
