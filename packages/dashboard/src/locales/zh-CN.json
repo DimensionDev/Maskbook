@@ -167,6 +167,8 @@
     "wallets_assets_price": "价格",
     "wallets_assets_value": "价值",
     "wallets_assets_operation": "操作",
+    "wallets_assets_more$collapsed": "值较小的 Token 不会显示({{- symbol }} $1) 。显示全部",
+    "wallets_assets_more$expanded": "值较小的 Token 会显示({{- symbol }} $1) 。隐藏全部",
     "wallets_assets_more_show_all": "全部显示",
     "wallets_address": "钱包地址",
     "wallets_receive_tips": "扫描二维码并发送{{chainName}} 资产到此钱包",
