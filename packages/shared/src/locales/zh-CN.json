@@ -140,6 +140,8 @@
     "plugin_wallet_no_gas_fee": "Gas费用不足",
     "plugin_wallet_invalid_network": "网络无效",
     "plugin_wallet_wrong_network": "网络错误",
+    "plugin_wallet_unsupported_network": "不支持的网络",
+    "plugin_wallet_unsupported_chain": "当前钱包不支持该网络。",
     "plugin_wallet_switch_network": "切换到 {{network}}",
     "plugin_wallet_not_support_network": "此网络尚未支持。",
     "plugin_wallet_switch_network_under_going": "切换到 {{network}}",
@@ -188,5 +190,6 @@
     "applications_create_persona_hint": "使用此功能需要先创建一个身份并验证您的社交媒体账号。",
     "applications_create_persona_action": "创建身份",
     "lens_follow": "关注",
+    "verified_by": "由 {{ marketplace }} 验证",
     "no_NFTs_found": "没有找到任何NFT。"
 }
