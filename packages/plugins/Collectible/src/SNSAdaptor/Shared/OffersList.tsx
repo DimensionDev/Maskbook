@@ -1,35 +1,27 @@
-import { useMemo } from 'react'
-import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
-import { Typography, Button, Box, Stack } from '@mui/material'
-import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
+import { EmptyStatus, RetryHint, SourceProviderSwitcher } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceProviderSwitcher, RetryHint } from '@masknet/shared'
-import { OfferCard } from './OfferCard.js'
+import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
+import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import { Box, Button, Stack } from '@mui/material'
+import { useMemo } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
+import { OfferCard } from './OfferCard.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     wrapper: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         minHeight: 247,
         width: '100%',
-        gap: 12,
         height: 247,
         justifyContent: 'center',
     },
-    emptyIcon: {
-        width: 36,
-        height: 36,
-    },
-    emptyText: {
-        color: theme.palette.maskColor.publicSecond,
-    },
-}))
+})
 
 export interface OffersListProps {
     offers: AsyncStatePageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
@@ -64,13 +56,8 @@ export function OffersList(props: OffersListProps) {
                 />
             </div>
         )
-    if (!_offers.length)
-        return (
-            <div className={classes.wrapper}>
-                <Icons.EmptySimple className={classes.emptyIcon} />
-                <Typography className={classes.emptyText}>{t.plugin_collectible_nft_offers_empty()}</Typography>
-            </div>
-        )
+    if (!_offers.length) return <EmptyStatus height={280}>{t.plugin_collectible_nft_offers_empty()}</EmptyStatus>
+
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
             {_offers?.map((x, idx) => (
