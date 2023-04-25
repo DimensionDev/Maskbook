@@ -10,9 +10,16 @@ export interface SnapshotProposal {
     end: number
     dateDescription: string
     choices: string[]
+    scores_total: number
     state: string
     scores: number[]
     strategies: Array<{ params: { symbol: string } }>
+    strategyName: string
+    space: {
+        id: string
+        name: string
+    }
+    choicesWithScore: Array<{ score: number; choice: string }>
 }
 
 export namespace SnapshotBaseAPI {
@@ -21,5 +28,6 @@ export namespace SnapshotBaseAPI {
     }
     export interface Provider {
         getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]>
+        getSpaceMemberList(spaceId: string): Promise<string[]>
     }
 }

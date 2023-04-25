@@ -1,12 +1,14 @@
-import { List, ListItem, Typography } from '@mui/material'
+import { List, ListItem, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { millify } from 'millify'
 import type { SnapshotProposal } from '@masknet/web3-providers/types'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
-import { formatElapsed, formatElapsedPure } from '@masknet/web3-shared-base'
+import { formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
 import { startCase } from 'lodash-es'
 import { useMemo } from 'react'
 import { useI18N } from '../../../utils/index.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -16,7 +18,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+            marginTop: 14,
         },
         authorInfo: { display: 'flex', alignItems: 'center' },
         author: { fontSize: 16, fontWeight: 700 },
@@ -62,7 +64,37 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
         date: {
             fontSize: 14,
             marginTop: 12,
-            marginBottom: 12,
+            marginBottom: 8,
+        },
+        voteList: {
+            width: '100%',
+            paddingTop: 0,
+            paddingBottom: 12,
+            borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        },
+        voteItem: {
+            padding: '8px 6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderRadius: 4,
+        },
+        selectedVoteItem: {
+            background: theme.palette.maskColor.bg,
+        },
+        voteName: {
+            fontWeight: 700,
+            fontSize: 14,
+            marginRight: 12,
+        },
+        voteIcon: {
+            marginRight: 12,
+        },
+        strategyName: { fontSize: 14 },
+        percentage: {},
+        voteInfo: {
+            display: 'flex',
+            alignItems: 'center',
         },
     }
 })
@@ -106,7 +138,7 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
                 <Typography className={classes.author}>{Others?.formatAddress(proposal.author, 4)}</Typography>
             </div>
             <div className={classes.state}>
-                <Typography>{startCase(proposal.state)}</Typography>
+                <Typography fontWeight={700}>{startCase(proposal.state)}</Typography>
             </div>
         </section>
     )
@@ -139,8 +171,34 @@ function ProfileProposalListItemBody(props: ProfileProposalProps) {
 
 function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
-    const { classes } = useStyles({ state: proposal.state })
+    const { classes, cx } = useStyles({ state: proposal.state })
     const { t } = useI18N()
+    const theme = useTheme()
 
-    return <Typography className={classes.title}>{proposal.title}</Typography>
+    return (
+        <List className={classes.voteList}>
+            {proposal.choices.map((x, i) => (
+                <ListItem key={i} className={cx(classes.voteItem, i === 0 ? classes.selectedVoteItem : '')}>
+                    <div className={classes.voteInfo}>
+                        {i === 0 ? (
+                            <Icons.Check color={theme.palette.maskColor.main} size={18} className={classes.voteIcon} />
+                        ) : null}
+                        <Typography className={classes.voteName}>{x}</Typography>
+                        <Typography className={classes.strategyName}>
+                            {millify(proposal.choicesWithScore[i].score, {
+                                precision: 2,
+                                lowercase: true,
+                            }).toUpperCase() +
+                                ' ' +
+                                proposal.strategyName}
+                        </Typography>
+                    </div>
+
+                    <Typography className={classes.percentage}>
+                        {formatPercentage(proposal.choicesWithScore[i].score / proposal.scores_total)}
+                    </Typography>
+                </ListItem>
+            ))}
+        </List>
+    )
 }

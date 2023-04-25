@@ -10,7 +10,7 @@ async function fetchFromGraphql<T>(query: string) {
 
 export class SnapshotAPI implements SnapshotBaseAPI.Provider {
     async getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]> {
-        const query = `
+        const queryProposal = `
             query {
                 proposals (
                     first: 1000,
@@ -47,8 +47,36 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
                 }
             }
         `
-        const { proposals } = await fetchFromGraphql<{ proposals: SnapshotProposal[] }>(query)
 
-        return proposals
+        const { proposals } = await fetchFromGraphql<{ proposals: SnapshotProposal[] }>(queryProposal)
+
+        return proposals.map((proposal) => {
+            const validStrategy = proposal.strategies.find((x) => {
+                return !x.params.symbol.includes('delegated')
+            })
+
+            const choicesWithScore = proposal.choices
+                .map((x, i) => ({
+                    choice: x,
+                    score: proposal.scores[i],
+                }))
+                .sort((a, b) => b.score - a.score)
+
+            return { ...proposal, strategyName: validStrategy?.params.symbol ?? proposal.space.name, choicesWithScore }
+        })
+    }
+
+    async getSpaceMemberList(spaceId: string) {
+        const querySpace = `
+            query {
+                space(id: "${spaceId}") {
+                    members
+                }
+            }
+        `
+
+        const { space } = await fetchFromGraphql<{ space: { members: string[] } }>(querySpace)
+
+        return space.members
     }
 }

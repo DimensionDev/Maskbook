@@ -9,8 +9,10 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ProfileProposalList } from './ProfileProposalList.js'
+import { useSpaceMemberList } from './hooks/useSpaceMemberList.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -19,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
     },
-    loadingContent: {
+    skeletonContent: {
         height: 300,
         paddingTop: 0,
         paddingBottom: 0,
@@ -50,9 +52,15 @@ export function ProfileView(props: ProfileViewProps) {
 
     const currentSpace = spaceList[spaceIndex]
 
-    const { value: proposalList, loading } = useProposalList(currentSpace.spaceId)
+    const { value: proposalList, loading: loadingProposalList } = useProposalList(currentSpace.spaceId)
+    const { value: spaceMemberList, loading: loadingSpaceMemberList } = useSpaceMemberList(currentSpace.spaceId)
 
-    console.log({ proposalList })
+    const filteredProposalList = useMemo(() => {
+        if (!proposalList || !spaceMemberList) return
+        if (currentTab === ContentTabs.All) return proposalList
+        if (currentTab === ContentTabs.Core) return proposalList.filter((x) => spaceMemberList?.includes(x.author))
+        return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
+    }, [currentTab, JSON.stringify(proposalList), JSON.stringify(spaceMemberList)])
 
     return (
         <ProfileCard {...ProfileCardProps}>
@@ -79,8 +87,8 @@ export function ProfileView(props: ProfileViewProps) {
                     </Stack>
                 </TabContext>
             </Stack>
-            {loading || !proposalList ? (
-                <CardContent className={classes.loadingContent}>
+            {loadingProposalList || loadingSpaceMemberList || !filteredProposalList ? (
+                <CardContent className={classes.skeletonContent}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />
                         <Typography fontSize="14px" mt={1.5}>
@@ -88,8 +96,17 @@ export function ProfileView(props: ProfileViewProps) {
                         </Typography>
                     </Stack>
                 </CardContent>
+            ) : filteredProposalList.length > 0 ? (
+                <ProfileProposalList proposalList={filteredProposalList} />
             ) : (
-                <ProfileProposalList proposalList={proposalList} />
+                <CardContent className={classes.skeletonContent}>
+                    <Stack height="100%" alignItems="center" justifyContent="center">
+                        <Icons.EmptySimple size={36} />
+                        <Typography fontSize="14px" mt={1.5}>
+                            {t('plugin_snapshot_proposal_no_results')}
+                        </Typography>
+                    </Stack>
+                </CardContent>
             )}
         </ProfileCard>
     )
