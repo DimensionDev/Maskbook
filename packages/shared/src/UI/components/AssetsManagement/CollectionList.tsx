@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ElementAnchor, Image, NetworkIcon, RetryHint } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint } from '@masknet/shared'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -265,22 +265,7 @@ export function CollectionList({
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
-                    <div className={classes.main}>
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                            justifyContent="center"
-                            height={400}>
-                            <Icons.EmptySimple size={32} />
-                            <Typography
-                                color={(theme) => theme.palette.maskColor.second}
-                                fontSize="14px"
-                                marginTop="12px">
-                                {t.no_NFTs_found()}
-                            </Typography>
-                        </Box>
-                    </div>
+                    <EmptyStatus flexGrow={1}>{t.no_NFTs_found()}</EmptyStatus>
                     {sidebar}
                 </div>
             </Box>
