@@ -68,6 +68,7 @@ import { SimpleHashAPI_EVM, SimpleHashAPI_Solana } from './SimpleHash/index.js'
 import { RSS3API } from './RSS3/index.js'
 import { LidoAPI } from './Lido/index.js'
 import { Web3BioAPI } from './Web3Bio/index.js'
+import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -101,6 +102,8 @@ export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 export const SimpleHashEVM = new SimpleHashAPI_EVM()
 export const SimpleHashSolana = new SimpleHashAPI_Solana()
+export const SnapshotSearch = new SnapshotSearchAPI()
+export const Snapshot = new SnapshotAPI()
 
 // Wallet
 export {

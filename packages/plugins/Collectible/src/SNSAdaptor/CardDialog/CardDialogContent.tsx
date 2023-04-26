@@ -135,6 +135,9 @@ export function CardDialogContent(props: CardDialogContentProps) {
                 </div>
             </div>
         )
+
+    // Links of Solana NFTs might be incorrect, we discard them temporarily.
+    const externalLink = pluginID !== NetworkPluginID.PLUGIN_SOLANA && asset.value.source ? asset.value.link : null
     return (
         <div className={classes.contentWrapper}>
             <div className={classes.contentLayout}>
@@ -177,7 +180,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                                 <span className={classes.buttonText}>{t.plugin_collectibles_pfp_button()}</span>
                             </Button>
                         </ConnectPersonaBoundary>
-                    ) : asset.value.link && asset.value.source ? (
+                    ) : externalLink ? (
                         <Button
                             sx={{ display: 'flex', alignItems: 'center' }}
                             variant="contained"

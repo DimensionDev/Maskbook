@@ -144,3 +144,11 @@ export interface ProposalResult {
 export interface VoteSuccess {
     ipfsHash: string
 }
+
+export enum ContentTabs {
+    All = 'All',
+    Active = 'Active',
+    Core = 'Core',
+    Pending = 'Pending',
+    Closed = 'Closed',
+}

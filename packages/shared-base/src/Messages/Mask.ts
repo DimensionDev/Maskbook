@@ -24,7 +24,7 @@ export interface MaskSNSEvents {
     autoPasteFailed: AutoPasteFailedEvent
     replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
-    profileTabUpdated: ProfileNFTsPageEvent
+    profileTabUpdated: ProfileTabEvent
     profileTabHidden: { hidden: boolean }
     profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
@@ -183,8 +183,13 @@ export interface FollowLensDialogEvent {
     handle: string
 }
 
-export interface ProfileNFTsPageEvent {
+export enum ProfileTabs {
+    WEB3 = 'web3',
+    DAO = 'dao',
+}
+export interface ProfileTabEvent {
     show: boolean
+    type?: ProfileTabs
 }
 
 export interface OpenPageConfirmEvent {

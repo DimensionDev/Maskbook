@@ -288,7 +288,7 @@ export function TrendingView(props: TrendingViewProps) {
         )
     // #endregion
 
-    const { coin, tickers, market } = trending
+    const { coin, tickers } = trending
     const component = (
         <TrendingViewDeck
             classes={{

@@ -5,7 +5,7 @@ export function hmr(hot: __WebpackModuleApi.Hot | undefined) {
         signal: ac.signal,
         run(callback: () => () => void) {
             try {
-                ac.signal.addEventListener('abort', callback())
+                ac.signal.addEventListener('abort', callback(), { once: true })
             } catch (error) {
                 console.error(error)
             }

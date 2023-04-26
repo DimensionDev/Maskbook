@@ -38,6 +38,7 @@ export * from './types/Wallet.js'
 export * from './types/Lens.js'
 export * from './types/Lido.js'
 export * from './types/StringStorage.js'
+export * from './types/Snapshot.js'
 
 // Implementations
 export * from './DeBank/types.js'

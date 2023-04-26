@@ -8,7 +8,7 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID, type SocialIdentity } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, type SocialIdentity, ProfileTabs } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -44,6 +44,7 @@ export interface SearchResultInspectorProps {
     keyword?: string
     identity?: SocialIdentity
     isProfilePage?: boolean
+    profileTabType?: ProfileTabs
     searchResults?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     currentSearchResult?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
@@ -52,7 +53,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const dSearchEnabled = useValueRef(decentralizedSearchSettings)
-
+    const { profileTabType = ProfileTabs.WEB3 } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()

@@ -94,8 +94,7 @@ export namespace SocialNetworkUI {
             postActions?(signal: AbortSignal, author: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
-            /** Inject the UI that used to notify if the user has not completely setup the current network. */
-            setupPrompt?(signal: AbortSignal): void
+            banner?(signal: AbortSignal): void
             /**
              * TODO: explain what is a page inspector
              */
