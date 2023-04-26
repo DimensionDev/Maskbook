@@ -1,0 +1,14 @@
+{
+    "__plugin_name": "Claim",
+    "airdrop": "AirDrop",
+    "ito": "ITO",
+    "claim": "Claim",
+    "connect_wallet_tips": "Please connect wallet to view ITO activities.",
+    "no_activities_tips": "No activities found.",
+    "unclaimed_token_title": "{{symbol}} Unclaimed:",
+    "locked_token_title": "{{symbol}} Locked:",
+    "unlock_time": "Unlock Time: {{time}}",
+    "airdrop_title": "Mask Network ${{symbol}} Airdrop",
+    "airdrop_in_progress_time_tips": "Claiming will be live until: {{date}}",
+    "no_account_tips": "Please connect wallet to check if you are eligible to claim ${{symbol}}."
+}

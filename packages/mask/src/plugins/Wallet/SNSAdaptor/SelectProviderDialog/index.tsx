@@ -25,12 +25,20 @@ const useStyles = makeStyles()((theme) => ({
 export function SelectProviderDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID | undefined>()
+    const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[] | undefined>()
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
 
     // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, (ev) => {
-        if (!ev.open) return
+        if (!ev.open) {
+            setRequiredSupportChainIds(undefined)
+            setRequiredSupportPluginID(undefined)
+            return
+        }
         setWalletConnectedCallback(() => ev.walletConnectedCallback)
+        setRequiredSupportChainIds(ev.requiredSupportChainIds)
+        setRequiredSupportPluginID(ev.requiredSupportPluginID)
     })
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -75,7 +83,12 @@ export function SelectProviderDialog() {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <PluginProviderRender providers={selectedProviders} onProviderIconClicked={onProviderIconClicked} />
+                <PluginProviderRender
+                    providers={selectedProviders}
+                    onProviderIconClicked={onProviderIconClicked}
+                    requiredSupportChainIds={requiredSupportChainIds}
+                    requiredSupportPluginID={requiredSupportPluginID}
+                />
             </DialogContent>
         </InjectedDialog>
     )
