@@ -399,13 +399,6 @@ export const AchievementBurn = /*#__PURE__*/ __createIcon("AchievementBurn", [
         null
     ]
 ]);
-export const Shared = /*#__PURE__*/ __createIcon("shared", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./plugins/shared.svg", import.meta.url),
-        null
-    ]
-]);
 export const Web3ProfileCard = /*#__PURE__*/ __createIcon("Web3ProfileCard", [
     [
         null,
@@ -492,6 +485,13 @@ export const Snapshot = /*#__PURE__*/ __createIcon("Snapshot", [
         null
     ]
 ]);
+export const Shared = /*#__PURE__*/ __createIcon("shared", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./plugins/shared.svg", import.meta.url),
+        null
+    ]
+]);
 export const SettingInfo = /*#__PURE__*/ __createIcon("SettingInfo", [
     [
         [
@@ -550,6 +550,13 @@ export const MaskBox = /*#__PURE__*/ __createIcon("MaskBox", [
         null
     ]
 ]);
+export const MarketTrend = /*#__PURE__*/ __createIcon("MarketTrend", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./plugins/MarketTrend.svg", import.meta.url),
+        null
+    ]
+]);
 export const MarketsClaim = /*#__PURE__*/ __createIcon("MarketsClaim", [
     [
         null,
@@ -561,13 +568,6 @@ export const Markets = /*#__PURE__*/ __createIcon("Markets", [
     [
         null,
         /*#__PURE__*/ new URL("./plugins/Markets.png", import.meta.url),
-        null
-    ]
-]);
-export const MarketTrend = /*#__PURE__*/ __createIcon("MarketTrend", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./plugins/MarketTrend.svg", import.meta.url),
         null
     ]
 ]);
@@ -835,791 +835,6 @@ export const MenuLabs = /*#__PURE__*/ __createIcon("MenuLabs", [
     [
         null,
         /*#__PURE__*/ new URL("./menus/MenuLabs.png", import.meta.url),
-        null
-    ]
-]);
-export const Zrx = /*#__PURE__*/ __createIcon("zrx", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/zrx.svg", import.meta.url),
-        null
-    ]
-]);
-export const ZkScan = /*#__PURE__*/ __createIcon("zkScan", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/zkScan.svg", import.meta.url),
-        null
-    ]
-]);
-export const Zora = /*#__PURE__*/ __createIcon("Zora", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Zora.svg", import.meta.url),
-        null
-    ]
-]);
-export const Zilliqa = /*#__PURE__*/ __createIcon("Zilliqa", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Zilliqa.svg", import.meta.url),
-        null
-    ]
-]);
-export const ZeroX = /*#__PURE__*/ __createIcon("ZeroX", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/ZeroX.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dark"
-        ],
-        /*#__PURE__*/ new URL("./brands/ZeroX.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const Zerion = /*#__PURE__*/ __createIcon("Zerion", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Zerion.svg", import.meta.url),
-        null
-    ]
-]);
-export const YouTubeGray = /*#__PURE__*/ __createIcon("YouTubeGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/YouTubeGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const YouTube = /*#__PURE__*/ __createIcon("YouTube", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/YouTube.svg", import.meta.url),
-        null
-    ]
-]);
-export const XLog = /*#__PURE__*/ __createIcon("XLog", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/XLog.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dark"
-        ],
-        /*#__PURE__*/ new URL("./brands/XLog.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const X2Y2 = /*#__PURE__*/ __createIcon("X2Y2", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/X2Y2.svg", import.meta.url),
-        null
-    ]
-]);
-export const WETH = /*#__PURE__*/ __createIcon("WETH", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/WETH.svg", import.meta.url),
-        null
-    ]
-]);
-export const Uniswap = /*#__PURE__*/ __createIcon("Uniswap", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Uniswap.svg", import.meta.url),
-        null
-    ]
-]);
-export const TwitterRoundWithNoBorder = /*#__PURE__*/ __createIcon("TwitterRoundWithNoBorder", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TwitterRoundWithNoBorder.svg", import.meta.url),
-        null
-    ]
-]);
-export const TwitterRoundGray = /*#__PURE__*/ __createIcon("TwitterRoundGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TwitterRoundGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const TwitterRoundBlackWhite = /*#__PURE__*/ __createIcon("TwitterRoundBlackWhite", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TwitterRoundBlackWhite.svg", import.meta.url),
-        null
-    ]
-]);
-export const TwitterRound = /*#__PURE__*/ __createIcon("TwitterRound", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TwitterRound.svg", import.meta.url),
-        null
-    ]
-]);
-export const TwitterOtherColored = /*#__PURE__*/ __createIcon("TwitterOtherColored", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TwitterOtherColored.svg", import.meta.url),
-        null
-    ]
-]);
-export const TwitterColored = /*#__PURE__*/ __createIcon("TwitterColored", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TwitterColored.svg", import.meta.url),
-        null
-    ]
-]);
-export const TelegramRound = /*#__PURE__*/ __createIcon("TelegramRound", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/TelegramRound.svg", import.meta.url),
-        null
-    ]
-]);
-export const Sybil = /*#__PURE__*/ __createIcon("Sybil", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Sybil.png", import.meta.url),
-        null
-    ]
-]);
-export const SushiSwap = /*#__PURE__*/ __createIcon("SushiSwap", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/SushiSwap.png", import.meta.url),
-        null
-    ]
-]);
-export const Solana = /*#__PURE__*/ __createIcon("Solana", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Solana.svg", import.meta.url),
-        null
-    ]
-]);
-export const SimpleHash = /*#__PURE__*/ __createIcon("SimpleHash", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/SimpleHash.png", import.meta.url),
-        null
-    ]
-]);
-export const Rsk = /*#__PURE__*/ __createIcon("Rsk", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Rsk.svg", import.meta.url),
-        null
-    ]
-]);
-export const RedditRoundGray = /*#__PURE__*/ __createIcon("RedditRoundGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/RedditRoundGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const RedditRound = /*#__PURE__*/ __createIcon("RedditRound", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/RedditRound.svg", import.meta.url),
-        null
-    ]
-]);
-export const Rarible = /*#__PURE__*/ __createIcon("Rarible", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Rarible.svg", import.meta.url),
-        null
-    ]
-]);
-export const RSS3 = /*#__PURE__*/ __createIcon("RSS3", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/RSS3.svg", import.meta.url),
-        null
-    ]
-]);
-export const PolygonScan = /*#__PURE__*/ __createIcon("PolygonScan", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/PolygonScan.svg", import.meta.url),
-        null
-    ]
-]);
-export const Polygon = /*#__PURE__*/ __createIcon("Polygon", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Polygon.svg", import.meta.url),
-        null
-    ]
-]);
-export const PolkaDot = /*#__PURE__*/ __createIcon("PolkaDot", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/PolkaDot.svg", import.meta.url),
-        null
-    ]
-]);
-export const Planet = /*#__PURE__*/ __createIcon("Planet", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Planet.png", import.meta.url),
-        null
-    ]
-]);
-export const Pets = /*#__PURE__*/ __createIcon("Pets", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Pets.svg", import.meta.url),
-        null
-    ]
-]);
-export const PancakeSwap = /*#__PURE__*/ __createIcon("PancakeSwap", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/PancakeSwap.png", import.meta.url),
-        null
-    ]
-]);
-export const Optimism = /*#__PURE__*/ __createIcon("Optimism", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Optimism.svg", import.meta.url),
-        null
-    ]
-]);
-export const OpenSeaColored = /*#__PURE__*/ __createIcon("OpenSeaColored", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/OpenSeaColored.svg", import.meta.url),
-        null
-    ]
-]);
-export const OpenSea = /*#__PURE__*/ __createIcon("OpenSea", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/OpenSea.svg", import.meta.url),
-        null
-    ]
-]);
-export const OKX = /*#__PURE__*/ __createIcon("OKX", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/OKX.svg", import.meta.url),
-        null
-    ]
-]);
-export const NonFungibleFriends = /*#__PURE__*/ __createIcon("NonFungibleFriends", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/NonFungibleFriends.png", import.meta.url),
-        null
-    ]
-]);
-export const NextIDMini = /*#__PURE__*/ __createIcon("NextIDMini", [
-    [
-        [
-            "light"
-        ],
-        /*#__PURE__*/ new URL("./brands/NextIDMini.light.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dark"
-        ],
-        /*#__PURE__*/ new URL("./brands/NextIDMini.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const NFTScan = /*#__PURE__*/ __createIcon("NFTScan", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/NFTScan.svg", import.meta.url),
-        null
-    ]
-]);
-export const Mirror = /*#__PURE__*/ __createIcon("Mirror", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Mirror.svg", import.meta.url),
-        null
-    ]
-]);
-export const MiniMask = /*#__PURE__*/ __createIcon("MiniMask", [
-    [
-        [
-            "light"
-        ],
-        /*#__PURE__*/ new URL("./brands/MiniMask.light.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dark"
-        ],
-        /*#__PURE__*/ new URL("./brands/MiniMask.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const MindsRound = /*#__PURE__*/ __createIcon("MindsRound", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MindsRound.svg", import.meta.url),
-        null
-    ]
-]);
-export const Minds = /*#__PURE__*/ __createIcon("Minds", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Minds.svg", import.meta.url),
-        null
-    ]
-]);
-export const MetaMask = /*#__PURE__*/ __createIcon("MetaMask", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MetaMask.svg", import.meta.url),
-        null
-    ]
-]);
-export const MediumGray = /*#__PURE__*/ __createIcon("MediumGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MediumGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const Medium = /*#__PURE__*/ __createIcon("Medium", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Medium.svg", import.meta.url),
-        null
-    ]
-]);
-export const MaskWallet = /*#__PURE__*/ __createIcon("MaskWallet", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MaskWallet.png", import.meta.url),
-        null
-    ]
-]);
-export const MaskTextNightly = /*#__PURE__*/ __createIcon("MaskTextNightly", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MaskTextNightly.svg", import.meta.url),
-        null
-    ]
-]);
-export const MaskText = /*#__PURE__*/ __createIcon("MaskText", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MaskText.svg", import.meta.url),
-        null
-    ]
-]);
-export const MaskPlaceholder = /*#__PURE__*/ __createIcon("MaskPlaceholder", [
-    [
-        [
-            "light"
-        ],
-        /*#__PURE__*/ new URL("./brands/MaskPlaceholder.light.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dim"
-        ],
-        /*#__PURE__*/ new URL("./brands/MaskPlaceholder.dim.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dark"
-        ],
-        /*#__PURE__*/ new URL("./brands/MaskPlaceholder.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const MaskGrey = /*#__PURE__*/ __createIcon("MaskGrey", [
-    [
-        [
-            "light"
-        ],
-        /*#__PURE__*/ new URL("./brands/MaskGrey.light.svg", import.meta.url),
-        null
-    ],
-    [
-        [
-            "dark"
-        ],
-        /*#__PURE__*/ new URL("./brands/MaskGrey.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const MaskBlue = /*#__PURE__*/ __createIcon("MaskBlue", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MaskBlue.svg", import.meta.url),
-        null
-    ]
-]);
-export const MaskBanner = /*#__PURE__*/ __createIcon("MaskBanner", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/MaskBanner.svg", import.meta.url),
-        null
-    ]
-]);
-export const Mask = /*#__PURE__*/ __createIcon("Mask", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Mask.svg", import.meta.url),
-        null
-    ]
-]);
-export const LooksRare = /*#__PURE__*/ __createIcon("LooksRare", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/LooksRare.svg", import.meta.url),
-        null
-    ]
-]);
-export const Lens = /*#__PURE__*/ __createIcon("Lens", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Lens.svg", import.meta.url),
-        null
-    ]
-]);
-export const Leaderboard = /*#__PURE__*/ __createIcon("Leaderboard", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Leaderboard.png", import.meta.url),
-        null
-    ]
-]);
-export const Kusama = /*#__PURE__*/ __createIcon("Kusama", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Kusama.svg", import.meta.url),
-        null
-    ]
-]);
-export const Keybase = /*#__PURE__*/ __createIcon("Keybase", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Keybase.svg", import.meta.url),
-        null
-    ]
-]);
-export const InstagramRoundGray = /*#__PURE__*/ __createIcon("InstagramRoundGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/InstagramRoundGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const InstagramRoundColored = /*#__PURE__*/ __createIcon("InstagramRoundColored", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/InstagramRoundColored.svg", import.meta.url),
-        null
-    ]
-]);
-export const InstagramColored = /*#__PURE__*/ __createIcon("InstagramColored", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/InstagramColored.svg", import.meta.url),
-        null
-    ]
-]);
-export const Instagram = /*#__PURE__*/ __createIcon("Instagram", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Instagram.svg", import.meta.url),
-        null
-    ]
-]);
-export const IPFS = /*#__PURE__*/ __createIcon("IPFS", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/IPFS.svg", import.meta.url),
-        null
-    ]
-]);
-export const GoPlusLab = /*#__PURE__*/ __createIcon("GoPlusLab", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/GoPlusLab.svg", import.meta.url),
-        null
-    ]
-]);
-export const Gnosis = /*#__PURE__*/ __createIcon("Gnosis", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Gnosis.svg", import.meta.url),
-        null
-    ]
-]);
-export const GitHubGray = /*#__PURE__*/ __createIcon("GitHubGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/GitHubGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const GitHub = /*#__PURE__*/ __createIcon("GitHub", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/GitHub.svg", import.meta.url),
-        null
-    ]
-]);
-export const Gem = /*#__PURE__*/ __createIcon("Gem", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Gem.svg", import.meta.url),
-        null
-    ]
-]);
-export const Game = /*#__PURE__*/ __createIcon("Game", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Game.svg", import.meta.url),
-        null
-    ]
-]);
-export const Flow = /*#__PURE__*/ __createIcon("Flow", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Flow.svg", import.meta.url),
-        null
-    ]
-]);
-export const Farcaster = /*#__PURE__*/ __createIcon("Farcaster", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Farcaster.svg", import.meta.url),
-        null
-    ]
-]);
-export const Fantom = /*#__PURE__*/ __createIcon("Fantom", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Fantom.svg", import.meta.url),
-        null
-    ]
-]);
-export const FacebookRoundGray = /*#__PURE__*/ __createIcon("FacebookRoundGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/FacebookRoundGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const FacebookRound = /*#__PURE__*/ __createIcon("FacebookRound", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/FacebookRound.svg", import.meta.url),
-        null
-    ]
-]);
-export const FacebookColored = /*#__PURE__*/ __createIcon("FacebookColored", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/FacebookColored.svg", import.meta.url),
-        null
-    ]
-]);
-export const EtherScan = /*#__PURE__*/ __createIcon("EtherScan", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/EtherScan.svg", import.meta.url),
-        null
-    ]
-]);
-export const EVMChains = /*#__PURE__*/ __createIcon("EVMChains", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/EVMChains.svg", import.meta.url),
-        null
-    ]
-]);
-export const ETH = /*#__PURE__*/ __createIcon("ETH", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/ETH.svg", import.meta.url),
-        null
-    ]
-]);
-export const EIP1577 = /*#__PURE__*/ __createIcon("EIP1577", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/EIP1577.svg", import.meta.url),
-        null
-    ]
-]);
-export const DiscordRoundGray = /*#__PURE__*/ __createIcon("DiscordRoundGray", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/DiscordRoundGray.svg", import.meta.url),
-        null
-    ]
-]);
-export const DiscordRound = /*#__PURE__*/ __createIcon("DiscordRound", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/DiscordRound.svg", import.meta.url),
-        null
-    ]
-]);
-export const Discord = /*#__PURE__*/ __createIcon("Discord", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Discord.svg", import.meta.url),
-        null
-    ]
-]);
-export const Debank = /*#__PURE__*/ __createIcon("Debank", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Debank.svg", import.meta.url),
-        null
-    ]
-]);
-export const Danger = /*#__PURE__*/ __createIcon("Danger", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Danger.svg", import.meta.url),
-        null
-    ]
-]);
-export const CryptoArt = /*#__PURE__*/ __createIcon("CryptoArt", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/CryptoArt.png", import.meta.url),
-        null
-    ]
-]);
-export const Crossbell = /*#__PURE__*/ __createIcon("Crossbell", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Crossbell.svg", import.meta.url),
-        null
-    ]
-]);
-export const CrossSync = /*#__PURE__*/ __createIcon("CrossSync", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/CrossSync.svg", import.meta.url),
-        null
-    ]
-]);
-export const Cosmos = /*#__PURE__*/ __createIcon("Cosmos", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Cosmos.svg", import.meta.url),
-        null
-    ]
-]);
-export const CoinMarketCap = /*#__PURE__*/ __createIcon("CoinMarketCap", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/CoinMarketCap.svg", import.meta.url),
-        null
-    ]
-]);
-export const CoinGecko = /*#__PURE__*/ __createIcon("CoinGecko", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/CoinGecko.svg", import.meta.url),
-        null
-    ]
-]);
-export const Celo = /*#__PURE__*/ __createIcon("Celo", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Celo.svg", import.meta.url),
-        null
-    ]
-]);
-export const Blocto = /*#__PURE__*/ __createIcon("Blocto", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Blocto.svg", import.meta.url),
-        null
-    ]
-]);
-export const BSC = /*#__PURE__*/ __createIcon("BSC", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/BSC.svg", import.meta.url),
-        null
-    ]
-]);
-export const Avalanche = /*#__PURE__*/ __createIcon("Avalanche", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Avalanche.svg", import.meta.url),
-        null
-    ]
-]);
-export const Aurora = /*#__PURE__*/ __createIcon("Aurora", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Aurora.svg", import.meta.url),
-        null
-    ]
-]);
-export const Astar = /*#__PURE__*/ __createIcon("Astar", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Astar.png", import.meta.url),
-        null
-    ]
-]);
-export const Arweave = /*#__PURE__*/ __createIcon("Arweave", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Arweave.png", import.meta.url),
-        null
-    ]
-]);
-export const Arbitrum = /*#__PURE__*/ __createIcon("Arbitrum", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Arbitrum.svg", import.meta.url),
-        null
-    ]
-]);
-export const Algorand = /*#__PURE__*/ __createIcon("Algorand", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Algorand.svg", import.meta.url),
-        null
-    ]
-]);
-export const Aave = /*#__PURE__*/ __createIcon("Aave", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./brands/Aave.svg", import.meta.url),
-        null
-    ]
-]);
-export const Candle = /*#__PURE__*/ __createIcon("candle", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./general/candle.svg", import.meta.url),
         null
     ]
 ]);
@@ -2550,13 +1765,6 @@ export const Personas = /*#__PURE__*/ __createIcon("Personas", [
     25,
     24
 ]);
-export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon("NextIdPersonaWarning", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./general/NextIdPersonaWarning.svg", import.meta.url),
-        null
-    ]
-]);
 export const NFTSelected = /*#__PURE__*/ __createIcon("NFTSelected", [
     [
         null,
@@ -2575,6 +1783,13 @@ export const NFTLink = /*#__PURE__*/ __createIcon("NFTLink", [
     [
         null,
         /*#__PURE__*/ new URL("./general/NFTLink.svg", import.meta.url),
+        null
+    ]
+]);
+export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon("NextIdPersonaWarning", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./general/NextIdPersonaWarning.svg", import.meta.url),
         null
     ]
 ]);
@@ -2741,6 +1956,13 @@ export const KeySquare = /*#__PURE__*/ __createIcon("KeySquare", [
     25,
     24
 ]);
+export const ITO = /*#__PURE__*/ __createIcon("ITO", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./general/ITO.svg", import.meta.url),
+        null
+    ]
+]);
 export const InteractionCircle = /*#__PURE__*/ __createIcon("InteractionCircle", [
     [
         null,
@@ -2835,13 +2057,6 @@ export const Identity = /*#__PURE__*/ __createIcon("Identity", [
             "dark"
         ],
         /*#__PURE__*/ new URL("./general/Identity.dark.svg", import.meta.url),
-        null
-    ]
-]);
-export const ITO = /*#__PURE__*/ __createIcon("ITO", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./general/ITO.svg", import.meta.url),
         null
     ]
 ]);
@@ -3412,6 +2627,13 @@ export const ChevronUp = /*#__PURE__*/ __createIcon("ChevronUp", [
         true
     ]
 ]);
+export const CheckCircle = /*#__PURE__*/ __createIcon("CheckCircle", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./general/CheckCircle.svg", import.meta.url),
+        null
+    ]
+]);
 export const CheckboxBorder = /*#__PURE__*/ __createIcon("CheckboxBorder", [
     [
         null,
@@ -3476,13 +2698,6 @@ export const Checkbox = /*#__PURE__*/ __createIcon("Checkbox", [
         true
     ]
 ]);
-export const CheckCircle = /*#__PURE__*/ __createIcon("CheckCircle", [
-    [
-        null,
-        /*#__PURE__*/ new URL("./general/CheckCircle.svg", import.meta.url),
-        null
-    ]
-]);
 export const Check = /*#__PURE__*/ __createIcon("Check", [
     [
         null,
@@ -3504,6 +2719,13 @@ export const Card = /*#__PURE__*/ __createIcon("Card", [
     [
         null,
         /*#__PURE__*/ new URL("./general/Card.svg", import.meta.url),
+        null
+    ]
+]);
+export const Candle = /*#__PURE__*/ __createIcon("candle", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./general/candle.svg", import.meta.url),
         null
     ]
 ]);
@@ -3761,5 +2983,783 @@ export const Add = /*#__PURE__*/ __createIcon("Add", [
             ]
         }),
         true
+    ]
+]);
+export const Zrx = /*#__PURE__*/ __createIcon("zrx", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/zrx.svg", import.meta.url),
+        null
+    ]
+]);
+export const Zora = /*#__PURE__*/ __createIcon("Zora", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Zora.svg", import.meta.url),
+        null
+    ]
+]);
+export const ZkScan = /*#__PURE__*/ __createIcon("zkScan", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/zkScan.svg", import.meta.url),
+        null
+    ]
+]);
+export const Zilliqa = /*#__PURE__*/ __createIcon("Zilliqa", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Zilliqa.svg", import.meta.url),
+        null
+    ]
+]);
+export const ZeroX = /*#__PURE__*/ __createIcon("ZeroX", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/ZeroX.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dark"
+        ],
+        /*#__PURE__*/ new URL("./brands/ZeroX.dark.svg", import.meta.url),
+        null
+    ]
+]);
+export const Zerion = /*#__PURE__*/ __createIcon("Zerion", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Zerion.svg", import.meta.url),
+        null
+    ]
+]);
+export const YouTubeGray = /*#__PURE__*/ __createIcon("YouTubeGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/YouTubeGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const YouTube = /*#__PURE__*/ __createIcon("YouTube", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/YouTube.svg", import.meta.url),
+        null
+    ]
+]);
+export const XLog = /*#__PURE__*/ __createIcon("XLog", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/XLog.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dark"
+        ],
+        /*#__PURE__*/ new URL("./brands/XLog.dark.svg", import.meta.url),
+        null
+    ]
+]);
+export const X2Y2 = /*#__PURE__*/ __createIcon("X2Y2", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/X2Y2.svg", import.meta.url),
+        null
+    ]
+]);
+export const WETH = /*#__PURE__*/ __createIcon("WETH", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/WETH.svg", import.meta.url),
+        null
+    ]
+]);
+export const Uniswap = /*#__PURE__*/ __createIcon("Uniswap", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Uniswap.svg", import.meta.url),
+        null
+    ]
+]);
+export const TwitterRoundWithNoBorder = /*#__PURE__*/ __createIcon("TwitterRoundWithNoBorder", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TwitterRoundWithNoBorder.svg", import.meta.url),
+        null
+    ]
+]);
+export const TwitterRoundGray = /*#__PURE__*/ __createIcon("TwitterRoundGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TwitterRoundGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const TwitterRoundBlackWhite = /*#__PURE__*/ __createIcon("TwitterRoundBlackWhite", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TwitterRoundBlackWhite.svg", import.meta.url),
+        null
+    ]
+]);
+export const TwitterRound = /*#__PURE__*/ __createIcon("TwitterRound", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TwitterRound.svg", import.meta.url),
+        null
+    ]
+]);
+export const TwitterOtherColored = /*#__PURE__*/ __createIcon("TwitterOtherColored", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TwitterOtherColored.svg", import.meta.url),
+        null
+    ]
+]);
+export const TwitterColored = /*#__PURE__*/ __createIcon("TwitterColored", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TwitterColored.svg", import.meta.url),
+        null
+    ]
+]);
+export const TelegramRound = /*#__PURE__*/ __createIcon("TelegramRound", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/TelegramRound.svg", import.meta.url),
+        null
+    ]
+]);
+export const Sybil = /*#__PURE__*/ __createIcon("Sybil", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Sybil.png", import.meta.url),
+        null
+    ]
+]);
+export const SushiSwap = /*#__PURE__*/ __createIcon("SushiSwap", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/SushiSwap.png", import.meta.url),
+        null
+    ]
+]);
+export const Solana = /*#__PURE__*/ __createIcon("Solana", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Solana.svg", import.meta.url),
+        null
+    ]
+]);
+export const SimpleHash = /*#__PURE__*/ __createIcon("SimpleHash", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/SimpleHash.png", import.meta.url),
+        null
+    ]
+]);
+export const RSS3 = /*#__PURE__*/ __createIcon("RSS3", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/RSS3.svg", import.meta.url),
+        null
+    ]
+]);
+export const Rsk = /*#__PURE__*/ __createIcon("Rsk", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Rsk.svg", import.meta.url),
+        null
+    ]
+]);
+export const RedditRoundGray = /*#__PURE__*/ __createIcon("RedditRoundGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/RedditRoundGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const RedditRound = /*#__PURE__*/ __createIcon("RedditRound", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/RedditRound.svg", import.meta.url),
+        null
+    ]
+]);
+export const Rarible = /*#__PURE__*/ __createIcon("Rarible", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Rarible.svg", import.meta.url),
+        null
+    ]
+]);
+export const PolygonScan = /*#__PURE__*/ __createIcon("PolygonScan", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/PolygonScan.svg", import.meta.url),
+        null
+    ]
+]);
+export const Polygon = /*#__PURE__*/ __createIcon("Polygon", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Polygon.svg", import.meta.url),
+        null
+    ]
+]);
+export const PolkaDot = /*#__PURE__*/ __createIcon("PolkaDot", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/PolkaDot.svg", import.meta.url),
+        null
+    ]
+]);
+export const Planet = /*#__PURE__*/ __createIcon("Planet", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Planet.png", import.meta.url),
+        null
+    ]
+]);
+export const Pets = /*#__PURE__*/ __createIcon("Pets", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Pets.svg", import.meta.url),
+        null
+    ]
+]);
+export const PancakeSwap = /*#__PURE__*/ __createIcon("PancakeSwap", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/PancakeSwap.png", import.meta.url),
+        null
+    ]
+]);
+export const Optimism = /*#__PURE__*/ __createIcon("Optimism", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Optimism.svg", import.meta.url),
+        null
+    ]
+]);
+export const OpenSeaColored = /*#__PURE__*/ __createIcon("OpenSeaColored", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/OpenSeaColored.svg", import.meta.url),
+        null
+    ]
+]);
+export const OpenSea = /*#__PURE__*/ __createIcon("OpenSea", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/OpenSea.svg", import.meta.url),
+        null
+    ]
+]);
+export const OKX = /*#__PURE__*/ __createIcon("OKX", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/OKX.svg", import.meta.url),
+        null
+    ]
+]);
+export const NonFungibleFriends = /*#__PURE__*/ __createIcon("NonFungibleFriends", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/NonFungibleFriends.png", import.meta.url),
+        null
+    ]
+]);
+export const NFTScan = /*#__PURE__*/ __createIcon("NFTScan", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/NFTScan.svg", import.meta.url),
+        null
+    ]
+]);
+export const NextIDMini = /*#__PURE__*/ __createIcon("NextIDMini", [
+    [
+        [
+            "light"
+        ],
+        /*#__PURE__*/ new URL("./brands/NextIDMini.light.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dark"
+        ],
+        /*#__PURE__*/ new URL("./brands/NextIDMini.dark.svg", import.meta.url),
+        null
+    ]
+]);
+export const Mirror = /*#__PURE__*/ __createIcon("Mirror", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Mirror.svg", import.meta.url),
+        null
+    ]
+]);
+export const MiniMask = /*#__PURE__*/ __createIcon("MiniMask", [
+    [
+        [
+            "light"
+        ],
+        /*#__PURE__*/ new URL("./brands/MiniMask.light.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dark"
+        ],
+        /*#__PURE__*/ new URL("./brands/MiniMask.dark.svg", import.meta.url),
+        null
+    ]
+]);
+export const MindsRound = /*#__PURE__*/ __createIcon("MindsRound", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MindsRound.svg", import.meta.url),
+        null
+    ]
+]);
+export const Minds = /*#__PURE__*/ __createIcon("Minds", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Minds.svg", import.meta.url),
+        null
+    ]
+]);
+export const MetaMask = /*#__PURE__*/ __createIcon("MetaMask", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MetaMask.svg", import.meta.url),
+        null
+    ]
+]);
+export const MediumGray = /*#__PURE__*/ __createIcon("MediumGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MediumGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const Medium = /*#__PURE__*/ __createIcon("Medium", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Medium.svg", import.meta.url),
+        null
+    ]
+]);
+export const MaskWallet = /*#__PURE__*/ __createIcon("MaskWallet", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MaskWallet.png", import.meta.url),
+        null
+    ]
+]);
+export const MaskTextNightly = /*#__PURE__*/ __createIcon("MaskTextNightly", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MaskTextNightly.svg", import.meta.url),
+        null
+    ]
+]);
+export const MaskText = /*#__PURE__*/ __createIcon("MaskText", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MaskText.svg", import.meta.url),
+        null
+    ]
+]);
+export const MaskPlaceholder = /*#__PURE__*/ __createIcon("MaskPlaceholder", [
+    [
+        [
+            "light"
+        ],
+        /*#__PURE__*/ new URL("./brands/MaskPlaceholder.light.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dim"
+        ],
+        /*#__PURE__*/ new URL("./brands/MaskPlaceholder.dim.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dark"
+        ],
+        /*#__PURE__*/ new URL("./brands/MaskPlaceholder.dark.svg", import.meta.url),
+        null
+    ]
+]);
+export const MaskGrey = /*#__PURE__*/ __createIcon("MaskGrey", [
+    [
+        [
+            "light"
+        ],
+        /*#__PURE__*/ new URL("./brands/MaskGrey.light.svg", import.meta.url),
+        null
+    ],
+    [
+        [
+            "dark"
+        ],
+        /*#__PURE__*/ new URL("./brands/MaskGrey.dark.svg", import.meta.url),
+        null
+    ]
+]);
+export const MaskBlue = /*#__PURE__*/ __createIcon("MaskBlue", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MaskBlue.svg", import.meta.url),
+        null
+    ]
+]);
+export const MaskBanner = /*#__PURE__*/ __createIcon("MaskBanner", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/MaskBanner.svg", import.meta.url),
+        null
+    ]
+]);
+export const Mask = /*#__PURE__*/ __createIcon("Mask", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Mask.svg", import.meta.url),
+        null
+    ]
+]);
+export const LooksRare = /*#__PURE__*/ __createIcon("LooksRare", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/LooksRare.svg", import.meta.url),
+        null
+    ]
+]);
+export const Lens = /*#__PURE__*/ __createIcon("Lens", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Lens.svg", import.meta.url),
+        null
+    ]
+]);
+export const Leaderboard = /*#__PURE__*/ __createIcon("Leaderboard", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Leaderboard.png", import.meta.url),
+        null
+    ]
+]);
+export const Kusama = /*#__PURE__*/ __createIcon("Kusama", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Kusama.svg", import.meta.url),
+        null
+    ]
+]);
+export const Keybase = /*#__PURE__*/ __createIcon("Keybase", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Keybase.svg", import.meta.url),
+        null
+    ]
+]);
+export const IPFS = /*#__PURE__*/ __createIcon("IPFS", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/IPFS.svg", import.meta.url),
+        null
+    ]
+]);
+export const InstagramRoundGray = /*#__PURE__*/ __createIcon("InstagramRoundGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/InstagramRoundGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const InstagramRoundColored = /*#__PURE__*/ __createIcon("InstagramRoundColored", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/InstagramRoundColored.svg", import.meta.url),
+        null
+    ]
+]);
+export const InstagramColored = /*#__PURE__*/ __createIcon("InstagramColored", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/InstagramColored.svg", import.meta.url),
+        null
+    ]
+]);
+export const Instagram = /*#__PURE__*/ __createIcon("Instagram", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Instagram.svg", import.meta.url),
+        null
+    ]
+]);
+export const GoPlusLab = /*#__PURE__*/ __createIcon("GoPlusLab", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/GoPlusLab.svg", import.meta.url),
+        null
+    ]
+]);
+export const Gnosis = /*#__PURE__*/ __createIcon("Gnosis", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Gnosis.svg", import.meta.url),
+        null
+    ]
+]);
+export const GitHubGray = /*#__PURE__*/ __createIcon("GitHubGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/GitHubGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const GitHub = /*#__PURE__*/ __createIcon("GitHub", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/GitHub.svg", import.meta.url),
+        null
+    ]
+]);
+export const Gem = /*#__PURE__*/ __createIcon("Gem", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Gem.svg", import.meta.url),
+        null
+    ]
+]);
+export const Game = /*#__PURE__*/ __createIcon("Game", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Game.svg", import.meta.url),
+        null
+    ]
+]);
+export const Flow = /*#__PURE__*/ __createIcon("Flow", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Flow.svg", import.meta.url),
+        null
+    ]
+]);
+export const Farcaster = /*#__PURE__*/ __createIcon("Farcaster", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Farcaster.svg", import.meta.url),
+        null
+    ]
+]);
+export const Fantom = /*#__PURE__*/ __createIcon("Fantom", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Fantom.svg", import.meta.url),
+        null
+    ]
+]);
+export const FacebookRoundGray = /*#__PURE__*/ __createIcon("FacebookRoundGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/FacebookRoundGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const FacebookRound = /*#__PURE__*/ __createIcon("FacebookRound", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/FacebookRound.svg", import.meta.url),
+        null
+    ]
+]);
+export const FacebookColored = /*#__PURE__*/ __createIcon("FacebookColored", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/FacebookColored.svg", import.meta.url),
+        null
+    ]
+]);
+export const EVMChains = /*#__PURE__*/ __createIcon("EVMChains", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/EVMChains.svg", import.meta.url),
+        null
+    ]
+]);
+export const EtherScan = /*#__PURE__*/ __createIcon("EtherScan", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/EtherScan.svg", import.meta.url),
+        null
+    ]
+]);
+export const ETH = /*#__PURE__*/ __createIcon("ETH", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/ETH.svg", import.meta.url),
+        null
+    ]
+]);
+export const EIP1577 = /*#__PURE__*/ __createIcon("EIP1577", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/EIP1577.svg", import.meta.url),
+        null
+    ]
+]);
+export const DiscordRoundGray = /*#__PURE__*/ __createIcon("DiscordRoundGray", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/DiscordRoundGray.svg", import.meta.url),
+        null
+    ]
+]);
+export const DiscordRound = /*#__PURE__*/ __createIcon("DiscordRound", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/DiscordRound.svg", import.meta.url),
+        null
+    ]
+]);
+export const Discord = /*#__PURE__*/ __createIcon("Discord", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Discord.svg", import.meta.url),
+        null
+    ]
+]);
+export const Debank = /*#__PURE__*/ __createIcon("Debank", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Debank.svg", import.meta.url),
+        null
+    ]
+]);
+export const Danger = /*#__PURE__*/ __createIcon("Danger", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Danger.svg", import.meta.url),
+        null
+    ]
+]);
+export const CryptoArt = /*#__PURE__*/ __createIcon("CryptoArt", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/CryptoArt.png", import.meta.url),
+        null
+    ]
+]);
+export const CrossSync = /*#__PURE__*/ __createIcon("CrossSync", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/CrossSync.svg", import.meta.url),
+        null
+    ]
+]);
+export const Crossbell = /*#__PURE__*/ __createIcon("Crossbell", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Crossbell.svg", import.meta.url),
+        null
+    ]
+]);
+export const Cosmos = /*#__PURE__*/ __createIcon("Cosmos", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Cosmos.svg", import.meta.url),
+        null
+    ]
+]);
+export const CoinMarketCap = /*#__PURE__*/ __createIcon("CoinMarketCap", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/CoinMarketCap.svg", import.meta.url),
+        null
+    ]
+]);
+export const CoinGecko = /*#__PURE__*/ __createIcon("CoinGecko", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/CoinGecko.svg", import.meta.url),
+        null
+    ]
+]);
+export const Celo = /*#__PURE__*/ __createIcon("Celo", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Celo.svg", import.meta.url),
+        null
+    ]
+]);
+export const BSC = /*#__PURE__*/ __createIcon("BSC", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/BSC.svg", import.meta.url),
+        null
+    ]
+]);
+export const Blocto = /*#__PURE__*/ __createIcon("Blocto", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Blocto.svg", import.meta.url),
+        null
+    ]
+]);
+export const Avalanche = /*#__PURE__*/ __createIcon("Avalanche", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Avalanche.svg", import.meta.url),
+        null
+    ]
+]);
+export const Aurora = /*#__PURE__*/ __createIcon("Aurora", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Aurora.svg", import.meta.url),
+        null
+    ]
+]);
+export const Astar = /*#__PURE__*/ __createIcon("Astar", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Astar.png", import.meta.url),
+        null
+    ]
+]);
+export const Arweave = /*#__PURE__*/ __createIcon("Arweave", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Arweave.png", import.meta.url),
+        null
+    ]
+]);
+export const Arbitrum = /*#__PURE__*/ __createIcon("Arbitrum", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Arbitrum.svg", import.meta.url),
+        null
+    ]
+]);
+export const Algorand = /*#__PURE__*/ __createIcon("Algorand", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Algorand.svg", import.meta.url),
+        null
+    ]
+]);
+export const Aave = /*#__PURE__*/ __createIcon("Aave", [
+    [
+        null,
+        /*#__PURE__*/ new URL("./brands/Aave.svg", import.meta.url),
+        null
     ]
 ]);
