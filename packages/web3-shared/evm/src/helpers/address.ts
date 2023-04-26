@@ -1,7 +1,8 @@
-import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { memoize } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
 import {
     getArbConstants,
     getCryptoPunksConstants,
@@ -87,13 +88,13 @@ export function getZeroAddress() {
     return ZERO_ADDRESS
 }
 
-export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+export const getNativeTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
     return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ''
-}
+})
 
-export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+export const getMaskTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
-}
+})
 
 const { ENS_CONTRACT_ADDRESS } = getENSConstants()
 export function isENSContractAddress(contract_address: string) {
