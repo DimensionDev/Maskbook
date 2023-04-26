@@ -47,6 +47,8 @@
     "nft_select_all_option": "全部 ({{total}} NFT)",
     "nft_search_placeholder": "Token ID可用逗号分隔，例如：1224, 7873",
     "erc721_insufficient_balance": "余额不足",
+    "erc721_create_lucky_drop": "创建一个红包",
+    "erc721_gas_cap": "当选择过多的 NFT时，总气费可能超过 1 {{symbol}} 的 Metamask 限制。请减少选中的 NFT数量。",
     "erc721_tab_title": "NFT",
     "erc20_tab_title": "代币",
     "claimed": "已认领",

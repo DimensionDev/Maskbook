@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
-import { GraphQLClient } from 'graphql-request'
-import type { Variables } from 'graphql-request/dist/types.js'
+import { GraphQLClient, type Variables } from 'graphql-request'
 import {
     createIndicator,
     createNextIndicator,

@@ -1,20 +1,23 @@
 import { Icons } from '@masknet/icons'
-import { ElementAnchor, Image, NetworkIcon, RetryHint } from '@masknet/shared'
-import { EMPTY_OBJECT, type SocialAccount } from '@masknet/shared-base'
+import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint } from '@masknet/shared'
+import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
+import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
-import { range } from 'lodash-es'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
-import type { CollectibleGridProps } from '../../types.js'
-import { useUserAssets } from '../Context/UserAssetsContext.js'
+import type { BoxProps } from '@mui/system'
+import { range, sortBy } from 'lodash-es'
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react'
+import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
+import { useUserAssets } from './UserAssetsContext.js'
+import type { CollectibleGridProps } from './types.js'
 import { useCollections } from './useCollections.js'
-import type { BoxProps } from '@mui/system'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -28,7 +31,7 @@ const AllButton = styled(Button)(({ theme }) => ({
     },
 }))
 
-export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
+const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
     return {
         container: {
@@ -60,14 +63,11 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
         grid: {
             width: '100%',
             display: 'grid',
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridTemplateColumns: typeof columns === 'string' ? columns : `repeat(${columns}, 1fr)`,
             gridGap: gapIsNumber ? theme.spacing(gap) : gap,
             padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
             paddingRight: theme.spacing(1),
             boxSizing: 'border-box',
-        },
-        gridItem: {
-            overflow: 'auto',
         },
         currentCollection: {
             display: 'flex',
@@ -97,15 +97,13 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
             backgroundColor: theme.palette.maskColor.thirdMain,
         },
         sidebar: {
-            width: 24,
+            width: 36,
             flexShrink: 0,
-            marginRight: theme.spacing(1.5),
+            paddingRight: theme.spacing(1.5),
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
             boxSizing: 'border-box',
             height: '100%',
             overflow: 'auto',
-            // For profile-card footer
-            paddingBottom: 48,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -129,24 +127,62 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
     }
 })
 
-export interface CollectionListProps extends BoxProps {
-    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
-    gridProps?: CollectibleGridProps
+const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
+    [NetworkPluginID.PLUGIN_EVM]: [
+        ChainId.Mainnet,
+        ChainId.BSC,
+        ChainId.Matic,
+        ChainId.Arbitrum,
+        ChainId.Optimism,
+        ChainId.Avalanche,
+        ChainId.xDai,
+    ],
+    [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
+    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
 }
 
-export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, className, ...rest }: CollectionListProps) {
-    const { address: account, pluginID } = socialAccount
-    const t = useI18N()
+export interface CollectionListProps
+    extends BoxProps,
+        Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
+    account: string
+    pluginID: NetworkPluginID
+    defaultChainId?: Web3Helper.ChainIdAll
+    gridProps?: CollectibleGridProps
+    disableSidebar?: boolean
+}
+
+export function CollectionList({
+    className,
+    account,
+    pluginID,
+    defaultChainId,
+    gridProps = EMPTY_OBJECT,
+    disableSidebar,
+    disableAction,
+    onActionClick,
+    onItemClick,
+    ...rest
+}: CollectionListProps) {
+    const t = useSharedI18N()
     const { classes, cx } = useStyles(gridProps)
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
 
+    const allNetworks = useNetworkDescriptors(pluginID)
+    const networks = useMemo(() => {
+        const supported = SimpleHashSupportedChains[pluginID]
+        return sortBy(
+            allNetworks.filter((x) => x.isMainnet && supported.includes(x.chainId)),
+            (x) => supported.indexOf(x.chainId),
+        )
+    }, [allNetworks, pluginID])
+
+    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
-        useCollections(pluginID, chainId, account)
+        useCollections(pluginID, currentChainId, account)
 
-    const networks = useNetworkDescriptors(socialAccount.pluginID)
-
-    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress } = useUserAssets()
+    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress, isAllHidden } =
+        useUserAssets()
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
@@ -159,39 +195,35 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
         [loadAssets, loadVerifiedBy],
     )
 
-    const sidebar = (
+    const sidebar = disableSidebar ? null : (
         <div className={classes.sidebar}>
-            <AllButton
-                className={classes.networkButton}
-                onClick={() => {
-                    setChainId(undefined)
-                    setCurrentCollectionId(undefined)
-                }}>
-                ALL
-                {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
-            </AllButton>
-            {networks
-                .filter((x) => x.isMainnet)
-                .map((x) => (
-                    <Button
-                        variant="text"
-                        key={x.chainId}
-                        className={classes.networkButton}
-                        disableRipple
-                        onClick={() => {
-                            setChainId(x.chainId)
-                            setCurrentCollectionId(undefined)
-                        }}>
-                        <NetworkIcon
-                            pluginID={socialAccount.pluginID}
-                            chainId={x.chainId}
-                            ImageIconProps={{ size: 24 }}
-                        />
-                        {chainId === x.chainId ? (
-                            <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                        ) : null}
-                    </Button>
-                ))}
+            {networks.length > 1 ? (
+                <AllButton
+                    className={classes.networkButton}
+                    onClick={() => {
+                        setChainId(undefined)
+                        setCurrentCollectionId(undefined)
+                    }}>
+                    ALL
+                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                </AllButton>
+            ) : null}
+            {networks.map((x) => (
+                <Button
+                    variant="text"
+                    key={x.chainId}
+                    className={classes.networkButton}
+                    disableRipple
+                    onClick={() => {
+                        setChainId(x.chainId)
+                        setCurrentCollectionId(undefined)
+                    }}>
+                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
+                    {currentChainId === x.chainId ? (
+                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
+                    ) : null}
+                </Button>
+            ))}
         </div>
     )
 
@@ -229,26 +261,11 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
             </Box>
         )
 
-    if ((!loading && !collections.length) || !account || isHiddenAddress)
+    if ((!loading && !collections.length) || !account || isHiddenAddress || isAllHidden)
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
-                    <div className={classes.main}>
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                            justifyContent="center"
-                            height={400}>
-                            <Icons.EmptySimple size={32} />
-                            <Typography
-                                color={(theme) => theme.palette.maskColor.second}
-                                fontSize="14px"
-                                marginTop="12px">
-                                {t.no_NFTs_found()}
-                            </Typography>
-                        </Box>
-                    </div>
+                    <EmptyStatus flexGrow={1}>{t.no_NFTs_found()}</EmptyStatus>
                     {sidebar}
                 </div>
             </Box>
@@ -285,7 +302,7 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                     {currentCollection ? (
                         <ExpandedCollection
                             gridProps={gridProps}
-                            pluginID={socialAccount.pluginID}
+                            pluginID={pluginID}
                             collection={currentCollection}
                             key={currentCollection.id}
                             assets={getAssets(currentCollection.id!).assets}
@@ -293,27 +310,30 @@ export function CollectionList({ socialAccount, gridProps = EMPTY_OBJECT, classN
                             loading={getAssets(currentCollection.id!).loading}
                             expanded
                             onInitialRender={handleInitialRender}
+                            disableAction={disableAction}
+                            onActionClick={onActionClick}
+                            onItemClick={onItemClick}
                         />
                     ) : (
-                        <Box width="100%">
-                            <Box className={classes.grid}>
-                                {collections.map((collection) => {
-                                    const assetsState = getAssets(collection.id!)
-                                    return (
-                                        <LazyCollection
-                                            className={classes.gridItem}
-                                            pluginID={socialAccount.pluginID}
-                                            collection={collection}
-                                            key={`${collection.chainId}.${collection.id}`}
-                                            assets={assetsState.assets}
-                                            verifiedBy={getVerifiedBy(collection.id!)}
-                                            loading={assetsState.loading}
-                                            onExpand={setCurrentCollectionId}
-                                            onInitialRender={handleInitialRender}
-                                        />
-                                    )
-                                })}
-                            </Box>
+                        <Box className={classes.grid}>
+                            {collections.map((collection) => {
+                                const assetsState = getAssets(collection.id!)
+                                return (
+                                    <LazyCollection
+                                        pluginID={pluginID}
+                                        collection={collection}
+                                        key={`${collection.chainId}.${collection.id}`}
+                                        assets={assetsState.assets}
+                                        verifiedBy={getVerifiedBy(collection.id!)}
+                                        loading={assetsState.loading}
+                                        onExpand={setCurrentCollectionId}
+                                        onInitialRender={handleInitialRender}
+                                        disableAction={disableAction}
+                                        onActionClick={onActionClick}
+                                        onItemClick={onItemClick}
+                                    />
+                                )
+                            })}
                         </Box>
                     )}
                     {error ? <RetryHint hint={false} retry={retry} /> : null}
@@ -328,7 +348,8 @@ interface ExpandedCollectionProps extends CollectionProps {
     gridProps?: CollectibleGridProps
 }
 
-function ExpandedCollection({ gridProps = EMPTY_OBJECT, ...collectionProps }: ExpandedCollectionProps) {
+/** An ExpandedCollection tiles collectable cards */
+const ExpandedCollection: FC<ExpandedCollectionProps> = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps }) => {
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps
@@ -338,7 +359,7 @@ function ExpandedCollection({ gridProps = EMPTY_OBJECT, ...collectionProps }: Ex
         <>
             <Box width="100%">
                 <Box className={classes.grid}>
-                    <Collection className={classes.gridItem} {...collectionProps} />
+                    <Collection {...collectionProps} />
                     {loading ? range(20).map((i) => <CollectibleItemSkeleton omitName key={i} />) : null}
                 </Box>
             </Box>
@@ -351,4 +372,6 @@ function ExpandedCollection({ gridProps = EMPTY_OBJECT, ...collectionProps }: Ex
             </ElementAnchor>
         </>
     )
-}
+})
+
+ExpandedCollection.displayName = 'ExpandedCollection'

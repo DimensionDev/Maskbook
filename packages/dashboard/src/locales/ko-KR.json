@@ -167,8 +167,6 @@
     "wallets_assets_price": "가격",
     "wallets_assets_value": "값",
     "wallets_assets_operation": "운영",
-    "wallets_assets_more_expand": "잔액이 적은 토큰은 표시되지 않습니다 ({{direction}} $1). 전체 보기",
-    "wallets_assets_more_collapse": "잔액이 적은 토큰은 표시되지 않습니다 ({{direction}} $1). 전체 숨기기",
     "wallets_assets_more_show_all": "잔체 보기",
     "wallets_address": "월렛 주소",
     "wallets_receive_tips": "QR 코드를 스칸하여 {{chainName}} 자산을 전환하기",

@@ -1,27 +1,47 @@
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { Box } from '@mui/material'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SearchResultType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, parseURLs, SocialAddressType } from '@masknet/shared-base'
 import {
-    type Plugin,
-    usePostInfoDetails,
-    usePluginWrapper,
     SNSAdaptorContext,
+    usePluginWrapper,
+    usePostInfoDetails,
+    type Plugin,
 } from '@masknet/plugin-infra/content-script'
-import { PostInspector } from './PostInspector.js'
-import { base } from '../base.js'
-import { getPayloadFromURLs } from '../helpers/index.js'
-import { SharedContextSettings, setupContext } from '../context.js'
-import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
-import { DialogInspector } from './DialogInspector.js'
-import { CollectionList } from './List/CollectionList.js'
+import { CollectionList, UserAssetsProvider } from '@masknet/shared'
+import { CrossIsolationMessages, NetworkPluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
-import { UserAssetsProvider } from './Context/UserAssetsContext.js'
+import { SearchResultType } from '@masknet/web3-shared-base'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { Box } from '@mui/material'
+import { useCallback } from 'react'
+import { Trans } from 'react-i18next'
+import { base } from '../base.js'
+import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
+import { SharedContextSettings, setupContext } from '../context.js'
+import { getPayloadFromURLs } from '../helpers/index.js'
+import { DialogInspector } from './DialogInspector.js'
+import { PostInspector } from './PostInspector.js'
 
+function useInspectCollectible(pluginID?: NetworkPluginID) {
+    return useCallback(
+        function inspectCollectible(asset: Web3Helper.NonFungibleAssetAll) {
+            if (!pluginID) return
+            CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+                open: true,
+                chainId: asset.chainId,
+                pluginID,
+                tokenId: asset.tokenId,
+                tokenAddress: asset.address,
+            })
+        },
+        [pluginID],
+    )
+}
+
+const gridProps = {
+    columns: 'repeat(auto-fill, minmax(20%, 1fr))',
+}
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
@@ -29,6 +49,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     UI: {
         TabContent({ socialAccount, identity }) {
             useMountReport(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
+            const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
                 <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
@@ -38,7 +59,12 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
                             address={socialAccount.address}
                             userId={identity?.identifier?.userId!}
                             persona={identity?.publicKey!}>
-                            <CollectionList socialAccount={socialAccount} />
+                            <CollectionList
+                                account={socialAccount.address}
+                                pluginID={socialAccount.pluginID}
+                                gridProps={gridProps}
+                                onItemClick={inspectCollectible}
+                            />
                         </UserAssetsProvider>
                     </Web3ContextProvider>
                 </SNSAdaptorContext.Provider>
@@ -94,6 +120,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             UI: {
                 TabContent({ socialAccount, identity }) {
                     useMountReport(TelemetryAPI.EventID.AccessWeb3ProfileDialogNFTsTab)
+                    const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
                     if (!socialAccount) return null
 
@@ -105,7 +132,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                     address={socialAccount.address}
                                     userId={identity?.identifier?.userId!}
                                     persona={identity?.publicKey!}>
-                                    <CollectionList height={392} socialAccount={socialAccount} />
+                                    <CollectionList
+                                        height={392}
+                                        account={socialAccount.address}
+                                        pluginID={socialAccount.pluginID}
+                                        gridProps={gridProps}
+                                        onItemClick={inspectCollectible}
+                                    />
                                 </UserAssetsProvider>
                             </Web3ContextProvider>
                         </SNSAdaptorContext.Provider>
@@ -137,13 +170,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 : '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
+                    const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
                     return (
                         <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
                             <Box style={{ minHeight: 300 }}>
                                 <Web3ContextProvider value={{ pluginID: result.pluginID }}>
                                     <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>
-                                        <CollectionList height={479} socialAccount={socialAccount} />
+                                        <CollectionList
+                                            height={479}
+                                            account={socialAccount.address}
+                                            pluginID={socialAccount.pluginID}
+                                            gridProps={gridProps}
+                                            onItemClick={inspectCollectible}
+                                        />
                                     </UserAssetsProvider>
                                 </Web3ContextProvider>
                             </Box>

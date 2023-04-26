@@ -36,7 +36,8 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 backgroundPosition: 'center',
                 flexShrink: 0,
                 aspectRatio: String(intrinsicSize[0] / intrinsicSize[1]),
-                color,
+                '--icon-color': color, // for dynamic color with var()
+                color: color ? `var(--icon-color, var(--default-color))` : undefined, // for dynamic color with `currentColor`
                 height: height ?? size,
                 width: width ?? size,
             }
@@ -46,7 +47,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 ...base,
                 ...bg,
             }
-        }, [selected, height, width, size, hasClickHandler])
+        }, [selected, height, width, size, hasClickHandler, color])
 
         const iconProps = {
             'aria-hidden': true,

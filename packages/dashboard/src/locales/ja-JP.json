@@ -167,8 +167,6 @@
     "wallets_assets_price": "価格",
     "wallets_assets_value": "価値",
     "wallets_assets_operation": "操作方法",
-    "wallets_assets_more_expand": "価値の小さいトークンは表示されません ({{direction}} 1ドル)。すべて表示します",
-    "wallets_assets_more_collapse": "価値の小さいトークンは表示されません ({{direction}} 1ドル)。すべて非表示します",
     "wallets_assets_more_show_all": "すべて表示します",
     "wallets_address": "ウォレットアドレス",
     "wallets_receive_tips": "QRコードをスキャンして {{chainName}} 資産を転送します",

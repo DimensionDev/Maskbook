@@ -1,7 +1,6 @@
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import type { InitialEntry } from '@remix-run/router'
 import { useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -50,7 +49,7 @@ const FileServiceDialog: React.FC<FileServiceDialogProps> = ({
     const [confirmed] = useTermsConfirmed()
 
     const initialEntries = useMemo(() => {
-        const OpenEntry: InitialEntry = selectMode
+        const OpenEntry = selectMode
             ? {
                   pathname: RoutePaths.FileSelector,
                   search: '?' + urlcat('', { selectedFileIds }),

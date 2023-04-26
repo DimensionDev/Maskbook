@@ -6,11 +6,10 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { TokenType, isSameAddress, type Transaction } from '@masknet/web3-shared-base'
+import { TokenType, type Transaction } from '@masknet/web3-shared-base'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
 import { TransactionIcon } from '../TransactionIcon/index.js'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -63,7 +62,6 @@ export interface HistoryTableRowProps {
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
     const { value: domain } = useReverseAddress(undefined, transaction.to)
-
     const transactionType = (transaction.type ?? '').replace(/_/g, ' ')
 
     return (
@@ -147,11 +145,6 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                             </Stack>
                         )
                     })}
-                </TableCell>
-                <TableCell className={classes.cell} align="center">
-                    {isSameAddress(transaction.tokens[0]?.to_addr, ZERO_ADDRESS)
-                        ? Others?.formatAddress(transaction.tokens[0].contract_address || '', 4)
-                        : ''}
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>

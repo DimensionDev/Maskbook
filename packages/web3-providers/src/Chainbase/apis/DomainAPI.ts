@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import LRUCache from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { first } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress, isValidAddress, isValidChainId, isValidDomain } from '@masknet/web3-shared-evm'

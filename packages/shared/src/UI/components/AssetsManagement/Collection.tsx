@@ -1,15 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useRef, useState, type FC, type HTMLProps, useLayoutEffect } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { memo, useEffect, useLayoutEffect, useRef, useState, type FC, type HTMLProps } from 'react'
+import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleCard } from './CollectibleCard.js'
-import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
+import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
-import { useDetectOverflow } from '../Shared/useDetectOverflow.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -31,7 +30,7 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     },
     info: {
         alignSelf: 'stretch',
-        padding: theme.spacing('6px', '2px', '6px', '6px'),
+        padding: 6,
     },
     nameRow: {
         display: 'flex',
@@ -73,7 +72,9 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     },
 }))
 
-export interface CollectionProps extends HTMLProps<HTMLDivElement> {
+export interface CollectionProps
+    extends HTMLProps<HTMLDivElement>,
+        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
     pluginID: NetworkPluginID
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
@@ -99,9 +100,12 @@ export const Collection: FC<CollectionProps> = memo(
         expanded,
         onExpand,
         onInitialRender,
+        disableAction,
+        onActionClick,
+        onItemClick,
         ...rest
     }) => {
-        const t = useI18N()
+        const t = useSharedI18N()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
 
@@ -121,11 +125,15 @@ export const Collection: FC<CollectionProps> = memo(
         if (collection.balance! <= 2 || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
+                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
                     className={className}
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
+                    actionLabel={t.send()}
+                    disableAction={disableAction}
+                    onActionClick={onActionClick}
+                    onItemClick={onItemClick}
                 />
             ))
             return <>{renderAssets}</>
@@ -136,7 +144,7 @@ export const Collection: FC<CollectionProps> = memo(
                 className={classes.collectibleCard}
                 asset={asset}
                 pluginID={pluginID}
-                key={`${collection.id}.${asset.tokenId}`}
+                key={`${collection.id}.${asset.address}.${asset.tokenId}`}
                 disableNetworkIcon
             />
         ))
@@ -157,7 +165,7 @@ export const Collection: FC<CollectionProps> = memo(
                         {renderAssets}
                         {hasExtra ? (
                             <Typography component="div" className={classes.extraCount}>
-                                +{Math.min(collection.balance! - 3, 999)}
+                                {collection.balance! > 1002 ? '>999' : `+${collection.balance! - 3}`}
                             </Typography>
                         ) : null}
                     </div>
@@ -185,9 +193,9 @@ export const Collection: FC<CollectionProps> = memo(
 Collection.displayName = 'Collection'
 
 export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
+    id: string
     /** Render variants according to count */
     count: number
-    id: string
     expanded?: boolean
 }
 export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, count, id, expanded, ...rest }) => {

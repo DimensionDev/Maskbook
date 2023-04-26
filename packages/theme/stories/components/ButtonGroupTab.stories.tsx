@@ -1,5 +1,5 @@
 import { story } from '../utils/index.js'
-import TabContext from '@mui/lab/TabContext'
+import TabContext from '@mui/lab'
 import TabPanel from '@mui/lab/TabPanel'
 import { Tab } from '@mui/material'
 import { useState } from 'react'

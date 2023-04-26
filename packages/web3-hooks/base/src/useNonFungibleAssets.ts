@@ -69,9 +69,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
             setError(error_ as string)
             setDone(true)
         }
-        setAssets((pred) => {
-            return [...pred, ...batchResult]
-        })
+        setAssets((pred) => (batchResult.length ? [...pred, ...batchResult] : pred))
         toggleLoading(false)
     }, [iterator, done])
 

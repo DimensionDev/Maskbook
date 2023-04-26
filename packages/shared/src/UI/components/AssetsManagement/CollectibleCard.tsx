@@ -1,4 +1,4 @@
-import { type HTMLProps } from 'react'
+import { memo, type HTMLProps, type FC } from 'react'
 import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -44,32 +44,30 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableInspect?: boolean
 }
 
-export function CollectibleCard({
-    className,
-    pluginID,
-    asset,
-    disableNetworkIcon,
-    disableInspect,
-    ...rest
-}: CollectibleCardProps) {
-    const { classes, cx } = useStyles()
+export const CollectibleCard: FC<CollectibleCardProps> = memo(
+    ({ className, pluginID, asset, disableNetworkIcon, disableInspect, ...rest }) => {
+        const { classes, cx } = useStyles()
 
-    const icon = pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null
-    const { metadata } = asset
-    const url = metadata?.previewImageURL || metadata?.imageURL || metadata?.mediaURL
+        const icon =
+            pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null
+        const { metadata } = asset
+        const url = metadata?.previewImageURL || metadata?.imageURL || metadata?.mediaURL
 
-    return (
-        <div className={cx(classes.root, className)} {...rest}>
-            <div className={classes.blocker} />
-            <Card className={classes.card}>
-                <AssetPreviewer
-                    classes={{
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    url={url}
-                    icon={icon}
-                />
-            </Card>
-        </div>
-    )
-}
+        return (
+            <div className={cx(classes.root, className)} {...rest}>
+                <div className={classes.blocker} />
+                <Card className={classes.card}>
+                    <AssetPreviewer
+                        classes={{
+                            fallbackImage: classes.fallbackImage,
+                        }}
+                        url={url}
+                        icon={icon}
+                    />
+                </Card>
+            </div>
+        )
+    },
+)
+
+CollectibleCard.displayName = 'CollectibleCard'

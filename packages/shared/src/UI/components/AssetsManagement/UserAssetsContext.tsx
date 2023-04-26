@@ -3,7 +3,7 @@ import { createIndicator, EMPTY_LIST, type NetworkPluginID, type PageIndicator }
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Hub } from '@masknet/web3-hooks-base'
 import { CollectionType } from '@masknet/web3-providers/types'
-import { chunk, take } from 'lodash-es'
+import { chunk, sum, take } from 'lodash-es'
 import {
     createContext,
     memo,
@@ -33,6 +33,7 @@ interface AssetsContextOptions {
     loadAssets(collection: Web3Helper.NonFungibleCollectionAll): Promise<void>
     loadVerifiedBy(id: string): Promise<void>
     isHiddenAddress: boolean
+    isAllHidden: boolean
 }
 
 export const AssetsContext = createContext<AssetsContextOptions>({
@@ -42,6 +43,7 @@ export const AssetsContext = createContext<AssetsContextOptions>({
     loadAssets: () => Promise.resolve(),
     loadVerifiedBy: () => Promise.resolve(),
     isHiddenAddress: false,
+    isAllHidden: false,
 })
 
 interface Props {
@@ -55,6 +57,7 @@ interface Props {
 const CHUNK_SIZE = 8
 
 const joinKeys = (ids: string[]) => ids.join('_').toLowerCase()
+const getAssetsTotal = (map: Record<string, AssetsState>) => sum(Object.values(map).map((x) => x.assets.length))
 
 export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
     ({ pluginID, userId, address, persona, children }) => {
@@ -89,6 +92,11 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
             return updated ? listingMap : assetsMap
         }, [assetsMap, hiddenList])
 
+        const isAllHidden = useMemo(() => {
+            if (!hiddenList.length || getAssetsTotal(assetsMap) === 0) return false
+            return getAssetsTotal(listingAssetsMap) === 0
+        }, [assetsMap, listingAssetsMap, !hiddenList.length])
+
         const hub = useWeb3Hub(pluginID)
         // We load merged collections with iterators
         const assetsLoaderIterators = useRef<Map<string, AsyncGenerator<undefined, void>>>(new Map())
@@ -110,12 +118,18 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
                     size,
                     chainId,
                 })
+                if (process.env.NODE_ENV === 'development' && collectionId) {
+                    console.assert(
+                        !pageable.nextIndicator,
+                        'Loading part of a merged collection, but see pageable result has nextIndicator',
+                    )
+                }
                 if (pageable.nextIndicator) {
                     indicatorMapRef.current.set(id, pageable.nextIndicator as PageIndicator)
                 }
                 dispatch({ type: 'APPEND_ASSETS', id, assets: pageable.data })
-                // If collectionId is set, that means we are loading part of a virtual collection.
-                // And we will let the virtual collection's iterator decide if it has ended
+                // If collectionId is set, that means we are loading part of a merged collection.
+                // And we will let the merged collection's iterator decide if it has ended
                 const finished = !collectionId && !pageable.nextIndicator
                 dispatch({ type: 'SET_LOADING_STATUS', id, finished, loading: false })
             },
@@ -136,6 +150,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
                 async function* generate(collection: Web3Helper.NonFungibleCollectionAll) {
                     const chunks = [take(allIds, 4), ...chunk(allIds.slice(4), CHUNK_SIZE)].map((x) => x.join(','))
                     for (const idChunk of chunks) {
+                        // TODO We assume that each individual collection in merged-collection has at most 2 assets
                         await loadAssetsViaHub(collection, idChunk)
                         yield
                     }
@@ -163,13 +178,14 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
         const contextValue = useMemo((): AssetsContextOptions => {
             return {
                 isHiddenAddress,
+                isAllHidden,
                 getAssets,
                 getVerifiedBy,
                 loadAssets,
                 loadVerifiedBy,
                 assetsMapRef,
             }
-        }, [isHiddenAddress, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy])
+        }, [isHiddenAddress, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden])
         return <AssetsContext.Provider value={contextValue}>{children}</AssetsContext.Provider>
     },
 )
