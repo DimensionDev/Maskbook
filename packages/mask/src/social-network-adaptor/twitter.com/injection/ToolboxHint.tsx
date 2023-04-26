@@ -25,7 +25,7 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
         missingReportRule: {
             name: 'Sidebar toolbox',
             rule() {
-                // retrun false where the page should not match. maybe on mobile size?
+                // return false where the page should not match. maybe on mobile size?
                 return true
             },
         },
