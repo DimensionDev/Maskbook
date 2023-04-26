@@ -6,6 +6,12 @@ import { searchResultHeadingSelector } from '../utils/selector.js'
 
 export function injectSearchResultInspectorAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchResultHeadingSelector())
-    startWatch(watcher, signal)
+    startWatch(watcher, {
+        signal,
+        missingReportRule: {
+            name: 'SearchResultInspector',
+            rule: 'https://twitter.com/search?q=',
+        },
+    })
     createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<SearchResultInspector />)
 }

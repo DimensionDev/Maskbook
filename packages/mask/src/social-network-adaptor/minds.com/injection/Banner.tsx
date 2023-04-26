@@ -1,24 +1,22 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt.js'
+import { Banner } from '../../../components/Welcomes/Banner.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector.js'
 
-export function injectSetupPromptAtMinds(signal: AbortSignal) {
-    injectSetupPrompt(postEditorInTimelineSelector(), signal, <MindsNotSetupYet_Timeline />)
-    injectSetupPrompt(postEditorInDialogSelector(), signal, <MindsNotSetupYet_Popup />)
+export function injectBannerAtMinds(signal: AbortSignal) {
+    injectBanner(postEditorInTimelineSelector(), signal, <MindsBannerTimeline />)
+    injectBanner(postEditorInDialogSelector(), signal, <MindsBannerPopup />)
 }
 
-function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal, element: JSX.Element) {
+function injectBanner<T>(ls: LiveSelector<T, true>, signal: AbortSignal, element: JSX.Element) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    watcher.useForeach((node, key, meta) => {
-        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
-            signal,
-        }).render(element)
-    })
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
+        signal,
+    }).render(element)
 }
 
 const useStyles = makeStyles()({
@@ -34,10 +32,10 @@ const useStyles = makeStyles()({
     },
 })
 
-const MindsNotSetupYet_Timeline = () => {
+const MindsBannerTimeline = () => {
     const { classes } = useStyles()
     return (
-        <NotSetupYetPrompt
+        <Banner
             iconType="minds"
             classes={{
                 buttonText: classes.buttonText,
@@ -47,7 +45,7 @@ const MindsNotSetupYet_Timeline = () => {
     )
 }
 
-const MindsNotSetupYet_Popup = () => {
+const MindsBannerPopup = () => {
     const { classes } = useStyles()
-    return <NotSetupYetPrompt iconType="minds" classes={{ buttonText: classes.buttonNoMargin }} />
+    return <Banner iconType="minds" classes={{ buttonText: classes.buttonNoMargin }} />
 }
