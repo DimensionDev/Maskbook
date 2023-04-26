@@ -5,8 +5,9 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
 import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { ProfileTabs } from '@masknet/shared-base'
+import { ProfileTabs, PluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { BooleanPreference } from '@masknet/plugin-infra'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -20,7 +21,9 @@ import {
 } from '../utils/selector.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import Services from '../../../extension/service.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
+import { useAsync } from 'react-use'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
@@ -215,15 +218,30 @@ export function ProfileTabForTokenAndPersona() {
 
 export function ProfileTabForDAO() {
     const { classes } = useStyles()
-    const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
     const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
 
+    const { value: snapshotDisabled } = useAsync(() => {
+        return Services.Settings.getPluginMinimalModeEnabled(PluginID.Snapshot)
+    }, [])
+
+    const [hidden, setHidden] = useState(snapshotDisabled === BooleanPreference.True)
+
     useEffect(() => {
-        return MaskMessages.events.profileTabHidden.on((data) => {
+        const offProfileTabHidden = MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
         })
+
+        const offPluginMinimalModeChanged = MaskMessages.events.pluginMinimalModeChanged.on(([id, val]) => {
+            setHidden(val)
+            if (val && location.hash === '#dao') resetTwitterActivatedContent()
+        })
+
+        return () => {
+            offProfileTabHidden()
+            offPluginMinimalModeChanged()
+        }
     }, [])
 
     return hidden || loading || !spaceList?.length ? null : (
