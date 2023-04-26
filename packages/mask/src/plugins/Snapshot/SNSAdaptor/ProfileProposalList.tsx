@@ -12,7 +12,13 @@ import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
-        root: {},
+        root: {
+            maxHeight: 969,
+            overflow: 'scroll',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
         header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' },
         listItem: {
             width: '100%',
@@ -172,9 +178,7 @@ function ProfileProposalListItemBody(props: ProfileProposalProps) {
 function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes, cx } = useStyles({ state: proposal.state })
-    const { t } = useI18N()
     const theme = useTheme()
-
     return (
         <List className={classes.voteList}>
             {proposal.choices.map((x, i) => (
@@ -185,17 +189,21 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         ) : null}
                         <Typography className={classes.voteName}>{x}</Typography>
                         <Typography className={classes.strategyName}>
-                            {millify(proposal.choicesWithScore[i].score, {
-                                precision: 2,
-                                lowercase: true,
-                            }).toUpperCase() +
+                            {(proposal.choicesWithScore[i].score
+                                ? millify(proposal.choicesWithScore[i].score, {
+                                      precision: 2,
+                                      lowercase: true,
+                                  }).toUpperCase()
+                                : '0') +
                                 ' ' +
                                 proposal.strategyName}
                         </Typography>
                     </div>
 
                     <Typography className={classes.percentage}>
-                        {formatPercentage(proposal.choicesWithScore[i].score / proposal.scores_total)}
+                        {formatPercentage(
+                            proposal.scores_total ? proposal.choicesWithScore[i].score / proposal.scores_total : 0,
+                        )}
                     </Typography>
                 </ListItem>
             ))}

@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 300,
         paddingTop: 0,
         paddingBottom: 0,
+        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
     },
     tabListRoot: {
         marginTop: '10px !important',
