@@ -1,5 +1,5 @@
 import { useRef, useContext, createContext, useState, useMemo, useEffect } from 'react'
-import { type DialogProps, Backdrop } from '@mui/material'
+import { type DialogProps } from '@mui/material'
 import { noop } from 'lodash-es'
 
 interface StackContext {
@@ -153,9 +153,8 @@ export function DialogStackingProvider(props: DialogStackingProviderProps) {
     return <DialogStackingContext.Provider value={context}>{props.children}</DialogStackingContext.Provider>
 }
 
-export function GlobalBackdrop(props: React.PropsWithChildren<{}>) {
-    const { stack } = useContext(DialogStackingContext)
-    return <Backdrop open={stack.length > 0} />
+export function useDialogStacking() {
+    return useContext(DialogStackingContext)
 }
 
 type Hierarchy = {
