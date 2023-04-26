@@ -3,14 +3,7 @@ import { CrossIsolationMessages, DashboardRoutes, EMPTY_LIST, NetworkPluginID } 
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNativeToken, useNetworkContext } from '@masknet/web3-hooks-base'
-import {
-    CurrencyType,
-    isGreaterThanOrEqualTo,
-    isLessThan,
-    leftShift,
-    minus,
-    toZeroUSD,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, isGreaterThanOrEqualTo, isLessThan, leftShift, minus, toZero } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -97,8 +90,8 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
 
         if (!selectedChainId) {
             return results.sort((a, z) => {
-                const aUSD = toZeroUSD(a.value?.[CurrencyType.USD] ?? '0')
-                const zUSD = toZeroUSD(z.value?.[CurrencyType.USD] ?? '0')
+                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
 
                 // token value
                 if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1

@@ -8,7 +8,7 @@ import {
     type PageIndicator,
     type NetworkPluginID,
 } from '@masknet/shared-base'
-import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus, toZeroUSD } from '@masknet/web3-shared-base'
+import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus, toZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
@@ -61,8 +61,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
                 const aBalance = leftShift(a.balance, a.decimals)
                 const zBalance = leftShift(z.balance, z.decimals)
 
-                const aUSD = toZeroUSD(a.value?.[CurrencyType.USD] ?? '0')
-                const zUSD = toZeroUSD(z.value?.[CurrencyType.USD] ?? '0')
+                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
 
                 const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
