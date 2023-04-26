@@ -220,7 +220,7 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { classes, cx } = useStyles({ state: proposal.state })
     const theme = useTheme()
     const { t } = useI18N()
-    const { value: currentAccountVote } = useCurrentAccountVote(proposal.id)
+    const { value: currentAccountVote } = useCurrentAccountVote(proposal.id, proposal.votes)
 
     return (
         <List className={classes.voteList}>

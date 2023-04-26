@@ -31,6 +31,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
                 snapshot
                 state
                 scores
+                votes
                 scores_state
                 strategies {
                     network
@@ -81,26 +82,36 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
         return space
     }
 
-    async getCurrentAccountVote(proposalId: string, account: string) {
-        const queryCurrentAccountVote = `
-            query {
-                votes (
-                first: 1000
-                skip: 0
-                where: {
-                    proposal: "${proposalId}",
-                    voter:"${account}"
+    async getCurrentAccountVote(proposalId: string, totalVotes: number, account: string) {
+        const allSettled = await Promise.allSettled(
+            Array.from(Array(Math.ceil(totalVotes / 1000))).map(async (x, i) => {
+                const queryCurrentAccountVote = `
+                query {
+                    votes (
+                        first: 1000
+                        skip: ${i * 1000}
+                        where: {
+                            proposal: "${proposalId}",
+                            voter:"${account}"
+                        }
+                        orderBy: "created",
+                        orderDirection: desc
+                    ) {
+                        choice
+                    }
                 }
-                orderBy: "created",
-                orderDirection: desc
-                ) {
-                choice
-                }
-            }
-        `
+            `
 
-        const { votes } = await fetchFromGraphql<{ votes: Array<{ choice: number }> }>(queryCurrentAccountVote)
+                const { votes } = await fetchFromGraphql<{ votes: Array<{ choice: number }> }>(queryCurrentAccountVote)
 
-        return votes[0]
+                return votes[0]
+            }),
+        )
+
+        const result = allSettled
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined))
+            .filter(Boolean) as Array<{ choice: number }>
+
+        return result.length ? result[0] : undefined
     }
 }

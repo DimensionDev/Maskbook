@@ -19,6 +19,7 @@ export interface SnapshotProposal {
         id: string
         name: string
     }
+    votes: number
     choicesWithScore: Array<{ score: number; choice: string }>
 }
 
@@ -34,6 +35,10 @@ export namespace SnapshotBaseAPI {
     export interface Provider {
         getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]>
         getSpace(spaceId: string): Promise<SnapshotSpace>
-        getCurrentAccountVote(proposalId: string, account: string): Promise<{ choice: number } | undefined>
+        getCurrentAccountVote(
+            proposalId: string,
+            totalVotes: number,
+            account: string,
+        ): Promise<{ choice: number } | undefined>
     }
 }
