@@ -74,6 +74,8 @@ export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, select
     )
 })
 
+HistoryTableRow.displayName = 'HistoryTableRow'
+
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     selectedChainId: Web3Helper.ChainIdAll
     formattedType: string
@@ -148,7 +150,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
-                        <Typography variant="body2">
+                        <Typography variant="body2" title={domain || transaction.to}>
                             {domain ? Others?.formatDomainName?.(domain) : Others?.formatAddress?.(transaction.to, 4)}
                         </Typography>
                         <Link
