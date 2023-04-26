@@ -95,8 +95,8 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
 }
 
+const { ENS_CONTRACT_ADDRESS } = getENSConstants()
 export function isENSContractAddress(contract_address: string) {
-    const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }
 
@@ -105,13 +105,13 @@ export function isLensProfileAddress(address: string) {
     return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
 }
 
+const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
 export function isArbContractAddress(contract_address: string) {
-    const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
     return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
 }
 
+const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
 export function isSpaceIdContractAddress(contract_address: string) {
-    const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
     return isSameAddress(contract_address, SID_CONTRACT_ADDRESS)
 }
 
