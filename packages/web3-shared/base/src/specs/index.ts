@@ -104,7 +104,7 @@ export enum SearchResultType {
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., realMaskNetwork
     CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
-    // e.g., realMaskNetwork
+    // e.g., PancakeSwap
     DAO = 'DAO',
 }
 
