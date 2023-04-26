@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../entry-helpers.js'
-import type { SnapshotBaseAPI, SnapshotProposal } from '../../entry-types.js'
+import type { SnapshotBaseAPI, SnapshotProposal, SnapshotSpace } from '../../entry-types.js'
 
 async function fetchFromGraphql<T>(query: string) {
     const { data } = await fetchJSON<{ data: T }>(
@@ -66,17 +66,18 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
         })
     }
 
-    async getSpaceMemberList(spaceId: string) {
+    async getSpace(spaceId: string) {
         const querySpace = `
             query {
                 space(id: "${spaceId}") {
                     members
+                    followersCount
                 }
             }
         `
 
-        const { space } = await fetchFromGraphql<{ space: { members: string[] } }>(querySpace)
+        const { space } = await fetchFromGraphql<{ space: SnapshotSpace }>(querySpace)
 
-        return space.members
+        return space
     }
 }

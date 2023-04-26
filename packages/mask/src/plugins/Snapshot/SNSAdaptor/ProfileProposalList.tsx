@@ -6,14 +6,15 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
 import { formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
 import { startCase } from 'lodash-es'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
+import { useIntersectionObserver } from '@react-hookz/web'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
         root: {
-            maxHeight: 969,
+            maxHeight: 1018,
             overflow: 'scroll',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -35,7 +36,8 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             height: 32,
             width: 72,
             borderRadius: 99,
-            color: theme.palette.maskColor.bottom,
+            color:
+                state === 'active' || state === 'pending' ? theme.palette.common.white : theme.palette.maskColor.bottom,
             backgroundColor:
                 state === 'active'
                     ? theme.palette.maskColor.success
@@ -92,6 +94,10 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             fontWeight: 700,
             fontSize: 14,
             marginRight: 12,
+            maxWidth: 350,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
         },
         voteIcon: {
             marginRight: 12,
@@ -112,17 +118,11 @@ export interface ProfileProposalListProps {
 export function ProfileProposalList(props: ProfileProposalListProps) {
     const { proposalList } = props
     const { classes } = useStyles({})
-    const { Others } = useWeb3State()
+
     return (
         <List className={classes.root}>
             {proposalList.map((x, i) => {
-                return (
-                    <ListItem key={i} className={classes.listItem}>
-                        <ProfileProposalListItemHeader proposal={x} />
-                        <ProfileProposalListItemBody proposal={x} />
-                        <ProfileProposalListItemVote proposal={x} />
-                    </ListItem>
-                )
+                return <ProfileProposalListItem proposal={x} key={i} />
             })}
         </List>
     )
@@ -130,6 +130,30 @@ export function ProfileProposalList(props: ProfileProposalListProps) {
 
 interface ProfileProposalProps {
     proposal: SnapshotProposal
+}
+
+function ProfileProposalListItem(props: ProfileProposalProps) {
+    const { proposal } = props
+    const { classes } = useStyles({})
+    const ref = useRef<HTMLLIElement | null>(null)
+    const entry = useIntersectionObserver(ref, {})
+    const [isViewed, setIsViewed] = useState(false)
+
+    useEffect(() => {
+        if (entry?.isIntersecting) setIsViewed(true)
+    }, [entry?.isIntersecting])
+
+    return (
+        <ListItem className={classes.listItem} ref={ref}>
+            {isViewed ? (
+                <>
+                    <ProfileProposalListItemHeader proposal={proposal} />
+                    <ProfileProposalListItemBody proposal={proposal} />
+                    <ProfileProposalListItemVote proposal={proposal} />
+                </>
+            ) : null}
+        </ListItem>
+    )
 }
 
 function ProfileProposalListItemHeader(props: ProfileProposalProps) {

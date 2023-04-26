@@ -22,12 +22,17 @@ export interface SnapshotProposal {
     choicesWithScore: Array<{ score: number; choice: string }>
 }
 
+export interface SnapshotSpace {
+    members: string[]
+    followersCount: number
+}
+
 export namespace SnapshotBaseAPI {
     export interface DataSourceProvider {
         get(): Promise<Array<DAOResult<ChainId.Mainnet>>>
     }
     export interface Provider {
         getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]>
-        getSpaceMemberList(spaceId: string): Promise<string[]>
+        getSpace(spaceId: string): Promise<SnapshotSpace>
     }
 }

@@ -9,9 +9,9 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useTransition } from 'react'
 import { ProfileProposalList } from './ProfileProposalList.js'
-import { useSpaceMemberList } from './hooks/useSpaceMemberList.js'
+import { useSpace } from './hooks/useSpace.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,14 +54,14 @@ export function ProfileView(props: ProfileViewProps) {
     const currentSpace = spaceList[spaceIndex]
 
     const { value: proposalList, loading: loadingProposalList } = useProposalList(currentSpace.spaceId)
-    const { value: spaceMemberList, loading: loadingSpaceMemberList } = useSpaceMemberList(currentSpace.spaceId)
-
+    const { value: space, loading: loadingSpaceMemberList } = useSpace(currentSpace.spaceId)
+    const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
-        if (!proposalList || !spaceMemberList) return
+        if (!proposalList || !space?.members) return
         if (currentTab === ContentTabs.All) return proposalList
-        if (currentTab === ContentTabs.Core) return proposalList.filter((x) => spaceMemberList?.includes(x.author))
+        if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space?.members?.includes(x.author))
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
-    }, [currentTab, JSON.stringify(proposalList), JSON.stringify(spaceMemberList)])
+    }, [currentTab, JSON.stringify(proposalList), JSON.stringify(space?.members)])
 
     return (
         <ProfileCard {...ProfileCardProps}>
@@ -70,7 +70,10 @@ export function ProfileView(props: ProfileViewProps) {
                     <PluginDescriptor />
                     <ProfileSpaceHeader
                         spaceList={spaceList}
-                        currentSpace={currentSpace}
+                        currentSpace={{
+                            ...currentSpace,
+                            followersCount: space?.followersCount ?? currentSpace.followersCount,
+                        }}
                         setSpaceIndex={setSpaceIndex}
                     />
                 </ThemeProvider>
@@ -79,7 +82,7 @@ export function ProfileView(props: ProfileViewProps) {
                         <MaskTabList
                             variant="base"
                             classes={{ root: classes.tabListRoot }}
-                            onChange={(_, v: ContentTabs) => setTab(v)}
+                            onChange={(_, v: ContentTabs) => startTransition(() => setTab(v))}
                             aria-label="Space Status Tabs">
                             {Object.values(ContentTabs).map((x) => {
                                 return <Tab value={x} key={x} label={x} />
@@ -88,7 +91,7 @@ export function ProfileView(props: ProfileViewProps) {
                     </Stack>
                 </TabContext>
             </Stack>
-            {loadingProposalList || loadingSpaceMemberList || !filteredProposalList ? (
+            {loadingProposalList || loadingSpaceMemberList || !filteredProposalList || isPending ? (
                 <CardContent className={classes.skeletonContent}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />
