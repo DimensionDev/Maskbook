@@ -1,5 +1,5 @@
 import { useI18N } from '../../../utils/index.js'
-import { Box, Checkbox, FormControlLabel, Typography, useTheme } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { type WizardDialogProps, WizardDialog } from './WizardDialog.js'
@@ -104,7 +104,6 @@ export const VerifyNextID = ({
     const { t } = useI18N()
 
     const { classes, cx } = useStyles()
-    const theme = useTheme()
     const [checked, setChecked] = useState(false)
 
     if (!personaIdentifier) return null
@@ -127,10 +126,7 @@ export const VerifyNextID = ({
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
                                     <img src={avatar} className={cx(classes.avatar, 'connected')} />
-                                    <Icons.Verification
-                                        color={theme.palette.maskColor.primary}
-                                        className={classes.verified}
-                                    />
+                                    <Icons.Verification className={classes.verified} />
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}

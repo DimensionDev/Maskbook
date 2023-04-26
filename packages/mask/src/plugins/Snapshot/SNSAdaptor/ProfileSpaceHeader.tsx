@@ -3,7 +3,7 @@ import { type ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { useState, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Typography, Avatar, IconButton, useTheme, Button } from '@mui/material'
+import { Box, Typography, Avatar, IconButton, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
@@ -63,7 +63,6 @@ const useStyles = makeStyles()((theme) => ({
 export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
     const { spaceList, currentSpace, setSpaceIndex } = props
     const { t } = useI18N()
-    const theme = useTheme()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
@@ -77,7 +76,7 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                         <Typography component="span" className={classes.symbol}>
                             {currentSpace.spaceName}
                         </Typography>
-                        <Icons.Verification size={16} color={theme.palette.maskColor.success} />
+                        <Icons.Verification size={16} />
                         {spaceList.length > 1 && (
                             <>
                                 <IconButton
@@ -100,11 +99,13 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                             </>
                         )}
                     </div>
-                    <Typography component="span" className={classes.followersCount}>
-                        {t('plugin_snapshot_space_info_followers_count', {
-                            followersCount: currentSpace.followersCount,
-                        })}
-                    </Typography>
+                    {currentSpace.followersCount ? (
+                        <Typography component="span" className={classes.followersCount}>
+                            {t('plugin_snapshot_space_info_followers_count', {
+                                followersCount: currentSpace.followersCount,
+                            })}
+                        </Typography>
+                    ) : null}
                 </div>
             </section>
             <Button

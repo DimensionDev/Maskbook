@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { Markdown, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { Box, CardContent, CardHeader, Paper, Tab, Typography, useTheme } from '@mui/material'
+import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { AboutTab } from './tabs/AboutTab.js'
@@ -120,7 +120,6 @@ export function Collectible(props: CollectibleProps) {
     const t = useI18N()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
-    const theme = useTheme()
     const { asset, events, orders } = Context.useContainer()
     const titleRef = useRef<HTMLDivElement>(null)
     const [outVerified, setOutVerified] = useState(false)
@@ -212,19 +211,11 @@ export function Collectible(props: CollectibleProps) {
                             <Typography className={classes.cardTitle} ref={titleRef}>
                                 {_asset.metadata?.name || '-'}
                                 {_asset.collection?.verified && !outVerified ? (
-                                    <Icons.Verification
-                                        color={theme.palette.maskColor.primary}
-                                        size={20}
-                                        sx={{ marginLeft: 0.5 }}
-                                    />
+                                    <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
                                 ) : null}
                             </Typography>
                             {_asset.collection?.verified && outVerified ? (
-                                <Icons.Verification
-                                    color={theme.palette.maskColor.primary}
-                                    size={20}
-                                    sx={{ marginLeft: 0.5 }}
-                                />
+                                <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
                     }

@@ -1,5 +1,5 @@
 import { memo, type MouseEvent, useState } from 'react'
-import { Box, Button, Link, Stack, Typography, useTheme } from '@mui/material'
+import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles, LoadingBase } from '@masknet/theme'
 import {
     type PersonaIdentifier,
@@ -105,7 +105,6 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
         const { classes } = useStyles()
-        const theme = useTheme()
 
         const [openDisconnectDialog, setOpenDisconnectDialog] = useState(false)
 
@@ -146,7 +145,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             {proofs.loading ? (
                                 <LoadingBase />
                             ) : isProved?.is_valid ? (
-                                <Icons.Verification size={18} color={theme.palette.maskColor.primary} />
+                                <Icons.Verification size={18} />
                             ) : (
                                 <Icons.NextIdPersonaWarning size={18} />
                             )}

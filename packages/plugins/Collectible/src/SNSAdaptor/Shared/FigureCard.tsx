@@ -1,6 +1,6 @@
 import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Typography, useTheme } from '@mui/material'
+import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -66,7 +66,6 @@ export interface FigureCardProps {
 export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
     const { asset, hideSubTitle, timeline } = props
-    const theme = useTheme()
     const { classes, cx } = useStyles()
 
     return (
@@ -93,10 +92,7 @@ export function FigureCard(props: FigureCardProps) {
                     <Typography className={classes.nameLg}>
                         {asset.collection?.name}
                         {asset.collection?.verified ? (
-                            <Icons.Verification
-                                color={theme.palette.maskColor.primary}
-                                style={{ transform: 'translate(4px, 5px)' }}
-                            />
+                            <Icons.Verification style={{ transform: 'translate(4px, 5px)' }} />
                         ) : null}
                     </Typography>
                 </div>
