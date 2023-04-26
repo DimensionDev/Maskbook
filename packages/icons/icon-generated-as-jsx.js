@@ -3045,3 +3045,13 @@ export const SettingsRestore = /*#__PURE__*/ __createIcon('SettingsRestore', [
         u: () => new URL('./settings/SettingsRestore.light.svg', import.meta.url),
     },
 ])
+export const SettingsSync = /*#__PURE__*/ __createIcon('SettingsSync', [
+    {
+        c: ['dark'],
+        u: () => new URL('./settings/SettingsSync.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./settings/SettingsSync.light.svg', import.meta.url),
+    },
+])
