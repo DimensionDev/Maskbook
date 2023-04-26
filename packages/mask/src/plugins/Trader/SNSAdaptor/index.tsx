@@ -99,8 +99,8 @@ const sns: Plugin.SNSAdaptor.Definition<ChainId> = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 10,
-                marketListSortingPriority: 5,
+                appBoardSortingDefaultPriority: 7,
+                marketListSortingPriority: 7,
                 icon,
                 category: 'dapp',
                 name,

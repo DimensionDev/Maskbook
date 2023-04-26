@@ -3,9 +3,12 @@ import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
+    getArbConstants,
     getCryptoPunksConstants,
     getENSConstants,
+    getLensProfileConstants,
     getRedPacketConstants,
+    getSpaceIdConstants,
     getTokenConstant,
     ZERO_ADDRESS,
 } from '../constants/index.js'
@@ -32,9 +35,9 @@ export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
+const nativeTokenSet = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
 export function isNativeTokenAddress(address?: string): address is string {
-    const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
-    return !!(address && set.has(address))
+    return !!(address && nativeTokenSet.has(address))
 }
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
@@ -92,9 +95,28 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
 }
 
+const { ENS_CONTRACT_ADDRESS } = getENSConstants()
 export function isENSContractAddress(contract_address: string) {
-    const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+}
+
+export function isLensProfileAddress(address: string) {
+    const { LENS_PROFILE_CONTRACT_ADDRESS } = getLensProfileConstants(ChainId.Matic)
+    return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
+}
+
+const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
+export function isArbContractAddress(contract_address: string) {
+    return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
+}
+
+const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
+export function isSpaceIdContractAddress(contract_address: string) {
+    return isSameAddress(contract_address, SID_CONTRACT_ADDRESS)
+}
+
+export function isXnsContractAddress(address: string) {
+    return isENSContractAddress(address) || isArbContractAddress(address) || isSpaceIdContractAddress(address)
 }
 
 export function isCryptoPunksContractAddress(contract_address: string) {

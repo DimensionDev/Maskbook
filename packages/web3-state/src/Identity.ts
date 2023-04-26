@@ -1,4 +1,4 @@
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { groupBy, first, compact, uniq } from 'lodash-es'
 import {
     type SocialAddress,
@@ -10,7 +10,7 @@ import {
 import { type IdentityServiceState as Web3SocialIdentityState } from '@masknet/web3-shared-base'
 
 export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<ChainId> {
-    protected cache = new LRU<string, Promise<Array<SocialAddress<ChainId>>>>({
+    protected cache = new LRUCache<string, Promise<Array<SocialAddress<ChainId>>>>({
         max: 20,
         ttl: Number.MAX_SAFE_INTEGER,
     })

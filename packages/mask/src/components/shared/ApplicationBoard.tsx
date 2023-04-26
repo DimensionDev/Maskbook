@@ -4,7 +4,6 @@ import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
@@ -114,9 +113,6 @@ function ApplicationBoardContent(props: Props) {
                         pluginID: ID,
                         isWalletConnectedRequired:
                             !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
-                        isWalletConnectedEVMRequired: Boolean(
-                            account && currentWeb3Network !== NetworkPluginID.PLUGIN_EVM && isWalletConnectedRequired,
-                        ),
                     }))
                 })
                 .sort((a, b) => {
@@ -209,7 +205,7 @@ function RenderEntryComponent({
     // #endregion
 
     const clickHandler = useMemo(() => {
-        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
+        if (application.isWalletConnectedRequired) {
             return (walletConnectedCallback?: () => void) =>
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
         }
@@ -226,7 +222,6 @@ function RenderEntryComponent({
     const tooltipHint = (() => {
         if (ApplicationEntryStatus.isLoading) return
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
-        if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
             return t('application_tooltip_hint_create_persona')

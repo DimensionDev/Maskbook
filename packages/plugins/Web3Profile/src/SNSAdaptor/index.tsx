@@ -38,10 +38,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <Icons.Web3Profile size={36} />
             const name = <Trans ns={PluginID.Web3Profile} i18nKey="web3_profile" />
-            const recommendFeature = {
-                description: <Trans i18nKey="plugin_web3_profile_recommend_feature_description" />,
-                backgroundGradient: 'linear-gradient(181.28deg, #6BA3FF 1.76%, #C2E9FB 99.59%)',
-            }
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {
@@ -57,7 +53,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 {...EntryComponentProps}
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
-                                recommendFeature={recommendFeature}
                                 onClick={() =>
                                     EntryComponentProps?.onClick
                                         ? EntryComponentProps.onClick()
@@ -76,7 +71,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 icon,
                 nextIdRequired: true,
                 category: 'dapp',
-                recommendFeature,
                 description: (
                     <Trans
                         i18nKey="__plugin_description"
@@ -84,16 +78,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         ns={base.ID}
                     />
                 ),
-                features: [
-                    {
-                        name: <Trans i18nKey="plugin_web3_profile_feature_general_user_name" />,
-                        description: <Trans i18nKey="plugin_web3_profile_feature_general_user_description" />,
-                    },
-                    {
-                        name: <Trans i18nKey="plugin_web3_profile_feature_nft_name" />,
-                        description: <Trans i18nKey="plugin_web3_profile_feature_nft_description" />,
-                    },
-                ],
             }
         })(),
     ],

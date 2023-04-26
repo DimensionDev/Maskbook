@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
@@ -59,8 +59,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenTableRowProps {
     asset: Web3Helper.FungibleAssetAll
-    onSwap(): void
-    onSend(): void
+    onSwap(asset: Web3Helper.FungibleAssetAll): void
+    onSend(asset: Web3Helper.FungibleAssetAll): void
 }
 
 export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
@@ -69,7 +69,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const { chainId } = useChainContext()
     const networkDescriptors = useNetworkDescriptors()
     const { pluginID: currentPluginId } = useNetworkContext()
-    const isOnCurrentChain = useMemo(() => chainId === asset.chainId, [asset, chainId])
+    const isOnCurrentChain = chainId === asset.chainId
 
     return (
         <TableRow className={classes.row}>
@@ -82,7 +82,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             name={asset.name}
                             chainId={asset.chainId}
                             logoURL={asset.logoURL || asset.logoURL}
-                            AvatarProps={{ sx: { width: 36, height: 36 } }}
+                            size={36}
                         />
                         <Box className={classes.chainIcon}>
                             <WalletIcon
@@ -135,7 +135,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                                 color="secondary"
                                 sx={{ marginRight: 1 }}
                                 className={classes.button}
-                                onClick={onSend}>
+                                onClick={() => onSend(asset)}>
                                 {t.wallets_balance_Send()}
                             </Button>
                         </span>
@@ -158,7 +158,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                                 disabled={!isOnCurrentChain || asset.chainId === ChainId.Conflux}
                                 variant="outlined"
                                 color="secondary"
-                                onClick={onSwap}
+                                onClick={() => onSwap(asset)}
                                 className={classes.button}>
                                 {t.wallets_balance_Swap()}
                             </Button>
@@ -169,3 +169,5 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
         </TableRow>
     )
 })
+
+FungibleTokenTableRow.displayName = 'FungibleTokenTableRow'

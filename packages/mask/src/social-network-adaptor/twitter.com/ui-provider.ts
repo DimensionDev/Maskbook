@@ -30,7 +30,6 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
 import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
-import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter.js'
 import { injectTips } from './injection/Tips/index.js'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar.js'
 import {
@@ -44,6 +43,7 @@ import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
 import { injectLens } from './injection/Lens/index.js'
+import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

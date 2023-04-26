@@ -11,15 +11,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumBlockieProps {
+export interface EthereumBlockieProps extends withClasses<'icon'> {
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function EthereumBlockie(props: EthereumBlockieProps) {
-    const { address, name } = props
-    const { classes } = useStyles()
+    const { address, name, AvatarProps } = props
+    const { classes } = useStyles(undefined, { props })
     const blockie = useBlockie(address)
 
     return (

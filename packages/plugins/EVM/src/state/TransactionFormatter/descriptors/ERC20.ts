@@ -1,6 +1,12 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import { type TransactionContext, isZero, leftShift, pow10, isSameAddress } from '@masknet/web3-shared-base'
-import { type ChainId, type TransactionParameter, SchemaType, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type TransactionParameter,
+    SchemaType,
+    ProviderType,
+    formatEthereumAddress,
+} from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
@@ -26,6 +32,24 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
                     const token = await hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
 
+                    const revokeTitle = i18NextInstance.t('plugin_infra_descriptor_token_revoke_title')
+                    const approveTitle = i18NextInstance.t('plugin_infra_descriptor_token_approve_title')
+                    const revokeDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke', {
+                        symbol: token?.symbol ?? 'token',
+                    })
+                    const approveDescription = i18NextInstance.t('plugin_infra_descriptor_token_approve', {
+                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                    })
+                    const revokeSuccessDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_success')
+                    const approveSuccessDescription = i18NextInstance.t(
+                        'plugin_infra_descriptor_token_approve_success',
+                        {
+                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        },
+                    )
+                    const revokeFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail')
+                    const approveFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_fail')
+
                     if (providerType === ProviderType.MetaMask) {
                         const spenders = await hub?.getFungibleTokenSpenders?.(context.chainId, context.from)
 
@@ -37,28 +61,35 @@ export class ERC20Descriptor implements TransactionDescriptor {
 
                         const spendingCap = new BigNumber(spender?.amount ?? 0).toString()
 
+                        const successfulDescription = isZero(parameters.value)
+                            ? isZero(spendingCap)
+                                ? revokeSuccessDescription
+                                : i18NextInstance.t('plugin_infra_descriptor_token_revoke_but_set_positive_cap', {
+                                      tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
+                                      spender: spender?.address
+                                          ? formatEthereumAddress(spender?.address, 4)
+                                          : 'spender',
+                                  })
+                            : isZero(spendingCap)
+                            ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
+                                  symbol: token?.symbol,
+                              })
+                            : approveSuccessDescription
+
+                        const successfulTitle =
+                            isZero(parameters.value) && !isZero(spendingCap) ? approveTitle : undefined
+
                         return {
                             chainId: context.chainId,
                             tokenInAddress: token?.address,
-                            title: i18NextInstance.t('plugin_infra_descriptor_token_set_spending_cap_title'),
-                            description: i18NextInstance.t('plugin_infra_descriptor_token_set_spending_cap', {
-                                symbol: token?.symbol ?? 'token',
-                            }),
+                            title: isZero(parameters.value) ? revokeTitle : approveTitle,
+                            description: isZero(parameters.value) ? revokeDescription : approveDescription,
                             snackbar: {
-                                successfulDescription: isZero(spendingCap)
-                                    ? i18NextInstance.t('plugin_infra_descriptor_token_revoke_success')
-                                    : i18NextInstance.t('plugin_infra_descriptor_token_approve_success', {
-                                          tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
-                                      }),
-                                successfulTitle: isZero(spendingCap)
-                                    ? i18NextInstance.t('plugin_infra_descriptor_token_revoke_title')
-                                    : i18NextInstance.t('plugin_infra_descriptor_token_approve_title'),
-                                failedDescription: i18NextInstance.t(
-                                    'plugin_infra_descriptor_token_set_spending_cap_fail',
-                                ),
-                                failedTitle: isZero(spendingCap)
-                                    ? i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail')
-                                    : i18NextInstance.t('plugin_infra_descriptor_token_fail'),
+                                successfulDescription,
+                                successfulTitle,
+                                failedDescription: isZero(parameters.value)
+                                    ? revokeFailedDescription
+                                    : approveFailedDescription,
                             },
                         }
                     }
@@ -67,40 +98,32 @@ export class ERC20Descriptor implements TransactionDescriptor {
                         return {
                             chainId: context.chainId,
                             tokenInAddress: token?.address,
-                            title: i18NextInstance.t('plugin_infra_descriptor_token_revoke_title'),
-                            description: i18NextInstance.t('plugin_infra_descriptor_token_revoke', {
-                                symbol: token?.symbol ?? 'token',
-                            }),
+                            title: revokeTitle,
+                            description: revokeDescription,
                             popup: {
                                 tokenDescription: token?.symbol ?? 'token',
                             },
                             snackbar: {
-                                successfulDescription: i18NextInstance.t(
-                                    'plugin_infra_descriptor_token_revoke_success',
-                                ),
-                                failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail'),
+                                successfulDescription: revokeSuccessDescription,
+                                failedDescription: revokeFailedDescription,
                             },
                         }
                     }
 
                     return {
                         chainId: context.chainId,
-                        title: i18NextInstance.t('plugin_infra_descriptor_token_approve_title'),
+                        title: approveTitle,
                         tokenInAddress: token?.address,
                         tokenInAmount: parameters?.value,
-                        description: i18NextInstance.t('plugin_infra_descriptor_token_approve', {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
-                        }),
+                        description: approveDescription,
                         popup: {
                             tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
                                 ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
                                 : undefined,
                         },
                         snackbar: {
-                            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_approve_success', {
-                                tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
-                            }),
-                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_fail'),
+                            successfulDescription: approveSuccessDescription,
+                            failedDescription: approveFailedDescription,
                         },
                     }
             }

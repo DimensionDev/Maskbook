@@ -9,6 +9,6 @@ export const TokenTable = of({
     args: {
         isLoading: false,
         isEmpty: true,
-        dataSource: [],
+        data: [],
     },
 })

@@ -1,4 +1,4 @@
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
 import {
     type EnhanceableSite,
@@ -14,7 +14,7 @@ import { getNFTAvatarByUserId } from '../utils/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Twitter } from '@masknet/web3-providers'
 
-const cache = new LRU<string, NextIDAvatarMeta>({
+const cache = new LRUCache<string, NextIDAvatarMeta>({
     max: 500,
     ttl: 60 * 1000,
 })

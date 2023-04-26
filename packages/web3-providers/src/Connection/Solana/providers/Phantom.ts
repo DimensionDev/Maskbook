@@ -50,7 +50,7 @@ export class PhantomProvider
             },
         })
 
-        transaction.addSignature(new PublicKey(publicKey), bs58.decode(signature))
+        transaction.addSignature(new PublicKey(publicKey), Buffer.from(bs58.decode(signature)))
         return transaction
     }
 

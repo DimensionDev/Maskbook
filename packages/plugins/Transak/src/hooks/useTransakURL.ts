@@ -20,7 +20,7 @@ const DEFAULT_PARAMETERS: TransakConfig = {
     redirectURL: location.origin,
     widgetWidth: '100%',
     widgetHeight: '630px',
-    hideMenu: true,
+    hideMenu: false,
     excludeFiatCurrencies: 'KRW',
 }
 

@@ -5,7 +5,7 @@ import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { useChainContext, useWeb3State, useNetworkDescriptor, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { type NetworkDescriptor, isGreaterThan, type FungibleTokenSpender } from '@masknet/web3-shared-base'
+import { type NetworkDescriptor, type FungibleTokenSpender, formatSpendingCap } from '@masknet/web3-shared-base'
 import { ChainBoundary, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
@@ -217,9 +217,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                        <Typography className={classes.primaryText}>
-                            {isGreaterThan(spender.amount, '1e+10') ? t.infinite() : spender.amount}
-                        </Typography>
+                        <Typography className={classes.primaryText}>{formatSpendingCap(spender.amount)}</Typography>
                     </div>
                 </div>
                 <ChainBoundary

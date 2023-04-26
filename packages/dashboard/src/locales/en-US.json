@@ -167,8 +167,8 @@
     "wallets_assets_price": "Price",
     "wallets_assets_value": "Value",
     "wallets_assets_operation": "Operation",
-    "wallets_assets_more_expand": "Tokens with small value are not displayed ({{- direction}} $1). Show all",
-    "wallets_assets_more_collapse": "Tokens with small value are displayed ({{- direction}} $1). Hide all",
+    "wallets_assets_more$collapsed": "Tokens with small value are not displayed ({{- symbol }} $1). Show all",
+    "wallets_assets_more$expanded": "Tokens with small value are displayed ({{- symbol }} $1). Hide all",
     "wallets_assets_more_show_all": "Show all",
     "wallets_address": "Wallet Address",
     "wallets_receive_tips": "Scan the QR code and transfer {{chainName}} assets to it",
@@ -395,5 +395,6 @@
     "recovery_smart_pay_wallet_description_other": "{{count}} local SmartPay wallets have been detected and successfully recovered.",
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
     "wallet_history_no_data": "No history records.",
-    "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>."
+    "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
+    "wallets_history_burn": "Burn"
 }

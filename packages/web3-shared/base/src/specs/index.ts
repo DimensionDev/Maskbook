@@ -104,6 +104,8 @@ export enum SearchResultType {
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., realMaskNetwork
     CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
+    // e.g., PancakeSwap
+    DAO = 'DAO',
 }
 
 export enum ActivityType {
@@ -611,6 +613,20 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
     address: string
 }
 
+export interface DAOResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.DAO
+    keyword: string
+    spaceId: string
+    spaceName: string
+    twitterHandler: string
+    avatar: string
+    followersCount: number
+    alias?: Array<{
+        value: string
+        isPin?: boolean
+    }>
+}
+
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
     domain?: string
@@ -667,6 +683,7 @@ export type SearchResult<ChainId, SchemaType> =
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
     | NonFungibleCollectionResult<ChainId, SchemaType>
+    | DAOResult<ChainId>
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).

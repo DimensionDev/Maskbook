@@ -6,6 +6,7 @@ import {
     formatEthereumAddress,
     isNativeTokenAddress,
     SchemaType,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
@@ -15,6 +16,7 @@ import {
     toFixed,
     TokenType,
     type Transaction,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import { DebankTransactionDirection, type HistoryResponse, type WalletTokenRecord } from './types.js'
@@ -59,6 +61,10 @@ export function formatTransactions(
             type = cate_dict[transaction.cate_id].name
         } else if (type === '') {
             type = 'contract interaction'
+        }
+
+        if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
+            type = 'burn'
         }
         return {
             id: transaction.id,

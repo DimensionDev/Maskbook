@@ -11,7 +11,7 @@ import {
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import { FormattedBalance, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
@@ -112,16 +112,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         gasOption,
     )
     // #endregion
-    const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
         const result = await createCallback()
 
         const { hash, receipt, events } = result ?? {}
         if (typeof hash !== 'string') return
         if (typeof receipt?.transactionHash !== 'string') return
-        await openShareTxDialog({
-            hash: receipt.transactionHash,
-        })
 
         // the settings is not available
         if (!settings?.token) return
@@ -161,7 +157,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
         // output the redpacket as JSON payload
         onCreated(payload.current)
-    }, [createCallback, settings, openShareTxDialog, onCreated])
+    }, [createCallback, settings, onCreated])
     // #endregion
 
     // assemble JSON payload

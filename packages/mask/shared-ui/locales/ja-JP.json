@@ -58,7 +58,6 @@
     "application_tooltip_hint_create_persona": "ペルソナを作成し、使用してください",
     "application_tooltip_hint_connect_persona": "あなたのペルソナに接続してください",
     "application_tooltip_hint_connect_wallet": "ウォレットを接続してください",
-    "application_tooltip_hint_switch_to_evm_wallet": "EVMチェーンのみが対応しており、他のチェーンは後ほど対応します。",
     "application_settings_tab_app_list": "アプリ一覧",
     "application_settings_tab_plug_in_switch": "プラグイン・スイッチ",
     "application_settings_tab_plug_app-list-listed": "リストされました",

@@ -1,7 +1,4 @@
-import urlcat from 'urlcat'
-import { Network } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { createPredicate, SourceType } from '@masknet/web3-shared-base'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import {
     RaribleRopstenUserURL,
@@ -14,19 +11,6 @@ import {
 type RaribleSupportedChainId = ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby
 type OpenSeaSupportedChainId = ChainId.Mainnet | ChainId.Rinkeby
 type ZoraSupportedChainId = ChainId.Mainnet
-
-export const isOpenSeaSupportedChainId = createPredicate<ChainId, ChainId.Mainnet | ChainId.Rinkeby>([
-    ChainId.Mainnet,
-    ChainId.Rinkeby,
-])
-
-export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, Network>(
-    {
-        [ChainId.Mainnet]: Network.Main,
-        [ChainId.Rinkeby]: Network.Rinkeby,
-    },
-    Network.Main,
-)
 
 export const resolveRaribleUserNetwork = createLookupTableResolver<RaribleSupportedChainId, string>(
     {
@@ -60,55 +44,3 @@ export const resolveLinkOnZora = createLookupTableResolver<ZoraSupportedChainId,
     },
     'https://zora.co',
 )
-
-export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
-    if (chainId === ChainId.Rinkeby) {
-        return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
-    }
-
-    return `https://opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
-}
-
-export function resolveAssetLinkOnCurrentProvider(chainId: ChainId, address: string, id: string, provider: SourceType) {
-    switch (provider) {
-        case SourceType.OpenSea:
-            return urlcat(resolveLinkOnOpenSea(chainId as OpenSeaSupportedChainId), '/assets/:address/:id', {
-                address,
-                id,
-            })
-        case SourceType.Rarible:
-            return urlcat(resolveLinkOnRarible(chainId as RaribleSupportedChainId), '/token/:address::id', {
-                address,
-                id,
-            })
-        case SourceType.NFTScan:
-            return ''
-        case SourceType.Zora:
-            return urlcat(resolveLinkOnZora(chainId as ZoraSupportedChainId), '/collections/:address/:id', {
-                address,
-                id,
-            })
-        default:
-            return ''
-    }
-}
-
-export function resolveUserUrlOnCurrentProvider(
-    chainId: ChainId,
-    address: string,
-    provider: SourceType,
-    username?: string,
-) {
-    switch (provider) {
-        case SourceType.Rarible:
-            return urlcat(resolveRaribleUserNetwork(chainId as RaribleSupportedChainId), `/${address}`)
-        case SourceType.OpenSea:
-            return urlcat(resolveLinkOnOpenSea(chainId as OpenSeaSupportedChainId), `/${username ?? ''}`)
-        case SourceType.NFTScan:
-            return ''
-        case SourceType.Zora:
-            return urlcat(resolveLinkOnZora(chainId as ZoraSupportedChainId), `/${address}`)
-        default:
-            return ''
-    }
-}

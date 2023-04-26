@@ -1,4 +1,3 @@
-import type { WyvernSchemaName } from 'opensea-js/lib/types.js'
 import type { SourceType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -22,14 +21,6 @@ export enum CollectibleTab {
     DETAILS = 1,
     OFFERS = 2,
     ACTIVITY = 3,
-}
-
-export interface CollectibleToken {
-    chainId: Web3Helper.ChainIdAll
-    tokenId: string
-    contractAddress: string
-    schemaName?: WyvernSchemaName
-    provider?: SourceType
 }
 
 export interface CollectibleGridProps {

@@ -1,18 +1,25 @@
-import { useCallback, useState } from 'react'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
-import { SchemaType, explorerResolver, type ChainId } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
-import { SourceType } from '@masknet/web3-shared-base'
-import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { FuseNonFungibleCollection } from '@masknet/web3-providers'
-import { useI18N } from '../../../../utils/index.js'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import {
+    SchemaType,
+    explorerResolver,
+    isLensCollect,
+    isLensFollower,
+    type ChainId,
+    isLensProfileAddress,
+} from '@masknet/web3-shared-evm'
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
+import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
 import { SearchInput } from '../../../../extension/options-page/DashboardComponents/SearchInput.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -106,12 +113,12 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             if (ev.chainId) setChainId(ev.chainId)
         },
     )
-    const onSubmit = useCallback(
-        (collection: NonFungibleCollection<ChainId, SchemaType>, balance?: number) => {
+    const onSelect = useCallback(
+        (collection: NonFungibleCollection<ChainId, SchemaType>) => {
             setKeyword('')
             setDialog({
                 open: false,
-                balance,
+                balance: collection.balance,
                 collection,
             })
         },
@@ -131,11 +138,19 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         sourceType: SourceType.NFTScan,
     })
 
-    const collectionsFiltered = collections.filter((x) => x.schema === SchemaType.ERC721)
+    const collectionsFiltered = collections.filter((x) => {
+        return (
+            x.address &&
+            x.schema === SchemaType.ERC721 &&
+            !isLensCollect(x.name) &&
+            !isLensFollower(x.name) &&
+            !isLensProfileAddress(x.address)
+        )
+    })
 
     // #region fuse
     const searchedTokenList = FuseNonFungibleCollection.create(
-        collections.filter((x) => x.schema === SchemaType.ERC721),
+        collectionsFiltered.filter((x) => x.schema === SchemaType.ERC721),
     )
         .search(keyword)
         .map((x) => x.item)
@@ -166,7 +181,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         keyword={keyword}
                         contractList={collectionsFiltered}
                         searchedTokenList={searchedTokenList}
-                        onSubmit={onSubmit}
+                        onSelect={onSelect}
                     />
                 )}
             </DialogContent>
@@ -178,11 +193,11 @@ export interface SearchResultBoxProps {
     keyword: string
     contractList: Array<NonFungibleCollection<ChainId, SchemaType>>
     searchedTokenList: Array<NonFungibleCollection<ChainId, SchemaType>>
-    onSubmit: (collection: NonFungibleCollection<ChainId, SchemaType>, balance?: number) => void
+    onSelect: (collection: NonFungibleCollection<ChainId, SchemaType>) => void
 }
 
 export function SearchResultBox(props: SearchResultBoxProps) {
-    const { keyword, searchedTokenList, onSubmit, contractList } = props
+    const { keyword, searchedTokenList, onSelect, contractList } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     return (
@@ -195,7 +210,7 @@ export function SearchResultBox(props: SearchResultBoxProps) {
                 <List>
                     {(keyword === '' ? contractList : searchedTokenList).map((collection, i) => (
                         <div key={i}>
-                            <ContractListItem onSubmit={onSubmit} collection={collection} />
+                            <ContractListItem onSelect={onSelect} collection={collection} />
                         </div>
                     ))}
                 </List>
@@ -204,17 +219,16 @@ export function SearchResultBox(props: SearchResultBoxProps) {
     )
 }
 
-interface ContractListItemProps {
+interface ContractListItemProps extends Pick<SearchResultBoxProps, 'onSelect'> {
     collection: NonFungibleCollection<ChainId, SchemaType>
-    onSubmit: (collection: NonFungibleCollection<ChainId, SchemaType>, balance?: number) => void
 }
 
 function ContractListItem(props: ContractListItemProps) {
-    const { onSubmit, collection } = props
+    const { onSelect, collection } = props
     const { classes } = useStyles()
     return (
         <div style={{ position: 'relative' }}>
-            <ListItem className={classes.listItem} onClick={() => onSubmit(collection, collection.balance)}>
+            <ListItem className={classes.listItem} onClick={() => onSelect(collection)}>
                 <Avatar className={classes.icon} src={collection.iconURL || ''} />
                 <Typography className={classes.contractName}>
                     {collection.name}{' '}
@@ -224,13 +238,11 @@ function ContractListItem(props: ContractListItemProps) {
             </ListItem>
             {collection.address ? (
                 <div className={classes.address}>
-                    <Typography
-                        onClick={() => onSubmit(collection, collection.balance)}
-                        className={classes.addressText}>
+                    <Typography onClick={() => onSelect(collection)} className={classes.addressText}>
                         {collection.address}
                     </Typography>
                     <Link
-                        href={explorerResolver.addressLink(collection.chainId, collection.address ?? '')}
+                        href={explorerResolver.addressLink(collection.chainId, collection.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon className={classes.openIcon} fontSize="small" />

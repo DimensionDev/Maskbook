@@ -175,8 +175,8 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         return filteredFungibleTokens
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-                const zBalance = toZero(leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals))
+                const aBalance = leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals)
+                const zBalance = leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals)
 
                 const aUSD = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
                 const zUSD = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')

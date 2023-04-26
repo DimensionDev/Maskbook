@@ -388,7 +388,6 @@ const moduleSystemRules = {
         'error',
         {
             paths: [
-                { name: 'lodash', message: 'Please use lodash-es instead.' },
                 { name: 'date-fns', message: 'Please use date-fns/{submodule} instead.' },
                 { name: 'date-fns/esm', message: 'Please use date-fns/{submodule} instead.' },
                 { name: 'idb/with-async-ittr-cjs', message: 'Please use idb/with-async-ittr instead.' },
