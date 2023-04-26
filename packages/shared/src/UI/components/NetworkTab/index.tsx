@@ -14,9 +14,10 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
     hideArrowButton?: boolean
     pluginID: NetworkPluginID
     onChange?(chainId: Web3Helper.ChainIdAll): void
+    requireChains?: boolean
 }
 
-export function NetworkTab({ chains, pluginID, hideArrowButton, onChange }: NetworkTabProps) {
+export function NetworkTab({ chains, pluginID, hideArrowButton, onChange, requireChains }: NetworkTabProps) {
     const { pluginID: networkPluginID } = useNetworkContext(pluginID)
     const { chainId, setChainId } = useChainContext()
     const networks = useNetworkDescriptors(networkPluginID)
@@ -24,9 +25,9 @@ export function NetworkTab({ chains, pluginID, hideArrowButton, onChange }: Netw
     const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const supportedChains = useMemo(() => {
-        if (!wallet?.owner) return chains
+        if (!wallet?.owner || requireChains) return chains
         return chains.filter((x) => x === smartPaySupportChainId)
-    }, [smartPaySupportChainId, wallet, chains])
+    }, [smartPaySupportChainId, wallet, chains, requireChains])
 
     const usedNetworks = networks.filter((x) => supportedChains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
