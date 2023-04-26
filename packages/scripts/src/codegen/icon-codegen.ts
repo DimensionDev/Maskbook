@@ -101,36 +101,38 @@ async function generateIcons() {
     )
 
     // Process in order of files
-    filePaths.forEach((path) => {
-        const { name } = parsePath(path)
+    filePaths
+        .sort((a, z) => a.localeCompare(z))
+        .forEach((path) => {
+            const { name } = parsePath(path)
 
-        const base = getBase(name)
-        const currentVariant = getVariant(name)
-        variants[base] ??= []
+            const base = getBase(name)
+            const currentVariant = getVariant(name)
+            variants[base] ??= []
 
-        // cross platform, use URL to calculate relative path
-        const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
-        const identifier = snakeCase(name)
+            // cross platform, use URL to calculate relative path
+            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
+            const identifier = snakeCase(name)
 
-        const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
-        asURL.js.push(`export const ${identifier}_url = ${url}`)
+            const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
+            asURL.js.push(`export const ${identifier}_url = ${url}`)
 
-        let currentLine = `/** ${createImage(importPath)} */ export const `
-        asURL.dtsMap.addMapping({
-            generated: { line: asURL.js.length + 1, column: currentLine.length },
-            original: voidMapping,
-            source: importPath,
+            let currentLine = `/** ${createImage(importPath)} */ export const `
+            asURL.dtsMap.addMapping({
+                generated: { line: asURL.js.length + 1, column: currentLine.length },
+                original: voidMapping,
+                source: importPath,
+            })
+            currentLine += `${identifier}_url: string`
+            asURL.dts.push(currentLine)
+
+            const isDynamicColor = sourceMap.has(path)
+            const source = isDynamicColor ? sourceMap.get(path)! : null
+            variants[base].push({
+                args: [currentVariant, url, source, isDynamicColor],
+                assetPath: importPath,
+            })
         })
-        currentLine += `${identifier}_url: string`
-        asURL.dts.push(currentLine)
-
-        const isDynamicColor = sourceMap.has(path)
-        const source = isDynamicColor ? sourceMap.get(path)! : null
-        variants[base].push({
-            args: [currentVariant, url, source, isDynamicColor],
-            assetPath: importPath,
-        })
-    })
 
     for (const [icon, variant] of Object.entries(variants)) {
         const Ident = upperFirst(icon.replace(/\.(\w)/, (_, c: string) => c.toUpperCase()))
