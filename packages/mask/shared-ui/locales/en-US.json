@@ -753,6 +753,7 @@
     "plugin_snapshot_vote_choice": "Option(s)",
     "plugin_snapshot_vote_power": "Your voting power",
     "plugin_snapshot_vote_title": "Cast your vote",
+    "plugin_snapshot_my_vote": "My vote",
     "plugin_snapshot_space_info_followers_count": "{{followersCount}} members",
     "plugin_snapshot_proposal_not_start": "starts in {{date}}",
     "plugin_snapshot_proposal_started": "ends in {{date}} ",

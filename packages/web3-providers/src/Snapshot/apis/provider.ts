@@ -80,4 +80,27 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
 
         return space
     }
+
+    async getCurrentAccountVote(proposalId: string, account: string) {
+        const queryCurrentAccountVote = `
+            query {
+                votes (
+                first: 1000
+                skip: 0
+                where: {
+                    proposal: "${proposalId}",
+                    voter:"${account}"
+                }
+                orderBy: "created",
+                orderDirection: desc
+                ) {
+                choice
+                }
+            }
+        `
+
+        const { votes } = await fetchFromGraphql<{ votes: Array<{ choice: number }> }>(queryCurrentAccountVote)
+
+        return votes[0]
+    }
 }

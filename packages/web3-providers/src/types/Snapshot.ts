@@ -34,5 +34,6 @@ export namespace SnapshotBaseAPI {
     export interface Provider {
         getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]>
         getSpace(spaceId: string): Promise<SnapshotSpace>
+        getCurrentAccountVote(proposalId: string, account: string): Promise<{ choice: number } | undefined>
     }
 }

@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { useIntersectionObserver } from '@react-hookz/web'
+import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -108,6 +109,21 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             display: 'flex',
             alignItems: 'center',
         },
+        myVote: {
+            height: 18,
+            width: 46,
+            borderRadius: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: theme.palette.maskColor.main,
+            marginLeft: 12,
+        },
+        myVoteText: {
+            fontSize: 10,
+            fontWeight: 700,
+            color: theme.palette.maskColor.bottom,
+        },
     }
 })
 
@@ -140,7 +156,7 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
     const [isViewed, setIsViewed] = useState(false)
 
     useEffect(() => {
-        if (entry?.isIntersecting) setIsViewed(true)
+        if (entry?.isIntersecting && entry?.intersectionRatio > 0) setIsViewed(true)
     }, [entry?.isIntersecting])
 
     return (
@@ -203,6 +219,9 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes, cx } = useStyles({ state: proposal.state })
     const theme = useTheme()
+    const { t } = useI18N()
+    const { value: currentAccountVote } = useCurrentAccountVote(proposal.id)
+
     return (
         <List className={classes.voteList}>
             {proposal.choices.map((x, i) => (
@@ -222,6 +241,11 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                                 ' ' +
                                 proposal.strategyName}
                         </Typography>
+                        {currentAccountVote?.choice === i + 1 ? (
+                            <div className={classes.myVote}>
+                                <Typography className={classes.myVoteText}>{t('plugin_snapshot_my_vote')}</Typography>
+                            </div>
+                        ) : null}
                     </div>
 
                     <Typography className={classes.percentage}>
