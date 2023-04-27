@@ -37,13 +37,12 @@ function ProfileCardHolder() {
     const [twitterId, setTwitterId] = useState('')
     const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
     const [openFromTrendingCard, setOpenFromTrendingCard] = useState(false)
-    const { active, setActive, style } = useControlProfileCard(holderRef, setOpenFromTrendingCard)
+    const { active, style } = useControlProfileCard(holderRef)
     const [address, setAddress] = useState('')
 
     useEffect(() => {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) {
-                setActive(false)
                 setOpenFromTrendingCard(false)
                 return
             }
