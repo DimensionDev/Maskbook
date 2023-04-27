@@ -1,12 +1,13 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
-import { setupContext } from './context.js'
+import { context, setupContext } from './context.js'
 import { PLUGIN_ID } from '../constants.js'
 import { Trans } from 'react-i18next'
 import { PluginID } from '@masknet/shared-base'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimDialog } from './components/ClaimDialog/index.js'
+import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -14,7 +15,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     GlobalInjection: function Component() {
-        return <ClaimDialog />
+        return (
+            <SNSAdaptorContext.Provider value={context}>
+                <ClaimDialog />
+            </SNSAdaptorContext.Provider>
+        )
     },
     ApplicationEntries: [
         {

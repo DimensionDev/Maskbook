@@ -1,10 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
 import { AirDropActivityItem } from './AirDropActivityItem.js'
+import { useClaimers } from '../../../hooks/useClaimers.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -34,6 +36,15 @@ export const AirDropActivities = memo(() => {
     const t = useI18N()
     const { classes } = useStyles()
     const { account, chainId } = useChainContext()
+
+    const { value: claimers, loading } = useClaimers(ChainId.Arbitrum)
+
+    if (loading)
+        return (
+            <Box className={classes.placeholder}>
+                <LoadingBase size={24} />
+            </Box>
+        )
 
     if (account) {
         return (

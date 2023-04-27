@@ -1,0 +1,27 @@
+{
+    "CLAIMERS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "https://raw.githubusercontent.com/DimensionDev/Mask-Arbitrum-Claimer/master/claimer.json",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Astar": ""
+    }
+}
