@@ -12,6 +12,8 @@ on:
       - 'develop'
       - 'release/*'
       - 'hotfix/*'
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: read

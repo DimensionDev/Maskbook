@@ -6,6 +6,8 @@ on:
     branches: [master, develop, released, hotfix/*, release/*]
   pull_request:
     branches: [master, develop, released, hotfix/*, release/*]
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: write
