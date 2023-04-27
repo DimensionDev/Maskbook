@@ -4,7 +4,8 @@ import { EMPTY_LIST } from '../index.js'
 function tick(callback: () => void) {
     Promise.resolve().then(callback)
 }
-export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {    readonly ALL_EVENTS: typeof ALL_EVENTS = ALL_EVENTS
+export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {
+    readonly ALL_EVENTS: typeof ALL_EVENTS = ALL_EVENTS
 
     declare __brand: 'Map'
 
@@ -20,7 +21,8 @@ export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {    r
         return _
     }
 }
-export class ObservableMap<K, V> extends Map<K, V> {    readonly ALL_EVENTS: typeof ALL_EVENTS = ALL_EVENTS
+export class ObservableMap<K, V> extends Map<K, V> {
+    readonly ALL_EVENTS: typeof ALL_EVENTS = ALL_EVENTS
 
     declare __brand: 'Map'
 
