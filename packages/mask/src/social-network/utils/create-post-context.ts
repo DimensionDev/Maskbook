@@ -1,6 +1,5 @@
 import {
     ValueRef,
-    ALL_EVENTS,
     ObservableMap,
     ObservableSet,
     parseURLs,
@@ -165,11 +164,11 @@ export function createRefsForCreatePostContext() {
         rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => postMetadataImages.asValues,
-            subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
+            subscribe: (sub) => postMetadataImages.event.on(postMetadataImages.ALL_EVENTS, sub),
         }),
         postMentionedLinksProvider: debug({
             getCurrentValue: () => postMetadataMentionedLinks.asValues,
-            subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
+            subscribe: (sub) => postMetadataMentionedLinks.event.on(postMetadataMentionedLinks.ALL_EVENTS, sub),
         }),
         coAuthors: createSubscriptionFromValueRef(postCoAuthors),
     }
