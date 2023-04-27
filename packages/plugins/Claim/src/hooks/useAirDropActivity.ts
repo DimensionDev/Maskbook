@@ -21,13 +21,13 @@ export function useAirDropActivity(chainId: ChainId) {
         const airdropList = claimerList.map(([address, amount]) => {
             return utils.keccak256(utils.solidityPack(['address', 'uint256'], [address, utils.parseEther(amount)]))
         })
-        const merkletree = new MerkleTree(airdropList, utils.keccak256)
+        const merkleTree = new MerkleTree(airdropList, utils.keccak256)
         const amount = claimer ? last(claimer) : undefined
         const leaf = amount
             ? utils.keccak256(utils.solidityPack(['address', 'uint256'], [account, utils.parseEther(amount)]))
             : undefined
 
-        const merkleProof = leaf ? merkletree.getHexProof(leaf) : undefined
+        const merkleProof = leaf ? merkleTree.getHexProof(leaf) : undefined
 
         return {
             ...rest,
