@@ -25,6 +25,7 @@ export interface SnapshotProposal {
 
 export interface SnapshotSpace {
     members: string[]
+    symbol: string
     followersCount: number
 }
 

@@ -26,13 +26,14 @@ export class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
             (x) => !resultsFromSpecificList.map((y) => y.spaceId.toLowerCase()).includes(x.spaceId.toLowerCase()),
         )
 
-        return uniqBy(resultsFromSpecificList.concat(filteredResults), (x) => x.spaceId + x.twitterHandler).map(
-            (x) => ({
-                ...x,
-                type: SearchResultType.DAO,
-                keyword: x.twitterHandler,
-                avatar: `https://cdn.stamp.fyi/space/${x.spaceId}?s=164`,
-            }),
-        )
+        return uniqBy(
+            resultsFromSpecificList.concat(filteredResults).sort((a, b) => b.followersCount - a.followersCount),
+            (x) => x.spaceId + x.twitterHandler,
+        ).map((x) => ({
+            ...x,
+            type: SearchResultType.DAO,
+            keyword: x.twitterHandler,
+            avatar: `https://cdn.stamp.fyi/space/${x.spaceId}?s=164`,
+        }))
     }
 }

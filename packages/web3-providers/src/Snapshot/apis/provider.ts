@@ -76,6 +76,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
             query {
                 space(id: "${spaceId}") {
                     members
+                    symbol
                     followersCount
                 }
             }
