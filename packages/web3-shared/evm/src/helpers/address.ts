@@ -1,7 +1,8 @@
-import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { memoize } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
 import {
     getArbConstants,
     getCryptoPunksConstants,
@@ -27,9 +28,9 @@ export function isValidAddress(address?: string): address is string {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId?: ChainId): chainId is ChainId {
+export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
-}
+})
 
 export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
@@ -40,14 +41,13 @@ export function isNativeTokenAddress(address?: string): address is string {
     return !!(address && nativeTokenSet.has(address))
 }
 
+const {
+    HAPPY_RED_PACKET_ADDRESS_V1,
+    HAPPY_RED_PACKET_ADDRESS_V2,
+    HAPPY_RED_PACKET_ADDRESS_V3,
+    HAPPY_RED_PACKET_ADDRESS_V4,
+} = getRedPacketConstants()
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
-    const {
-        HAPPY_RED_PACKET_ADDRESS_V1,
-        HAPPY_RED_PACKET_ADDRESS_V2,
-        HAPPY_RED_PACKET_ADDRESS_V3,
-        HAPPY_RED_PACKET_ADDRESS_V4,
-    } = getRedPacketConstants()
-
     switch (version) {
         case 1:
             return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address)
@@ -87,13 +87,13 @@ export function getZeroAddress() {
     return ZERO_ADDRESS
 }
 
-export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+export const getNativeTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
     return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ''
-}
+})
 
-export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+export const getMaskTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
-}
+})
 
 const { ENS_CONTRACT_ADDRESS } = getENSConstants()
 export function isENSContractAddress(contract_address: string) {
