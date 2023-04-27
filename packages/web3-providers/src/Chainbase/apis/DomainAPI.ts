@@ -34,7 +34,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
 
         const name = first(response)?.name
         if (!name) return
-        return isValidDomain(name) ? name : `${name}.eth`
+        return isValidDomain(name) ? name : isValidDomain(`${name}.eth`) ? `${name}.eth` : undefined
     }
 
     private addName(chainId: ChainId, name: string, address: string) {

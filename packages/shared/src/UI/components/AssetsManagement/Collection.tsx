@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useEffect, useLayoutEffect, useRef, useState, type FC, type HTMLProps } from 'react'
-import { useSharedI18N } from '../../../locales/i18n_generated.js'
+import { useSharedI18N } from '../../../index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
@@ -74,12 +74,11 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
 
 export interface CollectionProps
     extends HTMLProps<HTMLDivElement>,
-        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
+        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'onItemClick' | 'verifiedBy'> {
     pluginID: NetworkPluginID
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
     loading: boolean
-    verifiedBy: string[]
     /** set collection expanded */
     expanded?: boolean
     onExpand?(id: string): void
@@ -134,6 +133,7 @@ export const Collection: FC<CollectionProps> = memo(
                     disableAction={disableAction}
                     onActionClick={onActionClick}
                     onItemClick={onItemClick}
+                    verifiedBy={verifiedBy}
                 />
             ))
             return <>{renderAssets}</>

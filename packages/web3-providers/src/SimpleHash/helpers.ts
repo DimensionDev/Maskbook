@@ -68,7 +68,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             : undefined,
         metadata: {
             chainId,
-            name,
+            name: asset.name,
             tokenId: asset.token_id,
             symbol: asset.contract.symbol,
             description: asset.description,
