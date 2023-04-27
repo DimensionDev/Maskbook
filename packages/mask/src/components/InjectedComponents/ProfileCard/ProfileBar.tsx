@@ -1,7 +1,7 @@
 import { type HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
-import { CrossIsolationMessages, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Box, Link, Typography, ThemeProvider } from '@mui/material'
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
@@ -113,7 +113,7 @@ export const ProfileBar = memo<ProfileBarProps>(
         const containerRef = useRef<HTMLDivElement>(null)
         const { current: avatarClipPathId } = useRef<string>(uuid())
 
-        const { value: collectionList = [] } = useCollectionByTwitterHandler(identity.identifier?.userId)
+        const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -223,3 +223,5 @@ export const ProfileBar = memo<ProfileBarProps>(
         )
     },
 )
+
+ProfileBar.displayName = 'ProfileBar'

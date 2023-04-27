@@ -9,10 +9,7 @@ interface Result {
 }
 
 const LEAVE_DURATION = 500
-export function useControlProfileCard(
-    holderRef: RefObject<HTMLDivElement>,
-    setOpenFromTrendingCard: (x: boolean) => void,
-): Result {
+export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
 
@@ -21,8 +18,10 @@ export function useControlProfileCard(
 
     const hideProfileCard = useCallback(() => {
         if (hoverRef.current) return
-        setActive(false)
-        setOpenFromTrendingCard(false)
+        clearTimeout(closeTimerRef.current)
+        closeTimerRef.current = setTimeout(() => {
+            setActive(false)
+        }, LEAVE_DURATION)
     }, [])
 
     const showProfileCard = useCallback((patchStyle: CSSProperties) => {
@@ -43,8 +42,7 @@ export function useControlProfileCard(
         }
         const leave = () => {
             hoverRef.current = false
-            clearTimeout(closeTimerRef.current)
-            closeTimerRef.current = setTimeout(hideProfileCard, LEAVE_DURATION)
+            hideProfileCard()
         }
         holder.addEventListener('mouseenter', enter)
         holder.addEventListener('mouseleave', leave)
