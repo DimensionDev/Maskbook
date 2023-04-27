@@ -53,7 +53,10 @@ export function ProfileView(props: ProfileViewProps) {
 
     const currentSpace = spaceList[spaceIndex]
 
-    const { value: proposalList, loading: loadingProposalList } = useProposalList(currentSpace.spaceId)
+    const { value: proposalList, loading: loadingProposalList } = useProposalList(
+        currentSpace.spaceId,
+        currentSpace.strategyName,
+    )
     const { value: space, loading: loadingSpaceMemberList } = useSpace(currentSpace.spaceId)
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
