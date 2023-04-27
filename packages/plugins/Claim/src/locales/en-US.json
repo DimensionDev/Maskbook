@@ -3,12 +3,20 @@
     "airdrop": "AirDrop",
     "ito": "ITO",
     "claim": "Claim",
+    "claimable": "Claimable",
     "connect_wallet_tips": "Please connect wallet to view ITO activities.",
+    "eligible_to_claim": "Eligible to claim",
+    "expired": "Expired",
     "no_activities_tips": "No activities found.",
     "unclaimed_token_title": "{{symbol}} Unclaimed:",
     "locked_token_title": "{{symbol}} Locked:",
     "unlock_time": "Unlock Time: {{time}}",
     "airdrop_title": "Mask Network ${{symbol}} Airdrop",
-    "airdrop_in_progress_time_tips": "Claiming will be live until: {{date}}",
-    "no_account_tips": "Please connect wallet to check if you are eligible to claim ${{symbol}}."
+    "airdrop_in_progress_time_tips": "Claiming will be live until:  {{days}} d  {{hours}} h  {{minutes}} m",
+    "no_account_tips": "Please connect wallet to check if you are eligible to claim ${{symbol}}.",
+    "start_time_tips": "Start Time: {{time}}",
+    "end_time_tips": "Ended on {{time}}",
+    "no_eligible_tips": "Sorry, you are not eligible to claim $ARB in this campaign.",
+    "claimed_tips": "You’ve already claimed $ARB.",
+    "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 }

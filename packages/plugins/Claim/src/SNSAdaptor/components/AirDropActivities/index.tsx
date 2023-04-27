@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
 import { AirDropActivityItem } from './AirDropActivityItem.js'
-import { useClaimers } from '../../../hooks/useClaimers.js'
+import { useAirDropActivity } from '../../../hooks/useAirDropActivity.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,7 +37,7 @@ export const AirDropActivities = memo(() => {
     const { classes } = useStyles()
     const { account, chainId } = useChainContext()
 
-    const { value: claimers, loading } = useClaimers(ChainId.Arbitrum)
+    const { value: activity, loading, error } = useAirDropActivity(ChainId.Arbitrum)
 
     if (loading)
         return (
@@ -46,10 +46,10 @@ export const AirDropActivities = memo(() => {
             </Box>
         )
 
-    if (account) {
+    if (activity) {
         return (
             <Box className={classes.container}>
-                <AirDropActivityItem />
+                <AirDropActivityItem {...activity} />
             </Box>
         )
     }

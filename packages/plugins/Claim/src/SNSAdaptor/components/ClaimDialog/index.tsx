@@ -1,6 +1,6 @@
 import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { memo } from 'react'
 import { PluginClaimMessage } from '../../../message.js'
@@ -11,21 +11,15 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { ITOActivities } from '../ITOActivities/index.js'
 import { AirDropActivities } from '../AirDropActivities/index.js'
 
-// const useStyles = makeStyles()((theme) => ({
-//     actions: {
-//         padding: 0,
-//     },
-//     content: {
-//         padding: 0,
-//     },
-//     panel: {
-//         padding: 0,
-//     },
-// }))
+const useStyles = makeStyles()((theme) => ({
+    actions: {
+        padding: 0,
+    },
+}))
 
 export const ClaimDialog = memo(() => {
     const t = useI18N()
-    // const { classes } = useStyles()
+    const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('AirDrop', 'ITO')
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginClaimMessage.claimDialogEvent)
@@ -50,7 +44,7 @@ export const ClaimDialog = memo(() => {
                         <ITOActivities />
                     </TabPanel>
                 </DialogContent>
-                <DialogActions sx={{ padding: 0 }}>
+                <DialogActions className={classes.actions}>
                     <PluginWalletStatusBar
                         requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}
                         requiredSupportChainIds={[ChainId.Arbitrum]}

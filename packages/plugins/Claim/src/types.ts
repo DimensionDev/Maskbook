@@ -24,3 +24,9 @@ export interface Availability {
     end_time?: string
     qualification_addr?: string
 }
+
+export enum ActivityStatus {
+    NOT_START = 'NOT_START',
+    IN_PROGRESS = 'IN_PROGRESS',
+    ENDED = 'ENDED',
+}
