@@ -127,8 +127,8 @@ export const CollectibleItem = memo(
             if (isLensFollower(asset.collection.name)) return asset.collection.name
             if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
-            return asset.tokenId ? `#${asset.tokenId}` : ''
-        }, [asset.collection])
+            return asset.metadata?.name || (asset.tokenId ? `#${asset.tokenId}` : '')
+        }, [asset])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
         const [identityOverflow, identityRef] = useDetectOverflow()
