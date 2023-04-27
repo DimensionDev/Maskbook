@@ -28,9 +28,9 @@ export function isValidAddress(address?: string): address is string {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId?: ChainId): chainId is ChainId {
+export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
-}
+})
 
 export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
@@ -41,14 +41,13 @@ export function isNativeTokenAddress(address?: string): address is string {
     return !!(address && nativeTokenSet.has(address))
 }
 
+const {
+    HAPPY_RED_PACKET_ADDRESS_V1,
+    HAPPY_RED_PACKET_ADDRESS_V2,
+    HAPPY_RED_PACKET_ADDRESS_V3,
+    HAPPY_RED_PACKET_ADDRESS_V4,
+} = getRedPacketConstants()
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
-    const {
-        HAPPY_RED_PACKET_ADDRESS_V1,
-        HAPPY_RED_PACKET_ADDRESS_V2,
-        HAPPY_RED_PACKET_ADDRESS_V3,
-        HAPPY_RED_PACKET_ADDRESS_V4,
-    } = getRedPacketConstants()
-
     switch (version) {
         case 1:
             return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address)
