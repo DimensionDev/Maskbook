@@ -3,7 +3,7 @@ import { SNAPSHOT_PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: SNAPSHOT_PLUGIN_ID,
-    name: { fallback: 'Snapshot' },
+    name: { fallback: 'DAO' },
     description: {
         fallback: 'A plugin for https://snapshot.org/',
     },
