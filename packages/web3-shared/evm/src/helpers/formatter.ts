@@ -46,7 +46,7 @@ export function formatDomainName(domain: string, size = 18, invalidIgnore?: bool
     if (domain.length <= size) return domain
 
     if (isEnsSubdomain(domain)) {
-        return domain.replace(/^\[(.*?)]\.(.*)$/, (_, hash, mainName): string => {
+        return domain.replace(/^\[([^\]]+?)]\.(.*)$/, (_, hash, mainName): string => {
             return `[${hash.slice(0, 4)}...${hash.slice(-4)}].${formatDomainName(mainName, size, invalidIgnore)}`
         })
     }

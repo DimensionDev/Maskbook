@@ -19,9 +19,9 @@ describe('EVM formatter utilities', () => {
             resultOfCustomSize: 'looooooooo...ng.eth',
         },
         {
-            domain: '[9db67de1a578d6d3cfd09fbe15c526cc206d723f4f02b4dad5fdb852fa42b747].maskxx.eth.eth',
-            result: '[9db6...b747].maskxx.eth.eth',
-            resultOfCustomSize: '[9db6...b747].maskxx.eth.eth',
+            domain: '[9db67de1a578d6d3cfd09fbe15c526cc206d723f4f02b4dad5fdb852fa42b747].maskxx.eth',
+            result: '[9db6...b747].maskxx.eth',
+            resultOfCustomSize: '[9db6...b747].maskxx.eth',
         },
         /* cspell:enable */
     ])('formatDomainName', ({ domain, result, resultOfCustomSize }) => {
