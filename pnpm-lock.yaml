@@ -777,6 +777,9 @@ importers:
       '@masknet/plugin-avatar':
         specifier: workspace:^
         version: link:../plugins/Avatar
+      '@masknet/plugin-claim':
+        specifier: workspace:^
+        version: link:../plugins/Claim
       '@masknet/plugin-collectible':
         specifier: workspace:^
         version: link:../plugins/Collectible
@@ -1433,6 +1436,72 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
+
+  packages/plugins/Claim:
+    dependencies:
+      '@ethersproject/abi':
+        specifier: ^5.4.0
+        version: 5.4.0
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-contracts':
+        specifier: workspace:^
+        version: link:../../web3-contracts
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:^
+        version: link:../../web3-hooks/evm
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../../web3-shared/evm
+      bignumber.js:
+        specifier: 9.1.1
+        version: 9.1.1
+      date-fns:
+        specifier: 2.29.3
+        version: 2.29.3
+      ethers:
+        specifier: ^5.6.8
+        version: 5.7.2
+      merkletreejs:
+        specifier: ^0.3.10
+        version: 0.3.10
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+      urlcat:
+        specifier: ^3.1.0
+        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-21021fb0f-20230412)
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
 
   packages/plugins/Collectible:
     dependencies:
@@ -3803,7 +3872,7 @@ packages:
     resolution: {integrity: sha512-o89kQ2fWSRgqEFTIGEqLNT111yBD7JKM1tYBxIqPH39WTMBim7ueSjcd6/cCSr2+9nZKK0gCu/JoPUJ726DxOg==}
     deprecated: This package has been renamed to @3id/did-provider
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@ceramicnetwork/3id-did-resolver': 1.4.16
       '@ceramicnetwork/http-client': 1.5.7
       '@ceramicnetwork/stream-tile': 1.5.7
@@ -5924,7 +5993,7 @@ packages:
   /@changesets/apply-release-plan@6.1.3:
     resolution: {integrity: sha512-ECDNeoc3nfeAe1jqJb5aFQX7CqzQhD2klXRez2JDb/aVpGUbX673HgKrnrgJRuQR/9f2TtLoYIzrGB9qwD77mg==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/config': 2.3.0
       '@changesets/get-version-range-type': 0.3.2
       '@changesets/git': 2.0.0
@@ -5942,7 +6011,7 @@ packages:
   /@changesets/assemble-release-plan@5.2.3:
     resolution: {integrity: sha512-g7EVZCmnWz3zMBAdrcKhid4hkHT+Ft1n0mLussFMcB1dE2zCuwcvGoy9ec3yOgPGF4hoMtgHaMIk3T3TBdvU9g==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/errors': 0.1.4
       '@changesets/get-dependents-graph': 1.3.5
       '@changesets/types': 5.2.1
@@ -6026,7 +6095,7 @@ packages:
   /@changesets/get-release-plan@3.0.16:
     resolution: {integrity: sha512-OpP9QILpBp1bY2YNIKFzwigKh7Qe9KizRsZomzLe6pK8IUo8onkAAVUD8+JRKSr8R7d4+JRuQrfSSNlEwKyPYg==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/assemble-release-plan': 5.2.3
       '@changesets/config': 2.3.0
       '@changesets/pre': 1.0.14
@@ -6042,7 +6111,7 @@ packages:
   /@changesets/git@2.0.0:
     resolution: {integrity: sha512-enUVEWbiqUTxqSnmesyJGWfzd51PY4H7mH9yUw0hPVpZBJ6tQZFMU3F3mT/t9OJ/GjyiM4770i+sehAn6ymx6A==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/errors': 0.1.4
       '@changesets/types': 5.2.1
       '@manypkg/get-packages': 1.1.3
@@ -6067,7 +6136,7 @@ packages:
   /@changesets/pre@1.0.14:
     resolution: {integrity: sha512-dTsHmxQWEQekHYHbg+M1mDVYFvegDh9j/kySNuDKdylwfMEevTeDouR7IfHNyVodxZXu17sXoJuf2D0vi55FHQ==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/errors': 0.1.4
       '@changesets/types': 5.2.1
       '@manypkg/get-packages': 1.1.3
@@ -6077,7 +6146,7 @@ packages:
   /@changesets/read@0.5.9:
     resolution: {integrity: sha512-T8BJ6JS6j1gfO1HFq50kU3qawYxa4NTbI/ASNVVCBTsKquy2HYwM9r7ZnzkiMe8IEObAJtUVGSrePCOxAK2haQ==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/git': 2.0.0
       '@changesets/logger': 0.0.5
       '@changesets/parse': 0.3.16
@@ -6098,7 +6167,7 @@ packages:
   /@changesets/write@0.2.3:
     resolution: {integrity: sha512-Dbamr7AIMvslKnNYsLFafaVORx4H0pvCA2MHqgtNCySMe1blImEyAEOzDmcgKAkgz4+uwoLz7demIrX+JBr/Xw==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/types': 5.2.1
       fs-extra: 7.0.1
       human-id: 1.0.2
@@ -8319,7 +8388,7 @@ packages:
   /@manypkg/get-packages@1.1.3:
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       '@changesets/types': 4.1.0
       '@manypkg/find-root': 1.1.0
       fs-extra: 8.1.0
@@ -14984,6 +15053,10 @@ packages:
     engines: {node: '>=4.5'}
     dev: false
 
+  /buffer-reverse@1.0.1:
+    resolution: {integrity: sha512-M87YIUBsZ6N924W57vDwT/aOu8hw7ZgdByz6ijksLjmHJELBASmYTTlNHRgjE+pTsT9oJXGaDSgqqwfdHotDUg==}
+    dev: false
+
   /buffer-to-arraybuffer@0.0.5:
     resolution: {integrity: sha512-3dthu5CYiVB1DEJp61FtApNnNndTckcqe4pFcLdvHtrpG+kcyekCJKg4MRiDcFW7A6AODnXB9U4dwQiCW5kzJQ==}
     dev: false
@@ -16354,6 +16427,10 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /crypto-js@3.3.0:
+    resolution: {integrity: sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==}
+    dev: false
+
   /crypto-js@4.1.1:
     resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
     dev: false
@@ -17520,7 +17597,7 @@ packages:
   /dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
     dependencies:
-      '@babel/runtime': 7.20.13
+      '@babel/runtime': 7.21.0
       csstype: 3.1.1
     dev: false
 
@@ -23828,6 +23905,17 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
+  /merkletreejs@0.3.10:
+    resolution: {integrity: sha512-lin42tKfRdkW+6iE5pjtQ9BnH+1Hk3sJ5Fn9hUUSjcXRcJbSISHgPCfYvMNEXiNqZPhz/TyRPEV30qgnujsQ7A==}
+    engines: {node: '>= 7.6.0'}
+    dependencies:
+      bignumber.js: 9.1.1
+      buffer-reverse: 1.0.1
+      crypto-js: 3.3.0
+      treeify: 1.1.0
+      web3-utils: 1.8.0
+    dev: false
+
   /methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
@@ -29699,7 +29787,7 @@ packages:
       schema-utils: 3.1.2
       serialize-javascript: 5.0.1
       source-map: 0.6.1
-      terser: 5.17.0
+      terser: 5.16.6
       webpack: 4.46.0
       webpack-sources: 1.4.3
     transitivePeerDependencies:
@@ -29727,7 +29815,7 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.1.2
       serialize-javascript: 6.0.1
-      terser: 5.17.0
+      terser: 5.16.6
       webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
@@ -29752,7 +29840,7 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.1.2
       serialize-javascript: 6.0.1
-      terser: 5.17.0
+      terser: 5.16.6
       webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
@@ -29769,6 +29857,17 @@ packages:
 
   /terser@5.15.1:
     resolution: {integrity: sha512-K1faMUvpm/FBxjBXud0LWVAGxmvoPbZbfTCYbSgaaYQaIXI3/TdI7a7ZGA73Zrou6Q8Zmz3oeUTsp/dj+ag2Xw==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      '@jridgewell/source-map': 0.3.2
+      acorn: 8.8.2
+      commander: 2.20.3
+      source-map-support: 0.5.21
+    dev: true
+
+  /terser@5.16.6:
+    resolution: {integrity: sha512-IBZ+ZQIA9sMaXmRZCUMDjNH0D5AQQfdn4WUjHL0+1lF4TP1IHRJbrhb6fNaXWikrYQTSkb7SLxkeXAiy1p7mbg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -30064,6 +30163,11 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       punycode: 2.3.0
+    dev: false
+
+  /treeify@1.1.0:
+    resolution: {integrity: sha512-1m4RA7xVAJrSGrrXGs0L3YTwyvBs2S8PbRHaLZAkFw7JR8oIFwYtysxlBZhYIa7xSyiYJKZ3iGrrk55cGA3i9A==}
+    engines: {node: '>=0.6'}
     dev: false
 
   /trim-lines@3.0.1:
@@ -32887,6 +32991,7 @@ time:
   /lint-staged@13.2.1: '2023-04-07T12:41:19.271Z'
   /lodash-es@4.17.21: '2021-02-20T15:43:35.756Z'
   /lru-cache@9.1.0: '2023-04-18T06:24:06.133Z'
+  /merkletreejs@0.3.10: '2023-04-24T07:24:06.338Z'
   /millify@6.1.0: '2023-03-12T05:25:33.920Z'
   /mock-socket@9.2.1: '2023-02-14T12:46:15.982Z'
   /msw@1.2.1: '2023-03-24T14:26:16.989Z'

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { set } from 'lodash-es'
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
@@ -14,7 +13,6 @@ import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry, SOCIAL_MEDIA_NAME } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { ClaimAllDialog } from './ClaimAllDialog.js'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -105,38 +103,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 category: 'dapp',
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/d84c60903f974f4880d2085a13906d55',
-            }
-        })(),
-        (() => {
-            const icon = <Icons.MarketsClaim size={36} />
-            const name = <Trans i18nKey="plugin_ito_claim" />
-            const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
-            return {
-                ApplicationEntryID: `${base.ID}_claim`,
-                RenderEntryComponent(EntryComponentProps) {
-                    const [open, setOpen] = useState(false)
-                    const clickHandler = () => setOpen(true)
-                    return (
-                        <>
-                            <ApplicationEntry
-                                title={name}
-                                iconFilterColor={iconFilterColor}
-                                icon={icon}
-                                {...EntryComponentProps}
-                                onClick={
-                                    EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
-                                        : clickHandler
-                                }
-                            />
-                            {open ? <ClaimAllDialog open={open} onClose={() => setOpen(false)} /> : null}
-                        </>
-                    )
-                },
-                appBoardSortingDefaultPriority: 15,
-                icon,
-                name,
-                iconFilterColor,
             }
         })(),
     ],

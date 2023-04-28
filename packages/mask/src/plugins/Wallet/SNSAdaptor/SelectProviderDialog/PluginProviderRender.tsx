@@ -150,12 +150,16 @@ export interface PluginProviderRenderProps {
     ProviderIconClickBait?: React.ComponentType<
         ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
+    requiredSupportPluginID?: NetworkPluginID
+    requiredSupportChainIds?: Web3Helper.ChainIdAll[]
 }
 
 export function PluginProviderRender({
     providers,
     ProviderIconClickBait,
     onProviderIconClicked,
+    requiredSupportChainIds,
+    requiredSupportPluginID,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
@@ -216,6 +220,21 @@ export function PluginProviderRender({
         return t('plugin_wallet_support_chains_tips')
     }, [])
 
+    const getDisabled = useCallback(
+        (provider: Web3Helper.ProviderDescriptorAll) => {
+            if (requiredSupportPluginID) {
+                if (provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
+            }
+
+            if (requiredSupportChainIds) {
+                if (requiredSupportChainIds.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
+                    return true
+            }
+
+            return false
+        },
+        [requiredSupportChainIds, requiredSupportPluginID],
+    )
     return (
         <>
             <Box className={classes.root}>
@@ -238,6 +257,7 @@ export function PluginProviderRender({
                                     key={provider.ID}>
                                     <ListItem
                                         className={classes.walletItem}
+                                        disabled={getDisabled(provider)}
                                         onClick={() => {
                                             handleClick(provider)
                                         }}>
