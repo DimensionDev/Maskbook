@@ -2,7 +2,7 @@ import { useContext, useRef, useEffect, useState, useMemo, unstable_useCacheRefr
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
-import { millify } from 'millify'
+
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { useVotes } from './hooks/useVotes.js'
@@ -12,6 +12,7 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { LoadingCard } from './LoadingCard.js'
+import { formatCount } from '@masknet/web3-shared-base'
 
 const choiceMaxWidth = 240
 
@@ -146,10 +147,11 @@ function Content() {
                                           <Typography className={classes.ellipsisText}>
                                               {result.powerDetail
                                                   .flatMap((detail, index) => {
-                                                      const name = millify(proposal.scores_by_strategy[i][index], {
-                                                          precision: 2,
-                                                          lowercase: true,
-                                                      })
+                                                      const name = formatCount(
+                                                          proposal.scores_by_strategy[i][index],
+                                                          2,
+                                                          true,
+                                                      )
                                                       return [index === 0 ? '' : '+', name, detail.name]
                                                   })
                                                   .join(' ')}
@@ -158,7 +160,7 @@ function Content() {
                                       placement="top"
                                       arrow>
                                       <Typography className={classes.power}>
-                                          {millify(proposal.scores[i], { precision: 2, lowercase: true })}
+                                          {formatCount(proposal.scores[i], 2, true)}
                                       </Typography>
                                   </ShadowRootTooltip>
                                   <Typography className={classes.ratio}>

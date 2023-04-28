@@ -1,10 +1,9 @@
 import { List, ListItem, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { millify } from 'millify'
 import type { SnapshotProposal } from '@masknet/web3-providers/types'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
-import { formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
+import { formatCount, formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
 import { startCase } from 'lodash-es'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
@@ -254,9 +253,7 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         <Typography className={classes.voteName}>{x}</Typography>
                         <Typography className={classes.strategyName}>
                             {(proposal.choicesWithScore[i].score
-                                ? millify(proposal.choicesWithScore[i].score, {
-                                      precision: 1,
-                                  })
+                                ? formatCount(proposal.choicesWithScore[i].score, 1)
                                 : '0') +
                                 ' ' +
                                 proposal.strategyName}
