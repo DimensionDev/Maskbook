@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResultType, SourceType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID, type SocialIdentity } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -73,10 +73,11 @@ function TrendingViewWrapper({
 }: TrendingViewWrapperProps) {
     const { value: resultList, loading: loadingResultList } = useAsyncRetry(async () => {
         if (!name || !type) return EMPTY_LIST
-        return DSearch.search<Web3Helper.TokenResultAll>(
+        const results = await DSearch.search<Web3Helper.TokenResultAll>(
             isCollectionProjectPopper ? name : `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`,
             isCollectionProjectPopper ? SearchResultType.CollectionListByTwitterHandler : undefined,
         )
+        return results.sort((a) => (a.source === SourceType.CoinMarketCap ? 1 : 0))
     }, [name, type, isCollectionProjectPopper])
 
     if (!resultList?.length || loadingResultList) return null

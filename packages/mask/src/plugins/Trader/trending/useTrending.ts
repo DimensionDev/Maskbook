@@ -86,9 +86,8 @@ export function useTrendingById(
         loading,
         error,
     } = useAsync(async () => {
-        if (!currency) return null
-        if (!result.source) return null
-        return PluginTraderRPC.getCoinTrending(result, currency).catch(() => null)
+        if (!currency || !result.source) return null
+        return PluginTraderRPC.getCoinTrending(result, currency)
     }, [chainId, JSON.stringify(result), currency?.id])
 
     const { value: detailedToken } = useFungibleToken(result.pluginID, trending?.coin.contract_address, undefined, {
@@ -115,15 +114,15 @@ export function useTrendingById(
                 ? {
                       ...trending,
                       coin: {
-                          ...trending?.coin,
-                          id: trending?.coin.id ?? '',
-                          name: trending?.coin.name ?? '',
-                          symbol: trending?.coin.symbol ?? '',
-                          type: trending?.coin.type ?? TokenType.Fungible,
-                          decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
+                          ...trending.coin,
+                          id: trending.coin.id ?? '',
+                          name: trending.coin.name ?? '',
+                          symbol: trending.coin.symbol ?? '',
+                          type: trending.coin.type ?? TokenType.Fungible,
+                          decimals: trending.coin.decimals || detailedToken?.decimals || 0,
                           contract_address:
-                              trending?.coin.contract_address ?? trending?.contracts?.[0]?.address ?? address,
-                          chainId: trending?.coin.chainId ?? trending?.contracts?.[0]?.chainId ?? chainId,
+                              trending.coin.contract_address ?? trending.contracts?.[0]?.address ?? address,
+                          chainId: trending.coin.chainId ?? trending.contracts?.[0]?.chainId ?? chainId,
                       },
                   }
                 : null,
