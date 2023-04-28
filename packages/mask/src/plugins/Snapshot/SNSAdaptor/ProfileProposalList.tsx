@@ -17,6 +17,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
         root: {
             maxHeight: 1018,
+            paddingTop: 0,
             overflow: 'scroll',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -27,7 +28,11 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            marginTop: 14,
+            paddingTop: 16,
+            paddingBottom: 0,
+            '&:hover': {
+                background: theme.palette.maskColor.bg,
+            },
         },
         authorInfo: { display: 'flex', alignItems: 'center' },
         author: { fontSize: 16, fontWeight: 700 },
@@ -104,8 +109,13 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
         voteIcon: {
             marginRight: 12,
         },
-        strategyName: { fontSize: 14 },
-        percentage: {},
+        strategyName: {
+            fontSize: 14,
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        percentage: {
+            fontWeight: 700,
+        },
         voteInfo: {
             display: 'flex',
             alignItems: 'center',
@@ -188,7 +198,9 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
                 </Typography>
             </div>
             <div className={classes.state}>
-                <Typography fontWeight={700}>{startCase(proposal.state)}</Typography>
+                <Typography fontWeight={700} fontSize={12}>
+                    {startCase(proposal.state)}
+                </Typography>
             </div>
         </section>
     )

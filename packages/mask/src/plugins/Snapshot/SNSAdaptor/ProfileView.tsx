@@ -1,5 +1,13 @@
-import { ActionButton, LoadingBase, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { CardContent, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import {
+    ActionButton,
+    LoadingBase,
+    MaskDarkTheme,
+    MaskLightTheme,
+    MaskTabList,
+    makeStyles,
+    useTabs,
+} from '@masknet/theme'
+import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
@@ -66,6 +74,7 @@ export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
+    const theme = useTheme()
     const [currentTab, , , setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
         ContentTabs.Active,
@@ -134,6 +143,7 @@ export function ProfileView(props: ProfileViewProps) {
                 <ThemeProvider theme={MaskLightTheme}>
                     <PluginDescriptor />
                     <ProfileSpaceHeader
+                        theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}
                         spaceList={spaceList}
                         currentSpace={{
                             ...currentSpace,
