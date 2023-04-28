@@ -732,7 +732,7 @@
     "plugin_snapshot_info_ipfs": "IPFS",
     "plugin_snapshot_info_start": "开始日期",
     "plugin_snapshot_info_end": "结束日期",
-    "plugin_snapshot_info_snapshot": "DAO",
+    "plugin_snapshot_info_snapshot": "Snapshot",
     "plugin_snapshot_description": "直接在社交媒体上展示和投票支持提案。",
     "plugin_snapshot_result_title": "结果",
     "plugin_snapshot_votes_title": "投票",

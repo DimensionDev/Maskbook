@@ -35,6 +35,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 148,
         paddingTop: 0,
         paddingBottom: 0,
+        '&:last-child': {
+            paddingBottom: 16,
+        },
     },
     minimalText: {
         color: theme.palette.maskColor.dark,
