@@ -39,4 +39,16 @@ export class AirDropAPI {
             eventIndex: currentEventIndex,
         }
     }
+
+    async getPoolInfo(chainId: ChainId, eventIndex: string) {
+        const web3 = this.Web3.getWeb3(chainId)
+
+        const { CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
+
+        if (!CONTRACT_ADDRESS) return
+
+        const airdropContract = createContract<AirdropV2>(web3, CONTRACT_ADDRESS, AirDropV2ABI as AbiItem[])
+
+        return airdropContract?.methods.claimEvents(eventIndex).call()
+    }
 }
