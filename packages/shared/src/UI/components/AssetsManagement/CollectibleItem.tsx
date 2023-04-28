@@ -163,9 +163,13 @@ export const CollectibleItem = memo(
                     <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (
                             <div className={classes.nameRow}>
-                                <Typography ref={nameRef} className={classes.name} variant="body2">
-                                    {name || <br />}
-                                </Typography>
+                                {name ? (
+                                    <Typography ref={nameRef} className={classes.name} variant="body2">
+                                        {name}
+                                    </Typography>
+                                ) : (
+                                    <br />
+                                )}
                                 {verifiedBy?.length ? (
                                     <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                         <Icons.Verification size={16} />
