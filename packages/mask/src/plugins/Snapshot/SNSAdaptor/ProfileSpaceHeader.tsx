@@ -7,6 +7,7 @@ import { Box, Typography, Avatar, IconButton, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
+import { millify } from 'millify'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
@@ -102,7 +103,7 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                     {currentSpace.followersCount ? (
                         <Typography component="span" className={classes.followersCount}>
                             {t('plugin_snapshot_space_info_followers_count', {
-                                followersCount: currentSpace.followersCount,
+                                followersCount: millify(currentSpace.followersCount, { precision: 1 }),
                             })}
                         </Typography>
                     ) : null}

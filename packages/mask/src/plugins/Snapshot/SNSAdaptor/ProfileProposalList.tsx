@@ -234,9 +234,8 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         <Typography className={classes.strategyName}>
                             {(proposal.choicesWithScore[i].score
                                 ? millify(proposal.choicesWithScore[i].score, {
-                                      precision: 2,
-                                      lowercase: true,
-                                  }).toUpperCase()
+                                      precision: 1,
+                                  })
                                 : '0') +
                                 ' ' +
                                 proposal.strategyName}

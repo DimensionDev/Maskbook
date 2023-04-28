@@ -35,7 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 148,
         paddingTop: 0,
         paddingBottom: 0,
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
     },
     minimalText: {
         color: theme.palette.maskColor.dark,
