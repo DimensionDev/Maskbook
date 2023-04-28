@@ -186,7 +186,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 : null,
             looksrareStats
                 ? {
-                      logo_url: MaskIconURLs.looks_rare_url,
+                      logo_url: MaskIconURLs.looks_rare_url().toString(),
                       trade_url: `https://looksrare.org/collections/${address}`,
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
