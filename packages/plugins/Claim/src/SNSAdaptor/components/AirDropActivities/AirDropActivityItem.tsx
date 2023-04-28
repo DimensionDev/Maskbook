@@ -82,10 +82,23 @@ interface AirDropActivityItemProps {
     isEligible?: boolean
     chainId: ChainId
     merkleProof?: string[]
+    eventIndex: number
+    onClaimSuccess: () => void
 }
 
 export const AirDropActivityItem = memo<AirDropActivityItemProps>(
-    ({ startTime, endTime, token, isClaimed, amount, isEligible, chainId, merkleProof }) => {
+    ({
+        startTime,
+        endTime,
+        token,
+        isClaimed,
+        amount,
+        isEligible,
+        chainId,
+        merkleProof,
+        eventIndex,
+        onClaimSuccess,
+    }) => {
         const t = useI18N()
         const { classes } = useStyles()
         const { account, providerType } = useChainContext()
@@ -120,9 +133,16 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             }
         }, [activityStatus])
 
-        const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, token)
+        const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, token, undefined, { chainId })
 
-        const [{ loading }, handleClaim] = useClaimAirDrop(chainId, merkleProof, amount)
+        const [{ loading }, handleClaim] = useClaimAirDrop(
+            chainId,
+            eventIndex,
+            onClaimSuccess,
+            merkleProof,
+            amount,
+            token,
+        )
 
         return (
             <Box className={classes.container}>

@@ -35,9 +35,9 @@ const useStyles = makeStyles()((theme) => ({
 export const AirDropActivities = memo(() => {
     const t = useI18N()
     const { classes } = useStyles()
-    const { account, chainId } = useChainContext()
+    const { account } = useChainContext()
 
-    const { value: activity, loading, error } = useAirDropActivity(ChainId.Arbitrum)
+    const { value: activity, loading, retry } = useAirDropActivity(ChainId.Arbitrum)
 
     if (loading)
         return (
@@ -49,7 +49,7 @@ export const AirDropActivities = memo(() => {
     if (activity) {
         return (
             <Box className={classes.container}>
-                <AirDropActivityItem {...activity} />
+                <AirDropActivityItem {...activity} onClaimSuccess={retry} />
             </Box>
         )
     }

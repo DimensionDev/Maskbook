@@ -25,7 +25,7 @@ import WalletContract from '@masknet/web3-contracts/abis/Wallet.json'
 import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
 import LensHub from '@masknet/web3-contracts/abis/LensHub.json'
 import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json'
-
+import AirDrop from '@masknet/web3-contracts/abis/AirdropV2.json'
 class ABI {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
     private abis: Map<string, TransactionMethodABI[]> = new Map()
@@ -52,6 +52,7 @@ class ABI {
         this.construct(Create2Factory as AbiItem[]) // Create2Factory
         this.construct(LensHub as AbiItem[])
         this.construct(LensFollowNFT as AbiItem[])
+        this.construct(AirDrop as AbiItem[])
     }
 
     read(signature?: string) {

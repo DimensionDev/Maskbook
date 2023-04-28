@@ -8,6 +8,7 @@ import { PluginID } from '@masknet/shared-base'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimDialog } from './components/ClaimDialog/index.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { ClaimSuccessDialog } from './components/ClaimSuccessDialog.tsx/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -18,6 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <SNSAdaptorContext.Provider value={context}>
                 <ClaimDialog />
+                <ClaimSuccessDialog />
             </SNSAdaptorContext.Provider>
         )
     },

@@ -22,10 +22,11 @@ export class AirDropAPI {
         })
 
         const eventIndex = await airdropContract?.methods.eventIndex().call()
-        // TODO: event Index will be fix
-        const claimEvents = await airdropContract?.methods.claimEvents('0').call()
 
-        const isClaimed = await airdropContract?.methods.isClaimed('0', address).call()
+        const currentEventIndex = Number(eventIndex) - 1
+        const claimEvents = await airdropContract?.methods.claimEvents(currentEventIndex).call()
+
+        const isClaimed = await airdropContract?.methods.isClaimed(currentEventIndex, address).call()
 
         if (!claimEvents) return
 
@@ -35,6 +36,7 @@ export class AirDropAPI {
             endTime: claimEvents?.endTime,
             token: claimEvents?.token,
             isClaimed,
+            eventIndex: currentEventIndex,
         }
     }
 }
