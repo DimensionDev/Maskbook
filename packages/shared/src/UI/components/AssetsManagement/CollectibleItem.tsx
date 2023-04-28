@@ -75,9 +75,6 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
-    hidden: {
-        visibility: 'hidden',
-    },
     action: {
         width: '100%',
         padding: theme.spacing(0, 1),
@@ -163,11 +160,11 @@ export const CollectibleItem = memo(
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
                     />
-                    <div className={cx(classes.info, name ? '' : classes.hidden, classes.ease)}>
+                    <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (
                             <div className={classes.nameRow}>
                                 <Typography ref={nameRef} className={classes.name} variant="body2">
-                                    {name}
+                                    {name || <br />}
                                 </Typography>
                                 {verifiedBy?.length ? (
                                     <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
