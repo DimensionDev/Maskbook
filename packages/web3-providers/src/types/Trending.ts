@@ -194,7 +194,7 @@ export namespace TrendingAPI {
         /** Get coin info by address. */
         getCoinInfoByAddress: (address: string) => Promise<CoinInfo | undefined>
         /** Get coin trending information by id. */
-        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
+        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending | undefined>
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
         /** Get token info by symbol */

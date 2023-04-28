@@ -28,6 +28,7 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 import { ContentTabs } from '../../types/index.js'
+import { FailedTrendingView } from './FailedTrendingView.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -141,7 +142,7 @@ export function TrendingView(props: TrendingViewProps) {
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
     // #region merge trending
-    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
+    const { value: { trending } = {}, loading: loadingTrending, error } = useTrendingById(result, result.address)
     // #endregion
 
     useEffect(() => {
@@ -156,15 +157,15 @@ export function TrendingView(props: TrendingViewProps) {
     const onPriceDaysControlChange = useCallback(
         (days: number) => {
             setDays(days)
-            if (days === TrendingAPI.Days.ONE_DAY)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_24h_in_currency)
-            if (days === TrendingAPI.Days.ONE_MONTH)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_30d_in_currency)
-            if (days === TrendingAPI.Days.ONE_WEEK)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_7d_in_currency)
-            if (days === TrendingAPI.Days.ONE_YEAR)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_1y_in_currency)
-            if (days === TrendingAPI.Days.MAX) setCurrentPriceChange(trending?.market?.atl_change_percentage)
+            const Days = TrendingAPI.Days
+            const map: Partial<Record<TrendingAPI.Days, number | undefined>> = {
+                [Days.ONE_DAY]: trending?.market?.price_change_percentage_24h_in_currency,
+                [Days.ONE_MONTH]: trending?.market?.price_change_percentage_30d_in_currency,
+                [Days.ONE_WEEK]: trending?.market?.price_change_percentage_7d_in_currency,
+                [Days.ONE_YEAR]: trending?.market?.price_change_percentage_1y_in_currency,
+                [Days.MAX]: trending?.market?.atl_change_percentage,
+            }
+            setCurrentPriceChange(map[days as TrendingAPI.Days])
         },
         [JSON.stringify(trending?.market)],
     )
@@ -275,6 +276,17 @@ export function TrendingView(props: TrendingViewProps) {
     } = useNonFungibleAssetsByCollection(collectionId, result.pluginID, {
         chainId: result.chainId,
     })
+
+    if (error) {
+        return (
+            <FailedTrendingView
+                result={result}
+                resultList={resultList}
+                setResult={setResult}
+                classes={{ root: classes.root }}
+            />
+        )
+    }
 
     // #region display loading skeleton
     if (!trending?.currency || loadingTrending)

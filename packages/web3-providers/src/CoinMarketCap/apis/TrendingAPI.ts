@@ -149,13 +149,20 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         throw new Error('To be implemented.')
     }
 
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(
+        chainId: ChainId,
+        id: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending | undefined> {
         const currencyName = currency.name.toUpperCase()
-        const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
+        const [coinInfoRes, { data: quotesInfo }, { data: market }] = await Promise.all([
             getCoinInfo(id),
             getQuotesInfo(id, currencyName),
             getLatestMarketPairs(id, currencyName),
         ])
+
+        if (!coinInfoRes) return
+        const { data: coinInfo, status } = coinInfoRes
 
         const contracts: TrendingAPI.Contract[] = coinInfo.contract_address
             .map((x) => ({
