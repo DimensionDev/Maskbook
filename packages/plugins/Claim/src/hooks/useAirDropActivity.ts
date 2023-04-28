@@ -6,6 +6,7 @@ import { last } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { utils } from 'ethers'
 import { MerkleTree } from 'merkletreejs'
+import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 
 export function useAirDropActivity(chainId: ChainId) {
     const { account } = useChainContext()
@@ -32,8 +33,8 @@ export function useAirDropActivity(chainId: ChainId) {
         return {
             ...rest,
             isEligible: !!claimer,
-            startTime: Number(startTime) * 1000,
-            endTime: Number(endTime) * 1000,
+            startTime: secondsToMilliseconds(Number(startTime)),
+            endTime: secondsToMilliseconds(Number(endTime)),
             amount: claimer ? last(claimer) : undefined,
             chainId,
             merkleProof,

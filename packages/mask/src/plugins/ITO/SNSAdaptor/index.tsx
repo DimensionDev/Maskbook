@@ -105,38 +105,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 tutorialLink: 'https://realmasknetwork.notion.site/d84c60903f974f4880d2085a13906d55',
             }
         })(),
-        // (() => {
-        //     const icon = <Icons.MarketsClaim size={36} />
-        //     const name = <Trans i18nKey="plugin_ito_claim" />
-        //     const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
-        //     return {
-        //         ApplicationEntryID: `${base.ID}_claim`,
-        //         RenderEntryComponent(EntryComponentProps) {
-        //             const [open, setOpen] = useState(false)
-        //             const clickHandler = () => setOpen(true)
-        //             return (
-        //                 <>
-        //                     <ApplicationEntry
-        //                         title={name}
-        //                         iconFilterColor={iconFilterColor}
-        //                         icon={icon}
-        //                         {...EntryComponentProps}
-        //                         onClick={
-        //                             EntryComponentProps.onClick
-        //                                 ? () => EntryComponentProps.onClick?.(clickHandler)
-        //                                 : clickHandler
-        //                         }
-        //                     />
-        //                     {open ? <ClaimAllDialog open={open} onClose={() => setOpen(false)} /> : null}
-        //                 </>
-        //             )
-        //         },
-        //         appBoardSortingDefaultPriority: 15,
-        //         icon,
-        //         name,
-        //         iconFilterColor,
-        //     }
-        // })(),
     ],
     wrapperProps: {
         icon: <Icons.Markets size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }} />,

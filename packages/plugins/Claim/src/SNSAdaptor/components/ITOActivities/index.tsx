@@ -1,15 +1,15 @@
 import { useChainContext, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { memo, useCallback } from 'react'
 import { useClaimAll } from '../../../hooks/useClaimAll.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
+import { Box } from '@mui/material'
 import { useI18N } from '../../../locales/i18n_generated.js'
 import { ITOActivityItem } from './ITOActivityItem.js'
 import { useClaimCallback } from '../../../hooks/useClaimCallback.js'
+import { EmptyStatus } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -27,12 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         flexDirection: 'column',
     },
-    tips: {
-        marginTop: theme.spacing(1.5),
-        color: theme.palette.maskColor.second,
-        fontSize: 14,
-        lineHeight: '18px',
-    },
 }))
 
 export const ITOActivities = memo(() => {
@@ -42,9 +36,9 @@ export const ITOActivities = memo(() => {
 
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
 
-    const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(
+    const { value: swappedTokensWithDetailed = EMPTY_LIST, loading: loadingTokenDetailed } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
-        (_swappedTokens ?? []).map((t) => t.token.address) ?? [],
+        (_swappedTokens ?? EMPTY_LIST).map((t) => t.token.address) ?? EMPTY_LIST,
         {
             chainId,
         },
@@ -54,8 +48,11 @@ export const ITOActivities = memo(() => {
 
     const swappedTokens = _swappedTokens?.map((t) => {
         const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
-        if (tokenDetailed) t.token = tokenDetailed as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
-        return t
+
+        return {
+            ...t,
+            token: (tokenDetailed as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>) ?? t.token,
+        }
     })
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
@@ -85,18 +82,15 @@ export const ITOActivities = memo(() => {
                         key={index}
                         swappedToken={swappedToken}
                         chainId={chainId}
-                        handleClaim={claimCallback}
+                        onClaim={claimCallback}
                     />
                 ))}
             </Box>
         )
 
     return (
-        <Box className={classes.placeholder}>
-            <Icons.EmptySimple size={32} />
-            <Typography className={classes.tips}>
-                {!account ? t.connect_wallet_tips() : t.no_activities_tips()}
-            </Typography>
-        </Box>
+        <EmptyStatus className={classes.placeholder}>
+            {!account ? t.connect_wallet_tips() : t.no_activities_tips()}
+        </EmptyStatus>
     )
 })

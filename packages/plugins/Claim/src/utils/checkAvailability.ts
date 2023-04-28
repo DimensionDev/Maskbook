@@ -1,7 +1,8 @@
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { ChainId, Web3Connection } from '@masknet/web3-shared-evm'
-import { Interface } from '@ethersproject/abi'
+import { Interface, type Result } from '@ethersproject/abi'
+import { cloneDeep } from 'lodash-es'
 import type { Availability } from '../types.js'
 
 const interFaceV1 = new Interface(ITO_ABI)
@@ -39,7 +40,7 @@ function decodeResult(data: string, isV1: boolean): Availability {
         destructed: results[4],
         unlock_time: parseHexToInt(results[5]),
         swapped: parseHexToInt(results[6]),
-        exchanged_tokens: parse(results[7]).map(parseHexToInt),
+        exchanged_tokens: cloneDeep(results[7]).map(parseHexToInt),
         ...(isV1
             ? {}
             : {
@@ -51,10 +52,6 @@ function decodeResult(data: string, isV1: boolean): Availability {
     }
 }
 
-function parse(input: any) {
-    return JSON.parse(JSON.stringify(input))
-}
-
-function parseHexToInt(input: any) {
-    return Number.parseInt(parse(input).hex, 16).toString()
+function parseHexToInt(input: Result) {
+    return Number.parseInt(cloneDeep(input).hex, 16).toString()
 }

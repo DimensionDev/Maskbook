@@ -76,10 +76,10 @@ const useStyles = makeStyles()((theme) => ({
 interface ITOActivityItemProps {
     swappedToken: SwappedTokenType
     chainId: ChainId
-    handleClaim: (pids: string[]) => Promise<void>
+    onClaim: (pids: string[]) => Promise<void>
 }
 
-export const ITOActivityItem = memo<ITOActivityItemProps>(({ swappedToken, chainId, handleClaim }) => {
+export const ITOActivityItem = memo<ITOActivityItemProps>(({ swappedToken, chainId, onClaim }) => {
     const t = useI18N()
 
     const { classes, cx } = useStyles()
@@ -91,8 +91,8 @@ export const ITOActivityItem = memo<ITOActivityItemProps>(({ swappedToken, chain
 
     const [{ loading }, handleClickClaim] = useAsyncFn(async () => {
         if (!swappedToken.isClaimable) return
-        return handleClaim(swappedToken.pids)
-    }, [handleClaim, swappedToken])
+        return onClaim(swappedToken.pids)
+    }, [onClaim, swappedToken])
 
     return (
         <Box className={classes.container}>
