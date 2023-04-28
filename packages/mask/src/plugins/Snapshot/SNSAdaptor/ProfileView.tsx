@@ -1,4 +1,4 @@
-import { LoadingBase, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { ActionButton, LoadingBase, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { CardContent, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
@@ -13,6 +13,10 @@ import { useMemo, useState, useTransition } from 'react'
 import { ProfileProposalList } from './ProfileProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
 import { Icons } from '@masknet/icons'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { PluginID } from '@masknet/shared-base'
+import { useAsyncFn } from 'react-use'
+import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,9 +31,27 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: 0,
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
     },
+    minimalContent: {
+        height: 148,
+        paddingTop: 0,
+        paddingBottom: 0,
+        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+    },
+    minimalText: {
+        color: theme.palette.maskColor.dark,
+        whiteSpace: 'nowrap',
+    },
     tabListRoot: {
         marginTop: '10px !important',
         flexGrow: 0,
+    },
+
+    enableButton: {
+        display: 'inline-flex',
+        justifyContent: 'center',
+        borderRadius: 20,
+        width: 254,
+        height: 40,
     },
 }))
 
@@ -51,6 +73,8 @@ export function ProfileView(props: ProfileViewProps) {
     )
     const [spaceIndex, setSpaceIndex] = useState(0)
 
+    const isMinimalMode = useIsMinimalMode(PluginID.Snapshot)
+
     const currentSpace = spaceList[spaceIndex]
 
     const { value: space, loading: loadingSpaceMemberList } = useSpace(currentSpace.spaceId)
@@ -59,6 +83,11 @@ export function ProfileView(props: ProfileViewProps) {
         currentSpace.spaceId,
         currentSpace.strategyName ?? space?.symbol,
     )
+
+    const [{ loading: loadingModeEnabled }, onEnablePlugin] = useAsyncFn(async () => {
+        await Services.Settings.setPluginMinimalModeEnabled(PluginID.Snapshot, false)
+    }, [])
+
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
         if (!proposalList || !space?.members) return
@@ -66,6 +95,36 @@ export function ProfileView(props: ProfileViewProps) {
         if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space?.members?.includes(x.author))
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
     }, [currentTab, JSON.stringify(proposalList), JSON.stringify(space?.members)])
+
+    if (isMinimalMode) {
+        return (
+            <ProfileCard {...ProfileCardProps}>
+                <Stack className={classes.root}>
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <PluginDescriptor />
+                        <CardContent className={classes.minimalContent}>
+                            <Stack height="100%" alignItems="center" justifyContent="end">
+                                <Stack justifyContent="center" alignItems="center" width="100%" boxSizing="border-box">
+                                    <Typography fontWeight={400} fontSize={14} className={classes.minimalText}>
+                                        {t('enable_plugin_boundary_description')}
+                                    </Typography>
+                                </Stack>
+                                <ActionButton
+                                    loading={loadingModeEnabled}
+                                    startIcon={<Icons.Plugin size={18} />}
+                                    className={classes.enableButton}
+                                    color="primary"
+                                    onClick={onEnablePlugin}
+                                    sx={{ mt: 6 }}>
+                                    {t('enable_plugin_boundary')}
+                                </ActionButton>
+                            </Stack>
+                        </CardContent>
+                    </ThemeProvider>
+                </Stack>
+            </ProfileCard>
+        )
+    }
 
     return (
         <ProfileCard {...ProfileCardProps}>

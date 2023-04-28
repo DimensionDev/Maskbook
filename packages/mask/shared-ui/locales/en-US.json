@@ -75,7 +75,7 @@
     "applications_persona_verify_connect_hint": "Please connect {{nickname}} and send proof post before using dApps.",
     "persona_load_failed": "Load failed",
     "enable_plugin_boundary": "Enable plugin",
-    "enable_plugin_boundary_description": "You need to open the DApp to view the specific content.",
+    "enable_plugin_boundary_description": "This function has been turned off in the App settings. Enable plug-ins to fully access.",
     "close_check_security": "Close [Check Security]?",
     "check_security_intro": "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services.",
     "check_security_close_warning": "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses.",

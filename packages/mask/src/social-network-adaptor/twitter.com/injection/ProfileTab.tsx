@@ -230,19 +230,9 @@ export function ProfileTabForDAO() {
     const [hidden, setHidden] = useState(snapshotDisabled === BooleanPreference.True)
 
     useEffect(() => {
-        const offProfileTabHidden = MaskMessages.events.profileTabHidden.on((data) => {
+        return MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
         })
-
-        const offPluginMinimalModeChanged = MaskMessages.events.pluginMinimalModeChanged.on(([id, val]) => {
-            setHidden(val)
-            if (val && location.hash === '#dao') resetTwitterActivatedContent()
-        })
-
-        return () => {
-            offProfileTabHidden()
-            offPluginMinimalModeChanged()
-        }
     }, [])
 
     return hidden || loading || !spaceList?.length ? null : (
