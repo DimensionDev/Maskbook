@@ -4,7 +4,6 @@
 
 - cross-fetch: try to modify `fetch`. <https://github.com/lquixada/cross-fetch/pull/137>
 - reflect-metadata: try to overwrite `Reflect` methods. We use `ReflectMetadata` global object for them.
-- @sentry/core: try to modify `Function.prototype` <https://github.com/getsentry/sentry-javascript/releases>
 
 ### Bundled outdated `regenerator-runtime`
 

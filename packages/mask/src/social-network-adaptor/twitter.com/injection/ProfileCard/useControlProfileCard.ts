@@ -4,25 +4,29 @@ import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 
 interface Result {
     active: boolean
-    setActive: (x: boolean) => void
     style: CSSProperties
 }
 
 const LEAVE_DURATION = 500
-export function useControlProfileCard(
-    holderRef: RefObject<HTMLDivElement>,
-    setOpenFromTrendingCard: (x: boolean) => void,
-): Result {
+export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
+    const skipClick = useRef(false)
 
     const [active, setActive] = useState(false)
     const [style, setStyle] = useState<CSSProperties>({})
 
-    const hideProfileCard = useCallback(() => {
+    const hideProfileCard = useCallback((byClick?: boolean) => {
         if (hoverRef.current) return
-        setActive(false)
-        setOpenFromTrendingCard(false)
+        clearTimeout(closeTimerRef.current)
+        closeTimerRef.current = setTimeout(() => {
+            // Discard the click that would open from external
+            if (byClick && skipClick.current) {
+                skipClick.current = false
+                return
+            }
+            setActive(false)
+        }, LEAVE_DURATION)
     }, [])
 
     const showProfileCard = useCallback((patchStyle: CSSProperties) => {
@@ -43,8 +47,7 @@ export function useControlProfileCard(
         }
         const leave = () => {
             hoverRef.current = false
-            clearTimeout(closeTimerRef.current)
-            closeTimerRef.current = setTimeout(hideProfileCard, LEAVE_DURATION)
+            hideProfileCard()
         }
         holder.addEventListener('mouseenter', enter)
         holder.addEventListener('mouseleave', leave)
@@ -60,6 +63,8 @@ export function useControlProfileCard(
                 hideProfileCard()
                 return
             }
+            if (event.external) skipClick.current = true
+
             const { badgeBounding: bounding } = event
             const reachedBottomBoundary = bounding.bottom + CARD_HEIGHT > window.innerHeight
             let x = Math.max(bounding.left + bounding.width / 2 - CARD_WIDTH / 2, 0)
@@ -96,7 +101,7 @@ export function useControlProfileCard(
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
             if (event.composedPath()?.includes(holderRef.current!)) return
             hoverRef.current = false
-            hideProfileCard()
+            hideProfileCard(true)
         }
         document.body.addEventListener('click', onClick)
         return () => {
@@ -104,5 +109,5 @@ export function useControlProfileCard(
         }
     }, [hideProfileCard])
 
-    return { style, active, setActive }
+    return { style, active }
 }

@@ -14,6 +14,7 @@ overrides:
   '@ethersproject/providers': 5.7.2
   reflect-metadata: 0.1.13
   '@storybook/react-docgen-typescript-plugin': npm:react-docgen-typescript-plugin@1.0.2
+  webpack@5: Jack-Works/webpack#lazy-import
 
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1':
@@ -40,9 +41,9 @@ patchedDependencies:
   '@project-serum/sol-wallet-adapter@0.2.6':
     hash: dl5wqnnaxjm7biesxtvdpr7gpe
     path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
-  '@sentry/core@7.48.0':
-    hash: xxbttp42niberr7dozwoxw7koq
-    path: patches/@sentry__core@7.48.0.patch
+  '@protobufjs/inquire@1.1.0':
+    hash: cc6ztxhxwsg3dyqdzvftqua3dy
+    path: patches/@protobufjs__inquire@1.1.0.patch
   '@types/react-avatar-editor@13.0.0':
     hash: 6wzwgbn4gsisp2tjbg76iifhqq
     path: patches/@types__react-avatar-editor@13.0.0.patch
@@ -121,8 +122,8 @@ importers:
         specifier: 1.2.0
         version: 1.2.0
       '@masknet/kit':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.1.2
+        version: 0.1.2
       '@mui/base':
         specifier: 5.0.0-alpha.100
         version: 5.0.0-alpha.100(patch_hash=cc7k56pam6cgsdxwjuynldgftq)(@types/react@18.0.37)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
@@ -181,9 +182,6 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^17.6.1
         version: 17.6.1
-      '@dimensiondev/eslint-plugin':
-        specifier: 0.0.2-20220516081411-2649814
-        version: 0.0.2-20220516081411-2649814(eslint@8.38.0)
       '@magic-works/i18n-codegen':
         specifier: ^0.5.0
         version: 0.5.0(typescript@5.1.0-dev.20230418)
@@ -193,6 +191,9 @@ importers:
       '@masknet/config':
         specifier: workspace:^
         version: link:packages/config
+      '@masknet/eslint-plugin':
+        specifier: ^0.1.3
+        version: 0.1.3(eslint@8.38.0)
       '@masknet/serializer':
         specifier: workspace:^
         version: link:packages/test-serializer
@@ -414,8 +415,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3(@swc/core@1.3.51)(webpack@5.80.0)
       webpack:
-        specifier: ^5.80.0
-        version: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+        specifier: Jack-Works/webpack#lazy-import
+        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-cli:
         specifier: ^5.0.1
         version: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
@@ -445,8 +446,8 @@ importers:
   packages/base:
     dependencies:
       '@masknet/kit':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.1.2
+        version: 0.1.2
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
@@ -652,8 +653,8 @@ importers:
         specifier: ^9.1.2
         version: 9.1.2(@babel/core@7.21.4)(webpack@5.80.0)
       webpack:
-        specifier: ^5.80.0
-        version: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+        specifier: Jack-Works/webpack#lazy-import
+        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
 
   packages/empty: {}
 
@@ -1186,8 +1187,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3(@swc/core@1.3.51)(webpack@5.80.0)
       webpack:
-        specifier: ^5.80.0
-        version: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+        specifier: Jack-Works/webpack#lazy-import
+        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-cli:
         specifier: ^5.0.1
         version: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
@@ -2807,8 +2808,8 @@ importers:
   packages/sentry:
     dependencies:
       '@sentry/browser':
-        specifier: 7.48.0
-        version: 7.48.0
+        specifier: 7.50.0
+        version: 7.50.0
     devDependencies:
       '@rollup/plugin-node-resolve':
         specifier: ^15.0.2
@@ -3074,8 +3075,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3(@swc/core@1.3.51)(webpack@5.80.0)
       webpack:
-        specifier: ^5.80.0
-        version: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+        specifier: Jack-Works/webpack#lazy-import
+        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
 
   packages/test-serializer: {}
 
@@ -3604,14 +3605,14 @@ importers:
         version: 1.8.0
     devDependencies:
       '@sentry/browser':
-        specifier: 7.48.0
-        version: 7.48.0
+        specifier: ^7.50.0
+        version: 7.50.0
       '@sentry/tracing':
-        specifier: ^7.48.0
-        version: 7.48.0
+        specifier: ^7.50.0
+        version: 7.50.0
       '@sentry/types':
-        specifier: ^7.48.0
-        version: 7.48.0
+        specifier: ^7.50.0
+        version: 7.50.0
       '@types/bs58':
         specifier: ^4.0.1
         version: 4.0.1
@@ -6775,15 +6776,6 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin@0.0.2-20220516081411-2649814(eslint@8.38.0):
-    resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/eslint-plugin/0.0.2-20220516081411-2649814/f6b6b4579bfb2788600cef1c58230fadd0f66ac8}
-    engines: {node: '>= 16'}
-    peerDependencies:
-      eslint: '>= 8'
-    dependencies:
-      eslint: 8.38.0
-    dev: true
-
   /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb:
     resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
     peerDependencies:
@@ -8405,8 +8397,17 @@ packages:
     resolution: {integrity: sha512-zY9NPar8BhdWcOlZbZaWn5RwXQuPzEHkb5c5Ibijm+Mix4LaDMy6DQLt06NIwoCPFra4Jz4dqiLVsQJ0YtZTWQ==}
     dev: false
 
-  /@masknet/kit@0.1.0:
-    resolution: {integrity: sha512-OVQJSjEKDcL6RLFrdaQ9MF+3RyD3P3rClrPpfYTfeF3xT6pQitgfO4l3+A11CCSoD+5+EqezGnMGpQ2zB2O3kg==}
+  /@masknet/eslint-plugin@0.1.3(eslint@8.38.0):
+    resolution: {integrity: sha512-bw77qt7Si4PxDqLj8q+nje7QEccE8fSFkK8K7Z617AyGa09+0F0vXbftoacuXdMBrnuTsvN++LacbZTsNRdjPw==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      eslint: '>= 8'
+    dependencies:
+      eslint: 8.38.0
+    dev: true
+
+  /@masknet/kit@0.1.2:
+    resolution: {integrity: sha512-VVnIAJhhy5KseO+NtfIs1lYFtBxYCswD13NZtZgcyXTsxCkp55QIKtP6VZ7+0oFV2PgcqtOKGIz7JH0lIJ864g==}
     dev: false
 
   /@masknet/membrane@0.1.5:
@@ -9138,7 +9139,7 @@ packages:
     peerDependencies:
       webpack: '>= 5'
     dependencies:
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /@nice-labs/git-rev@3.5.1:
@@ -9557,7 +9558,7 @@ packages:
       react-refresh: 0.14.0
       schema-utils: 3.1.1
       source-map: 0.7.4
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-dev-server: 4.13.3(webpack-cli@5.0.1)(webpack@5.80.0)
     dev: true
 
@@ -9633,16 +9634,17 @@ packages:
     resolution: {integrity: sha512-lljVXpqXebpsijW71PZaCYeIcE5on1w5DlQy5WH6GLbFryLUrBD4932W/E2BSpfRJWseIL4v/KPgBFxDOIdKpQ==}
     dependencies:
       '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/inquire': 1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy)
     dev: false
 
   /@protobufjs/float@1.0.2:
     resolution: {integrity: sha512-Ddb+kVXlXst9d+R9PfTIxh1EdNkgoRe5tOX6t01f1lYWOvJnSPDBlG241QLzcyPdoNTsblLUdujGSE4RzrTZGQ==}
     dev: false
 
-  /@protobufjs/inquire@1.1.0:
+  /@protobufjs/inquire@1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy):
     resolution: {integrity: sha512-kdSefcPdruJiFMVSbn801t4vFK7KB/5gd2fYvrxhuJYg8ILrmn9SKSX2tZdV6V+ksulWqS7aXjBcRXl3wHoD9Q==}
     dev: false
+    patched: true
 
   /@protobufjs/path@1.1.2:
     resolution: {integrity: sha512-6JOcJ5Tm08dOHAbdR3GrvP+yUUfkjG5ePsHYczMFLq3ZmMkAD98cDgcT2iA1lJ9NVwFd4tH/iSSoe44YWkltEA==}
@@ -9859,24 +9861,24 @@ packages:
       '@scure/base': 1.1.1
     dev: false
 
-  /@sentry-internal/tracing@7.48.0:
-    resolution: {integrity: sha512-MFAPDTrvCtfSm0/Zbmx7HA0Q5uCfRadOUpN8Y8rP1ndz+329h2kA3mZRCuC+3/aXL11zs2CHUhcAkGjwH2vogg==}
+  /@sentry-internal/tracing@7.50.0:
+    resolution: {integrity: sha512-4TQ4vN0aMBWsUXfJWk2xbe4x7fKfwCXgXKTtHC/ocwwKM+0EefV5Iw9YFG8IrIQN4vMtuRzktqcs9q0/Sbv7tg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.48.0(patch_hash=xxbttp42niberr7dozwoxw7koq)
-      '@sentry/types': 7.48.0
-      '@sentry/utils': 7.48.0
+      '@sentry/core': 7.50.0
+      '@sentry/types': 7.50.0
+      '@sentry/utils': 7.50.0
       tslib: 1.14.1
 
-  /@sentry/browser@7.48.0:
-    resolution: {integrity: sha512-tdx/2nhuiykncmXFlV4Dpp+Hxgt/v31LiyXE79IcM560wc+QmWKtzoW9azBWQ0xt5KOO3ERMib9qPE4/ql1/EQ==}
+  /@sentry/browser@7.50.0:
+    resolution: {integrity: sha512-a+UYbP89+SAvW47/p9wxEi9eWlyp/SkYl52OCdZNXnplQY4kQIOVyiaIs5nnCxIxZgXKrhAX4eo1E9ykleFuNQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.48.0
-      '@sentry/core': 7.48.0(patch_hash=xxbttp42niberr7dozwoxw7koq)
-      '@sentry/replay': 7.48.0
-      '@sentry/types': 7.48.0
-      '@sentry/utils': 7.48.0
+      '@sentry-internal/tracing': 7.50.0
+      '@sentry/core': 7.50.0
+      '@sentry/replay': 7.50.0
+      '@sentry/types': 7.50.0
+      '@sentry/utils': 7.50.0
       tslib: 1.14.1
 
   /@sentry/core@5.30.0:
@@ -9890,14 +9892,13 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@sentry/core@7.48.0(patch_hash=xxbttp42niberr7dozwoxw7koq):
-    resolution: {integrity: sha512-8FYuJTMpyuxRZvlen3gQ3rpOtVInSDmSyXqWEhCLuG/w34AtWoTiW7G516rsAAh6Hy1TP91GooMWbonP3XQNTQ==}
+  /@sentry/core@7.50.0:
+    resolution: {integrity: sha512-6oD1a3fYs4aiNK7tuJSd88LHjYJAetd7ZK/AfJniU7zWKj4jxIYfO8nhm0qdnhEDs81RcweVDmPhWm3Kwrzzsg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.48.0
-      '@sentry/utils': 7.48.0
+      '@sentry/types': 7.50.0
+      '@sentry/utils': 7.50.0
       tslib: 1.14.1
-    patched: true
 
   /@sentry/hub@5.30.0:
     resolution: {integrity: sha512-2tYrGnzb1gKz2EkMDQcfLrDTvmGcQPuWxLnJKXJvYTQDGLlEvi2tWz1VIHjunmOvJrB5aIQLhm+dcMRwFZDCqQ==}
@@ -9934,13 +9935,13 @@ packages:
       - supports-color
     dev: false
 
-  /@sentry/replay@7.48.0:
-    resolution: {integrity: sha512-8fRHMGJ0NJeIZi6UucxUTvfDPaBa7+jU1kCTLjCcuH3X/UVz5PtGLMtFSO5U8HP+mUDlPs97MP1uoDvMa4S2Ng==}
+  /@sentry/replay@7.50.0:
+    resolution: {integrity: sha512-EYRk+DTZ5luwfkiCaDpBC3YBKIEdkReTUNZtWDVUytSVjsCnttkAipx/y6bxy3HN+rSXungMd3XKQT5RNMRUNA==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.48.0(patch_hash=xxbttp42niberr7dozwoxw7koq)
-      '@sentry/types': 7.48.0
-      '@sentry/utils': 7.48.0
+      '@sentry/core': 7.50.0
+      '@sentry/types': 7.50.0
+      '@sentry/utils': 7.50.0
 
   /@sentry/tracing@5.30.0:
     resolution: {integrity: sha512-dUFowCr0AIMwiLD7Fs314Mdzcug+gBVo/+NCMyDw8tFxJkwWAKl7Qa2OZxLQ0ZHjakcj1hNKfCQJ9rhyfOl4Aw==}
@@ -9953,11 +9954,11 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@sentry/tracing@7.48.0:
-    resolution: {integrity: sha512-X6w74Av0fyayNicKIlwL1IdpZ3O0ETQjyYXCDTwHoJL71ojrgrL5vdiNz8WwbPONTnqu98HehPYL/z3DCCKVbw==}
+  /@sentry/tracing@7.50.0:
+    resolution: {integrity: sha512-avbIgDA/Bktci5OeWb5T6JCS5edWHeket92KeFNpMH79NfF46csA5yBgM+q0X9/R4swZd5fuTQwh4y6BHA4lEQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.48.0
+      '@sentry-internal/tracing': 7.50.0
     dev: true
 
   /@sentry/types@5.30.0:
@@ -9965,8 +9966,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /@sentry/types@7.48.0:
-    resolution: {integrity: sha512-kkAszZwQ5/v4n7Yyw/DPNRWx7h724mVNRGZIJa9ggUMvTgMe7UKCZZ5wfQmYiKVlGbwd9pxXAcP8Oq15EbByFQ==}
+  /@sentry/types@7.50.0:
+    resolution: {integrity: sha512-Zo9vyI98QNeYT0K0y57Rb4JRWDaPEgmp+QkQ4CRQZFUTWetO5fvPZ4Gb/R7TW16LajuHZlbJBHmvmNj2pkL2kw==}
     engines: {node: '>=8'}
 
   /@sentry/utils@5.30.0:
@@ -9977,11 +9978,11 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@sentry/utils@7.48.0:
-    resolution: {integrity: sha512-d977sghkFVMfld0LrEyyY2gYrfayLPdDEpUDT+hg5y79r7zZDCFyHtdB86699E5K89MwDZahW7Erk+a1nk4x5w==}
+  /@sentry/utils@7.50.0:
+    resolution: {integrity: sha512-iyPwwC6fwJsiPhH27ZbIiSsY5RaccHBqADS2zEjgKYhmP4P9WGgHRDrvLEnkOjqQyKNb6c0yfmv83n0uxYnolw==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.48.0
+      '@sentry/types': 7.50.0
       tslib: 1.14.1
 
   /@servie/events@3.0.0:
@@ -10415,7 +10416,7 @@ packages:
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - eslint
@@ -10731,7 +10732,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.1.0-dev.20230418
       util-deprecate: 1.0.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-dev-middleware: 4.3.0(webpack@5.80.0)
       webpack-hot-middleware: 2.25.3
       webpack-virtual-modules: 0.4.6
@@ -10920,7 +10921,7 @@ packages:
       typescript: 5.1.0-dev.20230418
       unfetch: 4.2.0
       util-deprecate: 1.0.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /@storybook/core-common@6.5.13(eslint@8.38.0)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)(typescript@5.1.0-dev.20230418):
@@ -11115,7 +11116,7 @@ packages:
       react: 0.0.0-experimental-21021fb0f-20230412
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
       typescript: 5.1.0-dev.20230418
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: 5.80.0(@swc/core@1.3.51)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - bluebird
@@ -11285,7 +11286,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.1.0-dev.20230418
       util-deprecate: 1.0.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-dev-middleware: 4.3.0(webpack@5.80.0)
       webpack-virtual-modules: 0.4.6
     transitivePeerDependencies:
@@ -11439,7 +11440,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.1.0-dev.20230418
       util-deprecate: 1.0.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: 5.80.0(@swc/core@1.3.51)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - '@swc/core'
@@ -13338,7 +13339,7 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
     dev: true
 
@@ -13349,7 +13350,7 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
     dev: true
 
@@ -13364,7 +13365,7 @@ packages:
       webpack-dev-server:
         optional: true
     dependencies:
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
       webpack-dev-server: 4.13.3(webpack-cli@5.0.1)(webpack@5.80.0)
     dev: true
@@ -14319,7 +14320,7 @@ packages:
       loader-utils: 2.0.4
       make-dir: 3.1.0
       schema-utils: 2.7.1
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /babel-loader@9.1.2(@babel/core@7.21.4)(webpack@5.80.0):
@@ -14335,7 +14336,7 @@ packages:
       '@babel/core': 7.21.4
       find-cache-dir: 3.3.2
       schema-utils: 4.0.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /babel-plugin-add-react-displayname@0.0.5:
@@ -16202,7 +16203,7 @@ packages:
       normalize-path: 3.0.0
       schema-utils: 4.0.0
       serialize-javascript: 6.0.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /core-js-builder@3.30.1:
@@ -16680,7 +16681,7 @@ packages:
       postcss-value-parser: 4.2.0
       schema-utils: 3.1.2
       semver: 7.3.8
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /css-loader@6.7.3(webpack@5.80.0):
@@ -16697,7 +16698,7 @@ packages:
       postcss-modules-values: 4.0.0(postcss@8.4.22)
       postcss-value-parser: 4.2.0
       semver: 7.3.8
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /css-select@4.3.0:
@@ -19469,7 +19470,7 @@ packages:
       semver: 7.3.8
       tapable: 1.1.3
       typescript: 5.1.0-dev.20230418
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /form-data-encoder@1.7.1:
@@ -20700,7 +20701,7 @@ packages:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.15.1
+      terser: 5.17.0
     dev: true
 
   /html-parse-stringify@3.0.1:
@@ -20766,7 +20767,7 @@ packages:
       lodash: 4.17.21
       pretty-error: 4.0.0
       tapable: 2.2.1
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /htmlparser2@6.1.0:
@@ -26650,7 +26651,7 @@ packages:
       '@protobufjs/eventemitter': 1.1.0
       '@protobufjs/fetch': 1.1.0
       '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/inquire': 1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy)
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
@@ -26669,7 +26670,7 @@ packages:
       '@protobufjs/eventemitter': 1.1.0
       '@protobufjs/fetch': 1.1.0
       '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/inquire': 1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy)
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
@@ -27030,7 +27031,7 @@ packages:
       react-docgen-typescript: 2.2.2(typescript@5.1.0-dev.20230418)
       tslib: 2.5.0
       typescript: 5.1.0-dev.20230418
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: 5.80.0(@swc/core@1.3.51)
       webpack-sources: 2.3.1
     transitivePeerDependencies:
       - supports-color
@@ -28880,7 +28881,7 @@ packages:
       abab: 2.0.6
       iconv-lite: 0.6.3
       source-map-js: 1.0.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /source-map-resolve@0.5.3:
@@ -29483,7 +29484,7 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.1.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /style-loader@3.3.2(webpack@5.80.0):
@@ -29492,7 +29493,7 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /style-to-object@0.3.0:
@@ -29625,7 +29626,7 @@ packages:
       webpack: '>=2'
     dependencies:
       '@swc/core': 1.3.51
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /symbol-tree@3.2.4:
@@ -29812,7 +29813,7 @@ packages:
       schema-utils: 3.1.2
       serialize-javascript: 6.0.1
       terser: 5.17.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /terser-webpack-plugin@5.3.7(@swc/core@1.3.51)(webpack@5.80.0):
@@ -29837,7 +29838,7 @@ packages:
       schema-utils: 3.1.2
       serialize-javascript: 6.0.1
       terser: 5.17.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /terser@4.8.1:
@@ -31900,7 +31901,7 @@ packages:
       import-local: 3.1.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-dev-server: 4.13.3(webpack-cli@5.0.1)(webpack@5.80.0)
       webpack-merge: 5.8.0
     dev: true
@@ -31931,7 +31932,7 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 3.1.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /webpack-dev-middleware@5.3.3(webpack@5.80.0):
@@ -31945,7 +31946,7 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 4.0.0
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /webpack-dev-server@4.13.3(webpack-cli@5.0.1)(webpack@5.80.0):
@@ -31989,7 +31990,7 @@ packages:
       serve-index: 1.9.1
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
       webpack-dev-middleware: 5.3.3(webpack@5.80.0)
       ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
@@ -32059,7 +32060,7 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      webpack: 5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1)
     dev: true
 
   /webpack-virtual-modules@0.2.2:
@@ -32114,7 +32115,7 @@ packages:
       - supports-color
     dev: true
 
-  /webpack@5.80.0(@swc/core@1.3.51)(webpack-cli@5.0.1):
+  /webpack@5.80.0(@swc/core@1.3.51):
     resolution: {integrity: sha512-OIMiq37XK1rWO8mH9ssfFKZsXg4n6klTEDL7S8/HqbAOBBaiy8ABvXvz0dDCXeEF9gqwxSvVk611zFPjS8hJxA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -32147,7 +32148,6 @@ packages:
       tapable: 2.2.1
       terser-webpack-plugin: 5.3.7(@swc/core@1.3.51)(webpack@5.80.0)
       watchpack: 2.4.0
-      webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
       webpack-sources: 3.2.3
     transitivePeerDependencies:
       - '@swc/core'
@@ -32753,6 +32753,50 @@ packages:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}
     dev: false
 
+  github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.51)(webpack-cli@5.0.1):
+    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc}
+    id: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc
+    name: webpack
+    version: 5.80.0
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
+    dependencies:
+      '@types/eslint-scope': 3.7.4
+      '@types/estree': 1.0.0
+      '@webassemblyjs/ast': 1.11.5
+      '@webassemblyjs/wasm-edit': 1.11.5
+      '@webassemblyjs/wasm-parser': 1.11.5
+      acorn: 8.8.2
+      acorn-import-assertions: 1.8.0(acorn@8.8.2)
+      browserslist: 4.21.5
+      chrome-trace-event: 1.0.3
+      enhanced-resolve: 5.13.0
+      es-module-lexer: 1.2.1
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.10
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.1.2
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.7(@swc/core@1.3.51)(webpack@5.80.0)
+      watchpack: 2.4.0
+      webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+    dev: true
+
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
     resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
     name: html-parse-stringify2
@@ -32770,7 +32814,6 @@ time:
   /@commitlint/cli@17.6.1: '2023-04-14T08:24:40.864Z'
   /@commitlint/config-conventional@17.6.1: '2023-04-14T08:24:40.889Z'
   /@dimensiondev/common-protocols@1.6.0-20210723072221-8f46a92: '2021-07-23T07:22:56Z'
-  /@dimensiondev/eslint-plugin@0.0.2-20220516081411-2649814: '2022-05-16T08:17:05Z'
   /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb: '2023-03-07T04:58:40Z'
   /@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f: '2021-10-13T08:39:07Z'
   /@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca: '2022-11-05T07:43:23Z'
@@ -32792,7 +32835,8 @@ time:
   /@json2csv/plainjs@6.1.3: '2023-04-03T21:32:44.647Z'
   /@magic-works/i18n-codegen@0.5.0: '2023-02-17T06:35:05.095Z'
   /@masknet/compartment@0.4.2: '2022-10-31T05:24:41.592Z'
-  /@masknet/kit@0.1.0: '2022-11-01T11:04:09.479Z'
+  /@masknet/eslint-plugin@0.1.3: '2023-04-25T05:28:16.774Z'
+  /@masknet/kit@0.1.2: '2023-04-26T09:27:49.423Z'
   /@masknet/membrane@0.1.5: '2022-10-31T04:33:00.047Z'
   /@masknet/secp256k1-webcrypto@1.0.0: '2022-11-01T07:12:50.321Z'
   /@masknet/static-module-record-swc@0.4.1: '2022-10-31T06:11:09.670Z'
@@ -32815,9 +32859,9 @@ time:
   /@rollup/plugin-node-resolve@15.0.2: '2023-04-04T14:09:24.370Z'
   /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
   /@scamsniffer/detector@0.0.21: '2022-08-15T06:05:49.379Z'
-  /@sentry/browser@7.48.0: '2023-04-14T09:51:11.923Z'
-  /@sentry/tracing@7.48.0: '2023-04-14T09:51:13.774Z'
-  /@sentry/types@7.48.0: '2023-04-14T09:51:14.281Z'
+  /@sentry/browser@7.50.0: '2023-04-27T07:52:23.473Z'
+  /@sentry/tracing@7.50.0: '2023-04-27T07:52:26.085Z'
+  /@sentry/types@7.50.0: '2023-04-27T07:52:26.192Z'
   /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
   /@sinonjs/text-encoding@0.7.2: '2022-07-27T11:54:25.384Z'
   /@solana/buffer-layout@4.0.1: '2022-12-09T16:49:55.927Z'
@@ -33021,7 +33065,6 @@ time:
   /webpack-cli@5.0.1: '2022-12-05T17:33:38.692Z'
   /webpack-dev-server@4.13.3: '2023-04-15T17:10:09.877Z'
   /webpack-target-webextension@1.0.4: '2022-08-31T14:07:24.611Z'
-  /webpack@5.80.0: '2023-04-19T16:57:16.819Z'
   /yargs@17.7.1: '2023-02-21T15:44:58.643Z'
   /z-schema@6.0.1: '2023-04-13T12:31:24.670Z'
   /zod@3.21.4: '2023-03-07T04:39:36.379Z'

@@ -5,6 +5,8 @@ on:
     branches: [master, develop, released, hotfix/*, release/*]
   pull_request:
     branches: [master, develop*, released]
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: read

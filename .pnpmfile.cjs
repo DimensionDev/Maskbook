@@ -13,6 +13,8 @@ approvedList.set('ethereumjs-abi', [
     'git+https://github.com/ethereumjs/ethereumjs-abi.git',
 ])
 
+approvedList.set('webpack', 'Jack-Works/webpack#lazy-import')
+
 approvedList.set('wyvern-js', [
     // wyvern-schemas
     'github:ProjectOpenSea/wyvern-js#semver:^3.2.1',

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - develop
+  merge_group:
+    types: [checks_requested]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 

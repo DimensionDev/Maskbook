@@ -1,6 +1,6 @@
 import { sum } from 'lodash-es'
 
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 
 export function getTextUILength(text: string) {
     return sum(Array.from(text).map(getCharUILength))

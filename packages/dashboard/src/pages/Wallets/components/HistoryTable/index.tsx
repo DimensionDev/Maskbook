@@ -54,8 +54,6 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         value = EMPTY_LIST,
         next,
         done,
-        error,
-        retry,
         loading,
     } = useIterator<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(iterator)
 
@@ -112,9 +110,9 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, isL
                         </TableHead>
 
                         <TableBody>
-                            {dataSource.map((transaction, index) => (
+                            {dataSource.map((transaction) => (
                                 <HistoryTableRow
-                                    key={index}
+                                    key={transaction.hash}
                                     transaction={transaction}
                                     selectedChainId={selectedChainId}
                                 />

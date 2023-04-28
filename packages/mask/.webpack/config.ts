@@ -36,7 +36,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true },
+        experiments: { backCompat: false, asyncWebAssembly: true, deferImport: { asyncModule: 'error' } },
         cache: {
             type: 'filesystem',
             buildDependencies: {
@@ -107,6 +107,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                         sourceMaps: !!computedFlags.sourceMapKind,
                         // https://swc.rs/docs/configuring-swc/
                         jsc: {
+                            preserveAllComments: true,
                             parser: {
                                 syntax: 'typescript',
                                 dynamicImport: true,

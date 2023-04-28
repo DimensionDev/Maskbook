@@ -3,6 +3,8 @@ import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@ma
 import { Button, Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
+import { Icons } from '@masknet/icons'
+import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
     card: {
@@ -51,6 +53,11 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
         boxSizing: 'border-box',
         width: '100%',
     },
+    nameRow: {
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'auto',
+    },
     name: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -67,9 +74,6 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
         minHeight: theme.spacing(2),
         fontWeight: 700,
         color: theme.palette.maskColor.main,
-    },
-    hidden: {
-        visibility: 'hidden',
     },
     action: {
         width: '100%',
@@ -96,6 +100,7 @@ export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, Collect
     /** @default true */
     disableAction?: boolean
     actionLabel?: string
+    verifiedBy: string[]
     onActionClick?(asset: CollectibleCardProps['asset']): void
     onItemClick?(asset: CollectibleCardProps['asset']): void
 }
@@ -110,10 +115,12 @@ export const CollectibleItem = memo(
             disableName,
             disableAction = true,
             actionLabel,
+            verifiedBy,
             onActionClick,
             onItemClick,
             ...rest
         } = props
+        const t = useSharedI18N()
         const { classes, cx } = useStyles()
         const name = asset.collection?.name ?? ''
 
@@ -127,8 +134,8 @@ export const CollectibleItem = memo(
             if (isLensFollower(asset.collection.name)) return asset.collection.name
             if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
-            return asset.tokenId ? `#${asset.tokenId}` : ''
-        }, [asset.collection])
+            return asset.metadata?.name || (asset.tokenId ? `#${asset.tokenId}` : '')
+        }, [asset])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
         const [identityOverflow, identityRef] = useDetectOverflow()
@@ -153,11 +160,22 @@ export const CollectibleItem = memo(
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
                     />
-                    <div className={cx(classes.info, name ? '' : classes.hidden, classes.ease)}>
+                    <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (
-                            <Typography ref={nameRef} className={classes.name} variant="body2">
-                                {name}
-                            </Typography>
+                            <div className={classes.nameRow}>
+                                {name ? (
+                                    <Typography ref={nameRef} className={classes.name} variant="body2">
+                                        {name}
+                                    </Typography>
+                                ) : (
+                                    <br />
+                                )}
+                                {verifiedBy?.length ? (
+                                    <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                        <Icons.Verification size={16} />
+                                    </ShadowRootTooltip>
+                                ) : null}
+                            </div>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
                             {identity}
