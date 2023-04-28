@@ -1,7 +1,6 @@
 /// <reference types="react/next" />
 import { unstable_useCacheRefresh, useContext } from 'react'
-import { millify } from 'millify'
-import { formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
+import { formatCount, formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
@@ -154,7 +153,7 @@ function Content() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
-                                        {millify(v.balance, { precision: 2, lowercase: true }) +
+                                        {formatCount(v.balance, 2, true) +
                                             ' ' +
                                             (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                     </Typography>
@@ -162,7 +161,7 @@ function Content() {
                                 placement="top"
                                 arrow>
                                 <Typography className={classes.power}>
-                                    {millify(v.balance, { precision: 2, lowercase: true }) +
+                                    {formatCount(v.balance, 2, true) +
                                         ' ' +
                                         (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                 </Typography>

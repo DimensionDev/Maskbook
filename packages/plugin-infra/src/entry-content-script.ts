@@ -29,6 +29,7 @@ export {
     getSearchResultTabContent,
     getSearchResultTabs,
     getSettingsTabContent,
+    getSearchResultContentForProfileTab,
     useAllPersonas,
     useCompositionContext,
     useCurrentPersonaInformation,

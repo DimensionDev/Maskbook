@@ -13,7 +13,7 @@ export interface SnapshotProposal {
     scores_total: number
     state: string
     scores: number[]
-    strategies: Array<{ params: { symbol: string } }>
+    strategies: Array<{ params: { symbol?: string } }>
     strategyName: string
     space: {
         id: string
@@ -25,6 +25,7 @@ export interface SnapshotProposal {
 
 export interface SnapshotSpace {
     members: string[]
+    symbol: string
     followersCount: number
 }
 
@@ -33,7 +34,7 @@ export namespace SnapshotBaseAPI {
         get(): Promise<Array<DAOResult<ChainId.Mainnet>>>
     }
     export interface Provider {
-        getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]>
+        getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotProposal[]>
         getSpace(spaceId: string): Promise<SnapshotSpace>
         getCurrentAccountVote(
             proposalId: string,

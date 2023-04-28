@@ -1,5 +1,13 @@
-import { LoadingBase, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { CardContent, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import {
+    ActionButton,
+    LoadingBase,
+    MaskDarkTheme,
+    MaskLightTheme,
+    MaskTabList,
+    makeStyles,
+    useTabs,
+} from '@masknet/theme'
+import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
@@ -13,6 +21,10 @@ import { useMemo, useState, useTransition } from 'react'
 import { ProfileProposalList } from './ProfileProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
 import { Icons } from '@masknet/icons'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { PluginID } from '@masknet/shared-base'
+import { useAsyncFn } from 'react-use'
+import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,9 +39,29 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: 0,
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
     },
+    minimalContent: {
+        height: 148,
+        paddingTop: 0,
+        paddingBottom: 0,
+        '&:last-child': {
+            paddingBottom: 16,
+        },
+    },
+    minimalText: {
+        color: theme.palette.maskColor.dark,
+        whiteSpace: 'nowrap',
+    },
     tabListRoot: {
         marginTop: '10px !important',
         flexGrow: 0,
+    },
+
+    enableButton: {
+        display: 'inline-flex',
+        justifyContent: 'center',
+        borderRadius: 20,
+        width: 254,
+        height: 40,
     },
 }))
 
@@ -42,6 +74,7 @@ export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
+    const theme = useTheme()
     const [currentTab, , , setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
         ContentTabs.Active,
@@ -51,10 +84,21 @@ export function ProfileView(props: ProfileViewProps) {
     )
     const [spaceIndex, setSpaceIndex] = useState(0)
 
+    const isMinimalMode = useIsMinimalMode(PluginID.Snapshot)
+
     const currentSpace = spaceList[spaceIndex]
 
-    const { value: proposalList, loading: loadingProposalList } = useProposalList(currentSpace.spaceId)
     const { value: space, loading: loadingSpaceMemberList } = useSpace(currentSpace.spaceId)
+
+    const { value: proposalList, loading: loadingProposalList } = useProposalList(
+        currentSpace.spaceId,
+        currentSpace.strategyName ?? space?.symbol,
+    )
+
+    const [{ loading: loadingModeEnabled }, onEnablePlugin] = useAsyncFn(async () => {
+        await Services.Settings.setPluginMinimalModeEnabled(PluginID.Snapshot, false)
+    }, [])
+
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
         if (!proposalList || !space?.members) return
@@ -63,12 +107,43 @@ export function ProfileView(props: ProfileViewProps) {
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
     }, [currentTab, JSON.stringify(proposalList), JSON.stringify(space?.members)])
 
+    if (isMinimalMode) {
+        return (
+            <ProfileCard {...ProfileCardProps}>
+                <Stack className={classes.root}>
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <PluginDescriptor />
+                        <CardContent className={classes.minimalContent}>
+                            <Stack height="100%" alignItems="center" justifyContent="end">
+                                <Stack justifyContent="center" alignItems="center" width="100%" boxSizing="border-box">
+                                    <Typography fontWeight={400} fontSize={14} className={classes.minimalText}>
+                                        {t('enable_plugin_boundary_description')}
+                                    </Typography>
+                                </Stack>
+                                <ActionButton
+                                    loading={loadingModeEnabled}
+                                    startIcon={<Icons.Plugin size={18} />}
+                                    className={classes.enableButton}
+                                    color="primary"
+                                    onClick={onEnablePlugin}
+                                    sx={{ mt: 6 }}>
+                                    {t('enable_plugin_boundary')}
+                                </ActionButton>
+                            </Stack>
+                        </CardContent>
+                    </ThemeProvider>
+                </Stack>
+            </ProfileCard>
+        )
+    }
+
     return (
         <ProfileCard {...ProfileCardProps}>
             <Stack className={classes.root}>
                 <ThemeProvider theme={MaskLightTheme}>
                     <PluginDescriptor />
                     <ProfileSpaceHeader
+                        theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}
                         spaceList={spaceList}
                         currentSpace={{
                             ...currentSpace,

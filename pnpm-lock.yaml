@@ -3571,6 +3571,9 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      millify:
+        specifier: ^6.1.0
+        version: 6.1.0
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)

@@ -3,6 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import {
     getSearchResultContent,
+    getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
     useActivatedPluginsSNSAdaptor,
@@ -53,7 +54,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const dSearchEnabled = useValueRef(decentralizedSearchSettings)
-    const { profileTabType = ProfileTabs.WEB3 } = props
+    const { profileTabType } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
@@ -68,7 +69,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentResult?.type })
     const contentComponent = useMemo(() => {
         if (!currentResult || !resultList.value?.length) return null
-        const Component = getSearchResultContent(currentResult)
+
+        const Component = profileTabType
+            ? getSearchResultContentForProfileTab(currentResult)
+            : getSearchResultContent(currentResult)
+
         return (
             <Component
                 resultList={resultList.value}
@@ -77,7 +82,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                 identity={props.identity}
             />
         )
-    }, [currentResult, resultList.value, props.isProfilePage, props.identity])
+    }, [currentResult, resultList.value, props.isProfilePage, props.identity, profileTabType])
 
     const tabs = useMemo(() => {
         if (!currentResult) return EMPTY_LIST
@@ -92,7 +97,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnabled) return null
+    if (!dSearchEnabled && profileTabType === ProfileTabs.WEB3) return null
     if (!keyword && !currentResult) return null
     if (!contentComponent) return null
 

@@ -1,21 +1,22 @@
 import { List, ListItem, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { millify } from 'millify'
 import type { SnapshotProposal } from '@masknet/web3-providers/types'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
-import { formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
+import { formatCount, formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
 import { startCase } from 'lodash-es'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
         root: {
             maxHeight: 1018,
+            paddingTop: 0,
             overflow: 'scroll',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -26,7 +27,11 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            marginTop: 14,
+            paddingTop: 16,
+            paddingBottom: 0,
+            '&:hover': {
+                background: theme.palette.maskColor.bg,
+            },
         },
         authorInfo: { display: 'flex', alignItems: 'center' },
         author: { fontSize: 16, fontWeight: 700 },
@@ -103,8 +108,13 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
         voteIcon: {
             marginRight: 12,
         },
-        strategyName: { fontSize: 14 },
-        percentage: {},
+        strategyName: {
+            fontSize: 14,
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        percentage: {
+            fontWeight: 700,
+        },
         voteInfo: {
             display: 'flex',
             alignItems: 'center',
@@ -176,15 +186,20 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
     const { Others } = useWeb3State()
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, proposal.author)
 
     return (
         <section className={classes.header}>
             <div className={classes.authorInfo}>
                 <EthereumBlockie address={proposal.author} classes={{ icon: classes.blockieIcon }} />
-                <Typography className={classes.author}>{Others?.formatAddress(proposal.author, 4)}</Typography>
+                <Typography className={classes.author}>
+                    {domain ?? Others?.formatAddress(proposal.author, 4)}
+                </Typography>
             </div>
             <div className={classes.state}>
-                <Typography fontWeight={700}>{startCase(proposal.state)}</Typography>
+                <Typography fontWeight={700} fontSize={12}>
+                    {startCase(proposal.state)}
+                </Typography>
             </div>
         </section>
     )
@@ -225,18 +240,20 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     return (
         <List className={classes.voteList}>
             {proposal.choices.map((x, i) => (
-                <ListItem key={i} className={cx(classes.voteItem, i === 0 ? classes.selectedVoteItem : '')}>
+                <ListItem
+                    key={i}
+                    className={cx(
+                        classes.voteItem,
+                        i === 0 && proposal.state !== 'pending' ? classes.selectedVoteItem : '',
+                    )}>
                     <div className={classes.voteInfo}>
-                        {i === 0 ? (
+                        {i === 0 && proposal.state !== 'pending' ? (
                             <Icons.Check color={theme.palette.maskColor.main} size={18} className={classes.voteIcon} />
                         ) : null}
                         <Typography className={classes.voteName}>{x}</Typography>
                         <Typography className={classes.strategyName}>
                             {(proposal.choicesWithScore[i].score
-                                ? millify(proposal.choicesWithScore[i].score, {
-                                      precision: 2,
-                                      lowercase: true,
-                                  }).toUpperCase()
+                                ? formatCount(proposal.choicesWithScore[i].score, 1)
                                 : '0') +
                                 ' ' +
                                 proposal.strategyName}

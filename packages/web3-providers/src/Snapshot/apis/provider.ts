@@ -9,7 +9,7 @@ async function fetchFromGraphql<T>(query: string) {
 }
 
 export class SnapshotAPI implements SnapshotBaseAPI.Provider {
-    async getProposalListBySpace(spaceId: string): Promise<SnapshotProposal[]> {
+    async getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotProposal[]> {
         const queryProposal = `
             query {
                 proposals (
@@ -53,7 +53,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
 
         return proposals.map((proposal) => {
             const validStrategy = proposal.strategies.find((x) => {
-                return !x.params.symbol.includes('delegated')
+                return !x.params.symbol?.includes('delegated')
             })
 
             const choicesWithScore = proposal.choices
@@ -61,9 +61,13 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
                     choice: x,
                     score: proposal.scores[i],
                 }))
-                .sort((a, b) => b.score - a.score)
+                .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
 
-            return { ...proposal, strategyName: validStrategy?.params.symbol ?? proposal.space.name, choicesWithScore }
+            return {
+                ...proposal,
+                strategyName: validStrategy?.params.symbol ?? strategyName ?? proposal.space?.name,
+                choicesWithScore,
+            }
         })
     }
 
@@ -72,6 +76,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
             query {
                 space(id: "${spaceId}") {
                     members
+                    symbol
                     followersCount
                 }
             }

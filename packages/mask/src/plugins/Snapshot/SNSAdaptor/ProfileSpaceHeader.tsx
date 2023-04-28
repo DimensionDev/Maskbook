@@ -1,9 +1,9 @@
-import { type DAOResult } from '@masknet/web3-shared-base'
+import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { useState, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Typography, Avatar, IconButton, Button } from '@mui/material'
+import { Box, Typography, Avatar, IconButton, Button, ThemeProvider, type Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
@@ -12,6 +12,7 @@ interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
     currentSpace: DAOResult<ChainId.Mainnet>
     setSpaceIndex: (x: number) => void
+    theme: Theme
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -61,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
-    const { spaceList, currentSpace, setSpaceIndex } = props
+    const { spaceList, currentSpace, setSpaceIndex, theme } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
@@ -85,24 +86,26 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                                     onClick={() => setSpaceMenuOpen((v) => !v)}>
                                     <Icons.ArrowDrop size={24} className={classes.arrowIcon} />
                                 </IconButton>
-                                <SpaceMenu
-                                    options={spaceList}
-                                    currentOption={currentSpace}
-                                    onSelect={(i) => {
-                                        setSpaceIndex(i)
-                                        setSpaceMenuOpen(false)
-                                    }}
-                                    containerRef={spaceRef}
-                                    spaceMenuOpen={spaceMenuOpen}
-                                    setSpaceMenuOpen={setSpaceMenuOpen}
-                                />
+                                <ThemeProvider theme={theme}>
+                                    <SpaceMenu
+                                        options={spaceList}
+                                        currentOption={currentSpace}
+                                        onSelect={(i) => {
+                                            setSpaceIndex(i)
+                                            setSpaceMenuOpen(false)
+                                        }}
+                                        containerRef={spaceRef}
+                                        spaceMenuOpen={spaceMenuOpen}
+                                        setSpaceMenuOpen={setSpaceMenuOpen}
+                                    />
+                                </ThemeProvider>
                             </>
                         )}
                     </div>
                     {currentSpace.followersCount ? (
                         <Typography component="span" className={classes.followersCount}>
                             {t('plugin_snapshot_space_info_followers_count', {
-                                followersCount: currentSpace.followersCount,
+                                followersCount: formatCount(currentSpace.followersCount, 1),
                             })}
                         </Typography>
                     ) : null}
