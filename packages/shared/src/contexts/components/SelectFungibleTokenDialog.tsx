@@ -98,7 +98,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         chainId,
     })
 
-    const { value: fungibleAssets = EMPTY_LIST, loading: loadingAssets } = useFungibleAssets(pluginID, undefined, {
+    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
         chainId,
     })
 
@@ -115,7 +115,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                {(loadingTokens || loadingAssets) && mode !== TokenListMode.Manage ? (
+                {loadingTokens && mode !== TokenListMode.Manage ? (
                     <Stack
                         height={500}
                         width={'100%'}

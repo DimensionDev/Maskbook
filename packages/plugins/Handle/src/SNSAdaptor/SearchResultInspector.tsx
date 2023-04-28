@@ -83,7 +83,11 @@ export function SearchResultInspectorContent() {
                 <section className={classes.ensInfo}>
                     {domain && ChainIcon ? <ChainIcon size={30} className={classes.ensIcon} /> : null}
                     <div>
-                        {domain ? <Typography className={classes.domain}>{domain}</Typography> : null}
+                        {domain ? (
+                            <Typography className={classes.domain}>
+                                {Others?.formatDomainName(domain) || domain}
+                            </Typography>
+                        ) : null}
                         {reversedAddress ? (
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}

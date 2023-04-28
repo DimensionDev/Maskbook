@@ -1,4 +1,3 @@
-import { memoize } from 'lodash-es'
 import { sha3 } from 'web3-utils'
 
 function createCanvasFingerprint() {
@@ -27,7 +26,7 @@ function createCanvasFingerprint() {
     context.textBaseline = 'alphabetic'
     context.fillStyle = 'rgb(255,5,5)'
     context.rotate(0.03)
-    // eslint-disable-next-line @dimensiondev/unicode-specific-set
+    // eslint-disable-next-line @masknet/unicode-specific-set
     context.fillText('mask9é0#マスクfbz1마스크$%^@£éú面具', 4, 17)
     context.fillStyle = 'rgb(155,255,5)'
     context.shadowBlur = 8
@@ -37,12 +36,13 @@ function createCanvasFingerprint() {
     return canvas.toDataURL()
 }
 
+let result: string
 /**
  * The constant fingerprint of device.
  * @returns
  */
-export const createDeviceFingerprint: ReturnType<typeof memoize> = memoize((): string => {
-    return (
+export function createDeviceFingerprint() {
+    return (result ??=
         sha3(
             [
                 createCanvasFingerprint(),
@@ -51,6 +51,5 @@ export const createDeviceFingerprint: ReturnType<typeof memoize> = memoize((): s
                 navigator.maxTouchPoints,
                 navigator.hardwareConcurrency,
             ].join(''),
-        ) ?? ''
-    )
-})
+        ) ?? '')
+}

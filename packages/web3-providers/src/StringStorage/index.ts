@@ -9,7 +9,7 @@ interface ResponseData {
     message: string
     metaData: StringStorageBaseAPI.MetaData
 }
-const genKey = (namespace: string, userId: string) => `${namespace}-${userId}`
+const genKey = (namespace: string, userId: string) => `${namespace}-${userId.replace(/\./g, '%2E')}`
 
 export class StringStorageAPI implements StringStorageBaseAPI.Provider {
     async get<T>(namespace: string, userId: string, address: string) {

@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
