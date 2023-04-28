@@ -36,7 +36,7 @@ const useStyles = makeStyles<{
         display: 'flex',
         background:
             contentBackground ??
-            (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+            (isDashboardPage ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
         borderRadius: 8,
         alignItems: 'center',
         height: disableChange ? 60 : 82,
@@ -50,13 +50,13 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
+        color: !isDashboardPage ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
+        color: !isDashboardPage ? theme.palette.maskColor.dark : textColor,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -91,10 +91,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: isDashboardPage() ? textColor : theme.palette.maskColor.dark,
+        color: isDashboardPage ? textColor : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: isDashboardPage() ? textColor : theme.palette.maskColor?.dark,
+        color: isDashboardPage ? textColor : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -180,7 +180,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 className={cx(
                     classes.statusBox,
                     classes.currentAccount,
-                    isDashboardPage() ? classes.dashboardBackground : '',
+                    isDashboardPage ? classes.dashboardBackground : '',
                 )}>
                 <WalletIcon
                     size={30}

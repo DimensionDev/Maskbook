@@ -7,7 +7,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage as isDashboard, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
@@ -66,7 +66,6 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     onClose?(): void
 }
 
-const isDashboard = isDashboardPage()
 export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     open,
     pluginID,

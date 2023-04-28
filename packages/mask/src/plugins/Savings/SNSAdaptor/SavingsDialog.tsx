@@ -3,7 +3,7 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
-import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, isDashboardPage as isDashboard, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, createContract, getAaveConstants, type SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
@@ -89,7 +89,6 @@ const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
-    const isDashboard = isDashboardPage()
     const { pluginID } = useNetworkContext()
     const { classes } = useStyles({ isDashboard })
 

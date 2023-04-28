@@ -80,7 +80,7 @@ export function getDefaultNetworkType() {
 }
 
 export function getDefaultProviderType() {
-    return isPopupPage() ? ProviderType.MaskWallet : ProviderType.None
+    return isPopupPage ? ProviderType.MaskWallet : ProviderType.None
 }
 
 export function getZeroAddress() {

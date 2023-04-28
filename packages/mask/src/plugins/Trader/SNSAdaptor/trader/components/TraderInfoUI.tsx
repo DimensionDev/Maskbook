@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage as isDashboard } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'
@@ -107,8 +107,6 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         isGreatThanSlippageSetting,
         priceImpact,
     }) => {
-        const isDashboard = isDashboardPage()
-
         const { t } = useI18N()
         const { classes, cx } = useStyles({ isDashboard })
 
@@ -187,8 +185,6 @@ export interface DefaultTraderPlaceholderUIProps {
 }
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {
-    const isDashboard = isDashboardPage()
-
     const { t } = useI18N()
     const { classes, cx } = useStyles({ isDashboard })
 

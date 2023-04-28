@@ -3,7 +3,7 @@ import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage as isDashboard, NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -72,8 +72,6 @@ export function SelectProviderDialog() {
         },
         [closeDialog, walletConnectedCallback],
     )
-
-    const isDashboard = isDashboardPage()
 
     const selectedProviders = useMemo(
         () =>

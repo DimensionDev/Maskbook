@@ -14,7 +14,7 @@ import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage, isPopupPage, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage as isDashboard, isPopupPage as isPopup, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { currentSlippageSettings } from '../../settings.js'
@@ -23,10 +23,7 @@ import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-scr
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
-const useStyles = makeStyles<{
-    isDashboard: boolean
-    isPopup: boolean
-}>()((theme, { isDashboard, isPopup }) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
@@ -201,10 +198,8 @@ export const TradeForm = memo<AllTradeFormProps>(
     }) => {
         const maxAmountTrade = useRef<TradeInfo | null>(null)
         const userSelected = useRef(false)
-        const isDashboard = isDashboardPage()
-        const isPopup = isPopupPage()
         const { t } = useI18N()
-        const { classes, cx } = useStyles({ isDashboard, isPopup }, { props })
+        const { classes, cx } = useStyles(undefined, { props })
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
         const { Others } = useWeb3State()

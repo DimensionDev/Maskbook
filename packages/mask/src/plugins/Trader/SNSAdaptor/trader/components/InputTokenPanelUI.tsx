@@ -1,7 +1,7 @@
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage as isDashboard } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
@@ -149,7 +149,6 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         tokenValueUSD,
         isAvailableBalance,
     }) => {
-        const isDashboard = isDashboardPage()
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
 

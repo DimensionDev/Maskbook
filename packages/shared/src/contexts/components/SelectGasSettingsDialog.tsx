@@ -9,8 +9,6 @@ import { InjectedDialog } from '../components/index.js'
 import { SettingsBoard } from '../../UI/components/SettingsBoard/index.js'
 import { SettingsContext } from '../../UI/components/SettingsBoard/Context.js'
 
-const isDashboard = isDashboardPage()
-
 interface StyleProps {
     compact: boolean
 }
@@ -85,7 +83,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
                 paper: classes.root,
             }}
             open={open}
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
             onClose={() => {
                 onSubmit?.(settings)
                 onClose?.()

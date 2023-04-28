@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import type { BigNumber } from 'bignumber.js'
 import { FormattedBalance, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage as isDashboard } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
@@ -200,7 +200,6 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         onConfirm,
     }) => {
         const { t } = useI18N()
-        const isDashboard = isDashboardPage()
         const { classes, cx } = useStyles({ isDashboard })
 
         const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>()

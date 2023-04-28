@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import {
     PluginID,
     NetworkPluginID,
-    isDashboardPage,
+    isDashboardPage as isDashboard,
     CrossIsolationMessages,
     type TokenType,
 } from '@masknet/shared-base'
@@ -27,8 +27,6 @@ import { Trader, type TraderRef } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-
-const isDashboard = isDashboardPage()
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {

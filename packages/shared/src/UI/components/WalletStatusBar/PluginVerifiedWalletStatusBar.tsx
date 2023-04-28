@@ -30,13 +30,11 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useMenuConfig } from '../../../index.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 
-const isDashboard = isDashboardPage()
-
 const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: isDashboard ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: isDashboardPage ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
