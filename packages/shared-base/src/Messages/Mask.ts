@@ -128,7 +128,7 @@ export type ProfileCardEvent =
           userId: string
           address?: string
           badgeBounding: DOMRect
-          openFromTrendingCard?: boolean
+          external?: boolean
       }
 
 export type NonFungibleTokenDialogEvent =
