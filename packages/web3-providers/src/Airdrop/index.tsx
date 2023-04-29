@@ -1,11 +1,13 @@
+import type { AbiItem } from 'web3-utils'
 import { type ChainId, getAirdropClaimersConstants, createContract } from '@masknet/web3-shared-evm'
-import { fetchJSON } from '../entry-helpers.js'
-import { Web3API } from '../Connection/index.js'
 import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json'
 import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
-import type { AbiItem } from 'web3-utils'
-export class AirDropAPI {
+import { fetchJSON } from '../entry-helpers.js'
+import { Web3API } from '../Connection/index.js'
+
+export class AirdropAPI {
     public Web3 = new Web3API()
+
     async getActivity(chainId: ChainId, address: string) {
         const web3 = this.Web3.getWeb3(chainId)
 

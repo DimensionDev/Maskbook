@@ -1,4 +1,4 @@
-import { AirDrop } from '@masknet/web3-providers'
+import { Airdrop } from '@masknet/web3-providers'
 import type { TransactionContext } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
@@ -16,7 +16,7 @@ export class AirDropDescriptor {
                         chainId: context.chainId,
                     })
                     const result = parameters?._eventIndex
-                        ? await AirDrop.getPoolInfo(context.chainId, parameters._eventIndex)
+                        ? await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
                         : undefined
                     const token = result?.token
                         ? await hub?.getFungibleToken?.(result.token, { chainId: context.chainId })

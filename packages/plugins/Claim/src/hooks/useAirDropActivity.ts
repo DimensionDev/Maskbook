@@ -1,5 +1,5 @@
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { AirDrop } from '@masknet/web3-providers'
+import { Airdrop } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { last } from 'lodash-es'
@@ -13,7 +13,7 @@ export function useAirDropActivity(chainId: ChainId) {
 
     return useAsyncRetry(async () => {
         if (!account) return
-        const result = await AirDrop.getActivity(chainId, account)
+        const result = await Airdrop.getActivity(chainId, account)
         if (!result) return
         const { claimers, startTime, endTime, ...rest } = result
 

@@ -69,7 +69,7 @@ import { RSS3API } from './RSS3/index.js'
 import { LidoAPI } from './Lido/index.js'
 import { Web3BioAPI } from './Web3Bio/index.js'
 import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
-import { AirDropAPI } from './Airdrop/index.js'
+import { AirdropAPI } from './Airdrop/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -203,5 +203,5 @@ export const RSS3 = new RSS3API()
 // Storage
 export * from './Storage/index.js'
 
-// AirDrop
-export const AirDrop = new AirDropAPI()
+// Airdrop
+export const Airdrop = new AirdropAPI()
