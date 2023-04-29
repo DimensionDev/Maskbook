@@ -175,7 +175,9 @@ export const Collection: FC<CollectionProps> = memo(
                                 {collection.name}
                             </Typography>
                             {verifiedBy?.length ? (
-                                <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                <ShadowRootTooltip
+                                    disableInteractive
+                                    title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>
                             ) : null}

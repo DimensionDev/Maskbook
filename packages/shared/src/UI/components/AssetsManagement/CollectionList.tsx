@@ -149,6 +149,7 @@ export interface CollectionListProps
     defaultChainId?: Web3Helper.ChainIdAll
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
+    disableWindowScroll?: boolean
 }
 
 export function CollectionList({
@@ -159,6 +160,7 @@ export function CollectionList({
     gridProps = EMPTY_OBJECT,
     disableSidebar,
     disableAction,
+    disableWindowScroll,
     onActionClick,
     onItemClick,
     ...rest
@@ -228,17 +230,22 @@ export function CollectionList({
     )
 
     const containerRef = useRef<HTMLDivElement>(null)
+    const mainColumnRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
         if (!currentCollectionId) return
-        const rect = containerRef.current?.getBoundingClientRect()
-        if (!rect) return
-        // 53, height of the sticky bar of Twitter,
-        // 96, height of the header of web3 tab
-        const offset = 53 + 96
-        if (Math.abs(rect.top - offset) < 50) return
-        const top = rect.top + window.scrollY - offset
-        window.scroll({ top, behavior: 'smooth' })
-    }, [!currentCollectionId])
+        if (disableWindowScroll) {
+            mainColumnRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+        } else {
+            const rect = containerRef.current?.getBoundingClientRect()
+            if (!rect) return
+            // 53, height of the sticky bar of Twitter,
+            // 96, height of the header of web3 tab
+            const offset = 53 + 96
+            if (Math.abs(rect.top - offset) < 50) return
+            const top = rect.top + window.scrollY - offset
+            window.scroll({ top, behavior: 'smooth' })
+        }
+    }, [!currentCollectionId, disableWindowScroll])
 
     if (!collections.length && loading && !error && account)
         return (
@@ -276,7 +283,7 @@ export function CollectionList({
     return (
         <Box className={cx(classes.container, className)} ref={containerRef} {...rest}>
             <div className={classes.columns}>
-                <div className={classes.main}>
+                <div className={classes.main} ref={mainColumnRef}>
                     {currentCollection ? (
                         <div className={classes.currentCollection}>
                             <Box className={classes.info}>

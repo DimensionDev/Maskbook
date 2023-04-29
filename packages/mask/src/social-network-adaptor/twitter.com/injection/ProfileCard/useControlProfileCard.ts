@@ -1,6 +1,7 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { type CSSProperties, type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
+import { useDialogStacking } from '@masknet/theme'
 
 interface Result {
     active: boolean
@@ -15,9 +16,12 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
 
     const [active, setActive] = useState(false)
     const [style, setStyle] = useState<CSSProperties>({})
+    const hasDialogRef = useRef(false)
+    const { stack } = useDialogStacking()
+    hasDialogRef.current = stack.length > 0
 
     const hideProfileCard = useCallback((byClick?: boolean) => {
-        if (hoverRef.current) return
+        if (hoverRef.current || hasDialogRef.current) return
         clearTimeout(closeTimerRef.current)
         closeTimerRef.current = setTimeout(() => {
             // Discard the click that would open from external
@@ -55,7 +59,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
             holder.removeEventListener('mouseenter', enter)
             holder.removeEventListener('mouseleave', leave)
         }
-    }, [hideProfileCard])
+    }, [])
 
     useEffect(() => {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
@@ -94,7 +98,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
                 top: newTop,
             })
         })
-    }, [hideProfileCard, showProfileCard])
+    }, [])
 
     useEffect(() => {
         const onClick = (event: MouseEvent) => {
@@ -107,7 +111,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
         return () => {
             document.body.removeEventListener('click', onClick)
         }
-    }, [hideProfileCard])
+    }, [])
 
     return { style, active }
 }
