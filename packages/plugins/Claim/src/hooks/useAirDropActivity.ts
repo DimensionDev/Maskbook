@@ -1,12 +1,12 @@
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { Airdrop } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { last } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { utils } from 'ethers'
 import { MerkleTree } from 'merkletreejs'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Airdrop } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function useAirDropActivity(chainId: ChainId) {
     const { account } = useChainContext()
