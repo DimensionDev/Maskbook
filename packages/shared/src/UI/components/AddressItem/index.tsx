@@ -7,6 +7,7 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ReversedAddress } from '../../../index.js'
+import { isEnsSubdomain } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -47,7 +48,9 @@ export function AddressItem({
     return (
         <>
             <Box onClick={(ev: React.MouseEvent) => onClick?.(ev)}>
-                {!socialAccount.label || isSameAddress(socialAccount.label, socialAccount.address) ? (
+                {!socialAccount.label ||
+                isEnsSubdomain(socialAccount.label) ||
+                isSameAddress(socialAccount.label, socialAccount.address) ? (
                     <ReversedAddress
                         {...TypographyProps}
                         address={socialAccount.address}
@@ -71,9 +74,7 @@ export function AddressItem({
                     <Icons.LinkOut size={20} className={linkIconClassName} />
                 </Link>
             )}
-            {isMenu ? (
-                <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={(ev: React.MouseEvent) => onClick?.(ev)} />
-            ) : null}
+            {isMenu ? <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={onClick} /> : null}
         </>
     )
 }
