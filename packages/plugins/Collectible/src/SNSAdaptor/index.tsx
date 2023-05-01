@@ -137,6 +137,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         account={socialAccount.address}
                                         pluginID={socialAccount.pluginID}
                                         gridProps={gridProps}
+                                        disableWindowScroll
                                         onItemClick={inspectCollectible}
                                     />
                                 </UserAssetsProvider>
@@ -182,6 +183,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                             account={socialAccount.address}
                                             pluginID={socialAccount.pluginID}
                                             gridProps={gridProps}
+                                            disableWindowScroll
                                             onItemClick={inspectCollectible}
                                         />
                                     </UserAssetsProvider>
