@@ -163,13 +163,10 @@ export const CollectibleItem = memo(
                     <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (
                             <div className={classes.nameRow}>
-                                {name ? (
-                                    <Typography ref={nameRef} className={classes.name} variant="body2">
-                                        {name}
-                                    </Typography>
-                                ) : (
-                                    <br />
-                                )}
+                                <Typography ref={nameRef} className={classes.name} variant="body2">
+                                    {name || identity}
+                                </Typography>
+
                                 {verifiedBy?.length ? (
                                     <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                         <Icons.Verification size={16} />
@@ -178,7 +175,7 @@ export const CollectibleItem = memo(
                             </div>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
-                            {identity}
+                            {name ? identity : `#${asset.tokenId}`}
                         </Typography>
                     </div>
                     {disableAction ? null : (
