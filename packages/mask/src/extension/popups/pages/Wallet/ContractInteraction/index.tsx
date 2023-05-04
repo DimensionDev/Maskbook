@@ -48,6 +48,7 @@ import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { Icons } from '@masknet/icons'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
+import { isString } from 'lodash-es'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -187,7 +188,7 @@ const ContractInteraction = memo(() => {
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
                 const to = request.owner
-                    ? transactionDescription?._tx.methods?.find((x) => x.name === 'transfer')?.parameters?.to
+                    ? transactionDescription?.context?.methods?.find((x) => x.name === 'transfer')?.parameters?.to
                     : undefined
 
                 return {
@@ -197,7 +198,7 @@ const ContractInteraction = memo(() => {
                     typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
                     tokenAddress: transactionDescription?.tokenInAddress,
                     tokenDescription: transactionDescription?.popup?.tokenDescription,
-                    to: to ?? request.computedPayload?.to,
+                    to: to && isString(to) ? to : request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
                     maxFeePerGas: request.computedPayload?.maxFeePerGas,

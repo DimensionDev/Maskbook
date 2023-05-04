@@ -700,12 +700,13 @@ export type Web3EnableRequirement = Partial<
     >
 >
 
-export interface TransactionDescriptor<ChainId, Transaction> {
+export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined> {
     chainId: ChainId
     /** The transaction type */
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
+    context?: TransactionContext<ChainId, Parameter>
     /** The original transaction object */
     _tx: Transaction
     /** The address of the token leveraged to swap other tokens */
@@ -1470,13 +1471,13 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction>>
+    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
         txHash?: string,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction>>
+    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
     ready: boolean
