@@ -186,6 +186,10 @@ const ContractInteraction = memo(() => {
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
+                const to = request.owner
+                    ? transactionDescription?._tx.methods?.find((x) => x.name === 'transfer')?.parameters?.to
+                    : undefined
+
                 return {
                     isNativeTokenInteraction: transactionDescription?.tokenInAddress
                         ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
@@ -193,7 +197,7 @@ const ContractInteraction = memo(() => {
                     typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
                     tokenAddress: transactionDescription?.tokenInAddress,
                     tokenDescription: transactionDescription?.popup?.tokenDescription,
-                    to: request.computedPayload?.to,
+                    to: to ?? request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
                     maxFeePerGas: request.computedPayload?.maxFeePerGas,
