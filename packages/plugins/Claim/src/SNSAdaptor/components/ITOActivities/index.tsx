@@ -1,9 +1,8 @@
-import { useChainContext, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { memo, useCallback } from 'react'
 import { useClaimAll } from '../../../hooks/useClaimAll.js'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
-import { useITOConstants, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { type NetworkPluginID } from '@masknet/shared-base'
+import { useITOConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useI18N } from '../../../locales/i18n_generated.js'
@@ -35,26 +34,7 @@ export const ITOActivities = memo(() => {
     const { classes } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
-
-    const { value: swappedTokensWithDetailed = EMPTY_LIST, loading: loadingTokenDetailed } = useFungibleTokens(
-        NetworkPluginID.PLUGIN_EVM,
-        (_swappedTokens ?? EMPTY_LIST).map((t) => t.token.address) ?? EMPTY_LIST,
-        {
-            chainId,
-        },
-    )
-
-    const loading = _loading || loadingTokenDetailed
-
-    const swappedTokens = _swappedTokens?.map((t) => {
-        const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
-
-        return {
-            ...t,
-            token: (tokenDetailed as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>) ?? t.token,
-        }
-    })
+    const { value: swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const handleClaim = useClaimCallback(ITO2_CONTRACT_ADDRESS)
@@ -68,7 +48,7 @@ export const ITOActivities = memo(() => {
         [handleClaim],
     )
 
-    if (loading)
+    if (_loading)
         return (
             <Box className={classes.placeholder}>
                 <LoadingBase size={24} />
