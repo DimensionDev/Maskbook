@@ -6,7 +6,8 @@ export function useAddressLabel(address: string, pluginID?: NetworkPluginID): st
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
     const { value } = useReverseAddress(pluginID, address)
-    const domain = value ? Others?.formatDomainName(value) : undefined
-    const label = getDomain(address) || domain || Others?.formatAddress(address, 4) || address
+    const domain = getDomain(address) || value
+    const formattedDomain = domain ? Others?.formatDomainName(domain) : undefined
+    const label = formattedDomain || Others?.formatAddress(address, 4) || address
     return label
 }
