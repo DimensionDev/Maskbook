@@ -25,7 +25,7 @@ export class TransactionFormatterState<ChainId, TransactionParameter, Transactio
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, TransactionParameter>,
-    ): Promise<TransactionDescriptor<ChainId, Transaction>> {
+    ): Promise<TransactionDescriptor<ChainId, Transaction, TransactionParameter>> {
         throw new Error('Method not implemented.')
     }
 }
