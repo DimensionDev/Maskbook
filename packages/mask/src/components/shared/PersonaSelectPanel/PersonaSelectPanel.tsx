@@ -14,7 +14,7 @@ import {
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
@@ -56,14 +56,7 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { finishTarget, enableVerify = true, onClose } = props
 
-    const { t: originalTran } = useI18N()
-    const t: typeof originalTran = useCallback(
-        (key, options = {}) => {
-            if (typeof options === 'string') return t(key, options)
-            return originalTran(key, { interpolation: { escapeValue: false }, ...options })
-        },
-        [originalTran],
-    )
+    const { t } = useI18N()
 
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()

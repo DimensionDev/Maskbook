@@ -51,14 +51,7 @@ const useStyles = makeStyles()({
 })
 
 const AddDeriveWallet = memo(() => {
-    const { t: originalTran } = useI18N()
-    const t: typeof originalTran = useCallback(
-        (key, options = {}) => {
-            if (typeof options === 'string') return t(key, options)
-            return originalTran(key, { interpolation: { escapeValue: false }, ...options })
-        },
-        [originalTran],
-    )
+    const { t } = useI18N()
 
     const indexes = useRef(new Set<number>())
     const navigate = useNavigate()
