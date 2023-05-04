@@ -53,5 +53,5 @@ function decodeResult(data: string, isV1: boolean): Availability {
 }
 
 function parseHexToInt(input: Result) {
-    return Number.parseInt(cloneDeep(input).hex, 16).toString()
+    return Number.parseInt(cloneDeep(input)._hex, 16).toString()
 }
