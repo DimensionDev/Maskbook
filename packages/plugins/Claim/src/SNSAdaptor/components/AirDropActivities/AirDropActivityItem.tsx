@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundRepeat: 'no-repeat',
         paddingLeft: 232,
         paddingRight: 20,
+        backgroundSize: 'contain',
     },
     content: {
         marginTop: 46,
