@@ -32,6 +32,7 @@ const IGNORE_ERRORS = [
     'ResizeObserver loop limit exceeded',
     'User rejected the request.',
     'Non-Error promise rejection captured with keys: message',
+    'An attempt was made to break through the security policy of the user agent.',
 ]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
