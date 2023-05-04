@@ -23,6 +23,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         background: theme.palette.maskColor.modalTitleBg,
+        fontSize: 18,
+        lineHeight: '24px',
+        fontWeight: 700,
     },
     close: {
         position: 'absolute',
