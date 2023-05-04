@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid, Typography, useTheme } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatBalance, isZero, rightShift } from '@masknet/web3-shared-base'
@@ -96,6 +96,7 @@ export interface SavingsTableProps {
 export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProtocol }: SavingsTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const theme = useTheme()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -207,6 +208,9 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             ) : (
                 <div className={classes.placeholder}>
                     <Icons.EmptySimple size={36} className={classes.empty} />
+                    <Typography fontSize="14px" mt={1.5} color={theme.palette.maskColor.second}>
+                        {t('plugin_savings_no_protocol')}
+                    </Typography>
                 </div>
             )}
         </Box>
