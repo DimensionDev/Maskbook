@@ -427,7 +427,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                         [twitterHandler.toLowerCase(), `https://twitter.com/${twitterHandler.toLowerCase()}`].includes(
                             resultTwitterHandler.toLowerCase(),
                         ) &&
-                        ((x.rank && x.rank <= 200) || x.id === 'mask-network')
+                        ((x.rank && x.rank <= 500) || x.id === 'mask-network')
                     )
                 })
                 .sort((a, b) => {

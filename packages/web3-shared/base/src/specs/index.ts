@@ -622,6 +622,7 @@ export interface DAOResult<ChainId> extends Result<ChainId> {
     avatar: string
     followersCount: number
     strategyName?: string
+    isVerified: boolean
     alias?: Array<{
         value: string
         isPin?: boolean

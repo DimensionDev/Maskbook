@@ -77,7 +77,7 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                         <Typography component="span" className={classes.symbol}>
                             {currentSpace.spaceName}
                         </Typography>
-                        <Icons.Verification size={16} />
+                        {currentSpace.isVerified ? <Icons.Verification size={16} /> : null}
                         {spaceList.length > 1 && (
                             <>
                                 <IconButton
