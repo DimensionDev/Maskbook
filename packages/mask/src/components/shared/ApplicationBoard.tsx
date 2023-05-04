@@ -28,7 +28,7 @@ const useStyles = makeStyles<{
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(0, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, '24px'),
+            padding: theme.spacing(0, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 3),
             transform: props.isCarouselReady ? 'translate(-8px, -8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',

@@ -11,7 +11,7 @@ const useStyles = makeStyles()(() => {
             scrollbarColor: 'transparent transparent',
             overflowX: 'scroll',
             margin: '0 2px 8px',
-            padding: '8px 0px 8px',
+            padding: '8px 16px',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
