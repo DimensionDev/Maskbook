@@ -11,6 +11,8 @@ import { Icons } from '@masknet/icons'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import { resolveSnapshotProposalUrl } from './helpers.js'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -29,6 +31,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             flexDirection: 'column',
             paddingTop: 16,
             paddingBottom: 0,
+            cursor: 'pointer',
             '&:hover': {
                 background: theme.palette.maskColor.bg,
             },
@@ -114,6 +117,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
         },
         percentage: {
             fontWeight: 700,
+            fontSize: 14,
         },
         voteInfo: {
             display: 'flex',
@@ -170,7 +174,10 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
     }, [entry?.isIntersecting])
 
     return (
-        <ListItem className={classes.listItem} ref={ref}>
+        <ListItem
+            className={classes.listItem}
+            ref={ref}
+            onClick={() => openWindow(resolveSnapshotProposalUrl(proposal.space.id, proposal.id))}>
             {isViewed ? (
                 <>
                     <ProfileProposalListItemHeader proposal={proposal} />
