@@ -40,6 +40,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.white,
     },
     timeTips: {
+        fontSize: 14,
+        lineHeight: '18px',
         marginTop: theme.spacing(1),
         color: alpha(theme.palette.maskColor.white, 0.8),
     },
