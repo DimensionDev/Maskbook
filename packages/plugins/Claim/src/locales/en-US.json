@@ -7,6 +7,7 @@
     "tips": "Tips",
     "share": "Share",
     "share_text": "I just claimed airdrop with {{amount}} {{symbol}} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n Install https://mask.io to explore more airdrop activities.",
+    "connect_wallet_airdrop_tips": "Please connect wallet",
     "connect_wallet_tips": "Please connect wallet to view ITO activities.",
     "congratulations": "Congratulations!",
     "claim_successfully_tips": "Claimed {{amount}} ${{symbol}} successfully.",

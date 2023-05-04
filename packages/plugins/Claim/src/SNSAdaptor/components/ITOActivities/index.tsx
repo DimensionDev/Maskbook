@@ -23,9 +23,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 424,
+        height: 408,
         width: '100%',
         flexDirection: 'column',
+        padding: 0,
     },
 }))
 
