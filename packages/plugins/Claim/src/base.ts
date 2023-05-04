@@ -11,7 +11,7 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: '' }, link: '' },
     enableRequirement: {
         networks: { type: 'opt-out', networks: {} },
-        target: 'beta',
+        target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [
