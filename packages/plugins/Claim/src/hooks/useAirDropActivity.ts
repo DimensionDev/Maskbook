@@ -12,7 +12,6 @@ export function useAirDropActivity(chainId: ChainId) {
     const { account } = useChainContext()
 
     return useAsyncRetry(async () => {
-        if (!account) return
         const result = await Airdrop.getActivity(chainId, account)
         if (!result) return
         const { claimers, startTime, endTime, ...rest } = result

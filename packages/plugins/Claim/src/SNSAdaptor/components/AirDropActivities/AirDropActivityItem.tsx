@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundRepeat: 'no-repeat',
         paddingLeft: 232,
         paddingRight: 20,
+        backgroundSize: 'contain',
     },
     content: {
         marginTop: 46,
@@ -39,6 +40,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.white,
     },
     timeTips: {
+        fontSize: 14,
+        lineHeight: '18px',
         marginTop: theme.spacing(1),
         color: alpha(theme.palette.maskColor.white, 0.8),
     },
@@ -152,37 +155,42 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     <Typography className={classes.timeTips}>{timeTips}</Typography>
                     {!account ? (
                         <Typography className={classes.tips}>{t.no_account_tips({ symbol: 'ARB' })}</Typography>
-                    ) : null}
-                    {!isEligible ? <Typography className={classes.tips}>{t.no_eligible_tips()}</Typography> : null}
-                    {isClaimed ? <Typography className={classes.tips}>{t.claimed_tips()}</Typography> : null}
-                    {isEligible && !isClaimed ? (
-                        <Box className={classes.actions}>
-                            <Box>
-                                <Typography className={classes.amount}>
-                                    {amount} {tokenDetail.value?.symbol}
-                                </Typography>
-                                <Typography className={classes.claimable}>
-                                    {activityStatus === ActivityStatus.IN_PROGRESS
-                                        ? t.eligible_to_claim()
-                                        : t.claimable()}
-                                </Typography>
-                            </Box>
-                            <ActionButton
-                                onClick={handleClaim}
-                                loading={loading}
-                                className={classes.claimButton}
-                                disabled={activityStatus !== ActivityStatus.IN_PROGRESS}
-                                endIcon={
-                                    providerType === ProviderType.WalletConnect ? (
-                                        <ShadowRootTooltip title={t.wallet_connect_tips()} placement="top">
-                                            <Icons.Questions size={18} />
-                                        </ShadowRootTooltip>
-                                    ) : null
-                                }>
-                                {activityStatus === ActivityStatus.ENDED ? t.expired() : t.claim()}
-                            </ActionButton>
-                        </Box>
-                    ) : null}
+                    ) : (
+                        <>
+                            {!isEligible ? (
+                                <Typography className={classes.tips}>{t.no_eligible_tips()}</Typography>
+                            ) : null}
+                            {isClaimed ? <Typography className={classes.tips}>{t.claimed_tips()}</Typography> : null}
+                            {isEligible && !isClaimed ? (
+                                <Box className={classes.actions}>
+                                    <Box>
+                                        <Typography className={classes.amount}>
+                                            {amount} {tokenDetail.value?.symbol}
+                                        </Typography>
+                                        <Typography className={classes.claimable}>
+                                            {activityStatus === ActivityStatus.IN_PROGRESS
+                                                ? t.eligible_to_claim()
+                                                : t.claimable()}
+                                        </Typography>
+                                    </Box>
+                                    <ActionButton
+                                        onClick={handleClaim}
+                                        loading={loading}
+                                        className={classes.claimButton}
+                                        disabled={activityStatus !== ActivityStatus.IN_PROGRESS}
+                                        endIcon={
+                                            providerType === ProviderType.WalletConnect ? (
+                                                <ShadowRootTooltip title={t.wallet_connect_tips()} placement="top">
+                                                    <Icons.Questions size={18} />
+                                                </ShadowRootTooltip>
+                                            ) : null
+                                        }>
+                                        {activityStatus === ActivityStatus.ENDED ? t.expired() : t.claim()}
+                                    </ActionButton>
+                                </Box>
+                            ) : null}
+                        </>
+                    )}
                 </Box>
             </Box>
         )

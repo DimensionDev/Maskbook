@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return <ClaimEntry {...props} />
             },
             ApplicationEntryID: PLUGIN_ID,
-            appBoardSortingDefaultPriority: 15,
+            appBoardSortingDefaultPriority: 8,
             icon: <Icons.MarketsClaim size={36} />,
             name: <Trans ns={PluginID.Claim} i18nKey="__plugin_name" />,
             iconFilterColor: 'rgba(240, 51, 51, 0.3)',

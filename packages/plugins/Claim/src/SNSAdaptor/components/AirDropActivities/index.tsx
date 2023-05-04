@@ -20,9 +20,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 424,
+        height: 408,
         width: '100%',
         flexDirection: 'column',
+        padding: 0,
     },
 }))
 
@@ -49,7 +50,7 @@ export const AirDropActivities = memo(() => {
     }
     return (
         <EmptyStatus className={classes.placeholder}>
-            {!account ? t.connect_wallet_tips() : t.no_activities_tips()}
+            {!account ? t.connect_wallet_airdrop_tips() : t.no_activities_tips()}
         </EmptyStatus>
     )
 })

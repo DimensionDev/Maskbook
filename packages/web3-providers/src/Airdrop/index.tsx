@@ -8,12 +8,12 @@ import { Web3API } from '../Connection/index.js'
 export class AirdropAPI {
     public Web3 = new Web3API()
 
-    async getActivity(chainId: ChainId, address: string) {
+    async getActivity(chainId: ChainId, address?: string) {
         const web3 = this.Web3.getWeb3(chainId)
 
         const { CLAIMERS, CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
 
-        if (!CLAIMERS || !CONTRACT_ADDRESS || !address) return
+        if (!CLAIMERS || !CONTRACT_ADDRESS) return
 
         const airdropContract = createContract<AirdropV2>(web3, CONTRACT_ADDRESS, AirDropV2ABI as AbiItem[])
 
@@ -28,7 +28,7 @@ export class AirdropAPI {
         const currentEventIndex = Number(eventIndex) - 1
         const claimEvents = await airdropContract?.methods.claimEvents(currentEventIndex).call()
 
-        const isClaimed = await airdropContract?.methods.isClaimed(currentEventIndex, address).call()
+        const isClaimed = address ? await airdropContract?.methods.isClaimed(currentEventIndex, address).call() : false
 
         if (!claimEvents) return
 
