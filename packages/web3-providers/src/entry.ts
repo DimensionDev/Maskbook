@@ -61,6 +61,7 @@ import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
+import { ARBID_API } from './ARBID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
@@ -71,6 +72,7 @@ import { Web3BioAPI } from './Web3Bio/index.js'
 import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
+import { SID_DomainAPI } from './SID/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -156,6 +158,7 @@ export const R2D2Domain = new R2D2DomainAPI()
 
 // Name Service
 export const ENS = new ENS_API()
+export const ARBID = new ARBID_API()
 export const SpaceID = new SpaceID_API()
 export const Bonfida = new BonfidaAPI()
 
@@ -173,6 +176,9 @@ export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()
 export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()
 export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
 export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
+
+// SID
+export const SID_Domain = new SID_DomainAPI()
 
 // Chainbase
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
