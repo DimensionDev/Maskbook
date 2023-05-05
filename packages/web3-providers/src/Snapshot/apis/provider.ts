@@ -91,21 +91,21 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
         const allSettled = await Promise.allSettled(
             Array.from(Array(Math.ceil(totalVotes / 1000))).map(async (x, i) => {
                 const queryCurrentAccountVote = `
-                query {
-                    votes (
-                        first: 1000
-                        skip: ${i * 1000}
-                        where: {
-                            proposal: "${proposalId}",
-                            voter:"${account}"
+                    query {
+                        votes (
+                            first: 1000
+                            skip: ${i * 1000}
+                            where: {
+                                proposal: "${proposalId}",
+                                voter:"${account}"
+                            }
+                            orderBy: "created",
+                            orderDirection: desc
+                        ) {
+                            choice
                         }
-                        orderBy: "created",
-                        orderDirection: desc
-                    ) {
-                        choice
                     }
-                }
-            `
+                `
 
                 const { votes } = await fetchFromGraphql<{ votes: Array<{ choice: number }> }>(queryCurrentAccountVote)
 
@@ -118,5 +118,28 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
             .filter(Boolean) as Array<{ choice: number }>
 
         return result.length ? result[0] : undefined
+    }
+
+    async getFollowingSpaceIdList(account: string) {
+        if (!account) return []
+
+        const query = `
+            query {
+                follows(
+                    first: 1000,
+                    where: {
+                        follower: "${account}"
+                    }
+                ) {
+                    space {
+                        id
+                    }
+                }
+            }
+        `
+
+        const { follows } = await fetchFromGraphql<{ follows: Array<{ space: { id: string } }> }>(query)
+
+        return follows.map((x) => x.space.id)
     }
 }

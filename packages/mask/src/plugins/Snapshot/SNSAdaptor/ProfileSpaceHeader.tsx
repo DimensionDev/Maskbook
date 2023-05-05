@@ -7,6 +7,8 @@ import { Box, Typography, Avatar, IconButton, Button, ThemeProvider, type Theme 
 import { makeStyles } from '@masknet/theme'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
+import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
@@ -67,6 +69,8 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
+    const { account } = useChainContext()
+    const { value: followedSpaceList } = useCurrentAccountFollowSpaceList()
 
     return (
         <Box className={classes.root}>
@@ -117,7 +121,9 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                 size="medium"
                 variant="roundedContained"
                 onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
-                {t('plugin_snapshot_space_join')}
+                {account && followedSpaceList && !followedSpaceList.includes(currentSpace.spaceId)
+                    ? t('plugin_snapshot_space_join')
+                    : t('plugin_snapshot_space_view')}
             </Button>
         </Box>
     )

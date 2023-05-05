@@ -776,6 +776,7 @@
     "plugin_snapshot_proposal_no_results": "Oops, we can't find any results.",
     "plugin_snapshot_space": "Space",
     "plugin_snapshot_space_join": "Join",
+    "plugin_snapshot_space_view": "View",
     "plugin_snapshot_proposal": "Proposal",
     "plugin_snapshot_progress": "Progress",
     "plugin_snapshot_load_failed": "Loading fails due to Snapshot API service breakdown.",
