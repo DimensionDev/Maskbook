@@ -42,7 +42,12 @@ export const FailedTrendingView: FC<Props> = ({ result, resultList, setResult, o
                             </Button>
                         </Stack>
                     </EmptyStatus>
-                    <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
+                    <TrendingViewDescriptor
+                        result={result}
+                        resultList={resultList}
+                        setResult={setResult}
+                        omitProvider={resultList.length < 2}
+                    />
                 </div>
             </TrendingCard>
         </ThemeProvider>

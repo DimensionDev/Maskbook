@@ -47,10 +47,10 @@ export interface TrendingViewDescriptorProps {
     result: Web3Helper.TokenResultAll
     resultList: Web3Helper.TokenResultAll[]
     setResult: (a: Web3Helper.TokenResultAll) => void
+    omitProvider?: boolean
 }
 
-export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
-    const { result, resultList, setResult } = props
+export function TrendingViewDescriptor({ result, resultList, setResult, omitProvider }: TrendingViewDescriptorProps) {
     const {
         isProfilePage,
         isCollectionProjectPopper = false,
@@ -70,22 +70,24 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
             isCollectionProjectPopper={isCollectionProjectPopper}
             isProfilePage={isProfilePage}
             isTokenTagPopper={isTokenTagPopper}>
-            <Box className={classes.source}>
-                <Stack
-                    className={classes.sourceMenu}
-                    display="inline-flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={0.5}>
-                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                </Stack>
-                <SourceSwitcher
-                    resultList={displayList}
-                    result={result}
-                    setResult={setResult}
-                    classes={{ selectedOption: classes.selectedOption, arrowDropIcon: classes.arrowDropIcon }}
-                />
-            </Box>
+            {omitProvider ? null : (
+                <Box className={classes.source}>
+                    <Stack
+                        className={classes.sourceMenu}
+                        display="inline-flex"
+                        flexDirection="row"
+                        alignItems="center"
+                        gap={0.5}>
+                        <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                    </Stack>
+                    <SourceSwitcher
+                        resultList={displayList}
+                        result={result}
+                        setResult={setResult}
+                        classes={{ selectedOption: classes.selectedOption, arrowDropIcon: classes.arrowDropIcon }}
+                    />
+                </Box>
+            )}
         </PluginDescriptor>
     )
 }
