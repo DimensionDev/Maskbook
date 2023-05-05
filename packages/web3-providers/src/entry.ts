@@ -72,6 +72,7 @@ import { Web3BioAPI } from './Web3Bio/index.js'
 import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
+import { SID_DomainAPI } from './SID/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -175,6 +176,9 @@ export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()
 export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()
 export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
 export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
+
+// SID
+export const SID_Domain = new SID_DomainAPI()
 
 // Chainbase
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
