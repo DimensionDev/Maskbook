@@ -33,7 +33,7 @@ export namespace LensBaseAPI {
         ownedBy: string
         name: string
         picture?: {
-            original: {
+            original?: {
                 url: string
             }
         }
