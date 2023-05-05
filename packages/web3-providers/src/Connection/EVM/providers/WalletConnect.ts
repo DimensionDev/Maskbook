@@ -218,11 +218,16 @@ export default class WalletConnectProvider
     }
 
     override async switchChain(chainId?: ChainId | undefined): Promise<void> {
-        return new Promise((resolve, reject) => {
+        let clean: () => boolean | undefined
+        return new Promise<void>((resolve, reject) => {
             super.switchChain(chainId).catch((error) => {
                 reject(error)
             })
-            this.emitter.on('chainId', () => resolve())
+            clean = this.emitter.on('chainId', () => {
+                resolve()
+            })
+        }).finally(() => {
+            clean?.()
         })
     }
 
