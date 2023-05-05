@@ -79,10 +79,10 @@ export function useClaimAirdrop(
         } catch (error) {
             if (
                 error instanceof Error &&
-                !error.message.includes('Transaction was rejected') &&
-                !error.message.includes('Signature canceled') &&
-                !error.message.includes('User rejected the request') &&
-                !error.message.includes('User rejected transaction')
+                (error.message.includes('Transaction was rejected') ||
+                    error.message.includes('Signature canceled') ||
+                    error.message.includes('User rejected the request') ||
+                    error.message.includes('User rejected transaction'))
             )
                 showSingletonSnackbar(t.claim_tips(), {
                     processing: false,

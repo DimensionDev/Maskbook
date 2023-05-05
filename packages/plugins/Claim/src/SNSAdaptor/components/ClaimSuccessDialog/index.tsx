@@ -61,6 +61,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         marginTop: 14,
     },
+    icon: {
+        objectFit: 'contain',
+    },
 }))
 
 export function ClaimSuccessDialog() {
@@ -95,10 +98,10 @@ export function ClaimSuccessDialog() {
         <Dialog container={container} open={open} onClose={closeDialog} classes={{ paper: classes.paper }}>
             <DialogTitle className={classes.title}>
                 <Icons.Close className={classes.close} onClick={closeDialog} />
-                {t.tips()}
+                {t.claim()}
             </DialogTitle>
             <DialogContent className={classes.content} style={{ paddingTop: 34 }}>
-                <ImageIcon icon={tokenDetail.value?.logoURL} size={90} />
+                <ImageIcon icon={tokenDetail.value?.logoURL} size={90} classes={{ icon: classes.icon }} />
                 <Typography className={classes.symbol}>
                     {amount} {tokenDetail.value?.symbol}
                 </Typography>

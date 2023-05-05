@@ -155,6 +155,14 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
         if (!title) return
 
+        if (
+            title === 'Claim your Airdrop' &&
+            (errorInfo?.error.message.includes('Transaction was rejected') ||
+                errorInfo?.error.message.includes('Signature canceled') ||
+                errorInfo?.error.message.includes('User rejected the request') ||
+                errorInfo?.error.message.includes('User rejected transaction'))
+        )
+            return
         const snackbarConfig = resolveSnackbarConfig(TransactionStatusType.FAILED)
 
         showSingletonSnackbar(title, {

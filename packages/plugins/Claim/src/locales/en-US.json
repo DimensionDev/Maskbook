@@ -23,8 +23,8 @@
     "airdrop_title": "Mask Network ${{symbol}} Airdrop",
     "airdrop_in_progress_time_tips": "Claiming will be live until: <strong> {{days}} d  {{hours}} h  {{minutes}} m </strong>",
     "no_account_tips": "Please connect wallet to check if you are eligible to claim ${{symbol}}.",
-    "start_time_tips": "Start Time: {{time}}",
-    "end_time_tips": "Ended on {{time}}",
+    "start_time_tips": "Start Time: <strong>{{time}}</strong>",
+    "end_time_tips": "Ended on <strong>{{time}}</strong>",
     "no_eligible_tips": "Sorry, you are not eligible to claim $ARB in this campaign.",
     "claimed_tips": "You’ve already claimed $ARB.",
     "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
