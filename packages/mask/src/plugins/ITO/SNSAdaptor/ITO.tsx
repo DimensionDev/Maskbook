@@ -16,7 +16,7 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
-import { SOCIAL_MEDIA_NAME, TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
@@ -284,26 +284,23 @@ export function ITO(props: ITO_Props) {
     const isBuyer =
         chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || !!availability?.claimed)
 
-    const successShareText = t(
-        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-            ? 'plugin_ito_claim_success_share'
-            : 'plugin_ito_claim_success_share_no_official_account',
-        {
-            user: sellerName,
-            link: postLink,
-            symbol: token.symbol,
-            sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
-            account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
-        },
-    )
-    const canWithdraw = useMemo(
-        () =>
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+    const context = isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : undefined
+    const successShareText = t('plugin_ito_claim_success_share', {
+        context,
+        user: sellerName,
+        link: postLink,
+        symbol: token.symbol,
+    })
+    const canWithdraw = useMemo(() => {
+        return (
             !availability?.destructed &&
             isAccountSeller &&
             !availability?.exchanged_tokens.every(isZero) &&
-            (listOfStatus.includes(ITO_Status.expired) || noRemain),
-        [tradeInfo, listOfStatus, isAccountSeller, noRemain, loadingTradeInfo],
-    )
+            (listOfStatus.includes(ITO_Status.expired) || noRemain)
+        )
+    }, [tradeInfo, listOfStatus, isAccountSeller, noRemain, loadingTradeInfo])
 
     const refundAmount = useMemo(() => {
         const buyInfo = tradeInfo?.buyInfo
@@ -325,18 +322,12 @@ export function ITO(props: ITO_Props) {
 
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback([pid], payload.contract_address)
 
-    const shareText = t(
-        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-            ? 'plugin_ito_claim_foreshow_share'
-            : 'plugin_ito_claim_foreshow_share_no_official_account',
-        {
-            link: postLink,
-            name: token.name,
-            symbol: token.symbol ?? 'token',
-            sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
-            account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
-        },
-    )
+    const shareText = t('plugin_ito_claim_foreshow_share', {
+        context,
+        link: postLink,
+        name: token.name,
+        symbol: token.symbol ?? 'token',
+    })
     const onShare = useCallback(async () => {
         activatedSocialNetworkUI.utils.share?.(shareText)
     }, [shareText])
@@ -388,7 +379,7 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text = new BigNumber(availability?.swapped || 0).isGreaterThan(0)
+        const _text = isGreaterThan(availability?.swapped || 0, 0)
             ? t('plugin_ito_your_swapped_amount', {
                   amount: formatBalance(availability?.swapped || 0, token.decimals),
                   symbol: token.symbol,
