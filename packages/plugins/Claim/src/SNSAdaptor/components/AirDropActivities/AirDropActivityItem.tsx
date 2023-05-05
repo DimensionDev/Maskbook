@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 46,
     },
     title: {
-        fontSize: 22,
+        fontSize: 18,
         fontWeight: 700,
         lineHeight: 1.2,
         color: theme.palette.maskColor.white,

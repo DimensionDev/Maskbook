@@ -1,6 +1,6 @@
 {
     "__plugin_name": "Claim",
-    "airdrop": "AirDrop",
+    "airdrop": "Airdrop",
     "ito": "ITO",
     "claim": "Claim",
     "claimable": "Claimable",
@@ -18,14 +18,14 @@
     "unclaimed_token_title": "{{symbol}} Unclaimed:",
     "locked_token_title": "{{symbol}} Locked:",
     "unlock_time": "Unlock Time: {{time}}",
-    "claim_tips": "Claim your AirDrop",
+    "claim_tips": "Claim your Airdrop",
     "cancel_claim_tips": "Your wallet cancelled the transaction.",
-    "airdrop_title": "Mask Network ${{symbol}} Airdrop",
+    "airdrop_title": "Mask Community ${{symbol}} Giveaway",
     "airdrop_in_progress_time_tips": "Claiming will be live until: <strong> {{days}} d  {{hours}} h  {{minutes}} m </strong>",
     "no_account_tips": "Please connect wallet to check if you are eligible to claim ${{symbol}}.",
     "start_time_tips": "Start Time: <strong>{{time}}</strong>",
     "end_time_tips": "Ended on <strong>{{time}}</strong>",
     "no_eligible_tips": "Sorry, you are not eligible to claim $ARB in this campaign.",
-    "claimed_tips": "You’ve already claimed $ARB.",
+    "claimed_tips": "You have claimed $ARB.",
     "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 }

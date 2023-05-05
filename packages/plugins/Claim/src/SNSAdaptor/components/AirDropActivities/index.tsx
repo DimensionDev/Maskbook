@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
+        marginBottom: 0,
     },
 }))
 
