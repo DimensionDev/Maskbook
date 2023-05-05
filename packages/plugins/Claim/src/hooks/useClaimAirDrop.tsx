@@ -15,7 +15,7 @@ import { useRef, useCallback } from 'react'
 import { useI18N } from '../locales/i18n_generated.js'
 import { useTheme } from '@mui/material'
 
-export function useClaimAirDrop(
+export function useClaimAirdrop(
     chainId: ChainId,
     eventIndex: number,
     callback: () => void,

@@ -12,7 +12,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useClaimAirDrop } from '../../../hooks/useClaimAirDrop.js'
+import { useClaimAirdrop } from '../../../hooks/useClaimAirdrop.js'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -148,7 +148,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
 
         const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, token, undefined, { chainId })
 
-        const [{ loading }, handleClaim] = useClaimAirDrop(
+        const [{ loading }, handleClaim] = useClaimAirdrop(
             chainId,
             eventIndex,
             onClaimSuccess,
@@ -171,7 +171,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                                 <Typography className={classes.tips}>{t.no_eligible_tips()}</Typography>
                             ) : null}
                             {isClaimed ? <Typography className={classes.tips}>{t.claimed_tips()}</Typography> : null}
-                            {true ? (
+                            {isEligible && !isClaimed ? (
                                 <Box className={classes.actions}>
                                     <Box>
                                         <Typography className={classes.amount}>
