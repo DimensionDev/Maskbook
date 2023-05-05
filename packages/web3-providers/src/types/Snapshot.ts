@@ -41,5 +41,6 @@ export namespace SnapshotBaseAPI {
             totalVotes: number,
             account: string,
         ): Promise<{ choice: number } | undefined>
+        getFollowingSpaceIdList(account: string): Promise<string[] | undefined>
     }
 }
