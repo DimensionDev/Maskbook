@@ -337,7 +337,7 @@ export function FollowLensDialog() {
                                     profile={
                                         defaultProfile
                                             ? {
-                                                  avatar: defaultProfile.picture?.original.url,
+                                                  avatar: defaultProfile.picture?.original?.url,
                                                   handle: defaultProfile.handle,
                                               }
                                             : undefined

@@ -13,47 +13,50 @@ export class LensAPI implements LensBaseAPI.Provider {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `query Profile {
-                    profile(request: { handle: "${handle}" }) {
-                      id
-                      handle
-                      ownedBy
-                      name
-                      picture {
-                        ...on MediaSet {
-                            original {
-                                url
+                query: /* GraphQL */ `
+                    query Profile($handle: Handle) {
+                        profile(request: { handle: $handle }) {
+                            id
+                            handle
+                            ownedBy
+                            name
+                            picture {
+                                ... on MediaSet {
+                                    original {
+                                        url
+                                    }
+                                }
+                            }
+                            stats {
+                                totalFollowers
+                                totalFollowing
+                            }
+                            followModule {
+                                ... on FeeFollowModuleSettings {
+                                    type
+                                    contractAddress
+                                    amount {
+                                        asset {
+                                            name
+                                            symbol
+                                            decimals
+                                            address
+                                        }
+                                        value
+                                    }
+                                    recipient
+                                }
+                                ... on ProfileFollowModuleSettings {
+                                    type
+                                }
+                                ... on RevertFollowModuleSettings {
+                                    type
+                                }
                             }
                         }
-                      }
-                      stats {
-                        totalFollowers
-                        totalFollowing
-                      }
-                      followModule {
-                        ... on FeeFollowModuleSettings {
-                          type
-                          contractAddress
-                          amount {
-                            asset {
-                              name
-                              symbol
-                              decimals
-                              address
-                            }
-                            value
-                          }
-                          recipient
-                        }
-                        ... on ProfileFollowModuleSettings {
-                         type
-                        }
-                        ... on RevertFollowModuleSettings {
-                         type
-                        }
-                      }
                     }
-                  }`,
+                `,
+                variables: { handle },
             }),
         })
         return data.profile
