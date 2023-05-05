@@ -34,6 +34,7 @@ export default {
     'plugins/Approval/src/locales/%locale%.json': 'com.maskbook.approval',
     'plugins/ScamWarning/src/locales/%locale%.json': 'com.mask.scam-warning',
     'plugins/SmartPay/src/locales/%locale%.json': 'com.mask.smart-pay',
+    'plugins/Claim/src/locales/%locale%.json': 'com.mask.claim',
     'plugins/VCent/src/locales/%locale%.json': 'com.maskbook.tweet',
     'plugins/Transak/src/locales/%locale%.json': 'com.maskbook.transak',
     'plugins/Collectible/src/locales/%locale%.json': 'com.maskbook.collectibles',
