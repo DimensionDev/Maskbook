@@ -8,7 +8,7 @@ import { ButtonStyle } from '../constant.js'
 import { useEffect, useMemo, useState } from 'react'
 import { searchHomeLinkName } from '../utils/selector.js'
 
-const twitterBreakpoint = 1265
+const TWITTER_BREAKPOINT = 1265
 
 const Container = styled('div')`
     cursor: pointer;
@@ -22,7 +22,7 @@ const ListItem = styled(ListItemButton)`
         ${({ theme }) => (theme.palette.mode === 'dark' ? 'background: rgba(217, 217, 217, 0.1);' : '')}
     }
     /* twitter break point */
-    @media screen and (max-width: ${twitterBreakpoint}px) {
+    @media screen and (max-width: ${TWITTER_BREAKPOINT}px) {
         height: 50px;
     }
 `
@@ -49,7 +49,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
             </Text>
         )
     }, [buttonStyle.iconSize, textMarginLeft])
-    const _mini = useMediaQuery(`(max-width: ${twitterBreakpoint}px)`)
+    const _mini = useMediaQuery(`(max-width: ${TWITTER_BREAKPOINT}px)`)
     const [mini, setMini] = useState(_mini)
 
     useEffect(() => {
