@@ -52,6 +52,7 @@ const useStyles = makeStyles()({
 
 const AddDeriveWallet = memo(() => {
     const { t } = useI18N()
+
     const indexes = useRef(new Set<number>())
     const navigate = useNavigate()
     const location = useLocation()

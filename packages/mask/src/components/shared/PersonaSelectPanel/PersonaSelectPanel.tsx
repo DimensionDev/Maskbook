@@ -55,7 +55,9 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { finishTarget, enableVerify = true, onClose } = props
+
     const { t } = useI18N()
+
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
 
