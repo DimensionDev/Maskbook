@@ -142,7 +142,7 @@ export function TrendingView(props: TrendingViewProps) {
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
     // #region merge trending
-    const { value: { trending } = {}, loading: loadingTrending, error } = useTrendingById(result, result.address)
+    const { value: { trending } = {}, loading: loadingTrending, error, retry } = useTrendingById(result, result.address)
     // #endregion
 
     useEffect(() => {
@@ -284,6 +284,7 @@ export function TrendingView(props: TrendingViewProps) {
                 resultList={resultList}
                 setResult={setResult}
                 classes={{ root: classes.root }}
+                onRetry={retry}
             />
         )
     }

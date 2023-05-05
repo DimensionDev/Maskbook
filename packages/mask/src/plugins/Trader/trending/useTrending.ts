@@ -1,11 +1,9 @@
 import { flatten } from 'lodash-es'
 import { useRef, useState, useEffect } from 'react'
 import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
 import { TokenType, type NonFungibleTokenActivity, SearchResultType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
@@ -71,13 +69,7 @@ export function useNonFungibleTokenActivities(
     }
 }
 
-export function useTrendingById(
-    result: Web3Helper.TokenResultAll,
-    address?: string,
-): AsyncState<{
-    currency?: TrendingAPI.Currency
-    trending?: TrendingAPI.Trending | null
-}> {
+export function useTrendingById(result: Web3Helper.TokenResultAll, address?: string) {
     const { chainId } = useChainContext({ chainId: result.chainId })
     const currency = useCurrentCurrency(result.chainId, result.source)
 
@@ -85,7 +77,8 @@ export function useTrendingById(
         value: trending,
         loading,
         error,
-    } = useAsync(async () => {
+        retry,
+    } = useAsyncRetry(async () => {
         if (!currency || !result.source) return null
         return PluginTraderRPC.getCoinTrending(result, currency)
     }, [chainId, JSON.stringify(result), currency?.id])
@@ -104,6 +97,7 @@ export function useTrendingById(
         return {
             loading: false,
             error,
+            retry,
         }
     }
 
