@@ -124,7 +124,12 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             const now = new Date()
             switch (activityStatus) {
                 case ActivityStatus.NOT_START:
-                    return t.start_time_tips({ time: format(startTime, 'MM-dd-yyyy HH:mm') })
+                    return (
+                        <Translate.start_time_tips
+                            values={{ time: format(startTime, 'MM-dd-yyyy HH:mm') }}
+                            components={{ strong: <strong className={classes.strong} /> }}
+                        />
+                    )
                 case ActivityStatus.IN_PROGRESS:
                     const duration = intervalToDuration({
                         start: now,
@@ -142,7 +147,12 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                         />
                     )
                 case ActivityStatus.ENDED:
-                    return t.end_time_tips({ time: format(endTime, 'MM-dd-yyyy HH:mm') })
+                    return (
+                        <Translate.start_time_tips
+                            values={{ time: format(endTime, 'MM-dd-yyyy HH:mm') }}
+                            components={{ strong: <strong className={classes.strong} /> }}
+                        />
+                    )
             }
         }, [activityStatus, classes])
 
