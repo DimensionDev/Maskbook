@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Typography, alpha } from '@mui/material'
@@ -13,6 +13,7 @@ import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useClaimAirdrop } from '../../../hooks/useClaimAirdrop.js'
+import { useInterval } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -109,19 +110,16 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
         const t = useI18N()
         const { classes } = useStyles()
         const { account, providerType } = useChainContext()
-
+        const [now, setNow] = useState(new Date())
         const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
         const activityStatus = useMemo(() => {
-            const now = new Date()
-
             if (!isAfter(now, startTime)) return ActivityStatus.NOT_START
             if (isBefore(endTime, now)) return ActivityStatus.ENDED
             return ActivityStatus.IN_PROGRESS
-        }, [startTime, endTime])
+        }, [startTime, endTime, now])
 
         const timeTips = useMemo(() => {
-            const now = new Date()
             switch (activityStatus) {
                 case ActivityStatus.NOT_START:
                     return t.start_time_tips({ time: format(startTime, 'MM-dd-yyyy HH:mm') })
@@ -144,7 +142,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                 case ActivityStatus.ENDED:
                     return t.end_time_tips({ time: format(endTime, 'MM-dd-yyyy HH:mm') })
             }
-        }, [activityStatus, classes])
+        }, [activityStatus, classes, now])
 
         const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, token, undefined, { chainId })
 
@@ -156,6 +154,11 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             amount,
             token,
         )
+
+        // Time update every minute
+        useInterval(() => {
+            setNow(new Date())
+        }, 1000 * 60)
 
         return (
             <Box className={classes.container}>
