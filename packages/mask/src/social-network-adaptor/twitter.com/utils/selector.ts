@@ -293,4 +293,4 @@ export const searchReplyToolbarSelector = () =>
 // nameTag dom
 export const searchNameTag = () => querySelector<E>('#nft-gallery')
 
-export const searchHomeLinkName = () => querySelector<E>('[data-testid="AppTabBar_Home_Link"] span')
+export const searchHomeLinkName = () => querySelector<E>('[data-testid="AppTabBar_Home_Link"]')
