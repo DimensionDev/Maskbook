@@ -864,7 +864,7 @@
     "popups_wallet_name_origin_password": "Original Password",
     "popups_wallet_tab_assets": "Assets",
     "popups_wallet_tab_activity": "Activities",
-    "popups_wallet_derivation_path": "Derivation path ({{ -path }})",
+    "popups_wallet_derivation_path": "Derivation path ({{- path }})",
     "popups_wallet_next": "Next",
     "popups_wallet_backup_wallet": "Back up the wallet",
     "popups_wallet_backup_json_file": "JSON File",
