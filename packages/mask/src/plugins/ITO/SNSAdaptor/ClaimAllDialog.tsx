@@ -208,8 +208,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
     const claim = useCallback(async () => {
-        const hash = await claimCallback()
-        if (typeof hash !== 'string') return
+        const results = await claimCallback()
+        const { hash, receipt, events } = results ?? {}
+        const { id } = (events?.ClaimSuccess?.returnValues ?? {}) as {
+            id?: string
+        }
+        if (typeof hash !== 'string' || typeof receipt?.transactionHash !== 'string' || !id) return
         retry()
     }, [claimCallback, retry])
     const { classes, cx } = useStyles({
