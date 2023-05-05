@@ -775,6 +775,7 @@
     "plugin_snapshot_proposal_no_results": "crwdns20043:0crwdne20043:0",
     "plugin_snapshot_space": "crwdns20045:0crwdne20045:0",
     "plugin_snapshot_space_join": "crwdns20047:0crwdne20047:0",
+    "plugin_snapshot_space_view": "crwdns20167:0crwdne20167:0",
     "plugin_snapshot_proposal": "crwdns18648:0crwdne18648:0",
     "plugin_snapshot_progress": "crwdns18650:0crwdne18650:0",
     "plugin_snapshot_load_failed": "crwdns18652:0crwdne18652:0",
