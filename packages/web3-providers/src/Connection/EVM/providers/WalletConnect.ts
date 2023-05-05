@@ -217,6 +217,20 @@ export default class WalletConnectProvider
         }
     }
 
+    override async switchChain(chainId?: ChainId | undefined): Promise<void> {
+        let clean: () => boolean | undefined
+        return new Promise<void>((resolve, reject) => {
+            super.switchChain(chainId).catch((error) => {
+                reject(error)
+            })
+            clean = this.emitter.on('chainId', () => {
+                resolve()
+            })
+        }).finally(() => {
+            clean?.()
+        })
+    }
+
     override async connect(chainId: ChainId) {
         const account = await this.login(chainId)
         if (!account.account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)

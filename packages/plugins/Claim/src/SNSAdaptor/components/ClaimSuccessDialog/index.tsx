@@ -36,9 +36,11 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         padding: '34px 16px 50px',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     actions: {
         padding: '0px 16px 16px',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     symbol: {
         fontSize: 20,
@@ -95,7 +97,7 @@ export function ClaimSuccessDialog() {
                 <Icons.Close className={classes.close} onClick={closeDialog} />
                 {t.tips()}
             </DialogTitle>
-            <DialogContent className={classes.content}>
+            <DialogContent className={classes.content} style={{ paddingTop: 34 }}>
                 <ImageIcon icon={tokenDetail.value?.logoURL} size={90} />
                 <Typography className={classes.symbol}>
                     {amount} {tokenDetail.value?.symbol}

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Typography, alpha } from '@mui/material'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
@@ -12,7 +12,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useClaimAirDrop } from '../../../hooks/useClaimAirDrop.js'
+import { useClaimAirdrop } from '../../../hooks/useClaimAirdrop.js'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -74,6 +74,10 @@ const useStyles = makeStyles()((theme) => ({
             background: theme.palette.maskColor.white,
         },
     },
+    strong: {
+        color: theme.palette.maskColor.white,
+        fontWeight: 700,
+    },
 }))
 
 interface AirDropActivityItemProps {
@@ -126,19 +130,25 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                         start: now,
                         end: endTime,
                     })
-                    return t.airdrop_in_progress_time_tips({
-                        days: String(duration.days ?? ''),
-                        hours: String(duration.hours ?? ''),
-                        minutes: String(duration.minutes ?? ''),
-                    })
+
+                    return (
+                        <Translate.airdrop_in_progress_time_tips
+                            values={{
+                                days: String(duration.days ?? ''),
+                                hours: String(duration.hours ?? ''),
+                                minutes: String(duration.minutes ?? ''),
+                            }}
+                            components={{ strong: <strong className={classes.strong} /> }}
+                        />
+                    )
                 case ActivityStatus.ENDED:
                     return t.end_time_tips({ time: format(endTime, 'MM-dd-yyyy HH:mm') })
             }
-        }, [activityStatus])
+        }, [activityStatus, classes])
 
         const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, token, undefined, { chainId })
 
-        const [{ loading }, handleClaim] = useClaimAirDrop(
+        const [{ loading }, handleClaim] = useClaimAirdrop(
             chainId,
             eventIndex,
             onClaimSuccess,
