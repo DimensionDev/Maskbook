@@ -216,7 +216,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
 function FungibleTokenBalance({ protocol, tab }: { protocol: SavingsProtocol; tab: TabType }) {
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
-        protocol.bareToken.address,
+        tab === TabType.Deposit ? protocol.bareToken.address : '',
     )
 
     return (
