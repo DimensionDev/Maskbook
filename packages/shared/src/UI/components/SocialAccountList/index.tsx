@@ -1,5 +1,5 @@
 import { isNonNull } from '@masknet/kit'
-import { useMenuConfig, useSharedI18N } from '@masknet/shared'
+import { useMenuConfig } from '@masknet/shared'
 import { NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, type MenuProps } from '@mui/material'
@@ -61,8 +61,7 @@ interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuPro
 }
 
 export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: SocialAccountListProps) {
-    const t = useSharedI18N()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
     const orderedBindings = useMemo(() => {
         return nextIdBindings.sort((a, z) => {
