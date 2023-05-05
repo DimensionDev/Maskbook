@@ -9,7 +9,7 @@ import type { Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL.js'
 import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, type SavingsProtocol, TabType } from '../types.js'
-import { useChainContext, useFungibleAssets, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
 import { LDO_PAIRS } from '../constants.js'
@@ -101,10 +101,6 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
-        chainId,
-    })
-
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
         await Promise.all(
@@ -152,7 +148,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </Grid>
             </Grid>
 
-            {loading || getAssetsLoading ? (
+            {loading ? (
                 <div className={classes.placeholder}>
                     <Icons.CircleLoading size={36} className={classes.animated} />
                     <Typography className={classes.loading}>{t('popups_loading')}</Typography>
