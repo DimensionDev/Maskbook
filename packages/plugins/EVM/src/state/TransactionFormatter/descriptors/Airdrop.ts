@@ -1,13 +1,14 @@
 import { Airdrop } from '@masknet/web3-providers'
-import type { TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
+import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
+import { getITOConstants, type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
 import { getTokenAmountDescription } from '../utils.js'
 
 export class AirDropDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId>
-        if (!context.methods?.length) return
+        const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
+        if (!context.methods?.length || isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
 
         for (const { name, parameters } of context.methods) {
             switch (name) {
