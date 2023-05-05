@@ -61,6 +61,7 @@
     "bignumber.js": "9.1.1",
     "bloom-filters": "^3.0.0",
     "bs58": "^5.0.0",
+    "bn.js": "^4.12.0",
     "buffer": "^6.0.3",
     "date-fns": "^2.29.3",
     "fuse.js": "6.6.2",
@@ -77,11 +78,14 @@
     "wallet.ts": "^1.0.1",
     "web3": "1.8.0",
     "web3-core": "1.8.0",
+    "web3-core-helpers": "1.8.0",
     "web3-eth": "1.8.0",
+    "web3-eth-abi": "1.8.0",
     "web3-utils": "1.8.0"
   },
   "devDependencies": {
     "@types/bs58": "^4.0.1",
+    "@types/bn.js": "^4.11.6",
     "@sentry/browser": "^7.50.0",
     "@sentry/tracing": "^7.50.0",
     "@sentry/types": "^7.50.0",

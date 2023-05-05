@@ -1,15 +1,15 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PersonaSelectPanelDialog } from '../../../components/shared/PersonaSelectPanel/PersonaSelectPanelDialog.js'
-import { base } from '../base.js'
-import { NextIdPage } from '../components/NextIdPage.js'
-import { PLUGIN_ID } from '../constants.js'
-import { SharedContextSettings } from '../settings.js'
+import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { base } from '../base.js'
+import { PLUGIN_ID } from '../constants.js'
+import { NextIdPage } from '../components/NextIdPage.js'
+import { PersonaSelectPanelDialog } from '../../../components/shared/PersonaSelectPanel/PersonaSelectPanelDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
-        SharedContextSettings.value = context
+        SNSAdaptorPluginContext.setup(context)
     },
     GlobalInjection() {
         return <PersonaSelectPanelDialog />
@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 10,
             UI: {
                 TabContent: ({ identity }) => (
-                    <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                    <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                         <NextIdPage />
                     </SNSAdaptorContext.Provider>
                 ),

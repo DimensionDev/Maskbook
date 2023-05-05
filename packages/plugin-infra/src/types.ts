@@ -927,7 +927,6 @@ export namespace Plugin.Dashboard {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
-        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>

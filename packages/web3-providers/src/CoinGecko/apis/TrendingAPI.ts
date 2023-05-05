@@ -8,10 +8,10 @@ import {
     getTokenConstant,
     isNativeTokenSymbol,
 } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'

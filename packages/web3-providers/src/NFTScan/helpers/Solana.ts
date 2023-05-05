@@ -12,7 +12,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
-import type { Solana } from '../types/index.js'
+import type { Solana } from '../types/Solana.js'
 import { resolveActivityType, parseJSON, getAssetFullName, fetchJSON } from '../../entry-helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {

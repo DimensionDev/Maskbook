@@ -1,5 +1,5 @@
 import { fetchJSON } from '../../entry-helpers.js'
-import type { SnapshotBaseAPI, SnapshotProposal, SnapshotSpace } from '../../entry-types.js'
+import type { SnapshotBaseAPI } from '../../entry-types.js'
 
 async function fetchFromGraphql<T>(query: string) {
     const { data } = await fetchJSON<{ data: T }>(
@@ -9,7 +9,7 @@ async function fetchFromGraphql<T>(query: string) {
 }
 
 export class SnapshotAPI implements SnapshotBaseAPI.Provider {
-    async getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotProposal[]> {
+    async getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotBaseAPI.SnapshotProposal[]> {
         const queryProposal = `
             query {
                 proposals (
@@ -49,7 +49,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
             }
         `
 
-        const { proposals } = await fetchFromGraphql<{ proposals: SnapshotProposal[] }>(queryProposal)
+        const { proposals } = await fetchFromGraphql<{ proposals: SnapshotBaseAPI.SnapshotProposal[] }>(queryProposal)
 
         return proposals.map((proposal) => {
             const validStrategy = proposal.strategies.find((x) => {
@@ -82,7 +82,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
             }
         `
 
-        const { space } = await fetchFromGraphql<{ space: SnapshotSpace }>(querySpace)
+        const { space } = await fetchFromGraphql<{ space: SnapshotBaseAPI.SnapshotSpace }>(querySpace)
 
         return space
     }

@@ -18,7 +18,6 @@
     { "path": "../web3-hooks/base" },
     { "path": "../web3-providers" },
     { "path": "../web3-modals" },
-    { "path": "../web3-state" },
     { "path": "../web3-shared/base" }
   ]
 }

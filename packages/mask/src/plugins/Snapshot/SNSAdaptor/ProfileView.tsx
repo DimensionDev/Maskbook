@@ -1,3 +1,5 @@
+import { useMemo, useState, useTransition } from 'react'
+import { useAsyncFn } from 'react-use'
 import {
     ActionButton,
     LoadingBase,
@@ -8,22 +10,20 @@ import {
     useTabs,
 } from '@masknet/theme'
 import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
-import { PluginDescriptor } from './PluginDescriptor.js'
-import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ProfileCard, type ProfileCardProps } from './ProfileCard.js'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
+import { Icons } from '@masknet/icons'
+import { PluginID } from '@masknet/shared-base'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useI18N } from '../../../utils/index.js'
+import { PluginDescriptor } from './PluginDescriptor.js'
+import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
-import { useMemo, useState, useTransition } from 'react'
 import { ProfileProposalList } from './ProfileProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
-import { Icons } from '@masknet/icons'
-import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { PluginID } from '@masknet/shared-base'
-import { useAsyncFn } from 'react-use'
 import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -101,7 +101,7 @@ export function ProfileView(props: ProfileViewProps) {
 
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
-        if (!proposalList || !space?.members) return
+        if (!proposalList?.length || !space?.members) return
         if (currentTab === ContentTabs.All) return proposalList
         if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space?.members?.includes(x.author))
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())

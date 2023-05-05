@@ -16,9 +16,8 @@ import type {
     Web3,
     Block,
 } from '@masknet/web3-shared-evm'
+import { SharedUIPluginContext, Web3State } from '@masknet/web3-providers'
 import { base } from '../../base.js'
-import { createWeb3State } from '../../state/index.js'
-import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -39,12 +38,12 @@ const sns: Plugin.SNSAdaptor.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        SharedContextSettings.value = context
+        SharedUIPluginContext.setup(context)
 
-        const Web3State = await createWeb3State(signal, context)
+        const state = await Web3State.create(context)
 
-        sns.Web3State = Web3State
-        Web3StateSettings.value = Web3State
+        Web3State.setup(state)
+        sns.Web3State = Web3State.state
     },
 }
 
