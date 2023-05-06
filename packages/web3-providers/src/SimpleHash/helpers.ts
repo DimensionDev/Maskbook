@@ -1,13 +1,5 @@
 import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    WNATIVE,
-    chainResolver,
-    isValidChainId,
-    isValidDomain,
-    resolveImageURL,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { isEmpty } from 'lodash-es'
@@ -38,9 +30,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     const address = asset.contract_address
     if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
-    const name = isValidDomain(asset.name)
-        ? asset.name
-        : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
+    const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
     return {
         id: address,
@@ -68,7 +58,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             : undefined,
         metadata: {
             chainId,
-            name: asset.name,
+            name,
             tokenId: asset.token_id,
             symbol: asset.contract.symbol,
             description: asset.description,
