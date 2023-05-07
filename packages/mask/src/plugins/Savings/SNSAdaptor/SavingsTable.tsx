@@ -112,11 +112,11 @@ export function SavingsTable({
     // Only fetch protocol APR and Balance on chainId change
     const { loading: loadingDetails } = useAsync(async () => {
         if (loadingProtocols) return
-        await Promise.all(
-            protocols.map(async (protocol) => {
-                await protocol.updateApr(chainId, web3 as Web3)
-                await protocol.updateBalance(chainId, web3 as Web3, account)
-            }),
+        await Promise.allSettled(
+            protocols.flatMap((protocol) => [
+                protocol.updateApr(chainId, web3 as Web3),
+                protocol.updateBalance(chainId, web3 as Web3, account),
+            ]),
         )
     }, [chainId, web3, account, protocols, loadingProtocols])
 

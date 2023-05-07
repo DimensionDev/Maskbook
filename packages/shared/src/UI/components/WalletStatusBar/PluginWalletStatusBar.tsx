@@ -79,7 +79,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const providerDescriptor = useProviderDescriptor()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-        const { value: domain } = useReverseAddress(pluginID, account)
+        const { data: domain } = useReverseAddress(pluginID, account)
         const { Others } = useWeb3State()
 
         const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(

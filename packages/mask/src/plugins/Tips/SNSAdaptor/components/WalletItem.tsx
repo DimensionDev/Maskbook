@@ -78,7 +78,7 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, onSetD
     const { classes, cx } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address, ChainId.Mainnet)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {

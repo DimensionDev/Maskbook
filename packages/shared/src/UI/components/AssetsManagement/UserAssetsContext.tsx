@@ -118,6 +118,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
                     size,
                     chainId,
                 })
+
                 if (process.env.NODE_ENV === 'development' && collectionId) {
                     console.assert(
                         !pageable.nextIndicator,

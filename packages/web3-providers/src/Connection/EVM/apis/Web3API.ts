@@ -63,6 +63,7 @@ import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { Web3BaseAPI } from '../../../entry-types.js'
 import { fetchJSON } from '../../../entry-helpers.js'
+import { queryClient } from '@masknet/shared-base'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -265,13 +266,19 @@ export class Web3API
         // ERC20
         const contract = this.getERC20Contract(chainId, address)
         const bytes32Contract = this.getWeb3Contract<ERC20Bytes32>(chainId, address, ERC20Bytes32ABI as AbiItem[])
-        const results = await Promise.allSettled([
-            contract?.methods.name().call() ?? EMPTY_STRING,
-            bytes32Contract?.methods.name().call() ?? EMPTY_STRING,
-            contract?.methods.symbol().call() ?? EMPTY_STRING,
-            bytes32Contract?.methods.symbol().call() ?? EMPTY_STRING,
-            contract?.methods.decimals().call() ?? ZERO,
-        ])
+        const results = await queryClient.fetchQuery({
+            staleTime: 600_000,
+            queryKey: ['fungibleToken', chainId, address],
+            queryFn: async () => {
+                return Promise.allSettled([
+                    contract?.methods.name().call() ?? EMPTY_STRING,
+                    bytes32Contract?.methods.name().call() ?? EMPTY_STRING,
+                    contract?.methods.symbol().call() ?? EMPTY_STRING,
+                    bytes32Contract?.methods.symbol().call() ?? EMPTY_STRING,
+                    contract?.methods.decimals().call() ?? ZERO,
+                ])
+            },
+        })
         const [name, nameBytes32, symbol, symbolBytes32, decimals] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]

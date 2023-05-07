@@ -51,7 +51,7 @@ const VerifyWallet = memo(() => {
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
 
     const { value: isBound } = useAsync(async () => {
         if (!wallet.account || !currentPersona?.identifier.publicKeyAsHex) return false

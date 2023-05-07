@@ -10,10 +10,10 @@ import { useMemo, useState } from 'react'
 export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll | undefined, account: string) {
     const [currentCollectionId, setCurrentCollectionId] = useState<string>()
     const {
-        value: rawCollections = EMPTY_LIST,
-        loading,
+        data: rawCollections = EMPTY_LIST,
+        isLoading: loading,
         error,
-        retry,
+        refetch: retry,
     } = useNonFungibleCollections(pluginID, {
         account,
         allChains: true,

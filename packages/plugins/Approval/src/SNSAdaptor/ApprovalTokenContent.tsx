@@ -137,7 +137,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: spenders, loading, retry } = useFungibleTokenSpenders({ chainId, account })
+    const { data: spenders, isLoading, refetch } = useFungibleTokenSpenders({ chainId, account })
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
@@ -145,19 +145,19 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    if (loading) return <ApprovalLoadingContent />
+    if (isLoading) return <ApprovalLoadingContent />
 
     if (!spenders || spenders.length === 0) return <ApprovalEmptyContent />
 
     return (
         <List className={classes.approvalContentWrapper}>
-            {spenders.map((spender, i) => (
+            {spenders.map((spender) => (
                 <ApprovalTokenItem
-                    key={i}
+                    key={`${spender.address}.${spender.tokenInfo.address}`}
                     spender={spender}
                     networkDescriptor={networkDescriptor}
                     chainId={chainId}
-                    retry={retry}
+                    retry={refetch}
                 />
             ))}
         </List>

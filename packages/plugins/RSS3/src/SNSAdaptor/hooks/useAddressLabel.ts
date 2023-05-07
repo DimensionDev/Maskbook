@@ -5,8 +5,8 @@ export function useAddressLabel(address: string, pluginID?: NetworkPluginID): st
     const { Others } = useWeb3State()
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
-    const { value } = useReverseAddress(pluginID, address)
-    const domain = getDomain(address) || value
+    const { data } = useReverseAddress(pluginID, address)
+    const domain = getDomain(address) || data
     const formattedDomain = domain ? Others?.formatDomainName(domain) : undefined
     const label = formattedDomain || Others?.formatAddress(address, 4) || address
     return label

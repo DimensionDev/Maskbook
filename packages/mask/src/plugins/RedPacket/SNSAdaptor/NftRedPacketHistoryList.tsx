@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -94,7 +94,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const { value: collections = [] } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+    const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
 

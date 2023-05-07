@@ -186,7 +186,7 @@ function useToolbox() {
     )
     // #endregion
 
-    const { value: domain } = useReverseAddress(undefined, account)
+    const { data: domain } = useReverseAddress(undefined, account)
 
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')

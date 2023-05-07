@@ -394,7 +394,7 @@ const ContractInteraction = memo(() => {
     const totalUSD = new BigNumber(gasFeeUSD).plus(tokenValueUSD).toString()
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
 
     return requestLoading ? (
         <LoadingPlaceholder />

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider } from '@mui/material'
+import { QueryClientProvider } from '@tanstack/react-query'
 import {
     CustomSnackbarProvider,
     applyMaskColorVars,
@@ -14,7 +15,7 @@ import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle, queryClient } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
 
@@ -44,29 +45,31 @@ export default function DashboardRoot() {
     return (
         <EnvironmentContextProvider value={Web3ContextType}>
             <Web3ContextProvider value={Web3ContextType}>
-                <TelemetryProvider>
-                    <I18NextProviderHMR i18n={i18NextInstance}>
-                        <StyledEngineProvider injectFirst>
-                            <ThemeProvider theme={theme}>
-                                <DialogStackingProvider>
-                                    <PersonaContext.Provider>
-                                        <ErrorBoundary>
-                                            <CssBaseline />
-                                            <CustomSnackbarProvider>
-                                                <SharedContextProvider>
-                                                    <HashRouter>
-                                                        <Pages />
-                                                    </HashRouter>
-                                                    <PluginRender />
-                                                </SharedContextProvider>
-                                            </CustomSnackbarProvider>
-                                        </ErrorBoundary>
-                                    </PersonaContext.Provider>
-                                </DialogStackingProvider>
-                            </ThemeProvider>
-                        </StyledEngineProvider>
-                    </I18NextProviderHMR>
-                </TelemetryProvider>
+                <QueryClientProvider client={queryClient}>
+                    <TelemetryProvider>
+                        <I18NextProviderHMR i18n={i18NextInstance}>
+                            <StyledEngineProvider injectFirst>
+                                <ThemeProvider theme={theme}>
+                                    <DialogStackingProvider>
+                                        <PersonaContext.Provider>
+                                            <ErrorBoundary>
+                                                <CssBaseline />
+                                                <CustomSnackbarProvider>
+                                                    <SharedContextProvider>
+                                                        <HashRouter>
+                                                            <Pages />
+                                                        </HashRouter>
+                                                        <PluginRender />
+                                                    </SharedContextProvider>
+                                                </CustomSnackbarProvider>
+                                            </ErrorBoundary>
+                                        </PersonaContext.Provider>
+                                    </DialogStackingProvider>
+                                </ThemeProvider>
+                            </StyledEngineProvider>
+                        </I18NextProviderHMR>
+                    </TelemetryProvider>
+                </QueryClientProvider>
             </Web3ContextProvider>
         </EnvironmentContextProvider>
     )
