@@ -11,29 +11,27 @@ export class AirdropDescriptor {
         if (!context.methods?.length || isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
 
         for (const { name, parameters } of context.methods) {
-            switch (name) {
-                case 'claim':
-                    const hub = Web3StateRef.value.Hub?.getHub?.({
-                        chainId: context.chainId,
-                    })
-                    const result = parameters?._eventIndex
-                        ? await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
-                        : undefined
-                    const token = result?.token
-                        ? await hub?.getFungibleToken?.(result.token, { chainId: context.chainId })
-                        : undefined
-                    return {
-                        chainId: context.chainId,
-                        title: 'Claim your Airdrop',
-                        description: 'Transaction submitted.',
-                        snackbar: {
-                            successfulDescription: `${getTokenAmountDescription(
-                                parameters?._amount,
-                                token,
-                            )} were successfully claimed`,
-                            failedDescription: 'Transaction was Rejected!',
-                        },
-                    }
+            if (name === 'claim' && parameters?._eventIndex !== undefined) {
+                const hub = Web3StateRef.value.Hub?.getHub?.({
+                    chainId: context.chainId,
+                })
+                const result = await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
+
+                const token = result?.token
+                    ? await hub?.getFungibleToken?.(result.token, { chainId: context.chainId })
+                    : undefined
+                return {
+                    chainId: context.chainId,
+                    title: 'Claim your Airdrop',
+                    description: 'Transaction submitted.',
+                    snackbar: {
+                        successfulDescription: `${getTokenAmountDescription(
+                            parameters?._amount,
+                            token,
+                        )} were successfully claimed`,
+                        failedDescription: 'Transaction was Rejected!',
+                    },
+                }
             }
         }
         return
