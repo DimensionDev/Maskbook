@@ -12,7 +12,7 @@ export class AirDropDescriptor {
 
         for (const { name, parameters } of context.methods) {
             if (name === 'claim' && parameters?._eventIndex !== undefined) {
-                const hub = Web3StateRef.value.Hub?.getHub?.({
+                const hub = Web3StateSettings.value.Hub?.getHub?.({
                     chainId: context.chainId,
                 })
                 const result = await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
