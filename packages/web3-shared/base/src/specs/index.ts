@@ -1387,9 +1387,9 @@ export interface NameServiceState<ChainId> {
     readyPromise: Promise<void>
 
     /** get address of domain name */
-    lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
+    lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
+    reverse?: (address: string) => Promise<string | undefined>
 }
 
 export interface TokenState<ChainId, SchemaType> {
