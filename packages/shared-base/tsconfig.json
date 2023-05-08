@@ -8,8 +8,9 @@
   "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../public-api" },
+    { "path": "../base" },
+    { "path": "../flags" },
     { "path": "../typed-message/base" },
-    { "path": "../encryption/" },
-    { "path": "../base" }
+    { "path": "../encryption/" }
   ]
 }

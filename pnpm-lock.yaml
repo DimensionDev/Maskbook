@@ -2922,6 +2922,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api

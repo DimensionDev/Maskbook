@@ -1,6 +1,18 @@
-import { EnhanceableSite, ExtensionSite } from './type.js'
+export enum EnhanceableSite {
+    Localhost = 'localhost',
+    Twitter = 'twitter.com',
+    Facebook = 'facebook.com',
+    Minds = 'minds.com',
+    Instagram = 'instagram.com',
+    OpenSea = 'opensea.io',
+    Mirror = 'mirror.xyz',
+}
 
-export * from './type.js'
+export enum ExtensionSite {
+    Dashboard = 'dashboard',
+    Popup = 'popup',
+    PopupConnect = 'popup-connect',
+}
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
