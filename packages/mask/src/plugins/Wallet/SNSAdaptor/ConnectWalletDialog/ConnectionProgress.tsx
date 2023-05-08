@@ -38,7 +38,7 @@ const useStyles = makeStyles<{
     },
     connectWith: {
         fontSize: '14px',
-        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor.dark,
+        color: isDashboardPage ? '#07101B' : theme.palette.maskColor.dark,
         fontWeight: 700,
     },
     error: {

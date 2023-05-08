@@ -73,12 +73,12 @@ export function SelectProviderDialog() {
         [closeDialog, walletConnectedCallback],
     )
 
-    const isDashboard = isDashboardPage()
-
     const selectedProviders = useMemo(
         () =>
-            isDashboard ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM) : providers,
-        [isDashboard],
+            isDashboardPage
+                ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
+                : providers,
+        [isDashboardPage],
     )
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>

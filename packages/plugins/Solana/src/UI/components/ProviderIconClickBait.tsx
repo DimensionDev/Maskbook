@@ -7,8 +7,7 @@ export function ProviderIconClickBait({
     provider,
     children,
 }: ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>) {
-    const isDashboard = isDashboardPage()
-    const disabled = isDashboard && provider.type === ProviderType.Phantom
+    const disabled = isDashboardPage && provider.type === ProviderType.Phantom
 
     return (
         <>

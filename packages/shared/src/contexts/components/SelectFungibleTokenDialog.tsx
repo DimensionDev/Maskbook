@@ -19,10 +19,9 @@ import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
 interface StyleProps {
     compact: boolean
-    isDashboard: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(2),
@@ -36,7 +35,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
         },
     },
     search: {
-        backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
+        backgroundColor: isDashboardPage ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
     },
     wrapper: {
@@ -66,7 +65,6 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     onClose?(): void
 }
 
-const isDashboard = isDashboardPage()
 export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     open,
     pluginID,
@@ -86,7 +84,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const { classes } = useStyles({ compact, isDashboard })
+    const { classes } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -108,7 +106,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     )
     return (
         <InjectedDialog
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
             open={open}
             onClose={() => {
                 mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)

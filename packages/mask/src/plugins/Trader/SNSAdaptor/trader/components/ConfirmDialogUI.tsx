@@ -4,18 +4,16 @@ import type { BigNumber } from 'bignumber.js'
 import { FormattedBalance, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
-import { useI18N } from '../../../../../utils/index.js'
-import type { TradeComputed } from '../../../types/index.js'
 import { formatBalance, formatCurrency, formatPercentage, isZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
+import { useI18N } from '../../../../../utils/index.js'
+import type { TradeComputed } from '../../../types/index.js'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
 
-const useStyles = makeStyles<{
-    isDashboard: boolean
-}>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     section: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -30,16 +28,16 @@ const useStyles = makeStyles<{
         },
     },
     title: {
-        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.second,
+        color: isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor?.second,
     },
     description: {
-        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        color: isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor?.main,
     },
     card: {
         borderRadius: 12,
         padding: 12,
-        background: `${isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        background: `${isDashboardPage ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
+        border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         display: 'flex',
         flexDirection: 'column',
         rowGap: 10,
@@ -78,7 +76,7 @@ const useStyles = makeStyles<{
     reverse: {
         marginTop: -8,
         border: `2px solid ${theme.palette.maskColor?.bottom}`,
-        backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
+        backgroundColor: isDashboardPage ? MaskColorVar.lightBackground : theme.palette.background.default,
         width: 32,
         height: 32,
         borderRadius: 99,
@@ -87,7 +85,7 @@ const useStyles = makeStyles<{
         alignItems: 'center',
     },
     reverseIcon: {
-        stroke: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
+        stroke: isDashboardPage ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
     },
     alert: {
         marginTop: 12,
@@ -99,20 +97,20 @@ const useStyles = makeStyles<{
         borderRadius: 4,
     },
     warning: {
-        backgroundColor: isDashboard
+        backgroundColor: isDashboardPage
             ? theme.palette.warning.main
             : parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
-        color: isDashboard ? theme.palette.warning.main : theme.palette.maskColor?.warn,
+        color: isDashboardPage ? theme.palette.warning.main : theme.palette.maskColor?.warn,
     },
     info: {
-        backgroundColor: isDashboard ? theme.palette.background.default : theme.palette.maskColor?.bg,
-        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        backgroundColor: isDashboardPage ? theme.palette.background.default : theme.palette.maskColor?.bg,
+        color: isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor?.main,
     },
     error: {
-        backgroundColor: isDashboard
+        backgroundColor: isDashboardPage
             ? MaskColorVar.redMain
             : parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
-        color: isDashboard ? theme.palette.common.white : theme.palette.maskColor?.danger,
+        color: isDashboardPage ? theme.palette.common.white : theme.palette.maskColor?.danger,
     },
     action: {
         marginRight: 0,
@@ -120,7 +118,7 @@ const useStyles = makeStyles<{
         minWidth: 88,
     },
     infoIcon: {
-        color: isDashboard ? MaskColorVar.twitterInfo : theme.palette.maskColor?.main,
+        color: isDashboardPage ? MaskColorVar.twitterInfo : theme.palette.maskColor?.main,
     },
     content: {
         padding: 16,
@@ -139,11 +137,11 @@ const useStyles = makeStyles<{
         )}`,
     },
     danger: {
-        color: `${isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
+        color: `${isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
     },
     edit: {
         lineHeight: '18px',
-        color: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
+        color: isDashboardPage ? theme.palette.primary.main : theme.palette.maskColor?.primary,
         marginRight: 4,
         fontWeight: 700,
         cursor: 'pointer',
@@ -200,8 +198,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         onConfirm,
     }) => {
         const { t } = useI18N()
-        const isDashboard = isDashboardPage()
-        const { classes, cx } = useStyles({ isDashboard })
+        const { classes, cx } = useStyles()
 
         const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>()
         const [priceUpdated, setPriceUpdated] = useState(false)

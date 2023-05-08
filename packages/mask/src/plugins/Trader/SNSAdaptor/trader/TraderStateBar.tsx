@@ -76,7 +76,6 @@ export function TraderStateBar({
 }: TradeStateBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isPopup = isPopupPage()
 
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
@@ -85,7 +84,7 @@ export function TraderStateBar({
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
 
-    // #region if `isPopup` be true, click the plugin status bar need to  open popup window
+    // #region if `isPopupPage` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
@@ -180,7 +179,7 @@ export function TraderStateBar({
         <Box className={classes.stateBar}>
             <PluginWalletStatusBar
                 actualPluginID={actualPluginID}
-                onClick={isPopup ? openSelectWalletPopup : undefined}>
+                onClick={isPopupPage ? openSelectWalletPopup : undefined}>
                 <WalletConnectedBoundary offChain expectedChainId={chainId}>
                     <EthereumERC20TokenApprovedBoundary
                         onlyInfiniteUnlock

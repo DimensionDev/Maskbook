@@ -16,9 +16,7 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-base'
 import { useI18N, Translate } from '../../../locales/index.js'
 
-const useStyles = makeStyles<{
-    isDashboard: boolean
-}>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     dialog: {
         [`.${dialogClasses.paper}`]: {
             width: '420px!important',
@@ -40,12 +38,12 @@ const useStyles = makeStyles<{
         alignItems: 'center',
     },
     icon: {
-        color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         width: 90,
         height: 90,
     },
     title: {
-        color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         fontSize: 24,
         lineHeight: 1.2,
         fontWeight: 700,
@@ -57,7 +55,7 @@ const useStyles = makeStyles<{
         fontSize: 16,
         lineHeight: '20px',
         '& > span': {
-            color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+            color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         },
     },
     actions: {
@@ -89,8 +87,7 @@ export interface PriceImpactDialogProps extends InjectedDialogProps {
 export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
     ({ open, onClose, lostToken, lostValue, priceImpact, symbol, onConfirm }) => {
         const t = useI18N()
-        const isDashboard = isDashboardPage()
-        const { classes } = useStyles({ isDashboard })
+        const { classes } = useStyles()
 
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()} className={classes.dialog}>

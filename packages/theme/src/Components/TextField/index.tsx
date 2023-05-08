@@ -14,8 +14,6 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
 
-const isDashboard = isDashboardPage()
-
 const useStyles = makeStyles()((theme) => ({
     label: {
         fontSize: 12,
@@ -50,12 +48,12 @@ const useStyles = makeStyles()((theme) => ({
             WebkitAppearance: 'none',
         },
         '& input::-webkit-input-placeholder': {
-            color: !isDashboard ? theme.palette.maskColor.second : undefined,
+            color: !isDashboardPage ? theme.palette.maskColor.second : undefined,
         },
     },
     input: {
         padding: theme.spacing(1),
-        background: !isDashboard
+        background: !isDashboardPage
             ? theme.palette.maskColor.input
             : theme.palette.mode === 'dark'
             ? '#2B2E4C'
@@ -73,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        backgroundColor: !isDashboard ? theme.palette.maskColor.input : MaskColorVar.primaryBackground,
+        backgroundColor: !isDashboardPage ? theme.palette.maskColor.input : MaskColorVar.primaryBackground,
         boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))
@@ -99,7 +97,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 </Typography>
             ) : null}
             {label && typeof label !== 'string' ? label : null}
-            {isDashboard ? (
+            {isDashboardPage ? (
                 <TextField
                     ref={ref}
                     {...rest}

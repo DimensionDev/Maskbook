@@ -156,7 +156,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
 
     const t = useSharedI18N()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
-    const isDashboard = isDashboardPage()
     const {
         children,
         open,
@@ -220,8 +219,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             className={cx('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
                             style={{
-                                border: isDashboard || disableTitleBorder ? 'none' : undefined,
-                                fontSize: isDashboard ? 24 : undefined,
+                                border: isDashboardPage || disableTitleBorder ? 'none' : undefined,
+                                fontSize: isDashboardPage ? 24 : undefined,
                             }}>
                             <IconButton
                                 size="large"
@@ -231,7 +230,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
-                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
+                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboardPage
                                             ? 'back'
                                             : titleBarIconStyle
                                     }

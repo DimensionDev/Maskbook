@@ -28,8 +28,6 @@ import { useI18N } from '../../../../utils/index.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 
-const isDashboard = isDashboardPage()
-
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
@@ -37,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 0,
         zIndex: 2,
 
-        '& > div .MuiBox-root': isDashboard
+        '& > div .MuiBox-root': isDashboardPage
             ? {
                   background: MaskColorVar.mainBackground,
               }
@@ -189,7 +187,7 @@ export function TraderDialog() {
                 setOpen(false)
             }}
             title={t('plugin_trader_swap')}
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
             titleTail={
                 <div className={classes.tail}>
                     <IconButton onClick={() => tradeRef.current?.refresh()}>

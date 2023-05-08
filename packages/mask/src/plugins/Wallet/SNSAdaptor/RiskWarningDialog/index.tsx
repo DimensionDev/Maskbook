@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {
-        borderRadius: isDashboardPage() ? 9999 : undefined,
+        borderRadius: isDashboardPage ? 9999 : undefined,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             marginBottom: theme.spacing(2),
         },
