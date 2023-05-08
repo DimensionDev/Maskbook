@@ -176,69 +176,72 @@ interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuPro
 export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: SocialAccountListProps) {
     const t = useSharedI18N()
     const { classes, cx } = useStyles()
-    const position = useWindowScroll()
     const ref = useRef<HTMLDivElement | null>(null)
+    const orderedBindings = useMemo(() => {
+        return nextIdBindings.sort((a, z) => {
+            if (a.platform === z.platform) return 0
+            return a.platform === NextIDPlatform.LENS ? -1 : 0
+        })
+    }, [nextIdBindings])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
-        nextIdBindings
-            .sort((x) => (x.platform === NextIDPlatform.LENS ? -1 : 0))
-            .map((x, i) => {
-                const Icon = resolveNextIDPlatformIcon(x.platform)
-                return (
-                    <SocialTooltip key={i} platform={x.source}>
-                        <MenuItem
-                            className={classes.listItem}
-                            disableRipple
-                            disabled={false}
-                            onClick={() => {
-                                if (x.platform === NextIDPlatform.ENS) {
-                                    ENS.lookup(x.identity).then((address) => {
-                                        openWindow(`https://app.ens.domains/address/${address}`)
-                                    })
-                                    return
-                                }
-                                return openWindow(x.link ?? resolveNextIDPlatformLink(x.platform, x.identity, x.name))
-                            }}>
-                            <div className={classes.content}>
-                                {Icon ? <Icon size={20} /> : null}
-                                <Typography className={cx(classes.socialName, classes.accountName)} component="div">
-                                    {x.name || x.identity}
-                                    {x.platform === NextIDPlatform.ENS ? <ENSAddress domain={x.identity} /> : null}
-                                </Typography>
-                                {x.platform === NextIDPlatform.LENS ? (
-                                    <Button
-                                        variant="text"
-                                        className={classes.followButton}
-                                        disableElevation
-                                        onClick={(event) => {
-                                            event.stopPropagation()
-                                            closeMenu()
-                                            CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
-                                                open: true,
-                                                handle: x.identity,
-                                            })
-                                        }}>
-                                        {t.lens_follow()}
-                                    </Button>
-                                ) : (
-                                    <div className={classes.linkIcon}>
-                                        <Icons.LinkOut size={16} className={classes.linkOutIcon} />
-                                    </div>
-                                )}
-                            </div>
-                            {x.platform === NextIDPlatform.ENS && x.relatedList?.length ? (
-                                <div className={classes.related}>
-                                    {x.relatedList.map((y) => (
-                                        <Typography component="span" key={y.name} className={classes.ens}>
-                                            {y.name}
-                                        </Typography>
-                                    ))}
+        orderedBindings.map((x, i) => {
+            const Icon = resolveNextIDPlatformIcon(x.platform)
+            return (
+                <SocialTooltip key={i} platform={x.source}>
+                    <MenuItem
+                        className={classes.listItem}
+                        disableRipple
+                        disabled={false}
+                        onClick={() => {
+                            if (x.platform === NextIDPlatform.ENS) {
+                                ENS.lookup(x.identity).then((address) => {
+                                    openWindow(`https://app.ens.domains/address/${address}`)
+                                })
+                                return
+                            }
+                            return openWindow(x.link ?? resolveNextIDPlatformLink(x.platform, x.identity, x.name))
+                        }}>
+                        <div className={classes.content}>
+                            {Icon ? <Icon size={20} /> : null}
+                            <Typography className={cx(classes.socialName, classes.accountName)} component="div">
+                                {x.name || x.identity}
+                                {x.platform === NextIDPlatform.ENS ? <ENSAddress domain={x.identity} /> : null}
+                            </Typography>
+                            {x.platform === NextIDPlatform.LENS ? (
+                                <Button
+                                    variant="text"
+                                    className={classes.followButton}
+                                    disableElevation
+                                    onClick={(event) => {
+                                        event.stopPropagation()
+                                        closeMenu()
+                                        CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
+                                            open: true,
+                                            handle: x.identity,
+                                        })
+                                    }}>
+                                    {t.lens_follow()}
+                                </Button>
+                            ) : (
+                                <div className={classes.linkIcon}>
+                                    <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                                 </div>
-                            ) : null}
-                        </MenuItem>
-                    </SocialTooltip>
-                )
-            }),
+                            )}
+                        </div>
+                        {x.platform === NextIDPlatform.ENS && x.relatedList?.length ? (
+                            <div className={classes.related}>
+                                {x.relatedList.map((y) => (
+                                    <Typography component="span" key={y.name} className={classes.ens}>
+                                        {y.name}
+                                    </Typography>
+                                ))}
+                            </div>
+                        ) : null}
+                    </MenuItem>
+                </SocialTooltip>
+            )
+        }),
         {
             hideBackdrop: true,
             anchorSibling: false,
@@ -266,15 +269,15 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
         ref,
     )
 
+    const position = useWindowScroll()
     useEffect(closeMenu, [position])
 
     const platformIcons = useMemo(() => {
-        return uniqBy(nextIdBindings, (x) => x.platform)
-            .sort((x) => (x.platform === NextIDPlatform.LENS ? -1 : 0))
+        return uniqBy(orderedBindings, (x) => x.platform)
             .map((x) => resolveNextIDPlatformIcon(x.platform))
             .filter(isNonNull)
             .slice(0, 3)
-    }, [nextIdBindings])
+    }, [orderedBindings])
 
     if (!platformIcons.length) return null
 

@@ -13,7 +13,7 @@ export class NameService extends NameServiceState<ChainId> {
         })
     }
 
-    override createResolvers(chainId?: ChainId) {
+    override createResolvers() {
         return [ENS, SpaceID] as NameServiceAPI.Provider[]
     }
 }

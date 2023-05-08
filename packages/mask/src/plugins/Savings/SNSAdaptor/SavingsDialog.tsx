@@ -99,7 +99,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
-    const { value: aaveTokens } = useAsync(async () => {
+    const { value: aaveTokens, loading: loadingAAve } = useAsync(async () => {
         if (!open || chainId !== ChainId.Mainnet) {
             return EMPTY_LIST
         }
@@ -121,13 +121,15 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         })
     }, [open, web3, chainId])
 
-    const { value: detailedAaveTokens } = useFungibleTokens(
+    const { value: detailedAaveTokens, loading: loadingAAveDetails } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         compact(flatten(aaveTokens ?? [])),
         {
             chainId,
         },
     )
+
+    const loadingProtocols = loadingAAve || loadingAAveDetails || !detailedAaveTokens?.length
 
     const protocols = useMemo(
         () => [
@@ -188,6 +190,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Deposit}>
                                         <SavingsTable
                                             chainId={chainId}
+                                            loadingProtocols={loadingProtocols}
                                             tab={TabType.Deposit}
                                             protocols={protocols}
                                             setTab={setTab}
@@ -197,6 +200,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Withdraw}>
                                         <SavingsTable
                                             chainId={chainId}
+                                            loadingProtocols={loadingProtocols}
                                             tab={TabType.Withdraw}
                                             protocols={protocols}
                                             setTab={setTab}

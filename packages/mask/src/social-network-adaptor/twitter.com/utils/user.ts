@@ -83,3 +83,7 @@ export async function getUserIdentity(twitterId: string): Promise<SocialIdentity
         homepage,
     }
 }
+
+export function getUserId(ele: HTMLElement) {
+    return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
+}

@@ -206,7 +206,7 @@ export function CollectionList({
                         setChainId(undefined)
                         setCurrentCollectionId(undefined)
                     }}>
-                    ALL
+                    All
                     {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </AllButton>
             ) : null}

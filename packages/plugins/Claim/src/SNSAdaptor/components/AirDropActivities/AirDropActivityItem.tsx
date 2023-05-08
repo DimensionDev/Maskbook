@@ -183,7 +183,11 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                             {!isEligible ? (
                                 <Typography className={classes.tips}>{t.no_eligible_tips()}</Typography>
                             ) : null}
-                            {isClaimed ? <Typography className={classes.tips}>{t.claimed_tips()}</Typography> : null}
+                            {isClaimed ? (
+                                <Typography className={classes.tips}>
+                                    {t.claimed_tips({ amount: amount ?? '', symbol: 'ARB' })}
+                                </Typography>
+                            ) : null}
                             {isEligible && !isClaimed ? (
                                 <Box className={classes.actions}>
                                     <Box>

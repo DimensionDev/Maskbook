@@ -6,7 +6,7 @@ import type { RSS3_KEY_SNS } from '../constants.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type { NFTAvatarEvent } from '@masknet/shared-base'
-import { usePersonaNFTAvatar } from '../index.js'
+import { useCheckPersonaNFTAvatar } from '../index.js'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -26,9 +26,10 @@ const useStyles = makeStyles()(() => ({
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId, width, height, snsKey, timelineUpdated } = props
-    const { loading, value: _avatar } = usePersonaNFTAvatar(userId, avatarId, '', snsKey)
+    const { loading, value: _avatar } = useCheckPersonaNFTAvatar(userId, avatarId, '', snsKey)
+
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
-    const [avatarId_, setAvatarId_] = useState('')
+    const [avatarId_, setAvatarId_] = useState(avatarId)
     const { classes } = useStyles(undefined, { props })
 
     const onUpdate = (data: AvatarMetaDB) => {
@@ -50,8 +51,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
 
     useEffect(() => timelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
-    if (!avatar) return null
-    if (avatarId_ && avatar.avatarId !== avatarId_) return null
+    if (!avatar || !avatarId || avatar.avatarId !== avatarId_) return null
 
     return loading ? (
         <LoadingBase size={width} />

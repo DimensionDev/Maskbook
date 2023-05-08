@@ -26,6 +26,6 @@
     "start_time_tips": "Start Time: <strong>{{time}}</strong>",
     "end_time_tips": "Ended on <strong>{{time}}</strong>",
     "no_eligible_tips": "Sorry, you are not eligible to claim $ARB in this campaign.",
-    "claimed_tips": "You have claimed $ARB.",
+    "claimed_tips": "You have claimed {{amount}} ${{symbol}}.",
     "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 }

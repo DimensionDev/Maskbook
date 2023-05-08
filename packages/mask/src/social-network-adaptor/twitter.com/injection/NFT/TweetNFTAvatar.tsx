@@ -5,6 +5,7 @@ import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../ut
 import { noop } from 'lodash-es'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { getUserId } from '../../utils/user.js'
 
 function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
@@ -13,6 +14,7 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
+                const userId = getUserId(ele)
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
@@ -25,8 +27,10 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                             avatarType={info.avatarType}
                             size={info.width}
                             screenName={
+                                userId ||
                                 activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier
-                                    ?.userId || ''
+                                    ?.userId ||
+                                ''
                             }
                         />
                     </div>,

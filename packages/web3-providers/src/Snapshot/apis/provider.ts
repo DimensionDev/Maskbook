@@ -4,6 +4,13 @@ import type { SnapshotBaseAPI } from '../../entry-types.js'
 async function fetchFromGraphql<T>(query: string) {
     const { data } = await fetchJSON<{ data: T }>(
         `https://cors-next.r2d2.to/?https://hub.snapshot.org/graphql?query=${encodeURIComponent(query)}`,
+        {
+            cache: 'default',
+        },
+        {
+            enableCache: true,
+            enableSquash: true,
+        },
     )
     return data
 }

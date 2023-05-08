@@ -64,9 +64,9 @@ export class NameServiceState<
         })
     }
 
-    async lookup(chainId: ChainId, name: string) {
+    async lookup(name: string) {
         if (!name) return
-        const callbacks = this.createResolvers(chainId).map((resolver) => {
+        const callbacks = this.createResolvers().map((resolver) => {
             return async () => {
                 const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
                 if (address && this.options.isValidAddress(address)) {
@@ -80,9 +80,9 @@ export class NameServiceState<
         return attemptUntil(callbacks, undefined, () => false)
     }
 
-    async reverse(chainId: ChainId, address: string) {
+    async reverse(address: string) {
         if (!this.options.isValidAddress(address)) return
-        const callbacks = this.createResolvers(chainId).map((resolver) => {
+        const callbacks = this.createResolvers().map((resolver) => {
             return async () => {
                 const name =
                     this.storage.value[resolver.id][this.options.formatAddress(address)] ||
@@ -97,7 +97,7 @@ export class NameServiceState<
         return attemptUntil(callbacks, undefined, () => false)
     }
 
-    createResolvers(chainId: ChainId): NameServiceAPI.Provider[] {
+    createResolvers(): NameServiceAPI.Provider[] {
         throw new Error('Method not implemented.')
     }
 }
