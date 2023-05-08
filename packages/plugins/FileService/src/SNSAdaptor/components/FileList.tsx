@@ -70,7 +70,13 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
                             name: file.name,
                         }}
                         components={{
-                            file: <Typography color={(theme) => theme.palette.maskColor.main} fontWeight={700} />,
+                            file: (
+                                <Typography
+                                    color={(theme) => theme.palette.maskColor.main}
+                                    fontSize={14}
+                                    fontWeight={700}
+                                />
+                            ),
                         }}
                     />
                 ),
