@@ -11,7 +11,7 @@ import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, type SavingsProtocol, TabType } from '../types.js'
 import { useChainContext, useWeb3, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { LDO_PAIRS } from '../constants.js'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -88,12 +88,20 @@ const useStyles = makeStyles()((theme, props) => ({
 export interface SavingsTableProps {
     chainId: ChainId
     tab: TabType
+    loadingProtocols: boolean
     protocols: SavingsProtocol[]
     setTab(tab: TabType): void
     setSelectedProtocol(protocol: SavingsProtocol): void
 }
 
-export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProtocol }: SavingsTableProps) {
+export function SavingsTable({
+    chainId,
+    tab,
+    protocols,
+    setTab,
+    setSelectedProtocol,
+    loadingProtocols,
+}: SavingsTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
@@ -102,14 +110,17 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // Only fetch protocol APR and Balance on chainId change
-    const { loading } = useAsync(async () => {
+    const { loading: loadingDetails } = useAsync(async () => {
+        if (loadingProtocols) return
         await Promise.all(
             protocols.map(async (protocol) => {
                 await protocol.updateApr(chainId, web3 as Web3)
                 await protocol.updateBalance(chainId, web3 as Web3, account)
             }),
         )
-    }, [chainId, web3, account, protocols])
+    }, [chainId, web3, account, protocols, loadingProtocols])
+
+    const loading = loadingDetails || loadingProtocols
 
     const onConvertClick = useCallback(() => {
         const ETH = LDO_PAIRS[0][0]
@@ -123,11 +134,6 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             },
         })
     }, [LDO_PAIRS])
-
-    const renderProtocols = useMemo(() => {
-        if (tab === TabType.Deposit) return protocols
-        return protocols.filter((x) => !x.balance.isZero())
-    }, [tab, protocols])
 
     return (
         <Box className={classes.containerWrap}>
@@ -153,53 +159,55 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                     <Icons.CircleLoading size={36} className={classes.animated} />
                     <Typography className={classes.loading}>{t('popups_loading')}</Typography>
                 </div>
-            ) : renderProtocols.length ? (
+            ) : protocols.length ? (
                 <div className={classes.tableContainer}>
-                    {renderProtocols.map((protocol, index) => (
-                        <Grid container spacing={0} className={classes.tableRow} key={index}>
-                            <Grid item xs={4} className={classes.tableCell}>
-                                <div className={classes.logoWrap}>
-                                    <TokenIcon
-                                        name={protocol.bareToken.name}
-                                        address={protocol.bareToken.address}
-                                        className={classes.logo}
-                                        chainId={chainId}
-                                    />
-                                    <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
-                                </div>
-                                <div>
-                                    <Typography variant="body1" className={classes.protocolLabel}>
-                                        {protocol.bareToken.symbol}
-                                    </Typography>
-                                </div>
-                            </Grid>
-                            {tab === TabType.Deposit ? (
-                                <Grid item xs={2} className={classes.tableCell}>
-                                    <Typography variant="body1">{protocol.apr}%</Typography>
+                    {protocols.map((protocol, index) =>
+                        protocol.balance.isZero() && tab === TabType.Withdraw ? null : (
+                            <Grid container spacing={0} className={classes.tableRow} key={index}>
+                                <Grid item xs={4} className={classes.tableCell}>
+                                    <div className={classes.logoWrap}>
+                                        <TokenIcon
+                                            name={protocol.bareToken.name}
+                                            address={protocol.bareToken.address}
+                                            className={classes.logo}
+                                            chainId={chainId}
+                                        />
+                                        <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
+                                    </div>
+                                    <div>
+                                        <Typography variant="body1" className={classes.protocolLabel}>
+                                            {protocol.bareToken.symbol}
+                                        </Typography>
+                                    </div>
                                 </Grid>
-                            ) : null}
-                            <Grid item xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
-                                <FungibleTokenBalance tab={tab} protocol={protocol} />
+                                {tab === TabType.Deposit ? (
+                                    <Grid item xs={2} className={classes.tableCell}>
+                                        <Typography variant="body1">{protocol.apr}%</Typography>
+                                    </Grid>
+                                ) : null}
+                                <Grid item xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
+                                    <FungibleTokenBalance tab={tab} protocol={protocol} />
+                                </Grid>
+                                <Grid item xs={3} className={classes.tableCell}>
+                                    <Button
+                                        color="primary"
+                                        disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
+                                        onClick={() => {
+                                            if (tab === TabType.Withdraw && protocol.type === ProtocolType.Lido) {
+                                                onConvertClick()
+                                                return
+                                            }
+                                            setTab(tab)
+                                            setSelectedProtocol(protocol)
+                                        }}>
+                                        {tab === TabType.Deposit
+                                            ? t('plugin_savings_deposit')
+                                            : t('plugin_savings_withdraw')}
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={3} className={classes.tableCell}>
-                                <Button
-                                    color="primary"
-                                    disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
-                                    onClick={() => {
-                                        if (tab === TabType.Withdraw && protocol.type === ProtocolType.Lido) {
-                                            onConvertClick()
-                                            return
-                                        }
-                                        setTab(tab)
-                                        setSelectedProtocol(protocol)
-                                    }}>
-                                    {tab === TabType.Deposit
-                                        ? t('plugin_savings_deposit')
-                                        : t('plugin_savings_withdraw')}
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    ))}
+                        ),
+                    )}
                 </div>
             ) : (
                 <div className={classes.placeholder}>
