@@ -1,7 +1,7 @@
 import { type Option, None } from 'ts-results-es'
 import { Identifier } from './base.js'
-import { ProfileIdentifier } from './profile.js'
 import { banSlash } from './utils.js'
+import { ProfileIdentifier } from './profile.js'
 
 const instance = new WeakSet()
 const id = new WeakMap<ProfileIdentifier, Record<string, PostIdentifier>>()
