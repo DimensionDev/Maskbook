@@ -26,6 +26,6 @@
     "start_time_tips": "crwdns20139:0{{time}}crwdne20139:0",
     "end_time_tips": "crwdns20141:0{{time}}crwdne20141:0",
     "no_eligible_tips": "crwdns20143:0$ARBcrwdne20143:0",
-    "claimed_tips": "crwdns20145:0$ARBcrwdne20145:0",
+    "claimed_tips": "crwdns20145:0{{amount}}crwdnd20145:0{{symbol}}crwdne20145:0",
     "wallet_connect_tips": "crwdns20147:0crwdne20147:0"
 }
