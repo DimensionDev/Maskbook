@@ -121,9 +121,9 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                 size="medium"
                 variant="roundedContained"
                 onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
-                {account && followedSpaceList && !followedSpaceList.includes(currentSpace.spaceId)
-                    ? t('plugin_snapshot_space_join')
-                    : t('plugin_snapshot_space_view')}
+                {followedSpaceList?.includes(currentSpace.spaceId) && account
+                    ? t('plugin_snapshot_space_view')
+                    : t('plugin_snapshot_space_join')}
             </Button>
         </Box>
     )
