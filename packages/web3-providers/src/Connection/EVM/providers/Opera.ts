@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import {
     type ChainId,

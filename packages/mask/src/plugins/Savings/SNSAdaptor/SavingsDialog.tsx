@@ -13,8 +13,7 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { Sniffings } from '@masknet/flags'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, createContract, getAaveConstants, type SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'

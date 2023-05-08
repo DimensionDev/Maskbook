@@ -1,9 +1,14 @@
 import { LRUCache } from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
-import { type EnhanceableSite, NetworkPluginID, getEnhanceableSiteType, getSiteType } from '@masknet/shared-base'
+import {
+    type EnhanceableSite,
+    NetworkPluginID,
+    Sniffings,
+    getEnhanceableSiteType,
+    getSiteType,
+} from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Twitter } from '@masknet/web3-providers'
-import { Sniffings } from '@masknet/flags'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'

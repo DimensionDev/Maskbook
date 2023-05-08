@@ -1,4 +1,4 @@
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 
 /* cspell:disable-next-line */
 const DB_NAME = 'localforage'

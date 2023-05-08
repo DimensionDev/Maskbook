@@ -2,6 +2,7 @@ import { memo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
+import { Sniffings } from '@masknet/shared-base'
 import {
     alpha,
     Button,
@@ -12,7 +13,6 @@ import {
     Typography,
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { Sniffings } from '@masknet/flags'
 import { formatPercentage } from '@masknet/web3-shared-base'
 import { useI18N, Translate } from '../../../locales/index.js'
 

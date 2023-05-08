@@ -1,5 +1,5 @@
 import { cloneElement, type HTMLAttributes, isValidElement } from 'react'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import type { ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { type ChainId, type NetworkType, ProviderType } from '@masknet/web3-shared-solana'
 

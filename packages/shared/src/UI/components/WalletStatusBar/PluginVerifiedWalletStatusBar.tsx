@@ -1,7 +1,6 @@
 import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
-import { Sniffings } from '@masknet/flags'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -10,7 +9,7 @@ import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } f
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
-import { type BindingProof, type NetworkPluginID } from '@masknet/shared-base'
+import { type BindingProof, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import {
     useChainContext,
     useNetworkContext,

@@ -5,8 +5,7 @@ import {
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { Sniffings } from '@masknet/flags'
-import { EnhanceableSite, ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { getTokenConstant } from './constants.js'

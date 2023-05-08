@@ -1,4 +1,4 @@
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '../Sniffings/index.js'
 import { ExtensionSite, EnhanceableSite } from './types.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {

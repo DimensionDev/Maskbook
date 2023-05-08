@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getArbConstants,

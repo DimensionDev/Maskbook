@@ -9,7 +9,6 @@
   "references": [
     { "path": "../base" },
     { "path": "../encryption/" },
-    { "path": "../flags" },
     { "path": "../public-api" },
     { "path": "../typed-message/base" }
   ]

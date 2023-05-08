@@ -10,7 +10,7 @@ import {
     Typography,
     InputBase,
 } from '@mui/material'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
 

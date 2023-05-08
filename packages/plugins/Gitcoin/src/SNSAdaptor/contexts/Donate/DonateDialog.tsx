@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { type FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
-import { Sniffings } from '@masknet/flags'
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
@@ -16,7 +15,7 @@ import {
     useSelectFungibleToken,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, type FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'

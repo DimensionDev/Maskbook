@@ -28,7 +28,6 @@
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
-    "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/storybook-shared": "workspace:^",

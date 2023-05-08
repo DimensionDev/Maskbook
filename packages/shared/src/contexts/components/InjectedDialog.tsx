@@ -1,8 +1,7 @@
 import { Children, cloneElement, useCallback, useRef } from 'react'
 import { omit } from 'lodash-es'
-import { Sniffings } from '@masknet/flags'
 /* eslint-disable tss-unused-classes/unused-classes */
-import { EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
+import { EnhanceableSite, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { type Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {

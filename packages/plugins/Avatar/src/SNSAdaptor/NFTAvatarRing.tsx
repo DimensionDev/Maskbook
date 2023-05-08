@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import { RainbowBox } from './RainbowBox.js'
 
 const useStyles = makeStyles()((theme) => ({

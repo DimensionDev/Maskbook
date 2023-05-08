@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'

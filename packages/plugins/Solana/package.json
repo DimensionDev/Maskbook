@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@bonfida/spl-name-service": "^0.1.50",
-    "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",

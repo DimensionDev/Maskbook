@@ -7,5 +7,3 @@ const flags = new RemoteFlags('https://mask-flags.r2d2.to/', defaultFlags)
 flags.fetchAndActive()
 
 export const Flags = flags.accessor
-
-export { sniffings as Sniffings } from './sniffings/index.js'

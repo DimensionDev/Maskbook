@@ -12,7 +12,7 @@ import {
     useTokenSecurity,
     ChainBoundary,
 } from '@masknet/shared'
-import { NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID, PopupRoutes, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
@@ -26,7 +26,6 @@ import { resolveTradeProviderName } from '../../pipes.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { TradeInfo } from '../../types/trader.js'
-import { Sniffings } from '@masknet/flags'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

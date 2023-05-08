@@ -1,7 +1,7 @@
 import { useCopyToClipboard } from 'react-use'
 import { Button, Link, Typography, useTheme } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Sniffings } from '@masknet/flags'
+import { Sniffings } from '@masknet/shared-base'
 import {
     useChainContext,
     useNetworkDescriptor,
@@ -18,7 +18,6 @@ import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shar
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
