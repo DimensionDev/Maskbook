@@ -13,7 +13,7 @@ export class NameService extends NameServiceState<ChainId> {
         })
     }
 
-    override createResolvers(chainId: ChainId) {
+    override createResolvers() {
         return [Bonfida] as NameServiceAPI.Provider[]
     }
 }

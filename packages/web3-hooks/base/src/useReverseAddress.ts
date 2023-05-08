@@ -18,6 +18,6 @@ export function useReverseAddress<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (isBad) return
-        return NameService.reverse?.(chainId, address)
+        return NameService.reverse?.(address)
     }, [address, chainId, isBad])
 }

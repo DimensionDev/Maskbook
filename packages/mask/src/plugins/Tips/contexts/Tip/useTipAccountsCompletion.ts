@@ -16,14 +16,14 @@ export function useTipAccountsCompletion(accounts: Array<SocialAccount<Web3Helpe
         accounts.forEach(async ({ address, label: originalName }) => {
             if (originalName) return
 
-            const name = await NameService.reverse!(chainId, address)
+            const name = await NameService.reverse!(address)
             if (!name) return
             setMap((oldMap) => ({
                 ...oldMap,
                 [address]: name,
             }))
         })
-    }, [chainId, accounts, NameService])
+    }, [accounts, NameService])
 
     return useMemo(() => {
         if (!Object.keys(map).length) return accounts
