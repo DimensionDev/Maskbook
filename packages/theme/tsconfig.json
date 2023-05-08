@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src"],
-  "references": [{ "path": "../shared-base" }, { "path": "../flags" }]
+  "references": [{ "path": "../flags" }, { "path": "../shared-base" }]
 }
