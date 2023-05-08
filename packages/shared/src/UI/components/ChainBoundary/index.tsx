@@ -146,6 +146,8 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         )
     }
 
+    if (isMatched) return <>{props.children}</>
+
     if (!chainIdValid && !expectedChainAllowed && forceShowingWrongNetworkButton)
         return renderBox(
             <>
