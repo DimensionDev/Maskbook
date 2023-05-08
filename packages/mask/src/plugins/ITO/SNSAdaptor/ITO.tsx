@@ -16,7 +16,7 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
-import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary, SOCIAL_MEDIA_NAME } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
@@ -292,6 +292,7 @@ export function ITO(props: ITO_Props) {
         user: sellerName,
         link: postLink,
         symbol: token.symbol,
+        sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
     })
     const canWithdraw = useMemo(() => {
         return (
@@ -327,6 +328,7 @@ export function ITO(props: ITO_Props) {
         link: postLink,
         name: token.name,
         symbol: token.symbol ?? 'token',
+        sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
     })
     const onShare = useCallback(async () => {
         activatedSocialNetworkUI.utils.share?.(shareText)
