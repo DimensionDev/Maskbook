@@ -8,6 +8,7 @@
   "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../base" },
+    { "path": "../flags" },
     { "path": "../../shared-base" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../polyfills" }

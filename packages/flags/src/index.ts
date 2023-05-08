@@ -1,5 +1,4 @@
 import { flags as defaultFlags } from './flags/index.js'
-import { sniffings } from './sniffings/index.js'
 import { RemoteFlags } from './libs/RemoteFlags.js'
 
 const flags = new RemoteFlags('https://mask-flags.r2d2.to/', defaultFlags)
@@ -8,4 +7,5 @@ const flags = new RemoteFlags('https://mask-flags.r2d2.to/', defaultFlags)
 flags.fetchAndActive()
 
 export const Flags = flags.accessor
-export const Sniffings = sniffings
+
+export { sniffings as Sniffings } from './sniffings/index.js'
