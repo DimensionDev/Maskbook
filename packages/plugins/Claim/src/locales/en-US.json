@@ -17,7 +17,7 @@
     "no_activities_tips": "No activities found.",
     "unclaimed_token_title": "{{symbol}} Unclaimed:",
     "locked_token_title": "{{symbol}} Locked:",
-    "unlock_time": "Unlock Time: {{time}}",
+    "unlock_time": "Unlock Time: {{-time}}",
     "claim_tips": "Claim your Airdrop",
     "cancel_claim_tips": "Your wallet cancelled the transaction.",
     "airdrop_title": "Mask Community ${{symbol}} Giveaway",
