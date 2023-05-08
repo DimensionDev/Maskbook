@@ -651,6 +651,7 @@
     "plugin_ito_congratulations": "祝贺您！",
     "plugin_ito_out_of_stock_hit": "祝您下次好运",
     "plugin_ito_claim_success_share": "我刚刚用 @{{account}} 来交换${{symbol}}，参加了 @{{user}}的 #ITO。 安装mask.io并开始您的初次推特优惠！ \n {{link}}",
+    "plugin_ito_claim_success_share$facebook": "我刚刚用 @$t(facebook_account) 来交换${{symbol}}，参加了 @{{- user}} 的 #ITO。\n$t(promote_ito_short)\n{{- link}}",
     "plugin_ito_claim_foreshow_share": "{{symbol}}({{name}}) 正在发布一个新的 #ITO。快来加入吧！关注 @{{account}} (mask.io) 来查找更多活动！ \n {{link}}",
     "plugin_ito_password": "密码：{{password}}",
     "plugin_ito_status_no_start": "尚未开始",
