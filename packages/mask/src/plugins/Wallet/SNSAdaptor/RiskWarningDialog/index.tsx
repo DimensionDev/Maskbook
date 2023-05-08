@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
+import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {
-        borderRadius: isDashboardPage ? 9999 : undefined,
+        borderRadius: Sniffings.is_dashboard_page ? 9999 : undefined,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             marginBottom: theme.spacing(2),
         },

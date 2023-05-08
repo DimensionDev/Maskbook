@@ -7,11 +7,10 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-
 import { DialogContent, type Theme, useMediaQuery, Stack, Typography } from '@mui/material'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { useBaseUIRuntime } from '../base/index.js'
 import { InjectedDialog } from '../components/index.js'
 import { useRowSize } from '../../hooks/useRowSize.js'
@@ -35,7 +34,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
         },
     },
     search: {
-        backgroundColor: isDashboardPage ? 'transparent !important' : theme.palette.maskColor.input,
+        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
     },
     wrapper: {
@@ -106,7 +105,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     )
     return (
         <InjectedDialog
-            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
+            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             open={open}
             onClose={() => {
                 mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)

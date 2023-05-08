@@ -1,10 +1,10 @@
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
-import { isDashboardPage } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 
@@ -13,8 +13,10 @@ const useStyles = makeStyles()((theme) => ({
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: `${isDashboardPage ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
-        border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        background: `${
+            Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input
+        }!important`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         position: 'relative',
         minHeight: 115,
         outline: 'none!important',
@@ -26,12 +28,12 @@ const useStyles = makeStyles()((theme) => ({
     balance: {
         fontWeight: 700,
         lineHeight: '18px',
-        color: isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.second,
         wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,
-        color: !isDashboardPage ? theme.palette.maskColor?.primary : undefined,
+        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
         fontWeight: 700,
     },
     input: {
@@ -46,9 +48,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 6,
         marginLeft: 8,
         height: 20,
-        backgroundColor: !isDashboardPage ? theme.palette.maskColor?.primary : undefined,
+        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
         '&:hover': {
-            backgroundColor: !isDashboardPage
+            backgroundColor: !Sniffings.is_dashboard_page
                 ? `${lighten(theme.palette.maskColor?.primary, 0.1)}!important`
                 : undefined,
         },
@@ -72,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 12,
         right: 12,
-        color: isDashboardPage ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor?.second,
     },
     action: {
         position: 'absolute',
@@ -87,7 +89,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 52.5,
         left: 12,
-        backgroundColor: isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+        backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
         paddingRight: 8,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
@@ -96,10 +98,12 @@ const useStyles = makeStyles()((theme) => ({
             fontSize: 14,
             marginRight: 12,
             fontWeight: 700,
-            color: !isDashboardPage ? theme.palette.maskColor?.main : undefined,
+            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.main : undefined,
         },
         ['&:hover']: {
-            backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+            backgroundColor: `${
+                Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+            }!important`,
             boxShadow: `0px 4px 30px ${alpha(
                 theme.palette.maskColor.shadowBottom,
                 theme.palette.mode === 'dark' ? 0.15 : 0.1,
@@ -113,11 +117,13 @@ const useStyles = makeStyles()((theme) => ({
     noToken: {
         borderRadius: '18px !important',
         backgroundColor: `${
-            isDashboardPage ? theme.palette.primary.main : theme.palette.maskColor?.primary
+            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
         } !important`,
         ['&:hover']: {
             backgroundColor: `${
-                isDashboardPage ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
+                Sniffings.is_dashboard_page
+                    ? theme.palette.primary.main
+                    : lighten(theme.palette.maskColor?.primary, 0.1)
             }!important`,
         },
         [`& .${chipClasses.label}`]: {

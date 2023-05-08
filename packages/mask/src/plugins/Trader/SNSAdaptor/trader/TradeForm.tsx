@@ -2,26 +2,26 @@ import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first, noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
+import { Tune as TuneIcon } from '@mui/icons-material'
+import { Icons } from '@masknet/icons'
 import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
-import { Tune as TuneIcon } from '@mui/icons-material'
-import { TokenPanelType, type TradeInfo } from '../../types/index.js'
-import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils/index.js'
-import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
-import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage, isPopupPage, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { currentSlippageSettings } from '../../settings.js'
-import { PluginTraderMessages } from '../../messages.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { InputTokenPanel } from './InputTokenPanel.js'
+import { useI18N } from '../../../../utils/index.js'
+import { TokenPanelType, type TradeInfo } from '../../types/index.js'
+import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
+import { MIN_GAS_LIMIT } from '../../constants/index.js'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
+import { currentSlippageSettings } from '../../settings.js'
+import { PluginTraderMessages } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -40,16 +40,20 @@ const useStyles = makeStyles()((theme) => {
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: isDashboardPage ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
+            color: Sniffings.is_dashboard_page
+                ? `${theme.palette.text.primary}!important`
+                : theme.palette.maskColor?.main,
         },
         card: {
-            background: isDashboardPage ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
-            border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+            background: Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
+            border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
             borderRadius: 12,
             padding: 12,
         },
         reverse: {
-            backgroundColor: isDashboardPage ? MaskColorVar.lightBackground : theme.palette.background.default,
+            backgroundColor: Sniffings.is_dashboard_page
+                ? MaskColorVar.lightBackground
+                : theme.palette.background.default,
             width: 32,
             height: 32,
             borderRadius: 99,
@@ -65,7 +69,7 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 1,
         },
         chevron: {
-            color: isDashboardPage ? theme.palette.text.primary : theme.palette.text.strong,
+            color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
         },
@@ -96,7 +100,7 @@ const useStyles = makeStyles()((theme) => {
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
             paddingRight: 8,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
@@ -105,10 +109,12 @@ const useStyles = makeStyles()((theme) => {
                 fontSize: 14,
                 marginRight: 12,
                 fontWeight: 700,
-                color: !isDashboardPage ? theme.palette.maskColor?.main : undefined,
+                color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.main : undefined,
             },
             ['&:hover']: {
-                backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+                backgroundColor: `${
+                    Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+                }!important`,
                 boxShadow: `0px 4px 30px ${alpha(
                     theme.palette.maskColor.shadowBottom,
                     theme.palette.mode === 'dark' ? 0.15 : 0.1,
@@ -122,18 +128,20 @@ const useStyles = makeStyles()((theme) => {
         controller: {
             width: '100%',
             // Just for design
-            backgroundColor: isDashboardPage ? MaskColorVar.mainBackground : theme.palette.background.paper,
+            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : theme.palette.background.paper,
             position: 'sticky',
-            bottom: isPopupPage ? -12 : -20,
+            bottom: Sniffings.is_popup_page ? -12 : -20,
         },
         noToken: {
             borderRadius: '18px !important',
             backgroundColor: `${
-                isDashboardPage ? theme.palette.primary.main : theme.palette.maskColor?.primary
+                Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
-                    isDashboardPage ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
+                    Sniffings.is_dashboard_page
+                        ? theme.palette.primary.main
+                        : lighten(theme.palette.maskColor?.primary, 0.1)
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
@@ -144,7 +152,9 @@ const useStyles = makeStyles()((theme) => {
         dropIcon: {
             width: 20,
             height: 24,
-            color: `${isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
+            color: `${
+                Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.main
+            }!important`,
         },
         whiteDrop: {
             color: '#ffffff !important',

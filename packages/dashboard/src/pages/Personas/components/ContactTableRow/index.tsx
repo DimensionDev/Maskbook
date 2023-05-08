@@ -3,13 +3,13 @@ import { useAsyncFn } from 'react-use'
 import { Box, TableCell, TableRow, Typography, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { LoadingButton } from '@mui/lab'
+import type { RelationProfile } from '@masknet/shared-base'
+import { Image, Icon } from '@masknet/shared'
 import { Services } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
-import { LoadingButton } from '@mui/lab'
-import type { RelationProfile } from '@masknet/shared-base'
-import { Image, Icon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     favorite: {

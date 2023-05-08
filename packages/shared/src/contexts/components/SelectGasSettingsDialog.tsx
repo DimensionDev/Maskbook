@@ -2,7 +2,7 @@ import { type FC, useMemo, useState } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '@masknet/shared'
-import { isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../components/index.js'
@@ -83,7 +83,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
                 paper: classes.root,
             }}
             open={open}
-            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
+            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             onClose={() => {
                 onSubmit?.(settings)
                 onClose?.()

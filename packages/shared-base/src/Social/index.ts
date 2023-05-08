@@ -1,5 +1,5 @@
 import type { ProfileIdentifier } from '@masknet/base'
-import type { NextIDPersonaBindings } from '../NextID/type.js'
+import type { NextIDPersonaBindings } from '../NextID/types.js'
 import type { NetworkPluginID } from '../index.js'
 
 export enum SocialAddressType {

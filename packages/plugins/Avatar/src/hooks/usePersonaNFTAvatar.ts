@@ -3,16 +3,16 @@ import { useAsyncRetry } from 'react-use'
 import {
     type EnhanceableSite,
     NetworkPluginID,
+    Sniffings,
     getEnhanceableSiteType,
     getSiteType,
-    isTwitter,
 } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Twitter } from '@masknet/web3-providers'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
 import { getNFTAvatarByUserId } from '../utils/index.js'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Twitter } from '@masknet/web3-providers'
 
 const cache = new LRUCache<string, NextIDAvatarMeta>({
     max: 500,
@@ -70,7 +70,7 @@ export function useCheckPersonaNFTAvatar(userId: string, avatarId: string, perso
             if (nftAvatar) cache.set(key, nftAvatar)
         }
         const metaData = cache.get(key)
-        if (!metaData && isTwitter()) {
+        if (!metaData && Sniffings.is_twitter_page) {
             const nft = await Twitter.getUserNftContainer(userId)
             if (nft)
                 // is twitter blue

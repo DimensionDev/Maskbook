@@ -2,6 +2,7 @@ import { memo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
+import { Sniffings } from '@masknet/shared-base'
 import {
     alpha,
     Button,
@@ -12,7 +13,6 @@ import {
     Typography,
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-base'
 import { useI18N, Translate } from '../../../locales/index.js'
 
@@ -38,12 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     icon: {
-        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         width: 90,
         height: 90,
     },
     title: {
-        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         fontSize: 24,
         lineHeight: 1.2,
         fontWeight: 700,
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '20px',
         '& > span': {
-            color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+            color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         },
     },
     actions: {

@@ -1,11 +1,11 @@
 import { memo } from 'react'
+import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isDashboardPage } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../../utils/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page
@@ -13,8 +13,10 @@ const useStyles = makeStyles()((theme) => ({
     trade: {
         marginBottom: 8,
         padding: 10,
-        backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
-        border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${
+            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+        }!important`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         borderRadius: 8,
         alignItems: 'flex-start',
         cursor: 'pointer',
@@ -27,8 +29,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
-        backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${
+            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+        }!important`,
         borderRadius: 8,
         cursor: 'pointer',
     },
@@ -37,20 +41,20 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 10,
         right: 10,
-        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         display: 'flex',
         alignItems: 'center',
         gap: 4,
     },
     provider: {
-        color: isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.main,
         fontSize: 18,
         lineHeight: '36px',
         fontWeight: 700,
         wordBreak: 'keep-all',
     },
     cost: {
-        color: isDashboardPage ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor?.second,
         lineHeight: '18px',
         marginTop: 8,
         display: 'flex',
@@ -68,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     focus: {
         border: `2px solid ${
-            isDashboardPage ? theme.palette.primary.main : theme.palette.maskColor?.primary
+            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
         }!important`,
     },
     best: {

@@ -5,7 +5,7 @@ import {
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSite, ExtensionSite, isFirefox, isOpera, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { getTokenConstant } from './constants.js'
@@ -373,7 +373,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/opera.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
-            supportedEnhanceableSites: isOpera() ? getEnumAsArray(EnhanceableSite).map((x) => x.value) : [],
+            supportedEnhanceableSites: Sniffings.is_opera ? getEnumAsArray(EnhanceableSite).map((x) => x.value) : [],
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.opera.com/crypto/next',
@@ -391,8 +391,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         backgroundGradient:
             'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         enableRequirements: {
-            supportedChainIds: isFirefox() ? [] : getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: isFirefox() ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedChainIds: Sniffings.is_firefox ? [] : getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhanceableSites: Sniffings.is_firefox ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
             supportedExtensionSites: [],
         },
         homeLink: 'https://clv.org',
@@ -406,9 +406,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Fortmatic',
         icon: new URL('../assets/fortmatic.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: isFirefox() ? [] : [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: isFirefox() ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: isFirefox() ? [] : getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedChainIds: Sniffings.is_firefox ? [] : [ChainId.Mainnet, ChainId.BSC],
+            supportedEnhanceableSites: Sniffings.is_firefox ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: Sniffings.is_firefox ? [] : getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',

@@ -1,6 +1,5 @@
-import { EnhanceableSite, ExtensionSite } from './type.js'
-
-export * from './type.js'
+import { Sniffings } from '../Sniffings/index.js'
+import { ExtensionSite, EnhanceableSite } from './types.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
@@ -43,10 +42,10 @@ export function getSiteType(url?: string) {
 }
 
 export function getAgentType() {
-    if (isEdge()) return 'edge'
-    if (isOpera()) return 'opera'
-    if (isFirefox()) return 'firefox'
-    if (isChromium()) return 'chromium'
+    if (Sniffings.is_edge) return 'edge'
+    if (Sniffings.is_opera) return 'opera'
+    if (Sniffings.is_firefox) return 'firefox'
+    if (Sniffings.is_chromium) return 'chromium'
     return 'unknown'
 }
 
@@ -58,33 +57,13 @@ export function isExtensionSiteType() {
     return !!getExtensionSiteType()
 }
 
-export function isChromium() {
-    return process.env.engine === 'chromium'
-}
-
-export function isEdge() {
-    return globalThis.navigator.userAgent.includes('Edg')
-}
-
-export function isFirefox() {
-    return process.env.engine === 'firefox'
-}
-
 export function isEthereumInjected() {
-    return !isExtensionSiteType() && !isFirefox()
-}
-
-export function isOpera() {
-    return globalThis.navigator?.userAgent.includes('OPR/')
-}
-
-export function isTwitter() {
-    return location.href.includes(EnhanceableSite.Twitter)
+    return !isExtensionSiteType() && !Sniffings.is_firefox
 }
 
 export function getExtensionId(): string | undefined {
     try {
-        if (isChromium() || isOpera() || isEdge()) {
+        if (Sniffings.is_chromium || Sniffings.is_opera || Sniffings.is_edge) {
             // @ts-expect-error this package should not access browser global. It makes this package non-portable.
             return browser.runtime.getURL('').match(/chrome-extension:\/\/([a-z]{32})/)?.[1] ?? ''
         }
