@@ -7,7 +7,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage as isDashboard, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
@@ -85,7 +85,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const { classes } = useStyles({ compact, isDashboard })
+    const { classes } = useStyles({ compact, isDashboard: isDashboardPage })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -107,7 +107,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     )
     return (
         <InjectedDialog
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
             open={open}
             onClose={() => {
                 mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)

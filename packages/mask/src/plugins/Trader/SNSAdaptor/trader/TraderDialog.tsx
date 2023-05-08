@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import {
     PluginID,
     NetworkPluginID,
-    isDashboardPage as isDashboard,
+    isDashboardPage,
     CrossIsolationMessages,
     type TokenType,
 } from '@masknet/shared-base'
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 0,
         zIndex: 2,
 
-        '& > div .MuiBox-root': isDashboard
+        '& > div .MuiBox-root': isDashboardPage
             ? {
                   background: MaskColorVar.mainBackground,
               }
@@ -187,7 +187,7 @@ export function TraderDialog() {
                 setOpen(false)
             }}
             title={t('plugin_trader_swap')}
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
             titleTail={
                 <div className={classes.tail}>
                     <IconButton onClick={() => tradeRef.current?.refresh()}>

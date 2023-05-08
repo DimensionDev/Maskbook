@@ -12,7 +12,7 @@ import {
     Typography,
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { isDashboardPage as isDashboard } from '@masknet/shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-base'
 import { useI18N, Translate } from '../../../locales/index.js'
 
@@ -89,7 +89,7 @@ export interface PriceImpactDialogProps extends InjectedDialogProps {
 export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
     ({ open, onClose, lostToken, lostValue, priceImpact, symbol, onConfirm }) => {
         const t = useI18N()
-        const { classes } = useStyles({ isDashboard })
+        const { classes } = useStyles({ isDashboard: isDashboardPage })
 
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()} className={classes.dialog}>

@@ -3,7 +3,7 @@ import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { isDashboardPage as isDashboard, NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -75,8 +75,10 @@ export function SelectProviderDialog() {
 
     const selectedProviders = useMemo(
         () =>
-            isDashboard ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM) : providers,
-        [isDashboard],
+            isDashboardPage
+                ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
+                : providers,
+        [isDashboardPage],
     )
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>

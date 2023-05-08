@@ -14,7 +14,7 @@ import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage as isDashboard, isPopupPage as isPopup, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { currentSlippageSettings } from '../../settings.js'
@@ -40,16 +40,16 @@ const useStyles = makeStyles()((theme) => {
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
+            color: isDashboardPage ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
         },
         card: {
-            background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
-            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+            background: isDashboardPage ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
+            border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
             borderRadius: 12,
             padding: 12,
         },
         reverse: {
-            backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
+            backgroundColor: isDashboardPage ? MaskColorVar.lightBackground : theme.palette.background.default,
             width: 32,
             height: 32,
             borderRadius: 99,
@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 1,
         },
         chevron: {
-            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboardPage ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
         },
@@ -96,7 +96,7 @@ const useStyles = makeStyles()((theme) => {
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+            backgroundColor: isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom,
             paddingRight: 8,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
@@ -105,10 +105,10 @@ const useStyles = makeStyles()((theme) => {
                 fontSize: 14,
                 marginRight: 12,
                 fontWeight: 700,
-                color: !isDashboard ? theme.palette.maskColor?.main : undefined,
+                color: !isDashboardPage ? theme.palette.maskColor?.main : undefined,
             },
             ['&:hover']: {
-                backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+                backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
                 boxShadow: `0px 4px 30px ${alpha(
                     theme.palette.maskColor.shadowBottom,
                     theme.palette.mode === 'dark' ? 0.15 : 0.1,
@@ -122,18 +122,18 @@ const useStyles = makeStyles()((theme) => {
         controller: {
             width: '100%',
             // Just for design
-            backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
+            backgroundColor: isDashboardPage ? MaskColorVar.mainBackground : theme.palette.background.paper,
             position: 'sticky',
-            bottom: isPopup ? -12 : -20,
+            bottom: isPopupPage ? -12 : -20,
         },
         noToken: {
             borderRadius: '18px !important',
             backgroundColor: `${
-                isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary
+                isDashboardPage ? theme.palette.primary.main : theme.palette.maskColor?.primary
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
-                    isDashboard ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
+                    isDashboardPage ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
@@ -144,7 +144,7 @@ const useStyles = makeStyles()((theme) => {
         dropIcon: {
             width: 20,
             height: 24,
-            color: `${isDashboard ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
+            color: `${isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
         },
         whiteDrop: {
             color: '#ffffff !important',
