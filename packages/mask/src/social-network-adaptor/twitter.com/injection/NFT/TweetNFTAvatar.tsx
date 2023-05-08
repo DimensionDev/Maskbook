@@ -5,10 +5,7 @@ import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../ut
 import { noop } from 'lodash-es'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-
-function getUserId(ele: HTMLElement) {
-    return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
-}
+import { getUserId } from '../../utils/user.js'
 
 function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
