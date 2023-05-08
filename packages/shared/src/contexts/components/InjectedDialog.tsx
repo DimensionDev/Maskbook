@@ -1,7 +1,9 @@
-/* eslint-disable tss-unused-classes/unused-classes */
-import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
-import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
+import { Children, cloneElement, useCallback, useRef } from 'react'
 import { omit } from 'lodash-es'
+import { Sniffings } from '@masknet/flags'
+/* eslint-disable tss-unused-classes/unused-classes */
+import { EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
+import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { type Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {
     Dialog,
@@ -17,7 +19,6 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { Children, cloneElement, useCallback, useRef } from 'react'
 import { useSharedI18N } from '../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
@@ -219,8 +220,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             className={cx('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
                             style={{
-                                border: isDashboardPage || disableTitleBorder ? 'none' : undefined,
-                                fontSize: isDashboardPage ? 24 : undefined,
+                                border: Sniffings.is_dashboard_page || disableTitleBorder ? 'none' : undefined,
+                                fontSize: Sniffings.is_dashboard_page ? 24 : undefined,
                             }}>
                             <IconButton
                                 size="large"
@@ -230,7 +231,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
-                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboardPage
+                                        titleBarIconStyle !== 'close' &&
+                                        shouldReplaceExitWithBack &&
+                                        !Sniffings.is_dashboard_page
                                             ? 'back'
                                             : titleBarIconStyle
                                     }

@@ -1,12 +1,16 @@
 import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
+import { Sniffings } from '@masknet/flags'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { Icons } from '@masknet/icons'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
-import { Action } from './Action.js'
-import { type BindingProof, type NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
+import { type BindingProof, type NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
     useNetworkContext,
@@ -19,22 +23,21 @@ import {
     useAccount,
     useChainId,
 } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { Icons } from '@masknet/icons'
+import { useSharedI18N } from '../../../locales/index.js'
+import { Action } from './Action.js'
 import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
-import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useMenuConfig } from '../../../index.js'
-import { SmartPayBundler } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: isDashboardPage ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: Sniffings.is_dashboard_page
+            ? MaskColorVar.mainBackground
+            : alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'

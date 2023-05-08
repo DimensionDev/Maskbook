@@ -1,8 +1,8 @@
-import { getEnumAsArray } from '@masknet/kit'
-import { isPopupPage } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { memoize } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
+import { getEnumAsArray } from '@masknet/kit'
+import { Sniffings } from '@masknet/flags'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getArbConstants,
     getCryptoPunksConstants,
@@ -80,7 +80,7 @@ export function getDefaultNetworkType() {
 }
 
 export function getDefaultProviderType() {
-    return isPopupPage ? ProviderType.MaskWallet : ProviderType.None
+    return Sniffings.is_popup_page ? ProviderType.MaskWallet : ProviderType.None
 }
 
 export function getZeroAddress() {

@@ -1,4 +1,7 @@
 import { useCopyToClipboard } from 'react-use'
+import { Button, Link, Typography, useTheme } from '@mui/material'
+import { getMaskColor, makeStyles } from '@masknet/theme'
+import { Sniffings } from '@masknet/flags'
 import {
     useChainContext,
     useNetworkDescriptor,
@@ -13,11 +16,9 @@ import {
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Button, Link, Typography, useTheme } from '@mui/material'
+
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -26,9 +27,9 @@ import { usePendingTransactions } from './usePendingTransactions.js'
 
 const useStyles = makeStyles<{
     contentBackground?: string
+    textColor?: string
     disableChange?: boolean
     withinRiskWarningDialog?: boolean
-    textColor?: string
 }>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
     currentAccount: {
         padding: theme.spacing(0, 1.5),
@@ -36,7 +37,7 @@ const useStyles = makeStyles<{
         display: 'flex',
         background:
             contentBackground ??
-            (isDashboardPage ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+            (Sniffings.is_dashboard_page ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
         borderRadius: 8,
         alignItems: 'center',
         height: disableChange ? 60 : 82,
@@ -50,13 +51,13 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !isDashboardPage ? theme.palette.maskColor.dark : textColor,
+        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !isDashboardPage ? theme.palette.maskColor.dark : textColor,
+        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -91,10 +92,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: isDashboardPage ? textColor : theme.palette.maskColor.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: isDashboardPage ? textColor : theme.palette.maskColor?.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -180,7 +181,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 className={cx(
                     classes.statusBox,
                     classes.currentAccount,
-                    isDashboardPage ? classes.dashboardBackground : '',
+                    Sniffings.is_dashboard_page ? classes.dashboardBackground : '',
                 )}>
                 <WalletIcon
                     size={30}

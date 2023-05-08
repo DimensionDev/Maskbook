@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import {
-    PluginID,
-    NetworkPluginID,
-    isDashboardPage,
-    CrossIsolationMessages,
-    type TokenType,
-} from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, CrossIsolationMessages, type TokenType } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     useChainContext,
@@ -20,6 +14,7 @@ import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { Sniffings } from '@masknet/flags'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { PluginTraderMessages } from '../../messages.js'
@@ -35,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 0,
         zIndex: 2,
 
-        '& > div .MuiBox-root': isDashboardPage
+        '& > div .MuiBox-root': Sniffings.is_dashboard_page
             ? {
                   background: MaskColorVar.mainBackground,
               }
@@ -187,7 +182,7 @@ export function TraderDialog() {
                 setOpen(false)
             }}
             title={t('plugin_trader_swap')}
-            titleBarIconStyle={isDashboardPage ? 'close' : 'back'}
+            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             titleTail={
                 <div className={classes.tail}>
                     <IconButton onClick={() => tradeRef.current?.refresh()}>

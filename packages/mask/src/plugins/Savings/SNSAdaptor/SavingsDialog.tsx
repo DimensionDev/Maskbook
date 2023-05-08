@@ -3,7 +3,18 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
-import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { TabContext, TabPanel } from '@mui/lab'
+import {
+    Web3ContextProvider,
+    useChainContext,
+    useFungibleTokens,
+    useWeb3,
+    ActualChainContextProvider,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/flags'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, createContract, getAaveConstants, type SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
@@ -17,16 +28,6 @@ import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtoc
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
-import { TabContext, TabPanel } from '@mui/lab'
-import {
-    Web3ContextProvider,
-    useChainContext,
-    useFungibleTokens,
-    useWeb3,
-    ActualChainContextProvider,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
-import type { FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -42,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         height: 36,
         minHeight: 36,
-        backgroundColor: isDashboardPage ? `${MaskColorVar.primaryBackground2}!important` : undefined,
+        backgroundColor: Sniffings.is_dashboard_page ? `${MaskColorVar.primaryBackground2}!important` : undefined,
     },
     tabPaper: {
         backgroundColor: 'inherit',

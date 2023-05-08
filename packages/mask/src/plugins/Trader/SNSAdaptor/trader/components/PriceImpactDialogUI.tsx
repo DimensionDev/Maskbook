@@ -12,7 +12,7 @@ import {
     Typography,
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { isDashboardPage } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/flags'
 import { formatPercentage } from '@masknet/web3-shared-base'
 import { useI18N, Translate } from '../../../locales/index.js'
 
@@ -38,12 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     icon: {
-        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         width: 90,
         height: 90,
     },
     title: {
-        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         fontSize: 24,
         lineHeight: 1.2,
         fontWeight: 700,
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '20px',
         '& > span': {
-            color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+            color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         },
     },
     actions: {

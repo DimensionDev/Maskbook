@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { delay } from '@masknet/kit'
+import { Sniffings } from '@masknet/flags'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -21,6 +22,14 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
+function getProviders() {
+    const providers = getRegisteredWeb3Providers()
+
+    return Sniffings.is_dashboard_page
+        ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
+        : providers
+}
 
 export function SelectProviderDialog() {
     const { t } = useI18N()
@@ -44,8 +53,6 @@ export function SelectProviderDialog() {
         WalletMessages.events.connectWalletDialogUpdated,
     )
     // #endregion
-
-    const providers = getRegisteredWeb3Providers()
 
     const onProviderIconClicked = useCallback(
         async (
@@ -73,18 +80,11 @@ export function SelectProviderDialog() {
         [closeDialog, walletConnectedCallback],
     )
 
-    const selectedProviders = useMemo(
-        () =>
-            isDashboardPage
-                ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
-                : providers,
-        [isDashboardPage],
-    )
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    providers={selectedProviders}
+                    providers={getProviders()}
                     onProviderIconClicked={onProviderIconClicked}
                     requiredSupportChainIds={requiredSupportChainIds}
                     requiredSupportPluginID={requiredSupportPluginID}
