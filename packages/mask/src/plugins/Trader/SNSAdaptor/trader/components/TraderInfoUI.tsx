@@ -9,14 +9,12 @@ import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../../utils/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page
-const useStyles = makeStyles<{
-    isDashboard: boolean
-}>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     trade: {
         marginBottom: 8,
         padding: 10,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+        border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         borderRadius: 8,
         alignItems: 'flex-start',
         cursor: 'pointer',
@@ -29,8 +27,8 @@ const useStyles = makeStyles<{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+        border: `1px solid ${isDashboardPage ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${isDashboardPage ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
         borderRadius: 8,
         cursor: 'pointer',
     },
@@ -39,20 +37,20 @@ const useStyles = makeStyles<{
         position: 'absolute',
         bottom: 10,
         right: 10,
-        color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: isDashboardPage ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         display: 'flex',
         alignItems: 'center',
         gap: 4,
     },
     provider: {
-        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        color: isDashboardPage ? theme.palette.text.primary : theme.palette.maskColor?.main,
         fontSize: 18,
         lineHeight: '36px',
         fontWeight: 700,
         wordBreak: 'keep-all',
     },
     cost: {
-        color: isDashboard ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: isDashboardPage ? MaskColorVar.normalText : theme.palette.maskColor?.second,
         lineHeight: '18px',
         marginTop: 8,
         display: 'flex',
@@ -69,7 +67,9 @@ const useStyles = makeStyles<{
         width: 'auto',
     },
     focus: {
-        border: `2px solid ${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary}!important`,
+        border: `2px solid ${
+            isDashboardPage ? theme.palette.primary.main : theme.palette.maskColor?.primary
+        }!important`,
     },
     best: {
         position: 'absolute',
@@ -108,7 +108,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         priceImpact,
     }) => {
         const { t } = useI18N()
-        const { classes, cx } = useStyles({ isDashboard: isDashboardPage })
+        const { classes, cx } = useStyles()
 
         if (loading)
             return (
@@ -186,7 +186,7 @@ export interface DefaultTraderPlaceholderUIProps {
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {
     const { t } = useI18N()
-    const { classes, cx } = useStyles({ isDashboard: isDashboardPage })
+    const { classes, cx } = useStyles()
 
     return (
         <TextField

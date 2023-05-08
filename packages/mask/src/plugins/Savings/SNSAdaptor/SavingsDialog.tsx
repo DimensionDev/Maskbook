@@ -28,7 +28,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles<{ isDashboardPage: boolean }>()((theme, { isDashboardPage }) => ({
+const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
         paddingBottom: theme.spacing(2),
@@ -90,7 +90,7 @@ const chains = [ChainId.Mainnet]
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
     const { pluginID } = useNetworkContext()
-    const { classes } = useStyles({ isDashboardPage })
+    const { classes } = useStyles()
 
     const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
