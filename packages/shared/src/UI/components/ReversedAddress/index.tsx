@@ -28,3 +28,5 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
 
     return hasEllipsis ? <ShadowRootTooltip title={showDomain ? domain : address}>{node}</ShadowRootTooltip> : node
 })
+
+ReversedAddress.displayName = 'ReversedAddress'
