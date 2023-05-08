@@ -14,12 +14,7 @@ export function useReverseAddress<T extends NetworkPluginID>(
     })
     const { NameService, Others } = useWeb3State(pluginID)
 
-    const isBad =
-        !Others?.chainResolver.isValid(chainId) ||
-        !address ||
-        !Others.isValidAddress?.(address) ||
-        Others.isZeroAddress?.(address) ||
-        !NameService
+    const isBad = !address || !Others?.isValidAddress?.(address) || Others.isZeroAddress?.(address) || !NameService
 
     return useAsyncRetry(async () => {
         if (isBad) return
