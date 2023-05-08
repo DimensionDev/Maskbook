@@ -1,4 +1,5 @@
 import { toHex } from 'web3-utils'
+import { Sniffings } from '@masknet/flags'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import {
     type ChainId,
@@ -15,21 +16,17 @@ export class OperaProvider
     extends BaseInjectedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private isOpera() {
-        return navigator.userAgent.includes('OPR/')
-    }
-
     constructor() {
         super(ProviderType.Opera, injectedOperaProvider)
     }
 
     override get ready() {
-        if (!this.isOpera) return true
+        if (!Sniffings.is_opera) return true
         return super.ready
     }
 
     override get readyPromise() {
-        if (!this.isOpera) return Promise.resolve(undefined)
+        if (!Sniffings.is_opera) return Promise.resolve(undefined)
         return super.readyPromise
     }
 

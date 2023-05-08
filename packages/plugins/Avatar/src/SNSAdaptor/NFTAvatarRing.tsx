@@ -1,5 +1,5 @@
-import { isFirefox } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { Sniffings } from '@masknet/flags'
 import { RainbowBox } from './RainbowBox.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -107,7 +107,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 <text
                     x="0%"
                     textAnchor="middle"
-                    fill={isFirefox() ? 'currentColor' : `url(#${id}-pattern)`}
+                    fill={Sniffings.is_firefox ? 'currentColor' : `url(#${id}-pattern)`}
                     fontFamily="sans-serif">
                     <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
                         <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">

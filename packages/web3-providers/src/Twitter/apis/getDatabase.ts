@@ -1,11 +1,11 @@
-import { isFirefox } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/flags'
 
 /* cspell:disable-next-line */
 const DB_NAME = 'localforage'
 const DB_VERSION = 2
 
 export async function getDatabase() {
-    if (!isFirefox()) {
+    if (!Sniffings.is_firefox) {
         const databases = await indexedDB.databases()
         if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
     }
