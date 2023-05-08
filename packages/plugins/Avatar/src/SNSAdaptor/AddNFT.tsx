@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useI18N } from '../locales/i18n_generated.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     addNFT: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface AddNFTProps {
     expectedPluginID: NetworkPluginID
     account?: string
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
     open: boolean
     title?: string
     onClose: () => void
