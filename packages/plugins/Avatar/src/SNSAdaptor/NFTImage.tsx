@@ -67,7 +67,7 @@ export const NFTImage = memo((props: NFTImageProps) => {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
     const name = token.collection?.name || token.contract?.name
-    const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+    const uiTokenId = token.tokenId ? Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}` : name
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
 
     return (

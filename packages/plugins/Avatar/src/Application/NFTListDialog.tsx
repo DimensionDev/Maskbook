@@ -8,7 +8,7 @@ import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallets } 
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-es'
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
@@ -130,14 +130,6 @@ export const NFTListDialog: FC = () => {
     const [selectedAccount, setSelectedAccount] = useState(targetAccount)
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
-    // Set eth to the default chain
-    const actualChainId = useMemo(() => {
-        if (selectedPluginId !== NetworkPluginID.PLUGIN_EVM) return
-        const defaultChain = first(SUPPORTED_CHAIN_IDS)
-        if (!SUPPORTED_CHAIN_IDS.includes(chainId as ChainId) && defaultChain) return defaultChain
-        return chainId
-    }, [chainId, selectedPluginId])
-
     const {
         value: collectibles = EMPTY_LIST,
         done: loadFinish,
@@ -145,7 +137,7 @@ export const NFTListDialog: FC = () => {
         error: loadError,
         retry,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
-        chainId: actualChainId,
+        chainId,
         account: selectedAccount,
     })
 
@@ -154,7 +146,7 @@ export const NFTListDialog: FC = () => {
         setSelectedToken(undefined)
     }, [pfpType])
 
-    useEffect(() => setSelectedToken(undefined), [actualChainId])
+    useEffect(() => setSelectedToken(undefined), [chainId])
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
@@ -233,14 +225,14 @@ export const NFTListDialog: FC = () => {
 
     const tokensInList = useMemo(() => {
         const filtered = [...tokens, ...collectibles].filter((x) => {
-            if (x.chainId !== actualChainId) return false
+            if (x.chainId !== chainId) return false
             if (isLensProfileAddress(x.address)) return false
             if (x.metadata?.name && isLensFollower(x.metadata.name)) return false
             if (x.collection?.name && isLensCollect(x.collection.name)) return false
             return true
         })
         return uniqBy(filtered, (x) => x.contract?.address?.toLowerCase() + x.tokenId)
-    }, [tokens, collectibles, actualChainId])
+    }, [tokens, collectibles, chainId])
 
     const getNoNFTList = () => {
         if (loadError && !collectibles.length) {
@@ -263,7 +255,7 @@ export const NFTListDialog: FC = () => {
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
                     <>
-                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM && actualChainId ? (
+                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM && chainId ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     chains={SUPPORTED_CHAIN_IDS}
@@ -371,7 +363,7 @@ export const NFTListDialog: FC = () => {
             </DialogActions>
             <AddNFT
                 account={targetAccount}
-                chainId={actualChainId as ChainId}
+                chainId={chainId}
                 title={t.add_collectible()}
                 open={addDialogOpen}
                 onClose={() => setAddDialogOpen(false)}
