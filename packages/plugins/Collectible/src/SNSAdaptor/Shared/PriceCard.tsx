@@ -57,7 +57,6 @@ export function PriceCard(props: PriceCardProps) {
     const { setSourceType, sourceType, orders } = Context.useContainer()
     const t = useI18N()
     const { classes } = useStyles()
-    console.log({ orders, sourceType })
     if (((!topListing && orders.error) || orders.loading) && !sourceType) return null
 
     if (!topListing && !orders.loading)
