@@ -1,4 +1,5 @@
 {
+    "send": "送信",
     "approve": "承認します",
     "approve_mask": "MASKを承認しますか？",
     "approve_mask_description": "Polygonのネットワークを利用するには、MATICトークンがガス料金として支払う必要があります。SmartPayを使用すると、MASKトークンを使ってPolygonネットワーク上でガス料金を支払うことができます。",
