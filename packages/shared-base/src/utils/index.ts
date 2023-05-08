@@ -10,7 +10,6 @@ export * from './markdown.js'
 export * from './mixin.js'
 export * from './personas.js'
 export * from './resolve.js'
-export * from './runtime.js'
 export * from './subscription.js'
 
 export enum SignType {
