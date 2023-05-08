@@ -53,11 +53,15 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
     const [mini, setMini] = useState(_mini)
 
     useEffect(() => {
+        const searchHomeLinkNameNode = searchHomeLinkName().evaluate()
+
+        if (!searchHomeLinkNameNode) return
+
         const observer = new MutationObserver((mutations) => {
             setMini(!searchHomeLinkName().querySelector('span').evaluate())
         })
 
-        observer.observe(searchHomeLinkName().evaluate()!, {
+        observer.observe(searchHomeLinkNameNode, {
             subtree: true,
             childList: true,
         })
