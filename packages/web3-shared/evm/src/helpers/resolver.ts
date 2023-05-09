@@ -51,7 +51,11 @@ export function resolveImageURL(image?: string, name?: string, collectionName?: 
 
 export function isLens(name?: string) {
     if (!name) return false
-    return name.toLowerCase().endsWith('.lens') || name.toLowerCase().includes('lensprotocol')
+    return (
+        name.toLowerCase().endsWith('.lens') ||
+        name.toLowerCase() === 'lensprotocol' ||
+        name.toLowerCase() === '@lensprotocol'
+    )
 }
 
 export function isLensFollower(name: string) {
