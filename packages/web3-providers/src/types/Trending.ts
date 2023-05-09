@@ -182,7 +182,7 @@ export namespace TrendingAPI {
 
     export interface MarketInfo {
         id: string
-        price: string
+        price?: string
         market_cap: string
     }
 
@@ -198,6 +198,6 @@ export namespace TrendingAPI {
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
         /** Get token info by symbol */
-        getCoinMarketInfo: (tokenSymbol: string) => Promise<MarketInfo>
+        getCoinMarketInfo: (tokenSymbol: string) => Promise<MarketInfo | undefined>
     }
 }

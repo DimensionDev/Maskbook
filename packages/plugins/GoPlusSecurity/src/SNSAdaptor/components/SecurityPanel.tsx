@@ -63,8 +63,6 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const t = useI18N()
     const theme = useTheme()
 
-    const price = tokenMarketCap ?? tokenPrice
-
     const [isCollapse, setCollapse] = useState(false)
     const {
         risk_item_quantity: riskyFactors = 0,
@@ -109,7 +107,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         <Typography className={classes.tokenName}>
                             {tokenSecurity?.token_name || t.unnamed()}
                         </Typography>
-                        <Typography className={classes.tokenPrice}> {price ? formatCurrency(price) : '--'}</Typography>
+                        <Typography className={classes.tokenPrice}>
+                            {tokenPrice ? formatCurrency(tokenPrice) : '--'}
+                        </Typography>
                     </Stack>
                 </Stack>
                 <Stack>
@@ -162,9 +162,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Icons.LinkOut
-                                style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
-                            />
+                            <Icons.LinkOut size={18} style={{ color: theme.palette.text.strong, marginTop: 2 }} />
                         </Link>
                     </Stack>
                 </Stack>
@@ -216,3 +214,4 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
         </Stack>
     )
 })
+SecurityPanel.displayName = 'SecurityPanel'

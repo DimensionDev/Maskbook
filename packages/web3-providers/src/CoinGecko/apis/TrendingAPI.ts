@@ -13,7 +13,7 @@ import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
-import type { Platform } from '../types.js'
+import type { CoinInfo, Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseCoinAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
@@ -193,7 +193,20 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
         return (await getStats(coinId, currency.id, days)).prices
     }
 
-    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
-        throw new Error('Method not implemented.')
+    getCoinMarketInfo(address: string): Promise<TrendingAPI.MarketInfo | undefined> {
+        return attemptUntil(
+            COINGECKO_CHAIN_ID_LIST.map((chainId) => async (): Promise<TrendingAPI.MarketInfo | undefined> => {
+                try {
+                    const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
+                    const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address.toLowerCase()}`
+                    const response = await fetchJSON<CoinInfo | { error: string }>(requestPath)
+                    if ('error' in response) return
+                    return { id: response.id, market_cap: response.market_data.market_cap.usd.toString() }
+                } catch {
+                    return undefined
+                }
+            }),
+            undefined,
+        )
     }
 }
