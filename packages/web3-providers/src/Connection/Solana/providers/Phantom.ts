@@ -19,6 +19,11 @@ export class PhantomProvider
         super(ProviderType.Phantom, injectedPhantomProvider)
     }
 
+    private async validateSession() {
+        if (this.bridge.isConnected) return
+        await (this.bridge as unknown as Web3Provider).connect()
+    }
+
     override async setup(): Promise<void> {
         if (!injectedPhantomProvider.isReady) return
         await injectedPhantomProvider.untilAvailable()
@@ -26,7 +31,7 @@ export class PhantomProvider
     }
 
     override async signMessage(message: string) {
-        if (!this.bridge.isConnected) await this.bridge.connect(undefined)
+        await this.validateSession()
         const { signature } = await this.bridge.request<{
             publicKey: string
             signature: string
@@ -41,6 +46,7 @@ export class PhantomProvider
     }
 
     override async signTransaction(transaction: Transaction) {
+        await this.validateSession()
         const { publicKey, signature } = await this.bridge.request<{
             publicKey: string
             signature: string
@@ -56,6 +62,7 @@ export class PhantomProvider
     }
 
     override async signTransactions(transactions: Transaction[]) {
+        await this.validateSession()
         return this.bridge.request<Transaction[]>({
             method: 'signAllTransactions',
             params: {
