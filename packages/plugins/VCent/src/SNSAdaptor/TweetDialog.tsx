@@ -1,7 +1,8 @@
+import urlcat from 'urlcat'
 import { first } from 'lodash-es'
+import { useAsync } from 'react-use'
 import { alpha, Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAsync } from 'react-use'
 import { PluginVCentRPC } from '../messages.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
@@ -10,7 +11,6 @@ import { ImageIcon } from '@masknet/shared'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { VALUABLES_VCENT_URL } from '../constants.js'
 import { useI18N } from '../locales/i18n_generated.js'
-import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({
     root: {

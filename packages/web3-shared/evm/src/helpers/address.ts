@@ -100,6 +100,11 @@ export function isENSContractAddress(contract_address: string) {
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }
 
+const { ENS_NAME_WRAPPER_CONTRACT_ADDRESS } = getENSConstants()
+export function isENSNameWrapperContractAddress(contract_address: string) {
+    return isSameAddress(contract_address, ENS_NAME_WRAPPER_CONTRACT_ADDRESS)
+}
+
 export function isLensProfileAddress(address: string) {
     const { LENS_PROFILE_CONTRACT_ADDRESS } = getLensProfileConstants(ChainId.Matic)
     return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
