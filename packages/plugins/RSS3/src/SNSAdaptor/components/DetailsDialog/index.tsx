@@ -60,6 +60,7 @@ export interface FeedDetailsDialogProps
     onSubmit?(): void
 }
 
+const badGitcoinPathRe = /^\/grants(\d+)\//
 export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, ...rest }: FeedDetailsDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -81,13 +82,25 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, 
                     <div className={classes.links}>
                         {links.map((link, index) => {
                             let host = ''
+                            const url = new URL(link)
                             try {
-                                const url = new URL(link)
                                 if (!['http:', 'https:'].includes(url.protocol)) return null
                                 host = url.host
                             } catch {}
                             const Icon = hostIconMap[host] ?? Icons.SettingsLanguage
                             const name = hostNameMap[host] ?? host
+                            if (
+                                process.env.NODE_ENV === 'development' &&
+                                url.host === 'gitcoin.co' &&
+                                !badGitcoinPathRe.test(url.pathname)
+                            ) {
+                                console.warn('You can remove the workaround for bad Gitcoin url now.')
+                            }
+                            // workaround for bad Gitcoin url.
+                            if (url.host === 'gitcoin.co' && badGitcoinPathRe.test(url.pathname)) {
+                                url.pathname = url.pathname.replace(badGitcoinPathRe, '/grants/$1/')
+                                link = url.toString()
+                            }
                             return (
                                 <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
                                     <Icon size={24} />
