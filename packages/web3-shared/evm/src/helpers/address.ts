@@ -8,7 +8,6 @@ import {
     getCryptoPunksConstants,
     getENSConstants,
     getLensProfileConstants,
-    getNameWrapperContrants,
     getRedPacketConstants,
     getSpaceIdConstants,
     getTokenConstant,
@@ -101,7 +100,7 @@ export function isENSContractAddress(contract_address: string) {
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }
 
-const { ENS_NAME_WRAPPER_CONTRACT_ADDRESS } = getNameWrapperContrants()
+const { ENS_NAME_WRAPPER_CONTRACT_ADDRESS } = getENSConstants()
 export function isENSNameWrapperContractAddress(contract_address: string) {
     return isSameAddress(contract_address, ENS_NAME_WRAPPER_CONTRACT_ADDRESS)
 }
