@@ -70,11 +70,12 @@ const useStyles = makeStyles()((theme) => ({
     followButton: {
         marginLeft: 'auto',
         height: 32,
-        padding: theme.spacing(1, 2),
+        padding: theme.spacing(1, 1.5),
         backgroundColor: '#ABFE2C',
         color: '#000',
         borderRadius: 99,
-        minWidth: 76,
+        minWidth: 64,
+        fontSize: 12,
         '&:hover': {
             backgroundColor: '#ABFE2C',
             color: '#000',
@@ -118,7 +119,7 @@ const ENSAddress = memo(({ domain }: { domain: string }) => {
 
     return (
         <div className={classes.address}>
-            <div className={classes.addressText}>{address}</div>
+            <Typography className={classes.addressText}>{address}</Typography>
             <CopyButton text={address} size={14} className={classes.copyButton} />
         </div>
     )
@@ -147,11 +148,15 @@ export function SocialAccountListItem({
     const { classes, cx } = useStyles()
     const Icon = resolveNextIDPlatformIcon(platform)
 
-    const { loading, value: ownerOfLensHandle } = useAsync(async () => {
+    const { loading, value } = useAsync(async () => {
         if (platform !== NextIDPlatform.LENS || !identity) return
         const profile = await Lens.getProfileByHandle(identity)
-        return profile.ownedBy
-    }, [identity, platform])
+        const isFollowing = await Lens.queryFollowStatus(account, profile.id)
+        return {
+            ownedBy: profile.ownedBy,
+            isFollowing,
+        }
+    }, [identity, platform, account])
 
     return (
         <SocialTooltip platform={platform}>
@@ -159,12 +164,11 @@ export function SocialAccountListItem({
                 className={classes.listItem}
                 disableRipple
                 disabled={false}
-                onClick={() => {
+                onClick={async () => {
                     if (platform === NextIDPlatform.ENS) {
-                        ENS.lookup(identity).then((address) => {
-                            openWindow(`https://app.ens.domains/address/${address}`)
-                        })
-                        return
+                        const address = await ENS.lookup(identity)
+                        if (!address) return
+                        openWindow(`https://app.ens.domains/address/${address}`)
                     }
                     return openWindow(link ?? resolveNextIDPlatformLink(platform, identity, name))
                 }}>
@@ -188,7 +192,11 @@ export function SocialAccountListItem({
                                     handle: identity,
                                 })
                             }}>
-                            {isSameAddress(account, ownerOfLensHandle) ? t.view() : t.lens_follow()}
+                            {isSameAddress(account, value?.ownedBy)
+                                ? t.view()
+                                : value?.isFollowing
+                                ? t.lens_following()
+                                : t.lens_follow()}
                         </ActionButton>
                     ) : (
                         <div className={classes.linkIcon}>
