@@ -21,7 +21,7 @@ export class PhantomProvider
 
     private async validateSession() {
         if (this.bridge.isConnected) return
-        return this.bridge.connect(undefined)
+        await this.bridge.connect(undefined)
     }
 
     override async setup(): Promise<void> {
