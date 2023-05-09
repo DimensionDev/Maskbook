@@ -1,5 +1,5 @@
 import { getEnumAsArray } from '@masknet/kit'
-import { isPopupPage } from '@masknet/shared-base'
+import { EMPTY_LIST, isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { memoize } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
@@ -95,9 +95,9 @@ export const getMaskTokenAddress: (chainId: ChainId) => string = memoize((chainI
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
 })
 
-const { ENS_CONTRACT_ADDRESS } = getENSConstants()
+const { ENS_CONTRACT_ADDRESS = EMPTY_LIST } = getENSConstants()
 export function isENSContractAddress(contract_address: string) {
-    return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+    return ENS_CONTRACT_ADDRESS.includes(contract_address)
 }
 
 export function isLensProfileAddress(address: string) {
