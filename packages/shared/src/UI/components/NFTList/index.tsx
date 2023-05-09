@@ -91,6 +91,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             width: 30,
             height: 30,
         },
+        fallbackENSImage: {
+            width: '100%',
+            height: '100%',
+        },
         image: {
             background: 'transparent !important',
             width: 126,
@@ -128,21 +132,22 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
         })
     }, [pluginID, token.chainId, token.tokenId, token.address])
 
+    const fallbackImageURL = resolveImageURL(
+        undefined,
+        token.metadata?.name,
+        token.collection?.name,
+        token.contract?.address,
+    )
     return (
         <div className={classes.nftContainer} onClick={onClick}>
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
-                    fallbackImage: classes.fallbackImage,
+                    fallbackImage: fallbackImageURL ? classes.fallbackENSImage : classes.fallbackImage,
                     container: classes.image,
                     root: classes.root,
                 }}
-                fallbackImage={resolveImageURL(
-                    undefined,
-                    token.metadata?.name,
-                    token.collection?.name,
-                    token.contract?.address,
-                )}
+                fallbackImage={fallbackImageURL}
             />
             <TextOverflowTooltip as={ShadowRootTooltip} title={caption} disableInteractive arrow placement="bottom">
                 <Typography className={classes.caption}>
