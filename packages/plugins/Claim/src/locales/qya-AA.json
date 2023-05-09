@@ -17,7 +17,7 @@
     "no_activities_tips": "crwdns20125:0crwdne20125:0",
     "unclaimed_token_title": "crwdns20127:0{{symbol}}crwdne20127:0",
     "locked_token_title": "crwdns20129:0{{symbol}}crwdne20129:0",
-    "unlock_time": "crwdns20131:0{{time}}crwdne20131:0",
+    "unlock_time": "crwdns20131:0{{-time}}crwdne20131:0",
     "claim_tips": "crwdns20163:0crwdne20163:0",
     "cancel_claim_tips": "crwdns20165:0crwdne20165:0",
     "airdrop_title": "crwdns20133:0{{symbol}}crwdne20133:0",
