@@ -4,6 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
+import { resolveImageURL } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,6 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 'none',
         width: 30,
         height: 30,
+    },
+    fallbackLensImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: '100%',
+        height: '100%',
     },
     blocker: {
         position: 'absolute',
@@ -52,6 +59,12 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
             pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null
         const { metadata } = asset
         const url = metadata?.previewImageURL || metadata?.imageURL || metadata?.mediaURL
+        const fallbackImage = resolveImageURL(
+            undefined,
+            asset.metadata?.name,
+            asset.collection?.name,
+            asset.contract?.address,
+        )
 
         return (
             <div className={cx(classes.root, className)} {...rest}>
@@ -59,10 +72,11 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
                 <Card className={classes.card}>
                     <AssetPreviewer
                         classes={{
-                            fallbackImage: classes.fallbackImage,
+                            fallbackImage: fallbackImage ? classes.fallbackLensImage : classes.fallbackImage,
                         }}
                         url={url}
                         icon={icon}
+                        fallbackImage={fallbackImage}
                     />
                 </Card>
             </div>
