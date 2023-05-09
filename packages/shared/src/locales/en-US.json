@@ -191,6 +191,7 @@
     "applications_create_persona_hint": "Please create a Persona and verify your account to use this function.",
     "applications_create_persona_action": "Create persona",
     "lens_follow": "Follow",
+    "view": "View",
     "verified_by": "Verified by {{ marketplace }}",
     "no_NFTs_found": "No NFTs found."
 }

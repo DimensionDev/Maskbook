@@ -11,7 +11,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
+import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
@@ -119,12 +119,13 @@ export function FollowLensDialog() {
 
         return {
             profile,
+            isSelf: isSameAddress(profile.ownedBy, account),
             isFollowing,
             defaultProfile: defaultProfile ?? first(profiles),
         }
     }, [handle, open, account])
 
-    const { isFollowing, profile, defaultProfile } = value ?? {}
+    const { isFollowing, profile, defaultProfile, isSelf } = value ?? {}
 
     const followModule = useMemo(() => {
         if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && defaultProfile) {
@@ -259,6 +260,7 @@ export function FollowLensDialog() {
     })
 
     const tips = useMemo(() => {
+        if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle })
         if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
             return t.follow_wallet_tips()
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
@@ -278,7 +280,7 @@ export function FollowLensDialog() {
             return t.follow_gas_tips()
         }
         return
-    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType])
+    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf])
 
     const avatar = useMemo(() => {
         if (!profile?.picture?.original) return
@@ -315,16 +317,31 @@ export function FollowLensDialog() {
                             />
                         </Typography>
                         <Box className={classes.actions}>
-                            {element}
-                            <Button
-                                variant="roundedOutlined"
-                                href={profile?.handle ? getLensterLink(profile.handle) : '#'}
-                                target="__blank"
-                                rel="noopener noreferrer"
-                                endIcon={<Icons.LinkOut size={18} />}
-                                sx={{ cursor: 'pointer' }}>
-                                {t.lenster()}
-                            </Button>
+                            {isSelf ? (
+                                <Button
+                                    variant="roundedContained"
+                                    className={classes.followAction}
+                                    href={profile?.handle ? getLensterLink(profile.handle) : '#'}
+                                    target="__blank"
+                                    rel="noopener noreferrer"
+                                    endIcon={<Icons.LinkOut size={18} />}
+                                    sx={{ cursor: 'pointer' }}>
+                                    {t.edit_profile_in_lenster()}
+                                </Button>
+                            ) : (
+                                <>
+                                    {element}
+                                    <Button
+                                        variant="roundedOutlined"
+                                        href={profile?.handle ? getLensterLink(profile.handle) : '#'}
+                                        target="__blank"
+                                        rel="noopener noreferrer"
+                                        endIcon={<Icons.LinkOut size={18} />}
+                                        sx={{ cursor: 'pointer' }}>
+                                        {t.lenster()}
+                                    </Button>
+                                </>
+                            )}
                         </Box>
                         <Box className={classes.profile}>
                             <WalletConnectedBoundary
