@@ -334,6 +334,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             return identities
         }
         const identitiesFromNextID = await this.getSocialAddressesFromNextID(identity)
+        const identitiesAddressFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
         const allSettledIdentitiesVerified = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const isVerified = await NextIDProof.verifyTwitterHandlerByAddress(
@@ -349,7 +350,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 allSettledIdentitiesVerified
                     .flatMap((x) => (x.status === 'fulfilled' && x.value.isVerified ? x.value : undefined))
                     .filter(Boolean) as Array<SocialAddress<ChainId>>
-            ).concat(identitiesFromNextID),
+            )
+                .filter((x) => !identitiesAddressFromNextID.includes(x.address.toLowerCase()))
+                .concat(identitiesFromNextID),
             (x) => x.address.toLowerCase(),
         )
     }

@@ -116,10 +116,10 @@ export const CollectibleItem = memo(
                     showNetworkIcon={showNetworkIcon}
                     disableLink={disableLink || selectable}
                 />
-                {uiTokenId ? (
+                {asset.metadata?.name || uiTokenId ? (
                     <div className={classes.description}>
                         <Typography className={classes.name} color="textPrimary" variant="body2">
-                            {uiTokenId}
+                            {asset.metadata?.name || uiTokenId}
                         </Typography>
                     </div>
                 ) : null}

@@ -1,21 +1,22 @@
-import { memo, type ReactNode, useEffect, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { CoinGeckoPriceEVM, GoPlusLabs } from '@masknet/web3-providers'
-import type { SecurityAPI } from '@masknet/web3-providers/types'
-import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
+import { CoinGeckoTrending, GoPlusLabs } from '@masknet/web3-providers'
+import type { SecurityAPI } from '@masknet/web3-providers/types'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
+import { toNumber } from 'lodash-es'
+import { useEffect, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useI18N } from '../locales/index.js'
+import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
+import { Footer } from './components/Footer.js'
+import { NotFound } from './components/NotFound.js'
 import { SearchBox } from './components/SearchBox.js'
 import { Searching } from './components/Searching.js'
 import { SecurityPanel } from './components/SecurityPanel.js'
-import { Footer } from './components/Footer.js'
-import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
-import { NotFound } from './components/NotFound.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -32,12 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'flex-end',
     },
 }))
-
-export const Center = memo(({ children }: { children: ReactNode }) => (
-    <Stack height="100%" justifyContent="center" alignItems="center">
-        {children}
-    </Stack>
-))
 
 export function CheckSecurityDialog() {
     const t = useI18N()
@@ -71,10 +66,12 @@ export function CheckSecurityDialog() {
         value?.contract,
     )
     const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
-    const { value: tokenMarketCapInfo } = useAsync(async () => {
-        if (!value?.token_symbol) return
-        return CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId.Mainnet, value.token_symbol)
-    }, [value])
+    const { value: tokenMarketCap } = useAsync(async () => {
+        if (!value?.contract || !value.token_symbol) return
+
+        const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(value.contract)
+        return marketInfo?.market_cap ? toNumber(marketInfo.market_cap) : undefined
+    }, [value?.contract, !value?.token_symbol])
 
     const onClose = () => setOpen(false)
 
@@ -89,9 +86,9 @@ export function CheckSecurityDialog() {
                     )}
                     <Stack flex={1}>
                         {searching || loadingToken ? (
-                            <Center>
+                            <Stack height="100%" justifyContent="center" alignItems="center">
                                 <Searching />
-                            </Center>
+                            </Stack>
                         ) : null}
                         {error && !searching && !loadingToken ? <NotFound /> : null}
                         {!error && !searching && !loadingToken && value ? (
@@ -99,13 +96,13 @@ export function CheckSecurityDialog() {
                                 tokenInfo={tokenDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice}
-                                tokenMarketCap={tokenMarketCapInfo}
+                                tokenMarketCap={tokenMarketCap}
                             />
                         ) : null}
                         {!error && !searching && !loadingToken && !value && (
-                            <Center>
+                            <Stack height="100%" justifyContent="center" alignItems="center">
                                 <DefaultPlaceholder />
-                            </Center>
+                            </Stack>
                         )}
                     </Stack>
                 </Stack>

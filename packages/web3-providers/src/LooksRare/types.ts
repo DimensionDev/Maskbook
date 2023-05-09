@@ -61,19 +61,16 @@ export interface Collection {
 
 export interface Order {
     hash: string
-    collectionAddress: string
-    tokenId?: string
-    isOrderAsk: boolean
+    collection: string
+    itemIds: string[]
+    quoteType: 0 | 1 // There are 2 quote types: Ask (1) or Bid (0).
     signer: string
-    strategy: string
-    currencyAddress: string
-    amount: number
+    strategyId: 0 | 1 // Id of strategy: Standard (0) and Collection (1).
+    currency: string
+    amounts: string[]
     price: string
-    nonce: string
     startTime: number
     endTime: number
-    minPercentageToAsk: number
-    params?: string
     status: OrderStatus
     signature: string
     v?: number
