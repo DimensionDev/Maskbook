@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import {
@@ -89,7 +89,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return getSearchResultTabs(activatedPlugins, currentResult, translate)
     }, [activatedPlugins, resultList.value, translate])
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
+    const defaultTab = first(tabs)?.id ?? PluginID.Collectible
+    const [currentTab, onChange, , setTab] = useTabs(defaultTab, ...tabs.map((tab) => tab.id))
+    useLayoutEffect(() => {
+        setTab(defaultTab)
+    }, [currentResult, defaultTab])
 
     const tabContentComponent = useMemo(() => {
         if (!currentResult) return null
