@@ -46,9 +46,11 @@ export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
     const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a div div > span'))
     // Note: quoted tweet has no [data-testid^="User-Name"]
-    const handle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a[tabindex="-1"] span'),
-    )
+    const handle =
+        Array.from(tweetElement.querySelectorAll<HTMLElement>('[tabindex]'))
+            .map((node) => node.innerText || '')
+            .filter((text) => text.startsWith('@'))
+            .at(0) || ''
 
     // post matched, return the result
     if (name || handle) {
