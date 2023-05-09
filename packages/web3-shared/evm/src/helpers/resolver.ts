@@ -9,7 +9,7 @@ import { keccak256 } from '@ethersproject/keccak256'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '../constants/index.js'
 import type { ChainId } from '../types/index.js'
-import { isENSContractAddress } from './address.js'
+import { isENSContractAddress, isENSNameWrapperContractAddress } from './address.js'
 
 export const chainResolver = createChainResolver(CHAIN_DESCRIPTORS)
 export const explorerResolver = createExplorerResolver(CHAIN_DESCRIPTORS)
@@ -45,7 +45,7 @@ export function resolveImageURL(image?: string, name?: string, collectionName?: 
     if (collectionName && isLensCollect(collectionName)) {
         return LENS_COLLECT_IMAGE
     }
-    if (address && isENSContractAddress(address)) return ENS_IMAGE
+    if (address && (isENSContractAddress(address) || isENSNameWrapperContractAddress(address))) return ENS_IMAGE
     return
 }
 
