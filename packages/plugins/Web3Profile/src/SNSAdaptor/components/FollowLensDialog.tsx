@@ -322,7 +322,7 @@ export function FollowLensDialog() {
                                     variant="roundedContained"
                                     className={classes.followAction}
                                     href={profile?.handle ? getLensterLink(profile.handle) : '#'}
-                                    target="__blank"
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
                                     sx={{ cursor: 'pointer' }}>
@@ -334,7 +334,7 @@ export function FollowLensDialog() {
                                     <Button
                                         variant="roundedOutlined"
                                         href={profile?.handle ? getLensterLink(profile.handle) : '#'}
-                                        target="__blank"
+                                        target="_blank"
                                         rel="noopener noreferrer"
                                         endIcon={<Icons.LinkOut size={18} />}
                                         sx={{ cursor: 'pointer' }}>

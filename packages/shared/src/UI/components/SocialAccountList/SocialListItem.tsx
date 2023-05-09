@@ -156,7 +156,7 @@ export function SocialAccountListItem({
             ownedBy: profile.ownedBy,
             isFollowing,
         }
-    }, [identity, platform, account])
+    }, [identity, platform !== NextIDPlatform.LENS, account])
 
     return (
         <SocialTooltip platform={platform}>
