@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext, useCallback } from 'react'
+import { useEffect, useMemo, useState, useContext, useCallback, useLayoutEffect } from 'react'
 import { compact, first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Box, useTheme } from '@mui/system'
@@ -224,6 +224,10 @@ export function TrendingView(props: TrendingViewProps) {
         return list
     }, [isSwappable, isNFT])
     const [currentTab, , , setTab] = useTabs<ContentTabs>(tabs[0], ...tabs)
+    useLayoutEffect(() => {
+        setTab(tabs[0])
+    }, [result, tabs[0]])
+
     const tabComponents = useMemo(() => {
         const configs = [
             {
