@@ -26,6 +26,7 @@ export class PhantomProvider
     }
 
     override async signMessage(message: string) {
+        if (!this.bridge.isConnected) await this.bridge.connect(undefined)
         const { signature } = await this.bridge.request<{
             publicKey: string
             signature: string
