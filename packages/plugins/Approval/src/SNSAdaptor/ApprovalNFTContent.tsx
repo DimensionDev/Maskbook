@@ -7,20 +7,19 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import {
     useChainContext,
-    useWeb3State,
     useNetworkDescriptor,
     useNonFungibleTokenContract,
     useNonFungibleCollections,
-    useWeb3Hub,
 } from '@masknet/web3-hooks-base'
+import { Hub, Others } from '@masknet/web3-providers'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import {
-    type NetworkDescriptor,
     TokenType,
+    isSameAddress,
+    type NetworkDescriptor,
     type NonFungibleContractSpender,
     type NonFungibleCollection,
-    isSameAddress,
 } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
@@ -151,10 +150,9 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: spenderList, loading } = useAsync(
-        async () => hub?.getNonFungibleTokenSpenders?.(chainId, account),
-        [chainId, account, hub],
+        async () => Hub.getNonFungibleTokenSpenders?.(chainId, account),
+        [chainId, account],
     )
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -196,13 +194,12 @@ interface ApprovalNFTItemProps {
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     const { networkDescriptor, spender, chainId, collection } = props
-    const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
+    const [cancelled, setCancelled] = useState(false)
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,
     })
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
         spender.contract.address,
@@ -255,11 +252,11 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name ?? Others?.formatAddress(spender.address, 4)}
+                            {spender.name ?? Others.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, spender.address) ?? ''}
+                            href={Others.explorerResolver.addressLink(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />

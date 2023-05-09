@@ -1,31 +1,27 @@
-import type { AuthorizationAPI } from '../entry-types.js'
-import { isZeroAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import {
-    approvalListState,
-    type TokenApprovalInfoAccountMap,
-    type NFTApprovalInfoAccountMap,
-} from './approvalListState.js'
-import { Web3API } from '../Connection/index.js'
-import { TOKEN_APPROVAL_TOPIC, NFT_APPROVAL_TOPIC } from './constants.js'
-import { maxBy, mapKeys } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
-import type { Log } from 'web3-core'
 import type Web3 from 'web3'
+import type { Log } from 'web3-core'
+import { maxBy, mapKeys } from 'lodash-es'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { isZeroAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { TOKEN_APPROVAL_TOPIC, NFT_APPROVAL_TOPIC } from './constants.js'
 import {
     isSameAddress,
     type FungibleTokenSpender,
     type NonFungibleContractSpender,
     isGreaterThan,
 } from '@masknet/web3-shared-base'
+import {
+    approvalListState,
+    type TokenApprovalInfoAccountMap,
+    type NFTApprovalInfoAccountMap,
+} from './approvalListState.js'
+import { ConnectionAPI } from '../Web3/EVM/apis/ConnectionAPI.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import type { AuthorizationAPI } from '../entry-types.js'
 
 export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
-    private Web3 = new Web3API()
-
-    private createWeb3(chainId: ChainId) {
-        return this.Web3.getWeb3(chainId)
-    }
+    private Web3 = new ConnectionAPI()
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         try {
@@ -160,7 +156,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         topic: string,
         state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
-        const web3 = this.createWeb3(chainId)
+        const web3 = this.Web3.getWeb3({ chainId })
         const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
         const toBlock = await web3.eth.getBlockNumber()
         const logs = await web3.eth.getPastLogs({

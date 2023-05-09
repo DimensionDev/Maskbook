@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { omit } from 'lodash-es'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { type FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
@@ -14,6 +14,7 @@ import {
     ContractTransaction,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export interface RedPacketSettings {
@@ -74,9 +75,7 @@ export function useCreateParamsCallback(
         const seed = Math.random().toString()
         const tokenType = token!.schema === SchemaType.Native ? 0 : 1
         const tokenAddress = token!.schema === SchemaType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
-        if (!tokenAddress) {
-            return null
-        }
+        if (!tokenAddress) return null
 
         const paramsObj: ParamsObjType = {
             publicKey,
@@ -130,21 +129,15 @@ export function useCreateCallback(
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
-        if (!web3 || !connection) return
-
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
         if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
 
-        if (gasError) {
-            return
-        }
+        if (gasError) return
 
         try {
             checkParams(paramsObj)
@@ -163,10 +156,10 @@ export function useCreateCallback(
             },
         )
 
-        const hash = await connection.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
-        const receipt = await connection.getTransactionReceipt(hash)
+        const hash = await Web3.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
+        const receipt = await Web3.getTransactionReceipt(hash)
         if (receipt) {
-            const events = decodeEvents(web3, redPacketContract.options.jsonInterface, receipt)
+            const events = decodeEvents(Web3.getWeb3(), redPacketContract.options.jsonInterface, receipt)
 
             return {
                 hash,
@@ -175,5 +168,5 @@ export function useCreateCallback(
             }
         }
         return { hash, receipt }
-    }, [account, chainId, web3, connection, redPacketContract, redPacketSettings, gasOption])
+    }, [account, redPacketContract, redPacketSettings, gasOption])
 }

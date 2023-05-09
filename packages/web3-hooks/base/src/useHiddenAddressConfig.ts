@@ -1,6 +1,6 @@
 import { EMPTY_LIST, EMPTY_OBJECT, NextIDPlatform, type PluginID } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
-import { useWeb3State } from './useWeb3State.js'
+import { Web3Storage } from '@masknet/web3-providers'
 
 type Result = Record<string, string[]> | string[]
 type StorageValue =
@@ -18,16 +18,14 @@ type StorageValue =
  * @returns
  */
 export function useHiddenAddressConfig(personaPubkey?: string, pluginID?: PluginID) {
-    const { Storage } = useWeb3State()
-
     return useQuery({
         queryKey: ['next-id', 'hidden-address', pluginID, personaPubkey],
-        enabled: !!Storage && !!personaPubkey,
+        enabled: !!personaPubkey,
         queryFn: async () => {
-            if (!Storage || !pluginID || !personaPubkey) return EMPTY_OBJECT
-            const storage = Storage.createNextIDStorage(personaPubkey, NextIDPlatform.NextID, personaPubkey)
-            const result = await storage.get<StorageValue>(pluginID)
+            if (!pluginID || !personaPubkey) return EMPTY_OBJECT
+            const storage = Web3Storage.createNextIDStorage(personaPubkey, NextIDPlatform.NextID, personaPubkey)
 
+            const result = await storage.get<StorageValue>(pluginID)
             if (!result) return EMPTY_OBJECT
 
             // When the tips data is legacy

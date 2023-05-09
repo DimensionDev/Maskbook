@@ -1,9 +1,6 @@
 import urlcat from 'urlcat'
-import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-es'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
     formatPercentage,
     type NonFungibleAsset,
@@ -19,21 +16,20 @@ import {
 import {
     type ChainId,
     chainResolver,
-    createContract,
     isENSContractAddress,
     SchemaType,
     WNATIVE,
     isValidDomain,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
+import { ContractAPI } from '../../Web3/EVM/apis/ContractAPI.js'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
-import { Web3API } from '../../Connection/index.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 import { fetchJSON, parseJSON, getAssetFullName, resolveActivityType, getPaymentToken } from '../../entry-helpers.js'
 
-const Web3 = new Web3API()
+const Web3Contract = new ContractAPI()
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
     return fetchJSON<T>(
@@ -55,8 +51,7 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
 
 export async function getContractSymbol(chainId: ChainId, address: string) {
     try {
-        const web3 = Web3.getWeb3(chainId)
-        const contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
+        const contract = Web3Contract.getERC721Contract(address, { chainId })
         const symbol = await contract?.methods.symbol().call({})
         return symbol ?? ''
     } catch {

@@ -4,8 +4,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 import { isLens, resolveImageURL } from '@masknet/web3-shared-evm'
 
@@ -118,8 +118,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
-    const { Others } = useWeb3State(pluginID)
-    const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others?.formatTokenId(token.tokenId, 4)
+    const Others = useWeb3Others(pluginID)
+    const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others.formatTokenId(token.tokenId, 4)
 
     const onClick = useCallback(() => {
         if (!token.chainId || !pluginID) return
@@ -151,7 +151,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
             />
             <TextOverflowTooltip as={ShadowRootTooltip} title={caption} disableInteractive arrow placement="bottom">
                 <Typography className={classes.caption}>
-                    {Others?.isValidDomain(token.metadata?.name) || pluginID === NetworkPluginID.PLUGIN_SOLANA
+                    {Others.isValidDomain(token.metadata?.name ?? '') || pluginID === NetworkPluginID.PLUGIN_SOLANA
                         ? token.metadata?.name
                         : caption}
                 </Typography>

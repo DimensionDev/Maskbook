@@ -1,10 +1,11 @@
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents, ContractTransaction, type GasConfig } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { toFixed } from '@masknet/web3-shared-base'
-import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
@@ -17,14 +18,10 @@ export function useCreateNftRedpacketCallback(
     gasOption?: GasConfig,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     const createCallback = useAsyncFn(
         async (publicKey: string) => {
             if (
-                !web3 ||
-                !connection ||
                 !nftRedPacketContract ||
                 !contractAddress ||
                 !EthereumAddress.isValid(contractAddress) ||
@@ -70,10 +67,10 @@ export function useCreateNftRedpacketCallback(
                 },
             )
 
-            const hash = await connection.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
-            const receipt = await connection.getTransactionReceipt(hash)
+            const hash = await Web3.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
+            const receipt = await Web3.getTransactionReceipt(hash)
             if (receipt) {
-                const events = decodeEvents(web3, nftRedPacketContract.options.jsonInterface, receipt)
+                const events = decodeEvents(Web3.getWeb3(), nftRedPacketContract.options.jsonInterface, receipt)
                 return {
                     hash,
                     receipt,
@@ -82,18 +79,7 @@ export function useCreateNftRedpacketCallback(
             }
             return { hash, receipt }
         },
-        [
-            duration,
-            message,
-            name,
-            contractAddress,
-            connection,
-            tokenIdList,
-            nftRedPacketContract,
-            account,
-            chainId,
-            gasOption,
-        ],
+        [duration, message, name, contractAddress, tokenIdList, nftRedPacketContract, account, chainId, gasOption],
     )
 
     return createCallback

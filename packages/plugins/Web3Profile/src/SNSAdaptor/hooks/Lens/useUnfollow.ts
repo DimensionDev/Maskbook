@@ -1,17 +1,17 @@
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { Lens } from '@masknet/web3-providers'
-import { ChainId, ContractTransaction, createContract, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
+import { useCallback, useRef, type MouseEvent, useState } from 'react'
+import { cloneDeep } from 'lodash-es'
+import type { AbiItem } from 'web3-utils'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Contract, Lens, Web3 } from '@masknet/web3-providers'
+import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
+import { ChainId, ContractTransaction, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
 import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.js'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-import { type AbiItem } from 'web3-utils'
 import { BroadcastType } from '@masknet/web3-providers/types'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
-import { useCallback, useRef, type MouseEvent, useState } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
-import { cloneDeep } from 'lodash-es'
 
 export function useUnfollow(
     profileId?: string,
@@ -20,10 +20,8 @@ export function useUnfollow(
 ) {
     const [loading, setLoading] = useState(false)
     const t = useI18N()
-    const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { fetchJSON } = useSNSAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
@@ -45,7 +43,7 @@ export function useUnfollow(
             const cloneEvent = cloneDeep(event)
             try {
                 setLoading(true)
-                if (!profileId || !connection || chainId !== ChainId.Matic) return
+                if (!profileId || chainId !== ChainId.Matic) return
                 const token = await handleQueryAuthenticate()
                 if (!token) return
 
@@ -53,7 +51,7 @@ export function useUnfollow(
 
                 if (!typedData) return
 
-                const signature = await connection.signMessage(
+                const signature = await Web3.signMessage(
                     'typedData',
                     JSON.stringify(
                         encodeTypedData(
@@ -77,8 +75,8 @@ export function useUnfollow(
                 } catch {
                     onFailed?.()
                     setLoading(true)
-                    const followNFTContract = createContract<LensFollowNFT>(
-                        web3,
+
+                    const followNFTContract = Contract.getWeb3Contract<LensFollowNFT>(
                         typedData.typedData.domain.verifyingContract,
                         LensFollowNftABI as AbiItem[],
                     )
@@ -86,17 +84,17 @@ export function useUnfollow(
                         followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
                         { from: account },
                     )
-                    hash = await connection.sendTransaction(tx)
+                    hash = await Web3.sendTransaction(tx)
                     onSuccess?.(cloneEvent)
                     setLoading(false)
                 }
 
                 if (!hash) return
-                const result = await connection.confirmTransaction(hash, {
+
+                const receipt = await Web3.confirmTransaction(hash, {
                     signal: AbortSignal.timeout(3 * 60 * 1000),
                 })
-
-                if (!result.status) return
+                if (!receipt.status) return
             } catch (error) {
                 if (
                     error instanceof Error &&
@@ -117,17 +115,7 @@ export function useUnfollow(
                 setLoading(false)
             }
         },
-        [
-            handleQueryAuthenticate,
-            chainId,
-            profileId,
-            web3,
-            account,
-            onSuccess,
-            connection,
-            fetchJSON,
-            showSingletonSnackbar,
-        ],
+        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, fetchJSON, showSingletonSnackbar],
     )
 
     return { loading, handleUnfollow }

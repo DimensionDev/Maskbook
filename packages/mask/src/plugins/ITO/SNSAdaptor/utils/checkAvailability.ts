@@ -1,23 +1,17 @@
+import { Interface } from '@ethersproject/abi'
+import { Web3 } from '@masknet/web3-providers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
-import type { ChainId, Web3Connection } from '@masknet/web3-shared-evm'
-import { Interface } from '@ethersproject/abi'
 import type { Availability } from '../../types.js'
 
 const interFaceV1 = new Interface(ITO_ABI)
 const interFaceV2 = new Interface(ITO2_ABI)
 
 // ITO Contract readonly method, read it no matter on whatever chains you are.
-export async function checkAvailability(
-    pid: string,
-    from: string,
-    to: string,
-    chainId: ChainId,
-    connection: Web3Connection,
-    isV1 = false,
-) {
+export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId, isV1 = false) {
     const callData = (isV1 ? interFaceV1 : interFaceV2).encodeFunctionData('check_availability', [pid])
-    const data = await connection.callTransaction(
+    const data = await Web3.callTransaction(
         {
             to,
             from,

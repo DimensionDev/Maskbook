@@ -18,7 +18,7 @@ import {
     useChainContext,
     useChainColor,
     useChainIdValid,
-    useWeb3State,
+    useWeb3Others,
     useReverseAddress,
     useChainIdMainnet,
     useRecentTransactions,
@@ -171,7 +171,7 @@ function useToolbox() {
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     // #region recent pending transactions
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
@@ -191,7 +191,7 @@ function useToolbox() {
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')
         if (pendingTransactions.length <= 0)
-            return Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || account
+            return Others.formatDomainName?.(domain) || Others.formatAddress(account, 4) || account
         return (
             <>
                 <span style={{ marginRight: 12 }}>

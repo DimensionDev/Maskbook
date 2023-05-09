@@ -1,25 +1,25 @@
-/// <reference types="web3" />
 import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
-import { useWeb3State } from './useWeb3State.js'
+import { useWeb3Connection } from './useWeb3Connection.js'
 
 export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    options?: Web3Helper.Web3ConnectionOptions<T>,
+    options?: ConnectionOptions<T>,
 ): Web3Helper.Web3Scope<S, T> | null {
-    const { Connection } = useWeb3State<S, T>(pluginID)
     const { account, chainId, providerType } = useChainContext()
+    const Web3 = useWeb3Connection(pluginID, {
+        account,
+        chainId,
+        providerType,
+        ...options,
+    })
 
     const web3 = useMemo(() => {
-        return Connection?.getWeb3?.({
-            account,
-            chainId,
-            providerType,
-            ...options,
-        })
-    }, [account, chainId, providerType, JSON.stringify(options)])
+        return Web3.getWeb3()
+    }, [Web3])
 
     return web3 || null
 }

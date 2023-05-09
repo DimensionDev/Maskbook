@@ -1,23 +1,20 @@
 import urlcat from 'urlcat'
 import { compact, first, unionBy } from 'lodash-es'
-import { type AbiItem, padLeft, toHex } from 'web3-utils'
+import { padLeft, toHex } from 'web3-utils'
 import {
     type ChainId,
     ContractWallet,
     Create2Factory,
-    createContract,
     getSmartPayConstants,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
-import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
+import { ContractAPI } from '../../Web3/EVM/apis/ContractAPI.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayFunderAPI } from './FunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
-import { Web3API } from '../../Connection/index.js'
 import type { OwnerAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
@@ -29,7 +26,7 @@ type OwnerShip = {
 }
 
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
-    private Web3 = new Web3API()
+    private Contract = new ContractAPI()
     private Multicall = new MulticallAPI()
     private Bundler = new SmartPayBundlerAPI()
     private Funder = new SmartPayFunderAPI()
@@ -42,7 +39,9 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     }
 
     private createWalletContract(chainId: ChainId, address: string) {
-        return createContract<Wallet>(this.Web3.getWeb3(chainId), address, WalletABI as AbiItem[])
+        return this.Contract.getWalletContract(address, {
+            chainId,
+        })
     }
 
     private async createContractWallet(chainId: ChainId, owner: string) {

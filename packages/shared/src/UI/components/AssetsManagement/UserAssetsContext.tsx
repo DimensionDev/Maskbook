@@ -1,6 +1,3 @@
-import { createIndicator, EMPTY_LIST, type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useWeb3Hub } from '@masknet/web3-hooks-base'
 import { chunk, take } from 'lodash-es'
 import {
     createContext,
@@ -15,6 +12,9 @@ import {
     type PropsWithChildren,
     type MutableRefObject,
 } from 'react'
+import { createIndicator, EMPTY_LIST, type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useWeb3Hub } from '@masknet/web3-hooks-base'
 import {
     assetsReducer,
     createAssetsState,
@@ -58,7 +58,8 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
         verifiedMapRef.current = verifiedMap
     })
 
-    const hub = useWeb3Hub(pluginID)
+    const Hub = useWeb3Hub(pluginID)
+
     // We load merged collections with iterators
     const assetsLoaderIterators = useRef<Map<string, AsyncGenerator<undefined, void>>>(new Map())
     const loadAssetsViaHub = useCallback(
@@ -68,13 +69,13 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
             const { id, chainId } = collection
             const realId = collectionId ?? id
             const assetsState = assetsMapRef.current[id]
-            if (!hub?.getNonFungibleAssetsByCollectionAndOwner) return
+
             // Fetch less in collection list, and more every time in expanded collection.
             // Also expand size if for id chunk, since there might be more assets than chunk size
             const size = assetsState?.assets.length || collectionId ? 20 : 4
             const indicator = (!collectionId && indicatorMapRef.current.get(id)) || createIndicator()
             dispatch({ type: 'SET_LOADING_STATUS', id, loading: true })
-            const pageable = await hub.getNonFungibleAssetsByCollectionAndOwner(realId, address, {
+            const pageable = await Hub.getNonFungibleAssetsByCollectionAndOwner(realId, address, {
                 indicator,
                 size,
                 chainId,
@@ -95,7 +96,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
             const finished = !collectionId && !pageable.nextIndicator
             dispatch({ type: 'SET_LOADING_STATUS', id, finished, loading: false })
         },
-        [hub, address],
+        [Hub, address],
     )
 
     const loadAssets = useCallback(
@@ -122,17 +123,17 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
             const result = await iterator.next()
             if (result.done) dispatch({ type: 'SET_LOADING_STATUS', id, finished: true, loading: false })
         },
-        [hub, address, loadAssetsViaHub],
+        [Hub, address, loadAssetsViaHub],
     )
 
     const loadVerifiedBy = useCallback(
         async (id: string) => {
             const verifiedState = verifiedMapRef.current[id]
-            if (!hub?.getNonFungibleCollectionVerifiedBy || verifiedState || !id) return
-            const verifiedBy = await hub.getNonFungibleCollectionVerifiedBy(id.split(',')[0])
+            if (!Hub?.getNonFungibleCollectionVerifiedBy || verifiedState || !id) return
+            const verifiedBy = await Hub.getNonFungibleCollectionVerifiedBy(id.split(',')[0])
             dispatch({ type: 'SET_VERIFIED', id, verifiedBy })
         },
-        [hub?.getNonFungibleCollectionVerifiedBy],
+        [Hub?.getNonFungibleCollectionVerifiedBy],
     )
 
     const getAssets = useCallback((id: string) => assetsMap[id] ?? createAssetsState(), [assetsMap])

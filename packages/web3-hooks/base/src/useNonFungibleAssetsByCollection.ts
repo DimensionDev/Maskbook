@@ -1,33 +1,32 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { EMPTY_LIST, type NetworkPluginID, pageableToIterator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { HubOptions } from '@masknet/web3-providers/types'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useNonFungibleAssetsByCollection<
     S extends 'all' | void = void,
     T extends NetworkPluginID = NetworkPluginID,
->(address?: string, pluginID?: T, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
+>(address?: string, pluginID?: T, options?: HubOptions<T>) {
     const [assets, setAssets] = useState<Array<Web3Helper.NonFungibleAssetScope<S, T>>>(EMPTY_LIST)
     const [done, setDone] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
-    const hub = useWeb3Hub(pluginID, options)
+    const Hub = useWeb3Hub(pluginID, options)
 
     // create iterator
     const iterator = useMemo(() => {
-        if (!hub?.getNonFungibleAssetsByCollection) return
-
         setAssets(EMPTY_LIST)
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return hub.getNonFungibleAssetsByCollection!(address ?? '', {
+            return Hub.getNonFungibleAssetsByCollection!(address ?? '', {
                 indicator,
                 size: 50,
                 ...options,
             })
         })
-    }, [hub?.getNonFungibleAssetsByCollection, address, JSON.stringify(options)])
+    }, [Hub, address])
 
     const next = useCallback(async () => {
         if (!iterator || done) return

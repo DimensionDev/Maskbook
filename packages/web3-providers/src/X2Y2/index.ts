@@ -2,7 +2,6 @@ import urlcat from 'urlcat'
 import { first, last } from 'lodash-es'
 import {
     OrderSide,
-    type HubOptions,
     type NonFungibleTokenOrder,
     type NonFungibleTokenEvent,
     type NonFungibleTokenContract,
@@ -13,7 +12,7 @@ import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
 import { fetchJSON, resolveActivityType } from '../entry-helpers.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
     const response = await fetchJSON<
@@ -99,7 +98,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         }
     }
 
-    async getOrders(address: string, tokenId: string, side: OrderSide, options?: HubOptions<ChainId>) {
+    async getOrders(address: string, tokenId: string, side: OrderSide, options?: HubOptions_Base<ChainId>) {
         const [data = EMPTY_LIST, next] = await fetchFromX2Y2<Order[]>(
             urlcat('/v1/orders', {
                 cursor: options?.indicator?.id,
@@ -123,7 +122,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             orders.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId>) {
+    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         const [data = EMPTY_LIST, next] = await fetchFromX2Y2<Order[]>(
             urlcat('/v1/offers', {
                 cursor: options?.indicator?.id,
@@ -143,10 +142,10 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             offers.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    getListings(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Sell)
     }
-    async getEvents(address: string, tokenId: string, options?: HubOptions<ChainId>) {
+    async getEvents(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         const cursors = options?.indicator?.id?.split('_')
         const listCursor = first(cursors)
         const saleCursor = last(cursors)
@@ -188,7 +187,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             events.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    async getContract(address: string, options?: HubOptions<ChainId>) {
+    async getContract(address: string, options?: HubOptions_Base<ChainId>) {
         const [contract] = await fetchFromX2Y2<Contract>(
             urlcat('/v1/contracts/:contract', {
                 contract: address,

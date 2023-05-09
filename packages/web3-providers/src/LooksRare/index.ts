@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import {
-    type HubOptions,
     type NonFungibleAsset,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
@@ -16,7 +15,7 @@ import { ChainId, createERC20Token, formatWeiToEther, isValidChainId, SchemaType
 import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 import { fetchJSON, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -150,7 +149,7 @@ function createNonFungibleTokenOrderFromOrder(
 }
 
 export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const response = await fetchFromLooksRare<{
             data: Token
@@ -166,14 +165,14 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getAssets(
         account: string,
-        options?: HubOptions<ChainId>,
+        options?: HubOptions_Base<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         if (!isValidChainId(chainId)) return
 
@@ -186,7 +185,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
@@ -216,7 +215,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getStats(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
         if (!isValidChainId(chainId)) return
         const response = await fetchFromLooksRare<{
@@ -241,7 +240,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
@@ -271,11 +270,11 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
     }
 
-    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    async getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 }

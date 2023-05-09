@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
 import { toBuffer } from '@ethereumjs/util'
-import { Web3Signer } from '@masknet/web3-providers'
+import { Signer } from '@masknet/web3-providers'
 import type { SignType, Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -306,5 +306,5 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
 }
 
 export async function signWithWallet<T>(type: SignType, message: T, address: string) {
-    return Web3Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
+    return Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
 }

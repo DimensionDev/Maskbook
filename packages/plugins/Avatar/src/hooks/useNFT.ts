@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useWeb3Hub, useWeb3Others } from '@masknet/web3-hooks-base'
 import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -14,20 +14,21 @@ export function useNFT(
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
-    const { Others, Connection } = useWeb3State<'all'>(pluginID)
-    const hub = useWeb3Hub<'all'>(pluginID, {
+    const hub = useWeb3Hub(pluginID, {
         chainId,
         account,
     })
+    const Others = useWeb3Others(pluginID)
+    const Web3 = useWeb3Connection(pluginID, {
+        chainId,
+        account,
+    })
+    const Hub = useWeb3Hub(pluginID)
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return
-        const connection = Connection?.getConnection?.({
-            chainId,
-            account,
-        })
         const allSettled = await Promise.allSettled([
-            connection?.getNonFungibleToken(address, tokenId),
-            hub?.getNonFungibleAsset?.(address, tokenId, {
+            Web3.getNonFungibleToken(address, tokenId),
+            Hub.getNonFungibleAsset(address, tokenId, {
                 chainId,
                 account: ownerAddress,
             }),
@@ -44,7 +45,7 @@ export function useNFT(
             : asset?.price?.[CurrencyType.USD] ?? '0'
         const name = metadata?.name ?? ''
         const imageURL = metadata?.imageURL
-        const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
+        const permalink = asset?.link ?? Others.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
 
         return {
             amount,
@@ -57,5 +58,5 @@ export function useNFT(
             permalink,
             tokenId,
         } as NFTInfo
-    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId, ownerAddress])
+    }, [Web3, Hub, Others, address, tokenId, chainId, ownerAddress])
 }

@@ -9,7 +9,7 @@ import {
     useNativeTokenPrice,
     useFungibleTokenPrice,
     useChainContext,
-    useWeb3State,
+    useWeb3Others,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -40,13 +40,13 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { inputToken, outputToken, gas = MIN_GAS_LIMIT, gasPrice, trade, onConfirm, gasConfig } = props
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
 
     const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)
 
     const currentSlippage = useValueRef(currentSlippageSettings)
-    const nativeToken = Others?.createNativeToken(chainId)
+    const nativeToken = Others.createNativeToken(chainId)
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID)
 
     const { value: inputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, inputToken.address)

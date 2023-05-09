@@ -1,24 +1,12 @@
-import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext } from './useContext.js'
-import { useWeb3State } from './useWeb3State.js'
+import { Web3ConnectionAll } from '@masknet/web3-providers'
+import type { Connection, ConnectionOptions } from '@masknet/web3-providers/types'
+import { useNetworkContext } from './useContext.js'
 
-export function useWeb3Connection<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
-    pluginID?: T,
-    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
-): Web3Helper.Web3ConnectionScope<S, T> | null {
-    const { Connection } = useWeb3State(pluginID)
-    const { account, chainId, providerType } = useChainContext()
-
-    const connection = useMemo(() => {
-        return Connection?.getConnection?.({
-            account,
-            chainId,
-            providerType,
-            ...options,
-        })
-    }, [account, chainId, providerType, Connection, JSON.stringify(options)])
-
-    return connection || null
+export function useWeb3Connection<T extends NetworkPluginID = NetworkPluginID>(
+    expectedPluginID?: T,
+    options?: ConnectionOptions<T>,
+) {
+    const { pluginID } = useNetworkContext(expectedPluginID)
+    return Web3ConnectionAll.use(pluginID, options) as Connection<T>
 }

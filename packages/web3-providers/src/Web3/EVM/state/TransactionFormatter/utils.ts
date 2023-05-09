@@ -1,0 +1,43 @@
+import type { AbiItem } from 'web3-utils'
+import { type FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
+import { type ChainId, type SchemaType, decodeEvents } from '@masknet/web3-shared-evm'
+import { ContractAPI } from '../../apis/ContractAPI.js'
+import { BaseDescriptor } from './descriptors/Base.js'
+
+export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
+    const value = scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
+        ? formatBalance(amount, token?.decimals)
+        : 'infinite'
+
+    return `${value} ${token?.symbol?.trim()}`
+}
+
+export class DescriptorWithTransactionDecodedReceipt extends BaseDescriptor {
+    private Contract = new ContractAPI()
+
+    async getReceipt(
+        chainId: ChainId,
+        contractAddress: string | undefined,
+        abi: AbiItem[] | undefined,
+        hash: string | undefined,
+    ) {
+        if (!hash || !contractAddress || !abi) return
+
+        const Web3 = this.useConnection({
+            readonly: true,
+        })
+
+        const receipt = await Web3?.getTransactionReceipt(hash, { chainId })
+        if (!receipt) return
+
+        const contract = this.Contract.getWeb3Contract(contractAddress, abi)
+        if (!contract) return
+
+        const web3 = Web3?.getWeb3({
+            chainId,
+        })
+        if (!web3) return
+
+        return decodeEvents(web3, contract.options.jsonInterface, receipt)
+    }
+}
