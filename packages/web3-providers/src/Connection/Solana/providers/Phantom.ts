@@ -21,7 +21,7 @@ export class PhantomProvider
 
     private async validateSession() {
         if (this.bridge.isConnected) return
-        await this.bridge.connect(undefined)
+        await (this.bridge as unknown as Web3Provider).connect()
     }
 
     override async setup(): Promise<void> {
