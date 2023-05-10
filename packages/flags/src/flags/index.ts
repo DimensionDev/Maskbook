@@ -41,7 +41,7 @@ export const flags = {
     sandboxedPluginRuntime: insiderOnly,
 
     // how many users should use blockpi rpc
-    blockpi_graysacle: 20,
+    blockpi_grayscale: 20,
 
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,

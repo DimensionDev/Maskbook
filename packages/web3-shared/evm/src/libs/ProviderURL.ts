@@ -15,8 +15,8 @@ export class ProviderURL {
     static from(chainId: ChainId) {
         const { RPC_URLS, RPC_WEIGHTS, RPC_BLOCKPI_URL } = getRPCConstants(chainId)
 
-        // a grayscale user will be served the blockfi apir
-        if (chainId !== ChainId.Mainnet && RPC_BLOCKPI_URL && isDeviceOnWhitelist(Flags.blockpi_graysacle))
+        // a grayscale user will be served the blockpi API
+        if (chainId !== ChainId.Mainnet && RPC_BLOCKPI_URL && isDeviceOnWhitelist(Flags.blockpi_grayscale))
             return RPC_BLOCKPI_URL
 
         if (!RPC_URLS || !RPC_WEIGHTS) throw new Error(`No RPC presets at chainId: ${chainId}.`)
