@@ -18,6 +18,11 @@ if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) 
     process.env.TSESTREE_SINGLE_RUN = 'true'
 }
 
+const deferPackages = [
+    'wallet.ts',
+    // add package names here.
+]
+
 // Prefer rules from @typescript-eslint > unicorn > other plugins
 // Level: if the rule is fixable and can be tolerate during dev, use 'warn' is better.
 //        if the fix needs big rewrite (e.g. XHR => fetch), use 'error' to notice the developer early.
@@ -432,9 +437,7 @@ const moduleSystemRules = {
     '@masknet/prefer-defer-import': [
         'warn',
         {
-            deferPackages: [
-                // add package names here.
-            ],
+            deferPackages,
         },
     ],
 }

@@ -225,6 +225,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         optimization: {
             minimize: false,
             runtimeChunk: false,
+            moduleIds: flags.channel === 'stable' && flags.mode === 'production' ? 'deterministic' : 'named',
             splitChunks: {
                 maxInitialRequests: Infinity,
                 chunks: 'all',

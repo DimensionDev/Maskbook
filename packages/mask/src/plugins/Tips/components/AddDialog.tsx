@@ -1,6 +1,6 @@
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { useChainContext, useNetworkDescriptors, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from '@masknet/web3-hooks-evm'
 import { ImageIcon, InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
@@ -73,7 +73,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     }, [tokenId, contractAddress])
 
     const [state, handleAdd] = useAsyncFn(async () => {
-        if (!erc721TokenContract || !EthereumAddress.isValid(contractAddress)) {
+        if (!erc721TokenContract || !wallet_ts.EthereumAddress.isValid(contractAddress)) {
             setMessage(t.tip_add_collectibles_error())
             return
         }

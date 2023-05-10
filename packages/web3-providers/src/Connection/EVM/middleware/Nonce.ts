@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import {
     type ChainId,
     EthereumMethodType,
@@ -20,7 +20,7 @@ export class Nonce implements Middleware<ConnectionContext> {
     }
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
-        const address_ = EthereumAddress.checksumAddress(address)
+        const address_ = wallet_ts.EthereumAddress.checksumAddress(address)
         const addressNonces = this.nonces.get(address_) ?? new Map<ChainId, number>()
         addressNonces.set(
             chainId,

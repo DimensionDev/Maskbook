@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
 import { Sniffings } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -25,7 +25,7 @@ export function isZeroString(str?: string): str is undefined {
 
 export function isValidAddress(address?: string): address is string {
     if (!address) return false
-    return EthereumAddress.isValid(address)
+    return wallet_ts.EthereumAddress.isValid(address)
 }
 
 export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {

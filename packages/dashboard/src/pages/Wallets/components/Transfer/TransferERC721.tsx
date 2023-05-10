@@ -3,7 +3,7 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-es'
 import { z } from 'zod'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
@@ -93,7 +93,7 @@ export const TransferERC721 = memo(() => {
         recipient: z
             .string()
             .refine(
-                (address) => EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
+                (address) => wallet_ts.EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
                 t.wallets_incorrect_address(),
             ),
         contract: z.string().min(1, t.wallets_collectible_contract_is_empty()),
@@ -161,7 +161,7 @@ export const TransferERC721 = memo(() => {
         SchemaType.ERC721,
         contract?.address,
         undefined,
-        EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
+        wallet_ts.EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
         allFormFields.tokenId,
     )
 
@@ -206,9 +206,12 @@ export const TransferERC721 = memo(() => {
     const onTransfer = useCallback(
         async (data: FormInputs) => {
             let hash: string | undefined
-            if (EthereumAddress.isValid(data.recipient)) {
+            if (wallet_ts.EthereumAddress.isValid(data.recipient)) {
                 hash = await transferCallback(data.tokenId, data.recipient, gasConfig)
-            } else if (Others?.isValidDomain?.(data.recipient) && EthereumAddress.isValid(registeredAddress)) {
+            } else if (
+                Others?.isValidDomain?.(data.recipient) &&
+                wallet_ts.EthereumAddress.isValid(registeredAddress)
+            ) {
                 hash = await transferCallback(data.tokenId, registeredAddress, gasConfig)
             }
             if (typeof hash === 'string') {

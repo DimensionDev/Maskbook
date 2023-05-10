@@ -5,7 +5,7 @@ import { isNonNull } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet.js'
 import { ec as EC } from 'elliptic'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { toBase64URL, type EC_Public_JsonWebKey, type EC_Private_JsonWebKey } from '@masknet/shared-base'
 
 export async function internal_wallet_backup() {
@@ -120,5 +120,5 @@ function keyToAddr(key: string, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')
     const key_ = key.replace(/^0x/, '')
     const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
-    return EthereumAddress.from(Buffer.from(keyPair.getPublic(false, 'array'))).address
+    return wallet_ts.EthereumAddress.from(Buffer.from(keyPair.getPublic(false, 'array'))).address
 }

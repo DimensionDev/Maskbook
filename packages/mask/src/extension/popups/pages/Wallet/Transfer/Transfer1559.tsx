@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import { mapValues } from 'lodash-es'
 import { z as zod } from 'zod'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
@@ -237,7 +237,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_address_absence'))
                     .refine(
-                        (address) => EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
+                        (address) => wallet_ts.EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
                         t('wallet_transfer_error_invalid_address'),
                     ),
                 amount: zod
@@ -353,7 +353,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         setAddressTip(null)
 
         if (!address && !registeredAddress) return
-        if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
+        if (!wallet_ts.EthereumAddress.isValid(address) && !wallet_ts.EthereumAddress.isValid(registeredAddress)) return
         methods.clearErrors('address')
 
         if (isSameAddress(address, wallet?.address) || isSameAddress(registeredAddress, wallet?.address)) {
@@ -375,7 +375,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     }, [
         address,
         pluginID,
-        EthereumAddress.isValid,
+        wallet_ts.EthereumAddress.isValid,
         registeredAddress,
         methods.clearErrors,
         wallet?.address,
@@ -389,7 +389,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         selectedAsset?.schema,
         selectedAsset?.address,
         rightShift(amount ?? 0, selectedAsset?.decimals).toFixed(),
-        EthereumAddress.isValid(address) ? address : registeredAddress,
+        wallet_ts.EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     // #endregion
 

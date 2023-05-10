@@ -1,7 +1,7 @@
 import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useMemo, useState } from 'react'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleListContext } from '../../DashboardComponents/CollectibleList/index.js'
@@ -53,7 +53,7 @@ export function DashboardWalletTransferDialogNFT(
     // #region validation
     const validationMessage = useMemo(() => {
         if (!address) return t('wallet_transfer_error_address_absence')
-        if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
+        if (!wallet_ts.EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
         return ''
     }, [address, token])
     // #endregion

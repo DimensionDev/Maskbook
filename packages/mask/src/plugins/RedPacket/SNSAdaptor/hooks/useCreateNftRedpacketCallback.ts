@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents, ContractTransaction, type GasConfig } from '@masknet/web3-shared-evm'
 import { toFixed } from '@masknet/web3-shared-base'
@@ -27,7 +27,7 @@ export function useCreateNftRedpacketCallback(
                 !connection ||
                 !nftRedPacketContract ||
                 !contractAddress ||
-                !EthereumAddress.isValid(contractAddress) ||
+                !wallet_ts.EthereumAddress.isValid(contractAddress) ||
                 tokenIdList.length === 0
             ) {
                 return

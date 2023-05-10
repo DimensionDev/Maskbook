@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -15,7 +15,7 @@ export function useNativeTransferCallback() {
             if (!account || !recipient || !amount || isZero(amount) || !web3) return
 
             // error: invalid recipient address
-            if (!EthereumAddress.isValid(recipient)) return
+            if (!wallet_ts.EthereumAddress.isValid(recipient)) return
 
             // error: insufficient balance
             const balance = await web3.eth.getBalance(account)
