@@ -20,6 +20,7 @@ if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) 
 
 const deferPackages = [
     'wallet.ts',
+    'anchorme',
     // add package names here.
 ]
 
