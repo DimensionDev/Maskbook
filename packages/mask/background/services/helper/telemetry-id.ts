@@ -1,4 +1,4 @@
-// Note: this file should import as less file as possible because it will be evaluated in the earlist stage.
+// Note: this file should import as less file as possible because it will be evaluated in the initial stage.
 // therefore don't import from @masknet/shared-base but from the source directly.
 import { TelemetryID } from '../../../../shared-base/src/utils/TelemetryID.js'
 
