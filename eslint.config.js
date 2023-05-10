@@ -427,6 +427,16 @@ const moduleSystemRules = {
     'import/no-self-import': 'error',
     // 'import/no-unassigned-import': 'error', // bans `import 'x'`. side-effect only imports should be explicitly marked.
     // '@typescript-eslint/no-import-type-side-effects': 'warn',
+
+    // performance
+    '@masknet/prefer-defer-import': [
+        'warn',
+        {
+            deferPackages: [
+                // add package names here.
+            ],
+        },
+    ],
 }
 // TODO: enable rule @typescript-eslint/explicit-module-boundary-types for "./packages/mask/background/services/*"
 // TODO: ban uses of localStorage or sessionStorage
