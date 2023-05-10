@@ -15,7 +15,6 @@ export type PersonaSelectPanelDialogEvent = {
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     telemetrySettings: boolean
-    telemetryIDReset: string
     pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
@@ -35,6 +34,7 @@ export interface MaskSNSEvents {
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
+    telemetryIDReset: string
     /** value is "bulkKey" */
     legacySettings_bulkDiscoverNS: string
     /** emit when the settings changed. */

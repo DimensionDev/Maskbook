@@ -16,5 +16,5 @@ export function getABTestSeed(maximum = 2 ** 32): number {
  */
 export function joinsABTest(percent = 50): boolean {
     if (percent < 0 || percent > 100) throw new RangeError()
-    return getABTestSeed(100) >= percent
+    return getABTestSeed(100) <= percent
 }
