@@ -3674,6 +3674,9 @@ importers:
       '@ethersproject/strings':
         specifier: 5.7.0
         version: 5.7.0
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../../flags
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
