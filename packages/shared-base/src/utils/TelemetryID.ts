@@ -7,4 +7,3 @@ export function generateTelemetryID() {
         .slice(0, 40)
 }
 export const TelemetryID = new ValueRef(generateTelemetryID())
-console.log(TelemetryID)
