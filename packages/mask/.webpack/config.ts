@@ -236,6 +236,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         optimization: {
             minimize: false,
             runtimeChunk: false,
+            moduleIds: flags.channel === 'stable' && flags.mode === 'production' ? 'deterministic' : 'named',
             splitChunks: {
                 maxInitialRequests: Infinity,
                 chunks: 'all',
