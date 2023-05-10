@@ -16,7 +16,7 @@ import {
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
-import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
+import { TokenIcon, FormattedAddress, Image, WalletIcon, ElementAnchor } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State, useNetworkDescriptor, useFungibleToken } from '@masknet/web3-hooks-base'
@@ -232,7 +232,13 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                     </TableHead>
                     <TableBody>
                         {tickerRows.length ? (
-                            tickerRows
+                            tickerRows.concat(
+                                <Stack py={1}>
+                                    <ElementAnchor callback={fetchMore}>
+                                        {loadingNonFungibleTokenActivities ? <LoadingBase /> : null}
+                                    </ElementAnchor>
+                                </Stack>,
+                            )
                         ) : (
                             <TableRow>
                                 <TableCell
