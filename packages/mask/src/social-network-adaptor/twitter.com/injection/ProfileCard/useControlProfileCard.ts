@@ -9,6 +9,7 @@ interface Result {
 }
 
 const LEAVE_DURATION = 500
+const MARGIN = 12
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
@@ -84,7 +85,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
             }
             // reached right boundary
             if (x + CARD_WIDTH > window.innerWidth) {
-                x = bounding.left - CARD_WIDTH
+                x = window.innerWidth - CARD_WIDTH - MARGIN
             }
             // Prefer to show top left corner of the card.
             x = Math.max(0, x)

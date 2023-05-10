@@ -17,7 +17,7 @@ const avatarSelector = () => {
 }
 
 /**
- * Inject on conversation, including both DM drawer and message page (/messages/xxx)
+ * Inject on space dock
  */
 export function injectLensOnSpaceDock(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(avatarSelector())

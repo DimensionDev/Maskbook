@@ -275,16 +275,6 @@ export const searchTwitterAvatarNFTStyleSelector = () => querySelector<E>('a[hre
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
 
-export const inpageAvatarSelector = () =>
-    querySelectorAll<HTMLDivElement>(
-        [
-            // Avatars in post
-            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
-            // Avatars in side panel
-            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
-        ].join(','),
-    )
-
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
         'div[data-testid="geoButton"]',
