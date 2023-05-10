@@ -93,7 +93,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
     const availablePlugins = useMemo(() => {
         return snsAdaptorPlugins
             .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginID: ID })))
-            .filter((x) => x.entry.category === 'dapp' && x.pluginID !== PluginID.Trader)
+            .filter((x) => x.entry.category === 'dapp' && !x.entry.hiddenInList)
             .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
     }, [snsAdaptorPlugins])
 
