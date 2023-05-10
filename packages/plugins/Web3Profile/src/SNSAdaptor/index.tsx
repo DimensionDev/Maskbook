@@ -105,9 +105,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     onStatusUpdate?.(hasLens)
                 }, [onStatusUpdate, hasLens])
 
-                if (!accounts.length) return null
+                if (!accounts.length || !identity?.userId) return null
 
-                return <LensBadge slot={slot} accounts={accounts} />
+                return <LensBadge slot={slot} accounts={accounts} userId={identity.userId} />
             },
         },
     },
