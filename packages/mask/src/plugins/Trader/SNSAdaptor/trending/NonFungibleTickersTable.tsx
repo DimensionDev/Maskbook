@@ -17,7 +17,6 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { TokenIcon, FormattedAddress, Image, WalletIcon, ElementAnchor } from '@masknet/shared'
-import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State, useNetworkDescriptor, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -124,7 +123,6 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
         id,
         chainId,
     )
-    useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),
         method: t('plugin_trader_table_method'),
