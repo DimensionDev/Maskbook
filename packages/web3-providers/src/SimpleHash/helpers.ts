@@ -7,21 +7,27 @@ import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, queryClient } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
-    return fetchJSON<T>(
-        `${SIMPLE_HASH_URL}${path}`,
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: { 'content-type': 'application/json' },
+    return queryClient.fetchQuery<T>({
+        queryKey: [path],
+        staleTime: 10_000,
+        queryFn: async () => {
+            return fetchJSON<T>(
+                `${SIMPLE_HASH_URL}${path}`,
+                {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'content-type': 'application/json' },
+                },
+                {
+                    enableSquash: true,
+                },
+            )
         },
-        {
-            enableSquash: true,
-        },
-    )
+    })
 }
 
 export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {

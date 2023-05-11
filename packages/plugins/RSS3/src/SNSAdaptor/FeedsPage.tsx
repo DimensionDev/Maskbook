@@ -32,7 +32,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
 
     const { feeds, loading: loadingFeeds, error, next } = useFeeds(address, tag)
 
-    const { value: reversedName, loading: loadingENS } = useReverseAddress(undefined, address)
+    const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
     const loading = loadingFeeds || loadingENS
@@ -84,7 +84,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
                     {feeds.map((feed, index) => (
                         <FeedCard key={index} className={classes.feedCard} feed={feed} />
                     ))}
-                    <ElementAnchor callback={next}>
+                    <ElementAnchor callback={() => next()}>
                         {loading ? <LoadingBase className={classes.loading} /> : null}
                     </ElementAnchor>
                 </Box>

@@ -193,7 +193,7 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
     const { Others } = useWeb3State()
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, proposal.author)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, proposal.author)
 
     return (
         <section className={classes.header}>

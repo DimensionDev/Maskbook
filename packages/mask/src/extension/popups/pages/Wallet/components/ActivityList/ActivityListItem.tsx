@@ -57,7 +57,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const { t } = useI18N()
         const { classes } = useStyles()
         const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-        const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
+        const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {

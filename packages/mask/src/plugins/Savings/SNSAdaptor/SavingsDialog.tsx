@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
@@ -27,6 +27,7 @@ import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtoc
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
+import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -99,27 +100,30 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
-    const { value: aaveTokens, loading: loadingAAve } = useAsync(async () => {
-        if (!open || chainId !== ChainId.Mainnet) {
-            return EMPTY_LIST
-        }
+    const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
+        enabled: open && chainId === ChainId.Mainnet && !!web3,
+        queryKey: ['savings', 'aave', chainId],
+        queryFn: async () => {
+            const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
 
-        const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+            const protocolDataContract = createContract<AaveProtocolDataProvider>(
+                web3,
+                address,
+                AaveProtocolDataProviderABI as AbiItem[],
+            )
 
-        const protocolDataContract = createContract<AaveProtocolDataProvider>(
-            web3,
-            address,
-            AaveProtocolDataProviderABI as AbiItem[],
-        )
+            const [tokens, aTokens] = await Promise.all([
+                protocolDataContract?.methods.getAllReservesTokens().call(),
+                protocolDataContract?.methods.getAllATokens().call(),
+            ])
 
-        const tokens = await protocolDataContract?.methods.getAllReservesTokens().call()
-
-        const aTokens = await protocolDataContract?.methods.getAllATokens().call()
-
-        return tokens?.map((token) => {
-            return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
-        })
-    }, [open, web3, chainId])
+            if (!tokens) return EMPTY_LIST
+            return tokens.map((token) => {
+                return [token[1], aTokens?.find((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())?.[1]]
+            })
+        },
+        staleTime: 300_000,
+    })
 
     const { value: detailedAaveTokens, loading: loadingAAveDetails } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,

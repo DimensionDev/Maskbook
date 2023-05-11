@@ -132,7 +132,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [setDialog])
     // #endregion
 
-    const { value: collections = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+    const { data: collections = [], isLoading: loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
         // Todo: remove this line, after SimpleHash can recognize ERC721 Collections.
         sourceType: SourceType.NFTScan,

@@ -37,7 +37,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
-    const { value: reversedName } = useReverseAddress(currentPluginID, account)
+    const { data: reversedName } = useReverseAddress(currentPluginID, account)
     const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()

@@ -1,54 +1,31 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { uniqBy } from 'lodash-es'
+import { useMemo } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { compact } from 'lodash-es'
 import { RSS3 } from '@masknet/web3-providers'
-import type { PageIndicator } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
-    const indicatorRef = useRef<PageIndicator>()
-    const [feeds, setFeeds] = useState<RSS3BaseAPI.Web3Feed[]>([])
-    const [finished, setFinished] = useState(false)
+    const { data, isLoading, error, hasNextPage, fetchNextPage } = useInfiniteQuery({
+        queryKey: ['rss3-feeds', address, tag],
+        queryFn: async ({ pageParam }) => {
+            if (!address) return
+            const res = await RSS3.getAllNotes(address, { tag }, { indicator: pageParam, size: 20 })
+            return res
+        },
+        getNextPageParam: (lastPage) => lastPage?.nextIndicator,
+    })
 
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<Error>()
-    const loadingRef = useRef(false)
-    useEffect(() => {
-        loadingRef.current = loading
-    }, [loading])
+    const feeds = useMemo(() => {
+        if (!data?.pages) return EMPTY_LIST
+        return compact(data.pages).flatMap((page) => page.data)
+    }, [data?.pages])
 
-    const load = useCallback(async () => {
-        if (loadingRef.current || !address) {
-            setFinished(true)
-            return
-        }
-        setLoading(true)
-        try {
-            const { data, nextIndicator } = await RSS3.getAllNotes(
-                address,
-                { tag },
-                {
-                    indicator: indicatorRef.current,
-                    size: 20,
-                },
-            )
-            setError(undefined)
-            setLoading(false)
-            indicatorRef.current = nextIndicator
-
-            if (!data.length) {
-                setFinished(true)
-                return
-            }
-            setFeeds((oldList) => uniqBy([...oldList, ...data], (x) => x.timestamp))
-        } catch (error) {
-            loadingRef.current = false
-            setError(error as Error)
-        }
-    }, [address, tag])
-
-    useEffect(() => {
-        load()
-    }, [load])
-
-    return { feeds, loading, error, finished, load, next: load }
+    return {
+        feeds,
+        loading: isLoading,
+        error: error as Error | undefined,
+        finished: !hasNextPage,
+        next: fetchNextPage,
+    }
 }
