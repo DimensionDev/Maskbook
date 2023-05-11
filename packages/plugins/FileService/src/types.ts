@@ -1,7 +1,6 @@
 export enum Provider {
     arweave = 'arweave',
     ipfs = 'ipfs',
-    swarm = 'swarm',
 }
 
 export interface ProviderConfig {
