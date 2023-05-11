@@ -37,85 +37,88 @@ export default class WalletConnectV2Provider
         return !!this.session
     }
 
+    private async setupModal() {
+        if (this.web3Modal) return
+
+        this.web3Modal = new Web3Modal({
+            projectId: DEFAULT_PROJECT_ID,
+            walletConnectVersion: 2,
+        })
+    }
+
     private async setupClient() {
-        if (!this.web3Modal) {
-            this.web3Modal = new Web3Modal({
-                projectId: DEFAULT_PROJECT_ID,
-                walletConnectVersion: 2,
-            })
-        }
+        if (this.client) return
 
-        if (!this.client) {
-            const client = await SignClient.init({
-                projectId: DEFAULT_PROJECT_ID,
-                logger: DEFAULT_LOGGER,
-                relayUrl: DEFAULT_RELAY_URL,
-                metadata: {
-                    name: 'Mask Network',
-                    description: 'Your Portal To The New, Open Internet.',
-                    url: 'https://mask.io',
-                    icons: ['https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg'],
-                },
-            })
+        const client = await SignClient.init({
+            projectId: DEFAULT_PROJECT_ID,
+            logger: DEFAULT_LOGGER,
+            relayUrl: DEFAULT_RELAY_URL,
+            metadata: {
+                name: 'Mask Network',
+                description: 'Your Portal To The New, Open Internet.',
+                url: 'https://mask.io',
+                icons: ['https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg'],
+            },
+        })
 
-            client.on('session_ping', (args) => {
-                console.log('EVENT', 'session_ping', args)
-            })
+        client.on('session_ping', (args) => {
+            console.log('[DEBUG EVENT]', 'session_ping', args)
+        })
 
-            client.on('session_event', (args) => {
-                console.log('EVENT', 'session_event', args)
-            })
+        client.on('session_event', (args) => {
+            console.log('[DEBUG EVENT]', 'session_event', args)
+        })
 
-            client.on('session_update', ({ topic, params }) => {
-                console.log('EVENT', 'session_update', { topic, params })
-                // const { namespaces } = params
-                // const _session = client.session.get(topic)
-                // const updatedSession = { ..._session, namespaces }
-                // onSessionConnected(updatedSession);
-            })
+        client.on('session_update', ({ topic, params }) => {
+            console.log('[DEBUG EVENT]', 'session_update', { topic, params })
+            // const { namespaces } = params
+            // const _session = client.session.get(topic)
+            // const updatedSession = { ..._session, namespaces }
+            // onSessionConnected(updatedSession);
+        })
 
-            client.on('session_delete', () => {
-                console.log('EVENT', 'session_delete')
-                // reset()
-            })
+        client.on('session_delete', () => {
+            console.log('[DEBUG EVENT]', 'session_delete')
+            // reset()
+        })
 
-            this.client = client
+        this.client = client
 
-            // // @ts-expect-error the client type mismatch
-            // this.client.on('display_uri', (uri: string) => {
-            //     this.web3Modal?.openModal({ uri })
-            // })
+        // // @ts-expect-error the client type mismatch
+        // this.client.on('display_uri', (uri: string) => {
+        //     this.web3Modal?.openModal({ uri })
+        // })
 
-            // // @ts-expect-error the client type mismatch
-            // this.client.on('connect', (session: SessionTypes.Struct) => {
-            //     const encodedAccount = first(session.namespaces.eip155.accounts)
-            //     if (!encodedAccount) return
+        // // @ts-expect-error the client type mismatch
+        // this.client.on('connect', (session: SessionTypes.Struct) => {
+        //     const encodedAccount = first(session.namespaces.eip155.accounts)
+        //     if (!encodedAccount) return
 
-            //     const [, chainId, account] = encodedAccount.split(':')
-            //     const chainId_ = Number.parseInt(chainId, 10)
+        //     const [, chainId, account] = encodedAccount.split(':')
+        //     const chainId_ = Number.parseInt(chainId, 10)
 
-            //     if (isValidAddress(account) && isValidChainId(chainId_)) {
-            //         this.emitter.emit('connect', {
-            //             chainId: chainId_,
-            //             account,
-            //         })
-            //     }
-            // })
+        //     if (isValidAddress(account) && isValidChainId(chainId_)) {
+        //         this.emitter.emit('connect', {
+        //             chainId: chainId_,
+        //             account,
+        //         })
+        //     }
+        // })
 
-            // this.client.on('accountsChanged', (accounts) => {
-            //     if (!this.connected) return
-            //     this.emitter.emit('accounts', accounts)
-            // })
+        // this.client.on('accountsChanged', (accounts) => {
+        //     if (!this.connected) return
+        //     this.emitter.emit('accounts', accounts)
+        // })
 
-            // this.client.on('chainChanged', (chainId) => {
-            //     if (!this.connected) return
-            //     this.emitter.emit('chainId', chainId)
-            // })
-        }
+        // this.client.on('chainChanged', (chainId) => {
+        //     if (!this.connected) return
+        //     this.emitter.emit('chainId', chainId)
+        // })
     }
 
     private async login(chainId: ChainId) {
         await this.setupClient()
+        // await this.setupModal()
 
         const connected = await this.client?.connect({
             requiredNamespaces: {

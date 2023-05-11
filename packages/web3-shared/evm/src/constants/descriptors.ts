@@ -325,6 +325,24 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
             'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
+        ID: `${PLUGIN_ID}_walletconnectv2`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.WalletConnectV2,
+        name: 'WalletConnect V2',
+        icon: new URL('../assets/walletconnect.png', import.meta.url),
+        enableRequirements: {
+            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+        },
+        homeLink: 'https://walletconnect.com',
+        shortenLink: 'walletconnect.com',
+        downloadLink: 'https://walletconnect.com',
+        iconFilterColor: 'rgba(59, 153, 252, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
         ID: `${PLUGIN_ID}_coin98`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Coin98,
