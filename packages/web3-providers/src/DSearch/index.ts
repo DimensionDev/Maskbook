@@ -63,6 +63,7 @@ const handleRe = new RegExp(
         'csb',
         'bit',
         'eth',
+        'arb',
         'lens',
         'bnb',
         'crypto',
