@@ -26,6 +26,5 @@
     "error_102": "文件太大，限制为 {{limit}}。",
     "on_change_file": "更改文件",
     "provider_arweave": "Arweave",
-    "provider_ipfs": "IPFS",
-    "provider_swarm": "Swarm"
+    "provider_ipfs": "IPFS"
 }

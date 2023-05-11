@@ -70,10 +70,6 @@ export const Upload: React.FC = () => {
             provider: Provider.ipfs,
             name: t.provider_ipfs(),
         },
-        {
-            provider: Provider.swarm,
-            name: t.provider_swarm(),
-        },
     ]
 
     const onFile = async (file: File) => {
