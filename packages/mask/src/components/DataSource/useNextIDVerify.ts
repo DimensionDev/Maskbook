@@ -39,20 +39,46 @@ export function useNextIDVerify() {
             await new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
                     const postId = getPostIdFromNewPostToast?.()
+
                     if (postId && persona.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
-                        await NextIDProof.bindProof(
-                            payload.uuid,
-                            persona.identifier.publicKeyAsHex,
-                            NextIDAction.Create,
-                            platform,
-                            username,
-                            payload.createdAt,
-                            {
-                                signature,
-                                proofLocation: postId,
-                            },
+
+                        alert('[DEBUG]: Bind Post')
+                        alert(
+                            `[DEBUG]: ${JSON.stringify([
+                                payload.uuid,
+                                persona.identifier.publicKeyAsHex,
+                                NextIDAction.Create,
+                                platform,
+                                username,
+                                payload.createdAt,
+                                {
+                                    signature,
+                                    proofLocation: postId,
+                                },
+                            ])}`,
                         )
+
+                        try {
+                            await NextIDProof.bindProof(
+                                payload.uuid,
+                                persona.identifier.publicKeyAsHex,
+                                NextIDAction.Create,
+                                platform,
+                                username,
+                                payload.createdAt,
+                                {
+                                    signature,
+                                    proofLocation: postId,
+                                },
+                            )
+                        } catch (error) {
+                            if (error instanceof Error) {
+                                alert(`[DEBUG]: ${error.message}`)
+                            } else {
+                                alert(`[DEBUG]: ${JSON.stringify(error)}`)
+                            }
+                        }
                         resolve()
                     }
                 }, 1000)
