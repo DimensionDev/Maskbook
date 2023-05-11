@@ -3,6 +3,7 @@ import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { HTMLProps, Fragment } from 'react'
 import { useI18N } from '../../locales'
+import { Image } from '@masknet/shared'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
     imageUrl: string
@@ -73,7 +74,7 @@ export const DonationCard = ({
     const t = useI18N()
     return (
         <div className={classnames(classes.card, className)} {...rest}>
-            <img className={classes.cover} src={imageUrl} alt={name} />
+            <Image className={classes.cover} src={imageUrl} alt={name} />
             <dl className={classes.info}>
                 <dt className={classes.infoRow}>
                     <Typography
