@@ -180,6 +180,8 @@
     "setup_guide_pin_tip_step_find_left": "拡張機能の一覧からMask Networkを検索し、 ",
     "setup_guide_pin_tip_step_find_right": "ボタン",
     "setup_guide_pin_tip_successfully": "ピン留めが完了しました",
+    "user_guide_tip_1": "複数チェーンのdAppを探索します。",
+    "user_guide_tip_2": "ウォレットを接続して切り替えます。",
     "import": "インポート",
     "no_search_result": "該当なし",
     "browser_action_enter_dashboard": "ダッシュボードに入る",
