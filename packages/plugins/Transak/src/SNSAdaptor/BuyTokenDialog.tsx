@@ -10,6 +10,7 @@ import { PluginTransakMessages } from '../messages.js'
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
         width: '500px !important',
+        overflow: 'inherit',
     },
     dialogContent: {
         padding: '0 !important',
@@ -17,8 +18,8 @@ const useStyles = makeStyles()((theme) => ({
     close: {
         color: `${theme.palette.common.white} !important`,
         backgroundColor: `${theme.palette.maskColor.dark} !important`,
-        top: theme.spacing(2),
-        right: theme.spacing(2),
+        top: theme.spacing(-2),
+        right: theme.spacing(-2),
         position: 'absolute',
     },
     content: {
@@ -29,12 +30,15 @@ const useStyles = makeStyles()((theme) => ({
         '::-webkit-scrollbar': {
             display: 'none',
         },
+        overflow: 'inherit',
+        borderRadius: 12,
     },
     frame: {
         display: 'block',
         width: '100%',
         height: 630,
         border: 0,
+        borderRadius: 12,
     },
 }))
 
