@@ -5,9 +5,9 @@ import {
     getSiteType,
     getAgentType,
     getExtensionId,
-    createDeviceSeed,
-    createDeviceFingerprint,
-    isDeviceOnWhitelist,
+    joinsABTest,
+    getABTestSeed,
+    TelemetryID,
 } from '@masknet/shared-base'
 import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
 import { isNewerThan, isSameVersion } from '../entry-helpers.js'
@@ -103,11 +103,16 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
-        Sentry.setTag('device_ab', isDeviceOnWhitelist(50))
-        Sentry.setTag('device_seed', createDeviceSeed())
-        Sentry.setTag('device_fingerprint', createDeviceFingerprint())
+        Sentry.setTag('device_ab', joinsABTest())
+        Sentry.setTag('device_seed', getABTestSeed())
+        Sentry.setTag('device_id', TelemetryID.value)
         Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
+        TelemetryID.addListener((trackID) => {
+            Sentry.setTag('device_ab', joinsABTest())
+            Sentry.setTag('device_seed', getABTestSeed())
+            Sentry.setTag('track_id', trackID)
+        })
     }
 
     // The sentry needs to be opened at the runtime.

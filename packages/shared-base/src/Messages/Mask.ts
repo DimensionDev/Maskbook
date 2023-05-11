@@ -34,6 +34,7 @@ export interface MaskSNSEvents {
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
+    telemetryIDReset: string
     /** value is "bulkKey" */
     legacySettings_bulkDiscoverNS: string
     /** emit when the settings changed. */
