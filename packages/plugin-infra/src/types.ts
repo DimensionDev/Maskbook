@@ -609,6 +609,8 @@ export namespace Plugin.SNSAdaptor {
             name: I18NFieldOrReactNode
             description: I18NFieldOrReactNode
         }>
+
+        hiddenInList?: boolean
     }
 
     export interface PluginWrapperProps {
