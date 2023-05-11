@@ -1,5 +1,6 @@
 import { type CSSProperties, type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { emitter } from '../../emitter.js'
+import { attachRectangle } from '@masknet/shared-base'
 
 interface Result {
     active: boolean
@@ -55,25 +56,12 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>): Resul
             const CARD_HEIGHT = holderRef.current!.offsetHeight
             const CARD_WIDTH = holderRef.current!.offsetWidth
 
-            const reachedBottomBoundary = bounding.bottom + CARD_HEIGHT > window.innerHeight
-            let x = Math.max(bounding.left + bounding.width / 2 - CARD_WIDTH / 2, 0)
-            let y = bounding.top + bounding.height
-            if (reachedBottomBoundary) {
-                const reachedTopBoundary = bounding.top < CARD_HEIGHT
-                if (reachedTopBoundary) {
-                    x = bounding.left + bounding.width
-                    y = Math.min(window.innerHeight - CARD_HEIGHT, Math.max(bounding.top - CARD_HEIGHT / 2))
-                } else {
-                    y = bounding.top - CARD_HEIGHT
-                }
-            }
-            // reached right boundary
-            if (x + CARD_WIDTH > window.innerWidth) {
-                x = window.innerWidth - CARD_WIDTH - MARGIN
-            }
-            // Prefer to show top left corner of the card.
-            x = Math.max(0, x)
-            y = Math.max(0, y)
+            const { x, y } = attachRectangle({
+                anchorBounding: bounding,
+                targetDimension: { height: CARD_HEIGHT, width: CARD_WIDTH },
+                containerDimension: { height: window.innerHeight, width: window.innerWidth },
+                margin: MARGIN,
+            })
 
             const pageOffset = document.scrollingElement?.scrollTop || 0
             const newLeft = x
