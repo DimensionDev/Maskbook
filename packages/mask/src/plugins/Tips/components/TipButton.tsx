@@ -128,7 +128,7 @@ export const TipButton: FC<Props> = ({
     }, [pluginId, publicWallets, addresses, socialAddressList])
 
     const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvailable
+    const disabled = isChecking || allAddresses.length === 0 || !isRuntimeAvailable
 
     const createTipTask: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
