@@ -64,7 +64,7 @@
     "@walletconnect/client": "1.7.8",
     "@walletconnect/sign-client": "^2.7.3",
     "@walletconnect/types": "^2.7.3",
-    "@walletconnect/universal-provider": "^2.7.3",
+    "@walletconnect/utils": "^2.7.3",
     "@web3modal/standalone": "^2.4.1",
     "@ethersproject/address": "^5.4.0",
     "@ethersproject/providers": "^5.7.2",
