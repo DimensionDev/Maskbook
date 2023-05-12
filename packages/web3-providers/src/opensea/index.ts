@@ -109,7 +109,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
-            owner: asset.owner.address,
+            owner: asset.owner?.address,
         },
         collection: {
             address: asset.token_address ?? asset.asset_contract.address,
@@ -165,9 +165,9 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             link: createAssetLink(asset.creator),
         },
         owner: {
-            address: asset.owner.address,
-            nickname: asset.owner.user?.username ?? 'Unknown',
-            avatarURL: asset.owner.profile_img_url,
+            address: asset.owner?.address,
+            nickname: asset.owner?.user?.username ?? 'Unknown',
+            avatarURL: asset.owner?.profile_img_url,
             link: createAssetLink(asset.owner),
         },
         traits: asset.traits.map((x) => ({
