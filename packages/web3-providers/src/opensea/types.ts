@@ -145,7 +145,7 @@ export interface OpenSeaResponse extends Asset {
     collection: OpenSeaCollection
     name: string
     description: string
-    owner: OpenSeaCustomAccount
+    owner?: OpenSeaCustomAccount
     orders: AssetOrder[] | null
     buy_orders: AssetOrder[] | null
     sell_orders: AssetOrder[] | null
