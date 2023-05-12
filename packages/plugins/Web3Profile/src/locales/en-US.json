@@ -14,6 +14,7 @@
     "Solana_wallet": "Solana Wallet",
     "Flow_wallet": "Flow Wallet",
     "network_error": "Network error, try again",
+    "view": "View",
     "follow": "Follow",
     "following_action": "Following",
     "follow_lens_handle": "Follow Lens handle",

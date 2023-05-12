@@ -15,13 +15,14 @@ import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from 
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
+import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
@@ -84,6 +85,15 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
         color: theme.palette.maskColor.main,
         fontSize: 14,
     },
+    canvas: {
+        height: '100vh',
+        pointerEvents: 'none',
+        position: 'fixed',
+        width: '100%',
+        zIndex: 2,
+        top: 0,
+        left: 0,
+    },
 }))
 
 export function FollowLensDialog() {
@@ -92,6 +102,7 @@ export function FollowLensDialog() {
     const [handle, setHandle] = useState('')
 
     const wallet = useWallet()
+    const [isFollowing, setIsFollowing] = useState(false)
     const { classes } = useStyles({ account: !!wallet })
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
@@ -113,10 +124,12 @@ export function FollowLensDialog() {
 
         if (!profile) return
         const isFollowing = await Lens.queryFollowStatus(account, profile.id)
+
         const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
 
         const profiles = await Lens.queryProfilesByAddress(account)
 
+        setIsFollowing(!!isFollowing)
         return {
             profile,
             isSelf: isSameAddress(profile.ownedBy, account),
@@ -125,7 +138,7 @@ export function FollowLensDialog() {
         }
     }, [handle, open, account])
 
-    const { isFollowing, profile, defaultProfile, isSelf } = value ?? {}
+    const { profile, defaultProfile, isSelf } = value ?? {}
 
     const followModule = useMemo(() => {
         if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && defaultProfile) {
@@ -159,8 +172,25 @@ export function FollowLensDialog() {
     }, [profile?.followModule?.amount, chainId])
 
     // #region follow and unfollow event handler
-    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, followModule, !!defaultProfile, retry)
-    const [{ loading: unfollowLoading }, handleUnfollow] = useUnfollow(profile?.id, retry)
+    const { showConfettiExplosion, canvasRef } = useConfettiExplosion()
+    const { loading: followLoading, handleFollow } = useFollow(
+        profile?.id,
+        followModule,
+        !!defaultProfile,
+        (event: MouseEvent<HTMLElement>) => {
+            showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
+            setIsFollowing(true)
+        },
+        () => setIsFollowing(false),
+    )
+    const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
+        profile?.id,
+        (event: MouseEvent<HTMLElement>) => {
+            showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
+            setIsFollowing(false)
+        },
+        () => setIsFollowing(true),
+    )
     // #endregion
 
     const { value: feeTokenBalance, loading: getBalanceLoading } = useFungibleTokenBalance(
@@ -364,6 +394,13 @@ export function FollowLensDialog() {
                         </Box>
                     </Box>
                 )}
+                <canvas
+                    className={classes.canvas}
+                    id="follow-button-confetto"
+                    ref={canvasRef}
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                />
             </DialogContent>
         </InjectedDialog>
     )

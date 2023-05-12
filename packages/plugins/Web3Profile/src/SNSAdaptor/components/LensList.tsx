@@ -1,11 +1,15 @@
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
-import { Button, List, ListItem, Typography, type ListProps } from '@mui/material'
+import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { memo, type FC } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { useAsync } from 'react-use'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Lens } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -55,7 +59,8 @@ const useStyles = makeStyles()((theme) => {
         followButton: {
             marginLeft: 'auto',
             height: 32,
-            padding: theme.spacing(1, 2),
+            minWidth: 64,
+            padding: theme.spacing(1, 1.5),
             backgroundColor: '#ABFE2C',
             color: theme.palette.common.black,
             borderRadius: 99,
@@ -76,34 +81,63 @@ export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
     const t = useI18N()
     return (
         <List className={cx(classes.list, className)} {...rest}>
-            {accounts.map((account) => {
-                const profileUri = account.profileUri.filter(Boolean)
-                const lensIcon = <Icons.Lens size={20} />
-                return (
-                    <ListItem className={classes.listItem} key={account.handle}>
-                        {profileUri.length ? (
-                            <Image size={20} src={profileUri[0]} className={classes.avatar} fallback={lensIcon} />
-                        ) : (
-                            lensIcon
-                        )}
-                        <Typography className={classes.name}>{account.name || account.handle}</Typography>
-                        <Button
-                            variant="text"
-                            className={classes.followButton}
-                            disableElevation
-                            onClick={() => {
-                                CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
-                                    open: true,
-                                    handle: account.handle,
-                                })
-                            }}>
-                            {t.follow()}
-                        </Button>
-                    </ListItem>
-                )
+            {accounts.map((account, key) => {
+                return <LensListItem account={account} key={key} />
             })}
         </List>
     )
 })
 
 LensList.displayName = 'LensList'
+
+interface LensListItemProps {
+    account: FireflyBaseAPI.LensAccount
+}
+
+const LensListItem = memo<LensListItemProps>(({ account }) => {
+    const { classes, cx } = useStyles()
+    const { account: wallet } = useChainContext()
+    const t = useI18N()
+    const profileUri = account.profileUri.filter(Boolean)
+    const lensIcon = <Icons.Lens size={20} />
+
+    const { loading, value } = useAsync(async () => {
+        const profile = await Lens.getProfileByHandle(account.handle)
+        const isFollowing = await Lens.queryFollowStatus(wallet, profile.id)
+
+        return {
+            ownedBy: profile.ownedBy,
+            isFollowing,
+        }
+    }, [account, wallet])
+
+    return (
+        <ListItem className={classes.listItem} key={account.handle}>
+            {profileUri.length ? (
+                <Image size={20} src={profileUri[0]} className={classes.avatar} fallback={lensIcon} />
+            ) : (
+                lensIcon
+            )}
+            <Typography className={classes.name}>{account.name || account.handle}</Typography>
+            <ActionButton
+                variant="text"
+                loading={loading}
+                className={classes.followButton}
+                disableElevation
+                onClick={() => {
+                    CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
+                        open: true,
+                        handle: account.handle,
+                    })
+                }}>
+                {isSameAddress(wallet, value?.ownedBy)
+                    ? t.view()
+                    : value?.isFollowing
+                    ? t.following_action()
+                    : t.follow()}
+            </ActionButton>
+        </ListItem>
+    )
+})
+
+LensListItem.displayName = 'LensListItem'
