@@ -79,6 +79,9 @@ const useStyles = makeStyles()((theme) => {
                 borderRadius: 8,
             },
         },
+        disabledWalletItem: {
+            pointerEvents: 'none',
+        },
         providerIcon: {
             height: '100%',
             fontSize: 36,
@@ -161,7 +164,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     requiredSupportChainIds,
     requiredSupportPluginID,
 }: PluginProviderRenderProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const snsPlugins = useActivatedPluginsSNSAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
@@ -251,12 +254,15 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                             })
                             .map((provider) => (
                                 <ShadowRootTooltip
-                                    title={getTips(provider.type)}
+                                    title={getDisabled(provider) ? '' : getTips(provider.type)}
                                     arrow
                                     placement="top"
                                     key={provider.ID}>
                                     <ListItem
-                                        className={classes.walletItem}
+                                        className={cx(
+                                            classes.walletItem,
+                                            getDisabled(provider) ? classes.disabledWalletItem : '',
+                                        )}
                                         disabled={getDisabled(provider)}
                                         onClick={() => {
                                             handleClick(provider)
