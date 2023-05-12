@@ -1,17 +1,20 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeText } from '@dimensiondev/kit'
-import { create, IPFSHTTPClient } from 'ipfs-http-client'
-import { isEmpty } from 'lodash-unified'
-import { landing } from '../constants'
+import { create, type IPFSHTTPClient } from 'ipfs-http-client'
+import { landing } from '../constants.js'
 import urlcat from 'urlcat'
-import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
-import { makeFileKeySigned } from '../helpers'
+import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
+import { makeFileKeySigned } from '../helpers.js'
+import { isEmpty } from 'lodash-unified'
+import { encodeText } from '@dimensiondev/kit'
 
 function createClient(): IPFSHTTPClient {
     return create({
         host: 'ipfs.infura.io',
         port: 5001,
         protocol: 'https',
+        headers: {
+            authorization: 'Basic MkRZaG10eThyM21DOWl5dE5tdG9ZdkdmWkxiOmM5YjVlOTRmNjM1OTdiMGEyNmJhY2RlNmI3NTgxOTgx',
+        },
     })
 }
 
@@ -40,7 +43,7 @@ class IPFSAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const linkPrefix = 'https://ipfs.infura.io/ipfs'
+        const linkPrefix = 'https://mask.infura-ipfs.io/ipfs'
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
