@@ -153,7 +153,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 )}
             </section>
 
-            <PluginWalletStatusBar className={classes.footer} />
+            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM} />
         </div>
     )
 }
