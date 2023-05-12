@@ -52,9 +52,9 @@ export const AirDropActivities = memo(() => {
     const { classes } = useStyles()
     const { account } = useChainContext()
 
-    const { value: activity, loading, retry } = useAirDropActivity(ChainId.Arbitrum)
+    const { data: activity, isLoading, refetch } = useAirDropActivity(ChainId.Arbitrum)
 
-    if (loading)
+    if (isLoading)
         return (
             <Box className={classes.placeholder}>
                 <LoadingBase size={24} />
@@ -64,7 +64,7 @@ export const AirDropActivities = memo(() => {
     if (activity) {
         return (
             <Box className={classes.container}>
-                <AirDropActivityItem {...activity} onClaimSuccess={retry} />
+                <AirDropActivityItem {...activity} onClaimSuccess={refetch} />
                 {open ? (
                     <Alert severity="info" onClose={toggle} className={classes.alert}>
                         <AlertTitle className={classes.alertTitle}>{t.airdrop_alert()}</AlertTitle>

@@ -1,10 +1,10 @@
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { emitter } from './emitter.js'
 import FileServiceDialog from './MainDialog.js'
 
-export function FileServiceInjection() {
+export const FileServiceInjection = memo(function FileServiceInjection() {
     const [open, setOpen] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState<string[]>([])
     const [compositionType, setCompositionType] = useState<CompositionType>('popup')
@@ -31,4 +31,4 @@ export function FileServiceInjection() {
             selectedFileIds={selectedFiles}
         />
     )
-}
+})

@@ -1,29 +1,19 @@
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { base } from '../base.js'
 import { ApplicationEntry } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
-import { setupContext } from './context.js'
-import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog.js'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
-import { CheckSecurityDialog } from './CheckSecurityDialog.js'
-import { RiskWarningDialog } from './components/RiskWarningDialog.js'
+import { Trans } from 'react-i18next'
+import { base } from '../base.js'
+import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
+import { setupContext } from './context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
     },
-    GlobalInjection: function Component() {
-        return (
-            <>
-                <CheckSecurityConfirmDialog />
-                <CheckSecurityDialog />
-                <RiskWarningDialog />
-            </>
-        )
-    },
+    GlobalInjection: GoPlusGlobalInjection,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SecurityChecker size={36} />

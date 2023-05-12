@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
@@ -30,7 +30,7 @@ function getProviders() {
         : providers
 }
 
-export function SelectProviderDialog() {
+export const SelectProviderDialog = memo(function SelectProviderDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID | undefined>()
@@ -78,12 +78,13 @@ export function SelectProviderDialog() {
         },
         [closeDialog, walletConnectedCallback],
     )
+    const providers = useMemo(getProviders, [])
 
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    providers={getProviders()}
+                    providers={providers}
                     onProviderIconClicked={onProviderIconClicked}
                     requiredSupportChainIds={requiredSupportChainIds}
                     requiredSupportPluginID={requiredSupportPluginID}
@@ -91,4 +92,4 @@ export function SelectProviderDialog() {
             </DialogContent>
         </InjectedDialog>
     )
-}
+})

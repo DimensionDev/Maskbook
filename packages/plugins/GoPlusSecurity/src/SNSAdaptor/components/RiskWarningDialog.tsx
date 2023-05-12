@@ -1,14 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales/index.js'
-import { PluginGoPlusSecurityMessages } from '../../messages.js'
+import { type TokenRiskWarningDialogEvent } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -60,24 +59,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Token {
+export interface Token {
     contract: string
     name: string
     chainId: ChainId
 }
 
-export function RiskWarningDialog() {
+interface Props {
+    token?: Token
+    open: boolean
+    onSetDialog(event: TokenRiskWarningDialogEvent): void
+}
+export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const [token, setToken] = useState<Token>()
-
-    const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
-        PluginGoPlusSecurityMessages.tokenRiskWarningDialogEvent,
-        (env) => {
-            if (!env.open) return
-            setToken(env.token)
-        },
-    )
 
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
@@ -93,12 +88,12 @@ export function RiskWarningDialog() {
     )
 
     const onClose = useCallback(async () => {
-        setRiskWarningDialog({ open: false, swap: false })
-    }, [setRiskWarningDialog])
+        onSetDialog({ open: false, swap: false })
+    }, [onSetDialog])
 
     const onConfirm = useCallback(async () => {
-        setRiskWarningDialog({ open: false, swap: true })
-    }, [setRiskWarningDialog])
+        onSetDialog({ open: false, swap: true })
+    }, [onSetDialog])
 
     return (
         <InjectedDialog
