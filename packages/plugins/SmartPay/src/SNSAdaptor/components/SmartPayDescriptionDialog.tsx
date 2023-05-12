@@ -1,9 +1,9 @@
 import { InjectedDialog } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Box, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -26,12 +26,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SmartPayDescriptionDialog = memo(() => {
+export function InjectSmartPayDescriptionDialog() {
+    const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
+    return open ? <SmartPayDescriptionDialog open onClose={closeDialog} /> : null
+}
+
+interface Props {
+    open: boolean
+    onClose(): void
+}
+export const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title={t.what_is_smart_pay()}>
+        <InjectedDialog open={open} onClose={onClose} title={t.what_is_smart_pay()}>
             <DialogContent className={classes.dialogContent}>
                 <Typography className={classes.title}>{t.what_is_smart_pay_title()}</Typography>
                 <Typography sx={{ my: 3 }} className={classes.content}>

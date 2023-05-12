@@ -1,9 +1,7 @@
 import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { memo } from 'react'
-import { PluginClaimMessage } from '../../../message.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -17,18 +15,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ClaimDialog = memo(() => {
+interface Props {
+    open: boolean
+    onClose(): void
+}
+export const ClaimDialog = memo(({ open, onClose }: Props) => {
     const t = useI18N()
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('AirDrop', 'ITO')
-
-    const { open, closeDialog } = useRemoteControlledDialog(PluginClaimMessage.claimDialogEvent)
 
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
                 open={open}
-                onClose={closeDialog}
+                onClose={onClose}
                 title={t.__plugin_name()}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="Claim">
@@ -54,3 +54,5 @@ export const ClaimDialog = memo(() => {
         </TabContext>
     )
 })
+
+ClaimDialog.displayName = 'ClaimDialog'

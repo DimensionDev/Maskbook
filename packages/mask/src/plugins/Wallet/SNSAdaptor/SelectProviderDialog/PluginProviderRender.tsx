@@ -28,7 +28,7 @@ import {
 } from '@masknet/web3-shared-flow'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
 import { ImageIcon } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -154,7 +154,7 @@ export interface PluginProviderRenderProps {
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
 }
 
-export function PluginProviderRender({
+export const PluginProviderRender = memo(function PluginProviderRender({
     providers,
     ProviderIconClickBait,
     onProviderIconClicked,
@@ -327,4 +327,4 @@ export function PluginProviderRender({
             ))}
         </>
     )
-}
+})

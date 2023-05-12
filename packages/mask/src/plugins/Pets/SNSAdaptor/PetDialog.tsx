@@ -1,10 +1,8 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { useAsync, useTimeout } from 'react-use'
 import type { Constant } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { PluginPetMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
 import { PetShareDialog } from './PetShareDialog.js'
 import { PetSetDialog } from './PetSetDialog.js'
@@ -18,10 +16,13 @@ enum PetFriendNFTStep {
     ShareFriendNFT = 'share',
 }
 
-export function PetDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+}
+export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
     const t = useI18N()
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [isReady, cancel] = useTimeout(500)
@@ -36,7 +37,7 @@ export function PetDialog() {
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)
 
     const handleClose = () => {
-        closeDialog()
+        onClose()
         isReady() ? setStep(PetFriendNFTStep.SetFriendNFT) : cancel()
     }
 
@@ -55,4 +56,4 @@ export function PetDialog() {
             </DialogContent>
         </InjectedDialog>
     )
-}
+})

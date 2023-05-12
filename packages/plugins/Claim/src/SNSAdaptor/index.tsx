@@ -1,25 +1,52 @@
-import type { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
-import { base } from '../base.js'
-import { context, setupContext } from './context.js'
-import { PLUGIN_ID } from '../constants.js'
-import { Trans } from 'react-i18next'
-import { PluginID } from '@masknet/shared-base'
-import { ClaimEntry } from './components/ClaimEntry/index.js'
-import { ClaimDialog } from './components/ClaimDialog/index.js'
+import type { Plugin } from '@masknet/plugin-infra'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { PluginID } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useState } from 'react'
+import { Trans } from 'react-i18next'
+import { base } from '../base.js'
+import { PLUGIN_ID } from '../constants.js'
+import { PluginClaimMessage } from '../message.js'
+import { ClaimDialog } from './components/ClaimDialog/index.js'
+import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
+import { context, setupContext } from './context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
     },
-    GlobalInjection: function Component() {
+    GlobalInjection: function ClaimGlobalInjection() {
+        const { open: claimOpen, closeDialog: closeClaimDialog } = useRemoteControlledDialog(
+            PluginClaimMessage.claimDialogEvent,
+        )
+
+        const [tokenAddress, setTokenAddress] = useState<string>()
+        const [amount, setAmount] = useState<string>()
+        const { open: successOpen, closeDialog: closeSuccessDialog } = useRemoteControlledDialog(
+            PluginClaimMessage.claimSuccessDialogEvent,
+            (ev) => {
+                if (!ev.open) {
+                    setAmount(undefined)
+                    setTokenAddress(undefined)
+                    return
+                }
+
+                setAmount(ev.amount)
+
+                if (isValidAddress(ev.token)) setTokenAddress(ev.token)
+            },
+        )
+
         return (
             <SNSAdaptorContext.Provider value={context}>
-                <ClaimDialog />
-                <ClaimSuccessDialog />
+                {claimOpen ? <ClaimDialog open onClose={closeClaimDialog} /> : null}
+                {successOpen ? (
+                    <ClaimSuccessDialog open onClose={closeSuccessDialog} tokenAddress={tokenAddress} amount={amount} />
+                ) : null}
             </SNSAdaptorContext.Provider>
         )
     },

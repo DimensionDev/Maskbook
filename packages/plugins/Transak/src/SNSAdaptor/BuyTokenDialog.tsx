@@ -1,11 +1,8 @@
-import { useState } from 'react'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent, IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useTransakURL } from '../hooks/useTransakURL.js'
-import { PluginTransakMessages } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
@@ -42,38 +39,34 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<'root'> {}
+export interface BuyTokenDialogProps extends withClasses<'root'> {
+    code: string
+    address: string
+    open: boolean
+    onClose(): void
+}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const { classes } = useStyles(undefined, { props })
+    const { code, address, open, onClose } = props
 
-    const [code, setCode] = useState('ETH')
-    const [address, setAddress] = useState('')
     const transakURL = useTransakURL({
         defaultCryptoCurrency: code,
         walletAddress: address,
     })
 
-    // #region remote controlled buy token dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, (ev) => {
-        if (!ev.open) return
-        setCode(ev.code ?? 'ETH')
-        setAddress(ev.address)
-    })
-    // #endregion
-
     return (
         <div className={classes.root}>
             <InjectedDialog
                 open={open}
-                onClose={closeDialog}
+                onClose={onClose}
                 classes={{
                     paper: classes.dialogPaper,
                     dialogContent: classes.dialogContent,
                 }}
                 disableBackdropClick>
                 <DialogContent className={classes.content}>
-                    <IconButton className={classes.close} size="small" onClick={closeDialog}>
+                    <IconButton className={classes.close} size="small" onClick={onClose}>
                         <CloseIcon />
                     </IconButton>
                     {transakURL ? <iframe className={classes.frame} src={transakURL} /> : null}

@@ -1,23 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { sortBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, type WalletTypes } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    type MaskEvents,
-    NetworkPluginID,
-    NextIDPlatform,
-    PopupRoutes,
-} from '@masknet/shared-base'
+import { EMPTY_LIST, type MaskEvents, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Sentry } from '@masknet/web3-providers'
 import { SceneMap, type Scene } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { context } from '../context.js'
@@ -45,24 +36,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function Web3ProfileDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+}
+export function Web3ProfileDialog({ open, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
     const [scene, setScene] = useState<Scene>()
     const [accountId, setAccountId] = useState<string>()
-
-    const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open)
-                Sentry.captureEvent({
-                    eventType: TelemetryAPI.EventType.Access,
-                    eventID: TelemetryAPI.EventID.AccessWeb3ProfileDialog,
-                })
-            setOpen(open)
-        })
-    }, [])
 
     const persona = useCurrentPersona()
     const currentVisitingProfile = useLastRecognizedProfile()
@@ -142,7 +124,7 @@ export function Web3ProfileDialog() {
             titleTail={
                 <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
             }
-            onClose={() => setOpen(false)}>
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <LoadGuard loading={loadingBinding} retry={retryQueryBinding} error={!!loadingBindingError}>
                     <Main

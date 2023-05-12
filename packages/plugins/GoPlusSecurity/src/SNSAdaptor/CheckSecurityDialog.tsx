@@ -1,5 +1,5 @@
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
 import { CoinGeckoTrending, GoPlusLabs } from '@masknet/web3-providers'
@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { toNumber } from 'lodash-es'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useI18N } from '../locales/index.js'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
@@ -34,26 +34,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CheckSecurityDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+    searchHidden: boolean
+    chainId: ChainId
+    tokenAddress: string
+}
+export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, tokenAddress }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const [chainId, setChainId] = useState<ChainId>()
-    const [open, setOpen] = useState(false)
-    const [searchHidden, setSearchHidden] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.checkSecurityDialogEvent.on((env) => {
-            if (!env.open) return
-            setOpen(env.open)
-            setSearchHidden(env.searchHidden)
-            onSearch(env.chainId ?? ChainId.Mainnet, env.tokenAddress ?? ZERO_ADDRESS)
-        })
-    }, [])
+        onSearch(chainId, tokenAddress)
+    }, [ChainId, tokenAddress])
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(
         async (chainId: ChainId, content: string): Promise<SecurityAPI.TokenSecurityType | undefined> => {
             if (!content || isSameAddress(content.trim(), ZERO_ADDRESS)) return
-            setChainId(chainId)
             const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
             if (!values) throw new Error(t.contract_not_found())
             return values
@@ -72,8 +70,6 @@ export function CheckSecurityDialog() {
         const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(value.contract)
         return marketInfo?.market_cap ? toNumber(marketInfo.market_cap) : undefined
     }, [value?.contract, !value?.token_symbol])
-
-    const onClose = () => setOpen(false)
 
     return (
         <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>

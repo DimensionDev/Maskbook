@@ -1,11 +1,8 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
-import { PluginClaimMessage } from '../../../message.js'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { useI18N } from '../../../locales/i18n_generated.js'
@@ -66,25 +63,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ClaimSuccessDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+    amount?: string
+    tokenAddress?: string
+}
+export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const [tokenAddress, setTokenAddress] = useState<string | undefined>()
-    const [amount, setAmount] = useState<string | undefined>()
 
     const { share } = useSNSAdaptorContext()
-
-    const { open, closeDialog } = useRemoteControlledDialog(PluginClaimMessage.claimSuccessDialogEvent, (ev) => {
-        if (!ev.open) {
-            setAmount(undefined)
-            setTokenAddress(undefined)
-            return
-        }
-
-        setAmount(ev.amount)
-
-        if (isValidAddress(ev.token)) setTokenAddress(ev.token)
-    })
 
     const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
 
@@ -95,9 +84,9 @@ export function ClaimSuccessDialog() {
     }, [share, amount, tokenDetail.value?.symbol])
 
     return usePortalShadowRoot((container) => (
-        <Dialog container={container} open={open} onClose={closeDialog} classes={{ paper: classes.paper }}>
+        <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
             <DialogTitle className={classes.title}>
-                <Icons.Close className={classes.close} onClick={closeDialog} />
+                <Icons.Close className={classes.close} onClick={onClose} />
                 {t.claim()}
             </DialogTitle>
             <DialogContent className={classes.content} style={{ paddingTop: 34 }}>

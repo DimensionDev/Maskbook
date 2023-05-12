@@ -34,9 +34,9 @@ export class AirdropAPI {
 
         return {
             claimers: data,
-            startTime: claimEvents?.startTime,
-            endTime: claimEvents?.endTime,
-            token: claimEvents?.token,
+            startTime: claimEvents.startTime,
+            endTime: claimEvents.endTime,
+            token: claimEvents.token,
             isClaimed,
             eventIndex: currentEventIndex,
         }
