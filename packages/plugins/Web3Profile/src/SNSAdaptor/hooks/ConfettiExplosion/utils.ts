@@ -5,7 +5,7 @@ export const colors = [
     { front: '#C3FF9E', back: '#9FEA71' }, // Darker Blue
 ]
 
-// ammount to add on each button press
+// amount to add on each button press
 export const confettiCount = 20
 export const sequinCount = 10
 

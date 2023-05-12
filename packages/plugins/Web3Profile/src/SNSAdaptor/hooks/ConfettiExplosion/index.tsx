@@ -77,7 +77,7 @@ const renderConfetti = (
     })
 
     // remove confetti and sequins that fall off the screen
-    // must be done in seperate loops to avoid noticeable flickering
+    // must be done in separate loops to avoid noticeable flickering
     confetti.forEach((confetto, index) => {
         if (confetto.position.y >= canvasHeight) confetti.splice(index, 1)
     })
