@@ -69,6 +69,8 @@ export function useUnfollow(
 
                 let hash: string | undefined
                 try {
+                    onSuccess?.(cloneEvent)
+                    setLoading?.(false)
                     const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
                     if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
                     else hash = broadcast?.txHash
@@ -85,10 +87,10 @@ export function useUnfollow(
                         { from: account },
                     )
                     hash = await connection.sendTransaction(tx)
+                    onSuccess?.(cloneEvent)
+                    setLoading(false)
                 }
 
-                onSuccess?.(cloneEvent)
-                setLoading(false)
                 if (!hash) return
                 const result = await connection.confirmTransaction(hash, {
                     signal: AbortSignal.timeout(3 * 60 * 1000),
