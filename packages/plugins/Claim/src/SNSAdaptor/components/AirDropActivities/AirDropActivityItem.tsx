@@ -7,6 +7,7 @@ import isAfter from 'date-fns/isAfter'
 import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
 import intervalToDuration from 'date-fns/intervalToDuration'
+import differenceInDays from 'date-fns/differenceInDays'
 import { ActivityStatus } from '../../../types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
@@ -134,10 +135,12 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                         end: endTime,
                     })
 
+                    const days = differenceInDays(endTime, now)
+
                     return (
                         <Translate.airdrop_in_progress_time_tips
                             values={{
-                                days: String(duration.days ?? ''),
+                                days: String(days ?? ''),
                                 hours: String(duration.hours ?? ''),
                                 minutes: String(duration.minutes ?? ''),
                             }}
