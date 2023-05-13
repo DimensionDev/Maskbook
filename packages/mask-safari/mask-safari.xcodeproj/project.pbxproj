@@ -29,6 +29,8 @@
 		3727112B29F40847002F1A15 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 3727112A29F40847002F1A15 /* popup.html */; };
 		3727112D29F40847002F1A15 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 3727112C29F40847002F1A15 /* popup.css */; };
 		3727112F29F40847002F1A15 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 3727112E29F40847002F1A15 /* popup.js */; };
+		37A0536D2A0FB32F0092756A /* build in Resources */ = {isa = PBXBuildFile; fileRef = 37A0536C2A0FB32F0092756A /* build */; };
+		37A0536E2A0FB33E0092756A /* build in Resources */ = {isa = PBXBuildFile; fileRef = 37A0536C2A0FB32F0092756A /* build */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,7 @@
 		3727112E29F40847002F1A15 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		3727113029F40847002F1A15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3727113129F40847002F1A15 /* mask_safari_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mask_safari_Extension.entitlements; sourceTree = "<group>"; };
+		37A0536C2A0FB32F0092756A /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; path = build; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +221,7 @@
 		3727111F29F40847002F1A15 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				37A0536C2A0FB32F0092756A /* build */,
 				3727112029F40847002F1A15 /* _locales */,
 				3727112229F40847002F1A15 /* images */,
 				3727112429F40847002F1A15 /* manifest.json */,
@@ -356,6 +360,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37A0536E2A0FB33E0092756A /* build in Resources */,
 				372710EC29F40845002F1A15 /* Icon.png in Resources */,
 				372710F629F40845002F1A15 /* Main.storyboard in Resources */,
 				372710F029F40845002F1A15 /* Script.js in Resources */,
@@ -383,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37A0536D2A0FB32F0092756A /* build in Resources */,
 				3727112729F40847002F1A15 /* background.js in Resources */,
 				3727112D29F40847002F1A15 /* popup.css in Resources */,
 				3727112B29F40847002F1A15 /* popup.html in Resources */,

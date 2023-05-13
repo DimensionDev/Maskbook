@@ -25,7 +25,9 @@
     "prepare": "husky install",
     "svgo": "svgo packages/icons/*/*.svg",
     "test": "vitest",
-    "spellcheck": "cspell lint --no-must-find-files"
+    "spellcheck": "cspell lint --no-must-find-files",
+    "destroy": "rm -rf './packages/mask-safari/mask-safari Extension/Resources/build/'*",
+    "copy": "cp -r build/* './packages/mask-safari/mask-safari Extension/Resources/build'"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20230307045856-46252fb",

@@ -1,41 +1,45 @@
 {
+    "name": "Mask Network",
+    "version": "2.19.0",
     "manifest_version": 3,
-    "default_locale": "en",
-
-    "name": "__MSG_extension_name__",
-    "description": "__MSG_extension_description__",
-    "version": "1.0",
-
-    "icons": {
-        "48": "images/icon-48.png",
-        "96": "images/icon-96.png",
-        "128": "images/icon-128.png",
-        "256": "images/icon-256.png",
-        "512": "images/icon-512.png"
-    },
-
+    "permissions": ["storage", "downloads", "webNavigation", "activeTab", "scripting"],
+    "optional_permissions": ["notifications", "clipboardRead"],
+    "optional_host_permissions": ["<all_urls>"],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "/build/manifest-v3.entry.js"
     },
-
-    "content_scripts": [
+    "options_ui": {
+        "page": "/build/dashboard.html",
+        "open_in_tab": true
+    },
+    "icons": {
+        "16": "/build/16x16.png",
+        "48": "/build/48x48.png",
+        "128": "/build/128x128.png",
+        "256": "/build/256x256.png",
+        "96": "/build/128x128.png",
+        "512": "/build/256x256.png"
+    },
+    "action": {
+        "default_popup": "/build/popups.html"
+    },
+    "homepage_url": "https://mask.io",
+    "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
+    "web_accessible_resources": [
         {
-            "js": ["content.js"],
-            "matches": ["*://example.com/*"]
+            "resources": ["js/*", "*.svg", "*.png", "*.css"],
+            "matches": ["<all_urls>"],
+            "use_dynamic_url": true
+        },
+        {
+            "resources": ["hot/*"],
+            "matches": ["<all_urls>"],
+            "use_dynamic_url": false
         }
     ],
-
-    "action": {
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "images/toolbar-icon-16.png",
-            "19": "images/toolbar-icon-19.png",
-            "32": "images/toolbar-icon-32.png",
-            "38": "images/toolbar-icon-38.png",
-            "48": "images/toolbar-icon-48.png",
-            "72": "images/toolbar-icon-72.png"
-        }
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
     },
-
-    "permissions": []
+    "minimum_chrome_version": "102",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9PHybO3tlYUFJrZgUuZlEvt2T6SKIu6Rs9e9B3/brNQG3+hCHudbZkq2WG2IzO44dglrs24bRp/pV5oIif0bLuwrzvYsPQ6hgSp+5gc4pg0LEJPLFp01fbORDknWt8suJmEMz7S0O5+u13+34NvxYzUNeLJF9gYrd4zzrAFYITDEYcqr0OMZvVrKz7IkJasER1uJyoGj4gFJeXNGE8y4Sqb150wBju70lKNKlNevWDRJKasG9CjagAD2+BAfqNyltn7KwK7jAyL1w6d6mOwIDAQAB"
 }

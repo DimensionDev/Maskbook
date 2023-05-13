@@ -259,7 +259,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
             globalObject: 'globalThis',
-            publicPath: '/',
+            publicPath: '/build/',
             clean: flags.mode === 'production',
             trustedTypes: {
                 policyName: 'webpack',
@@ -345,8 +345,8 @@ function addHTMLEntry(
     if (options.lockdown) {
         templateContent = templateContent.replace(
             `<!-- lockdown -->`,
-            `<script src="/polyfill/lockdown.js"></script>
-        <script src="/lockdown.js"></script>`,
+            `<script src="/build/polyfill/lockdown.js"></script>
+        <script src="/build/lockdown.js"></script>`,
         )
     }
     return new HTMLPlugin({
