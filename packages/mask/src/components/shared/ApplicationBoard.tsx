@@ -1,25 +1,25 @@
-import { useState, useContext, createContext, type PropsWithChildren, useMemo, useRef } from 'react'
-import { useTimeout } from 'react-use'
-import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { Typography } from '@mui/material'
+import { createContext, useContext, useMemo, useRef, useState, type PropsWithChildren } from 'react'
+import { useTimeout } from 'react-use'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
+import Services from '../../extension/service.js'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { type Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
-import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
-import Services from '../../extension/service.js'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
+import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -125,7 +125,10 @@ function ApplicationBoardContent(props: Props) {
         .filter((x) => x.entry.recommendFeature)
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
-    const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
+    const unlistedEntries = useUnlistedEntries()
+    const listedAppList = applicationList.filter(
+        (x) => !x.entry.recommendFeature && !unlistedEntries.includes(x.entry.ApplicationEntryID),
+    )
     // #region handle carousel ui
     const [isCarouselReady] = useTimeout(300)
     const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)

@@ -24,11 +24,13 @@ export const InMemoryStorages = {
 }
 
 const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
+const APPLICATION_ENTRY_UNLISTED = 'APPLICATION_ENTRY_UNLISTED'
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
+    /** @deprecated */
     ApplicationEntryUnListedList: createPersistentKVStorage<{
         current: {
             [key: string]: boolean
@@ -50,4 +52,5 @@ export const PersistentStorages = {
             [PluginID.GoPlusSecurity]: false,
         },
     }),
+    ApplicationEntryUnListed: createPersistentKVStorage<{ list: string[] }>(APPLICATION_ENTRY_UNLISTED, { list: [] }),
 }
