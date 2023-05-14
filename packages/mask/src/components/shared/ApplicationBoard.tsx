@@ -2,12 +2,12 @@ import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-scr
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { Typography } from '@mui/material'
-import { createContext, useContext, useMemo, useRef, useState, type PropsWithChildren } from 'react'
+import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
@@ -96,7 +96,6 @@ function ApplicationBoardContent(props: Props) {
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
-    const popperBoundaryRef = useRef<HTMLElement | null>(null)
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const applicationList = useMemo(
         () =>
@@ -151,22 +150,22 @@ function ApplicationBoardContent(props: Props) {
             />
 
             {listedAppList.length > 0 ? (
-                <section
-                    ref={popperBoundaryRef}
-                    className={cx(
-                        classes.applicationWrapper,
-                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
-                            ? classes.applicationWrapperWithCarousel
-                            : '',
-                    )}>
-                    {listedAppList.map((application) => (
-                        <RenderEntryComponent
-                            key={application.entry.ApplicationEntryID}
-                            application={application}
-                            popperBoundary={popperBoundaryRef.current}
-                        />
-                    ))}
-                </section>
+                <Boundary>
+                    <section
+                        className={cx(
+                            classes.applicationWrapper,
+                            recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                                ? classes.applicationWrapperWithCarousel
+                                : '',
+                        )}>
+                        {listedAppList.map((application) => (
+                            <RenderEntryComponent
+                                key={application.entry.ApplicationEntryID}
+                                application={application}
+                            />
+                        ))}
+                    </section>
+                </Boundary>
             ) : (
                 <div
                     className={cx(
@@ -184,13 +183,7 @@ function ApplicationBoardContent(props: Props) {
     )
 }
 
-function RenderEntryComponent({
-    application,
-    popperBoundary,
-}: {
-    application: Application
-    popperBoundary?: HTMLElement | null
-}) {
+function RenderEntryComponent({ application }: { application: Application; popperBoundary?: HTMLElement | null }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -235,9 +228,7 @@ function RenderEntryComponent({
     })()
     // #endregion
 
-    return (
-        <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} popperBoundary={popperBoundary} />
-    )
+    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
 }
 
 interface ApplicationEntryStatusContextProps {

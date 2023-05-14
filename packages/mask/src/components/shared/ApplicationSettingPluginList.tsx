@@ -1,12 +1,11 @@
-import { useMemo, memo } from 'react'
-import { useActivatedPluginsSNSAdaptor, type Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor, type Plugin } from '@masknet/plugin-infra/content-script'
 import type { PluginID } from '@masknet/shared-base'
+import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItem, Typography } from '@mui/material'
-import { makeStyles, getMaskColor, ShadowRootTooltip, Boundary, useBoundedPopperProps } from '@masknet/theme'
-import { useI18N } from '../../utils/index.js'
-import { PersistentStorages } from '../../../shared/index.js'
-import { useAsync } from 'react-use'
+import { memo, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
+import { PersistentStorages } from '../../../shared/index.js'
+import { useI18N } from '../../utils/index.js'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
@@ -16,11 +15,11 @@ export interface Application {
 }
 
 export function useUnlistedEntries() {
-    return useSubscription(PersistentStorages.ApplicationEntryUnListed.storage.list.subscription)
+    return useSubscription(PersistentStorages.ApplicationEntryUnListed.storage.data.subscription)
 }
 
 async function toggleEntryListing(entryId: string, listing: boolean) {
-    const state = PersistentStorages.ApplicationEntryUnListed.storage.list
+    const state = PersistentStorages.ApplicationEntryUnListed.storage.data
     if (!state.initialized) await state.initializedPromise
     if (listing) {
         state.setValue(state.value.filter((id) => id !== entryId))
@@ -83,30 +82,9 @@ const useStyles = makeStyles<{
     },
 }))
 
-/**
- * Migrate from legacy data
- */
-function useMigrateData() {
-    useAsync(async () => {
-        await PersistentStorages.ApplicationEntryUnListedList.storage.current.initializedPromise
-        await PersistentStorages.ApplicationEntryUnListed.storage.list.initializedPromise
-        const legacyData = PersistentStorages.ApplicationEntryUnListedList.storage.current.value
-        const newData = PersistentStorages.ApplicationEntryUnListed.storage.list.value
-        const pairs = Array.from(Object.entries(legacyData))
-        const unlisted = pairs.filter((x) => x[1])
-        if (unlisted.length && !newData.length) {
-            const legacyList = unlisted.map((x) => x[0])
-            PersistentStorages.ApplicationEntryUnListed.storage.list.setValue(legacyList)
-            PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({})
-        }
-    }, [])
-}
-
 export function ApplicationSettingPluginList() {
     const { classes } = useStyles({ iconFilterColor: undefined })
     const { t } = useI18N()
-
-    useMigrateData()
 
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const applicationList = useMemo(() => {

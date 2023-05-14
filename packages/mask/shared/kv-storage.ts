@@ -23,6 +23,9 @@ export const InMemoryStorages = {
     }),
 }
 
+/**
+ * @deprecated Will be removed in 2.23
+ */
 const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 const APPLICATION_ENTRY_UNLISTED = 'APPLICATION_ENTRY_UNLISTED'
 export const PersistentStorages = {
@@ -30,7 +33,9 @@ export const PersistentStorages = {
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
-    /** @deprecated */
+    /**
+     * @deprecated Will be removed in 2.23
+     */
     ApplicationEntryUnListedList: createPersistentKVStorage<{
         current: {
             [key: string]: boolean
@@ -52,5 +57,23 @@ export const PersistentStorages = {
             [PluginID.GoPlusSecurity]: false,
         },
     }),
-    ApplicationEntryUnListed: createPersistentKVStorage<{ list: string[] }>(APPLICATION_ENTRY_UNLISTED, { list: [] }),
+    ApplicationEntryUnListed: createPersistentKVStorage<{ data: string[] }>(APPLICATION_ENTRY_UNLISTED, { data: [] }),
 }
+
+// TODO remove in 2.23
+async function migrateUnlistedEntries() {
+    await Promise.allSettled([
+        PersistentStorages.ApplicationEntryUnListedList.storage.current.initializedPromise,
+        PersistentStorages.ApplicationEntryUnListed.storage.data.initializedPromise,
+    ])
+    const legacyData = PersistentStorages.ApplicationEntryUnListedList.storage.current.value
+    const newData = PersistentStorages.ApplicationEntryUnListed.storage.data.value
+    const pairs = Array.from(Object.entries(legacyData))
+    const unlisted = pairs.filter((x) => x[1])
+    if (unlisted.length && !newData.length) {
+        const legacyList = unlisted.map((x) => x[0])
+        PersistentStorages.ApplicationEntryUnListed.storage.data.setValue(legacyList)
+        PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({})
+    }
+}
+migrateUnlistedEntries()
