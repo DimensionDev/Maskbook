@@ -114,7 +114,10 @@ class Connection implements BaseConnection {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('No payer provides.')
         const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+            this.connections.get(options.chainId) ??
+            new SolConnection(NETWORK_ENDPOINTS[options.chainId], {
+                fetch: globalThis.r2d2Fetch,
+            })
 
         const payerPubkey = new PublicKey(options.account)
         const recipientPubkey = new PublicKey(recipient)
@@ -321,8 +324,13 @@ class Connection implements BaseConnection {
 
     async getBalance(account: string, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const balance = await this.getWeb3Connection(options).getBalance(decodeAddress(account))
-        return balance.toFixed()
+        try {
+            const balance = await this.getWeb3Connection(options).getBalance(decodeAddress(account))
+            return balance.toFixed()
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
     }
 
     getTransaction(id: string, initial?: SolanaWeb3ConnectionOptions) {
