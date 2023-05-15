@@ -8,7 +8,7 @@ export type TokenApprovalInfoAccountMap = Record<
         ChainId,
         {
             spenderList: Record<string, BigNumber>
-            toBlock: number
+            fromBlock: number
         }
     >
 >
@@ -19,7 +19,7 @@ export type NFTApprovalInfoAccountMap = Record<
         ChainId,
         {
             spenderList: Record<string, boolean>
-            toBlock: number
+            fromBlock: number
         }
     >
 >
@@ -36,17 +36,19 @@ export class ApprovalListState {
         return this._nft_state
     }
 
-    public updateTokenState(account: string, spender: string, chainId: ChainId, toBlock: number, amount: BigNumber) {
+    public updateTokenState(account: string, spender: string, chainId: ChainId, fromBlock: number, amount: BigNumber) {
         return produce(this._token_state, (draft) => {
             draft[account][chainId].spenderList[spender] = amount
-            draft[account][chainId].toBlock = toBlock
+            draft[account][chainId].fromBlock = fromBlock
         })
     }
 
-    public updateNFT_State(account: string, spender: string, chainId: ChainId, toBlock: number, approved: boolean) {
+    public updateNFT_State(account: string, spender: string, chainId: ChainId, fromBlock: number, approved: boolean) {
         return produce(this._nft_state, (draft) => {
             draft[account][chainId].spenderList[spender] = approved
-            draft[account][chainId].toBlock = toBlock
+            draft[account][chainId].fromBlock = fromBlock
         })
     }
 }
+
+export const approvalListState = new ApprovalListState()
