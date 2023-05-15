@@ -89,6 +89,8 @@ export enum SourceType {
 
     // Token List
     R2D2 = 'R2D2',
+
+    Approval = 'Approval',
 }
 
 export enum SearchResultType {
