@@ -18,6 +18,7 @@ import {
     sendAndConfirmRawTransaction,
     SystemProgram,
     Transaction,
+    FetchFn,
 } from '@solana/web3.js'
 import { NETWORK_ENDPOINTS, SOL_ADDRESS } from '../../constants'
 import { SolanaRPC } from '../../messages'
@@ -116,7 +117,7 @@ class Connection implements BaseConnection {
         const connection =
             this.connections.get(options.chainId) ??
             new SolConnection(NETWORK_ENDPOINTS[options.chainId], {
-                fetch: globalThis.r2d2Fetch,
+                fetch: globalThis.r2d2Fetch as unknown as FetchFn,
             })
 
         const payerPubkey = new PublicKey(options.account)
@@ -283,7 +284,10 @@ class Connection implements BaseConnection {
     getWeb3Connection(initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
         const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+            this.connections.get(options.chainId) ??
+            new SolConnection(NETWORK_ENDPOINTS[options.chainId], {
+                fetch: globalThis.r2d2Fetch as unknown as FetchFn,
+            })
         this.connections.set(options.chainId, connection)
         return connection
     }
@@ -324,13 +328,8 @@ class Connection implements BaseConnection {
 
     async getBalance(account: string, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        try {
-            const balance = await this.getWeb3Connection(options).getBalance(decodeAddress(account))
-            return balance.toFixed()
-        } catch (error) {
-            console.log(error)
-            throw error
-        }
+        const balance = await this.getWeb3Connection(options).getBalance(decodeAddress(account))
+        return balance.toFixed()
     }
 
     getTransaction(id: string, initial?: SolanaWeb3ConnectionOptions) {
