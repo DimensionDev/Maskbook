@@ -1,5 +1,5 @@
 import '@sentry/tracing'
-import { Breadcrumbs, type Event, GlobalHandlers, init } from '@sentry/browser'
+import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import { Flags } from '@masknet/flags'
 import {
     getSiteType,
