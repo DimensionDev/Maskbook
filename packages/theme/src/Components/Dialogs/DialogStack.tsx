@@ -1,4 +1,4 @@
-import { useRef, useContext, createContext, useState, useMemo, useEffect } from 'react'
+import { useRef, useContext, createContext, useState, useMemo, useLayoutEffect } from 'react'
 import { type DialogProps } from '@mui/material'
 import { noop } from 'lodash-es'
 
@@ -54,9 +54,9 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
     // the stack will be ["B", "A"] (B pushed into the stack first.)
     // we need to notify the context the react component tree hierarchy to order them correctly.
     const parentID = useContext(DialogHierarchyContext)
-    useEffect(() => setParent(selfID, parentID), [parentID])
+    useLayoutEffect(() => setParent(selfID, parentID), [parentID])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         open ? push(selfID) : pop(selfID)
         return () => pop(selfID)
     }, [open])
