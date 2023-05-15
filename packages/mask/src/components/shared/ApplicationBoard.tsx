@@ -183,7 +183,7 @@ function ApplicationBoardContent(props: Props) {
     )
 }
 
-function RenderEntryComponent({ application }: { application: Application; popperBoundary?: HTMLElement | null }) {
+function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(

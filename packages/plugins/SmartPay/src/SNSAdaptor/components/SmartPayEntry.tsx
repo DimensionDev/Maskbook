@@ -12,7 +12,6 @@ export interface SmartPayEntryProps {
     disabled: boolean
     tooltipHint?: string
     onClick?: (walletConnectedCallback?: () => void) => void
-    popperBoundary?: HTMLElement | null
 }
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {

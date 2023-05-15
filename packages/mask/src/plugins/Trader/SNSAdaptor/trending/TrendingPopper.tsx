@@ -1,9 +1,8 @@
 import type { SocialIdentity } from '@masknet/shared-base'
-import { useDialogStacking } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { ClickAwayListener, Fade } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages.js'
 
@@ -22,9 +21,10 @@ export interface TrendingPopperProps {
          */
         reposition?: () => void,
     ) => React.ReactNode
+    locked?: boolean
 }
 
-export function TrendingPopper({ children }: TrendingPopperProps) {
+export const TrendingPopper = memo(function TrendingPopper({ children, locked }: TrendingPopperProps) {
     const [active, setActive] = useState(false)
     const [name, setName] = useState('')
     const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
@@ -34,8 +34,6 @@ export function TrendingPopper({ children }: TrendingPopperProps) {
     const [currentResult, setCurrentResult] = useState<Web3Helper.TokenResultAll>()
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [initialOffsetY, setInitialOffsetY] = useState(0)
-
-    const { stack } = useDialogStacking()
 
     // open popper from message center
     const position = useWindowScroll()
@@ -77,7 +75,7 @@ export function TrendingPopper({ children }: TrendingPopperProps) {
     return (
         <ClickAwayListener
             onClickAway={() => {
-                if (!stack.length) setActive(false)
+                if (!locked) setActive(false)
             }}>
             <Fade in={active} easing="linear" timeout={250}>
                 <div
@@ -102,4 +100,4 @@ export function TrendingPopper({ children }: TrendingPopperProps) {
             </Fade>
         </ClickAwayListener>
     )
-}
+})
