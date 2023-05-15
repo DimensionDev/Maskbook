@@ -4,13 +4,12 @@ import type { BigNumber } from 'bignumber.js'
 
 export type TokenApprovalInfoAccountMap = Record<
     string,
-    Record<
-        ChainId,
-        {
-            spenderList: Record<string, BigNumber>
+    {
+        [key in ChainId]?: {
+            spenderList: Record<string, Record<string, BigNumber>>
             fromBlock: number
         }
-    >
+    }
 >
 
 export type NFTApprovalInfoAccountMap = Record<
@@ -18,7 +17,7 @@ export type NFTApprovalInfoAccountMap = Record<
     Record<
         ChainId,
         {
-            spenderList: Record<string, boolean>
+            spenderList: Record<string, Record<string, boolean>>
             fromBlock: number
         }
     >
@@ -36,16 +35,41 @@ export class ApprovalListState {
         return this._nft_state
     }
 
-    public updateTokenState(account: string, spender: string, chainId: ChainId, fromBlock: number, amount: BigNumber) {
-        return produce(this._token_state, (draft) => {
-            draft[account][chainId].spenderList[spender] = amount
-            draft[account][chainId].fromBlock = fromBlock
+    public updateTokenState(
+        account: string,
+        spender: string,
+        address: string,
+        chainId: ChainId,
+        fromBlock: number,
+        amount: BigNumber,
+    ) {
+        this._token_state = produce(this._token_state, (draft) => {
+            if (!draft[account]) draft[account] = {}
+            if (!draft[account][chainId]) {
+                draft[account][chainId] = { spenderList: { [spender]: { [address]: amount } }, fromBlock }
+            }
+            if (!draft[account][chainId]!.spenderList) {
+                draft[account][chainId]!.spenderList = { [spender]: { [address]: amount } }
+            }
+            if (!draft[account][chainId]!.spenderList[spender]) {
+                draft[account][chainId]!.spenderList[spender] = { [address]: amount }
+            }
+
+            draft[account][chainId]!.spenderList[spender][address] = amount
+            draft[account][chainId]!.fromBlock = fromBlock
         })
     }
 
-    public updateNFT_State(account: string, spender: string, chainId: ChainId, fromBlock: number, approved: boolean) {
-        return produce(this._nft_state, (draft) => {
-            draft[account][chainId].spenderList[spender] = approved
+    public updateNFT_State(
+        account: string,
+        spender: string,
+        address: string,
+        chainId: ChainId,
+        fromBlock: number,
+        approved: boolean,
+    ) {
+        this._nft_state = produce(this._nft_state, (draft) => {
+            draft[account][chainId].spenderList[spender][address] = approved
             draft[account][chainId].fromBlock = fromBlock
         })
     }
