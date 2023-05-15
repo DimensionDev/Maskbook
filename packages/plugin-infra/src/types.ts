@@ -564,7 +564,7 @@ export namespace Plugin.SNSAdaptor {
         RenderEntryComponent?: (props: {
             disabled: boolean
             tooltipHint?: string
-            onClick?: (walletConnectedCallback?: () => void) => void
+            onClick?: (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) => void
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board

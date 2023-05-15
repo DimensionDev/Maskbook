@@ -20,6 +20,7 @@ import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgain
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -202,8 +203,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
-            return (walletConnectedCallback?: () => void) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback })
+            return (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) =>
+                setSelectProviderDialog({ open: true, walletConnectedCallback, requiredSupportPluginID })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
