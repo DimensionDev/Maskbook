@@ -186,7 +186,6 @@ export function FollowLensDialog() {
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
         profile?.id,
         (event: MouseEvent<HTMLElement>) => {
-            showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
             setIsFollowing(false)
         },
         () => setIsFollowing(true),
