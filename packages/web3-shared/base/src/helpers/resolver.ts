@@ -345,6 +345,8 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return `https://warpcast.com/${identifier}`
         case NextIDPlatform.Bit:
             return `https://bit.cc/${name}`
+        case NextIDPlatform.Unstoppable:
+            return `https://ud.me/${name}`
         default:
             return ''
     }
