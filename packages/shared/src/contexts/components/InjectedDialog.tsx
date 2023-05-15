@@ -207,6 +207,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                     !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
                 BackdropProps={{
+                    transitionDuration: 0,
                     classes: {
                         root: dialogBackdropRoot,
                     },
