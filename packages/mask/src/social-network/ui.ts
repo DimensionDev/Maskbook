@@ -53,14 +53,14 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     configureSelectorMissReporter((name) => {
-        if (crypto.getRandomValues(new Uint8Array(1))[0] > 26) return
-        // drop 90% of selector missing reports
         const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
         error.stack = ''
         Sentry.captureException({
             error,
             exceptionID: TelemetryAPI.ExceptionID.Debug,
             exceptionType: TelemetryAPI.ExceptionType.Error,
+            // drop 90% of selector missing reports
+            sampleRate: 0.1,
         })
     })
     setupReactShadowRootEnvironment()
