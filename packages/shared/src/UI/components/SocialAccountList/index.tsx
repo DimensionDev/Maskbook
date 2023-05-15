@@ -1,13 +1,14 @@
 import { isNonNull } from '@masknet/kit'
 import { useMenuConfig } from '@masknet/shared'
-import { NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { Firefly } from '@masknet/web3-providers'
 import { Button, type MenuProps } from '@mui/material'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useRef, type HTMLProps } from 'react'
-import { useWindowScroll } from 'react-use'
-import { resolveNextIDPlatformIcon } from './utils.js'
+import { useAsync, useWindowScroll } from 'react-use'
 import { SocialAccountListItem } from './SocialListItem.js'
+import { resolveNextIDPlatformIcon } from './utils.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,9 +59,10 @@ const useStyles = makeStyles()((theme) => {
 
 interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
     nextIdBindings: BindingProof[]
+    userId?: string
 }
 
-export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: SocialAccountListProps) {
+export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...rest }: SocialAccountListProps) {
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
     const orderedBindings = useMemo(() => {
@@ -70,9 +72,16 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
         })
     }, [nextIdBindings])
 
+    const { value: accounts = EMPTY_LIST } = useAsync(async () => {
+        if (!userId) return
+        return Firefly.getLensByTwitterId(userId)
+    }, [userId])
+
     const [menu, openMenu, closeMenu] = useMenuConfig(
         orderedBindings.map((x, i) => {
-            return <SocialAccountListItem key={i} {...x} onClose={() => closeMenu()} />
+            const isLens = x.platform === NextIDPlatform.LENS
+            const profileUri = isLens ? accounts.find((y) => y.handle === x.identity)?.profileUri : undefined
+            return <SocialAccountListItem key={i} {...x} profileUrl={profileUri?.[0]} onClose={() => closeMenu()} />
         }),
         {
             hideBackdrop: true,

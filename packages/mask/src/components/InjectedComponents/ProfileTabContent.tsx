@@ -467,7 +467,7 @@ function Content(props: ProfileTabContentProps) {
                                     fromSocialCard
                                 />
                             </ThemeProvider>
-                            <SocialAccountList nextIdBindings={nextIdBindings} />
+                            <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography
