@@ -66,6 +66,7 @@
     "date-fns": "^2.29.3",
     "fuse.js": "6.6.2",
     "fortmatic": "^2.2.1",
+    "immer": "^10.0.1",
     "graphql-request": "^6.0.0",
     "json-stable-stringify": "^1.0.2",
     "lru-cache": "^9.1.0",
