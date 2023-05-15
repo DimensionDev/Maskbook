@@ -177,6 +177,12 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
+    private shouldRecord(sampleRate = 1) {
+        const rate = sampleRate % 1
+        if (rate >= 1 || rate < 0) return true
+        return crypto.getRandomValues(new Uint8Array(1))[0] > 255 - Math.floor(255 * sampleRate)
+    }
+
     private createCommonEvent(
         groupID: TelemetryAPI.GroupID,
         type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
@@ -227,6 +233,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
+        if (!this.shouldRecord(options.sampleRate)) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
@@ -246,7 +253,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
-
+        if (!this.shouldRecord(options.sampleRate)) return
         Sentry.captureException(options.error, this.createException(options))
     }
 }
