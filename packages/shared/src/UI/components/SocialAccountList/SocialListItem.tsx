@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, useSharedI18N } from '@masknet/shared'
+import { CopyButton, Image, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
@@ -32,6 +32,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 40,
         display: 'flex',
         alignItems: 'center',
+    },
+    avatar: {
+        borderRadius: '50%',
     },
     socialName: {
         color: theme.palette.maskColor.main,
@@ -133,6 +136,7 @@ interface SocialAccountListItemProps {
     onClose: () => void
     relatedList?: BindingProof[]
     link?: string
+    profileUrl?: string
 }
 
 export function SocialAccountListItem({
@@ -142,11 +146,11 @@ export function SocialAccountListItem({
     name,
     onClose,
     relatedList,
+    profileUrl,
 }: SocialAccountListItemProps) {
     const t = useSharedI18N()
     const { account } = useChainContext()
     const { classes, cx } = useStyles()
-    const Icon = resolveNextIDPlatformIcon(platform)
 
     const { loading, value } = useAsync(async () => {
         if (platform !== NextIDPlatform.LENS || !identity) return
@@ -157,6 +161,15 @@ export function SocialAccountListItem({
             isFollowing,
         }
     }, [identity, platform !== NextIDPlatform.LENS, account])
+
+    const PlatformIcon = resolveNextIDPlatformIcon(platform)
+    const renderIcon = PlatformIcon ? <PlatformIcon size={20} /> : null
+
+    const icon = profileUrl ? (
+        <Image size={20} src={profileUrl} className={classes.avatar} fallback={renderIcon} />
+    ) : (
+        renderIcon
+    )
 
     return (
         <SocialTooltip platform={platform}>
@@ -173,7 +186,7 @@ export function SocialAccountListItem({
                     return openWindow(link ?? resolveNextIDPlatformLink(platform, identity, name))
                 }}>
                 <div className={classes.content}>
-                    {Icon ? <Icon size={20} /> : null}
+                    {icon}
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
                         {name || identity}
                         {platform === NextIDPlatform.ENS ? <ENSAddress domain={identity} /> : null}

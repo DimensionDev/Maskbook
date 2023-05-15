@@ -45,7 +45,7 @@ export interface ImageProps
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
     size?: number | string
     rounded?: boolean
-    fallback?: URL | string | JSX.Element
+    fallback?: URL | string | JSX.Element | null
     disableSpinner?: boolean
     containerProps?: HTMLProps<HTMLDivElement>
 }
