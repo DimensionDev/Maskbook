@@ -21,7 +21,7 @@ export class Confetto {
         }
 
         this.position = {
-            x: randomRange(canvasHeight / 2 - buttonOffsetWidth / 4, canvasWidth / 2 + buttonOffsetWidth / 4),
+            x: randomRange(canvasWidth / 2 - buttonOffsetWidth / 4, canvasWidth / 2 + buttonOffsetWidth / 4),
             y: randomRange(
                 canvasHeight / 2 + buttonOffsetHeight / 2 + 8,
                 canvasHeight / 2 + 1.5 * buttonOffsetHeight - 8,
