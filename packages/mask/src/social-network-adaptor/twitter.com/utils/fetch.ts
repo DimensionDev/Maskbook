@@ -32,12 +32,10 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const name = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('a:not([target]) > div > div[dir="auto"] > span'),
-    )
-
+    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a div div > span'))
+    // Note: quoted tweet has no [data-testid^="User-Name"]
     const handle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] > div > span'),
+        tweetElement.querySelector<HTMLElement>('[data-testid="User-Name"] a[tabindex="-1"] > div > span'),
     )
 
     if (name && handle) {
@@ -46,7 +44,6 @@ export const postNameParser = (node: HTMLElement) => {
             handle: handle.slice(1),
         }
     }
-
     const quotedTweetName = collectNodeText(
         tweetElement
             .querySelector('[data-testid="UserAvatar-Container-unknown"]')
