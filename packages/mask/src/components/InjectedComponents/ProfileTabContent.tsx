@@ -340,7 +340,7 @@ function Content(props: ProfileTabContentProps) {
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <GrantPermissions
-                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? []}
+                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? EMPTY_LIST}
                             onGrant={onGrant}
                         />
                     </PluginCardFrameMini>
