@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider } from '@mui/material'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,
     applyMaskColorVars,
@@ -46,6 +47,9 @@ export default function DashboardRoot() {
         <EnvironmentContextProvider value={Web3ContextType}>
             <Web3ContextProvider value={Web3ContextType}>
                 <QueryClientProvider client={queryClient}>
+                    {process.env.NODE_ENV === 'development' ? (
+                        <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
+                    ) : null}
                     <TelemetryProvider>
                         <I18NextProviderHMR i18n={i18NextInstance}>
                             <StyledEngineProvider injectFirst>
