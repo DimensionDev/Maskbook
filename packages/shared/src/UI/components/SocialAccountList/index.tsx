@@ -1,6 +1,6 @@
 import { isNonNull } from '@masknet/kit'
 import { useMenuConfig } from '@masknet/shared'
-import { NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import { NextIDPlatform, type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, type MenuProps } from '@mui/material'
 import { uniqBy } from 'lodash-es'
@@ -9,6 +9,7 @@ import { useWindowScroll } from 'react-use'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
 
 interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
     nextIdBindings: BindingProof[]
-    lensAccounts: FireflyBaseAPI.LensAccount[]
+    userId?: string
 }
 
 const FireflyLensToNextIdLens = (account: FireflyBaseAPI.LensAccount): BindingProof => {
@@ -73,31 +74,27 @@ const FireflyLensToNextIdLens = (account: FireflyBaseAPI.LensAccount): BindingPr
     }
 }
 
-export function SocialAccountList({
-    nextIdBindings,
-    disablePortal,
-    lensAccounts: accounts,
-    ...rest
-}: SocialAccountListProps) {
+export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...rest }: SocialAccountListProps) {
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
 
+    const { value: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
     // Merge and sort
     const orderedBindings = useMemo(() => {
         const merged = uniqBy(
-            [...accounts.map(FireflyLensToNextIdLens), ...nextIdBindings],
+            [...lensAccounts.map(FireflyLensToNextIdLens), ...nextIdBindings],
             (x) => `${x.platform}.${x.identity}`,
         )
         return merged.sort((a, z) => {
             if (a.platform === z.platform) return 0
             return a.platform === NextIDPlatform.LENS ? -1 : 0
         })
-    }, [accounts, nextIdBindings])
+    }, [lensAccounts, nextIdBindings])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
         orderedBindings.map((x, i) => {
             const isLens = x.platform === NextIDPlatform.LENS
-            const profileUri = isLens ? accounts.find((y) => y.handle === x.identity)?.profileUri : undefined
+            const profileUri = isLens ? lensAccounts.find((y) => y.handle === x.identity)?.profileUri : undefined
             return <SocialAccountListItem key={i} {...x} profileUrl={profileUri?.[0]} onClose={() => closeMenu()} />
         }),
         {
