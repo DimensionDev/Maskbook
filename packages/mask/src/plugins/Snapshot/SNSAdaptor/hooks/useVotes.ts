@@ -1,8 +1,8 @@
-import { PluginSnapshotRPC } from '../../messages'
 import type { VoteItem, ProposalIdentifier } from '../../types'
 import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { sumBy } from 'lodash-unified'
+import { getScores } from '../../utils'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItem[]] | [2, Error]>()
 export function votesRetry() {
@@ -16,19 +16,10 @@ export function useVotes(identifier: ProposalIdentifier) {
 async function Suspender(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)
 
-    const voters = proposal.votes.map((v) => v.voter)
-    const scores = await PluginSnapshotRPC.getScores(
-        proposal.snapshot,
-        voters,
-        proposal.network,
-        identifier.space,
-        proposal.strategies,
-    )
+    const scores = getScores(proposal)
     const strategies = proposal.strategies
-    const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
-    const profileEntries = Object.fromEntries(profiles.map((p) => [p.contract_address, p]))
     return proposal.votes
-        .map((v) => {
+        .map((v): VoteItem => {
             const choices =
                 typeof v.choice === 'number'
                     ? undefined
@@ -45,7 +36,7 @@ async function Suspender(identifier: ProposalIdentifier) {
                       }))
             return {
                 choiceIndex: typeof v.choice === 'number' ? v.choice : undefined,
-                choiceIndexes: typeof v.choice === 'number' ? undefined : Object.keys(v.choice).map((i) => Number(i)),
+                choiceIndexes: typeof v.choice === 'number' ? undefined : Object.keys(v.choice).map(Number),
                 choice: typeof v.choice === 'number' ? proposal.choices[v.choice - 1] : undefined,
                 choices,
                 totalWeight: choices
@@ -54,12 +45,10 @@ async function Suspender(identifier: ProposalIdentifier) {
                         : sumBy(choices, (choice) => choice.weight)
                     : undefined,
                 address: v.voter,
-                authorIpfsHash: v.id,
+                authorIpfsHash: v.ipfs ?? v.id,
                 balance: sumBy(scores, (score) => score[v.voter.toLowerCase()] ?? 0),
-                scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
+                scores: scores.map((score) => score[v.voter.toLowerCase()] || 0),
                 strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
-                authorName: profileEntries[v.voter.toLowerCase()]?.name,
-                authorAvatar: profileEntries[v.voter.toLowerCase()]?.image,
                 timestamp: v.created,
             }
         })
