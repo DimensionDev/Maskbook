@@ -211,7 +211,8 @@ export const postsContentSelector = () =>
         ].join(','),
     )
 
-export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
+export const postAvatarsContentSelector = () =>
+    querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
 
 export const postAvatarSelector = () => querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
 export const followUserAvatarSelector = () =>
