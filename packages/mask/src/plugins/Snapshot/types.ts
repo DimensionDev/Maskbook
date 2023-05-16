@@ -9,6 +9,7 @@ export interface ProposalIdentifier {
     id: string
 }
 export interface RawVote {
+    [x: string]: string
     /**
      * There're two sorts of vote,
      * for multiple choice vote, each choice can be assigned to a different weight.
@@ -17,6 +18,8 @@ export interface RawVote {
     created: number
     voter: string
     id: string
+    vp: number
+    vp_by_strategy: number[]
 }
 
 export interface Proposal {
@@ -103,8 +106,6 @@ export interface VoteItem {
     /** the consist detail of voting power */
     scores: number[]
     strategySymbol: string
-    authorName: string | null
-    authorAvatar: string | null
     choiceIndex: number | undefined
     choiceIndexes: number[] | undefined
     timestamp: number

@@ -126,6 +126,7 @@ function Content() {
                                 title={
                                     <Typography className={classes.ellipsisText}>
                                         {result.powerDetail
+                                            .filter((x) => x.power)
                                             .flatMap((detail, index) => {
                                                 const name = millify(detail.power, {
                                                     precision: 2,
