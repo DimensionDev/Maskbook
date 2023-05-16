@@ -5,6 +5,8 @@ on:
     branches: [master, develop, released, hotfix/*, release/*]
   pull_request:
     branches: [master, develop, released, hotfix/*, release/*]
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: read
@@ -20,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: npx prettier@2.8.4 --check .
+      - run: npx prettier@2.8.8 --check .
   markdownlint:
     runs-on: ubuntu-latest
     steps:
@@ -93,6 +95,9 @@ jobs:
           restore-keys: linter-
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
+      - run: npx gulp codegen
+      - run: echo "If you error at next line, please run npx gulp codegen and commit it!"
+      - run: git diff --exit-code
       - name: Run Eslint
         run: |
           # report to stdio and to file, it's cached, the second run should be fast

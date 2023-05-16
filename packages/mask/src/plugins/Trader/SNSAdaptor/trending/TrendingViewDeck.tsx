@@ -233,7 +233,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 userId: identity?.identifier?.userId,
                 badgeBounding,
                 address,
-                openFromTrendingCard: true,
+                external: true,
             })
 
             setActive?.(false)

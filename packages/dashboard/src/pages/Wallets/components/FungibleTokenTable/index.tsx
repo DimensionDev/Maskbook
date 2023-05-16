@@ -1,19 +1,19 @@
+import { Icons } from '@masknet/icons'
+import { CrossIsolationMessages, DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNativeToken, useNetworkContext } from '@masknet/web3-hooks-base'
+import { CurrencyType, isGreaterThanOrEqualTo, isLessThan, leftShift, minus, toZero } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales/index.js'
-import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
-import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
-import { NetworkPluginID, DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
-import { CurrencyType, isGreaterThanOrEqualTo, isLessThan, leftShift, minus, toZero } from '@masknet/web3-shared-base'
-import { useNetworkContext, useNativeToken } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { Context } from '../../hooks/useContext.js'
+import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
+import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -88,7 +88,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
         const results =
             fungibleAssets.value?.filter((x) => !selectedChainId || x.chainId === selectedChainId) ?? EMPTY_LIST
 
-        if (!selectedChainId)
+        if (!selectedChainId) {
             return results.sort((a, z) => {
                 const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
                 const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
@@ -98,6 +98,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
 
                 return 0
             })
+        }
 
         if (!results.length && nativeToken) {
             return [
@@ -111,13 +112,37 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
         return results
     }, [nativeToken, fungibleAssets.value, selectedChainId])
 
+    const handleSwitch = useCallback(() => {
+        setIsExpand((x) => !x)
+    }, [])
+
+    const hasLowValueToken = useMemo(() => {
+        return !!dataSource.find((x) => !isNativeTokenAddress(x.address) && isLessThan(x.value?.usd ?? 0, 1))
+    }, [dataSource])
+
+    const sortedData = useMemo(() => {
+        return dataSource.sort((first, second) => {
+            const firstValue = leftShift(first.balance, first.decimals)
+            const secondValue = leftShift(second.balance, second.decimals)
+            if (firstValue.isEqualTo(secondValue)) return 0
+            return Number(firstValue.lt(secondValue))
+        })
+    }, [dataSource])
+
+    const visibleData = useMemo(() => {
+        if (isExpand) return sortedData
+        return sortedData.filter((asset) => {
+            return isNativeTokenAddress(asset.address) || isGreaterThanOrEqualTo(asset.value?.usd ?? 0, 1)
+        })
+    }, [isExpand, sortedData])
+
     return (
         <>
             <TokenTableUI
                 isLoading={fungibleAssets.loading}
                 isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
                 isExpand={isExpand}
-                dataSource={dataSource}
+                data={visibleData}
                 onSwap={onSwap}
                 onSend={onSend}
             />
@@ -125,66 +150,55 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
                 isLoading={fungibleAssets.loading}
                 isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
                 isExpand={isExpand}
-                dataSource={dataSource}
-                onSwitch={() => setIsExpand((x) => !x)}
+                hasLowValueToken={hasLowValueToken}
+                onSwitch={handleSwitch}
             />
         </>
     )
 })
 
+FungibleTokenTable.displayName = 'FungibleTokenTable'
+
 export interface MoreBarUIProps {
     isEmpty: boolean
     isExpand: boolean
     isLoading: boolean
-    dataSource: Web3Helper.FungibleAssetAll[]
+    hasLowValueToken: boolean
     onSwitch: () => void
 }
 
-export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, dataSource, onSwitch }) => {
+export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, hasLowValueToken, onSwitch }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const hasLowValueToken = !!dataSource.find(
-        (x) => !isNativeTokenAddress(x.address) && isLessThan(x.value?.usd ?? 0, 1),
-    )
 
-    if (isEmpty || isLoading || !hasLowValueToken || !dataSource.length) return null
-    if (isExpand)
-        return (
-            <Typography className={classes.more}>
-                <span className={classes.moreBody} onClick={onSwitch}>
-                    <span>
-                        {t.wallets_assets_more_collapse({
-                            direction: '<',
-                        })}
-                    </span>
-                    <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
-                </span>
-            </Typography>
-        )
+    if (isEmpty || isLoading || !hasLowValueToken) return null
     return (
         <Typography className={classes.more}>
             <span className={classes.moreBody} onClick={onSwitch}>
                 <span>
-                    {t.wallets_assets_more_expand({
-                        direction: '<',
+                    {t.wallets_assets_more({
+                        symbol: '<',
+                        context: isExpand ? 'expanded' : 'collapsed',
                     })}
                 </span>
-                <Icons.ArrowDrop />
+                <Icons.ArrowDrop style={{ transform: isExpand ? 'rotate(180deg)' : undefined }} />
             </span>
         </Typography>
     )
 })
 
+MoreBarUI.displayName = 'MoreBarUI'
+
 export interface TokenTableUIProps {
     isEmpty: boolean
     isExpand: boolean
     isLoading: boolean
-    dataSource: Web3Helper.FungibleAssetAll[]
+    data: Web3Helper.FungibleAssetAll[]
     onSwap(token: Web3Helper.FungibleAssetAll): void
     onSend(token: Web3Helper.FungibleAssetAll): void
 }
 
-export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, dataSource }) => {
+export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, data }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const { pluginID: currentPluginId } = useNetworkContext()
@@ -220,31 +234,16 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             </TableRow>
                         </TableHead>
 
-                        {dataSource.length ? (
+                        {data.length ? (
                             <TableBody>
-                                {dataSource
-                                    .sort((first, second) => {
-                                        const firstValue = leftShift(first.balance, first.decimals)
-                                        const secondValue = leftShift(second.balance, second.decimals)
-                                        if (firstValue.isEqualTo(secondValue)) return 0
-                                        return Number(firstValue.lt(secondValue))
-                                    })
-                                    .filter(
-                                        (asset) =>
-                                            isExpand ||
-                                            isNativeTokenAddress(asset.address) ||
-                                            isGreaterThanOrEqualTo(asset.value?.usd ?? 0, 1),
-                                    )
-                                    .map((asset) => {
-                                        return (
-                                            <FungibleTokenTableRow
-                                                onSend={() => onSend(asset)}
-                                                onSwap={() => onSwap(asset)}
-                                                asset={asset}
-                                                key={`${asset.address}_${asset.chainId}`}
-                                            />
-                                        )
-                                    })}
+                                {data.map((asset) => (
+                                    <FungibleTokenTableRow
+                                        onSend={onSend}
+                                        onSwap={onSwap}
+                                        asset={asset}
+                                        key={`${asset.address}_${asset.chainId}`}
+                                    />
+                                ))}
                             </TableBody>
                         ) : null}
                     </Table>
@@ -253,3 +252,5 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
         </>
     )
 })
+
+TokenTableUI.displayName = 'TokenTableUI'

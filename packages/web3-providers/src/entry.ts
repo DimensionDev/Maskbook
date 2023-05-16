@@ -50,10 +50,14 @@ import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './Connection/EVM/apis/Web3SignerAPI.js'
 import {
     Web3API,
+    Web3StateAPI,
     Web3GasOptionAPI,
     FlowWeb3API,
+    FlowWeb3StateAPI,
     FlowFungibleAPI,
+    SolanaDomainAPI,
     SolanaWeb3API,
+    SolanaWeb3StateAPI,
     SolanaFungibleAPI,
     SolanaNonFungibleAPI,
 } from './Connection/index.js'
@@ -61,13 +65,19 @@ import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
+import { ARBID_API } from './ARBID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
-import { SimpleHashProviderAPI } from './SimpleHash/index.js'
+import { SimpleHashAPI_EVM, SimpleHashAPI_Solana } from './SimpleHash/index.js'
 import { RSS3API } from './RSS3/index.js'
 import { LidoAPI } from './Lido/index.js'
 import { Web3BioAPI } from './Web3Bio/index.js'
+import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
+import { AirdropAPI } from './Airdrop/index.js'
+import { FireflyAPI } from './Firefly/index.js'
+import { SID_DomainAPI } from './SID/index.js'
+import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -99,7 +109,10 @@ export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
-export const SimpleHash = new SimpleHashProviderAPI()
+export const SimpleHashEVM = new SimpleHashAPI_EVM()
+export const SimpleHashSolana = new SimpleHashAPI_Solana()
+export const SnapshotSearch = new SnapshotSearchAPI()
+export const Snapshot = new SnapshotAPI()
 
 // Wallet
 export {
@@ -110,17 +123,25 @@ export {
     EVM_Composers,
 } from './Connection/index.js'
 
+// Plugin Context
+export const SharedUIPluginContext = new SharedUIContextAPI()
+export const SNSAdaptorPluginContext = new SNSAdaptorContextAPI()
+
 // EVM Connection
 export const Web3 = new Web3API()
 export const Web3GasOption = new Web3GasOptionAPI()
 export const Web3Signer = new Web3SignerAPI()
+export const Web3State = new Web3StateAPI()
 
 // Flow Connection
 export const FlowWeb3 = new FlowWeb3API()
+export const FlowWeb3State = new FlowWeb3StateAPI()
 export const FlowFungible = new FlowFungibleAPI()
 
 // Solana Connection
+export const SolanaDomain = new SolanaDomainAPI()
 export const SolanaWeb3 = new SolanaWeb3API()
+export const SolanaWeb3State = new SolanaWeb3StateAPI()
 export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
@@ -150,6 +171,7 @@ export const R2D2Domain = new R2D2DomainAPI()
 
 // Name Service
 export const ENS = new ENS_API()
+export const ARBID = new ARBID_API()
 export const SpaceID = new SpaceID_API()
 export const Bonfida = new BonfidaAPI()
 
@@ -167,6 +189,9 @@ export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()
 export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()
 export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
 export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
+
+// SID
+export const SID_Domain = new SID_DomainAPI()
 
 // Chainbase
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
@@ -197,3 +222,9 @@ export const RSS3 = new RSS3API()
 
 // Storage
 export * from './Storage/index.js'
+
+// Airdrop
+export const Airdrop = new AirdropAPI()
+
+// Firefly
+export const Firefly = new FireflyAPI()

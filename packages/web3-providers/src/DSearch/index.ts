@@ -32,11 +32,12 @@ import {
 } from '@masknet/web3-shared-solana'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
-import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/index.js'
+import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/apis/DSearchAPI.js'
 import { CoinGeckoTrendingAPI } from '../CoinGecko/apis/TrendingAPI.js'
 import { RSS3API } from '../RSS3/index.js'
 import { ENS_API } from '../ENS/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
+import { ARBID_API } from '../ARBID/index.js'
 import { NextIDProofAPI } from '../NextID/proof.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { getHandlers } from './rules.js'
@@ -62,6 +63,7 @@ const handleRe = new RegExp(
         'csb',
         'bit',
         'eth',
+        'arb',
         'lens',
         'bnb',
         'crypto',
@@ -92,6 +94,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private CoinGeckoTrending = new CoinGeckoTrendingAPI()
     private ENS = new ENS_API()
     private SpaceID = new SpaceID_API()
+    private ARBID = new ARBID_API()
     private NextIDProof = new NextIDProofAPI()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
@@ -122,6 +125,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     this.SpaceID.lookup(domain).then((x = '') => {
                         if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.BSC]
+                    }),
+                () =>
+                    this.ARBID.lookup(domain).then((x = '') => {
+                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        return [x, ChainIdEVM.Arbitrum]
                     }),
             ],
             ['', ChainIdEVM.Mainnet],
@@ -182,6 +190,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             [
                 () => this.ENS.reverse(address).then((x) => [x, ChainIdEVM.Mainnet]),
                 () => this.SpaceID.reverse(address).then((x) => [x, ChainIdEVM.BSC]),
+                () => this.ARBID.reverse(address).then((x) => [x, ChainIdEVM.Arbitrum]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
@@ -427,7 +436,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                         [twitterHandler.toLowerCase(), `https://twitter.com/${twitterHandler.toLowerCase()}`].includes(
                             resultTwitterHandler.toLowerCase(),
                         ) &&
-                        ((x.rank && x.rank <= 200) || x.id === 'mask-network')
+                        ((x.rank && x.rank <= 500) || x.id === 'mask-network')
                     )
                 })
                 .sort((a, b) => {

@@ -58,7 +58,8 @@ function resolveCurrentVisitingIdentityInner(
         const INIT_DATA = JSON.parse(script)
         if (!INIT_DATA) return
 
-        const writer = INIT_DATA.props?.pageProps?.project as Writer
+        const writer = (INIT_DATA.props?.pageProps?.publicationLayoutProject ??
+            INIT_DATA.props?.pageProps?.project) as Writer
         if (!writer) {
             if (!location.pathname.startsWith('/dashboard')) return
 

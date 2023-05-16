@@ -64,7 +64,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const connection = useWeb3Connection()
     const { Others } = useWeb3State()
 
-    const { value: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
+    const { data: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
     const providerDescriptor = useProviderDescriptor()
 
     const walletName = useMemo(() => {

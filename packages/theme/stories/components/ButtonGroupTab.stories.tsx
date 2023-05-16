@@ -1,6 +1,5 @@
 import { story } from '../utils/index.js'
-import TabContext from '@mui/lab/TabContext'
-import TabPanel from '@mui/lab/TabPanel'
+import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useState } from 'react'
 import { ButtonGroupTabList, type ButtonGroupTabListProps } from '../../src/index.js'

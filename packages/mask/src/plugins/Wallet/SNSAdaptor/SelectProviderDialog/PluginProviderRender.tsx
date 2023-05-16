@@ -28,7 +28,7 @@ import {
 } from '@masknet/web3-shared-flow'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { useCallback, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
 import { ImageIcon } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -78,6 +78,9 @@ const useStyles = makeStyles()((theme) => {
             '& > div': {
                 borderRadius: 8,
             },
+        },
+        disabledWalletItem: {
+            pointerEvents: 'none',
         },
         providerIcon: {
             height: '100%',
@@ -150,14 +153,18 @@ export interface PluginProviderRenderProps {
     ProviderIconClickBait?: React.ComponentType<
         ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
+    requiredSupportPluginID?: NetworkPluginID
+    requiredSupportChainIds?: Web3Helper.ChainIdAll[]
 }
 
-export function PluginProviderRender({
+export const PluginProviderRender = memo(function PluginProviderRender({
     providers,
     ProviderIconClickBait,
     onProviderIconClicked,
+    requiredSupportChainIds,
+    requiredSupportPluginID,
 }: PluginProviderRenderProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const snsPlugins = useActivatedPluginsSNSAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
@@ -216,6 +223,21 @@ export function PluginProviderRender({
         return t('plugin_wallet_support_chains_tips')
     }, [])
 
+    const getDisabled = useCallback(
+        (provider: Web3Helper.ProviderDescriptorAll) => {
+            if (requiredSupportPluginID) {
+                if (provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
+            }
+
+            if (requiredSupportChainIds) {
+                if (requiredSupportChainIds.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
+                    return true
+            }
+
+            return false
+        },
+        [requiredSupportChainIds, requiredSupportPluginID],
+    )
     return (
         <>
             <Box className={classes.root}>
@@ -232,12 +254,16 @@ export function PluginProviderRender({
                             })
                             .map((provider) => (
                                 <ShadowRootTooltip
-                                    title={getTips(provider.type)}
+                                    title={getDisabled(provider) ? '' : getTips(provider.type)}
                                     arrow
                                     placement="top"
                                     key={provider.ID}>
                                     <ListItem
-                                        className={classes.walletItem}
+                                        className={cx(
+                                            classes.walletItem,
+                                            getDisabled(provider) ? classes.disabledWalletItem : '',
+                                        )}
+                                        disabled={getDisabled(provider)}
                                         onClick={() => {
                                             handleClick(provider)
                                         }}>
@@ -307,4 +333,4 @@ export function PluginProviderRender({
             ))}
         </>
     )
-}
+})

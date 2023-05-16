@@ -5,9 +5,9 @@ import {
     getSiteType,
     getAgentType,
     getExtensionId,
-    createDeviceSeed,
-    createDeviceFingerprint,
-    isDeviceOnWhitelist,
+    joinsABTest,
+    getABTestSeed,
+    TelemetryID,
 } from '@masknet/shared-base'
 import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
 import { isNewerThan, isSameVersion } from '../entry-helpers.js'
@@ -21,8 +21,8 @@ const IGNORE_ERRORS = [
     "Cannot perform 'getPrototypeOf' on a proxy that has been revoked",
     'UnknownError: The databases() promise was rejected.',
     'DataError: Failed to read large IndexedDB value',
-    "Failed to execute 'open' on 'CacheStorage': Unexpected internal error.",
-    'UnknownError: Internal error opening backing store for indexedDB.open.',
+    'Unexpected internal error',
+    'UnknownError: Internal error',
     'TimeoutError: Transaction timed out due to inactivity.',
     'execution reverted',
     'Failed to fetch',
@@ -32,6 +32,7 @@ const IGNORE_ERRORS = [
     'ResizeObserver loop limit exceeded',
     'User rejected the request.',
     'Non-Error promise rejection captured with keys: message',
+    'An attempt was made to break through the security policy of the user agent.',
 ]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
@@ -102,11 +103,16 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
-        Sentry.setTag('device_ab', isDeviceOnWhitelist(50))
-        Sentry.setTag('device_seed', createDeviceSeed())
-        Sentry.setTag('device_fingerprint', createDeviceFingerprint())
+        Sentry.setTag('device_ab', joinsABTest())
+        Sentry.setTag('device_seed', getABTestSeed())
+        Sentry.setTag('device_id', TelemetryID.value)
         Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
+        TelemetryID.addListener((trackID) => {
+            Sentry.setTag('device_ab', joinsABTest())
+            Sentry.setTag('device_seed', getABTestSeed())
+            Sentry.setTag('track_id', trackID)
+        })
     }
 
     // The sentry needs to be opened at the runtime.
@@ -171,6 +177,12 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
+    private shouldRecord(sampleRate = 1) {
+        const rate = sampleRate % 1
+        if (rate >= 1 || rate < 0) return true
+        return crypto.getRandomValues(new Uint8Array(1))[0] > 255 - Math.floor(255 * sampleRate)
+    }
+
     private createCommonEvent(
         groupID: TelemetryAPI.GroupID,
         type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
@@ -221,6 +233,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
+        if (!this.shouldRecord(options.sampleRate)) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
@@ -240,7 +253,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
-
+        if (!this.shouldRecord(options.sampleRate)) return
         Sentry.captureException(options.error, this.createException(options))
     }
 }

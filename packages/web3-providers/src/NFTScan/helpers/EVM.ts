@@ -189,7 +189,7 @@ export function createNonFungibleCollectionFromGroup(
         chainId,
         assets: group.assets.map((x) => createNonFungibleAsset(chainId, x)),
         schema: sample?.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
-        name: group.contract_name || '',
+        name: group.contract_name || group.symbol || '',
         slug: group.contract_name || '',
         address: group.contract_address,
         description: group.description || payload?.description,

@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import { SchemaType } from '../types/index.js'
 import { isValidAddress } from './address.js'
-import { isValidDomain } from './isValidDomain.js'
+import { isEnsSubdomain, isValidDomain } from './isValidDomain.js'
 
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
     return new BigNumber(amount).shiftedBy(decimals).toFixed()
@@ -40,13 +40,20 @@ export function formatTokenId(tokenId = '', size_ = 4) {
 
 export function formatDomainName(domain: string, size = 18, invalidIgnore?: boolean) {
     if (!domain) return domain
-    if (!isValidDomain(domain) && !invalidIgnore) return domain
+    if (!isValidDomain(domain) && !invalidIgnore) {
+        return domain
+    }
     if (domain.length <= size) return domain
-    const name = domain.split('.')[0]
-    // xxx.yyy.eth
-    const suffix = domain.split('.').pop()
 
-    return `${name.slice(0, size - 6)}...${name.slice(-2)}.${suffix}`
+    if (isEnsSubdomain(domain)) {
+        return domain.replace(/^\[([^\]]+?)]\.(.*)$/, (_, hash, mainName): string => {
+            return `[${hash.slice(0, 4)}...${hash.slice(-4)}].${formatDomainName(mainName, size, invalidIgnore)}`
+        })
+    }
+
+    return domain.replace(/^(.*)\.(\w+)$/, (_, name, suffix): string => {
+        return `${name.slice(0, size - 6)}...${name.slice(-2)}.${suffix}`
+    })
 }
 
 export function formatKeccakHash(hash: string, size = 0) {

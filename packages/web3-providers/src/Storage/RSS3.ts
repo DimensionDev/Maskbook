@@ -1,13 +1,13 @@
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
 import type { Web3Connection } from '@masknet/web3-shared-evm'
 import { RSS3API } from '../RSS3/index.js'
 
-const caches = new Map<string, LRU<string, unknown>>()
+const caches = new Map<string, LRUCache<string, any>>()
 
 export class RSS3Storage implements Storage {
     private RSS3 = new RSS3API()
-    private cache: LRU<string, unknown> | undefined
+    private cache: LRUCache<string, any> | undefined
 
     constructor(private address: string, private getConnection?: () => Web3Connection | undefined) {
         const cache = caches.get(address)
@@ -15,7 +15,7 @@ export class RSS3Storage implements Storage {
             this.cache = cache
             return
         } else {
-            const lru = new LRU<string, unknown>({
+            const lru = new LRUCache<string, any>({
                 max: 500,
                 ttl: 60_000,
             })
@@ -42,7 +42,7 @@ export class RSS3Storage implements Storage {
     async get<T>(key: string): Promise<T | undefined> {
         const cacheKey = `${this.address}_${key}`
         const rss3 = await this.getRSS3<T>()
-        const cache = this.cache?.get<T>(cacheKey)
+        const cache = this.cache?.get(cacheKey)
         return cache ?? this.RSS3.getFileData(rss3, this.address, key)
     }
 

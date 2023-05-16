@@ -2,7 +2,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
@@ -564,8 +564,7 @@ export namespace Plugin.SNSAdaptor {
         RenderEntryComponent?: (props: {
             disabled: boolean
             tooltipHint?: string
-            onClick?: (walletConnectedCallback?: () => void) => void
-            popperBoundary?: HTMLElement | null
+            onClick?: (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) => void
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
@@ -927,7 +926,6 @@ export namespace Plugin.Dashboard {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
-        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>

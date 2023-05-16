@@ -16,7 +16,7 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
-import { isDeviceOnWhitelist, CrossIsolationMessages } from '@masknet/shared-base'
+import { joinsABTest, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface ConsoleContentProps {
@@ -37,19 +37,19 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
-    const { value: reversedName } = useReverseAddress(currentPluginID, account)
+    const { data: reversedName } = useReverseAddress(currentPluginID, account)
     const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
     const themeSettings = useThemeSettings()
 
-    const { setDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
+    useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
 
     const table: Array<{ name: string; content: JSX.Element }> = [
         {
             name: 'A/B Testing',
-            content: <Typography variant="body2">{isDeviceOnWhitelist() ? 'A' : 'B'}</Typography>,
+            content: <Typography variant="body2">{joinsABTest() ? 'A' : 'B'}</Typography>,
         },
         {
             name: 'Color',

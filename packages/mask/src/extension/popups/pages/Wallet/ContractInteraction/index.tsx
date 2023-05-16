@@ -48,6 +48,7 @@ import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { Icons } from '@masknet/icons'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
+import { isString } from 'lodash-es'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -186,6 +187,10 @@ const ContractInteraction = memo(() => {
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
+                const to = request.owner
+                    ? transactionDescription?.context?.methods?.find((x) => x.name === 'transfer')?.parameters?.to
+                    : undefined
+
                 return {
                     isNativeTokenInteraction: transactionDescription?.tokenInAddress
                         ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
@@ -193,7 +198,7 @@ const ContractInteraction = memo(() => {
                     typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
                     tokenAddress: transactionDescription?.tokenInAddress,
                     tokenDescription: transactionDescription?.popup?.tokenDescription,
-                    to: request.computedPayload?.to,
+                    to: to && isString(to) ? to : request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
                     maxFeePerGas: request.computedPayload?.maxFeePerGas,
@@ -389,7 +394,7 @@ const ContractInteraction = memo(() => {
     const totalUSD = new BigNumber(gasFeeUSD).plus(tokenValueUSD).toString()
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
 
     return requestLoading ? (
         <LoadingPlaceholder />

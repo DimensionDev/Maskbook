@@ -14,7 +14,7 @@ export interface ReverseAddressProps extends ComponentProps<typeof Typography> {
 }
 
 export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, size = 4, ...rest }) => {
-    const { value: domain } = useReverseAddress(pluginID, address)
+    const { data: domain } = useReverseAddress(pluginID, address)
     const { Others } = useWeb3State(pluginID)
 
     const showDomain = !!domain && !!Others?.formatDomainName && Others?.isValidDomain?.(domain)
@@ -28,3 +28,5 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
 
     return hasEllipsis ? <ShadowRootTooltip title={showDomain ? domain : address}>{node}</ShadowRootTooltip> : node
 })
+
+ReversedAddress.displayName = 'ReversedAddress'

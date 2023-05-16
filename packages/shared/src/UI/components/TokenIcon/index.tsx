@@ -1,9 +1,10 @@
-import { useAsyncRetry } from 'react-use'
-import { compact, first } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
+import { compact, first } from 'lodash-es'
+import { memo } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { Icon, type IconProps } from '../Icon/index.js'
 
 export interface TokenIconProps extends IconProps {
@@ -15,7 +16,7 @@ export interface TokenIconProps extends IconProps {
     disableDefaultIcon?: boolean
 }
 
-export function TokenIcon(props: TokenIconProps) {
+export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const { address, logoURL, name, symbol, tokenType = TokenType.Fungible, disableDefaultIcon, ...rest } = props
 
     const { chainId } = useChainContext({ chainId: props.chainId })
@@ -41,4 +42,4 @@ export function TokenIcon(props: TokenIconProps) {
 
     if (originalUrl && disableDefaultIcon) return null
     return <Icon key={value?.key} {...rest} logoURL={isNFT ? logoURL : originalUrl} name={symbol ?? name} />
-}
+})

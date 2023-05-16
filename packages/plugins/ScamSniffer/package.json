@@ -22,6 +22,6 @@
     "@scamsniffer/detector": "0.0.21",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
-    "urlcat": "2.0.4"
+    "urlcat": "^3.1.0"
   }
 }

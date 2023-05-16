@@ -38,7 +38,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, address, onClose 
     const { Others } = useWeb3State()
 
     const { chainId } = useChainContext()
-    const { value: domain } = useReverseAddress(undefined, address)
+    const { data: domain } = useReverseAddress(undefined, address)
 
     return (
         <ReceiveDialogUI

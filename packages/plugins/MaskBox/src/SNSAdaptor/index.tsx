@@ -1,27 +1,27 @@
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import {
     type Plugin,
     usePluginWrapper,
     usePostInfoDetails,
     SNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
-import { base } from '../base.js'
+import { Icons } from '@masknet/icons'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { Trans } from 'react-i18next'
 import { parseURLs } from '@masknet/shared-base'
-import { PreviewCard } from './components/PreviewCard.js'
-import { Context } from '../hooks/useContext.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Icons } from '@masknet/icons'
-import { SharedContextSettings } from '../settings.js'
+import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
+import { base } from '../base.js'
+import { PreviewCard } from './components/PreviewCard.js'
+import { Context } from '../hooks/useContext.js'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
-        SharedContextSettings.value = context
+        SNSAdaptorPluginContext.setup(context)
     },
     DecryptedInspector(props) {
         const link = useMemo(() => {
@@ -85,7 +85,7 @@ function Renderer(
     if (shouldNotRender) return null
 
     return (
-        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+        <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
             <Context.Provider initialState={{ boxId, hashRoot }}>
                 <PreviewCard />
             </Context.Provider>

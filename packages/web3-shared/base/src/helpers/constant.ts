@@ -10,13 +10,13 @@ export function transformAll<ChainId extends number, T extends Constants>(
     constants: T,
     environment: Record<string, string> = {},
 ) {
-    type Entries = {
+    type Entries = Readonly<{
         [key in keyof T]?: T[key]['Mainnet']
-    }
+    }>
     return (chainId: ChainId = 1 as ChainId) => {
         const chainName = chainIdEnum[chainId] as 'Mainnet'
         // unknown chain id
-        if (!chainName) return Object.freeze({}) as Entries
+        if (!chainName) return {} as Entries
         const entries = Object.keys(constants).map((name: keyof T) => {
             let value = constants[name][chainName]
             if (Array.isArray(value)) {
@@ -31,7 +31,7 @@ export function transformAll<ChainId extends number, T extends Constants>(
             }
             return [name, value] as [string, Primitive | Primitive[]]
         })
-        return Object.freeze(Object.fromEntries(entries)) as Entries
+        return Object.fromEntries(entries) as Entries
     }
 }
 

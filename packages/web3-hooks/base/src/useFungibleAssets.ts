@@ -58,11 +58,11 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(leftShift(a.balance, a.decimals))
-                const zBalance = toZero(leftShift(z.balance, z.decimals))
+                const aBalance = leftShift(a.balance, a.decimals)
+                const zBalance = leftShift(z.balance, z.decimals)
 
-                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
-                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
+                const aUSD = toZero(a.value?.[CurrencyType.USD])
+                const zUSD = toZero(z.value?.[CurrencyType.USD])
 
                 const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))

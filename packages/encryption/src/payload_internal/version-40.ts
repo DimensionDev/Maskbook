@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type { PayloadParseResult, Signature } from '../payload/index.js'
 import { Ok } from 'ts-results-es'
 import { PayloadException } from '../types/index.js'

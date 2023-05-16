@@ -1,3 +1,7 @@
+import { BigNumber } from 'bignumber.js'
+import { type FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
     ChainBoundary,
@@ -11,20 +15,16 @@ import {
     useSelectFungibleToken,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { EMPTY_LIST, isTwitter, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, type FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { type ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
-import { type FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
 import { useDonateCallback } from '../../hooks/useDonateCallback.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
 import type { GitcoinGrant } from '../../../apis/index.js'
-import { Icons } from '@masknet/icons'
 import { GiveBackSelect } from './GiveBackSelect.js'
-import { BigNumber } from 'bignumber.js'
 import { useShowResult } from '../ResultModal/index.js'
 import { getSupportedChainIds } from '../../../utils.js'
 
@@ -134,10 +134,10 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
 
     const showConfirm = useShowResult()
     const donate = useCallback(async () => {
+        if (!token) return
         const hash = await donateCallback()
         if (typeof hash !== 'string') return
-        const cashTag = isTwitter() ? '$' : ''
-        if (!token) return
+        const cashTag = Sniffings.is_twitter_page ? '$' : ''
         const uiAmount = formatBalance(amount.plus(tipAmount), token.decimals)
         const shareText = t.share_text({
             amount: uiAmount,

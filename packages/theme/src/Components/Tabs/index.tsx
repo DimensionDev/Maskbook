@@ -1,5 +1,5 @@
 import { Box, Button, ButtonGroup, type ButtonGroupProps, styled, Tab } from '@mui/material'
-import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
+import { useTabContext, getPanelId, getTabId } from '@mui/lab'
 import {
     forwardRef,
     Children,
@@ -284,3 +284,5 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         </ButtonGroupWrap>
     )
 })
+
+MaskTabList.displayName = 'MaskTabList'

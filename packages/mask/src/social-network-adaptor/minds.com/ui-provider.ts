@@ -22,7 +22,7 @@ import { injectPostBoxComposed } from './injection/inject.js'
 import { injectPostInspectorAtMinds } from './injection/PostInspector.js'
 import { injectPostReplacerAtMinds } from './injection/PostReplacer.js'
 import { injectSearchResultInspectorAtMinds } from './injection/SearchResultInspector.js'
-import { injectSetupPromptAtMinds } from './injection/SetupPrompt.js'
+import { injectBannerAtMinds } from './injection/Banner.js'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint.js'
 import { mindsShared } from './shared.js'
 import { makeStyles } from '@masknet/theme'
@@ -159,7 +159,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
         enhancedPostRenderer: injectPostReplacerAtMinds,
-        setupPrompt: injectSetupPromptAtMinds,
+        banner: injectBannerAtMinds,
         searchResult: injectSearchResultInspectorAtMinds,
         newPostComposition: {
             start: injectPostBoxComposed,

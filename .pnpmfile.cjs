@@ -7,23 +7,18 @@
 const approvedList = new Map()
 
 approvedList.set('ethereumjs-abi', [
-    // by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
-    'git+https://github.com/ProjectWyvern/ethereumjs-abi.git',
     // wyvern-js
     'https://github.com/ProjectWyvern/ethereumjs-abi.git',
     // eth-sig-util
     'git+https://github.com/ethereumjs/ethereumjs-abi.git',
 ])
 
+approvedList.set('webpack', 'Jack-Works/webpack#lazy-import')
+
 approvedList.set('wyvern-js', [
-    // by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
-    'git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1',
     // wyvern-schemas
     'github:ProjectOpenSea/wyvern-js#semver:^3.2.1',
 ])
-
-// by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
-approvedList.set('wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1')
 
 // https://github.com/storybookjs/storybook/issues/19055
 approvedList.set('@storybook/react-docgen-typescript-plugin', 'npm:react-docgen-typescript-plugin@1.0.2')
@@ -43,9 +38,6 @@ approvedList.set('html-parse-stringify2', [
     'github:locize/html-parse-stringify2',
     'github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c',
 ])
-
-// ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
-approvedList.set('node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz')
 
 /**
  * @param {string} parentPackage The current resolving parentPackage

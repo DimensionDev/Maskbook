@@ -12,6 +12,8 @@ on:
       - 'develop'
       - 'release/*'
       - 'hotfix/*'
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check Milestone
-        if: "github.event.pull_request.milestone == null && github.event.pull_request.title != 'docs(i18n): sync i18n files from Crowdin'"
+        if: "(github.event.pull_request && github.event.pull_request.milestone == null) && github.event.pull_request.title != 'docs(i18n): sync i18n files from Crowdin'"
         run: |
           echo "Please set a milestone."
           exit 1

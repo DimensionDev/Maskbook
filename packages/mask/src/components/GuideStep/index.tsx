@@ -1,4 +1,4 @@
-import { cloneElement, type PropsWithChildren, type ReactElement, useEffect, useRef, useState, useMemo } from 'react'
+import { cloneElement, type PropsWithChildren, type ReactElement, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-use'
 import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -174,11 +174,11 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         }
     }, [childrenRef.current, inserted, currentStep, history])
 
-    const scrollWidth = useMemo(() => {
+    const scrollWidth = (() => {
         if (stepVisible && Number.parseInt(currentStep, 10) === total) return 0
         const cWidth = document.documentElement.clientWidth || document.body.clientWidth
         return window.innerWidth - cWidth
-    }, [stepVisible, currentStep])
+    })()
 
     return (
         <>
@@ -189,9 +189,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                     <Portal container={container}>
                         <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
                             <div
-                                className={
-                                    step === 3 ? cx(classes.container, classes.noBoxShadowCover) : classes.container
-                                }
+                                className={cx(classes.container, step === 3 ? classes.noBoxShadowCover : null)}
                                 style={{
                                     top: clientRect.top,
                                     left: clientRect.left - scrollWidth,

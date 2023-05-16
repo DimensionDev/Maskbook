@@ -1,4 +1,4 @@
-import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
+import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
@@ -26,17 +26,7 @@ import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-import { getAvatarType, getInjectedDom } from '../../utils/AvatarType.js'
-
-export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(getInjectedDom()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-
-        root.render(<NFTAvatarInTwitter />)
-        return () => root.destroy()
-    })
-    startWatch(watcher, signal)
-}
+import { getAvatarType } from '../../utils/AvatarType.js'
 
 const useStyles = makeStyles()(() => ({
     root: {

@@ -19,7 +19,7 @@ export function getAvatarType(ele?: HTMLElement) {
         ? AvatarType.Square
         : styles.clipPath.includes('#shape-hex')
         ? AvatarType.Clip
-        : AvatarType.Circle
+        : AvatarType.Default
 }
 
 export function getInjectedDom() {

@@ -12,7 +12,7 @@ import {
     RelationFavor,
     fromBase64URL,
 } from '@masknet/shared-base'
-import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
+import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { MaskMessages } from '../../../shared/index.js'
 import type {
     FullPersonaDBTransaction,

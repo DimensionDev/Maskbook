@@ -1,4 +1,4 @@
-import { type FC, useEffect, useMemo, useState } from 'react'
+import { type FC, useEffect, useMemo, useState, memo } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress, ...rest }) => {
+export const ProfileCard: FC<Props> = memo(({ identity, badgeBounding, currentAddress, ...rest }) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const { t } = useI18N()
@@ -230,4 +230,6 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress
             </div>
         </Web3ContextProvider>
     )
-}
+})
+
+ProfileCard.displayName = 'ProfileCard'

@@ -17,7 +17,7 @@ export const useWalletName = (
 ) => {
     const { Others } = useWeb3State(expectedPluginId)
     const { account, providerType } = useChainContext({ account: expectedAccount })
-    const { value: domain } = useReverseAddress(expectedPluginId, account)
+    const { data: domain } = useReverseAddress(expectedPluginId, account)
     const wallets = useWallets()
     const providerDescriptor = useProviderDescriptor(expectedPluginId)
 

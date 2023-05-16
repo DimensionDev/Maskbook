@@ -1,9 +1,19 @@
 import { useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
-import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { TabContext, TabPanel } from '@mui/lab'
+import {
+    Web3ContextProvider,
+    useChainContext,
+    useFungibleTokens,
+    useWeb3,
+    ActualChainContextProvider,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, createContract, getAaveConstants, type SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
@@ -17,18 +27,9 @@ import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtoc
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
-import { TabContext, TabPanel } from '@mui/lab'
-import {
-    Web3ContextProvider,
-    useChainContext,
-    useFungibleTokens,
-    useWeb3,
-    ActualChainContextProvider,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { useQuery } from '@tanstack/react-query'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
         paddingBottom: theme.spacing(2),
@@ -42,7 +43,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     tab: {
         height: 36,
         minHeight: 36,
-        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground2}!important` : undefined,
+        backgroundColor: Sniffings.is_dashboard_page ? `${MaskColorVar.primaryBackground2}!important` : undefined,
     },
     tabPaper: {
         backgroundColor: 'inherit',
@@ -89,9 +90,8 @@ const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
-    const isDashboard = isDashboardPage()
     const { pluginID } = useNetworkContext()
-    const { classes } = useStyles({ isDashboard })
+    const { classes } = useStyles()
 
     const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
@@ -100,35 +100,40 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
-    const { value: aaveTokens } = useAsync(async () => {
-        if (!open || chainId !== ChainId.Mainnet) {
-            return EMPTY_LIST
-        }
+    const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
+        enabled: open && chainId === ChainId.Mainnet && !!web3,
+        queryKey: ['savings', 'aave', chainId],
+        queryFn: async () => {
+            const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
 
-        const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+            const protocolDataContract = createContract<AaveProtocolDataProvider>(
+                web3,
+                address,
+                AaveProtocolDataProviderABI as AbiItem[],
+            )
 
-        const protocolDataContract = createContract<AaveProtocolDataProvider>(
-            web3,
-            address,
-            AaveProtocolDataProviderABI as AbiItem[],
-        )
+            const [tokens, aTokens] = await Promise.all([
+                protocolDataContract?.methods.getAllReservesTokens().call(),
+                protocolDataContract?.methods.getAllATokens().call(),
+            ])
 
-        const tokens = await protocolDataContract?.methods.getAllReservesTokens().call()
+            if (!tokens) return EMPTY_LIST
+            return tokens.map((token) => {
+                return [token[1], aTokens?.find((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())?.[1]]
+            })
+        },
+        staleTime: 300_000,
+    })
 
-        const aTokens = await protocolDataContract?.methods.getAllATokens().call()
-
-        return tokens?.map((token) => {
-            return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
-        })
-    }, [open, web3, chainId])
-
-    const { value: detailedAaveTokens } = useFungibleTokens(
+    const { value: detailedAaveTokens, loading: loadingAAveDetails } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         compact(flatten(aaveTokens ?? [])),
         {
             chainId,
         },
     )
+
+    const loadingProtocols = loadingAAve || loadingAAveDetails || !detailedAaveTokens?.length
 
     const protocols = useMemo(
         () => [
@@ -180,6 +185,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                             tabPanel: classes.tabPanel,
                                             indicator: classes.indicator,
                                         }}
+                                        requireChains
                                         chains={chains.filter(Boolean)}
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
                                     />
@@ -188,6 +194,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Deposit}>
                                         <SavingsTable
                                             chainId={chainId}
+                                            loadingProtocols={loadingProtocols}
                                             tab={TabType.Deposit}
                                             protocols={protocols}
                                             setTab={setTab}
@@ -197,6 +204,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Withdraw}>
                                         <SavingsTable
                                             chainId={chainId}
+                                            loadingProtocols={loadingProtocols}
                                             tab={TabType.Withdraw}
                                             protocols={protocols}
                                             setTab={setTab}

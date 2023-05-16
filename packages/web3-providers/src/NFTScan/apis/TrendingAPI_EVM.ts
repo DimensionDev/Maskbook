@@ -14,9 +14,9 @@ import { fetchFromNFTScanV2, getContractSymbol, createNonFungibleAsset } from '.
 import { resolveNFTScanHostName, resolveNFTScanRange, NonFungibleMarketplace } from '../helpers/utils.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
-import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
 import type { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
 import { getPaymentToken } from '../../entry-helpers.js'
+import { MaskIconURLs } from '@masknet/icons'
 
 export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
@@ -174,7 +174,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
                 ? {
-                      logo_url: OpenSeaLogo,
+                      logo_url: MaskIconURLs.open_sea_url().toString(),
                       // TODO
                       trade_url: `https://opensea.io/assets/ethereum/${address}`,
                       market_name: NonFungibleMarketplace.OpenSea,
@@ -186,7 +186,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 : null,
             looksrareStats
                 ? {
-                      logo_url: LooksRareLogo,
+                      logo_url: MaskIconURLs.looks_rare_url().toString(),
                       trade_url: `https://looksrare.org/collections/${address}`,
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,

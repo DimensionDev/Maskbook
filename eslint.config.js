@@ -8,7 +8,7 @@ import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-import'
 import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
-import DimensionDevPlugin from '@dimensiondev/eslint-plugin'
+import * as MasknetPlugin from '@masknet/eslint-plugin'
 
 import { pathToFileURL } from 'url'
 
@@ -17,13 +17,6 @@ if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) 
     // cspell: disable-next-line
     process.env.TSESTREE_SINGLE_RUN = 'true'
 }
-
-// Note: update our plugin
-Object.keys(DimensionDevPlugin.rules)
-    .filter((x) => x.includes('/'))
-    .forEach((key) => {
-        DimensionDevPlugin.rules[key.replace('/', '-')] = DimensionDevPlugin.rules[key]
-    })
 
 // Prefer rules from @typescript-eslint > unicorn > other plugins
 // Level: if the rule is fixable and can be tolerate during dev, use 'warn' is better.
@@ -64,7 +57,7 @@ const avoidMistakeRules = {
     'no-misleading-character-class': 'error', // RegEx
     // 'require-unicode-regexp': 'error', // RegEx modern RegEx with Unicode support
     // 'unicorn/prefer-code-point': 'error',
-    // '@dimensiondev/no-builtin-base64': 'warn', // Note: it fixes to Node's Buffer
+    // '@masknet/no-builtin-base64': 'warn', // Note: it fixes to Node's Buffer
     /// type safety
     // '@typescript-eslint/method-signature-style': 'warn', // method signature is bivariant
     // '@typescript-eslint/no-non-null-asserted-optional-chain': 'error', // bans foo?.bar!
@@ -79,7 +72,7 @@ const avoidMistakeRules = {
     // '@typescript-eslint/strict-boolean-expressions': 'error', // stronger check for nullable string/number/boolean
     // '@typescript-eslint/switch-exhaustiveness-check': 'error', // switch should be exhaustive
     // '@typescript-eslint/unbound-method': 'error', // requires `this` to be set properly
-    // '@dimensiondev/type-no-force-cast-via-top-type': 'error', // expr as any as T
+    // '@masknet/type-no-force-cast-via-top-type': 'error', // expr as any as T
 
     // Security
     'no-script-url': 'error', // javascript:
@@ -89,11 +82,11 @@ const avoidMistakeRules = {
     'react/no-danger': 'error', // dangerouslySetInnerHTML
     'react/no-danger-with-children': 'error', // dangerouslySetInnerHTML + children
     '@typescript-eslint/no-implied-eval': 'error', // setTimeout('code')
-    '@dimensiondev/browser-no-set-html': 'error', // .innerHTML =
-    // '@dimensiondev/string-no-data-url': 'error', // data:...
-    '@dimensiondev/unicode-no-bidi': 'error',
-    '@dimensiondev/unicode-no-invisible': 'error',
-    '@dimensiondev/unicode-specific-set': 'warn',
+    '@masknet/browser-no-set-html': 'error', // .innerHTML =
+    // '@masknet/string-no-data-url': 'error', // data:...
+    '@masknet/unicode-no-bidi': 'error',
+    '@masknet/unicode-no-invisible': 'error',
+    '@masknet/unicode-specific-set': 'warn',
 
     // Confusing code
     'no-bitwise': 'error', // need mark out
@@ -114,7 +107,7 @@ const avoidMistakeRules = {
     // 'unicorn/require-number-to-fixed-digits-argument': 'warn', // Number#toFixed(_required_)
     'react/button-has-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
-    '@dimensiondev/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
+    '@masknet/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
     /// Footgun language features
     'no-compare-neg-zero': 'error', // x === -0 is wrong
     'no-new-wrappers': 'error', // wrapper objects are bad
@@ -154,7 +147,7 @@ const avoidMistakeRules = {
     '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
     '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
-    '@dimensiondev/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
+    '@masknet/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
 
     // Performance
     'react/jsx-key': ['warn', { checkFragmentShorthand: true, checkKeyMustBeforeSpread: true, warnOnDuplicates: true }], // key={data.key}
@@ -217,9 +210,9 @@ const codeStyleRules = {
     // '@typescript-eslint/no-useless-constructor': 'warn', // empty constructor
     // '@typescript-eslint/no-useless-empty-export': 'warn', // export {}
     // '@typescript-eslint/no-redundant-type-constituents': 'warn', // type Q = any | T
-    // '@dimensiondev/array-no-unneeded-flat-map': 'warn', // bans Array#flatMap((x) => x)
-    '@dimensiondev/string-no-unneeded-to-string': 'warn', // useless .toString()
-    '@dimensiondev/string-no-simple-template-literal': 'warn', // prefer simple string
+    // '@masknet/array-no-unneeded-flat-map': 'warn', // bans Array#flatMap((x) => x)
+    '@masknet/string-no-unneeded-to-string': 'warn', // useless .toString()
+    '@masknet/string-no-simple-template-literal': 'warn', // prefer simple string
 
     // Prefer modern things
     'prefer-const': 'warn',
@@ -257,19 +250,18 @@ const codeStyleRules = {
     'unicorn/prefer-string-slice': 'warn',
     'unicorn/prefer-string-trim-start-end': 'warn', // str.trimStart(...)
     '@typescript-eslint/no-this-alias': 'warn',
-    '@dimensiondev/jsx-no-class-component': 'error',
-    // '@dimensiondev/type-no-number-constructor': 'warn',
-    // '@dimensiondev/array-prefer-from': 'warn',
+    '@masknet/jsx-no-class-component': 'error',
+    // '@masknet/type-no-number-constructor': 'warn',
+    // '@masknet/array-prefer-from': 'warn',
     '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
     '@typescript-eslint/prefer-for-of': 'warn',
     '@typescript-eslint/prefer-includes': 'warn',
     '@typescript-eslint/no-for-in-array': 'warn',
     // '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     '@typescript-eslint/prefer-optional-chain': 'warn',
-    '@dimensiondev/browser-prefer-dataset': 'warn',
-    '@dimensiondev/browser-prefer-location-assign': 'warn',
-    // '@dimensiondev/no-unsafe-date': 'error', // use date-fns or Temporal instead
-    '@dimensiondev/prefer-fetch': 'error',
+    '@masknet/browser-prefer-location-assign': 'warn',
+    // '@masknet/no-unsafe-date': 'error', // use date-fns or Temporal instead
+    '@masknet/prefer-fetch': 'error',
 
     // Better debug
     // 'prefer-promise-reject-errors': 'warn', // Promise.reject(need_error)
@@ -348,10 +340,10 @@ const codeStyleRules = {
     // '@typescript-eslint/sort-type-constituents': 'warn',
     // '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'always' }],
     // '@typescript-eslint/unified-signatures': 'warn', // prefer merging overload
-    '@dimensiondev/prefer-early-return': 'warn',
-    // '@dimensiondev/no-redundant-variable': 'warn',
-    // '@dimensiondev/no-single-return': 'warn',
-    // '@dimensiondev/jsx-no-template-literal': 'warn',
+    '@masknet/prefer-early-return': 'warn',
+    // '@masknet/no-redundant-variable': 'warn',
+    // '@masknet/no-single-return': 'warn',
+    // '@masknet/jsx-no-template-literal': 'warn',
 
     // Naming convension
     // 'func-name-matching': 'warn',
@@ -435,6 +427,16 @@ const moduleSystemRules = {
     'import/no-self-import': 'error',
     // 'import/no-unassigned-import': 'error', // bans `import 'x'`. side-effect only imports should be explicitly marked.
     // '@typescript-eslint/no-import-type-side-effects': 'warn',
+
+    // performance
+    '@masknet/prefer-defer-import': [
+        'warn',
+        {
+            deferPackages: [
+                // add package names here.
+            ],
+        },
+    ],
 }
 // TODO: enable rule @typescript-eslint/explicit-module-boundary-types for "./packages/mask/background/services/*"
 // TODO: ban uses of localStorage or sessionStorage
@@ -445,7 +447,7 @@ const plugins = {
     import: ImportPlugin,
     unicorn: UnicornPlugin,
     '@typescript-eslint': TypeScriptPlugin,
-    '@dimensiondev': DimensionDevPlugin,
+    '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': ReactHooksPlugin,
 }

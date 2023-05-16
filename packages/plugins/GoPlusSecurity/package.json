@@ -21,7 +21,7 @@
     }
   },
   "dependencies": {
-    "react-feather": "^2.0.9",
+    "react-feather": "^2.0.10",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
@@ -34,7 +34,7 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "react-use": "^17.4.0",
-    "urlcat": "^2.0.4",
+    "urlcat": "^3.1.0",
     "wallet.ts": "1.0.1"
   }
 }

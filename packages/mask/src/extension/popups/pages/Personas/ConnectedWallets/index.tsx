@@ -32,7 +32,7 @@ const ConnectedWallets = memo(() => {
         const results = await Promise.all(
             proofs.map(async (x) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
-                    const domain = await NameService?.reverse?.(chainId, x.identity)
+                    const domain = await NameService?.reverse?.(x.identity)
 
                     if (domain)
                         return {

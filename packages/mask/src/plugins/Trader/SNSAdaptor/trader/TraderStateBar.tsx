@@ -12,13 +12,12 @@ import {
     useTokenSecurity,
     ChainBoundary,
 } from '@masknet/shared'
-import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID, PopupRoutes, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-
 import Services from '../../../../extension/service.js'
 import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/trader.js'
 import { isNativeTokenWrapper } from '../../helpers/trader.js'
@@ -76,7 +75,6 @@ export function TraderStateBar({
 }: TradeStateBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isPopup = isPopupPage()
 
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
@@ -85,7 +83,7 @@ export function TraderStateBar({
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
 
-    // #region if `isPopup` be true, click the plugin status bar need to  open popup window
+    // #region if `isPopupPage` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
@@ -180,7 +178,7 @@ export function TraderStateBar({
         <Box className={classes.stateBar}>
             <PluginWalletStatusBar
                 actualPluginID={actualPluginID}
-                onClick={isPopup ? openSelectWalletPopup : undefined}>
+                onClick={Sniffings.is_popup_page ? openSelectWalletPopup : undefined}>
                 <WalletConnectedBoundary offChain expectedChainId={chainId}>
                     <EthereumERC20TokenApprovedBoundary
                         onlyInfiniteUnlock

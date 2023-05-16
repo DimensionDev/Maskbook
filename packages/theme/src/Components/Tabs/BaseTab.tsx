@@ -22,6 +22,10 @@ const BaseTabWrap = styled(Button, {
         boxShadow: activated ? '0 0 20px rgba(0, 0, 0, 0.05)' : 'none',
         background: activated ? theme.palette.maskColor.bottom : 'transparent',
     },
+    // If there is only single one tab.
+    '&:first-of-type:last-of-type': {
+        maxWidth: '25%',
+    },
 }))
 
 export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onChange' | 'value' | 'selected'>> {

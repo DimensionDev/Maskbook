@@ -2,11 +2,11 @@ import { type Dispatch, memo, type SetStateAction, useMemo, useState } from 'rea
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useTransactions, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useTransactions, useNetworkContext, useIterator } from '@masknet/web3-hooks-base'
 import type { Transaction } from '@masknet/web3-shared-base'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { ElementAnchor, useIterator } from '@masknet/shared'
+import { ElementAnchor } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
@@ -54,8 +54,6 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         value = EMPTY_LIST,
         next,
         done,
-        error,
-        retry,
         loading,
     } = useIterator<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(iterator)
 
@@ -105,9 +103,6 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, isL
                                 <TableCell key="Value" align="center" variant="head" className={classes.header}>
                                     {t.wallets_history_value()}
                                 </TableCell>
-                                <TableCell key="Burn" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_history_burn()}
-                                </TableCell>
                                 <TableCell key="Receiver" align="center" variant="head" className={classes.header}>
                                     {t.wallets_history_receiver()}
                                 </TableCell>
@@ -115,9 +110,9 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, isL
                         </TableHead>
 
                         <TableBody>
-                            {dataSource.map((transaction, index) => (
+                            {dataSource.map((transaction) => (
                                 <HistoryTableRow
-                                    key={index}
+                                    key={transaction.hash}
                                     transaction={transaction}
                                     selectedChainId={selectedChainId}
                                 />

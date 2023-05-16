@@ -8,7 +8,7 @@ import {
     TransactionDescriptorType,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils/index.js'
@@ -47,7 +47,7 @@ const useStyles = makeStyles()({
 export interface ActivityListItemProps {
     toAddress?: string
     transaction: RecentTransactionComputed<ChainId, Transaction>
-    formatterTransaction: TransactionDescriptor<ChainId, Transaction>
+    formatterTransaction: TransactionDescriptor<ChainId, Transaction, TransactionParameter>
     onSpeedUpClick: (e: React.MouseEvent<HTMLButtonElement>) => void
     onCancelClick: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -57,7 +57,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const { t } = useI18N()
         const { classes } = useStyles()
         const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-        const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
+        const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {

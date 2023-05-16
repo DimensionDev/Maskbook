@@ -20,12 +20,12 @@ import {
     TokenWithSocialGroupMenu,
     SocialAccountList,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, ProfileTabs } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -120,11 +120,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 }
 
-function handleOpenDialog() {
-    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
+function openWeb3ProfileSettingDialog() {
+    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
         open: true,
+        targetTab: PluginID.Web3Profile,
     })
 }
+
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
@@ -133,6 +135,7 @@ function Content(props: ProfileTabContentProps) {
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
+    const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
@@ -270,6 +273,7 @@ function Content(props: ProfileTabContentProps) {
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
+            data.type && setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
 
@@ -291,7 +295,14 @@ function Content(props: ProfileTabContentProps) {
         setMenuOpen(false)
     }
 
-    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(
+        profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '',
+    )
+
+    const { value: spaceList = EMPTY_LIST } = useSnapshotSpacesByTwitterHandler(
+        profileTabType === ProfileTabs.DAO ? currentVisitingUserId ?? '' : '',
+    )
+
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
     const trendingResult = collectionList?.[currentTrendingIndex]
 
@@ -304,7 +315,10 @@ function Content(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    const keyword = trendingResult?.address || trendingResult?.name
+    const keyword =
+        profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
+
+    const searchResults = profileTabType === ProfileTabs.WEB3 ? collectionList : spaceList
 
     if (keyword && !isHideInspector)
         return (
@@ -312,8 +326,9 @@ function Content(props: ProfileTabContentProps) {
                 <SearchResultInspector
                     keyword={keyword}
                     isProfilePage
+                    profileTabType={profileTabType}
                     currentSearchResult={trendingResult}
-                    searchResults={collectionList}
+                    searchResults={searchResults}
                     identity={identity}
                 />
             </div>
@@ -482,7 +497,7 @@ function Content(props: ProfileTabContentProps) {
                                     directTo={PluginID.Web3Profile}>
                                     <Icons.Gear
                                         variant="light"
-                                        onClick={handleOpenDialog}
+                                        onClick={openWeb3ProfileSettingDialog}
                                         className={classes.gearIcon}
                                         sx={{ cursor: 'pointer' }}
                                     />

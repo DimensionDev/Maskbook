@@ -1,15 +1,15 @@
-import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
-import { Typography, Button, Stack } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { EmptyStatus, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
-import { ActivityCard } from './ActivityCard.js'
+import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
+import { Button, Stack } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { RetryHint } from '@masknet/shared'
+import { ActivityCard } from './ActivityCard.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     wrapper: {
         display: 'flex',
         flexDirection: 'column',
@@ -17,17 +17,9 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 280,
         height: 280,
         width: '100%',
-        gap: 12,
         justifyContent: 'center',
     },
-    emptyIcon: {
-        width: 36,
-        height: 36,
-    },
-    emptyText: {
-        color: theme.palette.maskColor.publicSecond,
-    },
-}))
+})
 
 export interface ActivitiesListProps {
     events: AsyncStatePageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
@@ -57,13 +49,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
             </div>
         )
 
-    if (!_events.length)
-        return (
-            <div className={classes.wrapper}>
-                <Icons.EmptySimple className={classes.emptyIcon} />
-                <Typography className={classes.emptyText}>{t.plugin_collectible_nft_activity_empty()}</Typography>
-            </div>
-        )
+    if (!_events.length) return <EmptyStatus height={280}>{t.plugin_collectible_nft_activity_empty()}</EmptyStatus>
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>

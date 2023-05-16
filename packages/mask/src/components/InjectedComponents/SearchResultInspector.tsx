@@ -1,14 +1,15 @@
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import {
     getSearchResultContent,
+    getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID, type SocialIdentity } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, type SocialIdentity, ProfileTabs } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -44,6 +45,7 @@ export interface SearchResultInspectorProps {
     keyword?: string
     identity?: SocialIdentity
     isProfilePage?: boolean
+    profileTabType?: ProfileTabs
     searchResults?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     currentSearchResult?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
@@ -52,7 +54,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const dSearchEnabled = useValueRef(decentralizedSearchSettings)
-
+    const { profileTabType } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
@@ -67,7 +69,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentResult?.type })
     const contentComponent = useMemo(() => {
         if (!currentResult || !resultList.value?.length) return null
-        const Component = getSearchResultContent(currentResult)
+
+        const Component = profileTabType
+            ? getSearchResultContentForProfileTab(currentResult)
+            : getSearchResultContent(currentResult)
+
         return (
             <Component
                 resultList={resultList.value}
@@ -76,14 +82,18 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                 identity={props.identity}
             />
         )
-    }, [currentResult, resultList.value, props.isProfilePage, props.identity])
+    }, [currentResult, resultList.value, props.isProfilePage, props.identity, profileTabType])
 
     const tabs = useMemo(() => {
         if (!currentResult) return EMPTY_LIST
         return getSearchResultTabs(activatedPlugins, currentResult, translate)
     }, [activatedPlugins, resultList.value, translate])
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
+    const defaultTab = first(tabs)?.id ?? PluginID.Collectible
+    const [currentTab, onChange, , setTab] = useTabs(defaultTab, ...tabs.map((tab) => tab.id))
+    useLayoutEffect(() => {
+        setTab(defaultTab)
+    }, [currentResult, defaultTab])
 
     const tabContentComponent = useMemo(() => {
         if (!currentResult) return null
@@ -91,7 +101,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnabled) return null
+    if (!dSearchEnabled && profileTabType === ProfileTabs.WEB3) return null
     if (!keyword && !currentResult) return null
     if (!contentComponent) return null
 

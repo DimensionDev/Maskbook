@@ -1,14 +1,13 @@
-import { isDashboardPage } from '@masknet/shared-base'
+import { cloneElement, type HTMLAttributes, isValidElement } from 'react'
+import { Sniffings } from '@masknet/shared-base'
 import type { ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { type ChainId, type NetworkType, ProviderType } from '@masknet/web3-shared-solana'
-import { cloneElement, type HTMLAttributes, isValidElement } from 'react'
 
 export function ProviderIconClickBait({
     provider,
     children,
 }: ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>) {
-    const isDashboard = isDashboardPage()
-    const disabled = isDashboard && provider.type === ProviderType.Phantom
+    const disabled = Sniffings.is_dashboard_page && provider.type === ProviderType.Phantom
 
     return (
         <>

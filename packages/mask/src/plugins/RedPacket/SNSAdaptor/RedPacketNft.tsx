@@ -1,8 +1,8 @@
-import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
 import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { useCallback, useEffect, useMemo, useState, useRef, useLayoutEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
@@ -207,8 +207,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     )
 
     const [isClaimed, setIsClaimed] = useState(false)
-    const [showTooltip, setShowTooltip] = useState(false)
-    const textRef = useRef<HTMLDivElement>(null)
+    const [showTooltip, textRef] = useDetectOverflow()
     useEffect(() => {
         setIsClaimed(false)
     }, [account])
@@ -264,12 +263,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             tokenType: TokenType.NonFungible,
         })
     }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
-
-    useLayoutEffect(() => {
-        if (textRef.current) {
-            setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
-        }
-    }, [textRef.current])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return

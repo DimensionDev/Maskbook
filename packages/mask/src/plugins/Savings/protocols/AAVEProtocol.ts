@@ -17,6 +17,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { ProtocolType, type SavingsProtocol } from '../types.js'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export class AAVEProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.17'
@@ -71,12 +72,7 @@ export class AAVEProtocol implements SavingsProtocol {
                   }
                 }`,
             })
-            const response = await fetch(subgraphUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body,
-            })
-            const fullResponse: {
+            const response = await fetchJSON<{
                 data: {
                     reserves: Array<{
                         id: string
@@ -86,8 +82,21 @@ export class AAVEProtocol implements SavingsProtocol {
                         liquidityRate: number
                     }>
                 }
-            } = await response.json()
-            const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
+            }>(
+                subgraphUrl,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body,
+                    cache: 'default',
+                },
+                {
+                    enableCache: true,
+                    enableSquash: true,
+                },
+            )
+
+            const liquidityRate = +response.data.reserves[0].liquidityRate
 
             const RAY = pow10(27) // 10 to the power 27
 
@@ -121,13 +130,8 @@ export class AAVEProtocol implements SavingsProtocol {
                     }
                 }`,
             })
-            const response = await fetch(subgraphUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body,
-            })
 
-            const fullResponse: {
+            const response = await fetchJSON<{
                 data: {
                     reserves: Array<{
                         aToken: {
@@ -135,9 +139,20 @@ export class AAVEProtocol implements SavingsProtocol {
                         }
                     }>
                 }
-            } = await response.json()
+            }>(
+                subgraphUrl,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body,
+                },
+                {
+                    enableCache: true,
+                    enableSquash: true,
+                },
+            )
 
-            const aTokenId = fullResponse.data.reserves[0].aToken.id
+            const aTokenId = response.data.reserves[0].aToken.id
             const contract = createContract<ERC20>(web3, aTokenId || ZERO_ADDRESS, ERC20ABI as AbiItem[])
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
         } catch (error) {

@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
@@ -32,19 +31,13 @@ const useStyles = makeStyles()((theme) => ({
 function onConfirm() {
     return context.setMinimalMode(PluginID.GoPlusSecurity, true)
 }
-function CheckSecurityConfirmDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+}
+function CheckSecurityConfirmDialog({ open, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-
-    const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.on(({ open }) => {
-            setOpen(open)
-        })
-    }, [])
-
-    const onClose = () => setOpen(false)
 
     return (
         <InjectedDialog

@@ -1,21 +1,22 @@
-import { memo, type ReactNode, useEffect, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { CoinGeckoPriceEVM, GoPlusLabs } from '@masknet/web3-providers'
-import type { SecurityAPI } from '@masknet/web3-providers/types'
-import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { useFungibleToken, useFungibleTokenPrice } from '@masknet/web3-hooks-base'
+import { CoinGeckoTrending, GoPlusLabs } from '@masknet/web3-providers'
+import type { SecurityAPI } from '@masknet/web3-providers/types'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
+import { toNumber } from 'lodash-es'
+import { useEffect } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useI18N } from '../locales/index.js'
+import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
+import { Footer } from './components/Footer.js'
+import { NotFound } from './components/NotFound.js'
 import { SearchBox } from './components/SearchBox.js'
 import { Searching } from './components/Searching.js'
 import { SecurityPanel } from './components/SecurityPanel.js'
-import { Footer } from './components/Footer.js'
-import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
-import { NotFound } from './components/NotFound.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -33,32 +34,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Center = memo(({ children }: { children: ReactNode }) => (
-    <Stack height="100%" justifyContent="center" alignItems="center">
-        {children}
-    </Stack>
-))
-
-export function CheckSecurityDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+    searchHidden: boolean
+    chainId: ChainId
+    tokenAddress: string
+}
+export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, tokenAddress }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const [chainId, setChainId] = useState<ChainId>()
-    const [open, setOpen] = useState(false)
-    const [searchHidden, setSearchHidden] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.checkSecurityDialogEvent.on((env) => {
-            if (!env.open) return
-            setOpen(env.open)
-            setSearchHidden(env.searchHidden)
-            onSearch(env.chainId ?? ChainId.Mainnet, env.tokenAddress ?? ZERO_ADDRESS)
-        })
-    }, [])
+        onSearch(chainId, tokenAddress)
+    }, [ChainId, tokenAddress])
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(
         async (chainId: ChainId, content: string): Promise<SecurityAPI.TokenSecurityType | undefined> => {
             if (!content || isSameAddress(content.trim(), ZERO_ADDRESS)) return
-            setChainId(chainId)
             const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
             if (!values) throw new Error(t.contract_not_found())
             return values
@@ -71,12 +64,12 @@ export function CheckSecurityDialog() {
         value?.contract,
     )
     const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
-    const { value: tokenMarketCapInfo } = useAsync(async () => {
-        if (!value?.token_symbol) return
-        return CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId.Mainnet, value.token_symbol)
-    }, [value])
+    const { value: tokenMarketCap } = useAsync(async () => {
+        if (!value?.contract || !value.token_symbol) return
 
-    const onClose = () => setOpen(false)
+        const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(value.contract)
+        return marketInfo?.market_cap ? toNumber(marketInfo.market_cap) : undefined
+    }, [value?.contract, !value?.token_symbol])
 
     return (
         <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
@@ -89,9 +82,9 @@ export function CheckSecurityDialog() {
                     )}
                     <Stack flex={1}>
                         {searching || loadingToken ? (
-                            <Center>
+                            <Stack height="100%" justifyContent="center" alignItems="center">
                                 <Searching />
-                            </Center>
+                            </Stack>
                         ) : null}
                         {error && !searching && !loadingToken ? <NotFound /> : null}
                         {!error && !searching && !loadingToken && value ? (
@@ -99,13 +92,13 @@ export function CheckSecurityDialog() {
                                 tokenInfo={tokenDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice}
-                                tokenMarketCap={tokenMarketCapInfo}
+                                tokenMarketCap={tokenMarketCap}
                             />
                         ) : null}
                         {!error && !searching && !loadingToken && !value && (
-                            <Center>
+                            <Stack height="100%" justifyContent="center" alignItems="center">
                                 <DefaultPlaceholder />
-                            </Center>
+                            </Stack>
                         )}
                     </Stack>
                 </Stack>

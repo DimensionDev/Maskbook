@@ -7,7 +7,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { SuffixToChainIconMap } from '../constants.js'
+import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { PluginHeader } from './PluginHeader.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
@@ -83,7 +83,11 @@ export function SearchResultInspectorContent() {
                 <section className={classes.ensInfo}>
                     {domain && ChainIcon ? <ChainIcon size={30} className={classes.ensIcon} /> : null}
                     <div>
-                        {domain ? <Typography className={classes.domain}>{domain}</Typography> : null}
+                        {domain ? (
+                            <Typography className={classes.domain}>
+                                {Others?.formatDomainName(domain) || domain}
+                            </Typography>
+                        ) : null}
                         {reversedAddress ? (
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
@@ -97,7 +101,10 @@ export function SearchResultInspectorContent() {
                                     rel="noopener noreferrer"
                                     className={classes.link}
                                     href={
-                                        Others?.explorerResolver.addressLink?.(ChainId.Mainnet, reversedAddress) ?? ''
+                                        Others?.explorerResolver.addressLink?.(
+                                            (suffix ? SuffixToChainIdMap[suffix] : ChainId.Mainnet) ?? ChainId.Mainnet,
+                                            reversedAddress,
+                                        ) ?? ''
                                     }>
                                     <Icons.LinkOut size={20} className={classes.reversedAddressIcon} />
                                 </Link>

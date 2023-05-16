@@ -4,7 +4,10 @@ import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
 import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
+import { ProfileTabs, PluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { BooleanPreference } from '@masknet/plugin-infra'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -15,10 +18,13 @@ import {
     searchProfileTabSelector,
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
+    isProfilePageLike,
 } from '../utils/selector.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import Services from '../../../extension/service.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
+import { useAsync } from 'react-use'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
@@ -52,6 +58,7 @@ const useStyles = makeStyles()((theme) => {
                 cursor: 'pointer',
             },
             height: props.height,
+            display: 'inline-block',
         },
         button: {
             zIndex: 1,
@@ -172,7 +179,7 @@ function resetTwitterActivatedContent() {
     }
 }
 
-export function ProfileTabAtTwitter() {
+export function ProfileTabForTokenAndPersona() {
     const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
@@ -197,6 +204,41 @@ export function ProfileTabAtTwitter() {
                     ? 'More'
                     : 'Web3'
             }
+            type={ProfileTabs.WEB3}
+            classes={{
+                root: classes.root,
+                button: classes.button,
+                selected: classes.selected,
+            }}
+            reset={resetTwitterActivatedContent}
+            clear={hideTwitterActivatedContent}
+            children={<div className={classes.line} />}
+        />
+    )
+}
+
+export function ProfileTabForDAO() {
+    const { classes } = useStyles()
+    const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
+    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
+    const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
+
+    const { value: snapshotDisabled } = useAsync(() => {
+        return Services.Settings.getPluginMinimalModeEnabled(PluginID.Snapshot)
+    }, [])
+
+    const [hidden, setHidden] = useState(snapshotDisabled === BooleanPreference.True)
+
+    useEffect(() => {
+        return MaskMessages.events.profileTabHidden.on((data) => {
+            setHidden(data.hidden)
+        })
+    }, [])
+
+    return hidden || loading || !spaceList?.length ? null : (
+        <ProfileTab
+            title="DAO"
+            type={ProfileTabs.DAO}
             classes={{
                 root: classes.root,
                 button: classes.button,
@@ -215,11 +257,25 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
-            startWatch(watcher, signal)
-            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtTwitter />)
+            startWatch(watcher, {
+                signal,
+                missingReportRule: {
+                    name: 'Last tab in the profile page',
+                    rule: isProfilePageLike,
+                },
+            })
+            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+                <>
+                    <ProfileTabForTokenAndPersona />
+                    <ProfileTabForDAO />
+                </>,
+            )
             tabInjected = true
         }
     })
 
-    startWatch(contentWatcher, signal)
+    startWatch(contentWatcher, {
+        signal,
+        missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
+    })
 }

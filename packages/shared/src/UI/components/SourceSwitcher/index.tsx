@@ -4,7 +4,6 @@ import { Stack, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Box } from '@mui/system'
-import { useSharedI18N } from '@masknet/shared'
 import { FootnoteMenu } from '../FootnoteMenu/index.js'
 import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
@@ -32,7 +31,6 @@ export interface SourceSwitcherProps extends withClasses<'source' | 'selectedOpt
 
 export function SourceSwitcher(props: SourceSwitcherProps) {
     const { result, setResult, resultList } = props
-    const t = useSharedI18N()
     const { classes } = useStyles(undefined, { props })
     const sourceTypes = uniqBy(resultList, (x) => x.source).map((x) => x.source)
     return (

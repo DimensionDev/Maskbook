@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { AssetPreviewer, InjectedDialog, type InjectedDialogProps, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
+import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, PropsWithChildren } from 'react'
@@ -96,7 +96,6 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
     onClose,
     ...rest
 }) => {
-    const { Others } = useWeb3State()
     const { classes } = useStyles()
     const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'
@@ -106,7 +105,6 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
         nonFungibleTokenAddress,
         nonFungibleTokenId ?? '',
     )
-    const uiTokenId = Others?.formatTokenId(nonFungibleToken?.tokenId)
     return (
         <InjectedDialog
             classes={{
@@ -148,9 +146,6 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                                 <div className={classes.nftName}>
                                     <Typography fontWeight={700} fontSize={20} lineHeight="24px">
                                         {nonFungibleToken?.metadata?.name}
-                                    </Typography>
-                                    <Typography fontWeight={700} fontSize={16} mx="7px">
-                                        {uiTokenId}
                                     </Typography>
                                     {nonFungibleToken.collection?.verified ? <Icons.Verification size={21.43} /> : null}
                                 </div>

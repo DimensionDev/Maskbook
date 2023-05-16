@@ -12,7 +12,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
-import type { Solana } from '../types/index.js'
+import type { Solana } from '../types/Solana.js'
 import { resolveActivityType, parseJSON, getAssetFullName, fetchJSON } from '../../entry-helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
@@ -87,7 +87,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             : undefined,
         metadata: {
             chainId,
-            name: getAssetFullName(asset.token_address, name, name),
+            name: getAssetFullName(asset.token_address, payload?.collection?.name || name, name),
             symbol,
             description,
             imageURL: mediaURL,

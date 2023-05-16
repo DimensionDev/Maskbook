@@ -7,7 +7,13 @@ import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, type NonFungibleAsset } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    isLensProfileAddress,
+    type ChainId,
+    type SchemaType,
+    isLensFollower,
+    isLensCollect,
+} from '@masknet/web3-shared-evm'
 import { FormControl, Typography } from '@mui/material'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { useI18N } from '../../locales/index.js'
@@ -53,7 +59,8 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: 0,
     },
     loadingList: {
-        overflow: 'auto',
+        overflowY: 'scroll',
+        flexGrow: 1,
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,
@@ -105,8 +112,16 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
+        const filtered = isEvm
+            ? fetchedTokens.filter((x) => {
+                  if (isLensProfileAddress(x.address)) return false
+                  if (x.metadata?.name && isLensFollower(x.metadata.name)) return false
+                  if (x.collection?.name && isLensCollect(x.collection.name)) return false
+                  return true
+              })
+            : fetchedTokens
         return uniqWith(
-            fetchedTokens,
+            filtered,
             isEvm
                 ? (v1, v2) => {
                       return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
@@ -156,7 +171,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                                         setNonFungibleTokenId(tokenId)
                                     }}
                                 />
-                                <ElementAnchor callback={() => next?.()}>
+                                <ElementAnchor key={fetchedTokens.length} callback={() => next?.()}>
                                     {!done && <LoadingBase size={36} />}
                                 </ElementAnchor>
                             </div>

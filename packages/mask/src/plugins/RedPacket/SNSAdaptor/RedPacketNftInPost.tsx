@@ -3,6 +3,7 @@ import { RedPacketRPC } from '../messages.js'
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { RedPacketNft } from './RedPacketNft.js'
 import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
+import { ChainContextProvider } from '@masknet/web3-hooks-base'
 
 export interface RedPacketNftInPostProps {
     payload: RedPacketNftJSONPayload
@@ -19,7 +20,9 @@ export function RedPacketNftInPost({ payload }: RedPacketNftInPostProps) {
     }, [payload])
     return (
         <TransactionConfirmDialogProvider>
-            <RedPacketNft payload={payload} />
+            <ChainContextProvider value={{ chainId: payload.chainId }}>
+                <RedPacketNft payload={payload} />
+            </ChainContextProvider>
         </TransactionConfirmDialogProvider>
     )
 }

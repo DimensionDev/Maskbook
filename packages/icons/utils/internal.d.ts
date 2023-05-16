@@ -2,6 +2,16 @@ import { MaskIconPalette } from './MaskIconPaletteContext.js'
 import { SxProps, Theme } from '@mui/material'
 import type { ComponentType } from 'react'
 
+export interface __RawIcon__ {
+    // currentVariant
+    c?: string[]
+    // URL
+    u: () => URL
+    // JSX
+    j?: () => object
+    // supportColor
+    s?: boolean
+}
 export interface GeneratedIconProps<Variants extends MaskIconPalette = never>
     extends GeneratedIconNonSquareProps<Variants> {
     size?: number

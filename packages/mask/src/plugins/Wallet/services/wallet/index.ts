@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
-import { toBuffer } from 'ethereumjs-util'
+import { toBuffer } from '@ethereumjs/util'
 import { Web3Signer } from '@masknet/web3-providers'
 import type { SignType, Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'

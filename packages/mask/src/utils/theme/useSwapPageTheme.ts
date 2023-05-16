@@ -1,6 +1,6 @@
 import { parseColor, MaskColors } from '@masknet/theme'
 import { unstable_createMuiStrictModeTheme } from '@mui/material'
-import produce, { setAutoFreeze } from 'immer'
+import { produce, setAutoFreeze } from 'immer'
 
 import { MaskLightTheme } from './MaskTheme.js'
 

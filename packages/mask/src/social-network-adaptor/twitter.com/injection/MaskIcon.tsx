@@ -6,8 +6,13 @@ import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { memoize, noop } from 'lodash-es'
 import Services from '../../../extension/service.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../utils/watcher.js'
-import { bioPageUserIDSelector, bioPageUserNickNameSelector, floatingBioCardSelector } from '../utils/selector.js'
+import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
+import {
+    bioPageUserIDSelector,
+    bioPageUserNickNameSelector,
+    floatingBioCardSelector,
+    isProfilePageLike,
+} from '../utils/selector.js'
 
 function Icon(props: { size: number }) {
     return (
@@ -20,40 +25,34 @@ function Icon(props: { size: number }) {
         />
     )
 }
-function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: AbortSignal) {
-    // TODO: for unknown reason the MutationObserverWatcher doesn't work well
-    // To reproduce, open a profile and switch to another profile.
-    startWatch(
-        new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            let remover = noop
-            const remove = () => remover()
-            const check = () => {
-                ifUsingMask(
-                    ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(
-                        null,
-                    ),
-                ).then(() => {
-                    const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal })
-                    root.render(<Icon size={size} />)
-                    remover = root.destroy
-                }, remove)
-            }
-            check()
-            return {
-                onNodeMutation: check,
-                onTargetChanged: check,
-                onRemove: remove,
-            }
-        }),
-        signal,
-    )
+function _(main: () => LiveSelector<HTMLElement, true>, size: number, options: WatchOptions) {
+    const watcher = new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
+        let remover = noop
+        const remove = () => remover()
+        const check = () => {
+            ifUsingMask(
+                ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(null),
+            ).then(() => {
+                const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal: options.signal })
+                root.render(<Icon size={size} />)
+                remover = root.destroy
+            }, remove)
+        }
+        check()
+        return {
+            onNodeMutation: check,
+            onTargetChanged: check,
+            onRemove: remove,
+        }
+    })
+    startWatch(watcher, options)
 }
 
 export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
     // profile
-    _(bioPageUserNickNameSelector, 24, signal)
+    _(bioPageUserNickNameSelector, 24, { signal, missingReportRule: { name: 'User badge', rule: isProfilePageLike } })
     // floating bio
-    _(floatingBioCardSelector, 20, signal)
+    _(floatingBioCardSelector, 20, { signal })
 }
 export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal) {
     const ls = new LiveSelector([post.rootElement])
@@ -76,7 +75,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         remover()
     }
 }
-export const ifUsingMask = memoizePromise(
+const ifUsingMask = memoizePromise(
     memoize,
     async (pid: ProfileIdentifier | null) => {
         if (!pid) throw new Error()

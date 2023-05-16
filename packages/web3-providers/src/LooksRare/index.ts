@@ -125,16 +125,16 @@ function createNonFungibleTokenOrderFromOrder(
     chainId: ChainId,
     order: Order,
 ): NonFungibleTokenOrder<ChainId, SchemaType> {
-    const paymentToken = getPaymentToken(chainId, { address: order.currencyAddress })
+    const paymentToken = getPaymentToken(chainId, { address: order.currency })
     return {
         id: order.hash,
         chainId,
-        quantity: order.amount.toString(),
+        quantity: order.amounts.length.toString(),
         hash: order.hash,
-        side: order.isOrderAsk ? OrderSide.Sell : OrderSide.Buy,
+        side: order.quoteType === 1 ? OrderSide.Sell : OrderSide.Buy,
         assetPermalink: urlcat('https://looksrare.org/collections/:address/:tokenId', {
-            address: order.collectionAddress,
-            tokenId: order.tokenId,
+            address: order.collection,
+            tokenId: order.itemIds[0],
         }),
         maker: {
             address: order.signer,
@@ -143,7 +143,7 @@ function createNonFungibleTokenOrderFromOrder(
         expiredAt: fromUnixTime(order.endTime).getTime(),
         priceInToken: {
             amount: order.price,
-            token: paymentToken ?? createERC20Token(chainId, order.currencyAddress),
+            token: paymentToken ?? createERC20Token(chainId, order.currency),
         },
         source: SourceType.LooksRare,
     }
@@ -248,22 +248,21 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             data: Order[]
         }>(
             chainId,
-            urlcat('/api/v1/orders', {
-                // For ask (aka. listing) set true. For bid (aka. offer) set false.
-                isOrderAsk: side === OrderSide.Sell,
+            urlcat('/api/v2/orders', {
+                // For ask (aka. listing) set 1. For bid (aka. offer) set 0.
+                quoteType: side === OrderSide.Sell ? 1 : 0,
                 collection: address,
-                tokenId,
+                itemId: tokenId,
                 pagination: indicator
                     ? JSON.stringify({
                           first: indicator.index * LOOKSRARE_PAGE_SIZE,
                       })
                     : undefined,
-                sort: 'NEWEST',
+                sort: 'PRICE_DESC',
             }),
         )
 
         if (!response?.data.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
-
         const orders = response.data.map((x) => createNonFungibleTokenOrderFromOrder(chainId, x))
         return createPageable(
             orders,

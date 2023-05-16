@@ -111,6 +111,5 @@
     "price": "Price",
     "no_NFTs_found": "No NFTs found.",
     "load_more": "Load More",
-    "nft_minted": "NFT is not minted yet.",
-    "verified_by": "Verified by {{ marketplace }}"
+    "nft_minted": "NFT is not minted yet."
 }

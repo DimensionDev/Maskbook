@@ -186,6 +186,7 @@ export function createProviderResolver<ChainId, ProviderType>(
 export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
     {
         [SocialAddressType.Address]: '',
+        [SocialAddressType.ARBID]: 'https://arb.id/',
         [SocialAddressType.ENS]: 'https://ens.domains/',
         [SocialAddressType.SPACE_ID]: 'https://space.id/',
         [SocialAddressType.RSS3]: 'https://rss3.bio/',
@@ -344,6 +345,8 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return `https://warpcast.com/${identifier}`
         case NextIDPlatform.Bit:
             return `https://bit.cc/${name}`
+        case NextIDPlatform.Unstoppable:
+            return `https://ud.me/${name}`
         default:
             return ''
     }

@@ -1,11 +1,11 @@
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import { R2D2KeyValueAPI } from '../R2D2/index.js'
 import type { Storage } from '@masknet/web3-shared-base'
 
-const caches = new Map<string, LRU<string, unknown>>()
+const caches = new Map<string, LRUCache<string, any>>()
 
 export class KVStorage implements Storage {
-    private cache: LRU<string, unknown> | undefined
+    private cache: LRUCache<string, any> | undefined
     private keyValue = new R2D2KeyValueAPI()
 
     constructor(private namespace: string) {
@@ -14,7 +14,7 @@ export class KVStorage implements Storage {
             this.cache = cache
             return
         } else {
-            const lru = new LRU<string, unknown>({
+            const lru = new LRUCache<string, any>({
                 max: 500,
                 ttl: 60_000,
             })
@@ -34,7 +34,7 @@ export class KVStorage implements Storage {
 
     async get<T>(key: string) {
         const cacheKey = `${this.namespace}_${key}`
-        const cache = this.cache?.get<T>(cacheKey)
+        const cache = this.cache?.get(cacheKey)
 
         return cache ?? this.getKV<T>().get(key)
     }

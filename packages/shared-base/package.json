@@ -17,7 +17,7 @@
     "@masknet/encryption": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/typed-message": "workspace:^",
-    "@msgpack/msgpack": "^2.8.0",
+    "@msgpack/msgpack": "^3.0.0-beta2",
     "@mui/icons-material": "link:..\\empty",
     "@mui/lab": "link:..\\empty",
     "@mui/material": "link:..\\empty",
@@ -28,18 +28,17 @@
     "@types/react": "18.0.27",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.1.5",
-    "bignumber.js": "9.1.0",
-    "dompurify": "^2.4.1",
+    "bignumber.js": "9.1.1",
+    "dompurify": "^3.0.2",
     "i18next-browser-languagedetector": "^7.0.1",
     "idb": "^7.1.1",
     "json-stable-stringify": "^1.0.2",
     "pvtsutils": "^1.3.2",
     "react": "link:..\\empty",
     "tiny-secp256k1": "^2.2.1",
-    "typeson": "^7.0.2",
-    "typeson-registry": "^3.0.0",
-    "web3-utils": "1.8.0",
-    "z-schema": "^5.0.3"
+    "typeson": "^8.0.1",
+    "typeson-registry": "^5.0.0",
+    "web3-utils": "1.8.0"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"

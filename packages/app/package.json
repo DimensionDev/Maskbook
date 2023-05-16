@@ -24,8 +24,8 @@
         ]
     },
     "dependencies": {
-        "@headlessui/react": "^1.7.12",
-        "@heroicons/react": "^2.0.16",
+        "@headlessui/react": "^1.7.14",
+        "@heroicons/react": "^2.0.17",
         "@masknet/base": "workspace:^",
         "@masknet/encryption": "workspace:^",
         "@masknet/plugin-evm": "workspace:^",
@@ -47,33 +47,33 @@
         "@masknet/web3-shared-solana": "workspace:^",
         "@servie/events": "^3.0.0",
         "@tailwindcss/aspect-ratio": "^0.4.2",
-        "@tailwindcss/container-queries": "^0.1.0",
+        "@tailwindcss/container-queries": "^0.1.1",
         "@tailwindcss/forms": "^0.5.3",
-        "@tailwindcss/line-clamp": "^0.4.2",
+        "@tailwindcss/line-clamp": "^0.4.4",
         "@tailwindcss/typography": "^0.5.9",
         "async-call-rpc": "^6.1.5",
-        "autoprefixer": "^10.4.13",
+        "autoprefixer": "^10.4.14",
         "cross-env": "^7.0.3",
         "crypto-browserify": "^3.12.0",
-        "cssnano": "^5.1.15",
+        "cssnano": "^6.0.0",
         "idb": "^7.1.1",
-        "postcss": "^8.4.21",
+        "postcss": "^8.4.22",
         "postcss-cli": "^10.1.0",
         "purgecss": "^5.0.0",
         "stream-browserify": "^3.0.0",
-        "tailwindcss": "^3.2.7"
+        "tailwindcss": "^3.3.1"
     },
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^6.7.3",
-        "html-webpack-plugin": "^5.5.0",
+        "html-webpack-plugin": "^5.5.1",
         "react-refresh": "^0.14.0",
         "source-map-loader": "^4.0.1",
-        "style-loader": "^3.3.1",
+        "style-loader": "^3.3.2",
         "swc-loader": "^0.2.3",
-        "webpack": "^5.76.0",
+        "webpack": "Jack-Works/webpack#lazy-import",
         "webpack-cli": "^5.0.1",
-        "webpack-dev-server": "^4.11.1"
+        "webpack-dev-server": "^4.13.3"
     }
 }

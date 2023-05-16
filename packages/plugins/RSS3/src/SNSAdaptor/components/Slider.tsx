@@ -1,7 +1,16 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { range } from 'lodash-es'
-import { type FC, Children, useState, useRef, type CSSProperties, type HTMLProps, useEffect } from 'react'
+import {
+    type FC,
+    Children,
+    useState,
+    useRef,
+    type CSSProperties,
+    type HTMLProps,
+    useEffect,
+    useLayoutEffect,
+} from 'react'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {},
@@ -46,13 +55,15 @@ export const Slider: FC<Props> = ({ children, className, onUpdate, ...rest }) =>
     const [index, setIndex] = useState(0)
 
     const count = Children.count(children)
-
-    const style: CSSProperties = containerRef.current
-        ? {
-              width: containerRef.current.offsetWidth * count,
-              transform: `translate(${-containerRef.current.offsetWidth * index}px, 0)`,
-          }
-        : {}
+    const [style, setStyle] = useState<CSSProperties>({})
+    useLayoutEffect(() => {
+        if (!containerRef.current) return
+        const offsetWidth = containerRef.current.offsetWidth
+        setStyle({
+            width: offsetWidth * count,
+            transform: `translate(${-offsetWidth * index}px, 0)`,
+        })
+    }, [count, index])
 
     useEffect(() => {
         onUpdate?.(index)

@@ -9,6 +9,7 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useMemo } from 'react'
 
 function useContext(initialState?: { account?: string; chainId?: Web3Helper.ChainIdAll; pluginID?: NetworkPluginID }) {
     const { account, chainId } = useChainContext({ account: initialState?.account, chainId: initialState?.chainId })
@@ -21,13 +22,16 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
         chainId,
     })
 
-    const assets = (fungibleAssets?.value ?? EMPTY_LIST).map((x) => {
-        if (isNativeTokenAddress(x.address))
-            return { ...x, logoURL: Others?.chainResolver.nativeCurrency(x.chainId)?.logoURL || x.logoURL }
-        const token = fungibleTokens.find((y) => isSameAddress(x.address, y.address) && x.chainId === y.chainId)
-        if (!token?.logoURL) return x
-        return { ...x, logoURL: token.logoURL }
-    })
+    const assets = useMemo(() => {
+        if (!fungibleAssets?.value) return EMPTY_LIST
+        return fungibleAssets.value.map((x) => {
+            if (isNativeTokenAddress(x.address))
+                return { ...x, logoURL: Others?.chainResolver.nativeCurrency(x.chainId)?.logoURL || x.logoURL }
+            const token = fungibleTokens.find((y) => isSameAddress(x.address, y.address) && x.chainId === y.chainId)
+            if (!token?.logoURL) return x
+            return { ...x, logoURL: token.logoURL }
+        })
+    }, [fungibleAssets.value, fungibleTokens, Others?.chainResolver.nativeCurrency])
     return {
         account,
         chainId,

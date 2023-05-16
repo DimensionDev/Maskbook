@@ -23,14 +23,14 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
+    "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
-    "bignumber.js": "9.1.0",
+    "bignumber.js": "9.1.1",
     "date-fns": "^2.29.3",
-    "immer": "^9.0.21",
-    "opensea-js": "^1.2.7",
+    "immer": "^10.0.1",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
     "unstated-next": "^1.1.0",
-    "urlcat": "2.0.4"
+    "urlcat": "^3.1.0"
   }
 }

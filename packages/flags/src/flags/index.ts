@@ -39,8 +39,6 @@ export const flags = {
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: insiderOnly,
 
-    simplehash_ab_percentage: 50,
-
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,
     sentry_sample_rate: 0.1,

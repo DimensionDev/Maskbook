@@ -1,5 +1,5 @@
 import { unstable_createMuiStrictModeTheme, type Theme } from '@mui/material'
-import produce, { setAutoFreeze } from 'immer'
+import { produce, setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 

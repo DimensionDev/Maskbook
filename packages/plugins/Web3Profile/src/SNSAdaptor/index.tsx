@@ -1,20 +1,16 @@
+import { Icons } from '@masknet/icons'
+import { type Plugin } from '@masknet/plugin-infra'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { Firefly } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { type Plugin } from '@masknet/plugin-infra'
-import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
-import { context, setupContext, setupStorage } from './context.js'
-import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
-import { FollowLensDialog } from './components/FollowLensDialog.js'
-import { useAsync } from 'react-use'
-import { NextIDProof } from '@masknet/web3-providers'
 import { LensBadge } from './components/LensBadge.js'
-import { LensPopup } from './components/LensPopup.js'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { setupContext, setupStorage } from './context.js'
+import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -23,17 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         await setupStorage(context)
     },
 
-    GlobalInjection: function Component() {
-        return (
-            <SNSAdaptorContext.Provider value={context}>
-                <Web3ProfileDialog />
-                <ChainContextProvider value={{ chainId: ChainId.Matic }}>
-                    <FollowLensDialog />
-                </ChainContextProvider>
-                <LensPopup />
-            </SNSAdaptorContext.Provider>
-        )
-    },
+    GlobalInjection: Web3ProfileGlobalInjection,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Web3Profile size={36} />
@@ -95,10 +81,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
-                const { value: accounts = EMPTY_LIST } = useAsync(async () => {
-                    if (!identity?.userId) return
-                    return NextIDProof.queryAllLens(identity?.userId)
-                }, [identity?.userId])
+                const { data: accounts = EMPTY_LIST } = useQuery({
+                    queryKey: [identity?.userId],
+                    enabled: !!identity?.userId,
+                    queryFn: async () => {
+                        if (!identity?.userId) return
+                        return Firefly.getLensByTwitterId(identity.userId)
+                    },
+                })
 
                 const hasLens = !accounts.length
                 useEffect(() => {

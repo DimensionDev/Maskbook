@@ -13,6 +13,6 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/theme": "workspace:^",
-    "ef.js": "^0.16.0"
+    "ef.js": "^0.16.6"
   }
 }

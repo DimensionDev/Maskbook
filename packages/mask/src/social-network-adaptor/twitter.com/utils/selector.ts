@@ -1,6 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils.js'
-import { isMobileTwitter } from './isMobile.js'
 import { isCompose } from './postBox.js'
 
 type E = HTMLElement
@@ -14,9 +13,6 @@ export const querySelectorAll = <T extends E>(selector: string) => {
 }
 
 // #region "Enhanced Profile"
-export const searchProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"]')
-
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
@@ -34,22 +30,12 @@ export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, t
 
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
-export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"]')
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
-export const searchAllProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"]')
 export const searchAppBarBackSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="app-bar-back"] > div')
-export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"] > div > div')
-export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"] [role="tablist"] [role="tab"][aria-selected="true"] > div')
 export const searchProfileTabListSelector = () =>
     querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
-export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] > div > div > div > div > div > div > div > div > div > div')
 export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
     const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')
     if (q.evaluate()) return q
@@ -78,24 +64,11 @@ export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
     ).closest(1)
-// To get margin bottom of menu button, and apply it to tip button to align it.
-export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')
 
 export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid^="UserAvatar-Container-"]')
         .closest(1)
         .querySelector('a[href="/settings/profile"]')
-
-export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
-    querySelector<HTMLDivElement, SingleMode>(
-        [
-            '.profile',
-            'a[href*="header_photo"] ~ div',
-            'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
-        ].join(','),
-        singleMode,
-    )
 // #endregion
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
@@ -110,12 +83,6 @@ export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> 
             '[role=main] [role=button][data-testid=tweetButton]',
         ].join(','),
     )
-export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>(
-        'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
-    )
-export const headingTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('[role="banner"] [role="heading"]')
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -147,14 +114,6 @@ export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
     // To match the scenario with no results in timeline.
     querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > :nth-child(2)')
 
-export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
-
-export const twitterMainAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="toolBar"]')
-        .closest<HTMLElement>(4)
-        .querySelector<HTMLElement>('div > a > div > :nth-child(2) > div')
-
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 export const profileBioSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
@@ -165,8 +124,17 @@ export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
         .querySelector<HTMLDivElement>('div[dir]')
+
+export function isProfilePageLike() {
+    // starts with exclude
+    if (location.pathname.match(/^\/(home|explore|notifications|messages|i\/|settings|compose|search)/)) return false
+    // ends with exclude
+    if (location.pathname.match(/\/(topics|recommended|not_interested|lists)$/)) return false
+    return !!location.pathname.match(/^\/[\dA-Za-z]+\/?$/)
+}
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
     selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
+
 export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(
         '[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]',
@@ -210,8 +178,6 @@ export const postsContentSelector = () =>
             '[data-testid="tweet"] + div div div[lang][dir]',
         ].join(','),
     )
-
-export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
 
 export const postAvatarSelector = () => querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
 export const followUserAvatarSelector = () =>
@@ -277,34 +243,9 @@ export const searchProfileAvatarSelector = () => {
         .closest<E>(3)
 }
 
-export const searchProfileAvatarParentSelector = () =>
-    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]
-        .firstChild?.firstChild?.lastChild?.firstChild as HTMLDivElement
-
-export const searchAvatarSelectorInput = () =>
-    querySelectorAll<E>('[data-testid="fileInput"]')
-        .at(1)
-        .closest<HTMLDivElement>(2)
-        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > :first-child')
-export const searchAvatarSelectorImage = () =>
-    querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
-        .at(1)
-        .closest<HTMLDivElement>(2)
-        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
-
-export const searchTwitterAvatarOpenFilesSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
 export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')
-
-export const searchProfileSetAvatarSelector = () =>
-    isMobileTwitter
-        ? searchProfessionalButtonSelector()
-              .closest<E>(4)
-              .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
-        : querySelector<E>('[data-testid^="ProfileBirthdate"]')
-              .closest<E>(5)
-              .querySelector('div > div:nth-child(2) > div:nth-child(2)')
 // #endregion
 
 // #region avatar selector
@@ -322,10 +263,6 @@ export const searchTwitterCircleAvatarSelector = () =>
 // #endregion
 
 export const searchTwitterSquareAvatarSelector = () => querySelector<E>('a[href$="/nft"] > div img')
-
-// #region twitter avatar
-export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
-// #endregion
 
 export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
@@ -354,10 +291,7 @@ export const searchReplyToolbarSelector = () =>
         'div[data-testid="geoButton"]',
     )
 
-export const searchRejectReplyTextSelector = () =>
-    querySelector<E>('div[data-testid="tweetTextarea_0"] > div > div > div > span')
-
 // nameTag dom
 export const searchNameTag = () => querySelector<E>('#nft-gallery')
 
-export const searchHomeLinkName = () => querySelector<E>('[data-testid="AppTabBar_Home_Link"] span')
+export const searchHomeLinkName = () => querySelector<E>('[data-testid="AppTabBar_Home_Link"]')

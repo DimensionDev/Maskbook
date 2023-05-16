@@ -1,22 +1,22 @@
 import { memo } from 'react'
+import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isDashboardPage } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../../utils/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page
-const useStyles = makeStyles<{
-    isDashboard: boolean
-}>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     trade: {
         marginBottom: 8,
         padding: 10,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${
+            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+        }!important`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         borderRadius: 8,
         alignItems: 'flex-start',
         cursor: 'pointer',
@@ -29,8 +29,10 @@ const useStyles = makeStyles<{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${
+            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+        }!important`,
         borderRadius: 8,
         cursor: 'pointer',
     },
@@ -39,20 +41,20 @@ const useStyles = makeStyles<{
         position: 'absolute',
         bottom: 10,
         right: 10,
-        color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         display: 'flex',
         alignItems: 'center',
         gap: 4,
     },
     provider: {
-        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.main,
         fontSize: 18,
         lineHeight: '36px',
         fontWeight: 700,
         wordBreak: 'keep-all',
     },
     cost: {
-        color: isDashboard ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor?.second,
         lineHeight: '18px',
         marginTop: 8,
         display: 'flex',
@@ -69,7 +71,9 @@ const useStyles = makeStyles<{
         width: 'auto',
     },
     focus: {
-        border: `2px solid ${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary}!important`,
+        border: `2px solid ${
+            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
+        }!important`,
     },
     best: {
         position: 'absolute',
@@ -107,10 +111,8 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         isGreatThanSlippageSetting,
         priceImpact,
     }) => {
-        const isDashboard = isDashboardPage()
-
         const { t } = useI18N()
-        const { classes, cx } = useStyles({ isDashboard })
+        const { classes, cx } = useStyles()
 
         if (loading)
             return (
@@ -187,10 +189,8 @@ export interface DefaultTraderPlaceholderUIProps {
 }
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {
-    const isDashboard = isDashboardPage()
-
     const { t } = useI18N()
-    const { classes, cx } = useStyles({ isDashboard })
+    const { classes, cx } = useStyles()
 
     return (
         <TextField

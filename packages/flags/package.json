@@ -12,6 +12,6 @@
     },
     "types": "./dist/index.d.ts",
     "devDependencies": {
-      "urlcat": "^2.0.4"
+      "urlcat": "^3.1.0"
     }
   }

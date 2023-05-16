@@ -1,9 +1,8 @@
-import { story } from '../utils/index.js'
-import TabContext from '@mui/lab/TabContext'
-import TabPanel from '@mui/lab/TabPanel'
+import { TabContext, TabPanel } from '@mui/lab'
 import { Stack, Tab } from '@mui/material'
 import { useState } from 'react'
 import { MaskTabList, type MaskTabListProps } from '../../src/index.js'
+import { story } from '../utils/index.js'
 
 const defaultTabs = ['One', 'Two', 'Three']
 const { meta, of } = story(function ({

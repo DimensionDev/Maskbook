@@ -102,7 +102,7 @@ export const UploadAvatarDialog: FC = () => {
             navigate(RoutePaths.Exit)
             setDisabled(false)
             await delay(500)
-            // location.reload()
+            location.reload()
         }, 'image/png')
     }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar])
 

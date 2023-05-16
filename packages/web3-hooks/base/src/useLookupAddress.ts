@@ -13,8 +13,7 @@ export function useLookupAddress<T extends NetworkPluginID>(
     const { NameService, Others } = useWeb3State(pluginID)
 
     return useAsyncRetry(async () => {
-        if (!Others?.chainResolver.isValid(chainId) || !domain || !Others?.isValidDomain?.(domain) || !NameService)
-            return
-        return NameService.lookup?.(chainId, domain)
+        if (!domain || !Others?.isValidDomain?.(domain) || !NameService) return
+        return NameService.lookup?.(domain)
     }, [chainId, domain, NameService, Others])
 }

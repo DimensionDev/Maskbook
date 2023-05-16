@@ -1,8 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { SocialAccountList } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    PluginID,
+    type SocialAccount,
+    type SocialIdentity,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -42,6 +46,13 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+function openWeb3ProfileSettingDialog() {
+    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+        open: true,
+        targetTab: PluginID.Web3Profile,
+    })
+}
+
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
     badgeBounding?: DOMRect
@@ -60,18 +71,6 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
 }) => {
     const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
-    const handleOpenDialog = () => {
-        setDialog({
-            open: true,
-            settings: {
-                quickMode: true,
-                switchTab: {
-                    focusPluginID: PluginID.Web3ProfileCard,
-                },
-            },
-        })
-    }
 
     const userId = identity.identifier?.userId
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
@@ -91,7 +90,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
                 <div className={classes.operations}>
                     {nextIdBindings.length ? <SocialAccountList nextIdBindings={nextIdBindings} disablePortal /> : null}
                     {identity.identifier?.userId === me?.identifier?.userId ? (
-                        <Icons.Gear className={classes.gearIcon} onClick={handleOpenDialog} />
+                        <Icons.Gear className={classes.gearIcon} onClick={openWeb3ProfileSettingDialog} />
                     ) : (
                         <TipButton className={classes.tipButton} receiver={identity.identifier} />
                     )}

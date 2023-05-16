@@ -3,7 +3,7 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
-import { Markdown, RetryHint } from '@masknet/shared'
+import { EmptyStatus, Markdown, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
@@ -106,10 +106,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             width: 380,
         },
         empty: {
-            fontSize: 14,
-            lineHeight: '18px',
-            color: theme.palette.maskColor.second,
-            paddingLeft: 4,
+            height: 150,
         },
     }
 })
@@ -153,12 +150,7 @@ export function Collectible(props: CollectibleProps) {
         )
 
     if (!asset.value && !asset.error) {
-        return (
-            <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" minHeight={148}>
-                <Icons.EmptySimple variant="light" size={24} />
-                <Typography className={classes.empty}>{t.nft_minted()}</Typography>
-            </Box>
-        )
+        return <EmptyStatus className={classes.empty}>{t.nft_minted()}</EmptyStatus>
     }
 
     if (!asset.value) {

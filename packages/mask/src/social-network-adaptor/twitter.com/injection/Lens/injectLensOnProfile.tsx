@@ -7,7 +7,7 @@ import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelector } from '../../utils/selector.js'
 
-export const selector: () => LiveSelector<HTMLElement, true> = () =>
+const selector: () => LiveSelector<HTMLElement, true> = () =>
     querySelector<HTMLElement>('[data-testid=UserName] div[dir]')
 
 export function injectLensOnProfile(signal: AbortSignal) {

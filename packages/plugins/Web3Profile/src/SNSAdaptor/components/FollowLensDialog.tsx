@@ -5,8 +5,7 @@ import {
     InjectedDialog,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
@@ -15,7 +14,7 @@ import { formatBalance, isLessThan, resolveIPFS_URL, ZERO } from '@masknet/web3-
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useAsyncRetry, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
@@ -86,25 +85,17 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
 }))
 
-export function FollowLensDialog() {
+interface Props {
+    handle?: string
+    onClose(): void
+}
+export function FollowLensDialog({ handle, onClose }: Props) {
     const t = useI18N()
-
-    const [handle, setHandle] = useState('')
 
     const wallet = useWallet()
     const { classes } = useStyles({ account: !!wallet })
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
-    const { open, closeDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.followLensDialogEvent,
-        (ev) => {
-            if (!ev.open) {
-                setHandle('')
-            }
-
-            setHandle(ev.handle)
-        },
-    )
 
     // #region profile information
     const { value, loading, retry } = useAsyncRetry(async () => {
@@ -287,8 +278,8 @@ export function FollowLensDialog() {
 
     return (
         <InjectedDialog
-            open={open}
-            onClose={closeDialog}
+            open
+            onClose={onClose}
             title={t.lens()}
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
@@ -337,7 +328,7 @@ export function FollowLensDialog() {
                                     profile={
                                         defaultProfile
                                             ? {
-                                                  avatar: defaultProfile.picture?.original.url,
+                                                  avatar: defaultProfile.picture?.original?.url,
                                                   handle: defaultProfile.handle,
                                               }
                                             : undefined

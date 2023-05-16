@@ -17,20 +17,20 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '../../../locales/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { useSharedI18N } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
-
-const isDashboard = isDashboardPage()
 
 export const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: isDashboard ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: Sniffings.is_dashboard_page
+            ? MaskColorVar.mainBackground
+            : alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
@@ -56,10 +56,20 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     expectedPluginID?: T
     expectedChainId?: Web3Helper.Definition[T]['ChainId']
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
+    requiredSupportChainIds?: Array<Web3Helper.Definition[T]['ChainId']>
+    requiredSupportPluginID?: NetworkPluginID
 }
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
-    ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
+    ({
+        className,
+        onClick,
+        expectedPluginID,
+        expectedChainId,
+        children,
+        requiredSupportChainIds,
+        requiredSupportPluginID,
+    }) => {
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
@@ -69,7 +79,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const providerDescriptor = useProviderDescriptor()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-        const { value: domain } = useReverseAddress(pluginID, account)
+        const { data: domain } = useReverseAddress(pluginID, account)
         const { Others } = useWeb3State()
 
         const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -80,8 +90,10 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
             setSelectProviderDialog({
                 open: true,
                 network: expectedNetworkDescriptor,
+                requiredSupportChainIds,
+                requiredSupportPluginID,
             })
-        }, [expectedNetworkDescriptor])
+        }, [expectedNetworkDescriptor, requiredSupportChainIds, requiredSupportPluginID])
 
         const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
             WalletMessages.events.walletStatusDialogUpdated,

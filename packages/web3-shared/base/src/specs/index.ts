@@ -104,6 +104,8 @@ export enum SearchResultType {
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., realMaskNetwork
     CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
+    // e.g., PancakeSwap
+    DAO = 'DAO',
 }
 
 export enum ActivityType {
@@ -611,6 +613,22 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
     address: string
 }
 
+export interface DAOResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.DAO
+    keyword: string
+    spaceId: string
+    spaceName: string
+    twitterHandler: string
+    avatar: string
+    followersCount: number
+    strategyName?: string
+    isVerified: boolean
+    alias?: Array<{
+        value: string
+        isPin?: boolean
+    }>
+}
+
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
     domain?: string
@@ -667,6 +685,7 @@ export type SearchResult<ChainId, SchemaType> =
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
     | NonFungibleCollectionResult<ChainId, SchemaType>
+    | DAOResult<ChainId>
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -681,12 +700,13 @@ export type Web3EnableRequirement = Partial<
     >
 >
 
-export interface TransactionDescriptor<ChainId, Transaction> {
+export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined> {
     chainId: ChainId
     /** The transaction type */
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
+    context?: TransactionContext<ChainId, Parameter>
     /** The original transaction object */
     _tx: Transaction
     /** The address of the token leveraged to swap other tokens */
@@ -767,8 +787,6 @@ export interface Transaction<ChainId, SchemaType> {
             symbol: string
             amount: string
             direction: string
-            to_addr?: string
-            contract_address?: string
         }
     >
     /** estimated tx fee */
@@ -1369,9 +1387,9 @@ export interface NameServiceState<ChainId> {
     readyPromise: Promise<void>
 
     /** get address of domain name */
-    lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
+    lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
+    reverse?: (address: string) => Promise<string | undefined>
 }
 
 export interface TokenState<ChainId, SchemaType> {
@@ -1453,13 +1471,13 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction>>
+    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
         txHash?: string,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction>>
+    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
     ready: boolean

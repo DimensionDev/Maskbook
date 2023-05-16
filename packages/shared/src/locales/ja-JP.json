@@ -1,4 +1,5 @@
 {
+    "send": "送信",
     "approve": "承認します",
     "approve_mask": "MASKを承認しますか？",
     "approve_mask_description": "Polygonのネットワークを利用するには、MATICトークンがガス料金として支払う必要があります。SmartPayを使用すると、MASKトークンを使ってPolygonネットワーク上でガス料金を支払うことができます。",
@@ -139,6 +140,8 @@
     "plugin_wallet_no_gas_fee": "ガス代なし",
     "plugin_wallet_invalid_network": "無効のネットワーク",
     "plugin_wallet_wrong_network": "ネットワークが間違っています",
+    "plugin_wallet_unsupported_network": "対応していないネットワーク",
+    "plugin_wallet_unsupported_chain": "このネットワークは現在のウォレットでは対応されていません。",
     "plugin_wallet_switch_network": "{{network}} に切り替え",
     "plugin_wallet_not_support_network": "{network} はまだサポートされていません.",
     "plugin_wallet_switch_network_under_going": "{{network}} に切り替え",
@@ -186,5 +189,7 @@
     "applications_create_persona_title": "ペルソナ",
     "applications_create_persona_hint": "本機能を利用するには、ペルソナを作成し、アカウントを認証してください。",
     "applications_create_persona_action": "ペルソナを作成",
-    "lens_follow": "フォロー"
+    "lens_follow": "フォロー",
+    "verified_by": "{{ marketplace }} によって検証されました",
+    "no_NFTs_found": "NFTが見つかりません。"
 }

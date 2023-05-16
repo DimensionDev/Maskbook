@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useTransition } from 'react'
 
 /**
  * @example
@@ -18,6 +18,7 @@ import { useCallback, useEffect, useState } from 'react'
  */
 export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
     const [currentTab, setTab] = useState(defaultTab)
+    const [isPending, startTransition] = useTransition()
     const tabRecords = { [defaultTab]: defaultTab } as Record<T, T>
     possibleTabs.forEach((t) => (tabRecords[t] = t))
 
@@ -29,7 +30,7 @@ export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
     }, [isCurrentTabAvailable, defaultTab])
 
     const onChange = useCallback((event: unknown, value: any) => {
-        setTab(value)
+        startTransition(() => setTab(value))
     }, [])
     return [currentTab, onChange, tabRecords, setTab] as const
 }

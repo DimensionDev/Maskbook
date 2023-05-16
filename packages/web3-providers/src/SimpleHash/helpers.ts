@@ -1,42 +1,42 @@
 import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    WNATIVE,
-    chainResolver,
-    isValidChainId,
-    isValidDomain,
-    resolveImageURL,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { isEmpty } from 'lodash-es'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
+import { NetworkPluginID, queryClient } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
-    return fetchJSON<T>(
-        `${SIMPLE_HASH_URL}${path}`,
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: { 'content-type': 'application/json' },
+    return queryClient.fetchQuery<T>({
+        queryKey: [path],
+        staleTime: 10_000,
+        queryFn: async () => {
+            return fetchJSON<T>(
+                `${SIMPLE_HASH_URL}${path}`,
+                {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'content-type': 'application/json' },
+                },
+                {
+                    enableSquash: true,
+                },
+            )
         },
-        {
-            enableSquash: true,
-        },
-    )
+    })
 }
 
 export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
-    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
-    const name = isValidDomain(asset.name)
-        ? asset.name
-        : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
+    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
+    const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
     return {
         id: address,
@@ -68,8 +68,18 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             tokenId: asset.token_id,
             symbol: asset.contract.symbol,
             description: asset.description,
-            imageURL: resolveImageURL(asset.image_url || asset.previews.image_large_url, name, asset.contract_address),
-            previewImageURL: resolveImageURL(asset.previews.image_small_url, name, asset.contract_address),
+            imageURL: resolveImageURL(
+                asset.image_url || asset.previews.image_large_url,
+                asset.name,
+                asset.collection.name,
+                asset.contract_address,
+            ),
+            previewImageURL: resolveImageURL(
+                asset.previews.image_small_url,
+                asset.name,
+                asset.collection.name,
+                asset.contract_address,
+            ),
             blurhash: asset.previews.blurhash,
             mediaURL: asset.image_url || asset.previews.image_large_url,
         },
@@ -136,34 +146,28 @@ export function resolveChainId(chain: string): ChainId | undefined {
     }
 }
 
-export const allChainNames = [
-    ChainId.Mainnet,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.Optimism,
-    ChainId.Optimism,
-    ChainId.xDai,
-    ChainId.BSC,
-]
-    .map(resolveChain)
-    .join(',')
-export function resolveChain(chainId: ChainId): string | undefined {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'ethereum'
-        case ChainId.Matic:
-            return 'polygon'
-        case ChainId.Arbitrum:
-            return 'arbitrum'
-        case ChainId.Optimism:
-            return 'optimism'
-        case ChainId.Avalanche:
-            return 'avalanche'
-        case ChainId.xDai:
-            return 'gnosis'
-        case ChainId.BSC:
-            return 'bsc'
-        default:
-            return undefined
-    }
+const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
+    [NetworkPluginID.PLUGIN_EVM]: {
+        [ChainId.Mainnet]: 'ethereum',
+        [ChainId.BSC]: 'bsc',
+        [ChainId.Matic]: 'polygon',
+        [ChainId.Arbitrum]: 'arbitrum',
+        [ChainId.Optimism]: 'optimism',
+        [ChainId.Avalanche]: 'avalanche',
+        [ChainId.xDai]: 'gnosis',
+    },
+    [NetworkPluginID.PLUGIN_SOLANA]: {
+        [SolanaChainId.Mainnet]: 'solana',
+    },
+    [NetworkPluginID.PLUGIN_FLOW]: {
+        [FlowChainId.Mainnet]: 'flow',
+    },
+}
+
+export const getAllChainNames = (pluginID: NetworkPluginID) => {
+    return Object.values(ChainNameMap[pluginID]).join(',')
+}
+
+export function resolveChain(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll): string | undefined {
+    return ChainNameMap[pluginId][chainId]
 }

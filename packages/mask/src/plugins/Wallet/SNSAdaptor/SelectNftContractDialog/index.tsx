@@ -1,18 +1,25 @@
-import { useCallback, useState } from 'react'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
-import { SchemaType, explorerResolver, type ChainId, isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages, type SelectNftContractDialogEvent } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
-import { SourceType } from '@masknet/web3-shared-base'
-import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { FuseNonFungibleCollection } from '@masknet/web3-providers'
-import { useI18N } from '../../../../utils/index.js'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import {
+    SchemaType,
+    explorerResolver,
+    isLensCollect,
+    isLensFollower,
+    type ChainId,
+    isLensProfileAddress,
+} from '@masknet/web3-shared-evm'
+import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
+import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
 import { SearchInput } from '../../../../extension/options-page/DashboardComponents/SearchInput.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -89,16 +96,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectNftContractDialogProps {}
-
-export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-
-    const [keyword, setKeyword] = useState('')
+export function InjectSelectNftContractDialog() {
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
-    // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
@@ -106,33 +105,53 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             if (ev.chainId) setChainId(ev.chainId)
         },
     )
+    return open ? <SelectNftContractDialog chainId={chainId} open onSetDialog={setDialog} /> : null
+}
+
+export interface SelectNftContractDialogProps {
+    chainId: ChainId
+    open: boolean
+    onSetDialog: (event: SelectNftContractDialogEvent) => void
+}
+
+export function SelectNftContractDialog({ chainId, open, onSetDialog }: SelectNftContractDialogProps) {
+    const { t } = useI18N()
+    const { classes } = useStyles()
+
+    const [keyword, setKeyword] = useState('')
+
     const onSelect = useCallback(
         (collection: NonFungibleCollection<ChainId, SchemaType>) => {
             setKeyword('')
-            setDialog({
+            onSetDialog({
                 open: false,
                 balance: collection.balance,
                 collection,
             })
         },
-        [setDialog, setKeyword],
+        [onSetDialog, setKeyword],
     )
     const onClose = useCallback(() => {
         setKeyword('')
-        setDialog({
+        onSetDialog({
             open: false,
         })
-    }, [setDialog])
-    // #endregion
+    }, [onSetDialog])
 
-    const { value: collections = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+    const { data: collections = [], isLoading: loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
         // Todo: remove this line, after SimpleHash can recognize ERC721 Collections.
         sourceType: SourceType.NFTScan,
     })
 
     const collectionsFiltered = collections.filter((x) => {
-        return x.schema === SchemaType.ERC721 && !isLensCollect(x.name) && !isLensFollower(x.name)
+        return (
+            x.address &&
+            x.schema === SchemaType.ERC721 &&
+            !isLensCollect(x.name) &&
+            !isLensFollower(x.name) &&
+            !isLensProfileAddress(x.address)
+        )
     })
 
     // #region fuse
@@ -229,7 +248,7 @@ function ContractListItem(props: ContractListItemProps) {
                         {collection.address}
                     </Typography>
                     <Link
-                        href={explorerResolver.addressLink(collection.chainId, collection.address ?? '')}
+                        href={explorerResolver.addressLink(collection.chainId, collection.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon className={classes.openIcon} fontSize="small" />

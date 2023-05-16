@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import produce, { setAutoFreeze } from 'immer'
+import { produce, setAutoFreeze } from 'immer'
 import { type Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { fromRGB, shade, toRGB } from '@masknet/plugin-infra/content-script'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'

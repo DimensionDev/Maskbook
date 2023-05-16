@@ -20,7 +20,7 @@ import {
 import { openPopupWindow } from '../helper/popup-opener.js'
 import { requestHostPermission } from '../helper/request-permission.js'
 import { restoreNormalizedBackup } from './internal_restore.js'
-import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
+import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../identity/persona/utils.js'
 import { decode } from '@msgpack/msgpack'
