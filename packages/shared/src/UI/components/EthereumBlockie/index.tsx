@@ -1,6 +1,8 @@
-import { useBlockie } from '@masknet/web3-hooks-base'
+import { generateBlockie } from '@masknet/web3-hooks-base'
 import { Avatar, type AvatarProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { useEffect, useRef, useState } from 'react'
+import { useIntersection } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -18,12 +20,19 @@ export interface EthereumBlockieProps extends withClasses<'icon'> {
 }
 
 export function EthereumBlockie(props: EthereumBlockieProps) {
-    const { address, name, AvatarProps } = props
+    const { address, name } = props
     const { classes } = useStyles(undefined, { props })
-    const blockie = useBlockie(address)
+    const [blockie, setBlockie] = useState('')
+    const ref = useRef(null)
+    const ob = useIntersection(ref, {})
+    useEffect(() => {
+        if (ob?.isIntersecting && !blockie) {
+            setBlockie(generateBlockie(address))
+        }
+    }, [ob?.isIntersecting, address, !blockie])
 
     return (
-        <Avatar className={classes.icon} src={blockie}>
+        <Avatar className={classes.icon} src={blockie} ref={ref}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
