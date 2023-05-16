@@ -1,16 +1,14 @@
-import type { ProposalIdentifier, ProposalResult, VoteItem } from '../../types.js'
+import type { Proposal, ProposalIdentifier, ProposalResult, VoteItem } from '../../types.js'
 import { cache, use } from 'react'
-import { useProposal } from './useProposal.js'
 import { useVotes } from './useVotes.js'
 import { sumBy } from 'lodash-es'
 
 const Request = cache(Suspender)
-export function useResults(identifier: ProposalIdentifier) {
-    return use(Request(identifier.id, identifier.space))
+export function useResults(identifier: ProposalIdentifier, proposal: Proposal) {
+    return use(Request(identifier.id, identifier.space, proposal))
 }
 
-async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space']) {
-    const proposal = useProposal(id)
+async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], proposal: Proposal) {
     const votes = useVotes({ id, space })
     const strategies = proposal.strategies
     const powerOfChoices = proposal.choices.map((_choice, index) =>

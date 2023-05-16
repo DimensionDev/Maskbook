@@ -9,7 +9,7 @@ export async function fetchProposal(id: string) {
     const isEnd = proposal.end * 1000 < now
     return {
         ...proposal,
-        voterAmounts: proposal.votes,
+        voterAmounts: votes.length,
         address: proposal.author,
         isStart,
         isEnd,
