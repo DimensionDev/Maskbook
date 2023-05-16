@@ -9,6 +9,7 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { FC, HTMLProps } from 'react'
 import { useAsync } from 'react-use'
@@ -77,6 +78,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
         if (!userId) return EMPTY_LIST
         return NextIDProof.queryProfilesByTwitterId(userId)
     }, [userId])
+    const { value: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
 
     return (
         <div className={cx(classes.title, className)} {...rest}>
@@ -89,7 +91,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
                 onAddressChange={onAddressChange}>
                 <div className={classes.operations}>
                     {nextIdBindings.length ? (
-                        <SocialAccountList nextIdBindings={nextIdBindings} userId={userId} disablePortal />
+                        <SocialAccountList nextIdBindings={nextIdBindings} lensAccounts={lensAccounts} disablePortal />
                     ) : null}
                     {identity.identifier?.userId === me?.identifier?.userId ? (
                         <Icons.Gear className={classes.gearIcon} onClick={openWeb3ProfileSettingDialog} />

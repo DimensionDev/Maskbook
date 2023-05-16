@@ -95,7 +95,7 @@ interface LensListItemProps {
 }
 
 const LensListItem = memo<LensListItemProps>(({ account }) => {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { account: wallet } = useChainContext()
     const t = useI18N()
     const profileUri = account.profileUri.filter(Boolean)

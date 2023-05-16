@@ -9,11 +9,9 @@ import { base } from '../base.js'
 import { context, setupContext, setupStorage } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
-import { useAsync } from 'react-use'
-import { Firefly } from '@masknet/web3-providers'
 import { LensBadge } from './components/LensBadge.js'
 import { LensPopup } from './components/LensPopup.js'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -95,10 +93,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
-                const { value: accounts = EMPTY_LIST } = useAsync(async () => {
-                    if (!identity?.userId) return
-                    return Firefly.getLensByTwitterId(identity.userId)
-                }, [identity?.userId])
+                const { value: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
 
                 const hasLens = !accounts.length
                 useEffect(() => {

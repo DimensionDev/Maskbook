@@ -1,24 +1,34 @@
-import { compact, first, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
-import { IdentityServiceState } from '@masknet/web3-state'
 import {
-    NetworkPluginID,
     EMPTY_LIST,
     EnhanceableSite,
-    getSiteType,
+    NetworkPluginID,
     NextIDPlatform,
-    createLookupTableResolver,
     PluginID,
-    type BindingProof,
-    type SocialIdentity,
-    type SocialAddress,
     SocialAddressType,
+    createLookupTableResolver,
+    getSiteType,
+    type BindingProof,
+    type SocialAddress,
+    type SocialIdentity,
 } from '@masknet/shared-base'
-import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { ENS, Lens, MaskX, NextIDProof, NextIDStorageProvider, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
-import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
-import { Web3StateSettings } from '../settings/index.js'
+import {
+    ENS,
+    Firefly,
+    Lens,
+    MaskX,
+    NextIDProof,
+    NextIDStorageProvider,
+    RSS3,
+    SpaceID,
+    Twitter,
+} from '@masknet/web3-providers'
 import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
+import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
+import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { IdentityServiceState } from '@masknet/web3-state'
+import { compact, first, uniqBy } from 'lodash-es'
+import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
@@ -205,8 +215,12 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         )
     }
 
-    private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '' }: SocialIdentity) {
+    private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '', identifier }: SocialIdentity) {
         const names = getLensNames(nickname, bio, homepage)
+        if (identifier?.userId) {
+            const lensAccounts = await Firefly.getLensByTwitterId(identifier?.userId)
+            names.push(...lensAccounts.map((x) => x.handle))
+        }
         if (!names.length) return
 
         const allSettled = await Promise.allSettled(

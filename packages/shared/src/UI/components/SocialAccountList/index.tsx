@@ -1,14 +1,14 @@
 import { isNonNull } from '@masknet/kit'
 import { useMenuConfig } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import { NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Firefly } from '@masknet/web3-providers'
 import { Button, type MenuProps } from '@mui/material'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useRef, type HTMLProps } from 'react'
-import { useAsync, useWindowScroll } from 'react-use'
+import { useWindowScroll } from 'react-use'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,23 +59,40 @@ const useStyles = makeStyles()((theme) => {
 
 interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
     nextIdBindings: BindingProof[]
-    userId?: string
+    lensAccounts: FireflyBaseAPI.LensAccount[]
 }
 
-export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...rest }: SocialAccountListProps) {
+const FireflyLensToNextIdLens = (account: FireflyBaseAPI.LensAccount): BindingProof => {
+    return {
+        platform: NextIDPlatform.LENS,
+        name: account.name,
+        identity: account.handle,
+        created_at: '',
+        is_valid: true,
+        last_checked_at: '',
+    }
+}
+
+export function SocialAccountList({
+    nextIdBindings,
+    disablePortal,
+    lensAccounts: accounts,
+    ...rest
+}: SocialAccountListProps) {
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
+
+    // Merge and sort
     const orderedBindings = useMemo(() => {
-        return nextIdBindings.sort((a, z) => {
+        const merged = uniqBy(
+            [...accounts.map(FireflyLensToNextIdLens), ...nextIdBindings],
+            (x) => `${x.platform}.${x.identity}`,
+        )
+        return merged.sort((a, z) => {
             if (a.platform === z.platform) return 0
             return a.platform === NextIDPlatform.LENS ? -1 : 0
         })
-    }, [nextIdBindings])
-
-    const { value: accounts = EMPTY_LIST } = useAsync(async () => {
-        if (!userId) return
-        return Firefly.getLensByTwitterId(userId)
-    }, [userId])
+    }, [accounts, nextIdBindings])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
         orderedBindings.map((x, i) => {

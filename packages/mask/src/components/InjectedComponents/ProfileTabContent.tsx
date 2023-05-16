@@ -25,7 +25,11 @@ import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from 
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
+import {
+    ScopedDomainsContainer,
+    useFireflyLensAccounts,
+    useSnapshotSpacesByTwitterHandler,
+} from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -312,6 +316,7 @@ function Content(props: ProfileTabContentProps) {
         if (!currentVisitingUserId) return EMPTY_LIST
         return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
     }, [currentVisitingUserId])
+    const { value: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(currentVisitingUserId)
 
     if (hidden) return null
 
@@ -340,7 +345,7 @@ function Content(props: ProfileTabContentProps) {
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <GrantPermissions
-                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? []}
+                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? EMPTY_LIST}
                             onGrant={onGrant}
                         />
                     </PluginCardFrameMini>
@@ -467,7 +472,7 @@ function Content(props: ProfileTabContentProps) {
                                     fromSocialCard
                                 />
                             </ThemeProvider>
-                            <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
+                            <SocialAccountList nextIdBindings={nextIdBindings} lensAccounts={lensAccounts} />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography
