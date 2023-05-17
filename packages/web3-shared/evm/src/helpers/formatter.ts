@@ -1,7 +1,7 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
-import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts';
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { SchemaType } from '../types/index.js'
 import { isValidAddress } from './address.js'
 import { isEnsSubdomain, isValidDomain } from './isValidDomain.js'
