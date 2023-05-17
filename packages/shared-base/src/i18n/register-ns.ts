@@ -26,6 +26,10 @@ export function createI18NBundle(namespace: string, langs: Record<string, object
     return (instance: i18n) => addI18NBundle(instance, namespace, langs)
 }
 
-function removeEmptyString(lang: object) {
-    return Object.fromEntries(Object.entries(lang).filter((x) => x[1].length))
+function removeEmptyString(lang: Partial<Record<string, string>>) {
+    const next: Partial<Record<string, string>> = {}
+    for (const key in lang) {
+        if (lang[key]) next[key] = lang[key]
+    }
+    return next
 }
