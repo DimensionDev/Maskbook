@@ -1,5 +1,5 @@
 import type { AuthorizationAPI } from '../entry-types.js'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { approvalListState } from './approvalListState.js'
 import { Web3API } from '../Connection/index.js'
 import { TOKEN_APPROVAL_TOPIC } from './constants.js'
@@ -7,6 +7,8 @@ import { maxBy, mapKeys } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import type { Log } from 'web3-core'
 import type Web3 from 'web3'
+import { isSameAddress, type FungibleTokenSpender } from '@masknet/web3-shared-base'
+import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 
 export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
     private Web3 = new Web3API()
@@ -25,20 +27,65 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 fromBlock,
                 toBlock,
             })
+            const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
 
             const tokenSpenderRecords = parseLogs(web3, logs)
 
             mapKeys(tokenSpenderRecords, (spender, spenderAddress) =>
                 mapKeys(spender, (token, tokenAddress) => {
-                    const latestEntry = maxBy(token, (x) => x.blockNumber)
-                    if (!latestEntry) return
-                    const amount = new BigNumber(latestEntry.data)
-                    approvalListState.updateTokenState(account, spenderAddress, tokenAddress, chainId, toBlock, amount)
+                    const latestTx = maxBy(token, (x) => x.blockNumber)
+                    if (!latestTx) return
+                    const amount = new BigNumber(latestTx.data)
+                    approvalListState.updateTokenState(
+                        account,
+                        spenderAddress,
+                        tokenAddress,
+                        chainId,
+                        toBlock,
+                        latestTx.blockNumber,
+                        amount,
+                    )
                 }),
             )
 
-            console.log({ r: approvalListState.tokenState, fromBlock, logs })
-            return []
+            const { spenderList } = approvalListState.tokenState[account][chainId]!
+
+            return Object.keys(spenderList)
+                .map((spender) => {
+                    return Object.keys(spenderList[spender]).map((address) => {
+                        const maskDappContractInfo = maskDappContractInfoList.find((y) =>
+                            isSameAddress(y.address, spender),
+                        )
+
+                        if (maskDappContractInfo) {
+                            return {
+                                tokenInfo: { address, name: '', symbol: '' },
+                                address: spender,
+                                name: maskDappContractInfo.name,
+                                logo: maskDappContractInfo.logo,
+                                rawAmount: spenderList[spender][address].amount.toNumber(),
+                                transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
+                                isMaskDapp: true,
+                            }
+                        }
+
+                        return {
+                            tokenInfo: { address, name: '', symbol: '' },
+                            address: spender,
+                            name: '',
+                            logo: undefined,
+                            rawAmount: spenderList[spender][address].amount.toNumber(),
+                            transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
+                            isMaskDapp: false,
+                        }
+                    })
+                })
+                .flat()
+                .sort((a, b) => {
+                    if (a.isMaskDapp && !b.isMaskDapp) return -1
+                    if (!a.isMaskDapp && b.isMaskDapp) return 1
+                    return Number(b.transactionBlockNumber) - Number(a.transactionBlockNumber)
+                }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
         } catch (error) {
             console.log(error)
             return []

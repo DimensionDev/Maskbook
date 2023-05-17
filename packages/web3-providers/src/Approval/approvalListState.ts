@@ -6,7 +6,7 @@ export type TokenApprovalInfoAccountMap = Record<
     string,
     {
         [key in ChainId]?: {
-            spenderList: Record<string, Record<string, BigNumber>>
+            spenderList: Record<string, Record<string, { amount: BigNumber; transactionBlockNumber: number }>>
             fromBlock: number
         }
     }
@@ -41,21 +41,25 @@ export class ApprovalListState {
         address: string,
         chainId: ChainId,
         fromBlock: number,
+        transactionBlockNumber: number,
         amount: BigNumber,
     ) {
         this._token_state = produce(this._token_state, (draft) => {
             if (!draft[account]) draft[account] = {}
             if (!draft[account][chainId]) {
-                draft[account][chainId] = { spenderList: { [spender]: { [address]: amount } }, fromBlock }
+                draft[account][chainId] = {
+                    spenderList: { [spender]: { [address]: { amount, transactionBlockNumber } } },
+                    fromBlock,
+                }
             }
             if (!draft[account][chainId]!.spenderList) {
-                draft[account][chainId]!.spenderList = { [spender]: { [address]: amount } }
+                draft[account][chainId]!.spenderList = { [spender]: { [address]: { amount, transactionBlockNumber } } }
             }
             if (!draft[account][chainId]!.spenderList[spender]) {
-                draft[account][chainId]!.spenderList[spender] = { [address]: amount }
+                draft[account][chainId]!.spenderList[spender] = { [address]: { amount, transactionBlockNumber } }
             }
 
-            draft[account][chainId]!.spenderList[spender][address] = amount
+            draft[account][chainId]!.spenderList[spender][address] = { amount, transactionBlockNumber }
             draft[account][chainId]!.fromBlock = fromBlock
         })
     }

@@ -570,7 +570,9 @@ export interface FungibleTokenSpender<ChainId, SchemaType> {
     /** spender logo */
     logo: React.ReactNode | undefined
     /** allowance token amount of this spender */
-    amount: number
+    amount?: number
+    /** allowance token amount(not formatted by token decimals) of this spender */
+    rawAmount?: number
 }
 
 /**

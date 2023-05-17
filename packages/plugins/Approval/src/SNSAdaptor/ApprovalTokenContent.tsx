@@ -3,9 +3,20 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { useChainContext, useWeb3State, useNetworkDescriptor, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useWeb3State,
+    useNetworkDescriptor,
+    useFungibleTokenSpenders,
+    useFungibleToken,
+} from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { type NetworkDescriptor, type FungibleTokenSpender, formatSpendingCap } from '@masknet/web3-shared-base'
+import {
+    type NetworkDescriptor,
+    type FungibleTokenSpender,
+    formatSpendingCap,
+    formatBalance,
+} from '@masknet/web3-shared-base'
 import { ChainBoundary, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
@@ -188,24 +199,34 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         retry,
         chainId,
     )
+
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
+        chainId,
+    })
+    const amount = spender.amount ? spender.amount : formatBalance(spender.rawAmount, token?.decimals)
+
     return (
         <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
                         <TokenIcon address={spender.tokenInfo.address} className={classes.logoIcon} />
-                        <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
-                        <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
+                        <Typography className={classes.primaryText}>
+                            {spender.tokenInfo.symbol || token?.symbol}
+                        </Typography>
+                        <Typography className={classes.secondaryText}>
+                            {spender.tokenInfo.name || token?.name}
+                        </Typography>
                     </div>
                     <div className={classes.contractInfo}>
                         <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                        {typeof spender.logo === 'string' ? (
+                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
                             <img src={spender.logo} className={classes.spenderLogoIcon} />
                         ) : (
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name ?? Others?.formatAddress(spender.address, 4)}
+                            {spender.name || Others?.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
@@ -217,7 +238,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                        <Typography className={classes.primaryText}>{formatSpendingCap(spender.amount)}</Typography>
+                        <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
                     </div>
                 </div>
                 <ChainBoundary
