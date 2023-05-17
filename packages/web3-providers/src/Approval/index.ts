@@ -49,7 +49,9 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 }),
             )
 
-            const { spenderList } = approvalListState.tokenState[account][chainId]!
+            const spenderList = approvalListState.tokenState[account][chainId]?.spenderList
+
+            if (!spenderList) return EMPTY_LIST
 
             return Object.keys(spenderList)
                 .map((spender) => {
