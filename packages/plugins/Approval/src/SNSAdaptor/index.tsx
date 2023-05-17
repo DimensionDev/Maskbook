@@ -7,7 +7,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
-import { PluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -32,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 icon={icon}
                                 onClick={
                                     EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        ? () => EntryComponentProps.onClick?.(clickHandler, NetworkPluginID.PLUGIN_EVM)
                                         : clickHandler
                                 }
                             />

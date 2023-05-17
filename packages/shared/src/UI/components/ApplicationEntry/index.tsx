@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
 import { Typography } from '@mui/material'
 
 const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
@@ -87,7 +87,6 @@ interface ApplicationEntryProps {
     secondTitle?: React.ReactNode
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
-    popperBoundary?: HTMLElement | null
     iconFilterColor?: string
     tooltipHint?: string | React.ReactElement
     onClick: () => void
@@ -103,9 +102,9 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         tooltipHint,
         recommendFeature,
         iconFilterColor,
-        popperBoundary,
     } = props
     const { classes, cx } = useStyles({ disabled, iconFilterColor })
+    const popperProps = useBoundedPopperProps()
     const jsx = recommendFeature ? (
         <div
             style={{
@@ -145,17 +144,9 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
     return tooltipHint ? (
         <ShadowRootTooltip
             PopperProps={{
+                ...popperProps,
                 disablePortal: true,
                 placement: recommendFeature ? 'bottom' : 'top',
-                modifiers: [
-                    {
-                        name: 'flip',
-                        options: {
-                            boundary: popperBoundary,
-                            flipVariations: false,
-                        },
-                    },
-                ],
             }}
             classes={{
                 arrow: cx(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),

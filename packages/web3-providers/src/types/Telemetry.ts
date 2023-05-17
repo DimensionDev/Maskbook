@@ -79,6 +79,8 @@ export namespace TelemetryAPI {
         user?: UserOptions
         device?: DeviceOptions
         network?: NetworkOptions
+        // default to 1 (100%)
+        sampleRate?: number
     }
 
     export interface EventOptions extends CommonOptions {

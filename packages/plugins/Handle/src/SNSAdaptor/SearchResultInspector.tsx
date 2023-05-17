@@ -7,7 +7,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { SuffixToChainIconMap } from '../constants.js'
+import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { PluginHeader } from './PluginHeader.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
@@ -101,7 +101,10 @@ export function SearchResultInspectorContent() {
                                     rel="noopener noreferrer"
                                     className={classes.link}
                                     href={
-                                        Others?.explorerResolver.addressLink?.(ChainId.Mainnet, reversedAddress) ?? ''
+                                        Others?.explorerResolver.addressLink?.(
+                                            (suffix ? SuffixToChainIdMap[suffix] : ChainId.Mainnet) ?? ChainId.Mainnet,
+                                            reversedAddress,
+                                        ) ?? ''
                                     }>
                                     <Icons.LinkOut size={20} className={classes.reversedAddressIcon} />
                                 </Link>

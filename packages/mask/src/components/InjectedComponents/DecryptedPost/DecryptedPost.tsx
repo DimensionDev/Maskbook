@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useReducer } from 'react'
-import { extractTextFromTypedMessage, type TypedMessage } from '@masknet/typed-message'
+import { extractTextFromTypedMessage, isTypedMessageEqual, type TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
 import Services, { GeneratorServices } from '../../../extension/service.js'
@@ -16,16 +16,19 @@ import type {
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
+import { uniqWith } from 'lodash-es'
+
+type PossibleProgress = SuccessDecryption | FailureDecryption | DecryptionProgress
 
 function progressReducer(
     state: Array<{
         key: string
-        progress: SuccessDecryption | FailureDecryption | DecryptionProgress
+        progress: PossibleProgress
     }>,
     payload: {
         type: 'refresh'
         key: string
-        progress: SuccessDecryption | FailureDecryption | DecryptionProgress
+        progress: PossibleProgress
     },
 ) {
     const { key, progress } = payload
@@ -50,6 +53,15 @@ function progressReducer(
 
 export interface DecryptPostProps {
     whoAmI: ProfileIdentifier | null
+}
+function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
+    if (a.type !== b.type) return false
+    if (a.internal !== b.internal) return false
+    if (a.type === 'success') return isTypedMessageEqual(a, b as SuccessDecryption)
+    if (a.type === 'error') return a.error === (b as FailureDecryption).error
+    if (a.type === 'progress') return a.progress === (b as DecryptionProgress).progress
+    safeUnreachable(a)
+    return false
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI } = props
@@ -151,11 +163,11 @@ export function DecryptPost(props: DecryptPostProps) {
     if (!deconstructedPayload && progress.every((x) => x.progress.internal)) return null
     return (
         <>
-            {progress
+            {uniqWith(progress, (a, b) => isProgressEqual(a.progress, b.progress))
                 // the internal progress should not display to the end-user
                 .filter(({ progress }) => !progress.internal)
-                .map(({ progress }, index) => (
-                    <Fragment key={index}>{renderProgress(progress)}</Fragment>
+                .map(({ progress, key }, index) => (
+                    <Fragment key={key}>{renderProgress(progress)}</Fragment>
                 ))}
         </>
     )

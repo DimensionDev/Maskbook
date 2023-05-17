@@ -10,7 +10,6 @@ export interface ClaimEntryProps {
     disabled: boolean
     tooltipHint?: string
     onClick?: (walletConnectedCallback?: () => void) => void
-    popperBoundary?: HTMLElement | null
 }
 
 export const ClaimEntry = memo<ClaimEntryProps>((props) => {
