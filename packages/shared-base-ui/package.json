@@ -22,5 +22,5 @@
   "peerDependencies": {
     "react-i18next": "^12"
   },
-  "sideEffect": false
+  "sideEffects": false
 }

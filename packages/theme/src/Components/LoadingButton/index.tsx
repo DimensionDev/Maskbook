@@ -2,7 +2,7 @@ import { LoadingButton, type LoadingButtonProps } from '@mui/lab'
 import { memo, useCallback, useState, forwardRef } from 'react'
 import { CircularProgress } from '@mui/material'
 
-interface MaskLoadingButtonProps extends Exclude<LoadingButtonProps, 'loading' | 'component'> {
+export interface MaskLoadingButtonProps extends Exclude<LoadingButtonProps, 'loading' | 'component'> {
     onClick(event: React.MouseEvent<HTMLButtonElement>): Promise<unknown>
     soloLoading?: boolean
 }

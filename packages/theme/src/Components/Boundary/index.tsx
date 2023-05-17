@@ -1,7 +1,6 @@
 import {
     cloneElement,
     createContext,
-    type FC,
     memo,
     type ReactElement,
     type RefObject,
@@ -10,19 +9,15 @@ import {
     useRef,
 } from 'react'
 
-interface Options {
-    boundaryRef: RefObject<HTMLElement>
-}
-
-const BoundaryContext = createContext<Options>({
-    boundaryRef: { current: null },
+const BoundaryContext = createContext({
+    boundaryRef: { current: null } as RefObject<HTMLElement>,
 })
 
-interface BoundaryProps {
+export interface BoundaryProps {
     children: ReactElement
 }
 
-export const Boundary: FC<BoundaryProps> = memo(({ children }) => {
+export const Boundary = memo(({ children }: BoundaryProps) => {
     const boundaryRef = useRef<HTMLElement>(null)
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (
@@ -31,7 +26,6 @@ export const Boundary: FC<BoundaryProps> = memo(({ children }) => {
         </BoundaryContext.Provider>
     )
 })
-
 Boundary.displayName = 'Boundary'
 
 export function useBoundary() {

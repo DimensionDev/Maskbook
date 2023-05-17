@@ -14,4 +14,6 @@ export const DisableShadowRootContext = createContext(false)
 DisableShadowRootContext.displayName = 'DisableShadowRootContext'
 
 /** @internal */
-export const stopPropagation = (e: Event): void => e.stopPropagation()
+export function stopPropagation(e: Event) {
+    e.stopPropagation()
+}

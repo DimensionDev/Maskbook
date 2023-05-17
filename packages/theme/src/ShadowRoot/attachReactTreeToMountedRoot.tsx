@@ -92,23 +92,22 @@ let observer: IntersectionObserver
 const callbacks = new WeakMap<Element, Record<string, () => void>>()
 function observe(element: Element, key: string, callback: () => void, signal: AbortSignal) {
     if (signal.aborted) return
-    if (!observer)
-        observer = new IntersectionObserver(
-            (records) => {
-                records
-                    .filter((x) => x.isIntersecting)
-                    .map((x) => {
-                        const result = callbacks.get(x.target)
-                        callbacks.delete(x.target)
-                        return result!
-                    })
-                    .filter(Boolean)
-                    .flatMap(Object.values)
-                    .forEach((f) => f())
-            },
-            // preload the element before it really hits the viewport
-            { root: null, threshold: 0.1, rootMargin: '20px 0px 50px 0px' },
-        )
+    observer ||= new IntersectionObserver(
+        (records) => {
+            records
+                .filter((x) => x.isIntersecting)
+                .map((x) => {
+                    const result = callbacks.get(x.target)
+                    callbacks.delete(x.target)
+                    return result!
+                })
+                .filter(Boolean)
+                .flatMap(Object.values)
+                .forEach((f) => f())
+        },
+        // preload the element before it really hits the viewport
+        { root: null, threshold: 0.1, rootMargin: '20px 0px 50px 0px' },
+    )
 
     observer.observe(element)
     signal.addEventListener('abort', () => observer.unobserve(element), { signal })

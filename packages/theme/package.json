@@ -1,5 +1,6 @@
 {
   "name": "@masknet/theme",
+  "sideEffects": false,
   "private": true,
   "description": "@mui/material theme of design system of Mask Network",
   "type": "module",
