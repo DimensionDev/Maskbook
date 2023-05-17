@@ -22,6 +22,7 @@ const deferPackages = [
     'wallet.ts',
     'anchorme',
     '@blocto/fcl',
+    '@metamask/eth-sig-util',
     // add package names here.
 ]
 
