@@ -58,26 +58,14 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                             isSameAddress(y.address, spender),
                         )
 
-                        if (maskDappContractInfo) {
-                            return {
-                                tokenInfo: { address, name: '', symbol: '' },
-                                address: spender,
-                                name: maskDappContractInfo.name,
-                                logo: maskDappContractInfo.logo,
-                                rawAmount: spenderList[spender][address].amount.toNumber(),
-                                transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
-                                isMaskDapp: true,
-                            }
-                        }
-
                         return {
                             tokenInfo: { address, name: '', symbol: '' },
                             address: spender,
-                            name: '',
-                            logo: undefined,
+                            name: maskDappContractInfo?.name,
+                            logo: maskDappContractInfo?.logo,
                             rawAmount: spenderList[spender][address].amount.toNumber(),
                             transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
-                            isMaskDapp: false,
+                            isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
                 })
