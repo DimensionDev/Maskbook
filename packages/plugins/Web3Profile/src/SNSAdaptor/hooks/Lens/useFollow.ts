@@ -152,7 +152,8 @@ export function useFollow(
                     !error.message.includes('Transaction was rejected') &&
                     !error.message.includes('Signature canceled') &&
                     !error.message.includes('User rejected the request') &&
-                    !error.message.includes('User rejected transaction')
+                    !error.message.includes('User rejected transaction') &&
+                    !error.message.includes('RPC Error')
                 ) {
                     onFailed?.()
                     showSingletonSnackbar(t.follow_lens_handle(), {
