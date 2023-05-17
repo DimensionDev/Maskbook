@@ -15,6 +15,7 @@ import { ChainContextProvider, useFireflyLensAccounts } from '@masknet/web3-hook
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
+import { uniqBy } from 'lodash-es'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -104,7 +105,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return accounts.map(NextIdLensToFireflyLens)
                 }, [isProfile, identity?.userId])
                 const lensAccounts = useMemo(
-                    () => (isProfile ? [...accounts, ...nextIdLens] : accounts),
+                    () => (isProfile ? uniqBy([...accounts, ...nextIdLens], (x) => x.handle) : accounts),
                     [isProfile, accounts, nextIdLens],
                 )
 
