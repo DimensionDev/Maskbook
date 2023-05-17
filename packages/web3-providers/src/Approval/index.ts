@@ -1,5 +1,5 @@
 import type { AuthorizationAPI } from '../entry-types.js'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { isZeroAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { approvalListState } from './approvalListState.js'
 import { Web3API } from '../Connection/index.js'
 import { TOKEN_APPROVAL_TOPIC } from './constants.js'
@@ -7,8 +7,9 @@ import { maxBy, mapKeys } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import type { Log } from 'web3-core'
 import type Web3 from 'web3'
-import { isSameAddress, type FungibleTokenSpender } from '@masknet/web3-shared-base'
+import { isSameAddress, type FungibleTokenSpender, isGreaterThan } from '@masknet/web3-shared-base'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
     private Web3 = new Web3API()
@@ -35,7 +36,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 mapKeys(spender, (token, tokenAddress) => {
                     const latestTx = maxBy(token, (x) => x.blockNumber)
                     if (!latestTx) return
-                    const amount = new BigNumber(latestTx.data)
+                    const amount = new BigNumber(isZeroAddress(latestTx.data) ? 0 : latestTx.data)
                     approvalListState.updateTokenState(
                         account,
                         spenderAddress,
@@ -81,6 +82,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                     })
                 })
                 .flat()
+                .filter((x) => isGreaterThan(x.rawAmount, 0))
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
@@ -88,16 +90,17 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
         } catch (error) {
             console.log(error)
-            return []
+            return EMPTY_LIST
         }
     }
 }
 
 function parseLogs(web3: Web3, logs: Log[]) {
     return logs
-        .filter((x) => x.data !== '0x')
+        .filter((x) => x.topics.length === 3 && x.data !== '0x')
         .reduce<Record<string, Record<string, Array<{ blockNumber: number; data: string }>>>>((acc, cur) => {
             const spender = web3.eth.abi.decodeParameter('address', cur.topics[2]) as unknown as string
+            if (isZeroAddress(spender)) return acc
             if (!acc[spender]) acc[spender] = {}
 
             if (acc[spender][cur.address]) {
