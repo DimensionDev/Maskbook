@@ -217,10 +217,8 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
     private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '', identifier }: SocialIdentity) {
         const names = getLensNames(nickname, bio, homepage)
-        if (identifier?.userId) {
-            const lensAccounts = await Firefly.getLensByTwitterId(identifier?.userId)
-            names.push(...lensAccounts.map((x) => x.handle))
-        }
+        const lensAccounts = await Firefly.getLensByTwitterId(identifier?.userId)
+        names.push(...lensAccounts.map((x) => x.handle))
         if (!names.length) return
 
         const allSettled = await Promise.allSettled(
@@ -315,25 +313,28 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         if (!getNextIDPlatform() || !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
             return identities
         }
-        const identitiesFromNextID = await this.getSocialAddressesFromNextID(identity)
-        const identitiesAddressFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
-        const allSettledIdentitiesVerified = await Promise.allSettled(
+        const [identitiesFromNextID, lensAccounts] = await Promise.all([
+            this.getSocialAddressesFromNextID(identity),
+            Firefly.getLensByTwitterId(identity.identifier?.userId),
+        ])
+        const lensAddresses = lensAccounts.map((x) => x.address.toLowerCase())
+        const identitiesAddressesFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
+        const allSettledTrustedIdentities = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
-                const isVerified = await NextIDProof.verifyTwitterHandlerByAddress(
-                    x.address,
-                    identity.identifier?.userId ?? '',
-                )
-                return { ...x, isVerified }
+                const trusted =
+                    lensAddresses.includes(x.address.toLowerCase()) ||
+                    (await NextIDProof.verifyTwitterHandlerByAddress(x.address, identity.identifier?.userId ?? ''))
+                return { ...x, trusted }
             }),
         )
 
         return uniqBy(
             (
-                allSettledIdentitiesVerified
-                    .flatMap((x) => (x.status === 'fulfilled' && x.value.isVerified ? x.value : undefined))
+                allSettledTrustedIdentities
+                    .flatMap((x) => (x.status === 'fulfilled' && x.value.trusted ? x.value : undefined))
                     .filter(Boolean) as Array<SocialAddress<ChainId>>
             )
-                .filter((x) => !identitiesAddressFromNextID.includes(x.address.toLowerCase()))
+                .filter((x) => !identitiesAddressesFromNextID.includes(x.address.toLowerCase()))
                 .concat(identitiesFromNextID),
             (x) => x.address.toLowerCase(),
         )
