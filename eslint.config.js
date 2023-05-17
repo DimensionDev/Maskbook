@@ -23,6 +23,7 @@ const deferPackages = [
     'anchorme',
     '@blocto/fcl',
     '@metamask/eth-sig-util',
+    '@masknet/gun-utils',
     // add package names here.
 ]
 

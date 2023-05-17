@@ -3,8 +3,6 @@ const prodOnly = process.env.NODE_ENV === 'production'
 const insiderOnly = process.env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
-// TODO: In future, we can turn this object into a Proxy to receive flags from remote
-
 export const flags = {
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
@@ -48,7 +46,5 @@ export const flags = {
     sentry_fetch_transaction_enabled: prodOnly,
     sentry_async_transaction_enabled: devOnly,
 } as const
-
-if (process.env.NODE_ENV === 'development') {
-    console.log('Mask Network starts with flags:', flags)
-}
+Object.setPrototypeOf(flags, null)
+Object.freeze(flags)

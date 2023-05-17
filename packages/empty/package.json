@@ -2,6 +2,7 @@
   "name": "@masknet/null",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

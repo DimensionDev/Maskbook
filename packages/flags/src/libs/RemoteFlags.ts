@@ -1,82 +1,61 @@
 import urlcat from 'urlcat'
-import { has } from 'lodash-es'
-import { Flags } from './Flags.js'
 
-interface FetchResult<T extends Record<string, unknown>> {
-    flags?: T
+interface FetchResult {
+    flags?: object
     timestamp: number
 }
 
-export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
-    private readonly KEY = 'mask-last-fetch-result'
+export interface RemoteFlagsOptions {
+    // the valid duration for remote fetched flags
+    fetchTTL?: number
+    // the valid duration for local storage flags
+    storageTTL?: number
+    KEY?: string
+}
 
-    private lastFetchResult: FetchResult<T> | null = null
+export class RemoteFlags<T extends object> {
+    constructor(private remoteFlagsURL: string, private localFlags: T, options?: RemoteFlagsOptions) {
+        const internalObject = (this.internalObject = Object.create(localFlags))
+        this.flags = new Proxy(internalObject, {
+            set: () => false,
+            defineProperty: () => false,
+            getPrototypeOf: () => null,
+            setPrototypeOf: (t, v) => v === null,
+        }) as T
 
-    private get lastStorageResult() {
-        try {
-            const json = localStorage.getItem(this.KEY)
-            const result: FetchResult<T> | null = json ? JSON.parse(json) : null
-            return result
-        } catch (error) {
-            return null
-        }
-    }
-
-    constructor(
-        private remoteFlagsURL: string,
-        defaults: T,
-        private initials?: {
-            // the valid duration for remote fetched flags
-            fetchTTL?: number
-            // the valid duration for local storage flags
-            storageTTL?: number
-        },
-    ) {
-        super(defaults)
+        this.optionsFetchTTL = options?.fetchTTL ?? 60 * 60 * 1000
+        this.optionsStorageTTL = options?.storageTTL ?? 2 * 60 * 60 * 1000
+        this.KEY = options?.KEY ?? 'mask-last-fetch-result'
 
         this.sync()
     }
+    flags: T
+    private internalObject: object
+    // options
+    private optionsFetchTTL: number
+    private optionsStorageTTL: number
+    private KEY: string
 
-    get options() {
-        return {
-            fetchTTL: 60 * 60 * 1000, // 1hr
-            storageTTL: 2 * 60 * 60 * 1000, // 2hr
-            ...this.initials,
+    private lastFetchResult: FetchResult | null = null
+    private get lastStorageResult(): FetchResult | null {
+        try {
+            // TODO: do not storage flags this.KEY in the localStorage
+            const json = localStorage.getItem(this.KEY)
+            if (!json) return null
+            const obj = JSON.parse(json)
+            if (!obj || typeof obj !== 'object') return null
+            const { timestamp, flags } = obj as FetchResult
+            if (typeof timestamp !== 'number' || (flags && typeof flags !== 'object')) return null
+            return obj
+        } catch {
+            return null
         }
-    }
-
-    get isLastFetchResultFresh() {
-        return Date.now() - this.lastFetchTimestamp < this.options.fetchTTL
-    }
-
-    get isLastStorageResultFresh() {
-        return Date.now() - this.lastStorageTimestamp < this.options.storageTTL
-    }
-
-    get lastFetchTimestamp() {
-        return this.lastFetchResult?.timestamp ?? 0
-    }
-
-    get lastStorageTimestamp() {
-        return this.lastStorageResult?.timestamp ?? 0
-    }
-
-    override get accessor(): Readonly<T> {
-        return new Proxy(this.defaults, {
-            get: (target, key, receiver) => {
-                if (has(this.lastFetchResult?.flags, key)) return this.lastFetchResult?.flags?.[key as string]
-                return Reflect.get(target, key, receiver)
-            },
-            set: (target, key, value, receiver) => {
-                throw new Error('Not allowed')
-            },
-        })
     }
 
     /**
      * Sync with the local storage.
      */
-    sync() {
+    private sync() {
         if (!this.isLastStorageResultFresh) {
             localStorage.removeItem(this.KEY)
         }
@@ -96,12 +75,21 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
             console.log('[RemoteFlags] sync from storage')
             this.lastFetchResult = lastStorageResult
         }
+
+        Object.setPrototypeOf(
+            this.internalObject,
+            Object.freeze({
+                ...this.lastFetchResult?.flags,
+                [Symbol.toStringTag]: 'RemoteFlags',
+                __proto__: this.localFlags,
+            }),
+        )
     }
 
     /**
      * Fetch flags from the remote server.
      */
-    async fetch() {
+    private async fetch(): Promise<object | undefined> {
         const response = await fetch(
             urlcat(this.remoteFlagsURL, {
                 engine: process.env.engine,
@@ -111,6 +99,7 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
             }),
         )
         const flags: T = await response.json()
+        if (typeof flags !== 'object' || !flags) return undefined
         return flags
     }
 
@@ -126,5 +115,18 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
             timestamp: Date.now(),
         }
         this.sync()
+    }
+
+    private get lastFetchTimestamp() {
+        return this.lastFetchResult?.timestamp ?? 0
+    }
+    private get lastStorageTimestamp() {
+        return this.lastStorageResult?.timestamp ?? 0
+    }
+    private get isLastFetchResultFresh() {
+        return Date.now() - this.lastFetchTimestamp < this.optionsFetchTTL
+    }
+    private get isLastStorageResultFresh() {
+        return Date.now() - this.lastStorageTimestamp < this.optionsStorageTTL
     }
 }
