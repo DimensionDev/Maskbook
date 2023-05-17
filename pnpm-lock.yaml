@@ -140,8 +140,8 @@ importers:
         specifier: 5.10.8
         version: 5.10.8(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@types/react@18.0.37)(react@0.0.0-experimental-21021fb0f-20230412)
       '@tanstack/react-query':
-        specifier: ^4.29.5
-        version: 4.29.5(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+        specifier: ^4.29.7
+        version: 4.29.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       '@types/masknet__global-types':
         specifier: workspace:^
         version: link:packages/polyfills/types
@@ -549,6 +549,9 @@ importers:
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
+      '@tanstack/react-query-devtools':
+        specifier: ^4.29.7
+        version: 4.29.7(@tanstack/react-query@4.29.7)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       '@types/color':
         specifier: ^3.0.3
         version: 3.0.3
@@ -927,6 +930,9 @@ importers:
       '@sinonjs/text-encoding':
         specifier: ^0.7.2
         version: 0.7.2
+      '@tanstack/react-query-devtools':
+        specifier: ^4.29.7
+        version: 4.29.7(@tanstack/react-query@4.29.7)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
       '@types/bn.js':
         specifier: ^4.11.6
         version: 4.11.6
@@ -11769,12 +11775,39 @@ packages:
       tailwindcss: 3.3.1(postcss@8.4.22)(ts-node@10.9.1)
     dev: false
 
-  /@tanstack/query-core@4.29.5:
-    resolution: {integrity: sha512-xXIiyQ/4r9KfaJ3k6kejqcaqFXXBTzN2aOJ5H1J6aTJE9hl/nbgAdfF6oiIu0CD5xowejJEJ6bBg8TO7BN4NuQ==}
+  /@tanstack/match-sorter-utils@8.8.4:
+    resolution: {integrity: sha512-rKH8LjZiszWEvmi01NR72QWZ8m4xmXre0OOwlRGnjU01Eqz/QnN+cqpty2PJ0efHblq09+KilvyR7lsbzmXVEw==}
+    engines: {node: '>=12'}
+    dependencies:
+      remove-accents: 0.4.2
     dev: false
 
-  /@tanstack/react-query@4.29.5(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
-    resolution: {integrity: sha512-F87cibC3s3eG0Q90g2O+hqntpCrudKFnR8P24qkH9uccEhXErnJxBC/AAI4cJRV2bfMO8IeGZQYf3WyYgmSg0w==}
+  /@tanstack/query-core@4.29.7:
+    resolution: {integrity: sha512-GXG4b5hV2Loir+h2G+RXhJdoZhJLnrBWsuLB2r0qBRyhWuXq9w/dWxzvpP89H0UARlH6Mr9DiVj4SMtpkF/aUA==}
+    dev: false
+
+  /@tanstack/react-query-devtools@4.29.7(@tanstack/react-query@4.29.7)(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-fckNnBV6Kfbtq6EJqQen8oBjPqGFcOPS9SJmNKLbFLQgd7OpNIlA4M0r37iJYUY9m14/ESKc1wzKd36VfeiPjg==}
+    peerDependencies:
+      '@tanstack/react-query': 4.29.7
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-21021fb0f-20230412
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-21021fb0f-20230412
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      '@tanstack/match-sorter-utils': 8.8.4
+      '@tanstack/react-query': 4.29.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412)
+      react: 0.0.0-experimental-21021fb0f-20230412
+      react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
+      superjson: 1.12.3
+      use-sync-external-store: 1.2.0(react@0.0.0-experimental-21021fb0f-20230412)
+    dev: false
+
+  /@tanstack/react-query@4.29.7(react-dom@0.0.0-experimental-21021fb0f-20230412)(react@0.0.0-experimental-21021fb0f-20230412):
+    resolution: {integrity: sha512-ijBWEzAIo09fB1yd22slRZzprrZ5zMdWYzBnCg5qiXuFbH78uGN1qtGz8+Ed4MuhaPaYSD+hykn+QEKtQviEtg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-21021fb0f-20230412
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-21021fb0f-20230412
@@ -11787,7 +11820,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 4.29.5
+      '@tanstack/query-core': 4.29.7
       react: 0.0.0-experimental-21021fb0f-20230412
       react-dom: 0.0.0-experimental-21021fb0f-20230412(react@0.0.0-experimental-21021fb0f-20230412)
       use-sync-external-store: 1.2.0(react@0.0.0-experimental-21021fb0f-20230412)
@@ -16194,6 +16227,13 @@ packages:
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+
+  /copy-anything@3.0.4:
+    resolution: {integrity: sha512-MaQ9FwzlZ/KLeVCLhzI3rZw0EhrIryfZa3AyT4agVybR0DjlkDHA8898lamLD6kfkf9MMn8D+zDAUR4+GxaymQ==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      is-what: 4.1.9
+    dev: false
 
   /copy-concurrently@1.0.5:
     resolution: {integrity: sha512-f2domd9fsVDFtaFcbaRZuYXwtdmnzqbADSwhSWYxYB/Q8zsdUUFMXVRwXGDMWmbEzAn1kdRrtI1T/KTFOL4X2A==}
@@ -21945,6 +21985,11 @@ packages:
     resolution: {integrity: sha512-qctsuLZmIQ0+vSSMfoVvyFe2+GSEvnmZ2ezTup1SBse9+twCCeial6EEi3Nc2KFcf6+qz2FBPnjXsk8xhKSaPQ==}
     dependencies:
       call-bind: 1.0.2
+
+  /is-what@4.1.9:
+    resolution: {integrity: sha512-I3FU0rkVvwhgLLEs6iITwZ/JaLXe7tQcHyzupXky8jigt1vu4KM0UOqDr963j36JRvJ835EATVIm6MnGz/i1/g==}
+    engines: {node: '>=12.13'}
+    dev: false
 
   /is-whitespace-character@1.0.4:
     resolution: {integrity: sha512-SDweEzfIZM0SJV0EUga669UTKlmL0Pq8Lno0QDQsPnvECB3IM2aP0gdx5TrU0A01MAPfViaZiI2V1QMZLaKK5w==}
@@ -27928,6 +27973,10 @@ packages:
       autolinker: 3.14.3
     dev: false
 
+  /remove-accents@0.4.2:
+    resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
+    dev: false
+
   /remove-bom-buffer@3.0.0:
     resolution: {integrity: sha512-8v2rWhaakv18qcvNeli2mZ/TMTL2nEyAKRvzo1WtnZBl15SHyEhrCu2/xKlJyUFKHiHgfXIyuY6g2dObJJycXQ==}
     engines: {node: '>=0.10.0'}
@@ -29652,6 +29701,13 @@ packages:
       mz: 2.7.0
       pirates: 4.0.5
       ts-interface-checker: 0.1.13
+    dev: false
+
+  /superjson@1.12.3:
+    resolution: {integrity: sha512-0j+U70KUtP8+roVPbwfqkyQI7lBt7ETnuA7KXbTDX3mCKiD/4fXs2ldKSMdt0MCfpTwiMxo20yFU3vu6ewETpQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      copy-anything: 3.0.4
     dev: false
 
   /superstruct@0.14.2:
@@ -33009,7 +33065,8 @@ time:
   /@tailwindcss/forms@0.5.3: '2022-09-02T11:45:39.924Z'
   /@tailwindcss/line-clamp@0.4.4: '2023-03-30T19:46:03.962Z'
   /@tailwindcss/typography@0.5.9: '2023-01-10T16:14:23.354Z'
-  /@tanstack/react-query@4.29.5: '2023-04-24T15:20:22.298Z'
+  /@tanstack/react-query-devtools@4.29.7: '2023-05-14T14:10:23.427Z'
+  /@tanstack/react-query@4.29.7: '2023-05-14T14:10:05.965Z'
   /@typechain/web3-v1@6.0.2: '2022-11-01T22:04:27.996Z'
   /@types/bn.js@4.11.6: '2020-01-03T23:18:47.360Z'
   /@types/bs58@4.0.1: '2019-11-15T20:48:33.391Z'

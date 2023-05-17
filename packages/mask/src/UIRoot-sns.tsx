@@ -1,5 +1,6 @@
 import { Suspense, useMemo } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
@@ -12,6 +13,7 @@ import { activatedSocialNetworkUI } from './social-network/index.js'
 import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
+import { createPortal } from 'react-dom'
 
 export function MaskUIRootSNS(children: React.ReactNode) {
     return compose(
@@ -35,6 +37,15 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <EnvironmentContextProvider value={context}>
                 <QueryClientProvider client={queryClient}>
+                    {process.env.NODE_ENV === 'development'
+                        ? createPortal(
+                              <ReactQueryDevtools
+                                  position="bottom-right"
+                                  toggleButtonProps={{ style: { width: 24 } }}
+                              />,
+                              document.body,
+                          )
+                        : null}
                     <Web3ContextProvider value={context}>
                         <TelemetryProvider>
                             <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>

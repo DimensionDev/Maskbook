@@ -146,6 +146,7 @@ function Content() {
                                       title={
                                           <Typography className={classes.ellipsisText}>
                                               {result.powerDetail
+                                                  .filter((x) => x.power)
                                                   .flatMap((detail, index) => {
                                                       const name = formatCount(
                                                           proposal.scores_by_strategy[i][index],
