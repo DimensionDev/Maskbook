@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const NextIdLensToFireflyLens = (account: LensAccount): FireflyBaseAPI.LensAccount => {
+export const NextIdLensToFireflyLens = (account: LensAccount): FireflyBaseAPI.LensAccount => {
     return {
         address: account.address,
         name: account.displayName,

@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { type Plugin } from '@masknet/plugin-infra'
+import { Plugin } from '@masknet/plugin-infra'
 import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
@@ -10,9 +10,11 @@ import { context, setupContext, setupStorage } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { LensBadge } from './components/LensBadge.js'
-import { LensPopup } from './components/LensPopup.js'
+import { LensPopup, NextIdLensToFireflyLens } from './components/LensPopup.js'
 import { ChainContextProvider, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { useAsync } from 'react-use'
+import { NextIDProof } from '@masknet/web3-providers'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -95,14 +97,25 @@ const sns: Plugin.SNSAdaptor.Definition = {
             Content({ identity, slot, onStatusUpdate }) {
                 const { value: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
 
-                const hasLens = !accounts.length
+                const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
+                const { value: nextIdLens = EMPTY_LIST } = useAsync(async () => {
+                    if (!isProfile || !identity?.userId) return
+                    const accounts = await NextIDProof.queryAllLens(identity.userId)
+                    return accounts.map(NextIdLensToFireflyLens)
+                }, [isProfile, identity?.userId])
+                const lensAccounts = useMemo(
+                    () => (isProfile ? [...accounts, ...nextIdLens] : accounts),
+                    [isProfile, accounts, nextIdLens],
+                )
+
+                const hasLens = !lensAccounts.length
                 useEffect(() => {
                     onStatusUpdate?.(hasLens)
                 }, [onStatusUpdate, hasLens])
 
-                if (!accounts.length || !identity?.userId) return null
+                if (!lensAccounts.length || !identity?.userId) return null
 
-                return <LensBadge slot={slot} accounts={accounts} userId={identity.userId} />
+                return <LensBadge slot={slot} accounts={lensAccounts} userId={identity.userId} />
             },
         },
     },
