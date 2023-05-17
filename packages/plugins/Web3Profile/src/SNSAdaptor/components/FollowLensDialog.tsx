@@ -7,7 +7,7 @@ import {
 } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType } from '@masknet/web3-providers/types'
@@ -15,7 +15,7 @@ import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from 
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
-import { useMemo, useState, type MouseEvent } from 'react'
+import { useMemo, useState, type MouseEvent, useCallback } from 'react'
 import { useAsyncRetry, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
@@ -96,6 +96,8 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     },
 }))
 
+let task: Promise<void> | undefined
+
 export function FollowLensDialog() {
     const t = useI18N()
 
@@ -117,8 +119,10 @@ export function FollowLensDialog() {
         },
     )
 
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+
     // #region profile information
-    const { value, loading, retry } = useAsyncRetry(async () => {
+    const { value, loading } = useAsyncRetry(async () => {
         if (!handle || !open || !open) return
         const profile = await Lens.getProfileByHandle(handle)
 
@@ -195,6 +199,21 @@ export function FollowLensDialog() {
     const { value: feeTokenBalance, loading: getBalanceLoading } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         profile?.followModule?.amount?.asset.address ?? '',
+    )
+
+    const handleClick = useCallback(
+        (event: MouseEvent<HTMLElement>) => {
+            if (task) {
+                showSnackbar(isFollowing ? t.lens_unfollow() : t.lens_follow(), {
+                    processing: true,
+                    message: isFollowing ? t.lens_unfollow_processing_tips() : t.lens_follow_processing_tips(),
+                    autoHideDuration: 2000,
+                })
+                return
+            }
+            task = (isFollowing ? handleUnfollow(event) : handleFollow(event)).finally(() => (task = undefined))
+        },
+        [handleFollow, handleUnfollow, isFollowing],
     )
 
     const disabled = useMemo(() => {
@@ -280,7 +299,7 @@ export function FollowLensDialog() {
                         className={classes.followAction}
                         disabled={disabled}
                         loading={followLoading || unfollowLoading || loading}
-                        onClick={isFollowing ? handleUnfollow : handleFollow}>
+                        onClick={handleClick}>
                         {getButtonText()}
                     </ActionButton>
                 </ChainBoundary>
