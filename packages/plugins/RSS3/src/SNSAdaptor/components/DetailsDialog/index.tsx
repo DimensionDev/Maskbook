@@ -18,17 +18,19 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
-        paddingRight: 15,
+        paddingBottom: theme.spacing(3),
+    },
+    details: {
+        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
         '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 5,
+            display: 'none',
         },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '5px',
-            width: 5,
-            border: '5px solid transparent',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
-        },
+        '::-webkit-scrollbar-thumb': {},
+    },
+    card: {
+        flexGrow: 1,
     },
     links: {
         display: 'flex',
@@ -76,27 +78,29 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, 
                 onSubmit?.()
             }}>
             <DialogContent className={classes.content}>
-                <FeedCard feed={feed} actionIndex={actionIndex} verbose />
-                {links?.length ? (
-                    <div className={classes.links}>
-                        {links.map((link, index) => {
-                            let host = ''
-                            try {
-                                const url = new URL(link)
-                                if (!['http:', 'https:'].includes(url.protocol)) return null
-                                host = url.host
-                            } catch {}
-                            const Icon = hostIconMap[host] ?? Icons.SettingsLanguage
-                            const name = hostNameMap[host] ?? host
-                            return (
-                                <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
-                                    <Icon size={24} />
-                                    <Typography className={classes.linkLabel}>{name}</Typography>
-                                </Linking>
-                            )
-                        })}
-                    </div>
-                ) : null}
+                <div className={classes.details}>
+                    <FeedCard className={classes.card} feed={feed} actionIndex={actionIndex} verbose />
+                    {links?.length ? (
+                        <div className={classes.links}>
+                            {links.map((link, index) => {
+                                let host = ''
+                                try {
+                                    const url = new URL(link)
+                                    if (!['http:', 'https:'].includes(url.protocol)) return null
+                                    host = url.host
+                                } catch {}
+                                const Icon = hostIconMap[host] ?? Icons.SettingsLanguage
+                                const name = hostNameMap[host] ?? host
+                                return (
+                                    <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
+                                        <Icon size={24} />
+                                        <Typography className={classes.linkLabel}>{name}</Typography>
+                                    </Linking>
+                                )
+                            })}
+                        </div>
+                    ) : null}
+                </div>
             </DialogContent>
         </InjectedDialog>
     )
