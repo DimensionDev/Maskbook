@@ -5,22 +5,23 @@ import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()(() => ({}))
 
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement>, withClasses<'loadingFailImage'> {
+interface ImageProps extends ImgHTMLAttributes<HTMLImageElement>, withClasses<'loadingFailImage' | 'root'> {
     fallbackImage?: URL
+    useProxy?: boolean
 }
 
-export function Image(props: ImageProps) {
-    const classes = useStylesExtends(useStyles(), props)
+export function Image({ useProxy = true, ...rest }: ImageProps) {
+    const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
     const maskImageURL =
         theme.palette.mode === 'dark'
             ? new URL('./mask_dark.png', import.meta.url)
             : new URL('./mask_light.png', import.meta.url)
     const { loading, value } = useAsync(async () => {
-        if (!props.src) return
-        const data = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${props.src}`)
+        if (!rest.src) return
+        const data = await globalThis.r2d2Fetch(useProxy ? `https://cors.r2d2.to?${rest.src}` : rest.src)
         return URL.createObjectURL(await data.blob())
-    }, [props.src])
+    }, [rest.src])
 
     return (
         <>
@@ -29,11 +30,11 @@ export function Image(props: ImageProps) {
             ) : (
                 <img
                     crossOrigin="anonymous"
-                    {...props}
-                    src={value ?? props.src}
+                    {...rest}
+                    src={value ?? rest.src}
                     onError={(event) => {
                         const target = event.currentTarget as HTMLImageElement
-                        target.src = (props.fallbackImage ?? maskImageURL).toString()
+                        target.src = (rest.fallbackImage ?? maskImageURL).toString()
                         target.classList.add(classes.loadingFailImage ?? '')
                     }}
                 />
