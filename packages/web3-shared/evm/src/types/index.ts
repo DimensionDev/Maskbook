@@ -273,7 +273,7 @@ export interface Transaction {
     maxFeePerGas?: string
     data?: string
     nonce?: number
-    chainId?: number | string
+    chainId?: number
 
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee

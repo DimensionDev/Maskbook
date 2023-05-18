@@ -3539,6 +3539,9 @@ importers:
       fortmatic:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=tb3oevqnvhntsyfyhi2z6spuea)
+      fuse.js:
+        specifier: 6.6.2
+        version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
       graphql-request:
         specifier: ^6.0.0
         version: 6.0.0(graphql@16.6.0)

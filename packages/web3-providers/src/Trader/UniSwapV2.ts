@@ -176,7 +176,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         })
     }
 
-    private async getSwapParamters(
+    private async getSwapParameters(
         chainId: ChainId,
         account: string,
         trade: TradeComputed<Trade> | null,
@@ -395,7 +395,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
     }
 
     public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<Trade> | null) {
-        const tradeParameters = await this.getSwapParamters(chainId, account, trade)
+        const tradeParameters = await this.getSwapParameters(chainId, account, trade)
 
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(

@@ -31,12 +31,14 @@ import {
     YUMI,
     xYUMI,
 } from '@masknet/web3-shared-evm'
+import { ONE } from '@masknet/web3-shared-base'
 import { Percent } from '@uniswap/sdk-core'
 import type { ERC20TokenCustomizedBase } from '../../types/Trader.js'
 import { BigNumber } from 'bignumber.js'
 
 export const UNISWAP_BIPS_BASE = 10000
 export const BIPS_BASE = new BigNumber(10000)
+export const ONE_BIPS = ONE.dividedBy(BIPS_BASE)
 
 export const DEFAULT_TRANSACTION_DEADLINE = 30 /* minutes */ * 60 /* seconds */
 export const L2_TRANSACTION_DEADLINE = 60 /* minutes */ * 5 /* seconds */
