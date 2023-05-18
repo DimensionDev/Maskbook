@@ -14,13 +14,12 @@ export type TokenApprovalInfoAccountMap = Record<
 
 export type NFTApprovalInfoAccountMap = Record<
     string,
-    Record<
-        ChainId,
-        {
-            spenderList: Record<string, Record<string, boolean>>
+    {
+        [key in ChainId]?: {
+            spenderList: Record<string, Record<string, { approved: boolean; transactionBlockNumber: number }>>
             fromBlock: number
         }
-    >
+    }
 >
 
 export class ApprovalListState {
@@ -70,11 +69,28 @@ export class ApprovalListState {
         address: string,
         chainId: ChainId,
         fromBlock: number,
+        transactionBlockNumber: number,
         approved: boolean,
     ) {
         this._nft_state = produce(this._nft_state, (draft) => {
-            draft[account][chainId].spenderList[spender][address] = approved
-            draft[account][chainId].fromBlock = fromBlock
+            if (!draft[account]) draft[account] = {}
+            if (!draft[account][chainId]) {
+                draft[account][chainId] = {
+                    spenderList: { [spender]: { [address]: { approved, transactionBlockNumber } } },
+                    fromBlock,
+                }
+            }
+            if (!draft[account][chainId]!.spenderList) {
+                draft[account][chainId]!.spenderList = {
+                    [spender]: { [address]: { approved, transactionBlockNumber } },
+                }
+            }
+            if (!draft[account][chainId]!.spenderList[spender]) {
+                draft[account][chainId]!.spenderList[spender] = { [address]: { approved, transactionBlockNumber } }
+            }
+
+            draft[account][chainId]!.spenderList[spender][address] = { approved, transactionBlockNumber }
+            draft[account][chainId]!.fromBlock = fromBlock
         })
     }
 }
