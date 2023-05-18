@@ -9,7 +9,6 @@ export interface ProposalIdentifier {
     id: string
 }
 export interface RawVote {
-    [x: string]: string
     /**
      * There're two sorts of vote,
      * for multiple choice vote, each choice can be assigned to a different weight.
@@ -17,6 +16,7 @@ export interface RawVote {
     choice: number | { [choiceIndex: number]: number } | number[]
     created: number
     voter: string
+    ipfs: string
     id: string
     vp: number
     vp_by_strategy: number[]
