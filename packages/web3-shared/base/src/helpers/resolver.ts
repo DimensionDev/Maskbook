@@ -190,6 +190,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.SPACE_ID]: 'https://space.id/',
         [SocialAddressType.RSS3]: 'https://rss3.bio/',
         [SocialAddressType.Crossbell]: 'https://crossbell.io/',
+        [SocialAddressType.Firefly]: '',
         [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
         [SocialAddressType.NEXT_ID]: 'https://next.id/',
         [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
@@ -198,6 +199,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.TwitterBlue]: '',
         [SocialAddressType.Mask]: '',
         [SocialAddressType.Lens]: '',
+        [SocialAddressType.OpenSea]: '',
     },
     () => '',
 )

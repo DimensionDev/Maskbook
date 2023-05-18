@@ -91,7 +91,9 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
 const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
     {
         [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
+        [MaskX_BaseAPI.SourceType.Firefly]: SocialAddressType.Firefly,
         [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
+        [MaskX_BaseAPI.SourceType.OpenSea]: SocialAddressType.OpenSea,
         [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
         [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
     },
@@ -215,10 +217,8 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         )
     }
 
-    private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '', identifier }: SocialIdentity) {
+    private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '' }: SocialIdentity) {
         const names = getLensNames(nickname, bio, homepage)
-        const lensAccounts = await Firefly.getLensByTwitterId(identifier?.userId)
-        names.push(...lensAccounts.map((x) => x.handle))
         if (!names.length) return
 
         const allSettled = await Promise.allSettled(
@@ -226,6 +226,21 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 const profile = await Lens.getProfileByHandle(name)
                 if (!profile) return
                 return this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name)
+            }),
+        )
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+    }
+
+    private async getSocialAddressFromFirefly({ identifier }: SocialIdentity) {
+        const lensAccounts = await Firefly.getLensByTwitterId(identifier?.userId)
+        const names = lensAccounts.map((x) => x.handle)
+        if (!names.length) return
+
+        const allSettled = await Promise.allSettled(
+            names.map(async (name) => {
+                const profile = await Lens.getProfileByHandle(name)
+                if (!profile) return
+                return this.createSocialAddress(SocialAddressType.Firefly, profile.ownedBy, name)
             }),
         )
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
@@ -252,16 +267,15 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         if (!userId) return
 
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
+        const sourceTypes = [
+            MaskX_BaseAPI.SourceType.CyberConnect,
+            MaskX_BaseAPI.SourceType.Firefly,
+            MaskX_BaseAPI.SourceType.Leaderboard,
+            MaskX_BaseAPI.SourceType.OpenSea,
+            MaskX_BaseAPI.SourceType.Sybil,
+        ]
         const results = response.records.filter((x) => {
-            if (
-                !isValidAddress(x.web3_addr) ||
-                ![
-                    MaskX_BaseAPI.SourceType.CyberConnect,
-                    MaskX_BaseAPI.SourceType.Leaderboard,
-                    MaskX_BaseAPI.SourceType.Sybil,
-                ].includes(x.source)
-            )
-                return false
+            if (!isValidAddress(x.web3_addr) || !sourceTypes.includes(x.source)) return false
 
             try {
                 // detect if a valid data source
@@ -291,6 +305,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
+        const socialAddressFromFirefly = this.getSocialAddressFromFirefly(identity)
         const allSettled = await Promise.allSettled([
             captureAsyncTransaction('getSocialAddressFromBio', this.getSocialAddressFromBio(identity)),
             captureAsyncTransaction('getSocialAddressFromENS', this.getSocialAddressFromENS(identity)),
@@ -304,6 +319,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             captureAsyncTransaction('getSocialAddressesFromNextID', this.getSocialAddressesFromNextID(identity)),
             captureAsyncTransaction('getSocialAddressesFromMaskX', this.getSocialAddressesFromMaskX(identity)),
             captureAsyncTransaction('getSocialAddressFromLens', this.getSocialAddressFromLens(identity)),
+            captureAsyncTransaction('getSocialAddressFromFirefly', socialAddressFromFirefly),
         ])
         const identities_ = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
@@ -315,9 +331,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         }
         const [identitiesFromNextID, lensAccounts] = await Promise.all([
             this.getSocialAddressesFromNextID(identity),
-            Firefly.getLensByTwitterId(identity.identifier?.userId),
+            socialAddressFromFirefly,
         ])
-        const lensAddresses = lensAccounts.map((x) => x.address.toLowerCase())
+        const lensAddresses = lensAccounts?.map((x) => x.address.toLowerCase()) ?? []
         const identitiesAddressesFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
         const allSettledTrustedIdentities = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
