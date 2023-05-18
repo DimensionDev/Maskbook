@@ -11,11 +11,11 @@ import { useHiddenAddressSettings, useSocialAccountsAll } from '@masknet/web3-ho
 import { currySameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
-export const useSocialAccountsBySettings = (
+export function useSocialAccountsBySettings(
     identity?: SocialIdentity,
     typeWhitelist?: SocialAddressType[],
     sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
-) => {
+) {
     const {
         value: socialAccounts = EMPTY_LIST,
         loading: loadingSocialAccounts,

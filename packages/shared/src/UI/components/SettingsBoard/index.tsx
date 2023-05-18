@@ -1,15 +1,8 @@
 import { useEffect } from 'react'
-import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SettingsContext } from './Context.js'
 import { GasSection } from './GasSection.js'
 import { SlippageToleranceSection } from './SlippageToleranceSection.js'
-
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {},
-    }
-})
 
 export interface SettingsBoardProps {
     disableGasPrice?: boolean
@@ -20,7 +13,6 @@ export interface SettingsBoardProps {
 
 export function SettingsBoard(props: SettingsBoardProps) {
     const { disableGasPrice = false, disableSlippageTolerance = false, onChange, disableGasLimit } = props
-    const { classes } = useStyles()
     const { transaction, transactionOptions, slippageTolerance, gasSettingsType, setGasSettingsType } =
         SettingsContext.useContainer()
 
@@ -37,7 +29,7 @@ export function SettingsBoard(props: SettingsBoardProps) {
     }, [JSON.stringify(transaction), JSON.stringify(transactionOptions), slippageTolerance, onChange])
 
     return (
-        <div className={classes.root}>
+        <div>
             {disableGasPrice ? null : (
                 <GasSection
                     activeTab={gasSettingsType}

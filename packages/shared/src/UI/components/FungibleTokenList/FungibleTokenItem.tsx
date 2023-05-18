@@ -96,7 +96,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const getFungibleTokenItem = <T extends NetworkPluginID>(
+export function getFungibleTokenItem<T extends NetworkPluginID>(
     getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
     isSelected: (address: string) => boolean,
     mode: TokenListMode,
@@ -108,7 +108,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
         strategy: 'trust' | 'block',
     ) => Promise<void>,
-) => {
+) {
     return memo(({ data, index, style }: any) => {
         const t = useSharedI18N()
         const { classes } = useStyles()

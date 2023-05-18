@@ -43,7 +43,7 @@ export interface PluginCardFrameMiniProps {
     children?: React.ReactNode
 }
 
-export const PluginCardFrameMini = ({ name, provider, providerLink, children }: PluginCardFrameMiniProps) => {
+export function PluginCardFrameMini({ name, provider, providerLink, children }: PluginCardFrameMiniProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 

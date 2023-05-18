@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -26,7 +26,7 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
     onSubmit?(result: boolean | null): void
 }
 
-export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, confirmLabel, content, onSubmit, ...rest }) => {
+export function ConfirmDialog({ title, confirmLabel, content, onSubmit, ...rest }: ConfirmDialogProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 

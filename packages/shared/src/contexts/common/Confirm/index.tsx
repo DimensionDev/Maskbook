@@ -6,7 +6,7 @@ const { TaskManagerContext, TaskManagerProvider: ConfirmProvider } = createUITas
     ConfirmDialog,
 )
 
-export const useShowConfirm = () => {
+export function useShowConfirm() {
     return useContext(TaskManagerContext).show
 }
 export { ConfirmProvider }

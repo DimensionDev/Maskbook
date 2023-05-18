@@ -100,7 +100,7 @@ export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, Collect
     /** @default true */
     disableAction?: boolean
     actionLabel?: string
-    verifiedBy: string[]
+    verifiedBy: readonly string[]
     onActionClick?(asset: CollectibleCardProps['asset']): void
     onItemClick?(asset: CollectibleCardProps['asset']): void
 }

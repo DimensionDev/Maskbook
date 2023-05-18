@@ -62,7 +62,7 @@ const useStyles = makeStyles()({
     listBox: {},
 })
 
-export const FungibleTokenList = function <T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
+export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
     const {
         tokens = EMPTY_LIST,
         whitelist: includeTokens,
@@ -255,7 +255,6 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         account,
     })
     // #endregion
-
     const itemRender = useMemo(() => {
         return getFungibleTokenItem<T>(
             (address) => {

@@ -1,4 +1,4 @@
-import { type FC, type PropsWithChildren, useCallback, type RefObject } from 'react'
+import { useCallback, type RefObject } from 'react'
 import { groupBy, toPairs } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -89,7 +89,7 @@ const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungib
     NonFungibleCollection: 'NFT',
 }
 
-export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroupProps>> = ({
+export function TokenWithSocialGroupMenu({
     currentCollection,
     collectionList: collectionList_,
     disablePortal = true,
@@ -103,7 +103,7 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
     fromSocialCard,
     onTokenChange,
     onClose,
-}) => {
+}: TokenWithSocialGroupProps) {
     const { classes } = useStyles()
     const t = useSharedI18N()
 

@@ -1,4 +1,4 @@
-import { memo, type HTMLProps, type FC } from 'react'
+import { memo, type HTMLProps } from 'react'
 import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -51,7 +51,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableInspect?: boolean
 }
 
-export const CollectibleCard: FC<CollectibleCardProps> = memo(
+export const CollectibleCard = memo<CollectibleCardProps>(
     ({ className, pluginID, asset, disableNetworkIcon, disableInspect, ...rest }) => {
         const { classes, cx } = useStyles()
 

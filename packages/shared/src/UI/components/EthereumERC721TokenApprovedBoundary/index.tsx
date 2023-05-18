@@ -1,12 +1,10 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
-import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme'
+import { type ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
-
-const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
@@ -22,7 +20,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     const { owner, collection, operator, children, validationMessage: _validationMessage, chainId } = props
     const t = useSharedI18N()
     const { Others } = useWeb3State()
-    const { classes } = useStyles(undefined, { props })
     const {
         value: isApproveForAll,
         loading,
@@ -50,13 +47,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
 
     if (approveState.loading) {
         return (
-            <ActionButton
-                className={classes.approveButton}
-                variant="contained"
-                fullWidth
-                loading
-                disabled
-                {...props.ActionButtonProps}>
+            <ActionButton variant="contained" fullWidth loading disabled {...props.ActionButtonProps}>
                 {t.plugin_wallet_nft_approving_all({
                     symbol: collection?.symbol
                         ? collection.symbol.toLowerCase() === 'unknown'
@@ -68,34 +59,15 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         )
     } else if (validationMessage) {
         return (
-            <ActionButton
-                className={classes.approveButton}
-                variant="contained"
-                fullWidth
-                disabled
-                {...props.ActionButtonProps}>
+            <ActionButton variant="contained" fullWidth disabled {...props.ActionButtonProps}>
                 {validationMessage}
             </ActionButton>
         )
     } else if (loading) {
-        return (
-            <ActionButton
-                className={classes.approveButton}
-                variant="contained"
-                fullWidth
-                loading
-                disabled
-                {...props.ActionButtonProps}
-            />
-        )
+        return <ActionButton variant="contained" fullWidth loading disabled {...props.ActionButtonProps} />
     } else if (isApproveForAll === false) {
         return (
-            <ActionButton
-                className={classes.approveButton}
-                variant="contained"
-                fullWidth
-                onClick={approveCallback}
-                {...props.ActionButtonProps}>
+            <ActionButton variant="contained" fullWidth onClick={approveCallback} {...props.ActionButtonProps}>
                 {t.plugin_wallet_approve_all_nft({
                     symbol: collection?.symbol
                         ? collection?.symbol.toLowerCase() === 'unknown'
@@ -107,12 +79,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         )
     } else if (isApproveForAll === undefined) {
         return (
-            <ActionButton
-                className={classes.approveButton}
-                variant="contained"
-                fullWidth
-                onClick={retry}
-                {...props.ActionButtonProps}>
+            <ActionButton variant="contained" fullWidth onClick={retry} {...props.ActionButtonProps}>
                 {t.plugin_wallet_fail_to_load_nft_contract()}
             </ActionButton>
         )

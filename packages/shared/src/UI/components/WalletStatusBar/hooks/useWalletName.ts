@@ -10,11 +10,7 @@ import {
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isSameAddress, resolveNetworkWalletName } from '@masknet/web3-shared-base'
 
-export const useWalletName = (
-    expectedAccount?: string,
-    expectedPluginId?: NetworkPluginID,
-    isNextIdWallet?: boolean,
-) => {
+export function useWalletName(expectedAccount?: string, expectedPluginId?: NetworkPluginID, isNextIdWallet?: boolean) {
     const { Others } = useWeb3State(expectedPluginId)
     const { account, providerType } = useChainContext({ account: expectedAccount })
     const { data: domain } = useReverseAddress(expectedPluginId, account)

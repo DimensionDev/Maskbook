@@ -10,8 +10,8 @@ export interface AssetsState {
 }
 
 export interface AssetsReducerState {
-    assetsMap: Record<string, AssetsState>
-    verifiedMap: Record<string, string[]>
+    readonly assetsMap: Readonly<Record<string, AssetsState>>
+    readonly verifiedMap: Readonly<Record<string, readonly string[]>>
 }
 
 type Action =

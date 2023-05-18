@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use'
 
 export const PLUGIN_GUIDE_INIT = 1
 
-export const usePluginGuideRecord = (pluginID: PluginID, totalStep: number, key?: string, onFinish?: () => void) => {
+export function usePluginGuideRecord(pluginID: PluginID, totalStep: number, key?: string, onFinish?: () => void) {
     const [setting = PLUGIN_GUIDE_INIT, setSetting] = useLocalStorage<number>(
         `plugin_userGuide_${pluginID}_${key ?? 'default'}`,
         PLUGIN_GUIDE_INIT,

@@ -1,4 +1,4 @@
-import { type FC, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import {
     useNetworkContext,
     useNativeTokenAddress,
@@ -64,7 +64,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     onClose?(): void
 }
 
-export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
+export function SelectFungibleTokenDialog({
     open,
     pluginID,
     chainId,
@@ -78,7 +78,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     onClose,
     title,
     enableManage = true,
-}) => {
+}: SelectFungibleTokenDialogProps) {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds

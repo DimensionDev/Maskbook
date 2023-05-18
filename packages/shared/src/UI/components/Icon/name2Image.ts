@@ -13,7 +13,7 @@ export const DEFAULT_IMAGES = [
     new URL('./Aura12.svg', import.meta.url).toString(),
 ]
 
-export const name2Image = (name?: string): string => {
+export function name2Image(name?: string): string {
     if (!name) return DEFAULT_IMAGES[0]
     let sum = 0
     for (let i = 0; i < name.length; i += 1) {
