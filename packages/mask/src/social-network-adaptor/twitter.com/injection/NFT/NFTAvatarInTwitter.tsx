@@ -145,10 +145,11 @@ function useNFTCircleAvatar(size: number) {
         nftAvatar?.ownerAddress,
     )
 
-    const showAvatar = useMemo(
-        () => !!nftAvatar?.avatarId && Twitter.getAvatarId(identity.avatar) === nftAvatar.avatarId,
-        [nftAvatar?.avatarId, identity.avatar],
-    )
+    const showAvatar = useMemo(() => {
+        const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
+        return !!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId
+    }, [nftAvatar?.avatarId, identity.avatar])
+
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const openConfirmDialog = useShowConfirm()
     const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)

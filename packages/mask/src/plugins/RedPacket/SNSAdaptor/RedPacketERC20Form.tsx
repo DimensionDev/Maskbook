@@ -11,7 +11,13 @@ import {
     formatBalance,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type GasConfig,
+    SchemaType,
+    useRedPacketConstants,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -39,6 +45,7 @@ import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallba
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -201,6 +208,12 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             chainId,
         },
     )
+
+    const { transactionValue, loading: loadingTransactionValue } = useTransactionValue(
+        origin?.total,
+        gasOption?.gas,
+        gasOption?.gasCurrency,
+    )
     // #endregion
 
     const validationMessage = useMemo(() => {
@@ -208,7 +221,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (!account) return tr('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return 'Enter shares'
         if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
-        if (isZero(amount)) return 'Enter an amount'
+        if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address)))
+            return 'Enter an amount'
 
         if (!isDivisible)
             return t.indivisible({
@@ -216,7 +230,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [account, amount, totalAmount, shares, token, balance, t, tr])
+    }, [account, amount, totalAmount, shares, token, balance, t, tr, loadingTransactionValue, gasOption?.gas])
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
@@ -225,9 +239,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
+        if (new BigNumber(transactionValue).isLessThanOrEqualTo(0)) return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, totalAmount, balance, token?.symbol])
+    }, [isAvailableBalance, totalAmount, balance, token?.symbol, transactionValue])
 
     const selectRef = useRef(null)
 

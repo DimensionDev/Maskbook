@@ -163,6 +163,11 @@ export const Farcaster = /*#__PURE__*/ __createIcon('Farcaster', [
         u: () => new URL('./brands/Farcaster.svg', import.meta.url),
     },
 ])
+export const Firefly = /*#__PURE__*/ __createIcon('Firefly', [
+    {
+        u: () => new URL('./brands/Firefly.svg', import.meta.url),
+    },
+])
 export const Flow = /*#__PURE__*/ __createIcon('Flow', [
     {
         u: () => new URL('./brands/Flow.svg', import.meta.url),

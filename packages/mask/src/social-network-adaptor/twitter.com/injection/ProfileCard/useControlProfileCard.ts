@@ -1,4 +1,4 @@
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, attachRectangle } from '@masknet/shared-base'
 import { type CSSProperties, type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 import { useDialogStacking } from '@masknet/theme'
@@ -9,6 +9,8 @@ interface Result {
 }
 
 const LEAVE_DURATION = 500
+const MARGIN = 12
+
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
@@ -68,27 +70,12 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
                 return
             }
             if (event.external) skipClick.current = true
-
-            const { badgeBounding: bounding } = event
-            const reachedBottomBoundary = bounding.bottom + CARD_HEIGHT > window.innerHeight
-            let x = Math.max(bounding.left + bounding.width / 2 - CARD_WIDTH / 2, 0)
-            let y = bounding.top + bounding.height
-            if (reachedBottomBoundary) {
-                const reachedTopBoundary = bounding.top < CARD_HEIGHT
-                if (reachedTopBoundary) {
-                    x = bounding.left + bounding.width
-                    y = Math.min(window.innerHeight - CARD_HEIGHT, Math.max(bounding.top - CARD_HEIGHT / 2))
-                } else {
-                    y = bounding.top - CARD_HEIGHT
-                }
-            }
-            // reached right boundary
-            if (x + CARD_WIDTH > window.innerWidth) {
-                x = bounding.left - CARD_WIDTH
-            }
-            // Prefer to show top left corner of the card.
-            x = Math.max(0, x)
-            y = Math.max(0, y)
+            const { x, y } = attachRectangle({
+                anchorBounding: event.badgeBounding,
+                targetDimension: { height: CARD_HEIGHT, width: CARD_WIDTH },
+                containerDimension: { height: window.innerHeight, width: window.innerWidth },
+                margin: MARGIN,
+            })
 
             const pageOffset = document.scrollingElement?.scrollTop || 0
             const newLeft = x

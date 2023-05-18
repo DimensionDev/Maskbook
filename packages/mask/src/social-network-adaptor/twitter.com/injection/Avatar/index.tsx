@@ -1,15 +1,29 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
+import { noop } from 'lodash-es'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
-import { inpageAvatarSelector } from '../../utils/selector.js'
-import { noop } from 'lodash-es'
+import { querySelectorAll } from '../../utils/selector.js'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
     if (!profileLink) return
     return profileLink.getAttribute('href')?.slice(1)
 }
+
+const inpageAvatarSelector = () =>
+    querySelectorAll<HTMLDivElement>(
+        [
+            // Avatars in post
+            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
+            // Avatars in side panel
+            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
+            // Avatars in space sheet dialog
+            '[data-testid=sheetDialog] [data-testid^="UserAvatar-Container-"]',
+            // Avatars in space dock
+            '[data-testid=SpaceDockExpanded] [data-testid^=UserAvatar-Container-]',
+        ].join(','),
+    )
 
 export async function injectAvatar(signal: AbortSignal) {
     startWatch(

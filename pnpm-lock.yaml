@@ -3649,6 +3649,9 @@ importers:
       '@ethersproject/strings':
         specifier: 5.7.0
         version: 5.7.0
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../../flags
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
@@ -5717,11 +5720,6 @@ packages:
       '@solana/web3.js': 1.75.0
       bn.js: 5.2.1
       borsh: 0.6.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - utf-8-validate
     dev: false
 
   /@bonfida/spl-name-service@0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.2.0)(@solana/web3.js@1.75.0)(bn.js@5.2.1)(borsh@0.7.0):
