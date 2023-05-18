@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
+import { Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, Image } from '@masknet/shared'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
@@ -285,7 +285,7 @@ function ContractListItem(props: ContractListItemProps) {
     return balance === '0' ? null : (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(balance, contract)}>
-                <Avatar className={classes.icon} src={contract.iconURL} />
+                <Image className={classes.icon} src={contract.iconURL} useProxy={false} />
                 <Typography className={classes.contractName}>
                     {contract.name}{' '}
                     {contract.symbol && contract.symbol !== 'UNKNOWN' ? '(' + contract.symbol + ')' : ''}

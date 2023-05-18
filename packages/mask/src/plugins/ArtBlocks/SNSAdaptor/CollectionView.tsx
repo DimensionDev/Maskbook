@@ -9,7 +9,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes'
 import { buildTokenId } from '../utils'
 import type { Project } from '../types'
-
+import { Image } from '@masknet/shared'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
@@ -158,7 +158,9 @@ export function CollectionView(props: CollectionProps) {
 
             <div className={classes.imageContainer}>
                 <Link href={tokenLink} target="_blank">
-                    <img
+                    <Image
+                        useProxy={false}
+                        noLoading
                         className={isImageLoaded ? classes.image : classes.hidden}
                         src={resolveImageLinkOnArtBlocks(chainId, `${currentSelectedToken?.tokenId}.png`)}
                         alt="collection collectible"
