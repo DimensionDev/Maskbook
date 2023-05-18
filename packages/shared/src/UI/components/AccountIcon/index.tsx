@@ -190,6 +190,16 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                     />
                 </AccountTooltips>
             ) : null}
+
+            {supportedAddressTypes.includes(SocialAddressType.RSS3) ? (
+                <AccountTooltips type={SocialAddressType.RSS3}>
+                    <Icons.RSS3
+                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                        size={18}
+                        style={iconStyle}
+                    />
+                </AccountTooltips>
+            ) : null}
         </>
     )
 }

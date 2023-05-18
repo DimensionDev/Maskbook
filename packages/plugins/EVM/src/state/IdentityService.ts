@@ -12,17 +12,7 @@ import {
     type SocialAddress,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import {
-    ENS,
-    Firefly,
-    Lens,
-    MaskX,
-    NextIDProof,
-    NextIDStorageProvider,
-    RSS3,
-    SpaceID,
-    Twitter,
-} from '@masknet/web3-providers'
+import { ENS, Lens, MaskX, NextIDProof, NextIDStorageProvider, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
@@ -148,7 +138,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 return this.createSocialAddress(SocialAddressType.Crossbell, info.address, info.crossbell)
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     /** Read a social address from avatar NextID storage. */
@@ -228,22 +218,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 return this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name)
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
-    }
-
-    private async getSocialAddressFromFirefly({ identifier }: SocialIdentity) {
-        const lensAccounts = await Firefly.getLensByTwitterId(identifier?.userId)
-        const names = lensAccounts.map((x) => x.handle)
-        if (!names.length) return
-
-        const allSettled = await Promise.allSettled(
-            names.map(async (name) => {
-                const profile = await Lens.getProfileByHandle(name)
-                if (!profile) return
-                return this.createSocialAddress(SocialAddressType.Firefly, profile.ownedBy, name)
-            }),
-        )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     /** Read a social address from Twitter Blue. */
@@ -273,6 +248,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             MaskX_BaseAPI.SourceType.Leaderboard,
             MaskX_BaseAPI.SourceType.OpenSea,
             MaskX_BaseAPI.SourceType.Sybil,
+            MaskX_BaseAPI.SourceType.RSS3,
         ]
         const results = response.records.filter((x) => {
             if (!isValidAddress(x.web3_addr) || !sourceTypes.includes(x.source)) return false
@@ -305,7 +281,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
-        const socialAddressFromFirefly = this.getSocialAddressFromFirefly(identity)
+        const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const allSettled = await Promise.allSettled([
             captureAsyncTransaction('getSocialAddressFromBio', this.getSocialAddressFromBio(identity)),
             captureAsyncTransaction('getSocialAddressFromENS', this.getSocialAddressFromENS(identity)),
@@ -317,40 +293,25 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             captureAsyncTransaction('getSocialAddressFromCrossbell', this.getSocialAddressFromCrossbell(identity)),
             captureAsyncTransaction('getSocialAddressFromTwitterBlue', this.getSocialAddressFromTwitterBlue(identity)),
             captureAsyncTransaction('getSocialAddressesFromNextID', this.getSocialAddressesFromNextID(identity)),
-            captureAsyncTransaction('getSocialAddressesFromMaskX', this.getSocialAddressesFromMaskX(identity)),
+            captureAsyncTransaction('getSocialAddressesFromMaskX', socialAddressFromMaskX),
             captureAsyncTransaction('getSocialAddressFromLens', this.getSocialAddressFromLens(identity)),
-            captureAsyncTransaction('getSocialAddressFromFirefly', socialAddressFromFirefly),
         ])
-        const identities_ = allSettled
-            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            .filter(Boolean) as Array<SocialAddress<ChainId>>
+        const identities_ = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
         const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
-        if (!getNextIDPlatform() || !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
-            return identities
-        }
-        const [identitiesFromNextID, lensAccounts] = await Promise.all([
+        const [identitiesFromNextID, trustedAccounts] = await Promise.all([
             this.getSocialAddressesFromNextID(identity),
-            socialAddressFromFirefly,
+            socialAddressFromMaskX,
         ])
-        const lensAddresses = lensAccounts?.map((x) => x.address.toLowerCase()) ?? []
+        const trustedAddresses = trustedAccounts?.map((x) => x.address.toLowerCase()) ?? []
         const identitiesAddressesFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
-        const allSettledTrustedIdentities = await Promise.allSettled(
-            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
-                const trusted =
-                    lensAddresses.includes(x.address.toLowerCase()) ||
-                    (await NextIDProof.verifyTwitterHandlerByAddress(x.address, identity.identifier?.userId ?? ''))
-                return { ...x, trusted }
-            }),
-        )
 
         return uniqBy(
-            (
-                allSettledTrustedIdentities
-                    .flatMap((x) => (x.status === 'fulfilled' && x.value.trusted ? x.value : undefined))
-                    .filter(Boolean) as Array<SocialAddress<ChainId>>
-            )
-                .filter((x) => !identitiesAddressesFromNextID.includes(x.address.toLowerCase()))
+            identities
+                .filter((x) => {
+                    const address = x.address.toLowerCase()
+                    return !identitiesAddressesFromNextID.includes(address) && trustedAddresses.includes(address)
+                })
                 .concat(identitiesFromNextID),
             (x) => x.address.toLowerCase(),
         )
