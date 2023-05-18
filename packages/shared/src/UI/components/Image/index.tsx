@@ -8,9 +8,10 @@ const useStyles = makeStyles()(() => ({}))
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement>, withClasses<'loadingFailImage' | 'root'> {
     fallbackImage?: URL
     useProxy?: boolean
+    noLoading?: boolean
 }
 
-export function Image({ useProxy = true, ...rest }: ImageProps) {
+export function Image({ useProxy = true, noLoading = false, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
     const maskImageURL =
@@ -25,7 +26,7 @@ export function Image({ useProxy = true, ...rest }: ImageProps) {
 
     return (
         <>
-            {loading ? (
+            {loading && !noLoading ? (
                 <CircularProgress style={{ width: 24, height: 24 }} />
             ) : (
                 <img
