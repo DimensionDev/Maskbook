@@ -5,7 +5,7 @@ export namespace MaskX_BaseAPI {
     }
 
     export enum SourceType {
-        CyberConnect = 'cyberconnect',
+        CyberConnect = 'cyber',
         Firefly = 'firefly',
         OpenSea = 'opensea',
         Sybil = 'sybil',

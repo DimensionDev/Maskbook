@@ -2,7 +2,7 @@ import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Link, Typography, type TypographyProps } from '@mui/material'
-import type { SocialAccount } from '@masknet/shared-base'
+import { SocialAddressType, type SocialAccount } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -45,12 +45,16 @@ export function AddressItem({
 
     if (!socialAccount) return null
 
+    const preferAddress =
+        !socialAccount.label ||
+        isEnsSubdomain(socialAccount.label) ||
+        socialAccount.supportedAddressTypes?.includes(SocialAddressType.Firefly) || // Label from Firefly is not reliable
+        isSameAddress(socialAccount.label, socialAccount.address)
+
     return (
         <>
             <Box onClick={(ev: React.MouseEvent) => onClick?.(ev)}>
-                {!socialAccount.label ||
-                isEnsSubdomain(socialAccount.label) ||
-                isSameAddress(socialAccount.label, socialAccount.address) ? (
+                {preferAddress ? (
                     <ReversedAddress
                         {...TypographyProps}
                         address={socialAccount.address}
