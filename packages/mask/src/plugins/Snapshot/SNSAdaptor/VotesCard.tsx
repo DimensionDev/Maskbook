@@ -1,5 +1,5 @@
-import { formatEthereumAddress, explorerResolver, resolveIPFSLink, formatPercentage } from '@masknet/web3-shared-evm'
-import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
+import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
+import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
@@ -107,13 +107,9 @@ function Content() {
                                 rel="noopener"
                                 href={explorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
-                                    {v.authorAvatar ? (
-                                        <Avatar src={resolveIPFSLink(v.authorAvatar)} className={classes.avatar} />
-                                    ) : (
-                                        <EthereumBlockie address={v.address} />
-                                    )}
+                                    <EthereumBlockie address={v.address} />
                                 </Box>
-                                <Typography>{v.authorName ?? formatEthereumAddress(v.address, 4)}</Typography>
+                                <Typography>{formatEthereumAddress(v.address, 4)}</Typography>
                             </Link>
                             {v.choice ? (
                                 <Typography className={classes.choice}>{v.choice}</Typography>
