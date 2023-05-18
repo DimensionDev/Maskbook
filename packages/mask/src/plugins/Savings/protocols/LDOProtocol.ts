@@ -4,32 +4,20 @@ import { BigNumber } from 'bignumber.js'
 import {
     type ChainId,
     createContract,
-    getLidoConstants,
-    type SchemaType,
     TransactionEventType,
     ZERO_ADDRESS,
+    getLidoConstant,
 } from '@masknet/web3-shared-evm'
-import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
+import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
 import { Lido as LidoAPI } from '@masknet/web3-providers'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import { ProtocolType, type SavingsProtocol } from '../types.js'
+import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
 export class LidoProtocol implements SavingsProtocol {
-    private _apr = '0.00'
-    private _balance = ZERO
-
     readonly type = ProtocolType.Lido
 
-    constructor(readonly pair: [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]) {}
-
-    get apr() {
-        return this._apr
-    }
-
-    get balance() {
-        return this._balance
-    }
+    constructor(readonly pair: TokenPair) {}
 
     get bareToken() {
         return this.pair[0]
@@ -39,36 +27,35 @@ export class LidoProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
-    async updateApr(chainId: ChainId, web3: Web3): Promise<void> {
+    async getApr(chainId: ChainId, web3: Web3) {
         try {
-            this._apr = await LidoAPI.getStEthAPR()
+            return LidoAPI.getStEthAPR()
         } catch {
             // the default APR is 5.30%
-            this._apr = '5.30'
+            return '5.30'
         }
     }
-    async updateBalance(chainId: ChainId, web3: Web3, account: string): Promise<void> {
+    async getBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getLidoConstants(chainId).LIDO_stETH_ADDRESS || ZERO_ADDRESS,
+                getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
                 LidoABI as AbiItem[],
             )
-            this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
-        } catch (error) {
-            this._balance = ZERO
-        }
+            return new BigNumber((await contract?.methods.balanceOf(account).call()) ?? 0)
+        } catch {}
+        return ZERO
     }
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getLidoConstants(chainId).LIDO_stETH_ADDRESS || ZERO_ADDRESS,
+                getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
                 LidoABI as AbiItem[],
             )
             const gasEstimate = await contract?.methods
-                .submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS)
+                .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
                 .estimateGas({
                     from: account,
                     // it's a BigNumber so it's ok
@@ -88,11 +75,11 @@ export class LidoProtocol implements SavingsProtocol {
         return new Promise<string>((resolve, reject) => {
             const contract = createContract<Lido>(
                 web3,
-                getLidoConstants(chainId).LIDO_stETH_ADDRESS || ZERO_ADDRESS,
+                getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
                 LidoABI as AbiItem[],
             )
             return contract?.methods
-                .submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS)
+                .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
                 .send({
                     from: account,
                     // it's a BigNumber so it's ok
