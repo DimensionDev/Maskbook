@@ -11,7 +11,13 @@ import {
     formatBalance,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type GasConfig,
+    SchemaType,
+    useRedPacketConstants,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -215,7 +221,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (!account) return tr('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return 'Enter shares'
         if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
-        if (isZero(amount) || !gasOption?.gas || loadingTransactionValue) return 'Enter an amount'
+        if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address)))
+            return 'Enter an amount'
 
         if (!isDivisible)
             return t.indivisible({
