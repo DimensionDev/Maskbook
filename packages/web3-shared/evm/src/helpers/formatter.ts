@@ -98,14 +98,3 @@ export function formatEtherToWei(value: BigNumber.Value) {
 export function formatGweiToEther(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(-9)
 }
-
-/* *
- * @deprecated use formatCurrency stead
- * @param value
- * @param significant
- * @returns
- */
-export function formatUSD(value: BigNumber.Value, significant = 2): string {
-    const bn = new BigNumber(value)
-    return bn.lt(0.01) ? '<$0.01' : bn.toFixed(significant)
-}
