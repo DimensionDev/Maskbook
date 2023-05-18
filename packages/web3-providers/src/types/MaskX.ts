@@ -9,8 +9,10 @@ export namespace MaskX_BaseAPI {
         Firefly = 'firefly',
         OpenSea = 'opensea',
         Sybil = 'sybil',
+        Uniswap = 'uniswap',
         Leaderboard = 'ethLeaderboard',
         RSS3 = 'rss3',
+        HandWriting = 'hand_writing',
     }
 
     export interface Identity {
