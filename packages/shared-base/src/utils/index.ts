@@ -1,4 +1,5 @@
 export * from './ABTest.js'
+export * from './attachRectangle.js'
 export * from './ValueRef.js'
 export * from './asyncIterator.js'
 export * from './compose.js'

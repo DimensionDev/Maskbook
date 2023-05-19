@@ -88,7 +88,7 @@ function Content() {
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier)
-    const { results } = useResults(identifier)
+    const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])

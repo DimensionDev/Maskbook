@@ -1,17 +1,17 @@
 import { compact, first, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    NetworkPluginID,
     EMPTY_LIST,
     EnhanceableSite,
-    getSiteType,
+    NetworkPluginID,
     NextIDPlatform,
-    createLookupTableResolver,
     PluginID,
-    type BindingProof,
-    type SocialIdentity,
-    type SocialAddress,
     SocialAddressType,
+    createLookupTableResolver,
+    getSiteType,
+    type BindingProof,
+    type SocialAddress,
+    type SocialIdentity,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import {
@@ -25,10 +25,10 @@ import {
     SpaceID,
     Twitter,
 } from '@masknet/web3-providers'
-import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
-import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
+import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
+import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
@@ -96,7 +96,9 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
 const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
     {
         [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
+        [MaskX_BaseAPI.SourceType.Firefly]: SocialAddressType.Firefly,
         [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
+        [MaskX_BaseAPI.SourceType.OpenSea]: SocialAddressType.OpenSea,
         [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
         [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
     },
@@ -151,7 +153,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 return this.createSocialAddress(SocialAddressType.Crossbell, info.address, info.crossbell)
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     /** Read a social address from avatar NextID storage. */
@@ -247,7 +249,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 return this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name)
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     /** Read a social address from Twitter Blue. */
@@ -271,16 +273,16 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         if (!userId) return
 
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
+        const sourceTypes = [
+            MaskX_BaseAPI.SourceType.CyberConnect,
+            MaskX_BaseAPI.SourceType.Firefly,
+            MaskX_BaseAPI.SourceType.Leaderboard,
+            MaskX_BaseAPI.SourceType.OpenSea,
+            MaskX_BaseAPI.SourceType.Sybil,
+            MaskX_BaseAPI.SourceType.RSS3,
+        ]
         const results = response.records.filter((x) => {
-            if (
-                !isValidAddress(x.web3_addr) ||
-                ![
-                    MaskX_BaseAPI.SourceType.CyberConnect,
-                    MaskX_BaseAPI.SourceType.Leaderboard,
-                    MaskX_BaseAPI.SourceType.Sybil,
-                ].includes(x.source)
-            )
-                return false
+            if (!isValidAddress(x.web3_addr) || !sourceTypes.includes(x.source)) return false
 
             try {
                 // detect if a valid data source
@@ -310,6 +312,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
+        const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const allSettled = await Promise.allSettled([
             captureAsyncTransaction('getSocialAddressFromBio', this.getSocialAddressFromBio(identity)),
             captureAsyncTransaction('getSocialAddressFromENS', this.getSocialAddressFromENS(identity)),
@@ -322,36 +325,25 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             captureAsyncTransaction('getSocialAddressFromCrossbell', this.getSocialAddressFromCrossbell(identity)),
             captureAsyncTransaction('getSocialAddressFromTwitterBlue', this.getSocialAddressFromTwitterBlue(identity)),
             captureAsyncTransaction('getSocialAddressesFromNextID', this.getSocialAddressesFromNextID(identity)),
-            captureAsyncTransaction('getSocialAddressesFromMaskX', this.getSocialAddressesFromMaskX(identity)),
+            captureAsyncTransaction('getSocialAddressesFromMaskX', socialAddressFromMaskX),
             captureAsyncTransaction('getSocialAddressFromLens', this.getSocialAddressFromLens(identity)),
         ])
-        const identities_ = allSettled
-            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            .filter(Boolean) as Array<SocialAddress<ChainId>>
+        const identities_ = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
         const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
-        if (!getNextIDPlatform() || !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
-            return identities
-        }
-        const identitiesFromNextID = await this.getSocialAddressesFromNextID(identity)
-        const identitiesAddressFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
-        const allSettledIdentitiesVerified = await Promise.allSettled(
-            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
-                const isVerified = await NextIDProof.verifyTwitterHandlerByAddress(
-                    x.address,
-                    identity.identifier?.userId ?? '',
-                )
-                return { ...x, isVerified }
-            }),
-        )
+        const [identitiesFromNextID, trustedAccounts] = await Promise.all([
+            this.getSocialAddressesFromNextID(identity),
+            socialAddressFromMaskX,
+        ])
+        const trustedAddresses = trustedAccounts?.map((x) => x.address.toLowerCase()) ?? []
+        const identitiesAddressesFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
 
         return uniqBy(
-            (
-                allSettledIdentitiesVerified
-                    .flatMap((x) => (x.status === 'fulfilled' && x.value.isVerified ? x.value : undefined))
-                    .filter(Boolean) as Array<SocialAddress<ChainId>>
-            )
-                .filter((x) => !identitiesAddressFromNextID.includes(x.address.toLowerCase()))
+            identities
+                .filter((x) => {
+                    const address = x.address.toLowerCase()
+                    return !identitiesAddressesFromNextID.includes(address) && trustedAddresses.includes(address)
+                })
                 .concat(identitiesFromNextID),
             (x) => x.address.toLowerCase(),
         )

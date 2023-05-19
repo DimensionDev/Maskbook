@@ -16,8 +16,7 @@ import {
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
-import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
-import { useScrollBottomEvent } from '@masknet/shared-base-ui'
+import { TokenIcon, FormattedAddress, Image, WalletIcon, ElementAnchor } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State, useNetworkDescriptor, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -101,6 +100,15 @@ const useStyles = makeStyles<{ isPopper: boolean; snsThemeMode?: string }>()((th
         paddingBottom: theme.spacing(10),
         borderStyle: 'none',
     },
+    loadMore: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        transform: 'translateY(-16px)',
+    },
+    loadMoreIcon: {
+        marginBottom: 16,
+    },
 }))
 
 export interface NonFungibleTickersTableProps {
@@ -124,7 +132,6 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
         id,
         chainId,
     )
-    useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),
         method: t('plugin_trader_table_method'),
@@ -220,33 +227,46 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                     </Typography>
                 </Stack>
             ) : (
-                <Table size="small" stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            {headCells.map((x) => (
-                                <TableCell className={classes.cell} key={x}>
-                                    {x}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {tickerRows.length ? (
-                            tickerRows
-                        ) : (
+                <>
+                    <Table size="small" stickyHeader>
+                        <TableHead>
                             <TableRow>
-                                <TableCell
-                                    className={classes.cell}
-                                    colSpan={headCells.length}
-                                    style={{ borderStyle: 'none' }}>
-                                    <Typography className={classes.placeholder} align="center" color="textSecondary">
-                                        {t('plugin_trader_no_data')}
-                                    </Typography>
-                                </TableCell>
+                                {headCells.map((x) => (
+                                    <TableCell className={classes.cell} key={x}>
+                                        {x}
+                                    </TableCell>
+                                ))}
                             </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {tickerRows.length ? (
+                                tickerRows
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        className={classes.cell}
+                                        colSpan={headCells.length}
+                                        style={{ borderStyle: 'none' }}>
+                                        <Typography
+                                            className={classes.placeholder}
+                                            align="center"
+                                            color="textSecondary">
+                                            {t('plugin_trader_no_data')}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+
+                    <Stack py={1} className={classes.loadMore}>
+                        <ElementAnchor callback={fetchMore}>
+                            {activities.length > 0 && loadingNonFungibleTokenActivities ? (
+                                <LoadingBase className={classes.loadMoreIcon} />
+                            ) : null}
+                        </ElementAnchor>
+                    </Stack>
+                </>
             )}
         </TableContainer>
     )
