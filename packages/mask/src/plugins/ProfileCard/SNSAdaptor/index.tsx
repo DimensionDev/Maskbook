@@ -2,7 +2,6 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { type EnhanceableSite } from '@masknet/shared-base'
-import { Box } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants.js'
 import { setupContext } from '../context.js'
@@ -46,15 +45,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity.identifier.network as EnhanceableSite]
                 if (!rss3Key) return null
                 return (
-                    <Box display="flex" alignItems="top" justifyContent="center">
-                        <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
-                            <AvatarBadge
-                                userId={identity.identifier.userId}
-                                identity={identity}
-                                socialAccounts={socialAccounts}
-                            />
-                        </div>
-                    </Box>
+                    <AvatarBadge
+                        userId={identity.identifier.userId}
+                        identity={identity}
+                        socialAccounts={socialAccounts}
+                    />
                 )
             },
         },
