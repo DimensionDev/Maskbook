@@ -13,6 +13,7 @@ export namespace MaskX_BaseAPI {
         Leaderboard = 'ethLeaderboard',
         RSS3 = 'rss3',
         HandWriting = 'hand_writing',
+        TwitterHexagon = 'twitter_hexagon',
     }
 
     export interface Identity {
@@ -26,10 +27,11 @@ export namespace MaskX_BaseAPI {
         // data source
         source: SourceType
         ens?: string
-        // a js like timestamp
+        // timestamp in milliseconds
         create_timestamp: string
-        // a js like timestamp
+        // timestamp in milliseconds
         modify_timestamp: string
+        is_verified: boolean
     }
 
     export interface Options {
