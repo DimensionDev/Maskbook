@@ -12,7 +12,17 @@ import {
     type SocialAddress,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import { ENS, Lens, MaskX, NextIDProof, NextIDStorageProvider, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
+import {
+    ENS,
+    Firefly,
+    Lens,
+    MaskX,
+    NextIDProof,
+    NextIDStorageProvider,
+    RSS3,
+    SpaceID,
+    Twitter,
+} from '@masknet/web3-providers'
 import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
@@ -82,10 +92,13 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
     {
         [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
         [MaskX_BaseAPI.SourceType.Firefly]: SocialAddressType.Firefly,
+        [MaskX_BaseAPI.SourceType.HandWriting]: SocialAddressType.Firefly,
         [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
         [MaskX_BaseAPI.SourceType.OpenSea]: SocialAddressType.OpenSea,
         [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
+        [MaskX_BaseAPI.SourceType.Uniswap]: SocialAddressType.Sybil,
         [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
+        [MaskX_BaseAPI.SourceType.TwitterHexagon]: SocialAddressType.TwitterBlue,
     },
     (x) => {
         throw new Error(`Unknown source type: ${x}`)
@@ -242,16 +255,8 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         if (!userId) return
 
         const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
-        const sourceTypes = [
-            MaskX_BaseAPI.SourceType.CyberConnect,
-            MaskX_BaseAPI.SourceType.Firefly,
-            MaskX_BaseAPI.SourceType.Leaderboard,
-            MaskX_BaseAPI.SourceType.OpenSea,
-            MaskX_BaseAPI.SourceType.Sybil,
-            MaskX_BaseAPI.SourceType.RSS3,
-        ]
         const results = response.records.filter((x) => {
-            if (!isValidAddress(x.web3_addr) || !sourceTypes.includes(x.source)) return false
+            if (!isValidAddress(x.web3_addr) || !x.is_verified) return false
 
             try {
                 // detect if a valid data source
@@ -267,13 +272,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 try {
                     const name = await ENS.reverse(y.web3_addr)
 
-                    return this.createSocialAddress(
-                        resolveMaskXAddressType(y.source),
-                        y.web3_addr,
-                        name ?? y.sns_handle,
-                    )
+                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, name)
                 } catch {
-                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle)
+                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr)
                 }
             }),
         )
@@ -282,6 +283,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
+        const socialAddressFromNextID = this.getSocialAddressesFromNextID(identity)
         const allSettled = await Promise.allSettled([
             captureAsyncTransaction('getSocialAddressFromBio', this.getSocialAddressFromBio(identity)),
             captureAsyncTransaction('getSocialAddressFromENS', this.getSocialAddressFromENS(identity)),
@@ -292,28 +294,25 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             ),
             captureAsyncTransaction('getSocialAddressFromCrossbell', this.getSocialAddressFromCrossbell(identity)),
             captureAsyncTransaction('getSocialAddressFromTwitterBlue', this.getSocialAddressFromTwitterBlue(identity)),
-            captureAsyncTransaction('getSocialAddressesFromNextID', this.getSocialAddressesFromNextID(identity)),
+            captureAsyncTransaction('getSocialAddressesFromNextID', socialAddressFromNextID),
             captureAsyncTransaction('getSocialAddressesFromMaskX', socialAddressFromMaskX),
             captureAsyncTransaction('getSocialAddressFromLens', this.getSocialAddressFromLens(identity)),
         ])
         const identities_ = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
         const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
-        const [identitiesFromNextID, trustedAccounts] = await Promise.all([
-            this.getSocialAddressesFromNextID(identity),
-            socialAddressFromMaskX,
-        ])
-        const trustedAddresses = trustedAccounts?.map((x) => x.address.toLowerCase()) ?? []
-        const identitiesAddressesFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
+        const identitiesFromNextID = await socialAddressFromNextID
 
-        return uniqBy(
-            identities
-                .filter((x) => {
-                    const address = x.address.toLowerCase()
-                    return !identitiesAddressesFromNextID.includes(address) && trustedAddresses.includes(address)
-                })
-                .concat(identitiesFromNextID),
-            (x) => x.address.toLowerCase(),
+        const handle = identity.identifier?.userId
+        const verifiedResult = await Promise.allSettled(
+            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
+                const address = x.address.toLowerCase()
+                const isReliable = await Firefly.verifyTwitterHandlerByAddress(address, handle)
+                return isReliable ? address : null
+            }),
         )
+        const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+
+        return identities.filter((x) => trustedAddresses.includes(x.address.toLowerCase())).concat(identitiesFromNextID)
     }
 }
