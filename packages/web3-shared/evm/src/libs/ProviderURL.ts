@@ -19,8 +19,7 @@ export class ProviderURL {
 
         if (!RPC_URLS || !RPC_WEIGHTS) throw new Error(`No RPC presets at chainId: ${chainId}.`)
 
-        const seed = getABTestSeed()
-        return RPC_URLS[RPC_WEIGHTS[seed % RPC_URLS.length]]
+        return RPC_URLS[RPC_WEIGHTS[getABTestSeed() % RPC_URLS.length]]
     }
 
     static fromOfficial(chainId: ChainId) {

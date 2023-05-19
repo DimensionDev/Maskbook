@@ -160,7 +160,7 @@ export function SocialAccountListItem({
             ownedBy: profile.ownedBy,
             isFollowing,
         }
-    }, [identity, platform !== NextIDPlatform.LENS, account])
+    }, [identity, platform, account])
 
     const PlatformIcon = resolveNextIDPlatformIcon(platform)
     const renderIcon = PlatformIcon ? <PlatformIcon size={20} /> : null
