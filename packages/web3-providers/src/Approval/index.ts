@@ -1,6 +1,10 @@
 import type { AuthorizationAPI } from '../entry-types.js'
 import { isZeroAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { approvalListState } from './approvalListState.js'
+import {
+    approvalListState,
+    type NFTApprovalInfoAccountMap,
+    type TokenApprovalInfoAccountMap,
+} from './approvalListState.js'
 import { Web3API } from '../Connection/index.js'
 import { TOKEN_APPROVAL_TOPIC, NFT_APPROVAL_TOPIC } from './constants.js'
 import { maxBy, mapKeys } from 'lodash-es'
@@ -25,17 +29,13 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         try {
-            const web3 = this.createWeb3(chainId)
-            const fromBlock = approvalListState.tokenState[account]?.[chainId]?.fromBlock ?? 0
-            const toBlock = await web3.eth.getBlockNumber()
-            const logs = await web3.eth.getPastLogs({
-                topics: [TOKEN_APPROVAL_TOPIC, web3.eth.abi.encodeParameter('address', account)],
-                fromBlock,
-                toBlock,
-            })
+            const { toBlock, records: tokenSpenderRecords } = await this.parseSpenderRecords(
+                chainId,
+                account,
+                TOKEN_APPROVAL_TOPIC,
+                approvalListState.tokenState,
+            )
             const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
-
-            const tokenSpenderRecords = parseLogs(web3, logs)
 
             mapKeys(tokenSpenderRecords, (spender, spenderAddress) =>
                 mapKeys(spender, (token, tokenAddress) => {
@@ -89,17 +89,13 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         try {
-            const web3 = this.createWeb3(chainId)
-            const fromBlock = approvalListState.nftState[account]?.[chainId]?.fromBlock ?? 0
-            const toBlock = await web3.eth.getBlockNumber()
-            const logs = await web3.eth.getPastLogs({
-                topics: [NFT_APPROVAL_TOPIC, web3.eth.abi.encodeParameter('address', account)],
-                fromBlock,
-                toBlock,
-            })
+            const { toBlock, records: nftSpenderRecords } = await this.parseSpenderRecords(
+                chainId,
+                account,
+                NFT_APPROVAL_TOPIC,
+                approvalListState.nftState,
+            )
             const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-
-            const nftSpenderRecords = parseLogs(web3, logs)
 
             mapKeys(nftSpenderRecords, (spender, spenderAddress) =>
                 mapKeys(spender, (token, tokenAddress) => {
@@ -150,6 +146,24 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         } catch (error) {
             return EMPTY_LIST
         }
+    }
+
+    private async parseSpenderRecords(
+        chainId: ChainId,
+        account: string,
+        topic: string,
+        state: NFTApprovalInfoAccountMap | TokenApprovalInfoAccountMap,
+    ) {
+        const web3 = this.createWeb3(chainId)
+        const fromBlock = state[account]?.[chainId]?.fromBlock ?? 0
+        const toBlock = await web3.eth.getBlockNumber()
+        const logs = await web3.eth.getPastLogs({
+            topics: [topic, web3.eth.abi.encodeParameter('address', account)],
+            fromBlock,
+            toBlock,
+        })
+
+        return { records: parseLogs(web3, logs), toBlock }
     }
 }
 
