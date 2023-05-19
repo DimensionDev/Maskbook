@@ -6,7 +6,10 @@ export type TokenApprovalInfoAccountMap = Record<
     string,
     {
         [key in ChainId]?: {
-            spenderList: Record<string, Record<string, { amount: BigNumber; transactionBlockNumber: number }>>
+            spenderList: Record<
+                string,
+                Record<string, { amount: BigNumber; transactionBlockNumber: number; transactionIndex: number }>
+            >
             fromBlock: number
         }
     }
@@ -16,7 +19,10 @@ export type NFTApprovalInfoAccountMap = Record<
     string,
     {
         [key in ChainId]?: {
-            spenderList: Record<string, Record<string, { approved: boolean; transactionBlockNumber: number }>>
+            spenderList: Record<
+                string,
+                Record<string, { approved: boolean; transactionBlockNumber: number; transactionIndex: number }>
+            >
             fromBlock: number
         }
     }
@@ -41,6 +47,7 @@ export class ApprovalListState {
         chainId: ChainId,
         fromBlock: number,
         transactionBlockNumber: number,
+        transactionIndex: number,
         amount: BigNumber,
     ) {
         const account = account_.toLowerCase()
@@ -48,18 +55,26 @@ export class ApprovalListState {
             if (!draft[account]) draft[account] = {}
             if (!draft[account][chainId]) {
                 draft[account][chainId] = {
-                    spenderList: { [spender]: { [address]: { amount, transactionBlockNumber } } },
+                    spenderList: { [spender]: { [address]: { amount, transactionBlockNumber, transactionIndex } } },
                     fromBlock,
                 }
             }
             if (!draft[account][chainId]!.spenderList) {
-                draft[account][chainId]!.spenderList = { [spender]: { [address]: { amount, transactionBlockNumber } } }
+                draft[account][chainId]!.spenderList = {
+                    [spender]: { [address]: { amount, transactionBlockNumber, transactionIndex } },
+                }
             }
             if (!draft[account][chainId]!.spenderList[spender]) {
-                draft[account][chainId]!.spenderList[spender] = { [address]: { amount, transactionBlockNumber } }
+                draft[account][chainId]!.spenderList[spender] = {
+                    [address]: { amount, transactionBlockNumber, transactionIndex },
+                }
             }
 
-            draft[account][chainId]!.spenderList[spender][address] = { amount, transactionBlockNumber }
+            draft[account][chainId]!.spenderList[spender][address] = {
+                amount,
+                transactionBlockNumber,
+                transactionIndex,
+            }
             draft[account][chainId]!.fromBlock = fromBlock
         })
     }
@@ -71,6 +86,7 @@ export class ApprovalListState {
         chainId: ChainId,
         fromBlock: number,
         transactionBlockNumber: number,
+        transactionIndex: number,
         approved: boolean,
     ) {
         const account = account_.toLowerCase()
@@ -78,20 +94,26 @@ export class ApprovalListState {
             if (!draft[account]) draft[account] = {}
             if (!draft[account][chainId]) {
                 draft[account][chainId] = {
-                    spenderList: { [spender]: { [address]: { approved, transactionBlockNumber } } },
+                    spenderList: { [spender]: { [address]: { approved, transactionBlockNumber, transactionIndex } } },
                     fromBlock,
                 }
             }
             if (!draft[account][chainId]!.spenderList) {
                 draft[account][chainId]!.spenderList = {
-                    [spender]: { [address]: { approved, transactionBlockNumber } },
+                    [spender]: { [address]: { approved, transactionBlockNumber, transactionIndex } },
                 }
             }
             if (!draft[account][chainId]!.spenderList[spender]) {
-                draft[account][chainId]!.spenderList[spender] = { [address]: { approved, transactionBlockNumber } }
+                draft[account][chainId]!.spenderList[spender] = {
+                    [address]: { approved, transactionBlockNumber, transactionIndex },
+                }
             }
 
-            draft[account][chainId]!.spenderList[spender][address] = { approved, transactionBlockNumber }
+            draft[account][chainId]!.spenderList[spender][address] = {
+                approved,
+                transactionBlockNumber,
+                transactionIndex,
+            }
             draft[account][chainId]!.fromBlock = fromBlock
         })
     }

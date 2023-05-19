@@ -49,6 +49,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                         chainId,
                         toBlock,
                         latestTx.blockNumber,
+                        latestTx.transactionIndex,
                         amount,
                     )
                 }),
@@ -72,6 +73,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                             logo: maskDappContractInfo?.logo,
                             rawAmount: spenderList[spender][address].amount.toNumber(),
                             transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
+                            transactionIndex: spenderList[spender][address].transactionIndex,
                             isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
@@ -80,6 +82,8 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
+                    if (b.transactionBlockNumber === a.transactionBlockNumber)
+                        return b.transactionIndex - a.transactionIndex
                     return b.transactionBlockNumber - a.transactionBlockNumber
                 }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
         } catch (error) {
@@ -109,6 +113,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                         chainId,
                         toBlock,
                         latestTx.blockNumber,
+                        latestTx.transactionIndex,
                         approved,
                     )
                 }),
@@ -133,6 +138,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                             amount: '1',
                             approved: spenderList[spender][address].approved,
                             transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
+                            transactionIndex: spenderList[spender][address].transactionIndex,
                             isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
@@ -141,6 +147,8 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
+                    if (b.transactionBlockNumber === a.transactionBlockNumber)
+                        return b.transactionIndex - a.transactionIndex
                     return b.transactionBlockNumber - a.transactionBlockNumber
                 }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
         } catch (error) {
@@ -170,17 +178,26 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
 function parseLogs(web3: Web3, logs: Log[]) {
     return logs
         .filter((x) => x.topics.length === 3 && x.data !== '0x')
-        .reduce<Record<string, Record<string, Array<{ blockNumber: number; data: string }>>>>((acc, cur) => {
-            const spender = web3.eth.abi.decodeParameter('address', cur.topics[2]) as unknown as string
-            if (isZeroAddress(spender)) return acc
-            if (!acc[spender]) acc[spender] = {}
+        .reduce<Record<string, Record<string, Array<{ blockNumber: number; data: string; transactionIndex: number }>>>>(
+            (acc, cur) => {
+                const spender = web3.eth.abi.decodeParameter('address', cur.topics[2]) as unknown as string
+                if (isZeroAddress(spender)) return acc
+                if (!acc[spender]) acc[spender] = {}
 
-            if (acc[spender][cur.address]) {
-                acc[spender][cur.address].push({ blockNumber: cur.blockNumber, data: cur.data })
-            } else {
-                acc[spender][cur.address] = [{ blockNumber: cur.blockNumber, data: cur.data }]
-            }
+                if (acc[spender][cur.address]) {
+                    acc[spender][cur.address].push({
+                        blockNumber: cur.blockNumber,
+                        data: cur.data,
+                        transactionIndex: cur.transactionIndex,
+                    })
+                } else {
+                    acc[spender][cur.address] = [
+                        { blockNumber: cur.blockNumber, data: cur.data, transactionIndex: cur.transactionIndex },
+                    ]
+                }
 
-            return acc
-        }, {})
+                return acc
+            },
+            {},
+        )
 }
