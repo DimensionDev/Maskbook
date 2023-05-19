@@ -191,6 +191,8 @@
     "applications_create_persona_hint": "crwdns19753:0crwdne19753:0",
     "applications_create_persona_action": "crwdns19755:0crwdne19755:0",
     "lens_follow": "crwdns19945:0crwdne19945:0",
+    "lens_following": "crwdns20185:0crwdne20185:0",
+    "view": "crwdns20187:0crwdne20187:0",
     "verified_by": "crwdns20017:0{{ marketplace }}crwdne20017:0",
     "no_NFTs_found": "crwdns20019:0crwdne20019:0"
 }
