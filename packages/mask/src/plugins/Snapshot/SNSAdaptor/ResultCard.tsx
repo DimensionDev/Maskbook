@@ -1,6 +1,6 @@
-import { useContext, useRef, useEffect, useState, useMemo, unstable_useCacheRefresh } from 'react'
+import { useContext, useMemo, unstable_useCacheRefresh } from 'react'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
 
 import { SnapshotContext } from '../context.js'
@@ -91,14 +91,6 @@ function Content() {
     const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
     const { t } = useI18N()
-    const listRef = useRef<HTMLSpanElement[]>([])
-    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
-        Array.from<boolean>({ length: results?.length ?? 0 }).fill(false),
-    )
-
-    useEffect(() => {
-        setTooltipsVisible(listRef.current.map((element) => element.offsetWidth === choiceMaxWidth))
-    }, [])
 
     const dataForCsv = useMemo(
         () =>
@@ -121,23 +113,19 @@ function Content() {
                     ? results.map((result, i) => (
                           <ListItem className={classes.listItem} key={i}>
                               <Box className={classes.listItemHeader}>
-                                  <ShadowRootTooltip
+                                  <TextOverflowTooltip
+                                      as={ShadowRootTooltip}
                                       PopperProps={{
                                           disablePortal: true,
                                       }}
                                       title={<Typography>{result.choice}</Typography>}
                                       placement="top"
-                                      disableHoverListener={!tooltipsVisible[i]}
                                       classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                       arrow>
-                                      <Typography
-                                          ref={(ref) => {
-                                              listRef.current[i] = ref!
-                                          }}
-                                          className={cx(classes.choice, classes.ellipsisText)}>
+                                      <Typography className={cx(classes.choice, classes.ellipsisText)}>
                                           {result.choice}
                                       </Typography>
-                                  </ShadowRootTooltip>
+                                  </TextOverflowTooltip>
                                   <ShadowRootTooltip
                                       PopperProps={{
                                           disablePortal: true,
