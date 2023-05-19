@@ -194,6 +194,26 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
                     />
                 </AccountTooltips>
             ) : null}
+
+            {supportedAddressTypes.includes(SocialAddressType.SPACE_ID) ? (
+                <AccountTooltips type={SocialAddressType.SPACE_ID}>
+                    <Icons.SpaceId
+                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                        size={18}
+                        style={iconStyle}
+                    />
+                </AccountTooltips>
+            ) : null}
+
+            {supportedAddressTypes.includes(SocialAddressType.Lens) ? (
+                <AccountTooltips type={SocialAddressType.Lens}>
+                    <Icons.Lens
+                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
+                        size={18}
+                        style={iconStyle}
+                    />
+                </AccountTooltips>
+            ) : null}
         </>
     )
 }
