@@ -53,6 +53,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     configureSelectorMissReporter((name) => {
+        if (crypto.getRandomValues(new Uint8Array(1))[0] > 26) return
         const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
         error.stack = ''
         Sentry.captureException({

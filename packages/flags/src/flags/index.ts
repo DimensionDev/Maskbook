@@ -12,6 +12,7 @@ export const flags = {
     /** Firefox has a special API that can inject to the document with a higher permission. */
     has_firefox_xray_vision: process.env.engine === 'firefox',
     support_testnet_switch: betaOrInsiderOnly,
+
     // #region Experimental features
     trader_all_api_cached_enabled: devOnly,
     /** Prohibit the use of test networks in production */
@@ -38,6 +39,9 @@ export const flags = {
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: insiderOnly,
+
+    // how many users should use blockpi rpc
+    blockpi_grayscale: 90,
 
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,
