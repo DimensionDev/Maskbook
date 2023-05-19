@@ -38,8 +38,12 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
             const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
 
             mapKeys(tokenSpenderRecords, (spender, spenderAddress) =>
-                mapKeys(spender, (token, tokenAddress) => {
-                    const latestTx = maxBy(token, (x) => x.blockNumber)
+                mapKeys(spender, (tokens, tokenAddress) => {
+                    const latestBlockTx = maxBy(tokens, (x) => x.blockNumber)
+                    const latestTx = maxBy(
+                        tokens.filter((x) => x.blockNumber === latestBlockTx?.blockNumber),
+                        (x) => x.transactionIndex,
+                    )
                     if (!latestTx) return
                     const amount = new BigNumber(isZeroAddress(latestTx.data) ? 0 : latestTx.data)
                     approvalListState.updateTokenState(
@@ -82,8 +86,6 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
-                    if (b.transactionBlockNumber === a.transactionBlockNumber)
-                        return b.transactionIndex - a.transactionIndex
                     return b.transactionBlockNumber - a.transactionBlockNumber
                 }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
         } catch (error) {
@@ -102,8 +104,12 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
             const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
 
             mapKeys(nftSpenderRecords, (spender, spenderAddress) =>
-                mapKeys(spender, (token, tokenAddress) => {
-                    const latestTx = maxBy(token, (x) => x.blockNumber)
+                mapKeys(spender, (nfts, tokenAddress) => {
+                    const latestBlockTx = maxBy(nfts, (x) => x.blockNumber)
+                    const latestTx = maxBy(
+                        nfts.filter((x) => x.blockNumber === latestBlockTx?.blockNumber),
+                        (x) => x.transactionIndex,
+                    )
                     if (!latestTx) return
                     const approved = Number.parseInt(latestTx.data, 16) === 1
                     approvalListState.updateNFT_State(
@@ -147,8 +153,6 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
-                    if (b.transactionBlockNumber === a.transactionBlockNumber)
-                        return b.transactionIndex - a.transactionIndex
                     return b.transactionBlockNumber - a.transactionBlockNumber
                 }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
         } catch (error) {
