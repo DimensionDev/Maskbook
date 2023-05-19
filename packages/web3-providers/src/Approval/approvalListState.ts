@@ -35,7 +35,7 @@ export class ApprovalListState {
     }
 
     public updateTokenState(
-        account: string,
+        account_: string,
         spender: string,
         address: string,
         chainId: ChainId,
@@ -43,6 +43,7 @@ export class ApprovalListState {
         transactionBlockNumber: number,
         amount: BigNumber,
     ) {
+        const account = account_.toLowerCase()
         this._token_state = produce(this._token_state, (draft) => {
             if (!draft[account]) draft[account] = {}
             if (!draft[account][chainId]) {
@@ -64,7 +65,7 @@ export class ApprovalListState {
     }
 
     public updateNFT_State(
-        account: string,
+        account_: string,
         spender: string,
         address: string,
         chainId: ChainId,
@@ -72,6 +73,7 @@ export class ApprovalListState {
         transactionBlockNumber: number,
         approved: boolean,
     ) {
+        const account = account_.toLowerCase()
         this._nft_state = produce(this._nft_state, (draft) => {
             if (!draft[account]) draft[account] = {}
             if (!draft[account][chainId]) {

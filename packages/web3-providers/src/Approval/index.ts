@@ -59,7 +59,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
             if (!spenderList) return EMPTY_LIST
 
             return Object.keys(spenderList)
-                .map((spender) => {
+                .flatMap((spender) => {
                     return Object.keys(spenderList[spender]).map((address) => {
                         const maskDappContractInfo = maskDappContractInfoList.find((y) =>
                             isSameAddress(y.address, spender),
@@ -76,15 +76,13 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                         }
                     })
                 })
-                .flat()
                 .filter((x) => isGreaterThan(x.rawAmount, 0))
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
-                    return Number(b.transactionBlockNumber) - Number(a.transactionBlockNumber)
+                    return b.transactionBlockNumber - a.transactionBlockNumber
                 }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
         } catch (error) {
-            console.log(error)
             return EMPTY_LIST
         }
     }
@@ -125,7 +123,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
             if (!spenderList) return EMPTY_LIST
 
             return Object.keys(spenderList)
-                .map((spender) => {
+                .flatMap((spender) => {
                     return Object.keys(spenderList[spender]).map((address) => {
                         const maskDappContractInfo = maskDappContractInfoList.find((y) =>
                             isSameAddress(y.address, spender),
@@ -143,15 +141,13 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                         }
                     })
                 })
-                .flat()
                 .filter((x) => x.approved)
                 .sort((a, b) => {
                     if (a.isMaskDapp && !b.isMaskDapp) return -1
                     if (!a.isMaskDapp && b.isMaskDapp) return 1
-                    return Number(b.transactionBlockNumber) - Number(a.transactionBlockNumber)
+                    return b.transactionBlockNumber - a.transactionBlockNumber
                 }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
         } catch (error) {
-            console.log(error)
             return EMPTY_LIST
         }
     }
