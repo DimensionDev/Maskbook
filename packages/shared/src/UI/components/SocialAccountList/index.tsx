@@ -78,7 +78,7 @@ export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...re
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
 
-    const { value: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
+    const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
     // Merge and sort
     const orderedBindings = useMemo(() => {
         const merged = uniqBy(

@@ -1,9 +1,11 @@
 import { Firefly } from '@masknet/web3-providers'
-import { useAsync } from 'react-use'
+import { useQuery } from '@tanstack/react-query'
+import { useId } from 'react'
 
 export function useFireflyLensAccounts(userId?: string) {
-    return useAsync(async () => {
-        if (!userId) return
-        return Firefly.getLensByTwitterId(userId)
-    }, [userId])
+    return useQuery({
+        queryKey: ['firefly', 'lens', useId],
+        enabled: !!useId,
+        queryFn: () => Firefly.getLensByTwitterId(userId),
+    })
 }

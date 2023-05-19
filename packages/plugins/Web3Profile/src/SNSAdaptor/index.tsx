@@ -1,6 +1,5 @@
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
-import { useAsync } from 'react-use'
 import { Trans } from 'react-i18next'
 import { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
@@ -14,6 +13,7 @@ import { base } from '../base.js'
 import { LensBadge } from './components/LensBadge.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
 import { setupContext, setupStorage } from './context.js'
+import { useQuery } from '@tanstack/react-query'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -84,14 +84,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
-                const { value: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
+                const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
 
                 const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
-                const { value: nextIdLens = EMPTY_LIST } = useAsync(async () => {
-                    if (!isProfile || !identity?.userId) return
-                    const accounts = await NextIDProof.queryAllLens(identity.userId)
-                    return accounts.map(NextIdLensToFireflyLens)
-                }, [isProfile, identity?.userId])
+
+                const { data: nextIdLens = EMPTY_LIST } = useQuery({
+                    queryKey: ['next-id', 'all-lens', identity?.userId],
+                    enabled: isProfile && !!identity?.userId,
+                    queryFn: async () => {
+                        const accounts = await NextIDProof.queryAllLens(identity!.userId)
+                        return accounts.map(NextIdLensToFireflyLens)
+                    },
+                })
+
                 const lensAccounts = useMemo(
                     () => (isProfile ? uniqBy([...accounts, ...nextIdLens], (x) => x.handle) : accounts),
                     [isProfile, accounts, nextIdLens],
