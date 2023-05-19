@@ -14,12 +14,7 @@ import {
     type NextIDEnsRecord,
     createBindingProofFromProfileQuery,
 } from '@masknet/shared-base'
-import {
-    PROOF_BASE_URL_DEV,
-    PROOF_BASE_URL_PROD,
-    RELATION_SERVICE_URL,
-    TWITTER_HANDLER_VERIFY_URL,
-} from './constants.js'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON } from '../entry-helpers.js'
@@ -423,23 +418,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                   uuid: response.uuid,
               }
             : null
-    }
-
-    async verifyTwitterHandlerByAddress(address: string, handler: string): Promise<boolean> {
-        const response = await fetchJSON<{
-            statusCode: number
-            data?: string[]
-            error?: string
-        }>(
-            urlcat(TWITTER_HANDLER_VERIFY_URL, '/v1/relation/handles', {
-                wallet: address.toLowerCase(),
-                isVerified: true,
-            }),
-        )
-
-        if (response.error || !handler || !address) return false
-
-        return response.data?.includes(handler) || response.data?.filter((x) => x).length === 0
     }
 }
 

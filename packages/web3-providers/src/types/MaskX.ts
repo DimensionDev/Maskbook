@@ -27,10 +27,11 @@ export namespace MaskX_BaseAPI {
         // data source
         source: SourceType
         ens?: string
-        // a js like timestamp
+        // timestamp in milliseconds
         create_timestamp: string
-        // a js like timestamp
+        // timestamp in milliseconds
         modify_timestamp: string
+        is_verified: boolean
     }
 
     export interface Options {
