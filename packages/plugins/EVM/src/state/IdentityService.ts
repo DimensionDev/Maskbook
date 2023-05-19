@@ -82,9 +82,11 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
     {
         [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
         [MaskX_BaseAPI.SourceType.Firefly]: SocialAddressType.Firefly,
+        [MaskX_BaseAPI.SourceType.HandWriting]: SocialAddressType.Firefly,
         [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
         [MaskX_BaseAPI.SourceType.OpenSea]: SocialAddressType.OpenSea,
         [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
+        [MaskX_BaseAPI.SourceType.Uniswap]: SocialAddressType.Sybil,
         [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
     },
     (x) => {
@@ -245,10 +247,11 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const sourceTypes = [
             MaskX_BaseAPI.SourceType.CyberConnect,
             MaskX_BaseAPI.SourceType.Firefly,
-            MaskX_BaseAPI.SourceType.Leaderboard,
             MaskX_BaseAPI.SourceType.OpenSea,
             MaskX_BaseAPI.SourceType.Sybil,
             MaskX_BaseAPI.SourceType.RSS3,
+            MaskX_BaseAPI.SourceType.HandWriting,
+            MaskX_BaseAPI.SourceType.Uniswap,
         ]
         const results = response.records.filter((x) => {
             if (!isValidAddress(x.web3_addr) || !sourceTypes.includes(x.source)) return false
@@ -267,13 +270,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 try {
                     const name = await ENS.reverse(y.web3_addr)
 
-                    return this.createSocialAddress(
-                        resolveMaskXAddressType(y.source),
-                        y.web3_addr,
-                        name ?? y.sns_handle,
-                    )
+                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, name)
                 } catch {
-                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, y.sns_handle)
+                    return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr)
                 }
             }),
         )
