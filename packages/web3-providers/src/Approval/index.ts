@@ -53,7 +53,6 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                         chainId,
                         toBlock,
                         latestTx.blockNumber,
-                        latestTx.transactionIndex,
                         amount,
                     )
                 }),
@@ -77,7 +76,6 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                             logo: maskDappContractInfo?.logo,
                             rawAmount: spenderList[spender][address].amount.toNumber(),
                             transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
-                            transactionIndex: spenderList[spender][address].transactionIndex,
                             isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
@@ -119,7 +117,6 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                         chainId,
                         toBlock,
                         latestTx.blockNumber,
-                        latestTx.transactionIndex,
                         approved,
                     )
                 }),
@@ -144,7 +141,6 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                             amount: '1',
                             approved: spenderList[spender][address].approved,
                             transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
-                            transactionIndex: spenderList[spender][address].transactionIndex,
                             isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
