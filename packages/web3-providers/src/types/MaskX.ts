@@ -13,6 +13,7 @@ export namespace MaskX_BaseAPI {
         Leaderboard = 'ethLeaderboard',
         RSS3 = 'rss3',
         HandWriting = 'hand_writing',
+        TwitterHexagon = 'twitter_hexagon',
     }
 
     export interface Identity {

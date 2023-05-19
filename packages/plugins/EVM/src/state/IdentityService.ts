@@ -88,6 +88,7 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
         [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
         [MaskX_BaseAPI.SourceType.Uniswap]: SocialAddressType.Sybil,
         [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
+        [MaskX_BaseAPI.SourceType.TwitterHexagon]: SocialAddressType.TwitterBlue,
     },
     (x) => {
         throw new Error(`Unknown source type: ${x}`)
@@ -252,6 +253,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             MaskX_BaseAPI.SourceType.RSS3,
             MaskX_BaseAPI.SourceType.HandWriting,
             MaskX_BaseAPI.SourceType.Uniswap,
+            MaskX_BaseAPI.SourceType.TwitterHexagon,
         ]
         const results = response.records.filter((x) => {
             if (!isValidAddress(x.web3_addr) || !sourceTypes.includes(x.source)) return false
@@ -305,14 +307,11 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const trustedAddresses = trustedAccounts?.map((x) => x.address.toLowerCase()) ?? []
         const identitiesAddressesFromNextID = identitiesFromNextID.map((y) => y.address.toLowerCase())
 
-        return uniqBy(
-            identities
-                .filter((x) => {
-                    const address = x.address.toLowerCase()
-                    return !identitiesAddressesFromNextID.includes(address) && trustedAddresses.includes(address)
-                })
-                .concat(identitiesFromNextID),
-            (x) => x.address.toLowerCase(),
-        )
+        return identities
+            .filter((x) => {
+                const address = x.address.toLowerCase()
+                return !identitiesAddressesFromNextID.includes(address) && trustedAddresses.includes(address)
+            })
+            .concat(identitiesFromNextID)
     }
 }
