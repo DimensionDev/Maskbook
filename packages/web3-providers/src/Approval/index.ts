@@ -55,7 +55,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 }),
             )
 
-            const spenderList = approvalListState.tokenState[account]?.[chainId]?.spenderList
+            const spenderList = approvalListState.tokenState[account.toLowerCase()]?.[chainId]?.spenderList
 
             if (!spenderList) return EMPTY_LIST
 
@@ -119,7 +119,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 }),
             )
 
-            const spenderList = approvalListState.nftState[account]?.[chainId]?.spenderList
+            const spenderList = approvalListState.nftState[account.toLowerCase()]?.[chainId]?.spenderList
 
             if (!spenderList) return EMPTY_LIST
 
