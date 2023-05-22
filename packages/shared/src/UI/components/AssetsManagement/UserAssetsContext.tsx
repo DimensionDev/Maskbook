@@ -1,9 +1,7 @@
-import { useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { createIndicator, EMPTY_LIST, type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Hub } from '@masknet/web3-hooks-base'
-import { CollectionType } from '@masknet/web3-providers/types'
-import { chunk, sum, take } from 'lodash-es'
+import { chunk, take } from 'lodash-es'
 import {
     createContext,
     memo,
@@ -32,8 +30,6 @@ interface AssetsContextOptions {
     getVerifiedBy(id: string): string[]
     loadAssets(collection: Web3Helper.NonFungibleCollectionAll): Promise<void>
     loadVerifiedBy(id: string): Promise<void>
-    isHiddenAddress: boolean
-    isAllHidden: boolean
 }
 
 export const AssetsContext = createContext<AssetsContextOptions>({
@@ -42,8 +38,6 @@ export const AssetsContext = createContext<AssetsContextOptions>({
     getVerifiedBy: () => EMPTY_LIST,
     loadAssets: () => Promise.resolve(),
     loadVerifiedBy: () => Promise.resolve(),
-    isHiddenAddress: false,
-    isAllHidden: false,
 })
 
 interface Props {
@@ -56,9 +50,6 @@ interface Props {
 /** Min merged collection chunk size */
 const CHUNK_SIZE = 8
 
-const joinKeys = (ids: string[]) => ids.join('_').toLowerCase()
-const getAssetsTotal = (map: Record<string, AssetsState>) => sum(Object.values(map).map((x) => x.assets.length))
-
 export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
     ({ pluginID, userId, address, persona, children }) => {
         const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
@@ -69,33 +60,6 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
             assetsMapRef.current = assetsMap
             verifiedMapRef.current = verifiedMap
         })
-        const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId?.toLowerCase(), persona, {
-            address,
-            hiddenAddressesKey: 'NFTs',
-            collectionKey: CollectionType.NFTs,
-        })
-
-        // A mapping that contains listing assets only
-        const listingAssetsMap = useMemo(() => {
-            if (!hiddenList.length) return assetsMap
-            const listingMap: Record<string, AssetsState> = { ...assetsMap }
-            let updated = false
-            for (const id in assetsMap) {
-                const originalAssets = assetsMap[id].assets
-                const newAssets = originalAssets.filter((x) => !hiddenList.includes(joinKeys([x.address, x.tokenId])))
-                if (newAssets.length !== originalAssets.length) {
-                    listingMap[id] = { ...listingMap[id], assets: newAssets }
-                    updated = true
-                }
-            }
-            // Update accordingly
-            return updated ? listingMap : assetsMap
-        }, [assetsMap, hiddenList])
-
-        const isAllHidden = useMemo(() => {
-            if (!hiddenList.length || getAssetsTotal(assetsMap) === 0) return false
-            return getAssetsTotal(listingAssetsMap) === 0
-        }, [assetsMap, listingAssetsMap, !hiddenList.length])
 
         const hub = useWeb3Hub(pluginID)
         // We load merged collections with iterators
@@ -174,19 +138,17 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(
             [hub?.getNonFungibleCollectionVerifiedBy],
         )
 
-        const getAssets = useCallback((id: string) => listingAssetsMap[id] ?? createAssetsState(), [listingAssetsMap])
+        const getAssets = useCallback((id: string) => assetsMap[id] ?? createAssetsState(), [assetsMap])
         const getVerifiedBy = useCallback((id: string) => verifiedMap[id] ?? EMPTY_LIST, [verifiedMap])
         const contextValue = useMemo((): AssetsContextOptions => {
             return {
-                isHiddenAddress,
-                isAllHidden,
                 getAssets,
                 getVerifiedBy,
                 loadAssets,
                 loadVerifiedBy,
                 assetsMapRef,
             }
-        }, [isHiddenAddress, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden])
+        }, [getAssets, getVerifiedBy, loadAssets, loadVerifiedBy])
         return <AssetsContext.Provider value={contextValue}>{children}</AssetsContext.Provider>
     },
 )

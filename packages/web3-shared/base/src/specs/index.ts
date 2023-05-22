@@ -1298,10 +1298,13 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
 }
 
-export interface Storage {
+export interface ReadonlyStorage {
     has(key: string): Promise<boolean>
     get<T>(key: string): Promise<T | undefined>
     getAll?<T>(key: string): Promise<T[] | undefined>
+}
+
+export interface Storage extends ReadonlyStorage {
     set<T>(key: string, value: T): Promise<void>
     delete?(key: string): Promise<void>
     clearAll?(): Promise<void>
@@ -1360,6 +1363,19 @@ export interface HubState<
     getHub?: (options: Web3HubOptions) => Web3Hub
 }
 
+/** To create a writable storage, you need to pass a signer as parameter */
+declare function CreateNextIDStorage(
+    proofIdentity: string,
+    platform: NextIDPlatform,
+    signerOrPublicKey: string,
+): ReadonlyStorage
+
+declare function CreateNextIDStorage(
+    proofIdentity: string,
+    platform: NextIDPlatform,
+    signerOrPublicKey: ECKeyIdentifier,
+): Storage
+
 export interface Web3StorageServiceState {
     createStorage: (
         providerType: StorageProviderType,
@@ -1371,11 +1387,7 @@ export interface Web3StorageServiceState {
     ) => Storage
     createKVStorage: (namespace: string) => Storage
     createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (
-        proofIdentity: string,
-        platform: NextIDPlatform,
-        signerOrPublicKey: string | ECKeyIdentifier,
-    ) => Storage
+    createNextIDStorage: typeof CreateNextIDStorage
 
     createStringStorage: (namespace: string, address: string) => Storage
 }

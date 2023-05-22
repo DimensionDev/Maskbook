@@ -1,17 +1,14 @@
-import { useEffect, useState } from 'react'
-import { SNSAdaptorContext, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
-import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
+import { PluginID } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { base } from '../base.js'
 import { TipTaskManager } from '../contexts/index.js'
 import { guideStorageDefaultValue, setupStorage, storageDefaultValue } from '../storage/index.js'
-import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -46,35 +43,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         }}
                     />
                 ),
-                RenderEntryComponent(EntryComponentProps) {
-                    const [open, setOpen] = useState(false)
-                    const clickHandler = () => setOpen(true)
-
-                    useEffect(() => {
-                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
-                            if (pluginID !== PluginID.Tips) return
-                            setOpen(open)
-                        })
-                    }, [])
-
-                    return (
-                        <>
-                            <ApplicationEntry
-                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                {...EntryComponentProps}
-                                iconFilterColor={iconFilterColor}
-                                icon={icon}
-                                onClick={
-                                    EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
-                                        : clickHandler
-                                }
-                            />
-
-                            <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
-                        </>
-                    )
-                },
                 ApplicationEntryID: base.ID,
                 icon,
                 name,
@@ -84,16 +52,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 entryWalletConnectedNotRequired: true,
             }
         })(),
-    ],
-    SettingTabs: [
-        {
-            ID: PluginID.Tips,
-            label: 'Tips',
-            priority: 1,
-            UI: {
-                TabContent: PublicWalletSetting,
-            },
-        },
     ],
     GlobalInjection() {
         return <TipTaskManager />

@@ -114,7 +114,8 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    proofs={proofs}
+                                    proofs={proofs.value}
+                                    loading={proofs.loading}
                                     isHideOperations
                                     key={networkIdentifier}
                                     onConnect={(type, profile) =>

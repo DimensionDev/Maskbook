@@ -1,12 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { SocialAccountList } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    PluginID,
-    type SocialAccount,
-    type SocialIdentity,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -47,9 +41,8 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function openWeb3ProfileSettingDialog() {
-    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
         open: true,
-        targetTab: PluginID.Web3Profile,
     })
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import { CrossIsolationMessages, ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
+import { CrossIsolationMessages, ProfileIdentifier, queryClient, type SocialIdentity } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { Fade } from '@mui/material'
@@ -51,7 +51,10 @@ function ProfileCardHolder() {
     const { value: identity, loading } = useAsync(async (): Promise<SocialIdentity | null> => {
         if (!twitterId) return null
 
-        const user = await Twitter.getUserByScreenName(twitterId)
+        const user = await queryClient.fetchQuery({
+            queryKey: ['twitter', 'profile', twitterId],
+            queryFn: () => Twitter.getUserByScreenName(twitterId),
+        })
         if (!user?.legacy) return null
 
         const handle = user.legacy.screen_name

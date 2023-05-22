@@ -117,16 +117,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const {
-        nickname,
-        definedSocialNetworks,
-        identifier,
-        profiles,
-        publicKey,
-        address,
-        hasSmartPay,
-        hasPaymentPassword,
-    } = props
+    const { nickname, definedSocialNetworks, identifier, profiles, publicKey, address } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
@@ -135,16 +126,6 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
     const [exportPersonaDialogOpen, setExportPersonaDialogOpen] = useState(false)
-
-    const logoutConfirmedPasswordCallback = () =>
-        confirmPassword(() => setLogoutDialogOpen(true), {
-            tipTitle: t.personas_logout(),
-            tipContent: t.personas_logout_confirm_password_tip(),
-            confirmTitle: t.personas_logout(),
-            force: false,
-            hasSmartPay,
-            hasPaymentPassword,
-        })
 
     const exportPersonaConfirmedPasswordCallback = () =>
         confirmPassword(() => setExportPersonaDialogOpen(true), {
@@ -219,7 +200,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    proofs={proofs}
+                                    proofs={proofs.value}
+                                    loading={proofs.loading}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

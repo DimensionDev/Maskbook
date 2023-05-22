@@ -7,6 +7,7 @@ import {
     type BindingProof,
     NextIDPlatform,
     EnhanceableSite,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
@@ -84,10 +85,8 @@ export interface ConnectedPersonaLineProps {
     networkIdentifier: string
     disableAdd?: boolean
     personaIdentifier: PersonaIdentifier
-    proofs: {
-        loading: boolean
-        value?: BindingProof[]
-    }
+    loading: boolean
+    proofs?: BindingProof[]
 }
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
@@ -100,7 +99,8 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         isHideOperations,
         disableAdd,
         personaIdentifier,
-        proofs,
+        loading,
+        proofs = EMPTY_LIST,
     }) => {
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
@@ -119,7 +119,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = proofs.value?.find((x) => {
+            const isProved = proofs.find((x) => {
                 return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
@@ -129,7 +129,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const isProved = proofs.value?.find((x) => {
+            const isProved = proofs.find((x) => {
                 return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
 
@@ -142,7 +142,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         <Typography
                             className={classes.proofIconBox}
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved, profile)}>
-                            {proofs.loading ? (
+                            {loading ? (
                                 <LoadingBase />
                             ) : isProved?.is_valid ? (
                                 <Icons.Verification size={18} />
