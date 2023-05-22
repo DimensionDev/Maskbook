@@ -1,24 +1,23 @@
 import {
     type ChainId,
-    getRedPacketConstants,
-    getMaskBoxConstants,
-    getITOConstants,
-    getNftRedPacketConstants,
+    getMaskBoxConstant,
+    getRedPacketConstant,
+    getITOConstant,
+    getNftRedPacketConstant,
     NetworkType,
 } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
 export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
-    const {
-        HAPPY_RED_PACKET_ADDRESS_V1,
-        HAPPY_RED_PACKET_ADDRESS_V2,
-        HAPPY_RED_PACKET_ADDRESS_V3,
-        HAPPY_RED_PACKET_ADDRESS_V4,
-    } = getRedPacketConstants(chainId)
-    const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = getITOConstants(chainId)
-    const { MASK_BOX_CONTRACT_ADDRESS } = getMaskBoxConstants(chainId)
-    const { RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(chainId)
+    const HAPPY_RED_PACKET_ADDRESS_V1 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V1')
+    const HAPPY_RED_PACKET_ADDRESS_V2 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V2')
+    const HAPPY_RED_PACKET_ADDRESS_V3 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V3')
+    const HAPPY_RED_PACKET_ADDRESS_V4 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
+    const ITO_CONTRACT_ADDRESS = getITOConstant(chainId, 'ITO_CONTRACT_ADDRESS')
+    const ITO2_CONTRACT_ADDRESS = getITOConstant(chainId, 'ITO2_CONTRACT_ADDRESS')
+    const MASK_BOX_CONTRACT_ADDRESS = getMaskBoxConstant(chainId, 'MASK_BOX_CONTRACT_ADDRESS')
+    const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(chainId, 'RED_PACKET_NFT_ADDRESS')
     return type === 'token'
         ? [
               {
