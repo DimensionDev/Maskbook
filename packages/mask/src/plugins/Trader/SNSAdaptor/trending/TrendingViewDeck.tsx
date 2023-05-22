@@ -358,7 +358,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     {isNFT ? null : (
                                         <PriceChanged
                                             amount={
-                                                market?.price_change_percentage_1h_in_currency ??
+                                                market?.price_change_percentage_24h_in_currency ??
                                                 market?.price_change_24h ??
                                                 0
                                             }

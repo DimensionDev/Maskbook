@@ -1,6 +1,4 @@
 import { Trans } from 'react-i18next'
-import { Box } from '@mui/material'
-import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
@@ -15,8 +13,6 @@ import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shar
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CollectionProjectAvatarBadge } from '../../../components/shared/AvatarBadge/CollectionProjectAvatarBadge.js'
-import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -115,33 +111,6 @@ const sns: Plugin.SNSAdaptor.Definition<ChainId> = {
         icon: <Icons.SwapColorful size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(254, 156, 0, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(254, 156, 0, 0.2) 100%), #FFFFFF;',
-    },
-    AvatarRealm: {
-        ID: `${base.ID}_nft_project_card`,
-        label: 'Web3 Profile Card',
-        priority: 99999,
-        UI: {
-            Decorator({ userId, identity }) {
-                const { value: collectionList } = useCollectionByTwitterHandler(userId)
-                const isMinimalMode = useIsMinimalMode(PluginID.Web3ProfileCard)
-                if (!userId || !collectionList?.[0] || isMinimalMode) return null
-
-                return (
-                    <Box display="flex" alignItems="top" justifyContent="center">
-                        <CollectionProjectAvatarBadge
-                            userId={userId}
-                            address={collectionList?.[0].address ?? ''}
-                            identity={identity}
-                        />
-                    </Box>
-                )
-            },
-        },
-        Utils: {
-            shouldDisplay(_, socialAccounts) {
-                return !socialAccounts?.length
-            },
-        },
     },
 }
 

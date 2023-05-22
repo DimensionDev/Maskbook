@@ -3,7 +3,7 @@ import { unstable_useCacheRefresh, useContext } from 'react'
 import { formatCount, formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../utils/index.js'
@@ -92,6 +92,7 @@ function Content() {
     const { t } = useI18N()
     return (
         <SnapshotCard
+            lazy
             title={
                 <Badge
                     max={9999999}
@@ -102,7 +103,7 @@ function Content() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {votes.map((v) => {
+                {votes.map(function voteItemIter(v) {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
@@ -146,7 +147,8 @@ function Content() {
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <ShadowRootTooltip
+                            <TextOverflowTooltip
+                                as={ShadowRootTooltip}
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
@@ -165,7 +167,7 @@ function Content() {
                                         ' ' +
                                         (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                 </Typography>
-                            </ShadowRootTooltip>
+                            </TextOverflowTooltip>
                         </ListItem>
                     )
                 })}
