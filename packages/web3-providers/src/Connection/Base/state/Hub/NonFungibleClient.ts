@@ -16,6 +16,7 @@ import {
 import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers/types'
 import { HubStateBaseClient } from '../Hub.js'
+import { isEmpty } from 'lodash-es'
 
 export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBaseClient<ChainId> {
     protected getProviders(
@@ -250,6 +251,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         return attemptUntil(
             providers.map((x) => () => x.getNonFungibleTokenSpenders?.(options.chainId, options.account)),
             EMPTY_LIST,
+            isEmpty,
         )
     }
 }
