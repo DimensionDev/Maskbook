@@ -16,12 +16,14 @@ import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { useI18N } from '../../../../utils/index.js'
-import { TokenPanelType, type TradeInfo } from '../../types/index.js'
+import { TokenPanelType } from '../../types/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -178,10 +180,10 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onInputAmountChange: (amount: string) => void
     onTokenChipClick?: (token: TokenPanelType) => void
     onRefreshClick?: () => void
-    trades: TradeInfo[]
-    focusedTrade?: TradeInfo
+    trades: Array<AsyncStateRetry<TraderAPI.TradeInfo>>
+    focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
     gasPrice?: string
-    onFocusedTradeChange: (trade: TradeInfo) => void
+    onFocusedTradeChange: (trade: AsyncStateRetry<TraderAPI.TradeInfo>) => void
     onSwitch: () => void
     settings?: boolean
     gasConfig?: GasConfig
@@ -206,7 +208,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         gasConfig,
         ...props
     }) => {
-        const maxAmountTrade = useRef<TradeInfo | null>(null)
+        const maxAmountTrade = useRef<AsyncStateRetry<TraderAPI.TradeInfo> | null>(null)
         const userSelected = useRef(false)
         const { t } = useI18N()
         const { classes, cx } = useStyles(undefined, { props })
@@ -235,7 +237,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const maxAmount = useMemo(() => {
             const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
-            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
+            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.value?.gas ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = BigNumber.max(
                 0,
@@ -284,7 +286,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             onFocusedTradeChange(bestTrade)
                             setExpand(false)
                         }}
-                        isFocus={bestTrade.provider === focusedTrade?.provider}
+                        isFocus={bestTrade.value?.provider === focusedTrade?.value?.provider}
                         isBest
                     />
                 )
@@ -298,7 +300,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             setExpand(false)
                         }}
                         isFocus
-                        isBest={bestTrade.provider === focusedTrade.provider}
+                        isBest={bestTrade.value?.provider === focusedTrade?.value?.provider}
                     />
                 )
             return null
@@ -311,7 +313,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #region clear maxAmount trade cache
         useUpdateEffect(() => {
             if (!focusedTrade || !maxAmountTrade.current) return
-            if (focusedTrade.provider !== maxAmountTrade.current.provider) maxAmountTrade.current = null
+            if (focusedTrade.value?.provider !== maxAmountTrade.current.value?.provider) maxAmountTrade.current = null
         }, [focusedTrade])
 
         useUpdateEffect(() => {
@@ -331,7 +333,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 disableSlippageTolerance: false,
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
-                    gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                    gas: focusedTrade?.value?.gas ?? MIN_GAS_LIMIT,
                     ...gasConfig,
                 },
             })
@@ -342,7 +344,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 open: false,
                 gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
             })
-        }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings, gasConfig])
+        }, [chainId, focusedTrade?.value?.gas, selectAdvancedSettings, gasConfig])
         // #endregion
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(
@@ -415,14 +417,14 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 <Collapse in={isExpand}>
                                     {trades.slice(1).map((trade) => (
                                         <TraderInfo
-                                            key={trade.provider}
+                                            key={trade.value?.provider}
                                             trade={trade}
                                             onClick={() => {
                                                 if (!userSelected.current) userSelected.current = true
                                                 onFocusedTradeChange(trade)
                                                 setExpand(false)
                                             }}
-                                            isFocus={trade.provider === focusedTrade?.provider}
+                                            isFocus={trade.value?.provider === focusedTrade?.value?.provider}
                                             gasPrice={gasPrice}
                                         />
                                     ))}

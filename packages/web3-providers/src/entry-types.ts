@@ -48,3 +48,5 @@ export * from './DeBank/types.js'
 export * from './Zerion/types.js'
 export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
+
+export * from './types/Trader.js'

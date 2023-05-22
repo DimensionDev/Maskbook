@@ -1,4 +1,14 @@
-import { NetworkType, chainResolver, isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import {
+    NetworkType,
+    chainResolver,
+    isNativeTokenAddress,
+    type ChainId,
+    ContractTransaction,
+    type SchemaType,
+    createContract,
+    getTokenConstants,
+    isNativeTokenSchemaType,
+} from '@masknet/web3-shared-evm'
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ZERO, isZero } from '@masknet/web3-shared-base'
@@ -19,6 +29,9 @@ import { first, pick } from 'lodash-es'
 import { ZRX_AFFILIATE_ADDRESS, ZRX_BASE_URL } from './constants/0x.js'
 import { Web3API } from '../Connection/index.js'
 import { TradeProvider } from '@masknet/public-api'
+import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
+import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
+import type { AbiItem } from 'web3-utils'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -50,7 +63,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 
 export class Zrx implements TraderAPI.Provider {
     private Web3 = new Web3API()
-    private provider = TradeProvider.ZRX
+    public provider = TradeProvider.ZRX
 
     private async swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
         const params: Record<string, string | number> = {}
@@ -169,6 +182,58 @@ export class Zrx implements TraderAPI.Provider {
                 }
             }
             return null
+        }
+    }
+
+    public async getNativeWrapperTradeInfo(
+        chainId: ChainId,
+        account: string,
+        inputAmount: string,
+        inputToken?: Web3Helper.FungibleTokenAll,
+        outputToken?: Web3Helper.FungibleTokenAll,
+    ) {
+        const web3 = this.Web3.getWeb3(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
+        const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
+
+        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+
+        const computed = {
+            strategy: TradeStrategy.ExactIn,
+            inputToken,
+            outputToken,
+            inputAmount: tradeAmount,
+            outputAmount: tradeAmount,
+            executionPrice: ZERO,
+            maximumSold: ZERO,
+            minimumReceived: tradeAmount,
+            priceImpact: ZERO,
+            fee: ZERO,
+            trade_: {
+                isWrap: isNativeTokenSchemaType(inputToken.schema as SchemaType),
+                isNativeTokenWrapper: true,
+            },
+        }
+
+        try {
+            const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract?.methods.deposit(), {
+                from: account,
+                value: tradeAmount.toFixed(),
+            })
+
+            const gas = tx.gas ?? '0'
+
+            return {
+                gas,
+                provider: this.provider,
+                value: computed,
+            }
+        } catch {
+            return {
+                value: computed,
+                provider: this.provider,
+            }
         }
     }
 

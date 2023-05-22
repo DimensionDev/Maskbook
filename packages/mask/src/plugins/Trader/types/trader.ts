@@ -132,13 +132,3 @@ export interface TradeContext {
     AGAINST_TOKENS?: ChainIdOptionalRecord<Web3Helper.FungibleTokenAll[]>
     CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, Web3Helper.FungibleTokenAll[]>>
 }
-
-export interface TradeInfo {
-    loading: boolean
-    retry: () => void
-    value: TradeComputed | null
-    provider: TradeProvider
-    error?: Error
-    gas: { value?: string; loading: boolean }
-    finalPrice?: BigNumber.Value
-}

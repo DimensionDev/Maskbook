@@ -4,7 +4,7 @@ import { createContract, type ChainId, getTraderConstants } from '@masknet/web3-
 import { CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
-import type { AbiItem } from 'web3-utils'
+import { type AbiItem } from 'web3-utils'
 import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
 import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
 import { FeeAmount, Pool, type Route, computePoolAddress, encodeRouteToPath, Trade } from '@uniswap/v3-sdk'

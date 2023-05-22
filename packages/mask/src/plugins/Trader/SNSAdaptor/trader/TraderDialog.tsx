@@ -159,7 +159,7 @@ export function TraderDialog() {
             disableGasLimit: true,
             disableSlippageTolerance: false,
             transaction: {
-                gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                gas: tradeRef.current?.focusedTrade?.gas ?? MIN_GAS_LIMIT,
                 ...tradeRef.current?.gasConfig,
             },
             slippageTolerance: currentSlippageSettings.value / 100,

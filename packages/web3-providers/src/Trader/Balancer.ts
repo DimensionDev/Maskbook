@@ -8,6 +8,7 @@ import {
     isNativeTokenSchemaType,
     type SchemaType,
     ContractTransaction,
+    createContract,
 } from '@masknet/web3-shared-evm'
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { ZERO, isSameAddress, isZero } from '@masknet/web3-shared-base'
@@ -24,6 +25,8 @@ import { BigNumber } from 'bignumber.js'
 import { TradeProvider } from '@masknet/public-api'
 import type { AbiItem } from 'web3-utils'
 import { ONE_BIPS, SLIPPAGE_DEFAULT } from './constants/index.js'
+import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
+import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 
 const MIN_VALUE = new BigNumber('1e-5')
 const createSOR_ = memoize((chainId: ChainId) => {
@@ -39,7 +42,7 @@ const createSOR_ = memoize((chainId: ChainId) => {
 
 export class Balancer implements TraderAPI.Provider {
     private Web3 = new Web3API()
-    private provider = TradeProvider.BALANCER
+    public provider = TradeProvider.BALANCER
 
     private createSOR(chainId: ChainId) {
         const sor = createSOR_(chainId)
@@ -209,6 +212,58 @@ export class Balancer implements TraderAPI.Provider {
             }
 
             return null
+        }
+    }
+
+    public async getNativeWrapperTradeInfo(
+        chainId: ChainId,
+        account: string,
+        inputAmount: string,
+        inputToken?: Web3Helper.FungibleTokenAll,
+        outputToken?: Web3Helper.FungibleTokenAll,
+    ) {
+        const web3 = this.Web3.getWeb3(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
+        const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
+
+        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+
+        const computed = {
+            strategy: TradeStrategy.ExactIn,
+            inputToken,
+            outputToken,
+            inputAmount: tradeAmount,
+            outputAmount: tradeAmount,
+            executionPrice: ZERO,
+            maximumSold: ZERO,
+            minimumReceived: tradeAmount,
+            priceImpact: ZERO,
+            fee: ZERO,
+            trade_: {
+                isWrap: isNativeTokenSchemaType(inputToken.schema as SchemaType),
+                isNativeTokenWrapper: true,
+            },
+        }
+
+        try {
+            const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract?.methods.deposit(), {
+                from: account,
+                value: tradeAmount.toFixed(),
+            })
+
+            const gas = tx.gas ?? '0'
+
+            return {
+                gas,
+                provider: this.provider,
+                value: computed,
+            }
+        } catch {
+            return {
+                value: computed,
+                provider: this.provider,
+            }
         }
     }
 

@@ -105,11 +105,20 @@ export namespace TraderAPI {
         finalPrice?: BigNumber.Value
     }
     export interface Provider {
+        provider: TradeProvider
         getTradeInfo: (
             chainId: ChainId,
             account: string,
             inputAmount_: string,
             slippage: number,
+            inputToken?: Web3Helper.FungibleTokenAll,
+            outputToken?: Web3Helper.FungibleTokenAll,
+        ) => Promise<TradeInfo | null>
+
+        getNativeWrapperTradeInfo: (
+            chainId: ChainId,
+            account: string,
+            inputAmount: string,
             inputToken?: Web3Helper.FungibleTokenAll,
             outputToken?: Web3Helper.FungibleTokenAll,
         ) => Promise<TradeInfo | null>

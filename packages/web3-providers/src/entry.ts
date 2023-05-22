@@ -78,6 +78,12 @@ import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
 import { SID_DomainAPI } from './SID/index.js'
 import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
+export { UniSwapV2Like } from './Trader/UniSwapV2.js'
+export { UniSwapV3Like } from './Trader/UniSwapV3.js'
+export { Balancer } from './Trader/Balancer.js'
+export { Zrx } from './Trader/Zrx.js'
+export { Bancor } from './Trader/Bancor.js'
+export { OpenOcean } from './Trader/OpenOcean.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()

@@ -14,7 +14,15 @@ import {
     uniswapPriceTo,
     uniswapTokenTo,
 } from './helpers/uniswap.js'
-import { isValidChainId, ChainId, createContract } from '@masknet/web3-shared-evm'
+import {
+    isValidChainId,
+    ChainId,
+    createContract,
+    isNativeTokenSchemaType,
+    type SchemaType,
+    getTokenConstants,
+    ContractTransaction,
+} from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import { getTradeContext, isTradeBetter } from './helpers/trade.js'
 import { flatMap } from 'lodash-es'
@@ -49,13 +57,15 @@ import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
 import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2.js'
 import SwapRouterABI from '@masknet/web3-contracts/abis/SwapRouter.json'
 import type { SwapRouter } from '@masknet/web3-contracts/types/SwapRouter.js'
+import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
+import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import { SwapRouter as V3Router } from '@uniswap/v3-sdk'
 import { MulticallAPI } from '../Multicall/index.js'
 
 export class UniSwapV2Like implements TraderAPI.Provider {
     public Web3 = new Web3API()
     public Multicall = new MulticallAPI()
-    constructor(protected provider: TradeProvider) {}
+    constructor(public provider: TradeProvider) {}
 
     public getAllCommonPairs(chainId: ChainId, currencyA?: Currency, currencyB?: Currency) {
         const chainIdValid = isValidChainId(chainId)
@@ -343,7 +353,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
                 outputToken,
             )
 
-            if (!isNotAvailable || !tradeAmount || !outputCurrency) return null
+            if (isNotAvailable || !tradeAmount || !outputCurrency) return null
 
             const trade = await this.getBestTradeExactIn(chainId, tradeAmount, outputCurrency)
 
@@ -353,7 +363,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
             const realizedLPFee = trade.inputAmount.multiply(realizedLPFeePercent)
             const priceImpact = trade.priceImpact.subtract(realizedLPFeePercent)
 
-            const percent_ = toUniswapPercent(slippage, 1000)
+            const percent_ = toUniswapPercent(slippage, 10000)
             const computed = {
                 strategy: TradeStrategy.ExactIn,
                 inputToken,
@@ -394,6 +404,58 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         }
     }
 
+    public async getNativeWrapperTradeInfo(
+        chainId: ChainId,
+        account: string,
+        inputAmount: string,
+        inputToken?: Web3Helper.FungibleTokenAll,
+        outputToken?: Web3Helper.FungibleTokenAll,
+    ) {
+        const web3 = this.Web3.getWeb3(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
+        const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
+
+        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+
+        const computed = {
+            strategy: TradeStrategy.ExactIn,
+            inputToken,
+            outputToken,
+            inputAmount: tradeAmount,
+            outputAmount: tradeAmount,
+            executionPrice: ZERO,
+            maximumSold: ZERO,
+            minimumReceived: tradeAmount,
+            priceImpact: ZERO,
+            fee: ZERO,
+            trade_: {
+                isWrap: isNativeTokenSchemaType(inputToken.schema as SchemaType),
+                isNativeTokenWrapper: true,
+            },
+        }
+
+        try {
+            const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract?.methods.deposit(), {
+                from: account,
+                value: tradeAmount.toFixed(),
+            })
+
+            const gas = tx.gas ?? '0'
+
+            return {
+                gas,
+                provider: this.provider,
+                value: computed,
+            }
+        } catch {
+            return {
+                value: computed,
+                provider: this.provider,
+            }
+        }
+    }
+
     public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<Trade> | null) {
         const tradeParameters = await this.getSwapParameters(chainId, account, trade)
 
@@ -409,8 +471,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
                 }
 
                 try {
-                    // const gas = await connection.estimateTransaction?.(config)
-                    const gas = this.Web3.estimateTransaction(chainId, config)
+                    const gas = await this.Web3.estimateTransaction(chainId, config)
                     return {
                         call: x,
                         gasEstimate: gas ?? '0',

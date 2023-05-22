@@ -1,13 +1,12 @@
-import { useAsync } from 'react-use'
 import type { NetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getEVMAvailableTraderProviders } from '../utils.js'
+import { useMemo } from 'react'
 
-export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAll): AsyncState<TradeProvider[]> {
+export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAll): TradeProvider[] {
     const { chainId } = useChainContext({
         chainId: targetChainId,
     })
@@ -15,7 +14,7 @@ export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAl
     const { Others } = useWeb3State()
     const networkType = Others?.chainResolver.networkType(chainId)
 
-    return useAsync(async () => {
+    return useMemo(() => {
         switch (pluginID) {
             case NetworkPluginID.PLUGIN_EVM:
                 return getEVMAvailableTraderProviders(networkType as NetworkType)
