@@ -54,7 +54,7 @@ export class Bancor implements TraderAPI.Provider {
 
     private async swapTransactionBancor(request: SwapBancorRequest) {
         const baseUrl = BANCOR_API_BASE_URL[request.chainId]
-        const url = urlcat(baseUrl, '/trasactions/swap', {
+        const url = urlcat(baseUrl, '/transactions/swap', {
             source_dlt_type: 'ethereum',
             source_dlt_id: toChecksumAddress(request.fromToken.address),
             target_dlt_type: 'ethereum',
