@@ -102,7 +102,7 @@
         "Gorli": "",
         "BSC": "https://bsc.blockpi.network/v1/rpc/aa1df11ff5f5a52af5ae0bd6289f819b295d36f1",
         "BSCT": "",
-        "Matic": "https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+        "Matic": "https://polygon.blockpi.network/v1/rpc/98175a60a725c6eb72c6db345af762021ec8f33c",
         "Mumbai": "",
         "Arbitrum": "https://arbitrum.blockpi.network/v1/rpc/3671ee3767ce54ddff136803eebd60ee8f75fe20",
         "Arbitrum_Rinkeby": "",
