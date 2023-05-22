@@ -150,9 +150,9 @@ export function TrendingView(props: TrendingViewProps) {
     }, [currentResult])
 
     // #region stats
-    const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
+    const [days, setDays] = useState(TrendingAPI.Days.ONE_DAY)
     const [currentPriceChange, setCurrentPriceChange] = useState(
-        trending?.market?.price_change_percentage_7d_in_currency,
+        trending?.market?.price_change_percentage_24h_in_currency,
     )
     const onPriceDaysControlChange = useCallback(
         (days: number) => {
@@ -160,8 +160,8 @@ export function TrendingView(props: TrendingViewProps) {
             const Days = TrendingAPI.Days
             const map: Partial<Record<TrendingAPI.Days, number | undefined>> = {
                 [Days.ONE_DAY]: trending?.market?.price_change_percentage_24h_in_currency,
-                [Days.ONE_MONTH]: trending?.market?.price_change_percentage_30d_in_currency,
                 [Days.ONE_WEEK]: trending?.market?.price_change_percentage_7d_in_currency,
+                [Days.ONE_MONTH]: trending?.market?.price_change_percentage_30d_in_currency,
                 [Days.ONE_YEAR]: trending?.market?.price_change_percentage_1y_in_currency,
                 [Days.MAX]: trending?.market?.atl_change_percentage,
             }
@@ -171,7 +171,7 @@ export function TrendingView(props: TrendingViewProps) {
     )
 
     useEffect(() => {
-        onPriceDaysControlChange(TrendingAPI.Days.ONE_WEEK)
+        onPriceDaysControlChange(TrendingAPI.Days.ONE_DAY)
     }, [JSON.stringify(trending?.market)])
 
     const {
