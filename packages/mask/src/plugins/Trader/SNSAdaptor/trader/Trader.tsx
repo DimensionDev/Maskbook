@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
-import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { ImageIcon, useSelectFungibleToken, useShowConfirm } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -44,7 +44,7 @@ import { SmartPayBundler } from '@masknet/web3-providers'
 import { BigNumber } from 'bignumber.js'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { TraderStateBar } from './TraderStateBar.js'
-
+import { Box, Typography, useTheme } from '@mui/material'
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
@@ -59,6 +59,7 @@ export interface TraderRef {
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
+    const theme = useTheme()
     const telemetry = useTelemetry()
     const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
@@ -73,6 +74,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const { Others } = useWeb3State()
+    const showConfirm = useShowConfirm()
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -237,28 +239,56 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
               })
             : ''
     }, [focusedTrade?.value, inputToken, outputToken, t])
-    const openShareTxDialog = useOpenShareTxDialog()
+
     const onConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
+
         const hash = await tradeCallback()
 
         setTemporarySlippage(undefined)
 
         if (typeof hash !== 'string') return
-        await openShareTxDialog({
-            hash,
-            buttonLabel: activatedSocialNetworkUI.utils.share ? 'Share' : 'Confirm',
-            onShare() {
+
+        await showConfirm({
+            title: t.swap(),
+            content: (
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                    <ImageIcon icon={inputToken?.logoURL} size={90} />
+                    <Typography
+                        fontSize={20}
+                        lineHeight="24px"
+                        fontWeight={700}
+                        color={theme.palette.maskColor.success}
+                        marginTop="20px">
+                        {t.congratulations()}
+                    </Typography>
+                    <Typography fontSize={16} lineHeight="20px" fontWeight={700} mt={5}>
+                        {t.swap_successfully_description({
+                            input: `${formatBalance(
+                                focusedTrade?.value?.value?.inputAmount,
+                                focusedTrade?.value?.value?.inputToken?.decimals,
+                            )} ${focusedTrade?.value?.value?.inputToken?.symbol}`,
+                            output: `${formatBalance(
+                                focusedTrade?.value?.value?.outputAmount,
+                                focusedTrade?.value?.value?.outputToken?.decimals,
+                            )} ${focusedTrade?.value?.value?.outputToken?.symbol}`,
+                        })}
+                    </Typography>
+                </Box>
+            ),
+            confirmLabel: t.share(),
+            onSubmit: () => {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
+            maxWidthOfContent: 420,
         })
         telemetry.captureEvent(TelemetryAPI.EventType.Interact, TelemetryAPI.EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, openShareTxDialog, telemetry])
+    }, [tradeCallback, shareText, showConfirm, telemetry, focusedTrade])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)

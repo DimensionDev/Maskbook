@@ -1,10 +1,15 @@
 import type { FC, ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Button, DialogActions, DialogContent } from '@mui/material'
+import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { InjectedDialog, type InjectedDialogProps } from '../../components/index.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
+    dialog: {
+        [`.${dialogClasses.paper}`]: {
+            maxWidth,
+        },
+    },
     content: {
         display: 'flex',
         alignItems: 'center',
@@ -24,14 +29,22 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
     content: ReactNode | string
     confirmLabel?: string
     onSubmit?(result: boolean | null): void
+    maxWidthOfContent?: number
 }
 
-export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, confirmLabel, content, onSubmit, ...rest }) => {
+export const ConfirmDialog: FC<ConfirmDialogProps> = ({
+    title,
+    confirmLabel,
+    content,
+    onSubmit,
+    maxWidthOfContent,
+    ...rest
+}) => {
     const t = useSharedI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles(maxWidthOfContent)
 
     return (
-        <InjectedDialog title={title ?? t.dialog_confirm()} {...rest}>
+        <InjectedDialog title={title ?? t.dialog_confirm()} className={classes.dialog} {...rest}>
             <DialogContent className={classes.content}>{content}</DialogContent>
             <DialogActions>
                 <Button fullWidth className={classes.button} onClick={() => onSubmit?.(true)}>
