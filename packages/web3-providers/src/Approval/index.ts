@@ -2,8 +2,8 @@ import type { AuthorizationAPI } from '../entry-types.js'
 import { isZeroAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import {
     approvalListState,
-    type NFTApprovalInfoAccountMap,
     type TokenApprovalInfoAccountMap,
+    type NFTApprovalInfoAccountMap,
 } from './approvalListState.js'
 import { Web3API } from '../Connection/index.js'
 import { TOKEN_APPROVAL_TOPIC, NFT_APPROVAL_TOPIC } from './constants.js'
@@ -14,8 +14,8 @@ import type Web3 from 'web3'
 import {
     isSameAddress,
     type FungibleTokenSpender,
-    isGreaterThan,
     type NonFungibleContractSpender,
+    isGreaterThan,
 } from '@masknet/web3-shared-base'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -57,25 +57,23 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                     )
                 }),
             )
-
-            const spenderList = approvalListState.tokenState[account.toLowerCase()]?.[chainId]?.spenderList
+            const spenderList = approvalListState.tokenState[account.toLowerCase()]?.get(chainId)?.spenderList
 
             if (!spenderList) return EMPTY_LIST
 
-            return Object.keys(spenderList)
+            return Array.from(spenderList.keys())
                 .flatMap((spender) => {
-                    return Object.keys(spenderList[spender]).map((address) => {
+                    return Array.from(spenderList.get(spender)!.keys()).map((address) => {
                         const maskDappContractInfo = maskDappContractInfoList.find((y) =>
                             isSameAddress(y.address, spender),
                         )
-
                         return {
                             tokenInfo: { address, name: '', symbol: '' },
                             address: spender,
                             name: maskDappContractInfo?.name,
                             logo: maskDappContractInfo?.logo,
-                            rawAmount: spenderList[spender][address].amount.toNumber(),
-                            transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
+                            rawAmount: spenderList.get(spender)?.get(address)?.amount.toNumber() ?? 0,
+                            transactionBlockNumber: spenderList.get(spender)?.get(address)?.transactionBlockNumber ?? 0,
                             isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
@@ -122,13 +120,13 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 }),
             )
 
-            const spenderList = approvalListState.nftState[account.toLowerCase()]?.[chainId]?.spenderList
+            const spenderList = approvalListState.nftState[account.toLowerCase()]?.get(chainId)?.spenderList
 
             if (!spenderList) return EMPTY_LIST
 
-            return Object.keys(spenderList)
+            return Array.from(spenderList.keys())
                 .flatMap((spender) => {
-                    return Object.keys(spenderList[spender]).map((address) => {
+                    return Array.from(spenderList.get(spender)!.keys()).map((address) => {
                         const maskDappContractInfo = maskDappContractInfoList.find((y) =>
                             isSameAddress(y.address, spender),
                         )
@@ -139,8 +137,8 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                             name: maskDappContractInfo?.name,
                             logo: maskDappContractInfo?.logo,
                             amount: '1',
-                            approved: spenderList[spender][address].approved,
-                            transactionBlockNumber: spenderList[spender][address].transactionBlockNumber,
+                            approved: spenderList.get(spender)?.get(address)?.approved,
+                            transactionBlockNumber: spenderList.get(spender)?.get(address)?.transactionBlockNumber ?? 0,
                             isMaskDapp: Boolean(maskDappContractInfo),
                         }
                     })
@@ -160,10 +158,10 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         chainId: ChainId,
         account: string,
         topic: string,
-        state: NFTApprovalInfoAccountMap | TokenApprovalInfoAccountMap,
+        state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
         const web3 = this.createWeb3(chainId)
-        const fromBlock = state[account]?.[chainId]?.fromBlock ?? 0
+        const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
         const toBlock = await web3.eth.getBlockNumber()
         const logs = await web3.eth.getPastLogs({
             topics: [topic, web3.eth.abi.encodeParameter('address', account)],
