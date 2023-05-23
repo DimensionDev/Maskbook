@@ -84,7 +84,7 @@ export namespace TrendingAPI {
     }
 
     export interface Market {
-        current_price: number
+        current_price: string
         circulating_supply?: number
         market_cap?: number
         max_supply?: number
@@ -103,7 +103,7 @@ export namespace TrendingAPI {
         price_change_percentage_200d_in_currency?: number
         atl_change_percentage?: number
         /** NFT only */
-        floor_price?: number
+        floor_price?: string
         /** NFT only */
         highest_price?: number
         /** NFT only */

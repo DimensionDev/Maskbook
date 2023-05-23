@@ -6,7 +6,7 @@ import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useNonFungibleAssetsByCollection, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType, type SocialIdentity } from '@masknet/shared-base'
@@ -174,6 +174,7 @@ export function TrendingView(props: TrendingViewProps) {
         onPriceDaysControlChange(TrendingAPI.Days.ONE_DAY)
     }, [JSON.stringify(trending?.market)])
 
+    const isNFT = trending?.coin.type === TokenType.NonFungible
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,
@@ -181,12 +182,11 @@ export function TrendingView(props: TrendingViewProps) {
     } = usePriceStats({
         chainId: result.chainId,
         coinId: trending?.coin.id,
-        dataProvider: trending?.dataProvider,
+        sourceType: isNFT ? SourceType.NFTScan : trending?.dataProvider,
         currency: trending?.currency,
         days,
     })
     // #endregion
-    const isNFT = trending?.coin.type === TokenType.NonFungible
 
     // #region expected chainId
     const swapExpectedContract = useMemo(() => {
