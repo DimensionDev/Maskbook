@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "bin": {
-    "build": "./src/bin/build.ts",
-    "dev": "./src/bin/dev.ts"
+    "build": "./src/bin/build.mjs",
+    "dev": "./src/bin/dev.mjs"
   },
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.4.1",
