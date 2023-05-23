@@ -14,7 +14,6 @@ import {
     type NonFungibleAsset,
     type NonFungibleCollection,
     TokenType,
-    formatBalance,
     leftShift,
 } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
@@ -220,10 +219,6 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                   }
                 : null,
         ])
-
-        console.log({
-            xx: formatBalance(collection.floor_prices[0].value, collection.floor_prices[0].payment_token.decimals),
-        })
 
         return {
             lastUpdated: new Date().toJSON(),
