@@ -14,6 +14,11 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
         setAutoFreeze(false)
 
         const TwitterTheme = produce(baseTheme, (theme) => {
+            if (themeSettings.isDim) {
+                theme.palette.maskColor.bottom = '#15202B'
+                theme.palette.maskColor.secondaryBottom = 'rgba(21, 32, 43, 0.8)'
+            }
+
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
                 main: toRGB(primaryColorRGB),
@@ -35,6 +40,11 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.components.MuiPaper = {
                 defaultProps: {
                     elevation: 0,
+                },
+                styleOverrides: {
+                    root: {
+                        background: theme.palette.maskColor.bottom,
+                    },
                 },
             }
             theme.components.MuiTab = {

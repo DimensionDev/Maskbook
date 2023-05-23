@@ -212,6 +212,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             color: ThemeColor.Blue,
             size: FontSize.Normal,
             mode: ThemeMode.Light,
+            isDim: false,
         },
         nextIDConfig: {
             enable: true,

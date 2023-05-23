@@ -21,7 +21,7 @@ import {
     SocialAccountList,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, ProfileTabs } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -449,24 +449,24 @@ function Content(props: ProfileTabContentProps) {
                                     socialAccount={selectedSocialAccount}
                                 />
                             </Button>
-                            <ThemeProvider theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                <TokenWithSocialGroupMenu
-                                    walletMenuOpen={menuOpen}
-                                    setWalletMenuOpen={setMenuOpen}
-                                    containerRef={buttonRef}
-                                    onAddressChange={onSelect}
-                                    currentAddress={selectedAddress}
-                                    collectionList={collectionList}
-                                    socialAccounts={socialAccounts}
-                                    currentCollection={trendingResult}
-                                    onTokenChange={(currentResult, i) => {
-                                        setCurrentTrendingIndex(i)
-                                        hideInspector(false)
-                                        setMenuOpen(false)
-                                    }}
-                                    fromSocialCard
-                                />
-                            </ThemeProvider>
+
+                            <TokenWithSocialGroupMenu
+                                walletMenuOpen={menuOpen}
+                                setWalletMenuOpen={setMenuOpen}
+                                containerRef={buttonRef}
+                                onAddressChange={onSelect}
+                                currentAddress={selectedAddress}
+                                collectionList={collectionList}
+                                socialAccounts={socialAccounts}
+                                currentCollection={trendingResult}
+                                onTokenChange={(currentResult, i) => {
+                                    setCurrentTrendingIndex(i)
+                                    hideInspector(false)
+                                    setMenuOpen(false)
+                                }}
+                                fromSocialCard
+                            />
+
                             <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>
