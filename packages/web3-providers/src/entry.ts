@@ -78,6 +78,7 @@ import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
 import { SID_DomainAPI } from './SID/index.js'
 import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
+import { ApprovalAPI } from './Approval/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -113,6 +114,7 @@ export const SimpleHashEVM = new SimpleHashAPI_EVM()
 export const SimpleHashSolana = new SimpleHashAPI_Solana()
 export const SnapshotSearch = new SnapshotSearchAPI()
 export const Snapshot = new SnapshotAPI()
+export const Approval = new ApprovalAPI()
 
 // Wallet
 export {

@@ -13,7 +13,7 @@ import {
     SecurityMessageLevel,
 } from './types.js'
 import { SecurityMessages } from './rules.js'
-import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
+import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { fetchJSON } from '../entry-helpers.js'
 import type { AuthorizationAPI, SecurityAPI } from '../entry-types.js'
 

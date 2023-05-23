@@ -15,6 +15,7 @@ import type {
     PriceAPI,
 } from '@masknet/web3-providers/types'
 import { HubStateBaseClient } from '../Hub.js'
+import { isEmpty } from 'lodash-es'
 
 export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseClient<ChainId> {
     protected getProviders(
@@ -98,6 +99,7 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         return attemptUntil(
             providers.map((x) => () => x.getFungibleTokenSpenders?.(options.chainId, options.account)),
             EMPTY_LIST,
+            isEmpty,
         )
     }
 

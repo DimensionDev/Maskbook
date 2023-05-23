@@ -59,7 +59,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                                 isSameAddress(x.tokenInfo.address, context.to),
                         )
 
-                        const spendingCap = new BigNumber(spender?.amount ?? 0).toString()
+                        const spendingCap = new BigNumber(spender?.amount ?? spender?.rawAmount ?? 0).toString()
 
                         const successfulDescription = isZero(parameters.value)
                             ? isZero(spendingCap)

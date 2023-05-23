@@ -10,11 +10,18 @@ import {
     useWeb3State,
     useNetworkDescriptor,
     useNonFungibleTokenContract,
+    useNonFungibleCollections,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { type NetworkDescriptor, TokenType, type NonFungibleContractSpender } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import {
+    type NetworkDescriptor,
+    TokenType,
+    type NonFungibleContractSpender,
+    type NonFungibleCollection,
+    isSameAddress,
+} from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
@@ -156,6 +163,11 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor?.icon}")` : undefined,
     })
 
+    const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+        account,
+    })
+
     if (loading) return <ApprovalLoadingContent />
 
     if (!spenderList || spenderList.length === 0) return <ApprovalEmptyContent />
@@ -163,7 +175,13 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     return (
         <List className={classes.approvalContentWrapper}>
             {spenderList.map((spender, i) => (
-                <ApprovalNFTItem key={i} spender={spender} networkDescriptor={networkDescriptor} chainId={chainId} />
+                <ApprovalNFTItem
+                    key={i}
+                    spender={spender}
+                    networkDescriptor={networkDescriptor}
+                    chainId={chainId}
+                    collection={collections.find((x) => isSameAddress(x.address, spender.contract.address))}
+                />
             ))}
         </List>
     )
@@ -171,12 +189,13 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
 
 interface ApprovalNFTItemProps {
     spender: NonFungibleContractSpender<ChainId, SchemaType>
+    collection: NonFungibleCollection<ChainId, SchemaType> | undefined
     chainId: ChainId
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
-    const { networkDescriptor, spender, chainId } = props
+    const { networkDescriptor, spender, chainId, collection } = props
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
     const { classes, cx } = useStyles({
@@ -211,19 +230,26 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             address={spender.contract.address}
                             name={spender.contract.name}
                             label=""
-                            logoURL={contractDetailed?.iconURL}
+                            logoURL={collection?.iconURL ?? ''}
                             className={classes.logoIcon}
                             tokenType={TokenType.NonFungible}
                         />
 
                         {contractDetailed ? (
-                            <Typography className={classes.primaryText}>{contractDetailed?.symbol}</Typography>
+                            <Typography className={classes.primaryText}>
+                                {contractDetailed?.symbol ||
+                                    spender.contract.name ||
+                                    contractDetailed?.name ||
+                                    collection?.name}
+                            </Typography>
                         ) : null}
-                        <Typography className={classes.secondaryText}>{spender.contract.name}</Typography>
+                        <Typography className={classes.secondaryText}>
+                            {spender.contract.name || contractDetailed?.name || collection?.name}
+                        </Typography>
                     </div>
                     <div className={classes.contractInfo}>
                         <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                        {typeof spender.logo === 'string' ? (
+                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
                             <img src={spender.logo} className={classes.spenderLogoIcon} />
                         ) : (
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
@@ -241,7 +267,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
-                        <Typography className={classes.primaryText}>{spender.amount}</Typography>
+                        <Typography className={classes.primaryText}>{collection?.balance ?? spender.amount}</Typography>
                     </div>
                 </div>
 
