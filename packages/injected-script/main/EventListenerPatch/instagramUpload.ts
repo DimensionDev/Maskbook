@@ -1,4 +1,5 @@
-import { contentFileFromBufferSource, defineFunctionOnContentObject, unwrapXRayVision } from '../utils.js'
+import { unwrapXRayVision } from '../intrinsic_content.js'
+import { contentFileFromBufferSource, defineFunctionOnContentObject } from '../utils.js'
 // TODO: This file is not audited
 export async function instagramUpload(url: string) {
     const result = await window.fetch(url).then((x) => x.arrayBuffer())

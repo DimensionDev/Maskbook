@@ -3,8 +3,8 @@ import { $, $Content } from './intrinsic.js'
 let currentLocationHref = window.location.href
 // Learn more about this hack from https://stackoverflow.com/a/52809105/1986338
 window.history.pushState = new $Content.Proxy(history.pushState, {
-    apply(target, thisArg, params: any) {
-        const val = $.Reflect.apply(target, thisArg, params)
+    apply(pushState, thisArg, params: any) {
+        const val = $.apply(pushState, thisArg, params)
         $Content.dispatchEvent(window, new $Content.Event('locationchange'))
         if (currentLocationHref !== window.location.href) {
             currentLocationHref = window.location.href
@@ -14,8 +14,8 @@ window.history.pushState = new $Content.Proxy(history.pushState, {
     },
 })
 window.history.replaceState = new $Content.Proxy(history.replaceState, {
-    apply(target, thisArg, params: any) {
-        const val = $.Reflect.apply(target, thisArg, params)
+    apply(replaceState, thisArg, params: any) {
+        const val = $.apply(replaceState, thisArg, params)
         $Content.dispatchEvent(window, new $Content.Event('replacestate'))
         if (currentLocationHref !== window.location.href) {
             currentLocationHref = window.location.href

@@ -4,23 +4,15 @@ import { $, $Blessed } from './intrinsic.js'
 import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
 import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
 import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
-import { callRequest, access, bindEvent, execute, until } from './GlobalVariableBridge/index.js'
+import {
+    __content__callRequest,
+    __content__access,
+    __content__onEvent,
+    __content__call,
+    __content__until,
+} from './GlobalVariableBridge/index.js'
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
-import { DispatchEvent, __Event } from './EventListenerPatch/Event.js'
-import { cloneIntoContent, unwrapXRayVision } from './utils.js'
 
-Object.assign(
-    unwrapXRayVision(window),
-    cloneIntoContent({
-        dispatchInput,
-        dispatchPaste,
-        instagramUpload,
-        dispatchPasteImage,
-        hookInputUploadOnce,
-        _Event: __Event,
-        DispatchEvent,
-    }),
-)
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent($.CustomEvent_detail_getter(e as CustomEvent))
     // r comes from JSON.parse, so it must be an ordinary object.
@@ -47,17 +39,17 @@ document.addEventListener(CustomEventId, (e) => {
 
         // web3
         case 'web3BridgeBindEvent':
-            return bindEvent(...args)
+            return __content__onEvent(...args)
         case 'web3BridgeEmitEvent':
             return
         case 'web3BridgeSendRequest':
-            return callRequest(...args)
+            return __content__callRequest(...args)
         case 'web3BridgePrimitiveAccess':
-            return access(...args)
+            return __content__access(...args)
         case 'web3UntilBridgeOnline':
-            return until(...args)
+            return __content__until(...args)
         case 'web3BridgeExecute':
-            return execute(...args)
+            return __content__call(...args)
 
         default:
             const neverEvent: never = type

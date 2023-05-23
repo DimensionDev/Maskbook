@@ -1,4 +1,5 @@
 import { getOwnPropertyDescriptors, takeThis } from './intrinsic_content.js'
+import { noop } from './utils.js'
 
 // The "window" here means another Realm in Firefox
 export const {
@@ -19,7 +20,7 @@ export const {
     DOMException,
 } = window
 export const apply = window.Reflect.apply
-export const reportError = takeThis(window.reportError)<Window> || (() => {})
+export const reportError = takeThis(window.reportError)<Window> || noop
 export const dispatchEvent = takeThis(window.dispatchEvent)<EventTarget>
 
 export const setTimeout = window.setTimeout.bind(window)

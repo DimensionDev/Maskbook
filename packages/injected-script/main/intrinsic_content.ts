@@ -1,4 +1,4 @@
-import type { Getter, Setter } from './intrinsic.js'
+import { $Content, type Getter, type Setter } from './intrinsic.js'
 
 export const takeThis: <F extends (...args: any) => any>(
     f: F,
@@ -12,6 +12,7 @@ export const Reflect = Object.create(
     null,
     Object.getOwnPropertyDescriptors(globalThis.Reflect),
 ) as typeof globalThis.Reflect
+export const { apply } = Reflect
 export const { parse: JSON_parse, stringify: JSON_stringify } = JSON
 export let hasOwn = Object.hasOwn
 if (!hasOwn) {
@@ -48,6 +49,9 @@ export const URL_origin_getter = takeThis<Getter<URL['origin']>>(
 export const Window_document = takeThis<Getter<Window['document']>>(
     Object.getOwnPropertyDescriptor(window, 'document')!.get!,
 )<Window>
+export const Node_nodeName = takeThis<Getter<Node['nodeName']>>(
+    Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName')!.get!,
+)<Node>
 export const Node_parentNode = takeThis<Getter<Node['parentNode']>>(
     Object.getOwnPropertyDescriptor(Node.prototype, 'parentNode')!.get!,
 )<Node>
@@ -80,12 +84,27 @@ export const DocumentActiveElement = Object.getOwnPropertyDescriptors(
 export const CustomEvent_detail_getter = takeThis<Getter<CustomEvent['detail']>>(
     Object.getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!,
 )<CustomEvent>
+export const Performance_now = globalThis.performance.now.bind(globalThis.performance)
 // #endregion
 
 // #region Firefox magic
-const _XPCNativeWrapper = typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper : null
 const _cloneInto = typeof cloneInto !== 'undefined' ? cloneInto : null
 const _exportFunction = typeof exportFunction !== 'undefined' ? exportFunction : null
-export { _XPCNativeWrapper as XPCNativeWrapper, _cloneInto as cloneInto, _exportFunction as exportFunction }
+export const unwrapXRayVision: <T extends object>(value: T) => T =
+    typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper.unwrap.bind(XPCNativeWrapper) : Object
+export const cloneIntoContent: <T extends object>(value: T) => T =
+    _exportFunction && _cloneInto
+        ? function (value) {
+              if (typeof value === 'function') return _exportFunction(value, $Content.window)
+              return _cloneInto(value, $Content.window, {
+                  cloneFunctions: true,
+                  __proto__: null,
+              })
+          }
+        : Object
+export const cloneIntoContentAny: <T>(value: T) => T =
+    _exportFunction && _cloneInto ? (cloneIntoContent as any) : (x) => x
+
+export { _cloneInto as cloneInto, _exportFunction as exportFunction }
 export const isFirefox = typeof cloneInto !== 'undefined'
 // #endregion

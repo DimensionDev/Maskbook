@@ -1,16 +1,6 @@
 import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
 import { $Content, $, $Blessed } from './intrinsic.js'
-import { exportFunction, cloneInto, XPCNativeWrapper } from './intrinsic_content.js'
-
-export function cloneIntoContent<T>(obj: T) {
-    if (typeof obj === 'function') {
-        if (exportFunction) return exportFunction(obj, $Content.window)
-        return obj
-    } else {
-        if (cloneInto) return cloneInto(obj, $Content.window, { cloneFunctions: true })
-        return obj
-    }
-}
+import { exportFunction, isFirefox, unwrapXRayVision } from './intrinsic_content.js'
 
 export function defineFunctionOnContentObject<T extends object>(
     contentObject: T,
@@ -18,8 +8,8 @@ export function defineFunctionOnContentObject<T extends object>(
     apply: (target: any, thisArg: any, argArray?: any) => any,
 ) {
     // Firefox magics!
-    if (XPCNativeWrapper) {
-        const rawObject = XPCNativeWrapper.unwrap(contentObject)
+    if (isFirefox) {
+        const rawObject = unwrapXRayVision(contentObject)
         const rawFunction = rawObject[key]
         exportFunction!(
             function (this: any) {
@@ -35,10 +25,6 @@ export function defineFunctionOnContentObject<T extends object>(
         __proto__: null,
         apply,
     })
-}
-
-export function unwrapXRayVision<T>(x: T) {
-    return $.XPCNativeWrapper?.unwrap(x) ?? x
 }
 
 export function contentFileFromBufferSource(format: string, fileName: string, xray_fileContent: number[] | Uint8Array) {

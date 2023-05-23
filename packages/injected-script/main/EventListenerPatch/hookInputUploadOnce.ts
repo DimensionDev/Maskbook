@@ -1,6 +1,5 @@
-import type { InternalEvents } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
-import { cloneIntoContent, contentFileFromBufferSource } from '../utils.js'
+import { $, $Blessed, $Content } from '../intrinsic.js'
+import { contentFileFromBufferSource } from '../utils.js'
 import { __Event, DispatchEvent } from './Event.js'
 
 const proto = HTMLInputElement.prototype
@@ -21,16 +20,21 @@ const proto = HTMLInputElement.prototype
  * @param triggerOnActiveElementNow
  */
 export function hookInputUploadOnce(
-    ...[format, fileName, fileArray, triggerOnActiveElementNow]: InternalEvents['hookInputUploadOnce']
+    format: string,
+    fileName: string,
+    fileArray: number[],
+    triggerOnActiveElementNow: boolean,
 ) {
-    let timer: ReturnType<typeof setTimeout> | null = null
-    const e = new __Event('change', { bubbles: true, cancelable: true })
+    $.setPrototypeOf(fileArray, $Blessed.ArrayPrototype)
+
+    let timer: number | null = null
+    const event = new __Event('change', { bubbles: true })
     const file = contentFileFromBufferSource(format, fileName, fileArray)
 
     const old = proto.click
     proto.click = function (this: HTMLInputElement) {
-        const fileList: Partial<FileList> = cloneIntoContent({
-            item: cloneIntoContent((i) => {
+        const fileList: Partial<FileList> = $.cloneIntoContent({
+            item: $.cloneIntoContent((i: number) => {
                 if (i === 0) return file
                 return null
             }),
@@ -43,7 +47,7 @@ export function hookInputUploadOnce(
         })
         if (timer !== null) $Content.clearTimeout(timer)
         timer = $Content.setTimeout(() => {
-            DispatchEvent(this, e)
+            DispatchEvent(this, event)
             proto.click = old
             $.Reflect.deleteProperty(this, 'files')
         }, 200)

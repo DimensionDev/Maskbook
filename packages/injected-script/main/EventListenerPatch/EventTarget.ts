@@ -1,4 +1,4 @@
-import { cloneIntoContent, defineFunctionOnContentObject } from '../utils.js'
+import { defineFunctionOnContentObject } from '../utils.js'
 import { $, $Blessed, $Content, isNode, isWindow } from '../intrinsic.js'
 
 export const CapturingEvents: ReadonlySet<string> = $Blessed.Set<keyof DocumentEventMap>([
@@ -25,14 +25,14 @@ defineFunctionOnContentObject(
     'addEventListener',
     // https://dom.spec.whatwg.org/#dom-eventtarget-addeventlistener
     (addEventListener, eventTarget: EventTarget, args: Parameters<EventTarget['addEventListener']>) => {
-        if (!CapturingEvents.has(args[0])) return $.Reflect.apply(addEventListener, eventTarget, args)
+        if (!CapturingEvents.has(args[0])) return $.apply(addEventListener, eventTarget, args)
 
         const listener = normalizeAddEventListenerArgs(args)
 
-        const native_result = $.Reflect.apply(
+        const native_result = $.apply(
             addEventListener,
             eventTarget,
-            cloneIntoContent([
+            $.cloneIntoContent([
                 listener.type,
                 listener.callback,
                 {
@@ -89,7 +89,7 @@ defineFunctionOnContentObject(
         }
 
         if (listener.signal !== null) {
-            $.Reflect.apply(addEventListener, listener.signal, [
+            $.apply(addEventListener, listener.signal, [
                 'abort',
                 $.bind(RemoveListener, null, listener, listenerList),
                 {
@@ -106,7 +106,7 @@ defineFunctionOnContentObject(
     $Content.EventTargetPrototype,
     'removeEventListener',
     (removeEventListener, eventTarget: EventTarget, args: Parameters<EventTarget['removeEventListener']>) => {
-        if (!CapturingEvents.has(args[0])) return $.Reflect.apply(removeEventListener, eventTarget, args)
+        if (!CapturingEvents.has(args[0])) return $.apply(removeEventListener, eventTarget, args)
 
         let capture = false
         {

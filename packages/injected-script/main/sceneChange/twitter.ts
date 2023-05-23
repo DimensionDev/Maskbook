@@ -29,7 +29,6 @@ function update() {
         const event = new $Content.CustomEvent('scenechange', {
             // @ts-expect-error null prototype
             __proto__: null,
-            cancelable: true,
             detail: {
                 __proto__: null,
                 scene: 'profile',
