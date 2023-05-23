@@ -12,7 +12,7 @@ let buttonOffsetHeight: number = 0
 let canvasWidth: number = 0
 let canvasHeight: number = 0
 let globalCtx: CanvasRenderingContext2D | undefined
-
+let requestId: number | undefined
 const renderConfetti = () => {
     if (globalCtx) {
         globalCtx.clearRect(0, 0, canvasWidth, canvasHeight)
@@ -88,10 +88,8 @@ const renderConfetti = () => {
         })
     }
 
-    window.requestAnimationFrame(renderConfetti)
+    requestId = window.requestAnimationFrame(renderConfetti)
 }
-
-renderConfetti()
 
 export function useConfettiExplosion() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -105,7 +103,9 @@ export function useConfettiExplosion() {
         }
 
         window.addEventListener('resize', resize)
+        renderConfetti()
         return () => {
+            if (requestId) window.cancelAnimationFrame(requestId)
             window.removeEventListener('resize', resize)
         }
     }, [])
