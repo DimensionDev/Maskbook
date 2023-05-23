@@ -3,10 +3,10 @@ import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { Box, Link, Typography, ThemeProvider } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
 import { AddressItem, Image, useSnackbarCallback, TokenWithSocialGroupMenu } from '@masknet/shared'
-import { makeStyles, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -191,33 +191,33 @@ export const ProfileBar = memo<ProfileBarProps>(
                         </div>
                     ) : null}
                 </Box>
-                <ThemeProvider theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                    <TokenWithSocialGroupMenu
-                        walletMenuOpen={walletMenuOpen}
-                        setWalletMenuOpen={setWalletMenuOpen}
-                        containerRef={containerRef}
-                        fromSocialCard
-                        onAddressChange={onAddressChange}
-                        currentAddress={address}
-                        socialAccounts={socialAccounts}
-                        collectionList={collectionList}
-                        onTokenChange={(currentResult) => {
-                            setWalletMenuOpen(false)
-                            if (!badgeBounding) return
-                            PluginTraderMessages.trendingAnchorObserved.sendToLocal({
-                                name: identity.identifier?.userId || '',
-                                identity,
-                                address,
-                                badgeBounding,
-                                type: TrendingAPI.TagType.HASH,
-                                isCollectionProjectPopper: true,
-                                currentResult,
-                            })
 
-                            CrossIsolationMessages.events.profileCardEvent.sendToLocal({ open: false })
-                        }}
-                    />
-                </ThemeProvider>
+                <TokenWithSocialGroupMenu
+                    walletMenuOpen={walletMenuOpen}
+                    setWalletMenuOpen={setWalletMenuOpen}
+                    containerRef={containerRef}
+                    fromSocialCard
+                    onAddressChange={onAddressChange}
+                    currentAddress={address}
+                    socialAccounts={socialAccounts}
+                    collectionList={collectionList}
+                    onTokenChange={(currentResult) => {
+                        setWalletMenuOpen(false)
+                        if (!badgeBounding) return
+                        PluginTraderMessages.trendingAnchorObserved.sendToLocal({
+                            name: identity.identifier?.userId || '',
+                            identity,
+                            address,
+                            badgeBounding,
+                            type: TrendingAPI.TagType.HASH,
+                            isCollectionProjectPopper: true,
+                            currentResult,
+                        })
+
+                        CrossIsolationMessages.events.profileCardEvent.sendToLocal({ open: false })
+                    }}
+                />
+
                 {children}
             </Box>
         )
