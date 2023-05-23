@@ -4,7 +4,7 @@ const { Map: _Map, Set: _Set, WeakMap: _WeakMap } = globalThis
 const MapPrototype: typeof _Map.prototype = create(null, getOwnPropertyDescriptors(_Map.prototype))
 const SetPrototype: typeof _Set.prototype = create(null, getOwnPropertyDescriptors(_Set.prototype))
 const WeakMapPrototype: typeof _WeakMap.prototype = create(null, getOwnPropertyDescriptors(_WeakMap.prototype))
-export const ArrayPrototype: typeof globalThis.Array.prototype = create(
+const ArrayPrototype: typeof globalThis.Array.prototype = create(
     null,
     getOwnPropertyDescriptors(globalThis.Array.prototype) as any,
 )
@@ -101,6 +101,9 @@ export function WeakMap<K extends object, V>(): WeakMap<K, V> {
 export function Set<T>(iterable?: Iterable<T> | null | undefined): Set<T> {
     return setPrototypeOf(new _Set(iterable), SetPrototype)
 }
-export function Array<T extends readonly unknown[]>(...args: T): T {
+export function Array_from<T extends readonly unknown[]>(...args: T): T {
     return setPrototypeOf(args, ArrayPrototype)
+}
+export function ExistArray<T extends readonly unknown[]>(array: T): T {
+    return setPrototypeOf(array, ArrayPrototype)
 }

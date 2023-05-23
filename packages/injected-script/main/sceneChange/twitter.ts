@@ -1,8 +1,7 @@
 import { TWITTER_RESERVED_SLUGS } from '../../shared/index.js'
-import { $, $Blessed, $Content } from '../intrinsic.js'
+import { $, $Content } from '../intrinsic.js'
 import { isTwitter } from '../utils.js'
 
-$.setPrototypeOf(TWITTER_RESERVED_SLUGS, $Blessed.ArrayPrototype)
 function getFirstSlug() {
     const slugs: string[] = $.ArrayFilter($.StringSplit(location.pathname, '/' as any), $.Boolean)
     return slugs[0]
@@ -12,7 +11,7 @@ let firstSlug = ''
 function update() {
     const newFirstSlug = getFirstSlug()
     // reset to void wrong value
-    if (!newFirstSlug || TWITTER_RESERVED_SLUGS.includes(newFirstSlug)) {
+    if (!newFirstSlug || $.ArrayIncludes(TWITTER_RESERVED_SLUGS, newFirstSlug)) {
         const event: WindowEventMap['scenechange'] = new $Content.CustomEvent('scenechange', {
             // @ts-expect-error null prototype
             __proto__: null,

@@ -5,21 +5,18 @@ import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
 import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
 import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
 import {
-    __content__callRequest,
-    __content__access,
-    __content__onEvent,
-    __content__call,
-    __content__until,
+    __unsafe__callRequest,
+    __unsafe__access,
+    __unsafe__onEvent,
+    __unsafe__call,
+    __unsafe__until,
 } from './GlobalVariableBridge/index.js'
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
 
 document.addEventListener(CustomEventId, (e) => {
-    const r = decodeEvent($.CustomEvent_detail_getter(e as CustomEvent))
-    // r comes from JSON.parse, so it must be an ordinary object.
-    $.setPrototypeOf(r, $Blessed.ArrayPrototype)
+    const [type, args] = $Blessed.ExistArray(decodeEvent($.CustomEvent_detail_getter(e as CustomEvent)))
 
-    const [type, args] = r
-    $.setPrototypeOf(args, $Blessed.ArrayPrototype)
+    $Blessed.ExistArray(args)
     if (args.length < 1) return
 
     switch (type) {
@@ -39,17 +36,17 @@ document.addEventListener(CustomEventId, (e) => {
 
         // web3
         case 'web3BridgeBindEvent':
-            return __content__onEvent(...args)
+            return __unsafe__onEvent(...args)
         case 'web3BridgeEmitEvent':
             return
         case 'web3BridgeSendRequest':
-            return __content__callRequest(...args)
+            return __unsafe__callRequest(...args)
         case 'web3BridgePrimitiveAccess':
-            return __content__access(...args)
+            return __unsafe__access(...args)
         case 'web3UntilBridgeOnline':
-            return __content__until(...args)
+            return __unsafe__until(...args)
         case 'web3BridgeExecute':
-            return __content__call(...args)
+            return __unsafe__call(...args)
 
         default:
             const neverEvent: never = type

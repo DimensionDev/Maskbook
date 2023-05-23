@@ -19,7 +19,6 @@ export const {
     EventTarget,
     DOMException,
 } = window
-export const apply = window.Reflect.apply
 export const reportError = takeThis(window.reportError)<Window> || noop
 export const dispatchEvent = takeThis(window.dispatchEvent)<EventTarget>
 
@@ -36,6 +35,5 @@ export const InputEventPrototypeDesc = getOwnPropertyDescriptors(InputEventProto
 
 export const EventTargetPrototype = window.EventTarget.prototype
 export const removeListener = takeThis(window.removeEventListener)<EventTarget>
-export const XMLHttpRequestPrototype = window.XMLHttpRequest.prototype
 const _window = window
 export { _window as window }

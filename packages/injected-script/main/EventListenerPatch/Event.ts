@@ -74,7 +74,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
         let activationTarget = null
         let relatedTarget: EventTarget | null = ReTarget(event.#relatedTarget, target)
         if (target !== relatedTarget || target === event.#relatedTarget) {
-            const touchTargets: PotentialEventTarget[] = $Blessed.Array()
+            const touchTargets: PotentialEventTarget[] = $Blessed.Array_from()
             for (const touchTarget of event.#touchTargetList) {
                 touchTargets.push(ReTarget(touchTarget, target))
             }
@@ -91,7 +91,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
                 // TODO: If slottable is non-null: ...
                 // TODO: If parent is a slottable and is assigned, then set slottable to parent.
                 relatedTarget = ReTarget(event.#relatedTarget, parent)
-                const touchTargets: PotentialEventTarget[] = $Blessed.Array()
+                const touchTargets: PotentialEventTarget[] = $Blessed.Array_from()
                 for (const touchTarget of event.#touchTargetList) {
                     touchTargets.push(ReTarget(touchTarget, parent))
                 }
@@ -152,13 +152,13 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
 
         event.#eventPhase = EVENT_PHASE_NONE
         event.#currentTarget = null
-        event.#path = $Blessed.Array()
+        event.#path = $Blessed.Array_from()
         event.#dispatch = false
         event.#stopPropagation = false
         event.#stopImmediatePropagation = false
         if (clearTargets) {
             event.#target = event.#relatedTarget = null
-            event.#touchTargetList = $Blessed.Array()
+            event.#touchTargetList = $Blessed.Array_from()
         }
         if (activationTarget !== null) {
             if (!event.#canceled) {
@@ -392,8 +392,8 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
         return event.#timeStamp
     }
     #relatedTarget: EventTarget | null = null
-    #touchTargetList: PotentialEventTarget[] = $Blessed.Array()
-    #path: PathRecord[] = $Blessed.Array()
+    #touchTargetList: PotentialEventTarget[] = $Blessed.Array_from()
+    #path: PathRecord[] = $Blessed.Array_from()
     #eventPhase = EVENT_PHASE_NONE
     get eventPhase(): number {
         const event = GetWrappedJSObject(this)

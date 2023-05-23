@@ -3,6 +3,12 @@ import { $Content, type Getter, type Setter } from './intrinsic.js'
 export const takeThis: <F extends (...args: any) => any>(
     f: F,
 ) => <T>(self: T, ...args: Parameters<F>) => ReturnType<F> = Function.prototype.bind.bind(Function.prototype.call)
+export const bind: <Args extends readonly unknown[], This, Return>(
+    f: (this: This, ...args: Args) => Return,
+    thisArg: This,
+    ...args: Args
+) => Return = takeThis(Function.prototype.bind) as any
+
 // #region ECMAScript intrinsic
 // ECMAScript
 export const { String, Promise, Boolean } = globalThis
@@ -19,27 +25,20 @@ if (!hasOwn) {
     const { hasOwnProperty } = Object.prototype
     hasOwn = (o, v) => Reflect.apply(hasOwnProperty, o, [v])
 }
-
-export const bind: <Args extends readonly unknown[], This, Return>(
-    f: (this: This, ...args: Args) => Return,
-    thisArg: This,
-    ...args: Args
-) => Return = takeThis(Function.prototype.bind) as any
 export const StringSplit = takeThis(globalThis.String.prototype.split)<string>
 export const StringInclude = takeThis(globalThis.String.prototype.includes)<string>
 export const ArrayFilter = takeThis(globalThis.Array.prototype.filter)<readonly unknown[]>
+export const ArrayIncludes = takeThis(globalThis.Array.prototype.includes)<readonly unknown[]>
 export const ArrayShift = takeThis(globalThis.Array.prototype.shift)<unknown[]>
 export const ArrayUnshift = takeThis(globalThis.Array.prototype.unshift)<unknown[]>
 export const ArrayPush = takeThis(globalThis.Array.prototype.push)<unknown[]>
-export const ArrayIteratorPrototype = Object.getOwnPropertyDescriptors(Object.getPrototypeOf([].values())) as any
-
 export const PromiseResolve = globalThis.Promise.resolve.bind(globalThis.Promise)
 export const DateNow = globalThis.Date.now
 // #endregion
 
 // #region  DOM
 export const { URL } = globalThis
-export const { warn: ConsoleWarn, error: ConsoleError } = console
+export const ConsoleError = console.error
 export const AbortSignal_aborted = takeThis<Getter<AbortSignal['aborted']>>(
     Object.getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!,
 )<AbortSignal>
@@ -77,7 +76,6 @@ export const HTMLTextAreaElement_value_setter = takeThis<Setter<HTMLTextAreaElem
 export const HTMLInputElement_value_setter = takeThis<Setter<HTMLInputElement['value']>>(
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!,
 )<HTMLInputElement>
-export const DataTransfer_setData = takeThis(DataTransfer.prototype.setData)<DataTransfer>
 export const DocumentActiveElement = Object.getOwnPropertyDescriptors(
     Object.getPrototypeOf(Object.getPrototypeOf(document)),
 ).activeElement.get!.bind(document) as () => Document['activeElement']
@@ -105,6 +103,6 @@ export const cloneIntoContent: <T extends object>(value: T) => T =
 export const cloneIntoContentAny: <T>(value: T) => T =
     _exportFunction && _cloneInto ? (cloneIntoContent as any) : (x) => x
 
-export { _cloneInto as cloneInto, _exportFunction as exportFunction }
-export const isFirefox = typeof cloneInto !== 'undefined'
+export { _exportFunction as exportFunction }
+export const isFirefox = !!_cloneInto
 // #endregion

@@ -25,7 +25,7 @@ export function hookInputUploadOnce(
     fileArray: number[],
     triggerOnActiveElementNow: boolean,
 ) {
-    $.setPrototypeOf(fileArray, $Blessed.ArrayPrototype)
+    $Blessed.ExistArray(fileArray)
 
     let timer: number | null = null
     const event = new __Event('change', { bubbles: true })
