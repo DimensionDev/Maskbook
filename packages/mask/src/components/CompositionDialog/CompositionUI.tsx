@@ -24,8 +24,6 @@ import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMeth
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
 import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
-import { PersonaAction } from '@masknet/shared'
-import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,20 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-    },
-    actions: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        padding: 16,
-        boxSizing: 'border-box',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        background: theme.palette.background.paper,
     },
     between: {
         justifyContent: 'space-between',
@@ -90,12 +74,10 @@ const useStyles = makeStyles()((theme) => ({
                 : '0px 0px 20px rgba(255, 255, 255, 0.12);',
         background: alpha(theme.palette.maskColor.bottom, 0.8),
         justifyContent: 'space-between',
+        display: 'flex',
     },
-    persona: {
-        padding: 0,
-        background: alpha(theme.palette.maskColor.bottom, 0.8),
-        width: 'auto',
-        boxShadow: 'none',
+    personaAction: {
+        flex: 1,
     },
 }))
 
@@ -122,6 +104,7 @@ export interface CompositionProps {
     version: -38 | -37
     setVersion(version: -38 | -37): void
     initialMetas?: Record<string, unknown>
+    personaAction?: React.ReactNode
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
@@ -142,8 +125,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { classes, cx } = useStyles()
     const { t } = useI18N()
     const id = useId()
-
-    const persona = useCurrentPersona()
 
     const [currentPostSize, __updatePostSize] = useState(0)
 
@@ -289,7 +270,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 ) : null}
             </div>
             <DialogActions className={classes.action}>
-                <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
+                <div className={classes.personaAction}>{props.personaAction}</div>
                 <div>
                     {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
                     {props.requireClipboardPermission && !props.hasClipboardPermission ? (

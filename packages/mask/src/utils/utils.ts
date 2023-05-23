@@ -6,7 +6,7 @@ import { isNull } from 'lodash-es'
 import { pasteImage } from '@masknet/injected-script'
 import Services from '../extension/service.js'
 import { ProfileIdentifier, type ProfileInformationFromNextID } from '@masknet/shared-base'
-import { batch } from 'async-call-rpc'
+import { notify } from 'async-call-rpc'
 /**
  * Download given url return as Blob
  */
@@ -60,7 +60,7 @@ export async function attachNextIDToProfile(nextID: ProfileInformationFromNextID
     const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
     if (!nextID?.fromNextID || !nextID.linkedPersona || !whoAmI) return
-    const [rpc, emit] = batch(Services.Identity)
+    const rpc = notify(Services.Identity)
     nextID.linkedTwitterNames?.forEach((x) => {
         const newItem = {
             ...nextID,
@@ -69,5 +69,4 @@ export async function attachNextIDToProfile(nextID: ProfileInformationFromNextID
         }
         rpc.attachNextIDPersonaToProfile(newItem, whoAmI)
     })
-    emit()
 }

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { InjectedDialog, PersonaAction, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { DialogContent } from '@mui/material'
+import { DialogContent, alpha } from '@mui/material'
 import { Flags } from '@masknet/flags'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -17,8 +17,9 @@ import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus.js'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
         minWidth: 400,
         width: 600,
@@ -32,7 +33,13 @@ const useStyles = makeStyles()({
     dialogContent: {
         padding: 0,
     },
-})
+    persona: {
+        padding: 0,
+        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        width: 'auto',
+        boxShadow: 'none',
+    },
+}))
 export interface PostDialogProps {
     type?: CompositionType
     requireClipboardPermission?: boolean
@@ -126,6 +133,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         if (!hasLocalKey && version === -38) return E2EUnavailableReason.NoLocalKey
         return
     })()
+    const persona = useCurrentPersona()
+    const personaAction = persona ? (
+        <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
+    ) : null
 
     return (
         <InjectedDialog
@@ -152,6 +163,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     e2eEncryptionDisabled={isE2E_Disabled}
                     isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     initialMetas={initialMetas}
+                    personaAction={personaAction}
                 />
             </DialogContent>
         </InjectedDialog>
