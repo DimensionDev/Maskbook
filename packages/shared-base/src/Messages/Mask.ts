@@ -128,7 +128,8 @@ export type ProfileCardEvent =
           open: true
           userId: string
           address?: string
-          badgeBounding: DOMRect
+          anchorBounding: DOMRect
+          anchorEl: HTMLElement | null
           external?: boolean
       }
 

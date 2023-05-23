@@ -14,14 +14,3 @@ export interface LensTokenStorageType {
         }
     >
 }
-
-/**
- * Bounding of the lens badge, can be used to position the LensPopup
- */
-export interface BadgeBounding extends DOMRect {
-    height: number
-    width: number
-    left: number
-    top: number
-    right: number
-}

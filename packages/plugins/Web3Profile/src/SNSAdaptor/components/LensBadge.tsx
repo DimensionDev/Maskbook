@@ -36,7 +36,11 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts, userId }) => {
             clearTimeout(openTimer)
 
             openTimer = setTimeout(() => {
-                openPopup(button.getBoundingClientRect().toJSON(), accounts, userId)
+                openPopup({
+                    lensAccounts: accounts,
+                    userId,
+                    popupAnchorEl: buttonRef.current,
+                })
             }, 200)
         }
         const leave = () => {
