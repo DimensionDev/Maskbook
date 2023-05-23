@@ -1,7 +1,7 @@
 import type { InternalEvents } from '../../shared/index.js'
 import { $, $Content } from '../intrinsic.js'
 import { cloneIntoContent, contentFileFromBufferSource } from '../utils.js'
-import { dispatchEventRaw } from './capture.js'
+import { __Event, DispatchEvent } from './Event.js'
 
 const proto = HTMLInputElement.prototype
 
@@ -24,10 +24,7 @@ export function hookInputUploadOnce(
     ...[format, fileName, fileArray, triggerOnActiveElementNow]: InternalEvents['hookInputUploadOnce']
 ) {
     let timer: ReturnType<typeof setTimeout> | null = null
-    const e = new $Content.Event('change', {
-        bubbles: true,
-        cancelable: true,
-    })
+    const e = new __Event('change', { bubbles: true, cancelable: true })
     const file = contentFileFromBufferSource(format, fileName, fileArray)
 
     const old = proto.click
@@ -46,7 +43,7 @@ export function hookInputUploadOnce(
         })
         if (timer !== null) $Content.clearTimeout(timer)
         timer = $Content.setTimeout(() => {
-            dispatchEventRaw(this, e, {})
+            DispatchEvent(this, e)
             proto.click = old
             $.Reflect.deleteProperty(this, 'files')
         }, 200)

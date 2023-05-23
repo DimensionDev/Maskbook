@@ -1,4 +1,4 @@
-import { $Content, $ } from './intrinsic.js'
+import { $, $Content } from './intrinsic.js'
 
 let currentLocationHref = window.location.href
 // Learn more about this hack from https://stackoverflow.com/a/52809105/1986338

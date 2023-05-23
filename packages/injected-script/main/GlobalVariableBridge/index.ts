@@ -35,7 +35,7 @@ export function access(path: string, id: number, property: string) {
 }
 
 export function callRequest(path: string, id: number, request: unknown) {
-    handlePromise(id, () => (read(path) as any)?.request(request))
+    handlePromise(id, () => (read(path) as any)?.request(cloneIntoContent(request)))
 }
 
 export function execute(path: string, id: number, ...args: unknown[]) {
@@ -49,7 +49,7 @@ export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event
         ;(read(path) as any)?.on(
             event,
             cloneIntoContent((...args: any[]) => {
-                // TODO: type unsound
+                // TODO: can we trust args?
                 sendEvent(bridgeEvent, path, event, args)
             }),
         )
@@ -57,16 +57,15 @@ export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event
 }
 
 function untilInner(name: string) {
-    const win = unwrappedWindow
-    if ($.Reflect.has(win, name)) return $.PromiseResolve(true)
+    if ($.Reflect.has(unwrappedWindow, name)) return $.PromiseResolve(true)
 
     let restCheckTimes = 150 // 30s
 
-    return new Promise<true>((resolve) => {
+    return new $.Promise<true>((resolve) => {
         function check() {
             restCheckTimes -= 1
             if (restCheckTimes < 0) return
-            if ($.Reflect.has(win, name)) return resolve(true)
+            if ($.Reflect.has(unwrappedWindow, name)) return resolve(true)
             $Content.setTimeout(check, 200)
         }
         check()

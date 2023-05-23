@@ -1,4 +1,4 @@
-export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
+export const CustomEventId = '413f832d-db5c-4779-8d7e-1f7127bd167b'
 export interface InternalEvents {
     /** Simulate a paste event on the activeElement */
     paste: [text: string]

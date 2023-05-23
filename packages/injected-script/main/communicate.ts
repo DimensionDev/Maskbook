@@ -1,20 +1,34 @@
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 import { instagramUpload } from './EventListenerPatch/instagramUpload.js'
-import { $, bless } from './intrinsic.js'
+import { $, $Blessed } from './intrinsic.js'
 import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
 import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
 import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
 import { callRequest, access, bindEvent, execute, until } from './GlobalVariableBridge/index.js'
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
+import { DispatchEvent, __Event } from './EventListenerPatch/Event.js'
+import { cloneIntoContent, unwrapXRayVision } from './utils.js'
 
+Object.assign(
+    unwrapXRayVision(window),
+    cloneIntoContent({
+        dispatchInput,
+        dispatchPaste,
+        instagramUpload,
+        dispatchPasteImage,
+        hookInputUploadOnce,
+        _Event: __Event,
+        DispatchEvent,
+    }),
+)
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent($.CustomEvent_detail_getter(e as CustomEvent))
-    if (r[1].length < 1) return
-
-    bless(r, $.ArrayDesc)
-    bless(r[1], $.ArrayDesc)
+    // r comes from JSON.parse, so it must be an ordinary object.
+    $.setPrototypeOf(r, $Blessed.ArrayPrototype)
 
     const [type, args] = r
+    $.setPrototypeOf(args, $Blessed.ArrayPrototype)
+    if (args.length < 1) return
 
     switch (type) {
         case 'input':
