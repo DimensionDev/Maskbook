@@ -1,16 +1,7 @@
-import {
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    NextIDPlatform,
-    ProfileIdentifier,
-    type ProfileInformation as Profile,
-    type ProfileInformationFromNextID,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { batch } from 'async-call-rpc'
-import { cloneDeep, uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
-import Services from '../../../extension/service.js'
 import { MaskMessages, useI18N } from '../../../utils/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
@@ -70,23 +61,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         return uniqBy(profileItems.concat(NextIDItems, selected), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
     }, [NextIDItems, selected, items.recipients, myUserId])
 
-    const onSelect = async (item: ProfileInformationFromNextID) => {
-        onSetSelected([...selected, item])
-        const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
-
-        if (!item?.fromNextID || !item.linkedPersona || !whoAmI) return
-        const [rpc, emit] = batch(Services.Identity)
-        item.linkedTwitterNames?.forEach((x) => {
-            const newItem = {
-                ...item,
-                nickname: x,
-                identifier: ProfileIdentifier.of('twitter.com', x).expect(`${x} should be a valid user id`),
-            }
-            rpc.attachNextIDPersonaToProfile(newItem, whoAmI)
-        })
-        emit()
-    }
-
     useEffect(() => {
         if (!open) return
         items.request()
@@ -103,14 +77,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             submitDisabled={false}
             onSubmit={onClose}
             onClose={onClose}
-            onSelect={(item) => onSelect(item as ProfileInformationFromNextID)}
-            onDeselect={(item) => {
-                onSetSelected(
-                    cloneDeep(selected).filter(
-                        (x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex,
-                    ),
-                )
-            }}
+            onSetSelected={onSetSelected}
         />
     )
 }

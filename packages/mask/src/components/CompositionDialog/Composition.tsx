@@ -4,7 +4,7 @@ import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { DialogActions, DialogContent } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { Flags } from '@masknet/flags'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -30,7 +30,7 @@ const useStyles = makeStyles()({
         visibility: 'hidden',
     },
     dialogContent: {
-        padding: 16,
+        padding: 0,
     },
 })
 export interface PostDialogProps {
@@ -154,7 +154,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     initialMetas={initialMetas}
                 />
             </DialogContent>
-            <DialogActions sx={{ height: 68, padding: '0px !important' }} />
         </InjectedDialog>
     )
 }
