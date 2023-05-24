@@ -53,34 +53,38 @@ export function useFollow(
 
     const followWithProxyAction = useCallback(
         async (token: string) => {
-            try {
-                if (!profileId || chainId !== ChainId.Matic || followModule || !connection || !hasDefaultProfile) return
-                const proxyAction = await Lens.followWithProxyAction(profileId, { token })
-                if (!proxyAction) return
-                for (let i = 0; i < 30; i += 1) {
-                    const receipt = await Lens.queryProxyStatus(proxyAction, { token })
-                    if (!receipt) return
-                    switch (receipt.__typename) {
-                        case ProxyActionType.ProxyActionError:
-                            throw new Error(receipt.reason)
-                        case ProxyActionType.ProxyActionQueued:
-                            await delay(1000)
-                            continue
-                        case ProxyActionType.ProxyActionStatusResult:
-                            const result = await connection.confirmTransaction(receipt.txHash)
-                            if (!result.status) return
-                            return proxyAction
-                        default:
-                            // TODO: error
-                            return
-                    }
-                }
-                return
-            } catch {
-                return
-            }
+            if (!profileId || chainId !== ChainId.Matic || followModule || !connection || !hasDefaultProfile) return
+            return Lens.followWithProxyAction(profileId, { token })
         },
         [profileId, chainId, followModule, connection, hasDefaultProfile],
+    )
+
+    const queryProxyActionStatus = useCallback(
+        async (token: string, proxyAction?: string) => {
+            if (!proxyAction || !connection) return
+
+            for (let i = 0; i < 30; i += 1) {
+                const receipt = await Lens.queryProxyStatus(proxyAction, { token })
+                if (!receipt) return
+                switch (receipt.__typename) {
+                    case ProxyActionType.ProxyActionError:
+                        throw new Error(receipt.reason)
+                    case ProxyActionType.ProxyActionQueued:
+                        await delay(1000)
+                        continue
+                    case ProxyActionType.ProxyActionStatusResult:
+                        const result = await connection.confirmTransaction(receipt.txHash)
+                        if (!result.status) return
+                        return proxyAction
+                    default:
+                        // TODO: error
+                        return
+                }
+            }
+
+            return
+        },
+        [connection],
     )
 
     const handleFollow = useCallback<(event: MouseEvent<HTMLElement>) => Promise<void>>(
@@ -92,11 +96,15 @@ export function useFollow(
                 if (!profileId || !connection || chainId !== ChainId.Matic) return
                 const token = await handleQueryAuthenticate()
                 if (!token) return
-                onSuccess?.(cloneEvent)
-                setLoading(false)
                 const proxyAction = await followWithProxyAction(token)
+                if (proxyAction) {
+                    onSuccess?.(cloneEvent)
+                    setLoading(false)
+                }
 
-                if (!proxyAction) {
+                const result = await queryProxyActionStatus(token, proxyAction)
+
+                if (!result) {
                     setLoading(true)
                     const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
 
