@@ -41,7 +41,6 @@ export const {
     EventTarget,
     DOMException,
 } = window
-export const Array_of = window.Array.of
 export const reportError = takeThisF(window.reportError)<Window> || noop
 
 export const setTimeout = window.setTimeout.bind(window)
