@@ -241,7 +241,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
             Call_A_User_Objects_Operation: {
                 let __unsafe__X: EventListener
                 let __unsafe__thisArg: object = event.#currentTarget!
-                if (typeof listener.callback === 'function') __unsafe__X = $unsafe.unwrapXRayVision(listener.callback)
+                if (typeof listener.callback === 'function') __unsafe__X = listener.callback
                 else {
                     try {
                         const __unsafe__callbackObject = $unsafe.unwrapXRayVision(listener.callback!)
