@@ -191,22 +191,9 @@ function Content(props: ProfileTabContentProps) {
                     x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 return x.pluginID !== PluginID.NextID && shouldDisplay
             })
-            .sort((a, z) => {
-                // order those tabs from next id first
-                if (a.pluginID === PluginID.NextID) return -1
-                if (z.pluginID === PluginID.NextID) return 1
-
-                // order those tabs from collectible first
-                if (a.pluginID === PluginID.Collectible) return -1
-                if (z.pluginID === PluginID.Collectible) return 1
-
-                // place those tabs from debugger last
-                if (a.pluginID === PluginID.Debugger) return 1
-                if (z.pluginID === PluginID.Debugger) return -1
-
-                return a.priority - z.priority
-            })
+            .sort((a, z) => a.priority - z.priority)
     })
+
     const tabs = displayPlugins.map((x) => ({
         id: x.ID,
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
