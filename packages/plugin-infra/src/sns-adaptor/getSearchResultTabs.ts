@@ -16,6 +16,7 @@ export function getSearchResultTabs(
             .filter((x) => x?.Utils?.shouldDisplay?.(result) ?? true)
             .sort((a, z) => a.priority - z.priority)
     })
+
     return displayPlugins.map((x) => ({
         id: x.ID,
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
