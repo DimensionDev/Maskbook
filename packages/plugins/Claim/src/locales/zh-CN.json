@@ -1,1 +1,27 @@
-{}
+{
+    "__plugin_name": "领取",
+    "airdrop": "空投",
+    "ito": "ITO",
+    "claim": "领取",
+    "claimable": "可领取",
+    "tips": "小费",
+    "share": "分享",
+    "connect_wallet_airdrop_tips": "请连接钱包",
+    "connect_wallet_tips": "请连接钱包以查看ITO活动。",
+    "congratulations": "恭喜！",
+    "claim_successfully_tips": "成功领取了{{amount}} ${{symbol}}。",
+    "eligible_to_claim": "有资格领取",
+    "expired": "已过期",
+    "no_activities_tips": "未找到活动",
+    "unclaimed_token_title": "{{symbol}} 未认领：",
+    "locked_token_title": "{{symbol}} 已锁定：",
+    "unlock_time": "解锁时间: {{-time}}",
+    "claim_tips": "确认领取空投",
+    "cancel_claim_tips": "你的钱包已取消交易。",
+    "airdrop_title": "Mask 社区 ${{symbol}} 赠送",
+    "no_account_tips": "请连接钱包以检查您是否有资格领取${{symbol}}。",
+    "start_time_tips": "开始时间： <strong>{{time}}</strong>",
+    "end_time_tips": "结束于 <strong>{{time}}</strong>",
+    "no_eligible_tips": "对不起，您没有资格在此活动中领取 $ARB。",
+    "claimed_tips": "你认领了 {{amount}} {{symbol}}."
+}
