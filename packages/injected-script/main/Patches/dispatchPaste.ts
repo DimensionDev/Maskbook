@@ -14,7 +14,7 @@ export function dispatchPaste(text: InternalEvents['paste'][0]) {
 
 function contentRealmDataTransferProxyFromText(text: string) {
     return new $unsafe.Proxy(
-        new $unsafe.DataTransfer(),
+        new $.DataTransfer(),
         $unsafe.structuredCloneFromSafe({
             __proto__: null,
             get: (target, key: keyof DataTransfer) => {
