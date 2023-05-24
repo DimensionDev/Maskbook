@@ -163,7 +163,7 @@ export namespace SocialNetworkUI {
         export interface NativeCompositionDialog {
             /** Upload the designated image on to the social network composition dialog */
             attachImage?(url: string | Blob, options?: NativeCompositionAttachImageOptions): void
-            appendText?(text: string, options?: NativeCompositionAttachTextOptions): void
+            appendText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
             open?(): void
         }
         export interface NativeCompositionAttachImageOptions {

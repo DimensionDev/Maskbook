@@ -10,6 +10,7 @@ import { type I18NFunction, useI18N } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
+import { delay } from '@masknet/kit'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t: originalTran } = useI18N()
@@ -41,6 +42,8 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             // Since we cannot directly send binary on the SNS, we need to encode it into a string.
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
 
+            onClose()
+            await delay(100) // wait for the dialog disappear to be able to focus on the dialog.
             if (encode === 'image') {
                 const decoratedText = decorateEncryptedText('', t, content.meta)
                 const defaultText = t('additional_post_box__encrypted_post_pre', {
@@ -57,7 +60,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
             }
-            onClose()
         },
         [t, lastRecognizedIdentity, onClose, reason],
     )

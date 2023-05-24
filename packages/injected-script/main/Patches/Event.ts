@@ -330,7 +330,7 @@ export class __Event extends $unsafe.NewObject implements Event {
                 configurable: false,
                 get: $unsafe.expose(function isTrusted(this: __Event) {
                     return $unsafe.unwrapXRayVision(this).#isTrusted
-                }, $.EventPrototypeDesc.isTrusted.get!),
+                }),
                 set: undefined,
             },
             NONE: { value: 0, writable: false, enumerable: true, configurable: false },

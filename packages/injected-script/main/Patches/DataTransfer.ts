@@ -5,8 +5,8 @@ export class __DataTransfer extends $unsafe.NewObject implements DataTransfer {
     constructor(items: __DataTransferItemList) {
         super()
         this.#items = items
-        const types = []
-        const files = []
+        const types: string[] = $safe.Array_of()
+        const files: File[] = $safe.Array_of()
         for (const item of __DataTransferItemList.items(items)) {
             if (item.kind === 'string') {
                 types.push(__DataTransferItem.type(item))
@@ -15,7 +15,7 @@ export class __DataTransfer extends $unsafe.NewObject implements DataTransfer {
                 files.push(__DataTransferItem.data(item) as File)
             }
         }
-        this.#types = $.freeze(types)
+        this.#types = $.freeze($unsafe.unwrapXRayVision($unsafe.structuredCloneFromSafe(types)))
         this.#files = new __FileList(files)
         $.setPrototypeOf(this, $.DataTransferPrototype)
     }
@@ -121,7 +121,7 @@ export class __DataTransfer extends $unsafe.NewObject implements DataTransfer {
 export class __FileList extends $unsafe.NewObject implements FileList {
     constructor(files: readonly File[]) {
         super()
-        this.#files = files
+        this.#files = $safe.Array_of(...files)
         const desc = $.getOwnPropertyDescriptors(files)
         delete (desc as any).length
         $.defineProperties(this, desc as any)
@@ -221,7 +221,7 @@ export class __DataTransferItemList extends $unsafe.NewObject implements DataTra
     }
     constructor(items: readonly __DataTransferItem[]) {
         super()
-        this.#items = items
+        this.#items = $safe.Array_of(...items)
         const desc = $.getOwnPropertyDescriptors(items)
         delete (desc as any).length
         $.defineProperties(this, desc as any)

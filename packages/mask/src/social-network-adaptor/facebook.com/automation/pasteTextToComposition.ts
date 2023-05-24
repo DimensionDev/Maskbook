@@ -37,9 +37,22 @@ export async function pasteTextToCompositionFacebook(
     const element = activated.evaluate()[0] ?? activatedCustom.evaluate()[0]
     try {
         element.focus()
+        await delay(100)
+
+        const selection = window.getSelection()
+        if (selection) {
+            if (selection.rangeCount > 0) {
+                selection.removeAllRanges()
+            }
+            if (element.firstChild) {
+                const range = document.createRange()
+                range.selectNode(element.firstChild)
+                selection.addRange(range)
+            }
+        }
         if ('value' in document.activeElement!) inputText(text)
         else pasteText(text)
-        await delay(400)
+        await delay(200)
         if (isMobileFacebook) {
             const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')
             if (e) e.style.display = 'none'
