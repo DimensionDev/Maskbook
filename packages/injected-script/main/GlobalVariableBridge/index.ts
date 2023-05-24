@@ -13,13 +13,13 @@ interface Ref extends NullPrototype {
 function __unsafe__Get(path: string): Ref | undefined {
     const fragments = $.setPrototypeOf($.StringSplit(path, '.' as any), $safe.ArrayPrototype)
     let __unsafe__this: any = __unsafe__window
-    let __unsafe__value: unknown = undefined
+    let __unsafe__value: unknown = __unsafe__window
 
     for (const fragment of fragments) {
         if (__unsafe__this === undefined || __unsafe__this === null) return undefined
         try {
-            __unsafe__value = __unsafe__this[fragment]
             __unsafe__this = __unsafe__value
+            __unsafe__value = __unsafe__this[fragment]
         } catch {
             return undefined
         }
@@ -31,12 +31,12 @@ export function __unsafe__getValue(path: string, id: number, property: string) {
     handlePromise(id, () => {
         const ref = __unsafe__Get(path + '.' + property)
         if (!ref) return
-        const { __unsafe__value, __unsafe__this } = ref
+        const { __unsafe__value } = ref
 
         // the public key cannot transfer correctly between pages, therefore stringify it manually
-        if (path === 'solflare' && property === 'publicKey' && typeof __unsafe__value === 'function') {
+        if (path === 'solflare' && property === 'publicKey') {
             try {
-                return $.apply(__unsafe__value, __unsafe__this, [])
+                return (__unsafe__value as any).toBase58()
             } catch {}
         }
 

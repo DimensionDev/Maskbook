@@ -79,9 +79,9 @@ function getError(message: any) {
         }
     }
 }
-export async function handlePromise(id: number, promise: () => any) {
+export async function handlePromise(id: number, f: () => any) {
     try {
-        const data = await $.setPrototypeOf(promise(), $safe.PromisePrototype)
+        const data = await $.setPrototypeOf($.PromiseResolve(f()), $safe.PromisePrototype)
         sendEvent('resolvePromise', id, data)
     } catch (error) {
         sendEvent('rejectPromise', id, getError(error))

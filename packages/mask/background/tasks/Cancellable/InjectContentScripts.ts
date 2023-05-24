@@ -25,7 +25,6 @@ function InjectContentScript(signal: AbortSignal) {
         const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
         // #region Injected script
-        debugger
         if (Flags.has_firefox_xray_vision) {
             browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
         } else {
