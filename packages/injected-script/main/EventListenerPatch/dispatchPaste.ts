@@ -16,6 +16,7 @@ function contentRealmDataTransferProxyFromText(text: string) {
     return new $Content.Proxy(
         new $Content.DataTransfer(),
         $.cloneIntoContent({
+            __proto__: null,
             get(target, key: keyof DataTransfer) {
                 if (key === 'getData') return $.cloneIntoContent(() => text)
                 return target[key]

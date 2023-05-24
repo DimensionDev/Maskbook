@@ -46,6 +46,7 @@ defineFunctionOnContentObject(
                 listener.type,
                 listener.callback,
                 {
+                    __proto__: null,
                     capture: listener.capture,
                     once: listener.once,
                     passive: listener.passive === null ? undefined : listener.passive,
@@ -103,7 +104,6 @@ defineFunctionOnContentObject(
                 'abort',
                 $.bind(RemoveListener, null, listener, listenerList),
                 {
-                    // @ts-expect-error null prototype
                     __proto__: null,
                     once: true,
                 },

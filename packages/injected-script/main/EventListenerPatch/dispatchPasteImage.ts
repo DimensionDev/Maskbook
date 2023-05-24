@@ -18,6 +18,7 @@ function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {
     return new $Content.Proxy(
         new $Content.DataTransfer(),
         $.cloneIntoContent({
+            __proto__: null,
             get(target, key: keyof DataTransfer) {
                 if (key === 'files') return $.cloneIntoContent([contentRealmFile])
                 if (key === 'types') return $.cloneIntoContent(['Files'])

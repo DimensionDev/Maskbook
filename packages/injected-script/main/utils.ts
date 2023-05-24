@@ -21,7 +21,6 @@ export function defineFunctionOnContentObject<T extends object>(
         return
     }
     contentObject[key] = new $Content.Proxy(contentObject[key], {
-        // @ts-expect-error null prototype
         __proto__: null,
         apply,
     })
@@ -30,12 +29,10 @@ export function defineFunctionOnContentObject<T extends object>(
 export function contentFileFromBufferSource(format: string, fileName: string, xray_fileContent: number[] | Uint8Array) {
     const binary = unwrapXRayVision(Uint8Array.from(xray_fileContent))
     const blob = new $Content.Blob($Blessed.Array_from(binary), {
-        // @ts-expect-error null prototype
         __proto__: null,
         type: format,
     })
     const file = new $Content.File($Blessed.Array_from(blob), fileName, {
-        // @ts-expect-error null prototype
         __proto__: null,
         lastModified: $.DateNow(),
         type: format,
@@ -70,7 +67,6 @@ export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: Int
     $Content.dispatchEvent(
         document,
         new $Content.CustomEvent(CustomEventId, {
-            // @ts-expect-error null prototype
             __proto__: null,
             detail,
         }),

@@ -28,3 +28,4 @@ export const TWITTER_RESERVED_SLUGS: readonly string[] = [
     'welcome',
     'your_twitter_data',
 ]
+Object.freeze(TWITTER_RESERVED_SLUGS)

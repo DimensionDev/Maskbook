@@ -294,7 +294,6 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
         let rootOfClosedTree = false
         if (isShadowRoot(invocationTarget) && $.ShadowRoot_mode(invocationTarget) === 'closed') rootOfClosedTree = true
         event.#path.push({
-            // @ts-expect-error null prototype
             __proto__: null,
             invocationTarget,
             invocationTargetInShadowTree,
@@ -685,6 +684,7 @@ export { DispatchEvent }
 }
 
 interface PathRecord {
+    __proto__: null
     invocationTarget: EventTarget
     invocationTargetInShadowTree: boolean
     shadowAdjustedTarget: PotentialEventTarget

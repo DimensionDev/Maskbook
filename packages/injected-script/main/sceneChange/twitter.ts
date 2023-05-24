@@ -13,7 +13,6 @@ function update() {
     // reset to void wrong value
     if (!newFirstSlug || $.ArrayIncludes(TWITTER_RESERVED_SLUGS, newFirstSlug)) {
         const event: WindowEventMap['scenechange'] = new $Content.CustomEvent('scenechange', {
-            // @ts-expect-error null prototype
             __proto__: null,
             detail: {
                 __proto__: null,
@@ -26,7 +25,6 @@ function update() {
     if (firstSlug !== newFirstSlug) {
         firstSlug = newFirstSlug
         const event = new $Content.CustomEvent('scenechange', {
-            // @ts-expect-error null prototype
             __proto__: null,
             detail: {
                 __proto__: null,
