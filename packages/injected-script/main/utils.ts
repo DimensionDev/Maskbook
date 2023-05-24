@@ -1,6 +1,6 @@
 import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
 import { $unsafe, $, $safe } from './intrinsic.js'
-import { exportFunction, isFirefox, unwrapXRayVision } from './intrinsic_content.js'
+import { exportFunction, getOwnPropertyDescriptors, isFirefox, unwrapXRayVision } from './intrinsic_content.js'
 
 /** @deprecated */
 export function defineFunctionOnContentObject<T extends object>(
@@ -25,6 +25,31 @@ export function defineFunctionOnContentObject<T extends object>(
         __proto__: null,
         apply,
     })
+}
+
+export function PatchDescriptor(patchedProps: PropertyDescriptorMap & NullPrototype, targetPrototype: object) {
+    const __unsafe__targetPrototype = $.unwrapXRayVision(targetPrototype)
+    const targetDescriptor = getOwnPropertyDescriptors(targetPrototype)
+    for (const key in patchedProps) {
+        if (key === 'constructor') continue
+        const desc = patchedProps[key]
+        const oldDesc = { ...targetDescriptor[key] }
+        if (!oldDesc.configurable) continue
+        desc.configurable = true
+        desc.enumerable = oldDesc.enumerable
+        if ('writable' in oldDesc) desc.writable = oldDesc.writable
+        if ($.hasOwn(desc, 'value') && desc.value) desc.value = $unsafe.expose(desc.value)
+        if ($.hasOwn(desc, 'get') && desc.get) desc.get = $unsafe.expose(desc.get!)
+        if ($.hasOwn(desc, 'set') && desc.set) desc.set = $unsafe.expose(desc.set!)
+        try {
+            $.defineProperty(__unsafe__targetPrototype, key, desc)
+        } catch {}
+    }
+}
+
+export function PatchDescriptor_NonNull(patchedProps: PropertyDescriptorMap, targetPrototype: object) {
+    $.setPrototypeOf(patchedProps, null)
+    PatchDescriptor(patchedProps as PropertyDescriptorMap & NullPrototype, targetPrototype)
 }
 
 export function contentFileFromBufferSource(format: string, fileName: string, xray_fileContent: number[] | Uint8Array) {

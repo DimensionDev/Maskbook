@@ -1,5 +1,3 @@
-import { $unsafe } from './intrinsic.js'
-
 export const takeThisF: <Args extends readonly unknown[], This, Return>(
     f: (this: This, ...args: Args) => Return,
 ) => <AssignedThis extends This>(self: AssignedThis, ...args: Args) => Return = Function.prototype.bind.bind(
@@ -79,25 +77,12 @@ export const Performance_now = globalThis.performance.now.bind(globalThis.perfor
 // #endregion
 
 // #region Firefox magic
-const _cloneInto = typeof cloneInto !== 'undefined' ? cloneInto : null
 const _exportFunction = typeof exportFunction !== 'undefined' ? exportFunction : null
 export const unwrapXRayVision: <const T extends object>(value: T) => T =
     typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper.unwrap.bind(XPCNativeWrapper) : Object
-export const cloneIntoContent: <const T extends object>(value: T) => T =
-    _exportFunction && _cloneInto
-        ? function (value) {
-              if (typeof value === 'function') return _exportFunction(value, $unsafe.window)
-              return _cloneInto(value, $unsafe.window, {
-                  cloneFunctions: true,
-                  __proto__: null,
-              })
-          }
-        : Object
-export const cloneIntoContentAny: <T>(value: T) => T =
-    _exportFunction && _cloneInto ? (cloneIntoContent as any) : (x) => x
 
 export { _exportFunction as exportFunction }
-export const isFirefox = !!_cloneInto
+export const isFirefox = typeof XPCNativeWrapper !== 'undefined'
 // #endregion
 export interface TypedPropertyDescriptor<T, V> {
     enumerable?: boolean

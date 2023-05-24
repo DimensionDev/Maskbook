@@ -33,8 +33,8 @@ export function hookInputUploadOnce(
 
     const old = proto.click
     proto.click = function (this: HTMLInputElement) {
-        const fileList: Partial<FileList> = $.cloneIntoContent({
-            item: $.cloneIntoContent((i: number) => {
+        const fileList: Partial<FileList> = $unsafe.fromSafe({
+            item: $unsafe.expose((i: number) => {
                 if (i === 0) return file
                 return null
             }),

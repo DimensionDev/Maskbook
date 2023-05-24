@@ -44,10 +44,6 @@ export function __unsafe__getValue(path: string, id: number, property: string) {
     })
 }
 
-export function __unsafe__callRequest(path: string, id: number, request: unknown) {
-    __unsafe__call(path + '.request', id, [$.cloneIntoContentAny(request)])
-}
-
 export function __unsafe__call(path: string, id: number, ...args: unknown[]) {
     $.setPrototypeOf(args, $safe.ArrayPrototype)
     handlePromise(id, () => {
@@ -55,8 +51,12 @@ export function __unsafe__call(path: string, id: number, ...args: unknown[]) {
         if (!ref) return
         const { __unsafe__this, __unsafe__value } = ref
         if (typeof __unsafe__value !== 'function') return
-        return $.apply(__unsafe__value, __unsafe__this, $.cloneIntoContent(args))
+        return $.apply(__unsafe__value, __unsafe__this, $unsafe.fromSafe(args))
     })
+}
+
+export function __unsafe__callRequest(path: string, id: number, request: unknown) {
+    __unsafe__call(path + '.request', id, $unsafe.fromSafe(request))
 }
 
 export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {
@@ -69,7 +69,7 @@ export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvent
         if (typeof __unsafe__value !== 'function') return
         $.apply(__unsafe__value, __unsafe__this, [
             event,
-            $.cloneIntoContent((...args: any[]) => {
+            $unsafe.expose((...args: any[]) => {
                 $.setPrototypeOf(args, null)
                 sendEvent(bridgeEvent, path, event, args)
             }),

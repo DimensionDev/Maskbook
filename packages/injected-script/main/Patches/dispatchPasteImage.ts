@@ -15,26 +15,23 @@ export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
 }
 
 function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {
-    return new $unsafe.Proxy(
-        new $unsafe.DataTransfer(),
-        $.cloneIntoContent({
-            __proto__: null,
-            get(target, key: keyof DataTransfer) {
-                if (key === 'files') return $.cloneIntoContent([contentRealmFile])
-                if (key === 'types') return $.cloneIntoContent(['Files'])
-                if (key === 'items')
-                    return $.cloneIntoContent([
-                        {
-                            kind: 'file',
-                            type: 'image/png',
-                            getAsFile() {
-                                return contentRealmFile
-                            },
+    return new $unsafe.Proxy(new $unsafe.DataTransfer(), {
+        __proto__: null,
+        get: $unsafe.expose((target, key: keyof DataTransfer) => {
+            if (key === 'files') return $unsafe.Array_of(contentRealmFile)
+            if (key === 'types') return $unsafe.Array_of('Files')
+            if (key === 'items')
+                return $unsafe.fromSafe([
+                    {
+                        kind: 'file',
+                        type: 'image/png',
+                        getAsFile() {
+                            return contentRealmFile
                         },
-                    ])
-                if (key === 'getData') return $.cloneIntoContent(() => '')
-                return target[key]
-            },
+                    },
+                ])
+            if (key === 'getData') return $unsafe.expose(() => '')
+            return target[key]
         }),
-    )
+    })
 }
