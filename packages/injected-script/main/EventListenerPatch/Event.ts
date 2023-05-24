@@ -97,7 +97,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
                 }
                 // If parent is a Window object, or parent is a node
                 // TODO: and target's root is a shadow-including inclusive ancestor of parent, then:
-                if (isWindow(parent) || isNode(parent)) {
+                if (isNode(parent) || isWindow(parent)) {
                     if (
                         isActivationEvent &&
                         event.#bubbles &&

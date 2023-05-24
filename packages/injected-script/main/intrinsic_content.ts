@@ -42,8 +42,8 @@ export const StringInclude = takeThisF(globalThis.String.prototype.includes)<str
 export const ArrayFilter = takeThisF(globalThis.Array.prototype.filter)<readonly unknown[]>
 export const ArrayIncludes = takeThisF(globalThis.Array.prototype.includes)<readonly unknown[]>
 export const ArrayShift = takeThisF(globalThis.Array.prototype.shift)<unknown[]>
-export const ArrayUnshift = takeThisF(globalThis.Array.prototype.unshift)<unknown[]>
-export const ArrayPush = takeThisF(globalThis.Array.prototype.push)<unknown[]>
+export const ArrayUnshift: <T>(self: T[], ...args: T[]) => number = takeThisF(globalThis.Array.prototype.unshift)
+export const ArrayPush: <T>(self: T[], ...args: T[]) => number = takeThisF(globalThis.Array.prototype.push)
 export const PromiseResolve = globalThis.Promise.resolve.bind(globalThis.Promise)
 export const DateNow = globalThis.Date.now
 // #endregion

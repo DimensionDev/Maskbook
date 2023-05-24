@@ -15,7 +15,6 @@ import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js
 
 document.addEventListener(CustomEventId, (e) => {
     const [type, args] = $Blessed.ExistArray(decodeEvent($.CustomEvent_detail_getter(e as CustomEvent)))
-
     $Blessed.ExistArray(args)
     if (args.length < 1) return
 
