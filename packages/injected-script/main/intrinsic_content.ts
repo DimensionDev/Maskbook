@@ -38,6 +38,7 @@ if (!hasOwn) {
 }
 export const StringSplit = takeThisF(globalThis.String.prototype.split)<string>
 export const StringToLowerCase = takeThisF(globalThis.String.prototype.toLowerCase)<string>
+export const StringStartsWith = takeThisF(globalThis.String.prototype.startsWith)<string>
 export const StringInclude = takeThisF(globalThis.String.prototype.includes)<string>
 export const ArrayFilter = takeThisF(globalThis.Array.prototype.filter)<readonly unknown[]>
 export const ArrayIncludes = takeThisF(globalThis.Array.prototype.includes)<readonly unknown[]>
