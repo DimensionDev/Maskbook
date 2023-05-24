@@ -1,4 +1,4 @@
-import { create, getOwnPropertyDescriptors, getPrototypeOf, setPrototypeOf, takeThis } from './intrinsic_content.js'
+import { create, getOwnPropertyDescriptors, getPrototypeOf, setPrototypeOf, takeThisF } from './intrinsic_content.js'
 
 const { Map: _Map, Set: _Set, WeakMap: _WeakMap } = globalThis
 const MapPrototype: typeof _Map.prototype = create(null, getOwnPropertyDescriptors(_Map.prototype))
@@ -31,20 +31,21 @@ export const ArrayIteratorPrototype: IterableIterator<any> = create(
 
 // Map
 {
-    const entries = takeThis(MapPrototype.entries)
-    const keys = takeThis(MapPrototype.keys)
-    const values = takeThis(MapPrototype.values)
-    MapPrototype.entries = MapPrototype[Symbol.iterator] = function (this: ReadonlyMap<any, any>) {
+    type T = ReadonlyMap<unknown, unknown>
+    const entries = takeThisF(MapPrototype.entries)<T>
+    const keys = takeThisF(MapPrototype.keys)<T>
+    const values = takeThisF(MapPrototype.values)<T>
+    MapPrototype.entries = MapPrototype[Symbol.iterator] = function (this: T) {
         const iter = entries(this)
         setPrototypeOf(iter, MapIteratorPrototype)
         return iter
     }
-    MapPrototype.keys = function (this: ReadonlyMap<any, any>) {
+    MapPrototype.keys = function (this: T) {
         const iter = keys(this)
         setPrototypeOf(iter, MapIteratorPrototype)
         return iter
     }
-    MapPrototype.values = function (this: ReadonlyMap<any, any>) {
+    MapPrototype.values = function (this: T) {
         const iter = values(this)
         setPrototypeOf(iter, MapIteratorPrototype)
         return iter
@@ -53,9 +54,10 @@ export const ArrayIteratorPrototype: IterableIterator<any> = create(
 
 // Set
 {
-    const entries = takeThis(SetPrototype.entries)
-    const values = takeThis(SetPrototype.values)
-    SetPrototype.entries = function (this: ReadonlySet<any>) {
+    type T = ReadonlySet<unknown>
+    const entries = takeThisF(SetPrototype.entries)<T>
+    const values = takeThisF(SetPrototype.values)<T>
+    SetPrototype.entries = function (this: T) {
         const iter = entries(this)
         setPrototypeOf(iter, SetIteratorPrototype)
         return iter
@@ -63,7 +65,7 @@ export const ArrayIteratorPrototype: IterableIterator<any> = create(
     SetPrototype.values =
         SetPrototype.keys =
         SetPrototype[Symbol.iterator] =
-            function (this: ReadonlySet<any>) {
+            function (this: T) {
                 const iter = values(this)
                 setPrototypeOf(iter, SetIteratorPrototype)
                 return iter
@@ -72,20 +74,21 @@ export const ArrayIteratorPrototype: IterableIterator<any> = create(
 
 // Array
 {
-    const entries = takeThis(ArrayPrototype.entries)
-    const keys = takeThis(ArrayPrototype.keys)
-    const values = takeThis(ArrayPrototype.values)
-    ArrayPrototype.entries = function (this: readonly unknown[]) {
+    type T = readonly unknown[]
+    const entries = takeThisF(ArrayPrototype.entries)<T>
+    const keys = takeThisF(ArrayPrototype.keys)<T>
+    const values = takeThisF(ArrayPrototype.values)<T>
+    ArrayPrototype.entries = function (this: T) {
         const iter = entries(this)
         setPrototypeOf(iter, ArrayIteratorPrototype)
         return iter
     }
-    ArrayPrototype.keys = function (this: readonly unknown[]) {
+    ArrayPrototype.keys = function (this: T) {
         const iter = keys(this)
         setPrototypeOf(iter, ArrayIteratorPrototype)
         return iter
     }
-    ArrayPrototype.values = ArrayPrototype[Symbol.iterator] = function (this: readonly unknown[]) {
+    ArrayPrototype.values = ArrayPrototype[Symbol.iterator] = function (this: T) {
         const iter = values(this)
         setPrototypeOf(iter, ArrayIteratorPrototype)
         return iter

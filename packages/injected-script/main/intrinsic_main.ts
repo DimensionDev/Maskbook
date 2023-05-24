@@ -1,4 +1,4 @@
-import { getOwnPropertyDescriptors, takeThis } from './intrinsic_content.js'
+import { getOwnPropertyDescriptors, takeThisF } from './intrinsic_content.js'
 import { noop } from './utils.js'
 
 // The "window" here means another Realm in Firefox
@@ -19,8 +19,8 @@ export const {
     EventTarget,
     DOMException,
 } = window
-export const reportError = takeThis(window.reportError)<Window> || noop
-export const dispatchEvent = takeThis(window.dispatchEvent)<EventTarget>
+export const reportError = takeThisF(window.reportError)<Window> || noop
+export const dispatchEvent = takeThisF(window.dispatchEvent)<EventTarget>
 
 export const setTimeout = window.setTimeout.bind(window)
 export const clearTimeout = window.clearTimeout.bind(window)
@@ -34,6 +34,6 @@ export const InputEventPrototype = window.InputEvent.prototype
 export const InputEventPrototypeDesc = getOwnPropertyDescriptors(InputEventPrototype)
 
 export const EventTargetPrototype = window.EventTarget.prototype
-export const removeListener = takeThis(window.removeEventListener)<EventTarget>
+export const removeListener = takeThisF(window.removeEventListener)<EventTarget>
 const _window = window
 export { _window as window }

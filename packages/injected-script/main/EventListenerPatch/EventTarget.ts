@@ -24,9 +24,19 @@ defineFunctionOnContentObject(
     $Content.EventTargetPrototype,
     'addEventListener',
     // https://dom.spec.whatwg.org/#dom-eventtarget-addeventlistener
-    (addEventListener, eventTarget: EventTarget, args: Parameters<EventTarget['addEventListener']>) => {
-        if (!CapturingEvents.has(args[0])) return $.apply(addEventListener, eventTarget, args)
+    (
+        addEventListener: typeof EventTarget.prototype.addEventListener,
+        eventTarget: EventTarget,
+        args: Parameters<EventTarget['addEventListener']>,
+    ) => {
+        if (
+            !CapturingEvents.has(args[0]) ||
+            args[1] === null ||
+            (typeof args[1] !== 'object' && typeof args[1] !== 'function')
+        )
+            return $.apply(addEventListener, eventTarget, args)
 
+        $.apply(addEventListener, eventTarget, ['', null!]) // validate eventTarget is a EventTarget
         const listener = normalizeAddEventListenerArgs(args)
 
         const native_result = $.apply(
@@ -93,6 +103,7 @@ defineFunctionOnContentObject(
                 'abort',
                 $.bind(RemoveListener, null, listener, listenerList),
                 {
+                    // @ts-expect-error null prototype
                     __proto__: null,
                     once: true,
                 },

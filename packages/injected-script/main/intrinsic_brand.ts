@@ -32,7 +32,7 @@ export function isDocument(item: unknown): item is Document {
 export function isWindow(item: unknown): item is Window {
     if (!item) return false
     try {
-        $.Window_document(item as Window)
+        $.Window_document(item as typeof window)
         return true
     } catch {
         return false

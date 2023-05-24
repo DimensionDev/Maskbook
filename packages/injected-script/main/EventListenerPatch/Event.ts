@@ -70,7 +70,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
 
         event.#dispatch = true
         // legacy target override flag is only used by HTML and only when target is a Window object.
-        const targetOverride = !legacyTargetOverride ? target : $.Window_document(target as Window)
+        const targetOverride = !legacyTargetOverride ? target : $.Window_document(target as typeof window)
         let activationTarget = null
         let relatedTarget: EventTarget | null = ReTarget(event.#relatedTarget, target)
         if (target !== relatedTarget || target === event.#relatedTarget) {
@@ -472,7 +472,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
         if (value !== true) return
         const event = GetWrappedJSObject(this)
         if (#stopPropagation in event) event.#stopPropagation = value
-        else $.apply($Content.EventPrototypeDesc.cancelBubble.set!, this, [])
+        else $.apply($Content.EventPrototypeDesc.cancelBubble.set!, this, [value])
     }
     stopImmediatePropagation() {
         const event = GetWrappedJSObject(this)
@@ -518,7 +518,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
 
     initEvent(type: string, bubbles: boolean, cancelable: boolean) {
         const event = GetWrappedJSObject(this)
-        if (!(#dispatch in event)) return void $.apply($Content.EventPrototypeDesc.initEvent.value!, this, arguments)
+        if (!(#dispatch in event)) return $.apply($Content.EventPrototypeDesc.initEvent.value!, this, arguments)
         if (event.#dispatch) return
         event.#stopPropagation = false
         event.#stopImmediatePropagation = false
