@@ -253,6 +253,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Optimism',
         icon: new URL('../assets/optimism.png', import.meta.url),
         iconColor: 'rgb(232, 65, 66)',
+        backgroundGradient: 'linear-gradient(180deg, rgba(232, 65, 66, 0.15) 0%, rgba(232, 65, 66, 0.05) 100%)',
         isMainnet: true,
         averageBlockDelay: 10,
     },
