@@ -87,7 +87,7 @@ function __unsafe__untilInner(name: string) {
             restCheckTimes -= 1
             if (restCheckTimes < 0) return
             if ($.hasOwn(__unsafe__window, name)) return resolve(true)
-            $unsafe.setTimeout(check, 200)
+            $.setTimeout(check, 200)
         }
         check()
     })

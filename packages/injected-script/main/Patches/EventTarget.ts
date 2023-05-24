@@ -1,5 +1,5 @@
 import { PatchDescriptor } from '../utils.js'
-import { $, $safe, $unsafe, isNode, isWindow } from '../intrinsic.js'
+import { $, $safe, isNode, isWindow } from '../intrinsic.js'
 
 export const CapturingEvents: ReadonlySet<string> = $safe.Set<keyof DocumentEventMap>([
     'keyup',
@@ -26,7 +26,7 @@ function addEventListener(
     callback: EventListenerOrEventListenerObject | null,
     options?: boolean | AddEventListenerOptions | undefined,
 ) {
-    const original = $unsafe.EventTargetPrototypeDesc.addEventListener.value!
+    const original = $.EventTargetPrototypeDesc.addEventListener.value!
     if (
         callback === null ||
         (typeof callback !== 'object' && typeof callback !== 'function') ||
@@ -39,17 +39,13 @@ function addEventListener(
     $.apply(original, this, ['', null!])
     const listener = normalizeAddEventListenerArgs(type, callback, options)
 
-    const native_result = $.apply($unsafe.EventTargetPrototypeDesc.addEventListener.value!, this, [
-        listener.type,
-        listener.callback,
-        {
-            __proto__: null,
-            capture: listener.capture,
-            once: listener.once,
-            passive: listener.passive === null ? undefined : listener.passive,
-            signal: listener.signal === null ? undefined : listener.signal,
-        } satisfies AddEventListenerOptions,
-    ])
+    const native_result = $.addEventListener(this, listener.type, listener.callback, {
+        __proto__: null,
+        capture: listener.capture,
+        once: listener.once,
+        passive: listener.passive === null ? undefined : listener.passive,
+        signal: listener.signal === null ? undefined : listener.signal,
+    } satisfies AddEventListenerOptions)
 
     // https://dom.spec.whatwg.org/#add-an-event-listener
     // (Skip) If eventTarget is a ServiceWorkerGlobalScope object, ...
@@ -96,14 +92,10 @@ function addEventListener(
     }
 
     if (listener.signal !== null) {
-        $.apply($unsafe.EventTargetPrototypeDesc.addEventListener.value!, listener.signal, [
-            'abort',
-            $.bind(RemoveListener, null, listener, listenerList),
-            {
-                __proto__: null,
-                once: true,
-            },
-        ])
+        $.addEventListener(listener.signal, 'abort', $.bind(RemoveListener, null, listener, listenerList), {
+            __proto__: null,
+            once: true,
+        })
     }
     return native_result
 }
@@ -114,7 +106,7 @@ function removeEventListener(
     callback: EventListenerOrEventListenerObject | null,
     options?: boolean | EventListenerOptions | undefined,
 ) {
-    const original = $unsafe.EventTargetPrototypeDesc.removeEventListener.value!
+    const original = $.EventTargetPrototypeDesc.removeEventListener.value!
     if (!CapturingEvents.has(type)) return $.apply(original, this, arguments)
 
     // validate eventTarget is a EventTarget
@@ -140,7 +132,7 @@ PatchDescriptor(
         addEventListener: { value: addEventListener },
         removeEventListener: { value: removeEventListener },
     },
-    $unsafe.EventTargetPrototype,
+    $.EventTargetPrototype,
 )
 
 export function RemoveListener(listener: EventListenerDescriptor, listenerList: Set<EventListenerDescriptor>) {

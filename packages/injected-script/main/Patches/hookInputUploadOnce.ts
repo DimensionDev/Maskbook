@@ -45,8 +45,8 @@ export function hookInputUploadOnce(
             configurable: true,
             value: fileList,
         })
-        if (timer !== null) $unsafe.clearTimeout(timer)
-        timer = $unsafe.setTimeout(() => {
+        if (timer !== null) $.clearTimeout(timer)
+        timer = $.setTimeout(() => {
             DispatchEvent(this, event)
             proto.click = old
             $.deleteProperty(this, 'files')

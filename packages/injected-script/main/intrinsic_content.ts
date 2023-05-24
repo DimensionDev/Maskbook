@@ -47,11 +47,24 @@ export const DateNow = globalThis.Date.now
 export const Uint8Array_from = globalThis.Uint8Array.from.bind(globalThis.Uint8Array)
 // #endregion
 
-// #region  DOM
+// #region  DOM<EventTarget>
+export const {
+    URL,
+    Blob,
+    File,
+    DOMException,
+    setTimeout,
+    clearTimeout,
+    Event,
+    DataTransfer,
+    ClipboardEvent,
+    CustomEvent,
+    InputEvent,
+    EventTarget,
+} = globalThis
 export const addEventListener = takeThisF(EventTarget.prototype.addEventListener)<EventTarget>
 export const removeEventListener = takeThisF(EventTarget.prototype.removeEventListener)<EventTarget>
-export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)<EventTarget>
-export const { URL, Blob, File, DOMException } = globalThis
+export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)
 export const ConsoleError = console.error
 export const AbortSignal_aborted = takeThis(getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!)
 export const URL_origin = takeThis(getOwnPropertyDescriptor(URL.prototype, 'origin')!.get!)
@@ -74,6 +87,20 @@ export const HTMLInputElement_value_setter = takeThis(
 export const DocumentActiveElement = getOwnPropertyDescriptor(Document.prototype, 'activeElement').get!.bind(document)
 export const CustomEvent_detail = takeThis(getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!)
 export const Performance_now = globalThis.performance.now.bind(globalThis.performance)
+
+export const EventPrototype = window.Event.prototype
+export const EventPrototypeDesc = getOwnPropertyDescriptors(EventPrototype)
+export const ClipboardEventPrototype = window.ClipboardEvent.prototype
+export const ClipboardEventPrototypeDesc = getOwnPropertyDescriptors(ClipboardEventPrototype)
+export const UIEventPrototype = window.UIEvent.prototype
+export const UIEventPrototypeDesc = getOwnPropertyDescriptors(UIEventPrototype)
+export const InputEventPrototype = window.InputEvent.prototype
+export const InputEventPrototypeDesc = getOwnPropertyDescriptors(InputEventPrototype)
+
+export const EventTargetPrototype = window.EventTarget.prototype
+export const EventTargetPrototypeDesc = getOwnPropertyDescriptors(EventTargetPrototype)
+export const { pushState, replaceState } = window.history
+export const HistoryPrototype = window.History.prototype
 // #endregion
 
 // #region Firefox magic

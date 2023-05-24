@@ -91,7 +91,7 @@ export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: Int
     const detail = encodeEvent(event, args)
     $.dispatchEvent(
         document,
-        new $unsafe.CustomEvent(CustomEventId, {
+        new $.CustomEvent(CustomEventId, {
             __proto__: null,
             detail,
         }),

@@ -1,5 +1,5 @@
 import { TWITTER_RESERVED_SLUGS } from '../../shared/index.js'
-import { $, $unsafe } from '../intrinsic.js'
+import { $ } from '../intrinsic.js'
 import { isTwitter } from '../utils.js'
 
 function getFirstSlug() {
@@ -12,7 +12,7 @@ function update() {
     const newFirstSlug = getFirstSlug()
     // reset to void wrong value
     if (!newFirstSlug || $.ArrayIncludes(TWITTER_RESERVED_SLUGS, newFirstSlug)) {
-        const event: WindowEventMap['scenechange'] = new $unsafe.CustomEvent('scenechange', {
+        const event: WindowEventMap['scenechange'] = new $.CustomEvent('scenechange', {
             __proto__: null,
             detail: {
                 __proto__: null,
@@ -24,7 +24,7 @@ function update() {
     }
     if (firstSlug !== newFirstSlug) {
         firstSlug = newFirstSlug
-        const event = new $unsafe.CustomEvent('scenechange', {
+        const event = new $.CustomEvent('scenechange', {
             __proto__: null,
             detail: {
                 __proto__: null,

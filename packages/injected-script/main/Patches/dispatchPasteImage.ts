@@ -16,7 +16,7 @@ export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
 
 function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {
     return new $unsafe.Proxy(
-        new $unsafe.DataTransfer(),
+        new $.DataTransfer(),
         $unsafe.structuredCloneFromSafe({
             __proto__: null,
             get: (target, key: keyof DataTransfer) => {
