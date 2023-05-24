@@ -1,6 +1,6 @@
-import { $, $Blessed } from './intrinsic.js'
+import { $, $safe } from './intrinsic.js'
 
-const isNodeCache = $Blessed.WeakMap<object, boolean>()
+const isNodeCache = $safe.WeakMap<object, boolean>()
 export function isNode(item: unknown): item is Node {
     if (!item) return false
     if (isNodeCache.has(item)) return isNodeCache.get(item)!
@@ -14,7 +14,7 @@ export function isNode(item: unknown): item is Node {
     }
 }
 
-const isShadowRootCache = $Blessed.WeakMap<object, boolean>()
+const isShadowRootCache = $safe.WeakMap<object, boolean>()
 export function isShadowRoot(item: unknown): item is ShadowRoot {
     if (!item) return false
     if (isShadowRootCache.has(item)) return isShadowRootCache.get(item)!
@@ -28,7 +28,7 @@ export function isShadowRoot(item: unknown): item is ShadowRoot {
     }
 }
 
-const isDocumentCache = $Blessed.WeakMap<object, boolean>()
+const isDocumentCache = $safe.WeakMap<object, boolean>()
 export function isDocument(item: unknown): item is Document {
     if (item === document) return true
     if (!item) return false
@@ -43,7 +43,7 @@ export function isDocument(item: unknown): item is Document {
     }
 }
 
-const isWindowCache = $Blessed.WeakMap<object, boolean>()
+const isWindowCache = $safe.WeakMap<object, boolean>()
 export function isWindow(item: unknown): item is Window {
     if (item === window) return true
     if (!item) return false

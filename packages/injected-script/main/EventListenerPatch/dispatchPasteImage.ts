@@ -1,5 +1,5 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
+import { $, $unsafe } from '../intrinsic.js'
 import { contentFileFromBufferSource } from '../utils.js'
 import { DispatchEvent, __Event } from './Event.js'
 
@@ -15,8 +15,8 @@ export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
 }
 
 function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {
-    return new $Content.Proxy(
-        new $Content.DataTransfer(),
+    return new $unsafe.Proxy(
+        new $unsafe.DataTransfer(),
         $.cloneIntoContent({
             __proto__: null,
             get(target, key: keyof DataTransfer) {

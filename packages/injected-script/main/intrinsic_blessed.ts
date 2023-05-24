@@ -8,6 +8,7 @@ const ArrayPrototype: typeof globalThis.Array.prototype = create(
     null,
     getOwnPropertyDescriptors(globalThis.Array.prototype) as any,
 )
+const PromisePrototype: typeof globalThis.Promise.prototype = create(null, getOwnPropertyDescriptors(Promise.prototype))
 
 const __set_iter__ = new _Set().values()
 const __map_iter__ = new _Map().values()
@@ -109,4 +110,7 @@ export function Array_from<T extends readonly unknown[]>(...args: T): T {
 }
 export function ExistArray<T extends readonly unknown[]>(array: T): T {
     return setPrototypeOf(array, ArrayPrototype)
+}
+export function ExistPromise(promise: Promise<any>) {
+    return setPrototypeOf(promise, PromisePrototype)
 }

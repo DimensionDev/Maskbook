@@ -1,5 +1,5 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $Blessed } from '../intrinsic.js'
+import { $, $safe } from '../intrinsic.js'
 import { DispatchEvent, __Event, type ActivationBehavior } from './Event.js'
 
 export function dispatchInput(text: InternalEvents['input'][0]) {
@@ -14,7 +14,7 @@ export function dispatchInput(text: InternalEvents['input'][0]) {
         bubbles: true,
         cancelable: true,
     })
-    const activation: ActivationBehavior = $Blessed.Map()
+    const activation: ActivationBehavior = $safe.Map()
     activation.set(element, (event) => {
         if (!event.isTrusted) return
 

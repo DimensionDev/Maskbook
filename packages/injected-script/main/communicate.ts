@@ -1,6 +1,6 @@
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 import { instagramUpload } from './EventListenerPatch/instagramUpload.js'
-import { $, $Blessed } from './intrinsic.js'
+import { $, $safe } from './intrinsic.js'
 import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
 import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
 import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
@@ -14,8 +14,8 @@ import {
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
 
 document.addEventListener(CustomEventId, (e) => {
-    const [type, args] = $Blessed.ExistArray(decodeEvent($.CustomEvent_detail_getter(e as CustomEvent)))
-    $Blessed.ExistArray(args)
+    const [type, args] = $safe.ExistArray(decodeEvent($.CustomEvent_detail_getter(e as CustomEvent)))
+    $safe.ExistArray(args)
     if (args.length < 1) return
 
     switch (type) {

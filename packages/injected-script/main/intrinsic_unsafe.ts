@@ -20,7 +20,6 @@ export const {
     DOMException,
 } = window
 export const reportError = takeThisF(window.reportError)<Window> || noop
-export const dispatchEvent = takeThisF(window.dispatchEvent)<EventTarget>
 
 export const setTimeout = window.setTimeout.bind(window)
 export const clearTimeout = window.clearTimeout.bind(window)

@@ -1,13 +1,13 @@
 import { defineFunctionOnContentObject } from '../utils.js'
-import { $, $Blessed, $Content, isNode, isWindow } from '../intrinsic.js'
+import { $, $safe, $unsafe, isNode, isWindow } from '../intrinsic.js'
 
-export const CapturingEvents: ReadonlySet<string> = $Blessed.Set<keyof DocumentEventMap>([
+export const CapturingEvents: ReadonlySet<string> = $safe.Set<keyof DocumentEventMap>([
     'keyup',
     'input',
     'paste',
     'change',
 ])
-export const CapturedListeners: WeakMap<EventTarget, Set<EventListenerDescriptor>> = $Blessed.WeakMap()
+export const CapturedListeners: WeakMap<EventTarget, Set<EventListenerDescriptor>> = $safe.WeakMap()
 
 // https://dom.spec.whatwg.org/#concept-event-listener
 export interface EventListenerDescriptor {
@@ -21,7 +21,7 @@ export interface EventListenerDescriptor {
 }
 
 defineFunctionOnContentObject(
-    $Content.EventTargetPrototype,
+    $unsafe.EventTargetPrototype,
     'addEventListener',
     // https://dom.spec.whatwg.org/#dom-eventtarget-addeventlistener
     (
@@ -84,7 +84,7 @@ defineFunctionOnContentObject(
                 }
             } else listener.passive = false
         }
-        if (!CapturedListeners.has(eventTarget)) CapturedListeners.set(eventTarget, $Blessed.Set())
+        if (!CapturedListeners.has(eventTarget)) CapturedListeners.set(eventTarget, $safe.Set())
         const listenerList = CapturedListeners.get(eventTarget)!
 
         // If eventTarget's event listener list does not contain an event listener whose ...
@@ -114,7 +114,7 @@ defineFunctionOnContentObject(
 )
 
 defineFunctionOnContentObject(
-    $Content.EventTargetPrototype,
+    $unsafe.EventTargetPrototype,
     'removeEventListener',
     (removeEventListener, eventTarget: EventTarget, args: Parameters<EventTarget['removeEventListener']>) => {
         if (!CapturingEvents.has(args[0])) return $.apply(removeEventListener, eventTarget, args)

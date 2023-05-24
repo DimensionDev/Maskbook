@@ -1,5 +1,5 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
+import { $, $unsafe } from '../intrinsic.js'
 import { DispatchEvent, __Event } from './Event.js'
 
 export function dispatchPaste(text: InternalEvents['paste'][0]) {
@@ -13,8 +13,8 @@ export function dispatchPaste(text: InternalEvents['paste'][0]) {
 }
 
 function contentRealmDataTransferProxyFromText(text: string) {
-    return new $Content.Proxy(
-        new $Content.DataTransfer(),
+    return new $unsafe.Proxy(
+        new $unsafe.DataTransfer(),
         $.cloneIntoContent({
             __proto__: null,
             get(target, key: keyof DataTransfer) {

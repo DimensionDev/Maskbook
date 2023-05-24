@@ -1,4 +1,4 @@
-import { $Content } from './intrinsic.js'
+import { $unsafe } from './intrinsic.js'
 
 export const takeThisF: <Args extends readonly unknown[], This, Return>(
     f: (this: This, ...args: Args) => Return,
@@ -25,7 +25,7 @@ export const getOwnPropertyDescriptor: <T, K extends keyof T>(object: T, key: K)
     Object.getOwnPropertyDescriptor as any
 export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, setPrototypeOf, create } =
     Object
-export const Reflect = create(null, getOwnPropertyDescriptors(globalThis.Reflect)) as typeof globalThis.Reflect
+export const { deleteProperty } = Reflect
 export const apply: <Args extends readonly unknown[], This, Return>(
     f: (this: This, ...args: Args) => Return,
     thisArg: This,
@@ -46,9 +46,13 @@ export const ArrayUnshift: <T>(self: T[], ...args: T[]) => number = takeThisF(gl
 export const ArrayPush: <T>(self: T[], ...args: T[]) => number = takeThisF(globalThis.Array.prototype.push)
 export const PromiseResolve = globalThis.Promise.resolve.bind(globalThis.Promise)
 export const DateNow = globalThis.Date.now
+export const Uint8Array_from = globalThis.Uint8Array.from.bind(globalThis.Uint8Array)
 // #endregion
 
 // #region  DOM
+export const addEventListener = takeThisF(EventTarget.prototype.addEventListener)<EventTarget>
+export const removeEventListener = takeThisF(EventTarget.prototype.removeEventListener)<EventTarget>
+export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)<EventTarget>
 export const { URL } = globalThis
 export const ConsoleError = console.error
 export const AbortSignal_aborted = takeThis(getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!)
@@ -62,6 +66,7 @@ export const Document_defaultView = takeThis(getOwnPropertyDescriptor(Document.p
 export const Document_body = takeThis(getOwnPropertyDescriptor(Document.prototype, 'body')!.get!)
 export const ShadowRoot_host = takeThis(getOwnPropertyDescriptor(ShadowRoot.prototype, 'host')!.get!)
 export const ShadowRoot_mode = takeThis(getOwnPropertyDescriptor(ShadowRoot.prototype, 'mode')!.get!)
+export const HTMLElement_click = takeThisF(HTMLElement.prototype.click)<HTMLElement>
 export const HTMLTextAreaElement_value_setter = takeThis(
     getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')!.set!,
 )
@@ -81,8 +86,8 @@ export const unwrapXRayVision: <const T extends object>(value: T) => T =
 export const cloneIntoContent: <const T extends object>(value: T) => T =
     _exportFunction && _cloneInto
         ? function (value) {
-              if (typeof value === 'function') return _exportFunction(value, $Content.window)
-              return _cloneInto(value, $Content.window, {
+              if (typeof value === 'function') return _exportFunction(value, $unsafe.window)
+              return _cloneInto(value, $unsafe.window, {
                   cloneFunctions: true,
                   __proto__: null,
               })

@@ -1,4 +1,4 @@
-import { $, $Blessed, $Content } from '../intrinsic.js'
+import { $, $safe, $unsafe } from '../intrinsic.js'
 import { handlePromise, sendEvent } from '../utils.js'
 import type { InternalEvents } from '../../shared/index.js'
 
@@ -49,7 +49,7 @@ export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvent
         ;(read(path) as any)?.on(
             event,
             $.cloneIntoContent((...args: any[]) => {
-                $Blessed.ExistArray(args)
+                $safe.ExistArray(args)
                 sendEvent(bridgeEvent, path, event, args)
             }),
         )
@@ -66,7 +66,7 @@ function __unsafe__untilInner(name: string) {
             restCheckTimes -= 1
             if (restCheckTimes < 0) return
             if ($.hasOwn(__unsafe__window, name)) return resolve(true)
-            $Content.setTimeout(check, 200)
+            $unsafe.setTimeout(check, 200)
         }
         check()
     })

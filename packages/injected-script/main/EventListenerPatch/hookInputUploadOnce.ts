@@ -1,4 +1,4 @@
-import { $, $Blessed, $Content } from '../intrinsic.js'
+import { $, $safe, $unsafe } from '../intrinsic.js'
 import { contentFileFromBufferSource } from '../utils.js'
 import { __Event, DispatchEvent } from './Event.js'
 
@@ -25,7 +25,7 @@ export function hookInputUploadOnce(
     fileArray: number[],
     triggerOnActiveElementNow: boolean,
 ) {
-    $Blessed.ExistArray(fileArray)
+    $safe.ExistArray(fileArray)
 
     let timer: number | null = null
     const event = new __Event('change', { bubbles: true })
@@ -41,19 +41,20 @@ export function hookInputUploadOnce(
             length: 1,
             [0]: file,
         })
-        $.Reflect.defineProperty(this, 'files', {
+        $.defineProperty(this, 'files', {
             configurable: true,
             value: fileList,
         })
-        if (timer !== null) $Content.clearTimeout(timer)
-        timer = $Content.setTimeout(() => {
+        if (timer !== null) $unsafe.clearTimeout(timer)
+        timer = $unsafe.setTimeout(() => {
             DispatchEvent(this, event)
             proto.click = old
-            $.Reflect.deleteProperty(this, 'files')
+            $.deleteProperty(this, 'files')
         }, 200)
     }
 
-    if (triggerOnActiveElementNow && document.activeElement instanceof HTMLInputElement) {
-        document.activeElement?.click()
+    const element = $.DocumentActiveElement()
+    if (triggerOnActiveElementNow && element) {
+        $.HTMLElement_click(element as HTMLElement)
     }
 }

@@ -63,8 +63,9 @@ export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
     : never
 const { parse, stringify } = JSON
 const { isArray } = Array
+const { setPrototypeOf } = Object
 export function encodeEvent<T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) {
-    return stringify([key, args])
+    return stringify(setPrototypeOf([key, args], null))
 }
 export function decodeEvent(data: string): EventItemBeforeSerialization {
     const result = parse(data)

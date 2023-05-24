@@ -1,5 +1,5 @@
 import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
-import { $Content, $, $Blessed } from './intrinsic.js'
+import { $unsafe, $, $safe } from './intrinsic.js'
 import { exportFunction, isFirefox, unwrapXRayVision } from './intrinsic_content.js'
 
 export function defineFunctionOnContentObject<T extends object>(
@@ -20,19 +20,19 @@ export function defineFunctionOnContentObject<T extends object>(
         )
         return
     }
-    contentObject[key] = new $Content.Proxy(contentObject[key], {
+    contentObject[key] = new $unsafe.Proxy(contentObject[key], {
         __proto__: null,
         apply,
     })
 }
 
 export function contentFileFromBufferSource(format: string, fileName: string, xray_fileContent: number[] | Uint8Array) {
-    const binary = unwrapXRayVision(Uint8Array.from(xray_fileContent))
-    const blob = new $Content.Blob($Blessed.Array_from(binary), {
+    const binary = unwrapXRayVision($.Uint8Array_from(xray_fileContent))
+    const blob = new $unsafe.Blob($safe.Array_from(binary), {
         __proto__: null,
         type: format,
     })
-    const file = new $Content.File($Blessed.Array_from(blob), fileName, {
+    const file = new $unsafe.File($safe.Array_from(blob), fileName, {
         __proto__: null,
         lastModified: $.DateNow(),
         type: format,
@@ -55,7 +55,7 @@ function getError(message: any) {
 }
 export async function handlePromise(id: number, promise: () => any) {
     try {
-        const data = await promise()
+        const data = await $safe.ExistPromise(promise())
         sendEvent('resolvePromise', id, data)
     } catch (error) {
         sendEvent('rejectPromise', id, getError(error))
@@ -64,9 +64,9 @@ export async function handlePromise(id: number, promise: () => any) {
 
 export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: InternalEvents[T]) {
     const detail = encodeEvent(event, args)
-    $Content.dispatchEvent(
+    $.dispatchEvent(
         document,
-        new $Content.CustomEvent(CustomEventId, {
+        new $unsafe.CustomEvent(CustomEventId, {
             __proto__: null,
             detail,
         }),
