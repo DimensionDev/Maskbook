@@ -1,30 +1,6 @@
 import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
 import { $unsafe, $, $safe } from './intrinsic.js'
 
-/** @deprecated */
-export function defineFunctionOnContentObject<T extends object>(
-    contentObject: T,
-    key: keyof T,
-    apply: (target: any, thisArg: any, argArray?: any) => any,
-) {
-    if ($.isFirefox) {
-        const rawObject = $unsafe.unwrapXRayVision(contentObject)
-        const rawFunction = rawObject[key]
-        exportFunction!(
-            function (this: any) {
-                return apply(rawFunction, this, arguments)
-            },
-            rawObject,
-            { defineAs: key },
-        )
-        return
-    }
-    contentObject[key] = new $unsafe.Proxy(contentObject[key], {
-        __proto__: null,
-        apply,
-    })
-}
-
 export function PatchDescriptor(patchedProps: PropertyDescriptorMap & NullPrototype, targetPrototype: object) {
     const __unsafe__targetPrototype = $unsafe.unwrapXRayVision(targetPrototype)
     const targetDescriptor = $.getOwnPropertyDescriptors(targetPrototype)

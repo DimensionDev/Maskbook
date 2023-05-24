@@ -114,9 +114,6 @@ export const NodeList_forEach = takeThisF(NodeList.prototype.forEach)<NodeList>
 // #endregion
 
 // #region Firefox magic
-const _exportFunction = typeof exportFunction !== 'undefined' ? exportFunction : null
-
-export { _exportFunction as exportFunction }
 export const wrapXRayVision: <const T extends object>(val: T) => T =
     typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper : Object
 export const isFirefox = typeof XPCNativeWrapper !== 'undefined'
