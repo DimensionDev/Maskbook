@@ -64,16 +64,24 @@ export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
 const { parse, stringify } = JSON
 const { isArray } = Array
 const { setPrototypeOf } = Object
-export function encodeEvent<T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) {
-    return stringify(setPrototypeOf([key, args], null))
-}
-export function decodeEvent(data: string): EventItemBeforeSerialization {
-    const result = parse(data)
-    // Do not throw new Error cause it requires a global lookup.
+// @ts-expect-error firefox api
+const isFirefox = typeof XPCNativeWrapper === 'function'
+export const encodeEvent: <T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) => unknown = isFirefox
+    ? (key, args) => [key, args]
+    : (key, args) => stringify(setPrototypeOf([key, args], null))
 
-    if (!isEventItemBeforeSerialization(result)) throw null
-    return result
-}
+export const decodeEvent: (data: unknown) => EventItemBeforeSerialization = isFirefox
+    ? (data) => {
+          if (!isEventItemBeforeSerialization(data)) throw null
+          return data
+      }
+    : (data) => {
+          const result = parse(data as any)
+          // Do not throw new Error cause it requires a global lookup.
+
+          if (!isEventItemBeforeSerialization(result)) throw null
+          return result
+      }
 
 function isEventItemBeforeSerialization(data: unknown): data is EventItemBeforeSerialization {
     if (!isArray(data)) return false

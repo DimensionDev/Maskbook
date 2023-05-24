@@ -1,6 +1,6 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $safe } from '../intrinsic.js'
-import { DispatchEvent, __Event, type ActivationBehavior } from './Event.js'
+import { $ } from '../intrinsic.js'
+import { DispatchEvent, __Event } from './Event.js'
 
 export function dispatchInput(text: InternalEvents['input'][0]) {
     const element = $.DocumentActiveElement()
@@ -16,12 +16,5 @@ export function dispatchInput(text: InternalEvents['input'][0]) {
         bubbles: true,
         cancelable: true,
     })
-    const activation: ActivationBehavior = $safe.Map()
-    activation.set(element, (event) => {
-        if (!event.isTrusted) return
-
-        if (name === 'INPUT') $.HTMLInputElement_value_setter(element as HTMLInputElement, text)
-        else if (name === 'TEXTAREA') $.HTMLTextAreaElement_value_setter(element as HTMLTextAreaElement, text)
-    })
-    DispatchEvent(element, event, activation)
+    DispatchEvent(element, event)
 }
