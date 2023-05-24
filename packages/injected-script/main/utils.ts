@@ -1,6 +1,5 @@
 import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
 import { $unsafe, $, $safe } from './intrinsic.js'
-import { exportFunction, getOwnPropertyDescriptors, isFirefox, unwrapXRayVision } from './intrinsic_content.js'
 
 /** @deprecated */
 export function defineFunctionOnContentObject<T extends object>(
@@ -8,9 +7,8 @@ export function defineFunctionOnContentObject<T extends object>(
     key: keyof T,
     apply: (target: any, thisArg: any, argArray?: any) => any,
 ) {
-    // Firefox magics!
-    if (isFirefox) {
-        const rawObject = unwrapXRayVision(contentObject)
+    if ($.isFirefox) {
+        const rawObject = $unsafe.unwrapXRayVision(contentObject)
         const rawFunction = rawObject[key]
         exportFunction!(
             function (this: any) {
@@ -28,8 +26,8 @@ export function defineFunctionOnContentObject<T extends object>(
 }
 
 export function PatchDescriptor(patchedProps: PropertyDescriptorMap & NullPrototype, targetPrototype: object) {
-    const __unsafe__targetPrototype = $.unwrapXRayVision(targetPrototype)
-    const targetDescriptor = getOwnPropertyDescriptors(targetPrototype)
+    const __unsafe__targetPrototype = $unsafe.unwrapXRayVision(targetPrototype)
+    const targetDescriptor = $.getOwnPropertyDescriptors(targetPrototype)
     for (const key in patchedProps) {
         if (key === 'constructor') continue
         const desc = patchedProps[key]
@@ -53,17 +51,17 @@ export function PatchDescriptor_NonNull(patchedProps: PropertyDescriptorMap, tar
 }
 
 export function contentFileFromBufferSource(format: string, fileName: string, xray_fileContent: number[] | Uint8Array) {
-    const binary = unwrapXRayVision($.Uint8Array_from(xray_fileContent))
-    const blob = new $unsafe.Blob($safe.Array_from(binary), {
+    const binary = $.Uint8Array_from(xray_fileContent)
+    const blob = new $.Blob($safe.Array_of(binary), {
         __proto__: null,
         type: format,
     })
-    const file = new $unsafe.File($safe.Array_from(blob), fileName, {
+    const file = new $.File($safe.Array_of(blob), fileName, {
         __proto__: null,
         lastModified: $.DateNow(),
         type: format,
     })
-    return file
+    return $unsafe.structuredCloneFromSafe(file)
 }
 
 function getError(message: any) {

@@ -17,13 +17,13 @@ export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
 function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {
     return new $unsafe.Proxy(
         new $unsafe.DataTransfer(),
-        $unsafe.fromSafe({
+        $unsafe.structuredCloneFromSafe({
             __proto__: null,
             get: (target, key: keyof DataTransfer) => {
-                if (key === 'files') return $unsafe.fromSafe([contentRealmFile])
-                if (key === 'types') return $unsafe.fromSafe(['Files'])
+                if (key === 'files') return $unsafe.structuredCloneFromSafe([contentRealmFile])
+                if (key === 'types') return $unsafe.structuredCloneFromSafe(['Files'])
                 if (key === 'items')
-                    return $unsafe.fromSafe([
+                    return $unsafe.structuredCloneFromSafe([
                         {
                             kind: 'file',
                             type: 'image/png',
@@ -33,9 +33,7 @@ function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {
                         },
                     ])
                 if (key === 'getData') return $unsafe.expose(() => '')
-                const result = target[key]
-                if (typeof result === 'object') return $unsafe.unwrap(result)
-                return result
+                return (target as any)[key]
             },
         }),
     )

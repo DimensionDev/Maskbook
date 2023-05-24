@@ -51,7 +51,7 @@ export const Uint8Array_from = globalThis.Uint8Array.from.bind(globalThis.Uint8A
 export const addEventListener = takeThisF(EventTarget.prototype.addEventListener)<EventTarget>
 export const removeEventListener = takeThisF(EventTarget.prototype.removeEventListener)<EventTarget>
 export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)<EventTarget>
-export const { URL } = globalThis
+export const { URL, Blob, File, DOMException } = globalThis
 export const ConsoleError = console.error
 export const AbortSignal_aborted = takeThis(getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!)
 export const URL_origin = takeThis(getOwnPropertyDescriptor(URL.prototype, 'origin')!.get!)
@@ -78,10 +78,10 @@ export const Performance_now = globalThis.performance.now.bind(globalThis.perfor
 
 // #region Firefox magic
 const _exportFunction = typeof exportFunction !== 'undefined' ? exportFunction : null
-export const unwrapXRayVision: <const T extends object>(value: T) => T =
-    typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper.unwrap.bind(XPCNativeWrapper) : Object
 
 export { _exportFunction as exportFunction }
+export const wrapXRayVision: <const T extends object>(val: T) => T =
+    typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper : Object
 export const isFirefox = typeof XPCNativeWrapper !== 'undefined'
 // #endregion
 export interface TypedPropertyDescriptor<T, V> {

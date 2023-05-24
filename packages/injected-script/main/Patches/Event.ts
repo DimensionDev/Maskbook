@@ -21,7 +21,7 @@ function ReTarget(A: EventTarget | null, B: unknown): EventTarget | null {
 
 /** Return the unsafe object without XRayVision from the main Realm. */
 function __unsafe__Object() {
-    return $unsafe.unwrap(new $unsafe.Object())
+    return $unsafe.unwrapXRayVision(new $unsafe.Object())
 }
 export type ActivationBehavior = Map<EventTarget, (event: __Event) => void>
 
@@ -33,11 +33,13 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         // (Skip: we don't override document.createEvent) or if its initialized flag is not set
         if (event.#dispatch) {
             // TODO: stack
-            throw new $unsafe.DOMException(
-                $.isFirefox
-                    ? 'An attempt was made to use an object that is not, or is no longer, usable'
-                    : "Failed to execute 'dispatchEvent' on 'EventTarget': The event is already being dispatched.",
-                'InvalidStateError',
+            throw $unsafe.structuredCloneFromSafe(
+                new $.DOMException(
+                    $.isFirefox
+                        ? 'An attempt was made to use an object that is not, or is no longer, usable'
+                        : "Failed to execute 'dispatchEvent' on 'EventTarget': The event is already being dispatched.",
+                    'InvalidStateError',
+                ),
             )
         }
         event.#isTrusted = false
@@ -67,7 +69,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         let activationTarget = null
         let relatedTarget: EventTarget | null = ReTarget(event.#relatedTarget, target)
         if (target !== relatedTarget || target === event.#relatedTarget) {
-            const touchTargets: PotentialEventTarget[] = $safe.Array_from()
+            const touchTargets: PotentialEventTarget[] = $safe.Array_of()
             for (const touchTarget of event.#touchTargetList) {
                 touchTargets.push(ReTarget(touchTarget, target))
             }
@@ -84,7 +86,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
                 // TODO: If slottable is non-null: ...
                 // TODO: If parent is a slottable and is assigned, then set slottable to parent.
                 relatedTarget = ReTarget(event.#relatedTarget, parent)
-                const touchTargets: PotentialEventTarget[] = $safe.Array_from()
+                const touchTargets: PotentialEventTarget[] = $safe.Array_of()
                 for (const touchTarget of event.#touchTargetList) {
                     touchTargets.push(ReTarget(touchTarget, parent))
                 }
@@ -145,13 +147,13 @@ export class __Event extends (__unsafe__Object as any) implements Event {
 
         event.#eventPhase = EVENT_PHASE_NONE
         event.#currentTarget = null
-        event.#path = $safe.Array_from()
+        event.#path = $safe.Array_of()
         event.#dispatch = false
         event.#stopPropagation = false
         event.#stopImmediatePropagation = false
         if (clearTargets) {
             event.#target = event.#relatedTarget = null
-            event.#touchTargetList = $safe.Array_from()
+            event.#touchTargetList = $safe.Array_of()
         }
         if (activationTarget !== null) {
             if (!event.#canceled) {
@@ -239,10 +241,10 @@ export class __Event extends (__unsafe__Object as any) implements Event {
             Call_A_User_Objects_Operation: {
                 let __unsafe__X: EventListener
                 let __unsafe__thisArg: object = event.#currentTarget!
-                if (typeof listener.callback === 'function') __unsafe__X = $unsafe.unwrap(listener.callback)
+                if (typeof listener.callback === 'function') __unsafe__X = $unsafe.unwrapXRayVision(listener.callback)
                 else {
                     try {
-                        const __unsafe__callbackObject = $unsafe.unwrap(listener.callback!)
+                        const __unsafe__callbackObject = $unsafe.unwrapXRayVision(listener.callback!)
                         __unsafe__X = __unsafe__callbackObject?.handleEvent!
                         // TODO: message, stack
                         if (typeof __unsafe__X !== 'function')
@@ -324,13 +326,13 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         this.#type = type
         this.#bubbles = eventInitDict?.bubbles || false
         this.#cancelable = eventInitDict?.cancelable || false
-        $.setPrototypeOf(this, $.unwrapXRayVision($unsafe.EventPrototype))
+        $.setPrototypeOf(this, $unsafe.EventPrototype)
         $.defineProperties(this, {
             isTrusted: {
                 enumerable: true,
                 configurable: false,
                 get: $unsafe.expose(function isTrusted(this: __Event) {
-                    return $unsafe.unwrap(this).#isTrusted
+                    return $unsafe.unwrapXRayVision(this).#isTrusted
                 }),
                 set: undefined,
             },
@@ -347,48 +349,48 @@ export class __Event extends (__unsafe__Object as any) implements Event {
     #isTrusted = true
     #type: string
     get type(): string {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#type in event)) return $.apply($unsafe.EventPrototypeDesc.type.get!, this, [])
         return event.#type
     }
     #bubbles: boolean
     get bubbles(): boolean {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#bubbles in event)) return $.apply($unsafe.EventPrototypeDesc.bubbles.get!, this, [])
         return event.#bubbles
     }
     #target: EventTarget | null = null
     get target(): EventTarget | null {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#target in event)) return $.apply($unsafe.EventPrototypeDesc.target.get!, this, [])
         if (event.#target === null) return null
-        return $.unwrapXRayVision(event.#target)
+        return event.#target
     }
     get srcElement() {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#target in event)) return $.apply($unsafe.EventPrototypeDesc.srcElement.get!, this, [])
         if (event.#target === null) return null
-        return $.unwrapXRayVision(event.#target)
+        return event.#target
     }
     #currentTarget: EventTarget | null = null
     get currentTarget() {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#currentTarget in event)) return $.apply($unsafe.EventPrototypeDesc.currentTarget.get!, this, [])
         if (event.#currentTarget === null) return null
-        return $.unwrapXRayVision(event.#currentTarget)
+        return event.#currentTarget
     }
     #timeStamp = $.Performance_now()
     get timeStamp(): number {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#timeStamp in event)) return $.apply($unsafe.EventPrototypeDesc.timeStamp.get!, this, [])
         return event.#timeStamp
     }
     #relatedTarget: EventTarget | null = null
-    #touchTargetList: PotentialEventTarget[] = $safe.Array_from()
-    #path: PathRecord[] = $safe.Array_from()
+    #touchTargetList: PotentialEventTarget[] = $safe.Array_of()
+    #path: PathRecord[] = $safe.Array_of()
     #eventPhase = EVENT_PHASE_NONE
     get eventPhase(): number {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#eventPhase in event)) return $.apply($unsafe.EventPrototypeDesc.eventPhase.get!, this, [])
         return event.#eventPhase
     }
@@ -401,14 +403,14 @@ export class __Event extends (__unsafe__Object as any) implements Event {
     #dispatch = false
     // https://dom.spec.whatwg.org/#dom-event-composedpath
     composedPath(): EventTarget[] {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#path in event)) return $.apply($unsafe.EventPrototypeDesc.composedPath.value!, this, arguments)
 
         const path = event.#path
         const currentTarget = event.#currentTarget
-        const __unsafe__composedPath__: EventTarget[] = $unsafe.Array()
+        const __unsafe__composedPath__: EventTarget[] = $unsafe.structuredCloneFromSafe([])
         if (path.length === 0) return __unsafe__composedPath__
-        $.ArrayPush(__unsafe__composedPath__, currentTarget ? $.unwrapXRayVision(currentTarget) : null)
+        $.ArrayPush(__unsafe__composedPath__, currentTarget ? currentTarget : null)
         let currentTargetIndex = 0
         let currentTargetHiddenSubtreeLevel = 0
         let index = path.length - 1
@@ -427,7 +429,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         while (index >= 0) {
             if (path[index].rootOfClosedTree) currentHiddenLevel += 1
             if (currentHiddenLevel <= maxHiddenLevel)
-                $.ArrayUnshift(__unsafe__composedPath__, $.unwrapXRayVision(path[index].invocationTarget))
+                $.ArrayUnshift(__unsafe__composedPath__, path[index].invocationTarget)
             if (path[index].slotInClosedTree) {
                 currentHiddenLevel -= 1
                 if (currentHiddenLevel < maxHiddenLevel) maxHiddenLevel = currentHiddenLevel
@@ -440,7 +442,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         while (index < path.length) {
             if (path[index].slotInClosedTree) currentHiddenLevel += 1
             if (currentHiddenLevel <= maxHiddenLevel)
-                $.ArrayPush(__unsafe__composedPath__, $.unwrapXRayVision(path[index].invocationTarget))
+                $.ArrayPush(__unsafe__composedPath__, path[index].invocationTarget)
             if (path[index].rootOfClosedTree) {
                 currentHiddenLevel -= 1
                 if (currentHiddenLevel < maxHiddenLevel) maxHiddenLevel = currentHiddenLevel
@@ -450,24 +452,24 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         return __unsafe__composedPath__
     }
     stopPropagation() {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#stopPropagation in event))
             return $.apply($unsafe.EventPrototypeDesc.stopPropagation.value!, this, arguments)
         event.#stopPropagation = true
     }
     get cancelBubble(): boolean {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#stopPropagation in event) return event.#stopPropagation
         return $.apply($unsafe.EventPrototypeDesc.cancelBubble.get!, this, [])
     }
     set cancelBubble(value) {
         if (value !== true) return
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#stopPropagation in event) event.#stopPropagation = value
         else $.apply($unsafe.EventPrototypeDesc.cancelBubble.set!, this, [value])
     }
     stopImmediatePropagation() {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#stopImmediatePropagation in event))
             return $.apply($unsafe.EventPrototypeDesc.stopImmediatePropagation.value!, this, arguments)
         event.#stopPropagation = true
@@ -477,39 +479,39 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         if (this.#cancelable && !this.#inPassiveListener) this.#canceled = true
     }
     get cancelable(): boolean {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#stopPropagation in event) return event.#stopPropagation
         return $.apply($unsafe.EventPrototypeDesc.cancelable.get!, this, [])
     }
     get returnValue(): boolean {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#canceled in event) return !event.#canceled
         return $.apply($unsafe.EventPrototypeDesc.returnValue.get!, this, [])
     }
     set returnValue(value) {
         if (value !== false) return
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#canceled in event) event.#canceled = !value
         else $.apply($unsafe.EventPrototypeDesc.returnValue.set!, this, [value])
     }
     preventDefault() {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#canceled in event)) return $.apply($unsafe.EventPrototypeDesc.preventDefault.value!, this, arguments)
         event.#SetCancelFlag()
     }
     get defaultPrevented(): boolean {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#canceled in event) return event.#canceled
         return $.apply($unsafe.EventPrototypeDesc.defaultPrevented.get!, this, [])
     }
     get composed(): boolean {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (#composed in event) return event.#stopPropagation
         return $.apply($unsafe.EventPrototypeDesc.composed.get!, this, [])
     }
 
     initEvent(type: string, bubbles: boolean, cancelable: boolean) {
-        const event = $unsafe.unwrap(this)
+        const event = $unsafe.unwrapXRayVision(this)
         if (!(#dispatch in event)) return $.apply($unsafe.EventPrototypeDesc.initEvent.value!, this, arguments)
         if (event.#dispatch) return
         event.#stopPropagation = false
@@ -524,19 +526,19 @@ export class __Event extends (__unsafe__Object as any) implements Event {
     static UIEvent = class UIEvent extends __Event {
         constructor(type: string, eventInitDict?: UIEventInit | undefined) {
             super(type, eventInitDict)
-            $.setPrototypeOf(this, $.unwrapXRayVision($unsafe.UIEventPrototype))
+            $.setPrototypeOf(this, $unsafe.UIEventPrototype)
             this.#detail = eventInitDict?.detail || 0
             this.#view = eventInitDict?.view || null
         }
         #view?: Window | null | undefined
         get view() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#view in event)) return $.apply($unsafe.UIEventPrototypeDesc.view.get!, this, [])
             return event.#view
         }
         #detail: number
         get detail() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#detail in event)) return $.apply($unsafe.UIEventPrototypeDesc.detail.get!, this, [])
             return event.#detail
         }
@@ -547,7 +549,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
             view: Window | null | undefined,
             detail: number,
         ) {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#detail in event))
                 // TODO: use arguments after https://github.com/swc-project/swc/issues/7428
                 return $.apply($unsafe.UIEventPrototypeDesc.initUIEvent.value!, this, [
@@ -563,13 +565,13 @@ export class __Event extends (__unsafe__Object as any) implements Event {
             event.#detail = detail
         }
         get sourceCapabilities() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#detail in event)) return void $.apply($unsafe.UIEventPrototypeDesc.sourceCapabilities.get!, this, [])
             // TODO: for touch events
             return null
         }
         get which() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#detail in event)) return void $.apply($unsafe.UIEventPrototypeDesc.which.get!, this, [])
             // TODO: for MouseEvent and KeyboardEvent
             return null
@@ -580,10 +582,10 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         constructor(type: string, eventInitDict?: (ClipboardEventInit & { __proto__: null }) | undefined) {
             super(type, eventInitDict)
             this.#clipboardData = eventInitDict?.clipboardData || new $unsafe.DataTransfer()
-            $.setPrototypeOf(this, $.unwrapXRayVision($unsafe.ClipboardEventPrototype))
+            $.setPrototypeOf(this, $unsafe.ClipboardEventPrototype)
         }
         get clipboardData() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#clipboardData in event))
                 return $.apply($unsafe.ClipboardEventPrototypeDesc.clipboardData.get!, this, [])
             return event.#clipboardData
@@ -592,7 +594,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
     static InputEvent = class InputEvent extends __Event.UIEvent {
         constructor(type: string, eventInitDict?: (InputEventInit & { __proto__: null }) | undefined) {
             super(type, eventInitDict)
-            $.setPrototypeOf(this, $.unwrapXRayVision($unsafe.InputEventPrototype))
+            $.setPrototypeOf(this, $unsafe.InputEventPrototype)
             this.#data = eventInitDict?.data || null
             this.#isComposing = eventInitDict?.isComposing || false
             this.#inputType = eventInitDict?.inputType || ''
@@ -600,32 +602,32 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         }
         #data: string | null
         get data() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#data in event)) return $.apply($unsafe.InputEventPrototypeDesc.data.get!, this, [])
             return event.#data
         }
         #isComposing: boolean
         get isComposing() {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#isComposing in event)) return $.apply($unsafe.InputEventPrototypeDesc.isComposing.get!, this, [])
             return event.#isComposing
         }
         #inputType: string
         get inputType(): string {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#inputType in event)) return $.apply($unsafe.InputEventPrototypeDesc.inputType.get!, this, [])
             return event.#inputType
         }
         #dataTransfer: DataTransfer | null
         get dataTransfer(): DataTransfer | null {
-            const event = $unsafe.unwrap(this)
+            const event = $unsafe.unwrapXRayVision(this)
             if (!(#dataTransfer in event)) return $.apply($unsafe.InputEventPrototypeDesc.dataTransfer.get!, this, [])
             if (event.#dataTransfer === null) return null
-            return $.unwrapXRayVision(event.#dataTransfer)
+            return event.#dataTransfer
         }
         // TODO
         getTargetRanges(): StaticRange[] {
-            return $unsafe.Array()
+            return $unsafe.structuredCloneFromSafe([])
         }
     }
 }

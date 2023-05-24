@@ -1,7 +1,8 @@
 import { getOwnPropertyDescriptors, takeThisF } from './intrinsic_content.js'
 import { noop } from './utils.js'
 
-export const fromSafe: <const T>(value: T) => T =
+/** Clone a high privileged object into an unsafe one. This uses structuredClone on Firefox.  */
+export const structuredCloneFromSafe: <T extends object>(value: T) => T =
     typeof cloneInto === 'function'
         ? function (value) {
               return cloneInto!(value, window, {
@@ -14,20 +15,14 @@ export const expose: <T extends (...args: any[]) => any>(f: T) => T =
     typeof exportFunction === 'function'
         ? (f) => new Proxy(exportFunction!(f, window), empty)
         : (f) => new Proxy(f, empty)
-
-export const unwrap: <T extends object>(obj: T) => T =
-    typeof XPCNativeWrapper === 'function'
-        ? function (obj) {
-              return (obj as any).wrappedJSObject || obj
-          }
-        : globalThis.Object
-export const empty: NullPrototype = unwrap(fromSafe({ __proto__: null }))
+export const unwrapXRayVision: <const T extends object>(value: T) => T =
+    typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper.unwrap.bind(XPCNativeWrapper) : window.Object
+export const empty: NullPrototype = unwrapXRayVision(structuredCloneFromSafe({ __proto__: null }))
 window.Object.freeze(empty)
 // The "window" here means another Realm in Firefox
 export const {
     // ECMAScript
     Object,
-    Array,
     TypeError,
     Proxy,
     // Web
@@ -36,10 +31,7 @@ export const {
     ClipboardEvent,
     CustomEvent,
     InputEvent,
-    Blob,
-    File,
     EventTarget,
-    DOMException,
 } = window
 export const reportError = takeThisF(window.reportError)<Window> || noop
 

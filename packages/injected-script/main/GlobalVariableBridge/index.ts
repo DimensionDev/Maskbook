@@ -3,7 +3,7 @@ import { handlePromise, sendEvent } from '../utils.js'
 import type { InternalEvents } from '../../shared/index.js'
 
 const hasListened: Record<string, boolean> = { __proto__: null! }
-const __unsafe__window = $.unwrapXRayVision(window)
+const __unsafe__window = $unsafe.unwrapXRayVision(window)
 
 interface Ref extends NullPrototype {
     __unsafe__this: object
@@ -51,12 +51,12 @@ export function __unsafe__call(path: string, id: number, ...args: unknown[]) {
         if (!ref) return
         const { __unsafe__this, __unsafe__value } = ref
         if (typeof __unsafe__value !== 'function') return
-        return $.apply(__unsafe__value, __unsafe__this, $unsafe.fromSafe(args))
+        return $.apply(__unsafe__value, __unsafe__this, $unsafe.structuredCloneFromSafe(args))
     })
 }
 
 export function __unsafe__callRequest(path: string, id: number, request: unknown) {
-    __unsafe__call(path + '.request', id, $unsafe.fromSafe(request))
+    __unsafe__call(path + '.request', id, $unsafe.structuredCloneFromSafe({ request }).request)
 }
 
 export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {

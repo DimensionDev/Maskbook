@@ -33,11 +33,11 @@ export function hookInputUploadOnce(
 
     const old = proto.click
     proto.click = function (this: HTMLInputElement) {
-        const fileList: Partial<FileList> = $unsafe.fromSafe({
-            item: $unsafe.expose((i: number) => {
+        const fileList: Partial<FileList> = $unsafe.structuredCloneFromSafe({
+            item: (i: number) => {
                 if (i === 0) return file
                 return null
-            }),
+            },
             length: 1,
             [0]: file,
         })
