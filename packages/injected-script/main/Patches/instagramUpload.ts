@@ -1,7 +1,6 @@
 import { $, $safe, $unsafe } from '../intrinsic.js'
 import { contentFileFromBufferSource } from '../utils.js'
 import { HTMLElementClickReplaceAction } from './hookInputUploadOnce.js'
-// TODO: This file is not audited
 export async function instagramUpload(img: number[]) {
     $.setPrototypeOf(img, $safe.ArrayPrototype)
     const file = contentFileFromBufferSource('image/jpeg', 'image.jpg', $.Uint8Array_from(img))
