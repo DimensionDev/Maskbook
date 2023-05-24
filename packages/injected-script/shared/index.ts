@@ -3,11 +3,11 @@ export interface InternalEvents {
     /** Simulate a paste event on the activeElement */
     paste: [text: string]
     /** Simulate an image paste event on the activeElement */
-    pasteImage: [number[]]
+    pasteImage: [image: number[]]
     /** Simulate a input event on the activeElement */
     input: [text: string]
     /** Simulate a image upload on the activeElement on instagram */
-    instagramUpload: [url: string]
+    instagramUpload: [image: number[]]
     /**
      * Simulate an image upload event.
      *

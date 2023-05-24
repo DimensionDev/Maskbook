@@ -107,6 +107,9 @@ export const HTMLInputElementPrototype_files_get = takeThis(
 export const HTMLInputElementPrototype_files_set = takeThis(
     getOwnPropertyDescriptor(HTMLInputElementPrototype, 'files').set!,
 )
+export const querySelector = takeThisF(document.querySelector)<ParentNode>
+export const querySelectorAll = takeThisF(document.querySelectorAll)<ParentNode>
+export const NodeList_forEach = takeThisF(NodeList.prototype.forEach)<NodeList>
 // #endregion
 
 // #region Firefox magic

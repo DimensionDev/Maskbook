@@ -3,10 +3,12 @@ import { PatchDescriptor, contentFileFromBufferSource } from '../utils.js'
 import { __FileList } from './DataTransfer.js'
 import { __Event, DispatchEvent } from './Event.js'
 
-let replaceAction: ((thisVal: HTMLElement) => void) | undefined
+export const HTMLElementClickReplaceAction = $safe.WeakMap<HTMLElement, (thisVal: HTMLElement) => void>()
+let defaultReplaceAction: ((thisVal: HTMLElement) => void) | undefined
 let replaceFiles: FileList | undefined
 function click(this: HTMLElement) {
-    if (replaceAction) return replaceAction(this)
+    if (HTMLElementClickReplaceAction.has(this)) return HTMLElementClickReplaceAction.get(this)!(this)
+    if (defaultReplaceAction) return defaultReplaceAction(this)
     return $.HTMLElementPrototype_click(this)
 }
 function files_getter(this: HTMLInputElement) {
@@ -56,7 +58,7 @@ export function hookInputUploadOnce(
     $.setPrototypeOf(fileArray, $safe.ArrayPrototype)
 
     function action(thisVal: HTMLElement) {
-        replaceAction = undefined
+        defaultReplaceAction = undefined
         const file = contentFileFromBufferSource(format, fileName, fileArray)
         const fileList = new __FileList([file])
         replaceFiles = fileList
@@ -65,10 +67,10 @@ export function hookInputUploadOnce(
             DispatchEvent(thisVal, event)
         }, 200)
     }
-    replaceAction = action
+    defaultReplaceAction = action
 
     if (triggerOnActiveElementNow) {
         const element = $.DocumentActiveElement()
-        if (element) replaceAction(element as HTMLElement)
+        if (element) defaultReplaceAction(element as HTMLElement)
     }
 }

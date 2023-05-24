@@ -1,27 +1,29 @@
-import { unwrapXRayVision } from '../intrinsic_unsafe.js'
-import { contentFileFromBufferSource, defineFunctionOnContentObject } from '../utils.js'
+import { $, $safe, $unsafe } from '../intrinsic.js'
+import { contentFileFromBufferSource } from '../utils.js'
+import { HTMLElementClickReplaceAction } from './hookInputUploadOnce.js'
 // TODO: This file is not audited
-export async function instagramUpload(url: string) {
-    const result = await window.fetch(url).then((x) => x.arrayBuffer())
-    const file = contentFileFromBufferSource('image/jpeg', 'image.jpg', new Uint8Array(result))
+export async function instagramUpload(img: number[]) {
+    $.setPrototypeOf(img, $safe.ArrayPrototype)
+    const file = contentFileFromBufferSource('image/jpeg', 'image.jpg', $.Uint8Array_from(img))
 
-    const target = document.querySelectorAll('input')
-    const postButton = document.querySelector<HTMLElement>('[data-testid="new-post-button"]')
+    const target = $.querySelectorAll(document, 'input')
+    const postButton = $.querySelector(document, '[data-testid="new-post-button"]')
     if (!postButton || target.length === 0) return
-    const done = false
-    for (const input of target) {
-        defineFunctionOnContentObject(input, 'click', (_target: (...args: any) => any, thisArg, args) => {
-            if (done) {
-                _target.apply(thisArg, args)
-            }
-            const raw = unwrapXRayVision(input)
-            for (const x of Object.keys(raw)) {
-                // Old react for __reactEventHandlers, new for __reactProps
-                if (x.startsWith('__reactEventHandlers') || x.startsWith('__reactProps')) {
-                    ;(raw as any)[x].onChange({ target: { files: [file] } })
+
+    $.NodeList_forEach(target, (input) => {
+        HTMLElementClickReplaceAction.set(input as HTMLInputElement, () => {
+            const __unsafe__input = $unsafe.unwrapXRayVision(input)
+
+            for (const key in __unsafe__input) {
+                if (!$.hasOwn(__unsafe__input, key)) continue
+                if ($.StringStartsWith(key, '__reactEventHandlers') || $.StringStartsWith(key, '__reactProps')) {
+                    // @ts-expect-error extra prop
+                    const reactState: any = __unsafe__input[key]
+                    reactState.onChange($unsafe.structuredCloneFromSafe({ target: { files: [file] } }))
                 }
             }
         })
-    }
-    postButton.click()
+        $.setTimeout(() => HTMLElementClickReplaceAction.delete(input as HTMLInputElement), 500)
+    })
+    $.HTMLElementPrototype_click(postButton as HTMLElement)
 }
