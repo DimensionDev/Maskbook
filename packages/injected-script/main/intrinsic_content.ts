@@ -67,7 +67,6 @@ export const Document_defaultView = takeThis(getOwnPropertyDescriptor(Document.p
 export const Document_body = takeThis(getOwnPropertyDescriptor(Document.prototype, 'body')!.get!)
 export const ShadowRoot_host = takeThis(getOwnPropertyDescriptor(ShadowRoot.prototype, 'host')!.get!)
 export const ShadowRoot_mode = takeThis(getOwnPropertyDescriptor(ShadowRoot.prototype, 'mode')!.get!)
-export const HTMLElement_click = takeThisF(HTMLElement.prototype.click)<HTMLElement>
 export const HTMLTextAreaElement_value_setter = takeThis(
     getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')!.set!,
 )
@@ -99,6 +98,15 @@ export const DataTransferItemListPrototype = window.DataTransferItemList.prototy
 export const DataTransferItemListPrototypeDesc = getOwnPropertyDescriptors(DataTransferItemListPrototype)
 export const FileListPrototype = window.FileList.prototype
 export const FileListPrototypeDesc = getOwnPropertyDescriptors(FileListPrototype)
+export const HTMLElementPrototype = window.HTMLElement.prototype
+export const HTMLElementPrototype_click = takeThisF(window.HTMLElement.prototype.click)<HTMLElement>
+export const HTMLInputElementPrototype = window.HTMLInputElement.prototype
+export const HTMLInputElementPrototype_files_get = takeThis(
+    getOwnPropertyDescriptor(HTMLInputElementPrototype, 'files').get!,
+)
+export const HTMLInputElementPrototype_files_set = takeThis(
+    getOwnPropertyDescriptor(HTMLInputElementPrototype, 'files').set!,
+)
 // #endregion
 
 // #region Firefox magic
