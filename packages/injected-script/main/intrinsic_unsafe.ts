@@ -33,6 +33,5 @@ export const InputEventPrototype = window.InputEvent.prototype
 export const InputEventPrototypeDesc = getOwnPropertyDescriptors(InputEventPrototype)
 
 export const EventTargetPrototype = window.EventTarget.prototype
-export const removeListener = takeThisF(window.removeEventListener)<EventTarget>
 const _window = window
 export { _window as window }

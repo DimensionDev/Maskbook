@@ -1,21 +1,21 @@
 import { CustomEventId, decodeEvent } from '../shared/index.js'
-import { instagramUpload } from './EventListenerPatch/instagramUpload.js'
+import { instagramUpload } from './Patches/instagramUpload.js'
 import { $, $safe } from './intrinsic.js'
-import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
-import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
-import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
+import { dispatchInput } from './Patches/dispatchInput.js'
+import { dispatchPaste } from './Patches/dispatchPaste.js'
+import { dispatchPasteImage } from './Patches/dispatchPasteImage.js'
 import {
     __unsafe__callRequest,
-    __unsafe__access,
+    __unsafe__getValue,
     __unsafe__onEvent,
     __unsafe__call,
     __unsafe__until,
 } from './GlobalVariableBridge/index.js'
-import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
+import { hookInputUploadOnce } from './Patches/hookInputUploadOnce.js'
 
 document.addEventListener(CustomEventId, (e) => {
-    const [type, args] = $safe.ExistArray(decodeEvent($.CustomEvent_detail_getter(e as CustomEvent)))
-    $safe.ExistArray(args)
+    const [type, args] = $.setPrototypeOf(decodeEvent($.CustomEvent_detail(e as CustomEvent)), $safe.ArrayPrototype)
+    $.setPrototypeOf(args, $safe.ArrayPrototype)
     if (args.length < 1) return
 
     switch (type) {
@@ -41,7 +41,7 @@ document.addEventListener(CustomEventId, (e) => {
         case 'web3BridgeSendRequest':
             return __unsafe__callRequest(...args)
         case 'web3BridgePrimitiveAccess':
-            return __unsafe__access(...args)
+            return __unsafe__getValue(...args)
         case 'web3UntilBridgeOnline':
             return __unsafe__until(...args)
         case 'web3BridgeExecute':

@@ -4,11 +4,14 @@ const { Map: _Map, Set: _Set, WeakMap: _WeakMap } = globalThis
 const MapPrototype: typeof _Map.prototype = create(null, getOwnPropertyDescriptors(_Map.prototype))
 const SetPrototype: typeof _Set.prototype = create(null, getOwnPropertyDescriptors(_Set.prototype))
 const WeakMapPrototype: typeof _WeakMap.prototype = create(null, getOwnPropertyDescriptors(_WeakMap.prototype))
-const ArrayPrototype: typeof globalThis.Array.prototype = create(
+export const ArrayPrototype: typeof globalThis.Array.prototype = create(
     null,
     getOwnPropertyDescriptors(globalThis.Array.prototype) as any,
 )
-const PromisePrototype: typeof globalThis.Promise.prototype = create(null, getOwnPropertyDescriptors(Promise.prototype))
+export const PromisePrototype: typeof globalThis.Promise.prototype = create(
+    null,
+    getOwnPropertyDescriptors(Promise.prototype),
+)
 
 const __set_iter__ = new _Set().values()
 const __map_iter__ = new _Map().values()
@@ -107,10 +110,4 @@ export function Set<T>(iterable?: Iterable<T> | null | undefined): Set<T> {
 }
 export function Array_from<T extends readonly unknown[]>(...args: T): T {
     return setPrototypeOf(args, ArrayPrototype)
-}
-export function ExistArray<T extends readonly unknown[]>(array: T): T {
-    return setPrototypeOf(array, ArrayPrototype)
-}
-export function ExistPromise(promise: Promise<any>) {
-    return setPrototypeOf(promise, PromisePrototype)
 }

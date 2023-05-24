@@ -2,6 +2,7 @@ import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index
 import { $unsafe, $, $safe } from './intrinsic.js'
 import { exportFunction, isFirefox, unwrapXRayVision } from './intrinsic_content.js'
 
+/** @deprecated */
 export function defineFunctionOnContentObject<T extends object>(
     contentObject: T,
     key: keyof T,
@@ -55,7 +56,7 @@ function getError(message: any) {
 }
 export async function handlePromise(id: number, promise: () => any) {
     try {
-        const data = await $safe.ExistPromise(promise())
+        const data = await $.setPrototypeOf(promise(), $safe.PromisePrototype)
         sendEvent('resolvePromise', id, data)
     } catch (error) {
         sendEvent('rejectPromise', id, getError(error))
@@ -63,6 +64,7 @@ export async function handlePromise(id: number, promise: () => any) {
 }
 
 export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: InternalEvents[T]) {
+    $.setPrototypeOf(args, null)
     const detail = encodeEvent(event, args)
     $.dispatchEvent(
         document,
@@ -75,7 +77,7 @@ export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: Int
 
 export function isTwitter() {
     const url = new $.URL(window.location.href)
-    return $.StringInclude($.URL_origin_getter(url), 'twitter.com')
+    return $.StringInclude($.URL_origin(url), 'twitter.com')
 }
 
 export function noop() {}

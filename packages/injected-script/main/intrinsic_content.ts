@@ -23,14 +23,15 @@ export const bind: {
 export const { String, Promise, Boolean } = globalThis
 export const getOwnPropertyDescriptor: <T, K extends keyof T>(object: T, key: K) => TypedPropertyDescriptor<T, T[K]> =
     Object.getOwnPropertyDescriptor as any
-export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, setPrototypeOf, create } =
-    Object
+export const setPrototypeOf: <const T extends object>(o: T, proto: object | null) => T = Object.setPrototypeOf
+export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, create } = Object
 export const { deleteProperty } = Reflect
 export const apply: <Args extends readonly unknown[], This, Return>(
-    f: (this: This, ...args: Args) => Return,
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    f: ((this: This, ...args: Args) => Return) | Function,
     thisArg: This,
     args: Readonly<Args> | IArguments,
-) => Return = Reflect.apply
+) => Return = Reflect.apply as any
 export const { parse: JSON_parse, stringify: JSON_stringify } = JSON
 export let hasOwn = Object.hasOwn
 if (!hasOwn) {
@@ -41,7 +42,6 @@ export const StringSplit = takeThisF(globalThis.String.prototype.split)<string>
 export const StringInclude = takeThisF(globalThis.String.prototype.includes)<string>
 export const ArrayFilter = takeThisF(globalThis.Array.prototype.filter)<readonly unknown[]>
 export const ArrayIncludes = takeThisF(globalThis.Array.prototype.includes)<readonly unknown[]>
-export const ArrayShift = takeThisF(globalThis.Array.prototype.shift)<unknown[]>
 export const ArrayUnshift: <T>(self: T[], ...args: T[]) => number = takeThisF(globalThis.Array.prototype.unshift)
 export const ArrayPush: <T>(self: T[], ...args: T[]) => number = takeThisF(globalThis.Array.prototype.push)
 export const PromiseResolve = globalThis.Promise.resolve.bind(globalThis.Promise)
@@ -56,7 +56,7 @@ export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)<Even
 export const { URL } = globalThis
 export const ConsoleError = console.error
 export const AbortSignal_aborted = takeThis(getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!)
-export const URL_origin_getter = takeThis(getOwnPropertyDescriptor(URL.prototype, 'origin')!.get!)
+export const URL_origin = takeThis(getOwnPropertyDescriptor(URL.prototype, 'origin')!.get!)
 export const Window_document = takeThis(getOwnPropertyDescriptor(window, 'document')!.get!)
 export const Node_nodeName = takeThis(getOwnPropertyDescriptor(Node.prototype, 'nodeName')!.get!)
 export const Node_parentNode = takeThis(getOwnPropertyDescriptor(Node.prototype, 'parentNode')!.get!)
@@ -74,7 +74,7 @@ export const HTMLInputElement_value_setter = takeThis(
     getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!,
 )
 export const DocumentActiveElement = getOwnPropertyDescriptor(Document.prototype, 'activeElement').get!.bind(document)
-export const CustomEvent_detail_getter = takeThis(getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!)
+export const CustomEvent_detail = takeThis(getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!)
 export const Performance_now = globalThis.performance.now.bind(globalThis.performance)
 // #endregion
 

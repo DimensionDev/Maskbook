@@ -232,7 +232,7 @@ export class __Event extends (UnsafeMainWorldObject as any) implements Event {
             if (phase === 'capturing' && listener.capture === false) continue
             if (phase === 'bubbling' && listener.capture === true) continue
             if (listener.once === true) {
-                $unsafe.removeListener(event.#currentTarget!, listener.type, listener.callback!, listener.capture)
+                $.removeEventListener(event.#currentTarget!, listener.type, listener.callback!, listener.capture)
                 const list = CapturedListeners.get(event.#currentTarget!)
                 list && RemoveListener(listener, list)
             }
