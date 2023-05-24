@@ -37,7 +37,6 @@ export async function pasteTextToCompositionFacebook(
     const element = activated.evaluate()[0] ?? activatedCustom.evaluate()[0]
     try {
         element.focus()
-        await delay(100)
         if ('value' in document.activeElement!) inputText(text)
         else pasteText(text)
         await delay(400)

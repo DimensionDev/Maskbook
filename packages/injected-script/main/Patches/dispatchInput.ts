@@ -7,6 +7,8 @@ export function dispatchInput(text: InternalEvents['input'][0]) {
     if (!element) return
     const name = $.Node_nodeName(element)
 
+    if (name === 'INPUT') $.HTMLInputElement_value_setter(element as HTMLInputElement, text)
+    else if (name === 'TEXTAREA') $.HTMLTextAreaElement_value_setter(element as HTMLTextAreaElement, text)
     const event = new __Event.InputEvent('input', {
         __proto__: null,
         inputType: 'insertText',
