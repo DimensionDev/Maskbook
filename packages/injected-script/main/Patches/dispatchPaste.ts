@@ -1,26 +1,14 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $unsafe } from '../intrinsic.js'
+import { $ } from '../intrinsic.js'
+import { __DataTransfer, __DataTransferItemList } from './DataTransfer.js'
 import { DispatchEvent, __Event } from './Event.js'
 
 export function dispatchPaste(text: InternalEvents['paste'][0]) {
     const event = new __Event.ClipboardEvent('paste', {
         __proto__: null,
-        clipboardData: contentRealmDataTransferProxyFromText(text),
+        clipboardData: new __DataTransfer(__DataTransferItemList.from(text)),
         bubbles: true,
         cancelable: true,
     })
     DispatchEvent($.DocumentActiveElement(), event)
-}
-
-function contentRealmDataTransferProxyFromText(text: string) {
-    return new $unsafe.Proxy(
-        new $.DataTransfer(),
-        $unsafe.structuredCloneFromSafe({
-            __proto__: null,
-            get: (target, key: keyof DataTransfer) => {
-                if (key === 'getData') return $unsafe.expose(() => text)
-                return (target as any)[key]
-            },
-        }),
-    )
 }

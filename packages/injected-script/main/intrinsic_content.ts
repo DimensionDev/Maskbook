@@ -22,7 +22,7 @@ export const { String, Promise, Boolean } = globalThis
 export const getOwnPropertyDescriptor: <T, K extends keyof T>(object: T, key: K) => TypedPropertyDescriptor<T, T[K]> =
     Object.getOwnPropertyDescriptor as any
 export const setPrototypeOf: <const T extends object>(o: T, proto: object | null) => T = Object.setPrototypeOf
-export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, create } = Object
+export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, create, freeze } = Object
 export const { deleteProperty } = Reflect
 export const apply: <Args extends readonly unknown[], This, Return>(
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -37,6 +37,7 @@ if (!hasOwn) {
     hasOwn = (o, v) => Reflect.apply(hasOwnProperty, o, [v])
 }
 export const StringSplit = takeThisF(globalThis.String.prototype.split)<string>
+export const StringToLowerCase = takeThisF(globalThis.String.prototype.toLowerCase)<string>
 export const StringInclude = takeThisF(globalThis.String.prototype.includes)<string>
 export const ArrayFilter = takeThisF(globalThis.Array.prototype.filter)<readonly unknown[]>
 export const ArrayIncludes = takeThisF(globalThis.Array.prototype.includes)<readonly unknown[]>
@@ -48,20 +49,9 @@ export const Uint8Array_from = globalThis.Uint8Array.from.bind(globalThis.Uint8A
 // #endregion
 
 // #region  DOM<EventTarget>
-export const {
-    URL,
-    Blob,
-    File,
-    DOMException,
-    setTimeout,
-    clearTimeout,
-    Event,
-    DataTransfer,
-    ClipboardEvent,
-    CustomEvent,
-    InputEvent,
-    EventTarget,
-} = globalThis
+export const { URL, Blob, File, DOMException, Event, ClipboardEvent, CustomEvent, InputEvent, EventTarget } = globalThis
+export const setTimeout = globalThis.setTimeout.bind(window)
+export const clearTimeout = globalThis.clearTimeout.bind(window)
 export const addEventListener = takeThisF(EventTarget.prototype.addEventListener)<EventTarget>
 export const removeEventListener = takeThisF(EventTarget.prototype.removeEventListener)<EventTarget>
 export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)
@@ -87,7 +77,7 @@ export const HTMLInputElement_value_setter = takeThis(
 export const DocumentActiveElement = getOwnPropertyDescriptor(Document.prototype, 'activeElement').get!.bind(document)
 export const CustomEvent_detail = takeThis(getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!)
 export const Performance_now = globalThis.performance.now.bind(globalThis.performance)
-
+export const Blob_type = takeThis(getOwnPropertyDescriptor(Blob.prototype, 'type')!.get!)
 export const EventPrototype = window.Event.prototype
 export const EventPrototypeDesc = getOwnPropertyDescriptors(EventPrototype)
 export const ClipboardEventPrototype = window.ClipboardEvent.prototype
@@ -101,6 +91,14 @@ export const EventTargetPrototype = window.EventTarget.prototype
 export const EventTargetPrototypeDesc = getOwnPropertyDescriptors(EventTargetPrototype)
 export const { pushState, replaceState } = window.history
 export const HistoryPrototype = window.History.prototype
+export const DataTransferPrototype = window.DataTransfer.prototype
+export const DataTransferPrototypeDesc = getOwnPropertyDescriptors(DataTransferPrototype)
+export const DataTransferItemPrototype = window.DataTransferItem.prototype
+export const DataTransferItemPrototypeDesc = getOwnPropertyDescriptors(DataTransferItemPrototype)
+export const DataTransferItemListPrototype = window.DataTransferItemList.prototype
+export const DataTransferItemListPrototypeDesc = getOwnPropertyDescriptors(DataTransferItemListPrototype)
+export const FileListPrototype = window.FileList.prototype
+export const FileListPrototypeDesc = getOwnPropertyDescriptors(FileListPrototype)
 // #endregion
 
 // #region Firefox magic

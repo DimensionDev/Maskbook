@@ -1,5 +1,6 @@
 import { $, $safe, $unsafe, isDocument, isNode, isShadowRoot, isWindow } from '../intrinsic.js'
 import { PatchDescriptor, PatchDescriptor_NonNull } from '../utils.js'
+import { __DataTransfer, __DataTransferItemList } from './DataTransfer.js'
 import { RemoveListener, type EventListenerDescriptor, CapturedListeners, CapturingEvents } from './EventTarget.js'
 
 const EVENT_PHASE_NONE = 0
@@ -19,13 +20,9 @@ function ReTarget(A: EventTarget | null, B: unknown): EventTarget | null {
     // }
 }
 
-/** Return the unsafe object without XRayVision from the main Realm. */
-function __unsafe__Object() {
-    return $unsafe.unwrapXRayVision(new $unsafe.Object())
-}
 export type ActivationBehavior = Map<EventTarget, (event: __Event) => void>
 
-export class __Event extends (__unsafe__Object as any) implements Event {
+export class __Event extends $unsafe.NewObject implements Event {
     // https://dom.spec.whatwg.org/#dom-eventtarget-dispatchevent
     static EventTarget_DispatchEvent(this: EventTarget, event: Event) {
         if (!(#dispatch in event)) return $.apply(dispatchEvent, this, arguments)
@@ -333,7 +330,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
                 configurable: false,
                 get: $unsafe.expose(function isTrusted(this: __Event) {
                     return $unsafe.unwrapXRayVision(this).#isTrusted
-                }),
+                }, $.EventPrototypeDesc.isTrusted.get!),
                 set: undefined,
             },
             NONE: { value: 0, writable: false, enumerable: true, configurable: false },
@@ -580,7 +577,7 @@ export class __Event extends (__unsafe__Object as any) implements Event {
         #clipboardData: DataTransfer | null
         constructor(type: string, eventInitDict?: (ClipboardEventInit & { __proto__: null }) | undefined) {
             super(type, eventInitDict)
-            this.#clipboardData = eventInitDict?.clipboardData || new $.DataTransfer()
+            this.#clipboardData = eventInitDict?.clipboardData || new __DataTransfer(__DataTransferItemList.from())
             $.setPrototypeOf(this, $.ClipboardEventPrototype)
         }
         get clipboardData() {

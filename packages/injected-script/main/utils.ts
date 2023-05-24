@@ -36,9 +36,9 @@ export function PatchDescriptor(patchedProps: PropertyDescriptorMap & NullProtot
         desc.configurable = true
         desc.enumerable = oldDesc.enumerable
         if ('writable' in oldDesc) desc.writable = oldDesc.writable
-        if ($.hasOwn(desc, 'value') && desc.value) desc.value = $unsafe.expose(desc.value)
-        if ($.hasOwn(desc, 'get') && desc.get) desc.get = $unsafe.expose(desc.get!)
-        if ($.hasOwn(desc, 'set') && desc.set) desc.set = $unsafe.expose(desc.set!)
+        if ($.hasOwn(desc, 'value') && desc.value) desc.value = $unsafe.expose(desc.value, oldDesc.value)
+        if ($.hasOwn(desc, 'get') && desc.get) desc.get = $unsafe.expose(desc.get!, oldDesc.get!)
+        if ($.hasOwn(desc, 'set') && desc.set) desc.set = $unsafe.expose(desc.set!, oldDesc.set!)
         try {
             $.defineProperty(__unsafe__targetPrototype, key, desc)
         } catch {}
