@@ -5,7 +5,9 @@ import {
     emptyTransformationContext,
     FlattenTypedMessage,
     forEachTypedMessageChild,
+    makeTypedMessageText,
     isTypedMessageAnchor,
+    isTypedMessageText,
 } from '@masknet/typed-message'
 import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
@@ -28,7 +30,15 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
-    const postMessage = usePostInfoDetails.rawMessage()
+    const postMessage_ = usePostInfoDetails.rawMessage()
+    const messageAnchorWithPostData = postMessage_.items.find(
+        (x) => isTypedMessageAnchor(x) && x.content?.startsWith('https://mask.io/'),
+    )
+    const items = messageAnchorWithPostData ? [makeTypedMessageText('')] : postMessage_.items
+    const postMessage = {
+        ...postMessage_,
+        items,
+    }
 
     const author = usePostInfoDetails.author()
     const currentProfile = useCurrentIdentity()?.identifier
@@ -67,6 +77,7 @@ function Transformer({
         const flatten = FlattenTypedMessage(message, emptyTransformationContext)
         if (!isTypedMessageEqual(flatten, after)) return true
         if (hasCashOrHashTag(after)) return true
+        if (shouldHiddenPostReplacer(message)) return true
         return false
     }, [message, after])
 
@@ -93,4 +104,8 @@ function hasCashOrHashTag(message: TypedMessage): boolean {
     visitor(message)
     forEachTypedMessageChild(message, visitor)
     return result
+}
+
+function shouldHiddenPostReplacer(message: TypedMessage): boolean {
+    return isTypedMessageText(message) && message.content === ''
 }
