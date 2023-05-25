@@ -34,9 +34,7 @@ export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.Ch
                 theFirst.balance = sum(matchedCollections.map((x) => x.balance || 0))
 
                 // Remove the rest
-                rest.forEach((drop) => {
-                    draft.splice(draft.indexOf(drop), 1)
-                })
+                draft.splice(0, draft.length, ...draft.filter((x) => !rest.includes(x)))
             }
             mergeBy('Lens Followers', (x) => isLensFollower(x.name))
             mergeBy('Lens Collects', (x) => isLensCollect(x.name))
