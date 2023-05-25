@@ -1,6 +1,6 @@
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { formatBalance, isZero, leftShift } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI, type FungibleTokenInputUIProps } from './UI.js'
 import { BigNumber } from 'bignumber.js'
 
@@ -85,12 +85,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 onMaxClick={() => {
                     if (!token) return
                     const amount = new BigNumber(maxAmount ?? balance).dividedBy(maxAmountShares).decimalPlaces(0, 1)
-                    const formattedBalance = formatBalance(amount, token.decimals, token.decimals, true)
-                    onAmountChange(
-                        (isZero(formattedBalance)
-                            ? new BigNumber(leftShift(amount, token.decimals).toPrecision(2)).toFormat()
-                            : formattedBalance) ?? '0',
-                    )
+                    onAmountChange(formatBalance(amount, token.decimals, token.decimals, true) ?? '0')
                 }}
                 balance={balance}
                 required
