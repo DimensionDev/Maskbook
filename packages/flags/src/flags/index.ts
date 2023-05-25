@@ -36,7 +36,7 @@ export const flags = {
     using_emoji_flag: true,
 
     i18nTranslationHotUpdate: true,
-    sandboxedPluginRuntime: insiderOnly,
+    sandboxedPluginRuntime: false,
 
     // how many users should use blockpi rpc
     blockpi_grayscale: 5,
