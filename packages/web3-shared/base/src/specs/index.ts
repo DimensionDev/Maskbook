@@ -1367,14 +1367,10 @@ export interface HubState<
 declare function CreateNextIDStorage(
     proofIdentity: string,
     platform: NextIDPlatform,
-    signerOrPublicKey: string,
+    publicKey: string,
 ): ReadonlyStorage
 
-declare function CreateNextIDStorage(
-    proofIdentity: string,
-    platform: NextIDPlatform,
-    signerOrPublicKey: ECKeyIdentifier,
-): Storage
+declare function CreateNextIDStorage(proofIdentity: string, platform: NextIDPlatform, signer: ECKeyIdentifier): Storage
 
 export interface Web3StorageServiceState {
     createStorage: (
