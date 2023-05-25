@@ -31,6 +31,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         fontWeight: 700,
     },
+    changeOwner: {
+        height: 32,
+        fontSize: 12,
+        lineHeight: '16px',
+        fontWeight: 700,
+        padding: '8px 12px',
+    },
 }))
 
 export interface AccountsManagePopoverProps {
@@ -96,6 +103,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                         <Typography className={classes.second}>{ownerInfo?.publicKey}</Typography>
                     </Box>
                     <Button
+                        className={classes.changeOwner}
                         variant="roundedContained"
                         onClick={() =>
                             openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address, toBeClose: true })
