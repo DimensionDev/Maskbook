@@ -24,8 +24,8 @@ export type ActivationBehavior = Map<EventTarget, (event: __Event) => void>
 
 export class __Event extends $unsafe.NewObject implements Event {
     // https://dom.spec.whatwg.org/#dom-eventtarget-dispatchevent
-    static EventTarget_DispatchEvent(this: EventTarget, event: Event) {
-        if (!(#dispatch in event)) return $.apply(dispatchEvent, this, arguments)
+    static dispatchEvent(this: EventTarget, event: Event) {
+        if (!(#dispatch in event)) return $.dispatchEvent(this, event)
 
         // (Skip: we don't override document.createEvent) or if its initialized flag is not set
         if (event.#dispatch) {
@@ -634,10 +634,7 @@ PatchDescriptor_NonNull($.getOwnPropertyDescriptors(__Event.prototype), $.EventP
 PatchDescriptor_NonNull($.getOwnPropertyDescriptors(__Event.UIEvent.prototype), $.UIEventPrototype)
 PatchDescriptor_NonNull($.getOwnPropertyDescriptors(__Event.InputEvent.prototype), $.InputEventPrototype)
 PatchDescriptor_NonNull($.getOwnPropertyDescriptors(__Event.ClipboardEvent.prototype), $.ClipboardEventPrototype)
-PatchDescriptor(
-    { __proto__: null!, dispatchEvent: { value: __Event.EventTarget_DispatchEvent } },
-    $.EventTargetPrototype,
-)
+PatchDescriptor({ __proto__: null!, dispatchEvent: { value: __Event.dispatchEvent } }, $.EventTargetPrototype)
 
 interface PathRecord {
     __proto__: null

@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
-            padding: theme.spacing(0, props.padding),
+            padding: theme.spacing(0, props.padding || 0),
             color: props.color,
             font: props.font,
             fontSize: props.fontSize,

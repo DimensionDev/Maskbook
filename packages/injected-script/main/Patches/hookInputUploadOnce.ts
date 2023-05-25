@@ -1,5 +1,5 @@
 import { $, $safe } from '../intrinsic.js'
-import { PatchDescriptor, contentFileFromBufferSource } from '../utils.js'
+import { PatchDescriptor, PatchDescriptor_NonNull, contentFileFromBufferSource } from '../utils.js'
 import { __FileList } from './DataTransfer.js'
 import { __Event, DispatchEvent } from './Event.js'
 
@@ -11,21 +11,17 @@ function click(this: HTMLElement) {
     if (defaultReplaceAction) return defaultReplaceAction(this)
     return $.HTMLElementPrototype_click(this)
 }
-function files_getter(this: HTMLInputElement) {
-    const originalFiles = $.HTMLInputElementPrototype_files_get(this)
-    return replaceFiles || originalFiles
-}
-function files_setter(this: HTMLInputElement, value: FileList | null) {
-    $.HTMLInputElementPrototype_files_set(this, value)
-    replaceFiles = undefined
-}
-PatchDescriptor(
-    {
-        __proto__: null!,
-        files: { get: files_getter, set: files_setter },
+const HTMLInputElementPatch = {
+    get files() {
+        const originalFiles = $.HTMLInputElementPrototype_files_get(this as HTMLInputElement)
+        return replaceFiles || originalFiles
     },
-    $.HTMLInputElementPrototype,
-)
+    set files(value: FileList | null) {
+        $.HTMLInputElementPrototype_files_set(this as HTMLInputElement, value)
+        replaceFiles = undefined
+    },
+}
+PatchDescriptor_NonNull($.getOwnPropertyDescriptors(HTMLInputElementPatch), $.HTMLInputElementPrototype)
 PatchDescriptor(
     {
         __proto__: null!,
