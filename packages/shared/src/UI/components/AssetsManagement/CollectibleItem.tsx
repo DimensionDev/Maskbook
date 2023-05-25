@@ -159,6 +159,7 @@ export const CollectibleItem = memo(
                         asset={asset}
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
+                        selectedAsset={rest.selectedAsset}
                     />
                     <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (

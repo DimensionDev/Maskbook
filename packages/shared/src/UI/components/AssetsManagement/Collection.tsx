@@ -83,6 +83,7 @@ export interface CollectionProps
     expanded?: boolean
     onExpand?(id: string): void
     onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
+    selectedAsset?: Web3Helper.NonFungibleAssetScope
 }
 
 /**
@@ -102,6 +103,7 @@ export const Collection: FC<CollectionProps> = memo(
         disableAction,
         onActionClick,
         onItemClick,
+        selectedAsset,
         ...rest
     }) => {
         const t = useSharedI18N()
@@ -134,6 +136,7 @@ export const Collection: FC<CollectionProps> = memo(
                     onActionClick={onActionClick}
                     onItemClick={onItemClick}
                     verifiedBy={verifiedBy}
+                    selectedAsset={selectedAsset}
                 />
             ))
             return <>{renderAssets}</>
@@ -146,6 +149,7 @@ export const Collection: FC<CollectionProps> = memo(
                 pluginID={pluginID}
                 key={`${collection.id}.${asset.address}.${asset.tokenId}`}
                 disableNetworkIcon
+                selectedAsset={selectedAsset}
             />
         ))
         return (

@@ -1,24 +1,29 @@
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { ChainBoundary, NetworkTab, PluginVerifiedWalletStatusBar, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import {
+    ChainBoundary,
+    CollectionList,
+    PluginVerifiedWalletStatusBar,
+    UserAssetsProvider,
+    useSharedI18N,
+} from '@masknet/shared'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { uniqBy } from 'lodash-es'
-import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { type FC, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
-import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
+import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
-import { NFTListPage } from './NFTListPage.js'
 import { RoutePaths } from './Routes.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         '::-webkit-scrollbar': {
             display: 'none',
         },
-
+        overflow: 'hidden',
         display: 'flex',
     },
     addButton: {
@@ -130,17 +135,6 @@ export const NFTListDialog: FC = () => {
     const [selectedAccount, setSelectedAccount] = useState(targetAccount)
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
-    const {
-        value: collectibles = EMPTY_LIST,
-        done: loadFinish,
-        next: nextPage,
-        error: loadError,
-        retry,
-    } = useNonFungibleAssets(selectedPluginId, undefined, {
-        chainId,
-        account: selectedAccount,
-    })
-
     useEffect(() => {
         setChainId(ChainId.Mainnet)
         setSelectedToken(undefined)
@@ -203,45 +197,6 @@ export const NFTListDialog: FC = () => {
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address?.toLowerCase() + x.tokenId))
     }
 
-    const AddCollectible = (
-        <Box className={classes.empty}>
-            <Icons.EmptySimple variant="light" size={36} />
-            <Typography color="textSecondary" textAlign="center" fontSize={14}>
-                {t.collectible_no_collectible()}
-            </Typography>
-        </Box>
-    )
-
-    const Retry = (
-        <Box className={classes.error}>
-            <Typography color={(theme) => theme.palette.maskColor.main} fontWeight="bold" fontSize={12}>
-                {t.load_failed()}
-            </Typography>
-            <Button variant="roundedContained" size="small" style={{ width: 88 }} onClick={retry}>
-                {t.reload()}
-            </Button>
-        </Box>
-    )
-
-    const tokensInList = useMemo(() => {
-        const filtered = [...tokens, ...collectibles].filter((x) => {
-            if (x.chainId !== chainId) return false
-            if (isLensProfileAddress(x.address)) return false
-            if (x.metadata?.name && isLensFollower(x.metadata.name)) return false
-            if (x.collection?.name && isLensCollect(x.collection.name)) return false
-            return true
-        })
-        return uniqBy(filtered, (x) => x.contract?.address?.toLowerCase() + x.tokenId)
-    }, [tokens, collectibles, chainId])
-
-    const getNoNFTList = () => {
-        if (loadError && !collectibles.length) {
-            return Retry
-        }
-        if (tokensInList.length === 0 && loadFinish) return AddCollectible
-        return
-    }
-
     const walletItems = proofs.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
@@ -250,39 +205,25 @@ export const NFTListDialog: FC = () => {
         setTargetAccount(account)
     }, [account])
 
+    const gridProps = {
+        columns: 'repeat(auto-fill, minmax(20%, 1fr))',
+    }
+
     return (
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <>
-                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM && chainId ? (
-                            <div className={classes.abstractTabWrapper}>
-                                <NetworkTab
-                                    chains={SUPPORTED_CHAIN_IDS}
-                                    classes={{
-                                        tab: classes.tab,
-                                        tabs: classes.tabs,
-                                        tabPanel: classes.tabPanel,
-                                        tabPaper: classes.tabPaper,
-                                        indicator: classes.indicator,
-                                    }}
-                                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                                />
-                            </div>
-                        ) : null}
-
-                        <NFTListPage
+                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount}>
+                        <CollectionList
+                            height={479}
+                            account={selectedAccount}
                             pluginID={selectedPluginId}
-                            tokens={tokensInList}
-                            listLength={collectibles.length}
-                            tokenInfo={selectedToken}
-                            onChange={setSelectedToken}
-                            children={getNoNFTList()}
-                            nextPage={nextPage}
-                            loadError={!!loadError}
-                            loadFinish={loadFinish}
+                            gridProps={gridProps}
+                            disableWindowScroll
+                            onItemClick={setSelectedToken}
+                            selectedAsset={selectedToken}
                         />
-                    </>
+                    </UserAssetsProvider>
                 ) : (
                     <Box className={classes.noWallet}>
                         <Icons.EmptySimple variant="light" size={36} />
@@ -328,9 +269,9 @@ export const NFTListDialog: FC = () => {
                             fontSize={14}
                             fontWeight="bold"
                             color={(theme) => theme.palette.maskColor.main}>
-                            RSS3
+                            Simplehash
                         </Typography>
-                        <Icons.RSS3 />
+                        <Icons.SimpleHash />
                     </Stack>
                 </Stack>
 
