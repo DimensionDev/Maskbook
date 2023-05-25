@@ -57,54 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.primary,
     },
-    error: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 'auto',
-        flex: 1,
-        rowGap: 22,
-    },
-    empty: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 'auto',
-        flex: 1,
-        rowGap: 12,
-    },
-    abstractTabWrapper: {
-        width: '100%',
-        flex: 1,
-        flexShrink: 0,
-        position: 'absolute',
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        height: 36,
-        minHeight: 36,
-        paddingLeft: 16,
-        paddingRight: 16,
-        borderRadius: 4,
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
-    },
     noWallet: {
         display: 'flex',
         justifyContent: 'center',
