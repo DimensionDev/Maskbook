@@ -9,6 +9,7 @@ import { Messages } from '../API.js'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
+import { WelcomeFrame } from '../components/WelcomeFrame/index.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -58,7 +59,7 @@ export function Pages() {
         <Suspense fallback={null}>
             <TermsGuard>
                 <Routes>
-                    <Route path={DashboardRoutes.Welcome} element={<Welcome />} />
+                    <Route path={DashboardRoutes.Welcome} element={welcomeFrame(<Welcome />)} />
                     <Route path={DashboardRoutes.Setup} element={<Setup />} />
                     <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
                     <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
@@ -72,6 +73,10 @@ export function Pages() {
             </TermsGuard>
         </Suspense>
     )
+}
+
+function welcomeFrame(x: React.ReactNode) {
+    return <WelcomeFrame />
 }
 function frame(x: React.ReactNode) {
     return <DashboardFrame children={x} />
