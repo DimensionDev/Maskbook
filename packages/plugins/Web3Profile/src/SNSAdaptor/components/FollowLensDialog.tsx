@@ -260,7 +260,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             <EthereumERC20TokenApprovedBoundary
                 spender={value?.profile.followModule?.contractAddress}
                 amount={approved.amount}
-                token={approved.token}
+                token={!isFollowing ? approved.token : undefined}
                 showHelperToken={false}
                 ActionButtonProps={{
                     variant: 'roundedContained',
