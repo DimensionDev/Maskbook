@@ -22,7 +22,7 @@ export const useSocialAccountsBySettings = (
         isInitialLoading,
         error: loadingHiddenAddressError,
         refetch: retryLoadHiddenAddress,
-    } = useHiddenAddressConfigOf(PluginID.Web3Profile, identity?.publicKey, userId)
+    } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId)
 
     const addresses = useMemo(() => {
         if (!hiddenAddress?.length) return socialAccounts

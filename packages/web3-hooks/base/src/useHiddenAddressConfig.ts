@@ -1,7 +1,6 @@
 import { EMPTY_LIST, EMPTY_OBJECT, NextIDPlatform, type PluginID } from '@masknet/shared-base'
-import { useWeb3State } from './useWeb3State.js'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useQuery } from '@tanstack/react-query'
+import { useWeb3State } from './useWeb3State.js'
 
 type Result = Record<string, string[]> | string[]
 type StorageValue =
@@ -14,11 +13,11 @@ type StorageValue =
  *
  * Get unlisted address by persona pubkey.
  *
- * @param pluginID The plugin id as store key
  * @param personaPubkey The persona identifier in hex string
+ * @param pluginID The plugin id as store key
  * @returns
  */
-export function useHiddenAddressConfig(pluginID: PluginID, personaPubkey?: string) {
+export function useHiddenAddressConfig(personaPubkey?: string, pluginID?: PluginID) {
     const { Storage } = useWeb3State()
 
     return useQuery({
@@ -42,17 +41,12 @@ export function useHiddenAddressConfig(pluginID: PluginID, personaPubkey?: strin
     })
 }
 
-export function useHiddenAddressConfigOf(pluginID: PluginID, personaPubkey?: string, socialId?: string) {
-    const result = useHiddenAddressConfig(pluginID, personaPubkey)
+export function useHiddenAddressConfigOf(personaPubkey?: string, pluginID?: PluginID, socialId?: string) {
+    const result = useHiddenAddressConfig(personaPubkey, pluginID)
     return {
         ...result,
         data: result.data ? getHiddenAddressesOf(result.data, socialId) : undefined,
     }
-}
-
-export function useMyHiddenAddresses(pluginID: PluginID, personaPubkey?: string) {
-    const identity = useLastRecognizedIdentity()
-    return useHiddenAddressConfigOf(pluginID, personaPubkey, identity?.identifier?.userId)
 }
 
 export function hiddenAddressesAdapter(list: string[], accounts: string[]): Record<string, string[]> {

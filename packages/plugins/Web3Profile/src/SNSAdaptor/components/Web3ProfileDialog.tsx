@@ -82,7 +82,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
         data: unlistedAddressConfig,
         isInitialLoading,
         refetch,
-    } = useHiddenAddressConfig(PluginID.Web3Profile, personaPublicKey)
+    } = useHiddenAddressConfig(personaPublicKey, PluginID.Web3Profile)
     const migratedUnlistedAddressConfig = useMemo(() => {
         if (!unlistedAddressConfig || !twitterProofs.length) return EMPTY_OBJECT
         if (!Array.isArray(unlistedAddressConfig)) return unlistedAddressConfig

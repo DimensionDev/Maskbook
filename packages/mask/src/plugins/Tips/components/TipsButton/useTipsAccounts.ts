@@ -21,7 +21,7 @@ const supportSources: SocialAddressType[] = [
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
     const userId = identity?.identifier?.userId
-    const { data: hiddenAddresses } = useHiddenAddressConfigOf(PluginID.Web3Profile, personaPubkey, userId)
+    const { data: hiddenAddresses } = useHiddenAddressConfigOf(personaPubkey, PluginID.Web3Profile, userId)
     return useMemo(() => {
         if (!hiddenAddresses?.length) return socialAccounts
         const list = socialAccounts

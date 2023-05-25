@@ -347,7 +347,7 @@ function Content(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || (loadingSocialAccounts && socialAccounts.length === 0) || loadingPersonaStatus)
+    if (!currentVisitingUserId || loadingSocialAccounts || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
