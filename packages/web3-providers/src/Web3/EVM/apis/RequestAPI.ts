@@ -2,24 +2,18 @@ import type { RequestArguments } from 'web3-core'
 import { EthereumMethodType, PayloadEditor, createWeb3, createWeb3Provider } from '@masknet/web3-shared-evm'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 import { Composers } from '../middleware/index.js'
 import { Providers } from '../providers/index.js'
 import { createContext } from '../helpers/createContext.js'
 
-export class RequestAPI {
-    constructor(private options?: ConnectionOptions) {}
-
-    private Request = new RequestReadonlyAPI(this.options)
-    private ConnectionOptions = new ConnectionOptionsAPI(this.options)
-
+export class RequestAPI extends RequestReadonlyAPI {
     private get Provider() {
         return Web3StateRef.value.Provider
     }
 
     // Hijack RPC requests and process them with koa like middleware
-    get request() {
+    override get request() {
         return <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.ConnectionOptions.fill(initial)
@@ -52,7 +46,7 @@ export class RequestAPI {
                                 default: {
                                     if (PayloadEditor.fromPayload(context.request).readonly) {
                                         context.write(
-                                            await this.Request.request(context.requestArguments, {
+                                            await super.request(context.requestArguments, {
                                                 account: options.account,
                                                 chainId: options.chainId,
                                             }),
@@ -84,19 +78,19 @@ export class RequestAPI {
         }
     }
 
-    getWeb3(initial?: ConnectionOptions) {
+    override getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
 
-        if (options.readonly) return this.Request.getWeb3(options)
+        if (options.readonly) return super.getWeb3(options)
         return createWeb3(
             createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options)),
         )
     }
 
-    getWeb3Provider(initial?: ConnectionOptions) {
+    override getWeb3Provider(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
 
-        if (options.readonly) return this.Request.getWeb3Provider(options)
+        if (options.readonly) return super.getWeb3Provider(options)
         return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 }

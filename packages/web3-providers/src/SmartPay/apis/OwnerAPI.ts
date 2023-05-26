@@ -11,7 +11,7 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
-import { ContractAPI } from '../../Web3/EVM/apis/ContractAPI.js'
+import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayFunderAPI } from './FunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
@@ -26,7 +26,7 @@ type OwnerShip = {
 }
 
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
-    private Contract = new ContractAPI()
+    private Contract = new ContractReadonlyAPI()
     private Multicall = new MulticallAPI()
     private Bundler = new SmartPayBundlerAPI()
     private Funder = new SmartPayFunderAPI()

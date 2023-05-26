@@ -28,8 +28,8 @@ import {
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
-import { ConnectionAPI } from './ConnectionAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
+import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 
 export class HubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,
@@ -39,7 +39,7 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Web3 = new ConnectionAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     protected override HubOptions = new HubOptionsAPI(this.options)
 

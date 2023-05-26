@@ -11,7 +11,7 @@ import {
     type UserOperation,
 } from '@masknet/web3-shared-evm'
 import { ConnectionAPI } from '../apis/ConnectionAPI.js'
-import { ContractAPI } from '../apis/ContractAPI.js'
+import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
@@ -26,7 +26,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     ) {}
 
     private Web3 = new ConnectionAPI()
-    private Contract = new ContractAPI()
+    private Contract = new ContractReadonlyAPI()
 
     private async getNonce(context: ConnectionContext) {
         const contract = this.Contract.getWalletContract(context.account)

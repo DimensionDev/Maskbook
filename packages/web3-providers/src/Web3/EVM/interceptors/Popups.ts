@@ -14,8 +14,8 @@ import {
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
-import { ConnectionAPI } from '../apis/ConnectionAPI.js'
-import { ContractAPI } from '../apis/ContractAPI.js'
+import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 
@@ -25,8 +25,8 @@ const DEFAULT_PAYMENT_TOKEN_STATE = {
 }
 
 export class Popups implements Middleware<ConnectionContext> {
-    private Web3 = new ConnectionAPI()
-    private Contract = new ContractAPI()
+    private Web3 = new ConnectionReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
     private Bundler = new SmartPayBundlerAPI()
 
     private async getPaymentToken(context: ConnectionContext) {

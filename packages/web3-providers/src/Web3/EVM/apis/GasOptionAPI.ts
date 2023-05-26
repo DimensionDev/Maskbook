@@ -2,11 +2,11 @@ import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, chainResolver, type GasOption } from '@masknet/web3-shared-evm'
-import { ConnectionAPI } from './ConnectionAPI.js'
+import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { GasOptionAPI_Base } from '../../../entry-types.js'
 
 export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
-    private Web3 = new ConnectionAPI()
+    private Request = new RequestReadonlyAPI()
 
     static HISTORICAL_BLOCKS = 4
 
@@ -35,7 +35,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.Web3.getWeb3({ chainId })
+        const web3 = this.Request.getWeb3({ chainId })
         const history = await web3.eth.getFeeHistory(GasOptionAPI.HISTORICAL_BLOCKS, 'pending', [25, 50, 75])
         const blocks = this.formatFeeHistory(history)
         const slow = this.avg(blocks.map((b) => b.priorityFeePerGas[0]))
@@ -72,7 +72,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.Web3.getWeb3({
+        const web3 = this.Request.getWeb3({
             chainId,
         })
         const gasPrice = await web3.eth.getGasPrice()

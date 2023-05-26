@@ -3,7 +3,9 @@ import { ConnectionAPI } from '../apis/ConnectionAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 export class MetaMask implements Middleware<ConnectionContext> {
-    private Web3 = new ConnectionAPI()
+    private Web3 = new ConnectionAPI({
+        providerType: ProviderType.MaskWallet,
+    })
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // Evoke the unlock popup when metamask-like is locked before send transaction or sign message.
@@ -26,7 +28,6 @@ export class MetaMask implements Middleware<ConnectionContext> {
                 if (currentChainId !== context.chainId) {
                     await this.Web3.connect({
                         chainId: context.chainId,
-                        providerType: ProviderType.MaskWallet,
                     })
                 }
                 break

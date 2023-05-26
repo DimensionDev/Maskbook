@@ -33,10 +33,10 @@ import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.
 import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
 import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
-import { ConnectionAPI } from '../apis/ConnectionAPI.js'
+import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
-    private Web3 = new ConnectionAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     private coder = ABICoder as unknown as ABICoder.AbiCoder
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {

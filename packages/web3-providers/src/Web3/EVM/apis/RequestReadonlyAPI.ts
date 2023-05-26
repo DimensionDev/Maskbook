@@ -11,9 +11,9 @@ const createWeb3SDK = memoize(
 )
 
 export class RequestReadonlyAPI {
-    constructor(private options?: ConnectionOptions) {}
+    constructor(protected options?: ConnectionOptions) {}
 
-    private ConnectionOptions = new ConnectionOptionsAPI(this.options)
+    protected ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {

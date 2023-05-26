@@ -9,13 +9,13 @@ import {
 } from '@masknet/web3-shared-base'
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
-import { ContractAPI } from './ContractAPI.js'
+import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
 import type { HubOptions } from '../types/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
 
 export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, SchemaType> {
-    private Contract = new ContractAPI()
+    private Contract = new ContractReadonlyAPI()
     private CoinGecko = new CoinGeckoPriceAPI_EVM()
 
     private createContract(chainId: ChainId) {

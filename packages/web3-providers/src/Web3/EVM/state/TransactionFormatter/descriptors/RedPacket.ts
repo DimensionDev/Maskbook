@@ -9,12 +9,12 @@ import {
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
+import { ConnectionReadonlyAPI } from '../../../apis/ConnectionReadonlyAPI.js'
 import type { TransactionDescriptor } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
-import { ConnectionAPI } from '../../../apis/ConnectionAPI.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
-    private Web3 = new ConnectionAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)

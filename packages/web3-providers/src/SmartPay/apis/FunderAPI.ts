@@ -2,13 +2,13 @@ import urlcat from 'urlcat'
 import { BigNumber } from 'bignumber.js'
 import { ChainId, type TransactionReceipt } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, type Proof } from '@masknet/shared-base'
-import { ConnectionAPI } from '../../Web3/EVM/apis/ConnectionAPI.js'
+import { RequestReadonlyAPI } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { FUNDER_PROD } from '../constants.js'
 import { FunderAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
-    private Web3 = new ConnectionAPI()
+    private Request = new RequestReadonlyAPI()
 
     private async assetChainId(chainId: ChainId) {
         if (![ChainId.Matic, ChainId.Mumbai].includes(chainId)) throw new Error(`Not supported ${chainId}.`)
@@ -49,9 +49,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
             )
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
-                    this.Web3.getTransactionReceipt(x.tokenTransferTx, {
-                        chainId,
-                    }),
+                    this.Request.getWeb3({ chainId }).eth.getTransactionReceipt(x.tokenTransferTx),
                 ),
             )
 

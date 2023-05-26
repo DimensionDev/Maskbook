@@ -9,14 +9,14 @@ import {
     getEthereumConstant,
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { RequestReadonlyAPI } from '../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
-import { ConnectionAPI } from '../Web3/EVM/apis/ConnectionAPI.js'
-import { ContractAPI } from '../Web3/EVM/apis/ContractAPI.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI implements MulticallBaseAPI.Provider {
-    private Web3 = new ConnectionAPI()
-    private Web3Contract = new ContractAPI()
+    private Request = new RequestReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
 
     private results: {
         [chainId: number]: {
@@ -29,7 +29,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
         const address = getEthereumConstant(chainId, 'MULTICALL_ADDRESS')
         if (!address) throw new Error('Failed to create multicall contract.')
 
-        const contract = this.Web3Contract.getMulticallContract(address, { chainId })
+        const contract = this.Contract.getMulticallContract(address, { chainId })
         if (!contract) throw new Error('Failed to create multicall contract.')
 
         return contract
@@ -109,8 +109,8 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
         const contract = this.createContract(chainId)
         if (!contract) return EMPTY_LIST
 
-        const web3 = this.Web3.getWeb3({ chainId })
-        const blockNumber_ = blockNumber ?? (await this.Web3.getBlockNumber({ chainId })) ?? 0
+        const web3 = this.Request.getWeb3({ chainId })
+        const blockNumber_ = blockNumber ?? (await web3.eth.getBlockNumber())
 
         // filter out cached calls
         const unresolvedCalls = calls.filter((call_) => !this.getCallResult(call_, chainId, blockNumber_))
@@ -121,7 +121,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                 this.chunkArray(unresolvedCalls).map(async (chunk) => {
                     // we don't mind the actual block number of the current call
                     const tx = new ContractTransaction(contract).fill(contract.methods.multicall(chunk), overrides)
-                    const hex = await this.Web3.callTransaction(tx, { chainId })
+                    const hex = await web3.eth.call(tx)
 
                     const outputType = contract.options.jsonInterface.find(({ name }) => name === 'multicall')?.outputs
                     if (!outputType) return

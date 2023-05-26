@@ -1,13 +1,13 @@
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { type ChainId, EthereumMethodType, ProviderType, type Middleware } from '@masknet/web3-shared-evm'
-import { ConnectionAPI } from '../apis/ConnectionAPI.js'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
 
-    private Web3 = new ConnectionAPI()
+    private Request = new RequestReadonlyAPI()
     private nonces = new Map<string, Map<ChainId, number>>()
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
@@ -17,7 +17,7 @@ export class Nonce implements Middleware<ConnectionContext> {
             chainId,
             commitment +
                 Math.max(
-                    await this.Web3.getTransactionNonce(address, { chainId }),
+                    await this.Request.getWeb3({ chainId }).eth.getTransactionCount(address),
                     addressNonces.get(chainId) ?? Nonce.INITIAL_NONCE,
                 ),
         )
