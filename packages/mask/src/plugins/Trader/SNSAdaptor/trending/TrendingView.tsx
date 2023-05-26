@@ -4,7 +4,12 @@ import { TabContext } from '@mui/lab'
 import { Box, useTheme } from '@mui/system'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useNonFungibleAssetsByCollection, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNativeToken,
+    useNonFungibleAssetsByCollection,
+    Web3ContextProvider,
+} from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -136,6 +141,10 @@ export function TrendingView(props: TrendingViewProps) {
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
+    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+        chainId: result.chainId ?? chainId,
+    })
 
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
@@ -382,42 +391,31 @@ export function TrendingView(props: TrendingViewProps) {
                     <Web3ContextProvider
                         value={{
                             pluginID: context.pluginID,
-                            chainId: isNativeTokenSymbol(trending.coin.symbol)
-                                ? trending.coin.chainId
-                                : swapExpectedContract?.chainId,
+                            chainId: isNativeTokenSymbol(coin.symbol) ? coin.chainId : swapExpectedContract?.chainId,
                         }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
-                                defaultInputCoin: coin.address
-                                    ? createFungibleToken(
-                                          chainId,
-                                          isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
-                                          coin.address,
-                                          coin.name,
-                                          coin.symbol,
+                                defaultInputCoin: createFungibleToken(
+                                    result.chainId,
+                                    SchemaType.Native,
+                                    nativeToken?.address ?? '',
+                                    nativeToken?.name ?? '',
+                                    nativeToken?.symbol ?? '',
+                                    nativeToken?.decimals ?? 0,
+                                    isNativeTokenAddress(result.address) ? result.logoURL : undefined,
+                                ),
+                                defaultOutputCoin: isNativeTokenAddress(coin.contract_address)
+                                    ? undefined
+                                    : createFungibleToken(
+                                          swapExpectedContract?.chainId as ChainId,
+                                          SchemaType.ERC20,
+                                          swapExpectedContract?.address || '',
+                                          result.name,
+                                          result.symbol ?? '',
                                           coin.decimals ?? 0,
-                                      )
-                                    : undefined,
-                                defaultOutputCoin: trending.coin
-                                    ? isNativeTokenAddress(trending.coin.contract_address)
-                                        ? createFungibleToken(
-                                              trending.coin.chainId as ChainId,
-                                              SchemaType.Native,
-                                              trending.coin.contract_address,
-                                              '',
-                                              '',
-                                              trending.coin.decimals ?? 0,
-                                          )
-                                        : createFungibleToken(
-                                              swapExpectedContract?.chainId as ChainId,
-                                              SchemaType.ERC20,
-                                              swapExpectedContract?.address || '',
-                                              '',
-                                              '',
-                                              trending.coin.decimals ?? 0,
-                                          )
-                                    : undefined,
+                                          result.logoURL,
+                                      ),
                             }}
                         />
                     </Web3ContextProvider>
