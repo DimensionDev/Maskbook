@@ -26,6 +26,7 @@ export interface MaskSNSEvents {
     // TODO: move to plugin message
     profileTabUpdated: ProfileTabEvent
     profileTabHidden: { hidden: boolean }
+    postReplacerHidden: postReplacerHiddenEvent
     profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
@@ -191,6 +192,11 @@ export enum ProfileTabs {
 export interface ProfileTabEvent {
     show: boolean
     type?: ProfileTabs
+}
+
+export interface postReplacerHiddenEvent {
+    hidden: boolean
+    postId: string
 }
 
 export interface OpenPageConfirmEvent {

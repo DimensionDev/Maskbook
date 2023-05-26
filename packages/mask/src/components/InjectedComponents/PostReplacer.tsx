@@ -5,17 +5,19 @@ import {
     emptyTransformationContext,
     FlattenTypedMessage,
     forEachTypedMessageChild,
-    makeTypedMessageText,
     isTypedMessageAnchor,
+    makeTypedMessageText,
     isTypedMessageText,
 } from '@masknet/typed-message'
 import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
+import { MaskMessages } from '../../utils/messages.js'
+import { produce } from 'immer'
 
 const useStyles = makeStyles()({
     root: {
@@ -30,15 +32,19 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
-    const postMessage_ = usePostInfoDetails.rawMessage()
-    const messageAnchorWithPostData = postMessage_.items.find(
-        (x) => isTypedMessageAnchor(x) && x.content?.startsWith('https://mask.io/'),
-    )
-    const items = messageAnchorWithPostData ? [makeTypedMessageText('')] : postMessage_.items
-    const postMessage = {
-        ...postMessage_,
-        items,
-    }
+
+    const [postMessage, setPostMessage] = useState(usePostInfoDetails.rawMessage())
+    const iv = usePostInfoDetails.postIVIdentifier()
+    useEffect(() => {
+        if (postMessage?.meta || !iv?.toText()) return
+        return MaskMessages.events.postReplacerHidden.on(() => {
+            setPostMessage(
+                produce((draft) => {
+                    return { ...draft, items: [makeTypedMessageText('')] }
+                }),
+            )
+        })
+    }, [postMessage?.meta, iv?.toText])
 
     const author = usePostInfoDetails.author()
     const currentProfile = useCurrentIdentity()?.identifier

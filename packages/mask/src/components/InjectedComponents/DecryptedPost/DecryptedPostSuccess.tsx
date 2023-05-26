@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { useI18N } from '../../../utils/index.js'
+import { MaskMessages, useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
@@ -45,6 +45,13 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
 ) {
     const { message, author, postedBy } = props
     const { t } = useI18N()
+    const iv = usePostInfoDetails.postIVIdentifier()
+
+    useEffect(() => {
+        if (message.meta || !iv?.toText()) return
+        MaskMessages.events.postReplacerHidden.sendToLocal({ hidden: true, postId: iv.toText() })
+    }, [message, iv?.toText()])
+
     return (
         <>
             <AdditionalContent
