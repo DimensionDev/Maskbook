@@ -20,7 +20,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
             [
                 async () => {
                     const token = await hub?.getFungibleToken?.(address ?? '', { chainId })
-                    const logoURL = fallbackToken?.logoURL || ''
+                    const logoURL = token?.logoURL ?? fallbackToken?.logoURL
                     return { ...token, logoURL } as Web3Helper.FungibleTokenScope<S, T>
                 },
             ],
