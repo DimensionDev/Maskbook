@@ -138,7 +138,6 @@
     "no_NFTs_found": "NFTが見つかりません。",
     "dashboard_collectible_menu_all": "すべて ({{count}})",
     "days": "{{days}} 日ごと",
-    "decrypted_postbox_add_recipients": "受信者を追加",
     "decrypted_postbox_decrypting": "Mask が復号しています。",
     "decrypted_postbox_decoding": "Mask が解読しています。",
     "decrypted_postbox_decrypting_finding_person_key": "Mask は公開鍵を探しています…",

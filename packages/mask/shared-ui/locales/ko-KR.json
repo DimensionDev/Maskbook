@@ -138,7 +138,6 @@
     "no_NFTs_found": "NFT가 없습니다.",
     "dashboard_collectible_menu_all": "모든({{count}})",
     "days": "{{days}} 일마다",
-    "decrypted_postbox_add_recipients": "받는사람 추가",
     "decrypted_postbox_decrypting": "Mask 해독 중",
     "decrypted_postbox_decoding": "Mask 디코딩 중",
     "decrypted_postbox_decrypting_finding_person_key": "Mask가 상대방의 공개 키를 찾고 있습니다...",

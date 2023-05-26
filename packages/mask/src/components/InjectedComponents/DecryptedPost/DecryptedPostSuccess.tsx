@@ -3,13 +3,14 @@ import { useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
-import { Link } from '@mui/material'
+import { Typography } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
 import { EMPTY_LIST, type ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
+import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRecipientsList.js'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
@@ -39,12 +40,6 @@ function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is Pr
     if (whoAmI !== postAuthor) return false
     return true
 }
-export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    const { whoAmI } = props
-    const canShare = useCanAppendShareTarget(whoAmI)
-    if (canShare) return <DecryptPostSuccessAppendShare {...props} whoAmI={whoAmI} />
-    return <DecryptPostSuccessBase {...props} />
-})
 const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     props: React.PropsWithChildren<DecryptPostSuccessProps>,
 ) {
@@ -62,32 +57,55 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     )
 })
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canAppendShareTarget }) => {
     return {
-        addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
+        visibilityBox: {
+            padding: theme.spacing(0.5, 1),
+            background: theme.palette.maskColor.bg,
+            borderRadius: '999px',
+            cursor: canAppendShareTarget ? 'pointer' : 'default',
+        },
     }
 })
-const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShare(
-    props: DecryptPostSuccessProps & {
-        whoAmI: ProfileIdentifier
-    },
-) {
-    const { classes } = useStyles()
+export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
+    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
+    const { classes } = useStyles({ canAppendShareTarget })
     const { t } = useI18N()
     const [showDialog, setShowDialog] = useState(false)
     const recipients = useRecipientsList()
-    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
+    const { value: alreadySelectedPreviously } = useSelectedRecipientsList()
 
-    const rightActions = canAppendShareTarget ? (
-        <>
-            <Link color="primary" onClick={() => setShowDialog(true)} className={classes.addRecipientsLink}>
-                {t('decrypted_postbox_add_recipients')}
-            </Link>
-            {showDialog ? (
-                <AppendShareDetail whoAmI={props.whoAmI} onClose={() => setShowDialog(false)} recipients={recipients} />
-            ) : null}
-        </>
-    ) : null
+    const rightActions =
+        props.author?.userId === props.whoAmI?.userId ? (
+            canAppendShareTarget && props.whoAmI ? (
+                <>
+                    {!alreadySelectedPreviously?.length ? (
+                        <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
+                            <Typography color="textPrimary" fontSize={12} fontWeight={500}>
+                                {t('decrypted_postbox_only_visible_to_yourself')}
+                            </Typography>
+                        </section>
+                    ) : (
+                        <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
+                            {1234}
+                        </section>
+                    )}
+                    {showDialog ? (
+                        <AppendShareDetail
+                            whoAmI={props.whoAmI}
+                            onClose={() => setShowDialog(false)}
+                            recipients={recipients}
+                        />
+                    ) : null}
+                </>
+            ) : (
+                <section className={classes.visibilityBox}>
+                    <Typography color="textPrimary" fontSize={12} fontWeight={500}>
+                        {t('decrypted_postbox_visible_to_all')}
+                    </Typography>
+                </section>
+            )
+        ) : null
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>
 })
 
