@@ -7,7 +7,7 @@ import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIden
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'

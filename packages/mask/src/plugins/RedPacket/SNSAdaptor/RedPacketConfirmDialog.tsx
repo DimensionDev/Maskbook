@@ -79,7 +79,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const contract_version = 4
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { account: publicKey, privateKey } = useMemo(() => Web3.createAccount(), [])
+    const { account: publicKey, privateKey = '' } = useMemo(() => Web3.createAccount(), [])
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // #region amount minus estimate gas fee

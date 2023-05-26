@@ -134,7 +134,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { account: publicKey, privateKey } = useMemo(() => Web3.createAccount(), [])!
+    const { account: publicKey, privateKey = '' } = useMemo(() => Web3.createAccount(), [])!
 
     const duration = 60 * 60 * 24
 
