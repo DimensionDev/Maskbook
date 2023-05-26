@@ -15,11 +15,9 @@ export class RequestReadonlyAPI {
 
     private ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
-    // Hijack RPC requests and process them with koa like middleware
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
-            const web3Provider = this.getWeb3Provider(initial)
-            return (await web3Provider.request(requestArguments)) as T
+            return (await this.getWeb3Provider(initial).request(requestArguments)) as T
         }
     }
 

@@ -29,8 +29,6 @@ export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private Owner = new SmartPayOwnerAPI()
-
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
 
     constructor() {
@@ -46,45 +44,43 @@ export class MaskWalletProvider
         )
     }
     async update() {
+        const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
+        if (isRecovery) return
+
+        const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
-        const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
-        if (!isRecovery) {
-            const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
-            const chainId = await this.Bundler.getSupportedChainId()
-            const accounts = await this.Owner.getAccountsByOwners(chainId, [
-                ...wallets.map((x) => x.address),
-                ...compact(allPersonas.map((x) => x.address)),
-            ])
+        const chainId = await this.Bundler.getSupportedChainId()
+        const accounts = await new SmartPayOwnerAPI().getAccountsByOwners(chainId, [
+            ...wallets.map((x) => x.address),
+            ...compact(allPersonas.map((x) => x.address)),
+        ])
 
-            const now = new Date()
-            const smartPayWallets = accounts
-                .filter((x) => x.deployed)
-                .map((x) => ({
-                    id: x.address,
-                    name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
-                    address: x.address,
-                    hasDerivationPath: false,
-                    hasStoredKeyInfo: false,
-                    configurable: true,
-                    createdAt: now,
-                    updatedAt: now,
-                    owner: x.owner,
-                    deployed: x.deployed,
-                    identifier: allPersonas
-                        .find((persona) => isSameAddress(x.owner, persona.address))
-                        ?.identifier.toText(),
-                }))
+        const now = new Date()
+        const smartPayWallets = accounts
+            .filter((x) => x.deployed)
+            .map((x) => ({
+                id: x.address,
+                name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                address: x.address,
+                hasDerivationPath: false,
+                hasStoredKeyInfo: false,
+                configurable: true,
+                createdAt: now,
+                updatedAt: now,
+                owner: x.owner,
+                deployed: x.deployed,
+                identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
+            }))
 
-            const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
-                isSameAddress(a.address, b.address),
-            )
+        const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
+            isSameAddress(a.address, b.address),
+        )
 
-            if (!isEqual(result, super.wallets)) {
-                await this.updateWallets(result)
-            }
-            this.ref.value = sortBy(result, (x) => !!x.owner)
+        if (!isEqual(result, super.wallets)) {
+            await this.updateWallets(result)
         }
+        this.ref.value = sortBy(result, (x) => !!x.owner)
     }
 
     override get subscription() {
