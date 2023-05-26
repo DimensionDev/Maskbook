@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
-import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
+import { ApplicationEntry } from '@masknet/shared'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { NextIdLensToFireflyLens } from './components/LensPopup.js'
 import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
@@ -69,16 +69,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ),
             }
         })(),
-    ],
-    SettingTabs: [
-        {
-            ID: PluginID.Web3Profile,
-            label: 'Web3Profile',
-            priority: 2,
-            UI: {
-                TabContent: PublicWalletSetting,
-            },
-        },
     ],
     Lens: {
         ID: `${base.ID}_lens`,

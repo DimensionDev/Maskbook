@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+/**
+ * @deprecated unused
+ */
 export function PluginSettingsDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -63,12 +66,12 @@ export function PluginSettingsDialog() {
     )
 
     const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
-    const proofs = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
+    const { loading, value: proofs } = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
 
     const bindingWallets = useMemo(() => {
-        if (proofs.loading) return EMPTY_LIST
-        return proofs.value?.filter((x) => x.platform === NextIDPlatform.Ethereum) ?? EMPTY_LIST
-    }, [proofs])
+        if (loading || !proofs) return EMPTY_LIST
+        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+    }, [proofs, loading])
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 

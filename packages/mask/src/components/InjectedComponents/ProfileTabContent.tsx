@@ -9,7 +9,7 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { Link, Button, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
     AddressItem,
     ConnectPersonaBoundary,
@@ -121,9 +121,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 }
 
 function openWeb3ProfileSettingDialog() {
-    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
         open: true,
-        targetTab: PluginID.Web3Profile,
     })
 }
 
@@ -131,7 +130,6 @@ function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
-    const theme = useTheme()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)

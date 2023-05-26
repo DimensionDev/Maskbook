@@ -745,6 +745,21 @@ export const ArrowRightIos = /*#__PURE__*/ __createIcon('ArrowRightIos', [
         u: () => new URL('./general/ArrowRightIos.svg', import.meta.url),
     },
 ])
+export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
+    {
+        u: () => new URL('./general/ArrowUp.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'm12.566 9.066 5.068 5.068a.8.8 0 0 1-.566 1.366H6.931a.8.8 0 0 1-.565-1.366l5.068-5.068a.8.8 0 0 1 1.132 0Z',
+                }),
+            }),
+        s: true,
+    },
+])
 export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [
     {
         u: () => new URL('./general/ArrowUpRound.svg', import.meta.url),

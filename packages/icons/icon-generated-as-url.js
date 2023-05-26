@@ -121,6 +121,7 @@ export function arrow_downward_url() { return new URL("./general/ArrowDownward.s
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url) }
 export function arrow_right_url() { return new URL("./general/ArrowRight.svg", import.meta.url) }
 export function arrow_right_ios_url() { return new URL("./general/ArrowRightIos.svg", import.meta.url) }
+export function arrow_up_url() { return new URL("./general/ArrowUp.svg", import.meta.url) }
 export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.svg", import.meta.url) }
 export function asset_loading_url() { return new URL("./general/AssetLoading.svg", import.meta.url) }
 export function author_url() { return new URL("./general/Author.svg", import.meta.url) }

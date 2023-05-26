@@ -16,7 +16,11 @@ interface WalletSettingCardProps {
     onSwitchChange: (address: string) => void
 }
 
-export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked, onSwitchChange }) => {
+export const WalletSettingCard = memo<WalletSettingCardProps>(function WalletSettingCard({
+    wallet,
+    checked,
+    onSwitchChange,
+}) {
     const wallets = useWallets()
     const networkPluginId = resolveNextID_NetworkPluginID(wallet.platform)
     const chainId = useDefaultChainId(networkPluginId)
@@ -30,7 +34,7 @@ export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked
         if (walletAtDB) return walletAtDB.name
         if (networkPluginId) return resolveNetworkWalletName(networkPluginId)
         return
-    }, [domain, wallets, wallet, networkPluginId])
+    }, [domain, wallets, wallet.identity, networkPluginId])
 
     const formattedAddress = Others?.formatAddress(wallet.identity, 4)
     const addressLink = Others?.explorerResolver.addressLink?.(chainId, wallet.identity)
