@@ -1,6 +1,4 @@
 {
-    "add_wallet": "월렛 추가",
-    "add_wallet_tips": "팁을 받기를 위해 월렛을 추가하세요.",
     "tips": "팁",
     "tip_to": "받는 사람",
     "cancel": "취소",
@@ -42,20 +40,8 @@
     "tip_add_collectibles_error": "컨트랙트 조소가 잘못되거나 월렛에 해당 수집품이 없습니다.",
     "tip_loading": "로딩 중",
     "tip_empty_nft": "미리 보기에 사용할 수 있는 수집품이 없습니다. 여기에 수집품을 추가하십시오.",
-    "tip_disconnect_dialog_title": "월렛 연결을 해제하시겠습니까?",
     "tip_persona_sign_success": "저장 성공",
-    "tip_default_set_successfully_description": "팁을 받을 디플트 월렛을 설정했습니다.",
-    "tip_persona_sign_error": "저장 실패",
-    "tip_default_set_failed_description": "디플트 월렛의 설정이 실패되었습니다. 다시 시도하세요.",
-    "tip_wallet_sign_success": "월렛이 연결되었습니다.",
-    "tip_wallet_sign_error": "월렛 연결이 실패되었습니다.",
-    "tip_wallet_add": "월렛을 추가하세요.",
-    "tip_connect_your_wallet": "월렛 연결하세요.",
     "tips_wallet_alert": "팁을 받기 위해 확인된 월렛 주소를 추가하고 관리합니다.",
-    "tip_empty_list": "월렛을 연결하고 인증하세요.",
-    "tip_empty_manage_list": "팁을 받기를 위해 월렛을 관리하세요.",
-    "tip_set_as_default": "디플트로 설정",
-    "tip_copy_success_of_wallet_addr": "월렛 주소 복사 성공",
     "recipient_address_is_contract": "받는 주소는 컨트랙트 주소입니다. 다시 확인해 주세요.",
     "recipient_address_is_malicious": "받는 주소는 악의적인 주소일 수 있습니다.",
     "copy_address": "주소 복사",
@@ -63,6 +49,5 @@
     "wallet_set_up_failed": "팁 월렛 설정 실패, 디시 시도",
     "view_on_explorer": "Explorer에서 보기",
     "tips_guide_description": "마스크 네트워크의 팁 기능을 사용하여 작성자에게 팁을 보냅니다.",
-    "tips_guide_action": "닫기",
-    "nft_amount": "NFT 수량: <strong>{{count}}</strong>"
+    "tips_guide_action": "닫기"
 }
