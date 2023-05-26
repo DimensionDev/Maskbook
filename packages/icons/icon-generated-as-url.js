@@ -111,6 +111,7 @@ export function zk_scan_url() { return new URL("./brands/zkScan.svg", import.met
 export function zora_url() { return new URL("./brands/Zora.svg", import.meta.url) }
 export function zrx_url() { return new URL("./brands/zrx.svg", import.meta.url) }
 export function add_url() { return new URL("./general/Add.svg", import.meta.url) }
+export function add_no_border_url() { return new URL("./general/AddNoBorder.svg", import.meta.url) }
 export function add_user_url() { return new URL("./general/AddUser.svg", import.meta.url) }
 export function airdrop_url() { return new URL("./general/Airdrop.svg", import.meta.url) }
 export function application_nft_url() { return new URL("./general/ApplicationNFT.svg", import.meta.url) }

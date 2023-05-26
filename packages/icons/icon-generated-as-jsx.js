@@ -597,6 +597,11 @@ export const Add = /*#__PURE__*/ __createIcon('Add', [
         s: true,
     },
 ])
+export const AddNoBorder = /*#__PURE__*/ __createIcon('AddNoBorder', [
+    {
+        u: () => new URL('./general/AddNoBorder.svg', import.meta.url),
+    },
+])
 export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
     {
         u: () => new URL('./general/AddUser.svg', import.meta.url),
