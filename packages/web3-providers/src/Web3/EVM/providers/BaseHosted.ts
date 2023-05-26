@@ -6,25 +6,23 @@ import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, type StorageObject, type Wallet } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
-    type ChainId,
     getDefaultChainId,
     isValidAddress,
     formatEthereumAddress,
     PayloadEditor,
+    type ChainId,
     type ProviderType,
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
-import { ConnectionAPI } from '../apis/ConnectionAPI.js'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseHostedProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private Web3 = new ConnectionAPI()
-
     private walletStorage:
         | StorageObject<{
               account: string
@@ -32,6 +30,8 @@ export class BaseHostedProvider
               wallets: Wallet[]
           }>
         | undefined
+
+    private Request = new RequestReadonlyAPI()
 
     constructor(
         protected override providerType: ProviderType,
@@ -229,10 +229,11 @@ export class BaseHostedProvider
 
     override async request<T>(
         requestArguments: RequestArguments,
-        options?: WalletAPI.ProviderOptions<ChainId>,
+        initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.Web3.getWeb3Provider({
-            chainId: options?.chainId || this.hostedChainId,
-        }).request<T>(PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill())
+        return this.Request.request<T>(
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
+            initial,
+        )
     }
 }
