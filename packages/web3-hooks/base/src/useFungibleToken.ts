@@ -15,7 +15,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const chainId = useChainId(pluginID, options?.chainId)
 
     return useAsyncRetry<Web3Helper.FungibleTokenScope<S, T> | undefined>(async () => {
-        if (!hub) return
+        if (!hub || !address) return
         return attemptUntil(
             [
                 async () => {
@@ -26,5 +26,5 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
             ],
             fallbackToken,
         )
-    }, [address, hub, chainId, JSON.stringify(options)])
+    }, [address, hub, chainId])
 }
