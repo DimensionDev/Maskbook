@@ -48,7 +48,7 @@ function usePersonaContext() {
     )
     const avatar = currentPersona?.avatar
 
-    const { value: proofs, loading: fetchProofsLoading } = usePersonaProofs(
+    const { data: proofs, isLoading: fetchProofsLoading } = usePersonaProofs(
         currentPersona?.identifier.publicKeyAsHex,
         MaskMessages,
     )

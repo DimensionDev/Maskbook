@@ -1,8 +1,8 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
+import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { hiddenAddressesAdapter, useChainContext, useHiddenAddressConfig, useWeb3State } from '@masknet/web3-hooks-base'
 import { DialogActions, DialogContent } from '@mui/material'
 import { isEmpty, isEqual, range, uniqBy } from 'lodash-es'
@@ -16,8 +16,8 @@ import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
-        height: 494,
-        padding: '0px 16px',
+        height: 484,
+        padding: theme.spacing(1, 2, 0),
         '::-webkit-scrollbar': {
             display: 'none',
         },
@@ -53,6 +53,9 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
 
+    const [tipsVisible, setTipsVisible] = useState(true)
+    const dismissTips = useCallback(() => setTipsVisible(false), [])
+
     const persona = useCurrentPersona()
     const currentPersona = allPersona.find((x) => x.identifier.rawPublicKey === persona?.rawPublicKey)
     const personaPublicKey = currentPersona?.identifier.publicKeyAsHex
@@ -60,7 +63,11 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
         return allPersona.flatMap((x) => x.linkedProfiles).filter((x) => x.identifier.network === 'twitter.com')
     }, [])
 
-    const { value: proofs, loading: loadingBinding } = usePersonaProofs(personaPublicKey, {
+    const {
+        data: proofs,
+        isLoading: loadingBinding,
+        isFetched,
+    } = usePersonaProofs(personaPublicKey, {
         events: { ownProofChanged: context?.ownProofChanged },
     } as WebExtensionMessage<MaskEvents>)
     const twitterProofs = useMemo(() => {
@@ -110,6 +117,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
     }, [])
 
     const { Storage } = useWeb3State()
+    const { showSnackbar } = useCustomSnackbar()
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         if (!Storage || !currentPersona?.identifier) return
         const storage = Storage.createNextIDStorage(
@@ -117,20 +125,33 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
             NextIDPlatform.NextID,
             currentPersona.identifier,
         )
-        await storage.set<AddressConfig>(PluginID.Web3Profile, {
-            hiddenAddresses: pendingUnlistedConfig,
-        })
+        try {
+            await storage.set<AddressConfig>(PluginID.Web3Profile, {
+                hiddenAddresses: pendingUnlistedConfig,
+            })
+            showSnackbar(t.save_successfully(), {
+                variant: 'success',
+                message: t.save_successfully_message(),
+                autoHideDuration: 2000,
+            })
+        } catch {
+            showSnackbar(t.save_failed(), {
+                variant: 'error',
+                message: t.save_failed_message(),
+            })
+        }
+
         refetch()
-    }, [Storage, currentPersona?.identifier, pendingUnlistedConfig])
+    }, [Storage, currentPersona?.identifier, pendingUnlistedConfig, t])
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
-    const openPopupsWindow = () => {
+    const openPopupsWindow = useCallback(() => {
         context.openPopupWindow(PopupRoutes.ConnectedWallets, {
             chainId,
             internal: true,
         })
-    }
+    }, [chainId])
 
     const disabled = isClean || isInitialLoading
 
@@ -146,26 +167,34 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
             }
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                {loadingBinding && !twitterProofs.length
-                    ? range(3).map((v) => <ProfileCardSkeleton className={classes.profileCard} key={v} />)
-                    : twitterProofs.map((proof, i) => {
-                          const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
-                          const unlistedAddresses = migratedUnlistedAddressConfig[proof.identity] ?? EMPTY_LIST
-                          const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
-                          return (
-                              <ProfileCard
-                                  key={proof.identity}
-                                  className={classes.profileCard}
-                                  avatar={avatar}
-                                  profile={proof}
-                                  walletProofs={walletProofs}
-                                  unlistedAddresses={unlistedAddresses}
-                                  pendingUnlistedAddresses={pendingUnlistedAddresses}
-                                  initialCollapsed={i !== 0}
-                                  onToggle={toggleUnlisted}
-                              />
-                          )
-                      })}
+                <Alert open={tipsVisible} onClose={dismissTips}>
+                    {t.setup_tips()}
+                </Alert>
+                {loadingBinding && !twitterProofs.length ? (
+                    range(3).map((v) => <ProfileCardSkeleton className={classes.profileCard} key={v} />)
+                ) : isFetched && !twitterProofs.length ? (
+                    <EmptyStatus>{t.no_verified_account()}</EmptyStatus>
+                ) : (
+                    twitterProofs.map((proof, i) => {
+                        const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
+                        const unlistedAddresses = migratedUnlistedAddressConfig[proof.identity] ?? EMPTY_LIST
+                        const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
+                        return (
+                            <ProfileCard
+                                key={proof.identity}
+                                className={classes.profileCard}
+                                avatar={avatar}
+                                profile={proof}
+                                walletProofs={walletProofs}
+                                unlistedAddresses={unlistedAddresses}
+                                pendingUnlistedAddresses={pendingUnlistedAddresses}
+                                initialCollapsed={i !== 0}
+                                onToggle={toggleUnlisted}
+                                onAddWallet={openPopupsWindow}
+                            />
+                        )
+                    })
+                )}
             </DialogContent>
             {currentPersona ? (
                 <DialogActions className={classes.actions}>

@@ -66,12 +66,12 @@ export function PluginSettingsDialog() {
     )
 
     const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
-    const { loading, value: proofs } = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
+    const { isLoading, data: proofs } = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
 
     const bindingWallets = useMemo(() => {
-        if (loading || !proofs) return EMPTY_LIST
+        if (isLoading || !proofs) return EMPTY_LIST
         return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
-    }, [proofs, loading])
+    }, [proofs, isLoading])
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
