@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { NextIDProof, type LensAccount } from '@masknet/web3-providers'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { Fade } from '@mui/material'
@@ -35,13 +35,15 @@ export const LensPopup = memo(() => {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
     const [lens, setLens] = useState<FireflyBaseAPI.LensAccount[]>([])
-    const { style, active } = useControlLensPopup(holderRef)
+    const active = useControlLensPopup(holderRef)
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
 
     useEffect(() => {
-        const unsubscribe = emitter.on('open', async ({ lensAccounts, userId }) => {
+        const unsubscribe = emitter.on('open', async ({ lensAccounts, userId, popupAnchorEl }) => {
             setLens((oldAccounts) => {
                 return isEqual(oldAccounts, lensAccounts) ? oldAccounts : lensAccounts
             })
+            setAnchorEl(popupAnchorEl)
             const accounts = await NextIDProof.queryAllLens(userId)
             if (!accounts.length) return
             setLens((oldAccounts) => {
@@ -55,9 +57,14 @@ export const LensPopup = memo(() => {
 
     return (
         <Fade in={active} easing="linear" timeout={250}>
-            <div className={classes.popup} ref={holderRef} style={style}>
+            <ShadowRootPopper
+                open={!!anchorEl}
+                anchorEl={anchorEl}
+                keepMounted
+                className={classes.popup}
+                ref={holderRef}>
                 <LensList accounts={lens} />
-            </div>
+            </ShadowRootPopper>
         </Fade>
     )
 })

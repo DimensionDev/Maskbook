@@ -1,35 +1,21 @@
-import { type CSSProperties, type RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { emitter } from '../../emitter.js'
-import { attachRectangle } from '@masknet/shared-base'
-
-interface Result {
-    active: boolean
-    setActive: (x: boolean) => void
-    style: CSSProperties
-}
 
 const LEAVE_DURATION = 500
-const MARGIN = 12
-export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>): Result {
+export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>) {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
 
     const [active, setActive] = useState(false)
-    const [style, setStyle] = useState<CSSProperties>({})
 
     const hidePopup = useCallback(() => {
         if (hoverRef.current) return
         setActive(false)
     }, [])
 
-    const showProfileCard = useCallback((patchStyle: CSSProperties) => {
+    const showProfileCard = useCallback(() => {
         clearTimeout(closeTimerRef.current)
         setActive(true)
-        setStyle((old) => {
-            const { left, top } = old
-            if (left === patchStyle.left && top === patchStyle.top) return old
-            return { ...old, ...patchStyle }
-        })
     }, [])
     useEffect(() => {
         const holder = holderRef.current
@@ -52,25 +38,7 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>): Resul
     }, [hidePopup])
 
     useEffect(() => {
-        const unsubscribe = emitter.on('open', ({ badgeBounding: bounding }) => {
-            const CARD_HEIGHT = holderRef.current!.offsetHeight
-            const CARD_WIDTH = holderRef.current!.offsetWidth
-
-            const { x, y } = attachRectangle({
-                anchorBounding: bounding,
-                targetDimension: { height: CARD_HEIGHT, width: CARD_WIDTH },
-                containerDimension: { height: window.innerHeight, width: window.innerWidth },
-                margin: MARGIN,
-            })
-
-            const pageOffset = document.scrollingElement?.scrollTop || 0
-            const newLeft = x
-            const newTop = y + pageOffset
-            showProfileCard({
-                left: newLeft,
-                top: newTop,
-            })
-        })
+        const unsubscribe = emitter.on('open', showProfileCard)
         return () => void unsubscribe()
     }, [hidePopup, showProfileCard])
 
@@ -87,5 +55,5 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>): Resul
         }
     }, [hidePopup])
 
-    return { style, active, setActive }
+    return active
 }

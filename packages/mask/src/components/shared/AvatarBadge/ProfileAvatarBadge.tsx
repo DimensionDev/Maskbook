@@ -31,7 +31,8 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
                 CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                     open: true,
                     userId,
-                    badgeBounding: button.getBoundingClientRect(),
+                    anchorBounding: button.getBoundingClientRect(),
+                    anchorEl: button,
                 })
             }, 200)
         }
