@@ -200,8 +200,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    proofs={proofs.value}
-                                    loading={proofs.loading}
+                                    proofs={proofs.data}
+                                    loading={proofs.isLoading}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

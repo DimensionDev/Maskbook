@@ -1,17 +1,12 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { type BindingProof, EMPTY_LIST, type MaskEvents } from '@masknet/shared-base'
+import { EMPTY_LIST, type BindingProof, type MaskEvents } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useMemo } from 'react'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { useEffect, useMemo } from 'react'
 
-export function usePersonaProofs(
-    publicKey?: string,
-    message?: WebExtensionMessage<MaskEvents>,
-): AsyncStateRetry<BindingProof[]> {
+export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessage<MaskEvents>) {
     const queryKey = useMemo(() => ['next-id', 'bindings-by-persona', publicKey], [publicKey])
-    // TODO use isInitialLoading
-    const { data, refetch, isFetching, isError, error } = useQuery<BindingProof[], Error>({
+    const result = useQuery<BindingProof[], Error>({
         queryKey,
         enabled: !!publicKey,
         queryFn: async () => {
@@ -19,10 +14,7 @@ export function usePersonaProofs(
             return binding?.proofs ?? EMPTY_LIST
         },
     })
-
-    const retry = useCallback(() => {
-        refetch()
-    }, [])
+    const { refetch } = result
 
     useEffect(
         () =>
@@ -32,25 +24,5 @@ export function usePersonaProofs(
         [queryKey],
     )
 
-    if (isFetching) {
-        return {
-            loading: true,
-            value: data ?? EMPTY_LIST,
-            retry,
-        }
-    }
-
-    if (isError) {
-        return {
-            loading: false,
-            error,
-            retry,
-        }
-    }
-
-    return {
-        value: data ?? EMPTY_LIST,
-        loading: isFetching,
-        retry,
-    }
+    return result
 }

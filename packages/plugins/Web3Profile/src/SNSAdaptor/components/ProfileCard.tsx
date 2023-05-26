@@ -1,9 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { PlatformAvatar, WalletSettingCard } from '@masknet/shared'
+import { useI18N } from '../../locales/index.js'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { Card, CardContent, CardHeader, Collapse, Skeleton, Typography, type CardProps } from '@mui/material'
+import { Card, CardContent, CardHeader, Collapse, Skeleton, Typography, type CardProps, Button } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, type FC, useState, useCallback, useMemo } from 'react'
 
@@ -13,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow:
             theme.palette.mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0 0 20px rgba(0, 0, 0, 0.05)',
     },
-    header: {
+    cursor: {
         cursor: 'pointer',
     },
     content: {
@@ -61,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 16,
         lineHeight: '16px',
         fontSize: 12,
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         color: theme.palette.maskColor.second,
         marginTop: theme.spacing(0.5),
     },
@@ -75,6 +76,7 @@ interface Props extends CardProps {
     pendingUnlistedAddresses: string[]
     initialCollapsed?: boolean
     onToggle?(identity: string, address: string): void
+    onAddWallet?(): void
 }
 
 export const ProfileCard: FC<Props> = memo(function ProfileCard({
@@ -86,9 +88,11 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
     pendingUnlistedAddresses,
     initialCollapsed = true,
     onToggle,
+    onAddWallet,
     ...rest
 }) {
     const { classes, cx } = useStyles()
+    const t = useI18N()
     const [collapsed, setCollapsed] = useState(initialCollapsed)
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', profile.identity],
@@ -105,10 +109,27 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
         const addresses = walletProofs.map((x) => x.identity)
         return addresses.filter((x) => !pendingUnlistedAddresses.includes(x))
     }, [pendingUnlistedAddresses])
+
+    const action = walletProofs.length ? (
+        <>
+            <Icons.ConnectWallet size={24} />
+            <Typography className={classes.percent} variant="body2" mx={1}>
+                {listingAddresses.length}/{walletProofs.length}
+            </Typography>
+            <div className={classes.arrowWrapper}>
+                {collapsed ? <Icons.ArrowDrop size={20} /> : <Icons.ArrowUp size={20} />}
+            </div>
+        </>
+    ) : (
+        <Button variant="text" disableRipple onClick={onAddWallet} sx={{ px: 1 }}>
+            {t.add_wallet()}
+        </Button>
+    )
+
     return (
         <Card className={cx(classes.card, className)} {...rest}>
             <CardHeader
-                className={classes.header}
+                className={walletProofs.length ? classes.cursor : undefined}
                 classes={{
                     avatar: classes.avatar,
                     action: classes.action,
@@ -131,18 +152,11 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                         @{profile.identity}
                     </Typography>
                 }
-                action={
-                    <>
-                        <Icons.ConnectWallet size={24} />
-                        <Typography className={classes.percent} variant="body2" mx={1}>
-                            {listingAddresses.length}/{walletProofs.length}
-                        </Typography>
-                        <div className={classes.arrowWrapper}>
-                            {collapsed ? <Icons.ArrowDrop size={20} /> : <Icons.ArrowUp size={20} />}
-                        </div>
-                    </>
-                }
-                onClick={() => setCollapsed((v) => !v)}
+                action={action}
+                onClick={() => {
+                    if (!walletProofs.length) return
+                    return setCollapsed((v) => !v)
+                }}
             />
             <Collapse in={!collapsed} easing="ease-in-out">
                 <CardContent className={classes.content}>
@@ -170,7 +184,6 @@ export const ProfileCardSkeleton = memo(function ProfileCardSkeleton(props: Card
     return (
         <Card {...props} className={cx(classes.card, props.className)}>
             <CardHeader
-                className={classes.header}
                 classes={{
                     avatar: classes.avatar,
                     action: classes.action,
