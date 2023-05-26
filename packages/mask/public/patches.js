@@ -1,3 +1,4 @@
+// this key is also used for bundled React Devtools in Mask Network
 if (!globalThis[Symbol.for('mask_init_patch')]) {
     globalThis[Symbol.for('mask_init_patch')] = true
     // Fix for globalThis !== window in content script in Firefox

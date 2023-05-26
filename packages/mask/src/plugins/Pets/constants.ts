@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
-import { MEDIA_VIEWER_URL } from '@masknet/shared'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, MEDIA_VIEWER_URL } from '@masknet/shared-base'
 import { ImageType } from './types.js'
 
 export const PetsPluginID = PluginID.Pets

@@ -1,6 +1,5 @@
 import { socialNetworkEncoder } from '@masknet/encryption'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
-import { PluginID, type ProfileIdentifier } from '@masknet/shared-base'
+import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service.js'
