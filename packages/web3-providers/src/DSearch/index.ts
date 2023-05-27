@@ -208,7 +208,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ]
         }
 
-        const bindingProofs = await this.NextIDProof.queryProfilesByAddress(address)
+        const bindingProofs = await this.NextIDProof.queryProfilesByDomain(domain!)
 
         if (bindingProofs?.length > 0) {
             return [
@@ -488,7 +488,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (keyword.endsWith('.bit')) {
             return this.searchRSS3NameService(keyword) as Promise<T[]>
         }
-
         // vitalik.eth
         if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
 

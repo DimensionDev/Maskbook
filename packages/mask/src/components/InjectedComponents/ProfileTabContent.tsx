@@ -166,7 +166,6 @@ function Content(props: ProfileTabContentProps) {
         retry: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
-
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
@@ -296,8 +295,8 @@ function Content(props: ProfileTabContentProps) {
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
         if (!currentVisitingUserId) return EMPTY_LIST
-        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
-    }, [currentVisitingUserId])
+        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || '')
+    }, [selectedSocialAccount])
 
     if (hidden) return null
 
