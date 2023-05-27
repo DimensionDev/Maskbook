@@ -142,7 +142,7 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
 }
 
-export interface CollectionListProps
+export interface CollectionListProps<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
     account: string
@@ -151,7 +151,7 @@ export interface CollectionListProps
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
-    selectedAsset?: Web3Helper.NonFungibleAssetScope
+    selectedAsset?: Web3Helper.NonFungibleAssetScope<S, T>
 }
 
 export function CollectionList({
