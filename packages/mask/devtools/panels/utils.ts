@@ -18,7 +18,7 @@ export function devtoolsEval(runInContentScript: boolean) {
 }
 
 export function createPanel(name: string) {
-    return browser.devtools.panels.create(name + ' (Mask)', '128x128.png', 'empty.html')
+    return browser.devtools.panels.create(name, '128x128.png', 'empty.html')
 }
 
 export function attachListener<T>(
