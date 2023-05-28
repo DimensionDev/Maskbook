@@ -6,7 +6,7 @@ function init() {
     // See https://github.com/facebook/react/pull/26193
     const FRAME_TIME = 16
     let lastTime = 0
-    globalThis.requestAnimationFrame = function (callback: any) {
+    globalThis.requestAnimationFrame = function (callback: FrameRequestCallback) {
         const now = window.performance.now()
         const nextTime = Math.max(lastTime + FRAME_TIME, now)
         return setTimeout(function () {
