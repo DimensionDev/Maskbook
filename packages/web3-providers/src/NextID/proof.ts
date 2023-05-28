@@ -15,7 +15,12 @@ import {
     createBindingProofFromProfileQuery,
     EMPTY_LIST,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import {
+    PROOF_BASE_URL_DEV,
+    PROOF_BASE_URL_PROD,
+    RELATION_SERVICE_URL_DEV,
+    RELATION_SERVICE_URL_PROD,
+} from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON } from '../entry-helpers.js'
@@ -24,7 +29,12 @@ import type { NextIDBaseAPI } from '../entry-types.js'
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
-const relationServiceQuery = `  domain(domainSystem: "ENS", name: $identity) {
+const RELATION_SERVICE_URL =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+        ? RELATION_SERVICE_URL_PROD
+        : RELATION_SERVICE_URL_DEV
+
+const relationServiceQuery = `  domain(domainSystem: "ENS", name: $domain) {
         source
         system
         name
@@ -232,7 +242,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByAddress(address: string) {
+    async queryProfilesByDomain(domain: string) {
         const { data } = await fetchJSON<{
             data: {
                 domain: {
@@ -248,9 +258,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { identity: address.toLowerCase() },
+                    variables: { domain: domain.toLowerCase() },
                     query: `
-                    query GET_PROFILES_QUERY($identity: String) {
+                    query GET_PROFILES_QUERY($domain: String) {
                       ${relationServiceQuery}
                     }
                 `,

@@ -4,20 +4,22 @@ import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { attemptUntil } from '@masknet/web3-shared-base'
 
-export function useSocialAccountListByAddress(
+export function useSocialAccountListByAddressOrDomain(
     address: string,
+    domain?: string,
     defaultBindingProofs?: BindingProof[],
 ): AsyncState<BindingProof[]> {
     return useAsync(async () => {
         if (defaultBindingProofs?.length) return defaultBindingProofs
-        if (!address) return EMPTY_LIST
+        if (!address && !domain) return EMPTY_LIST
 
         return attemptUntil(
-            [NextIDProof, Web3Bio].map((x) => {
-                return async () => (address ? x.queryProfilesByAddress(address) : EMPTY_LIST)
-            }),
+            [
+                async () => (domain ? await NextIDProof.queryProfilesByDomain(domain) : EMPTY_LIST),
+                async () => (address ? await Web3Bio.queryProfilesByAddress(address) : EMPTY_LIST),
+            ],
             undefined,
             (result) => !result?.length,
         )
-    }, [address, JSON.stringify(defaultBindingProofs)])
+    }, [address, domain, JSON.stringify(defaultBindingProofs)])
 }

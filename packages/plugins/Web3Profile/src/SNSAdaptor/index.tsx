@@ -75,15 +75,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
                 const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
-
                 const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
 
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
                     queryKey: ['next-id', 'all-lens', identity?.userId],
                     enabled: isProfile && !!identity?.userId,
                     queryFn: async () => {
-                        const accounts = await NextIDProof.queryAllLens(identity!.userId)
-                        return accounts.map(NextIdLensToFireflyLens)
+                        const _accounts = await NextIDProof.queryAllLens(accounts[0]?.handle)
+                        return _accounts.map(NextIdLensToFireflyLens)
                     },
                 })
 
