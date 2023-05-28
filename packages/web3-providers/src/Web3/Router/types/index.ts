@@ -4,7 +4,7 @@ import type { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import type { ConnectionOptions_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
-import type { HubAPI_Base } from '../../Base/apis/HubCreatorAPI.js'
+import type { HubAPI_Base } from '../../Base/apis/HubAPI.js'
 
 export interface ConnectionOptions<T extends NetworkPluginID>
     extends ConnectionOptions_Base<

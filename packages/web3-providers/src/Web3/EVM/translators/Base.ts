@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js'
 import { toHex } from 'web3-utils'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -11,10 +10,10 @@ import {
     type Translator,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { AllHubAPI } from '../../Router/apis/AllHubAPI.js'
+import { HubAPI } from '../apis/HubAPI.js'
 
 export class Base implements Translator<ConnectionContext> {
-    private Hub = new AllHubAPI().use(NetworkPluginID.PLUGIN_EVM)!
+    private Hub = new HubAPI().create()
 
     async encode(context: ConnectionContext) {
         const config = context.config

@@ -1,8 +1,8 @@
 import type Web3 from 'web3'
 import type {
     AddressType,
-    SchemaType,
     ChainId,
+    SchemaType,
     Web3Provider,
     Transaction,
     TransactionDetailed,

@@ -3,18 +3,11 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions_Base, HubOptionsAPI_Base } from './HubOptionsAPI.js'
 import type { OthersAPI_Base } from './OthersAPI.js'
-import type { HubBaseAPI_Base } from './HubBaseAPI.js'
-import type { HubFungibleAPI_Base } from './HubFungibleAPI.js'
-import type { HubNonFungibleAPI_Base } from './HubNonFungibleAPI.js'
+import type { HubAPI_Base } from './HubAPI.js'
 
 const resolver = <ChainId>(initial?: HubOptions_Base<ChainId>) => {
     return [initial?.chainId, initial?.account, initial?.currencyType, initial?.sourceType].join(',')
 }
-
-export type HubAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter, GasOption> =
-    HubBaseAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter, GasOption> &
-        HubFungibleAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> &
-        HubNonFungibleAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
 
 export class HubCreatorAPI_Base<T extends NetworkPluginID> {
     constructor(

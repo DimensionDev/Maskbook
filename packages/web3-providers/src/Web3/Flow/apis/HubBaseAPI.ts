@@ -10,7 +10,7 @@ import type {
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
 import { HubBaseAPI_Base } from '../../Base/apis/HubBaseAPI.js'
 
-export class FlowWeb3HubBaseAPI extends HubBaseAPI_Base<
+export class FlowHubBaseAPI extends HubBaseAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,

@@ -1,9 +1,9 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Web3OthersAll } from '@masknet/web3-providers'
+import { OthersAll } from '@masknet/web3-providers'
 import type { Others } from '@masknet/web3-providers/types'
 import { useNetworkContext } from './useContext.js'
 
 export function useWeb3Others<T extends NetworkPluginID = NetworkPluginID>(expectedPluginID?: T) {
     const { pluginID } = useNetworkContext(expectedPluginID)
-    return Web3OthersAll.use(pluginID) as Others<T>
+    return OthersAll.use(pluginID) as Others<T>
 }

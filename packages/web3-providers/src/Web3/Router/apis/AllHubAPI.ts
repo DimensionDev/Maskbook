@@ -2,8 +2,8 @@ import { NetworkPluginID, mixin } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { HubCreatorAPI_Base } from '../../Base/apis/HubCreatorAPI.js'
-import { FlowWeb3HubBaseAPI } from '../../Flow/apis/HubBaseAPI.js'
-import { FlowWeb3HubFungibleAPI } from '../../Flow/apis/HubFungibleAPI.js'
+import { FlowHubBaseAPI } from '../../Flow/apis/HubBaseAPI.js'
+import { FlowHubFungibleAPI } from '../../Flow/apis/HubFungibleAPI.js'
 import { FlowHubNonFungibleAPI } from '../../Flow/apis/HubNonFungibleAPI.js'
 import { FlowHubOptionsAPI } from '../../Flow/apis/HubOptionsAPI.js'
 import { FlowOthersAPI } from '../../Flow/apis/OthersAPI.js'
@@ -30,8 +30,8 @@ export class AllHubAPI {
         [NetworkPluginID.PLUGIN_FLOW]: new HubCreatorAPI_Base<NetworkPluginID.PLUGIN_FLOW>(
             (initial) => {
                 return mixin(
-                    new FlowWeb3HubBaseAPI(initial),
-                    new FlowWeb3HubFungibleAPI(initial),
+                    new FlowHubBaseAPI(initial),
+                    new FlowHubFungibleAPI(initial),
                     new FlowHubNonFungibleAPI(initial),
                 )
             },

@@ -128,33 +128,33 @@ export { SolanaProviders } from './Web3/Solana/providers/index.js'
 export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
 // Web3
-export const Web3HubAll = new AllHubAPI()
-export const Web3ConnectionAll = new AllConnectionAPI()
-export const Web3OthersAll = new AllOthersAPI()
+export const HubAll = new AllHubAPI()
+export const Web3All = new AllConnectionAPI()
+export const OthersAll = new AllOthersAPI()
 
 export const Contract = new ContractAPI()
 export const ContractReadonly = new ContractReadonlyAPI()
 export const Signer = new SignerAPI()
 export const Web3State = new Web3StateAPI()
 export const Web3Storage = new Web3StorageAPI()
-export const Web3 = Web3ConnectionAll.use(NetworkPluginID.PLUGIN_EVM)!
+export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
 export const Web3Readonly = new ConnectionReadonlyAPI()
-export const Hub = Web3HubAll.use(NetworkPluginID.PLUGIN_EVM)!
-export const Others = Web3OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
+export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
+export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 
 export const FlowFungible = new FlowFungibleAPI()
 export const FlowWeb3State = new FlowWeb3StateAPI()
-export const FlowWeb3 = Web3ConnectionAll.use(NetworkPluginID.PLUGIN_FLOW)!
-export const FlowHub = Web3HubAll.use(NetworkPluginID.PLUGIN_FLOW)!
-export const FlowOthers = Web3OthersAll.use(NetworkPluginID.PLUGIN_FLOW)!
+export const FlowWeb3 = Web3All.use(NetworkPluginID.PLUGIN_FLOW)!
+export const FlowHub = HubAll.use(NetworkPluginID.PLUGIN_FLOW)!
+export const FlowOthers = OthersAll.use(NetworkPluginID.PLUGIN_FLOW)!
 
 export const SolanaDomain = new SolanaDomainAPI()
 export const SolanaFungible = new SolanaFungibleTokenAPI()
 export const SolanaNonFungible = new SolanaNonFungibleTokenAPI()
 export const SolanaWeb3State = new SolanaWeb3StateAPI()
-export const SolanaWeb3 = Web3ConnectionAll.use(NetworkPluginID.PLUGIN_SOLANA)!
-export const SolanaHub = Web3HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
-export const SolanaOthers = Web3OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
+export const SolanaWeb3 = Web3All.use(NetworkPluginID.PLUGIN_SOLANA)!
+export const SolanaHub = HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
+export const SolanaOthers = OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()

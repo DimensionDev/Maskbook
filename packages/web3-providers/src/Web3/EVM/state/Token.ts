@@ -1,6 +1,5 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -9,11 +8,11 @@ import {
     type SchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
+import { HubAPI } from '../apis/HubAPI.js'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
-import { AllHubAPI } from '../../Router/apis/AllHubAPI.js'
 
 export class Token extends TokenState<ChainId, SchemaType> {
-    private AllHub = new AllHubAPI()
+    private Hub = new HubAPI().create()
 
     constructor(
         context: Plugin.Shared.SharedUIContext,
@@ -48,9 +47,9 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage?.[chainId]
 
         if (!fungibleTokenListByChainFromStorage) {
-            const fungibleTokenList = await this.AllHub.use(NetworkPluginID.PLUGIN_EVM, {
+            const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId, {
                 chainId,
-            })?.getFungibleTokensFromTokenList?.(chainId)
+            })
             this.storage.credibleFungibleTokenList.setValue({
                 ...fungibleTokenListFromStorage,
                 [chainId]: fungibleTokenList,
@@ -75,9 +74,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
 
         if (!nonFungibleTokenListByChainFromStorage) {
-            const nonFungibleTokenList = await this.AllHub.use(NetworkPluginID.PLUGIN_EVM, {
-                chainId,
-            })?.getNonFungibleTokensFromTokenList?.(chainId)
+            const nonFungibleTokenList = await this.Hub.getNonFungibleTokensFromTokenList(chainId, { chainId })
             this.storage.credibleNonFungibleTokenList.setValue({
                 ...nonFungibleTokenListFromStorage,
                 [chainId]: nonFungibleTokenList,

@@ -29,7 +29,7 @@ import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-scr
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { ImageIcon } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Web3ConnectionAll, Web3OthersAll } from '@masknet/web3-providers'
+import { Web3All, OthersAll } from '@masknet/web3-providers'
 import { ProviderIcon } from './ProviderIcon.js'
 import { useI18N } from '../../../../utils/index.js'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
@@ -186,16 +186,16 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             if (!target) return
 
             const isReady = target.Web3State?.Provider?.isReady(provider.type)
-            const downloadLink = Web3OthersAll.use(
-                provider.providerAdaptorPluginID,
-            )?.providerResolver.providerDownloadLink(provider.type)
+            const downloadLink = OthersAll.use(provider.providerAdaptorPluginID)?.providerResolver.providerDownloadLink(
+                provider.type,
+            )
 
             if (!isReady) {
                 if (downloadLink) openWindow(downloadLink)
                 return
             }
 
-            const Web3 = Web3ConnectionAll.use(provider.providerAdaptorPluginID, {
+            const Web3 = Web3All.use(provider.providerAdaptorPluginID, {
                 providerType: provider.type,
             })
 

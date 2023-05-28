@@ -277,7 +277,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             // Uniswap V3
             if (method.name === 'multicall' && method.parameters?.[0]?.[0]) {
                 try {
-                    const results = Web3?.getWeb3().eth.abi.decodeParameters(
+                    const results = this.Web3.getWeb3().eth.abi.decodeParameters(
                         context.chainId === ChainId.Arbitrum
                             ? UniswapV3MulticallFunctionExactInputSingleABI
                             : UniswapV3MulticallFunctionExactInputABI,

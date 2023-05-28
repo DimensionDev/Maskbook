@@ -13,7 +13,7 @@ import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 
-export class FlowWeb3HubFungibleAPI extends HubFungibleAPI_Base<
+export class FlowHubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,

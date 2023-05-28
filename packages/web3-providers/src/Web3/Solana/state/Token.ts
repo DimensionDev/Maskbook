@@ -8,12 +8,11 @@ import {
     type SchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
+import { SolanaHubAPI } from '../apis/HubAPI.js'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
-import { AllHubAPI } from '../../Router/apis/AllHubAPI.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 export class Token extends TokenState<ChainId, SchemaType> {
-    private AllHub = new AllHubAPI()
+    private Hub = new SolanaHubAPI().create()
 
     constructor(
         protected override context: Plugin.Shared.SharedUIContext,
@@ -47,10 +46,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage?.[chainId]
 
         if (!fungibleTokenListByChainFromStorage) {
-            const Hub = this.AllHub.use(NetworkPluginID.PLUGIN_SOLANA, {
-                chainId,
-            })
-            const fungibleTokenList = await Hub?.getFungibleTokensFromTokenList?.(chainId)
+            const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId, { chainId })
             this.storage.credibleFungibleTokenList.setValue({
                 ...fungibleTokenListFromStorage,
                 [chainId]: fungibleTokenList,
@@ -75,10 +71,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
 
         if (!nonFungibleTokenListByChainFromStorage) {
-            const Hub = this.AllHub.use(NetworkPluginID.PLUGIN_SOLANA, {
-                chainId,
-            })
-            const nonFungibleTokenList = await Hub?.getNonFungibleTokensFromTokenList?.(chainId)
+            const nonFungibleTokenList = await this.Hub.getNonFungibleTokensFromTokenList?.(chainId, { chainId })
             this.storage.credibleNonFungibleTokenList.setValue({
                 ...nonFungibleTokenListFromStorage,
                 [chainId]: nonFungibleTokenList,

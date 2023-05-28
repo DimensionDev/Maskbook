@@ -1,14 +1,13 @@
-import { NetworkPluginID } from '@masknet/shared-base'
 import type { TransactionContext, TransactionDescriptor as TransactionDescriptorBase } from '@masknet/web3-shared-base'
 import { getTokenConstants, type ChainId, type Transaction, type TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
-import { AllHubAPI } from '../../../../Router/apis/AllHubAPI.js'
 import { ConnectionReadonlyAPI } from '../../../apis/ConnectionReadonlyAPI.js'
+import { HubAPI } from '../../../apis/HubAPI.js'
 
 export class BaseDescriptor implements TransactionDescriptor {
+    protected Hub = new HubAPI().create()
     protected Web3 = new ConnectionReadonlyAPI()
-    protected Hub = new AllHubAPI().use(NetworkPluginID.PLUGIN_EVM)!
 
     async compute(
         context: TransactionContext<ChainId, TransactionParameter>,
