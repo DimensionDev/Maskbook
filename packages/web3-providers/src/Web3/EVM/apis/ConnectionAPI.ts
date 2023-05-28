@@ -25,10 +25,11 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
+import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
-import type { ConnectionOptions } from '../types/index.js'
 import { Providers } from '../providers/index.js'
+import type { ConnectionOptions } from '../types/index.js'
 
 export class ConnectionAPI
     extends ConnectionReadonlyAPI
@@ -59,6 +60,7 @@ export class ConnectionAPI
 
     protected override Request = new RequestAPI(this.options)
     protected override Contract = new ContractAPI(this.options)
+    protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
     override async addWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
         await this.Request.request<void>(

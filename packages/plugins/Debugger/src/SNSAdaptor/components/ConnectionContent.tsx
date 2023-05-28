@@ -38,21 +38,21 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onEstimateCallback = useCallback(async () => {
         const contract = Contract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {
-            chainId: ChainId.Matic,
+            chainId: ChainId.Mainnet,
         })
         const estimatedGas = await Web3.estimateTransaction?.(
             {
-                from: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
                 value: '1',
                 data: contract?.methods.approve('0x31f42841c2db5173425b5223809cf3a38fede360', '1').encodeABI(),
             },
             0,
             {
-                chainId: ChainId.Matic,
-                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                chainId: ChainId.Mainnet,
+                account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 providerType: ProviderType.MaskWallet,
-                paymentToken: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                paymentToken: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 overrides: {
                     gas: '88888',
                     maxFeePerGas: '88888',
@@ -60,6 +60,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 },
             },
         )
+
         // eslint-disable-next-line no-alert
         alert(estimatedGas)
     }, [])
@@ -120,7 +121,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             '1',
             {
                 chainId: ChainId.Matic,
-                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 providerType: ProviderType.MaskWallet,
                 paymentToken: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             },

@@ -3,12 +3,13 @@ import { EthereumMethodType, PayloadEditor, createWeb3, createWeb3Provider } fro
 import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import type { ConnectionOptions } from '../types/index.js'
-import { Providers } from '../providers/index.js'
 import { createContext } from '../helpers/createContext.js'
+import { Providers } from '../providers/index.js'
+import type { ConnectionOptions } from '../types/index.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
     private Composer = new ComposerAPI()
+    private Request = new RequestReadonlyAPI(this.options)
 
     private get Provider() {
         return Web3StateRef.value.Provider
@@ -48,7 +49,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                                 default: {
                                     if (PayloadEditor.fromPayload(context.request).readonly) {
                                         context.write(
-                                            await super.request(context.requestArguments, {
+                                            await this.Request.request(context.requestArguments, {
                                                 account: options.account,
                                                 chainId: options.chainId,
                                             }),
@@ -83,7 +84,7 @@ export class RequestAPI extends RequestReadonlyAPI {
     override getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
 
-        if (options.readonly) return super.getWeb3(options)
+        if (options.readonly) return this.Request.getWeb3(options)
         return createWeb3(
             createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options)),
         )
@@ -92,7 +93,7 @@ export class RequestAPI extends RequestReadonlyAPI {
     override getWeb3Provider(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
 
-        if (options.readonly) return super.getWeb3Provider(options)
+        if (options.readonly) return this.Request.getWeb3Provider(options)
         return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 }
