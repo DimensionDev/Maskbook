@@ -24,14 +24,14 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
 import LensFollowNFT_ABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
+import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
 export class ContractReadonlyAPI {
     constructor(protected options?: ConnectionOptions) {}
 
     protected Request = new RequestReadonlyAPI(this.options)
-    protected ConnectionOptions = new ConnectionOptionsAPI(this.options)
+    protected ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
 
     getWeb3Contract<T extends BaseContract>(address: string, ABI: AbiItem[], initial?: ConnectionOptions) {
         const web3 = this.Request.getWeb3(initial)

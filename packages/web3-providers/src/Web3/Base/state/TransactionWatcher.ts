@@ -2,6 +2,7 @@ import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
 import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { Plugin } from '@masknet/plugin-infra'
 import { getSubscriptionCurrentValue, type StorageItem } from '@masknet/shared-base'
 import {
     type TransactionChecker,
@@ -11,7 +12,6 @@ import {
     type RecentTransaction,
     type RecognizableError,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
 
 interface TransactionWatcherItem<ChainId, Transaction> {
     at: number
