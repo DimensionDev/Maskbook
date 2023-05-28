@@ -15,7 +15,7 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
             if (name === 'claim' && parameters?._eventIndex !== undefined) {
                 const result = await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
                 const token = result?.token
-                    ? await this.useHub()?.getFungibleToken?.(result.token, { chainId: context.chainId })
+                    ? await this.Hub.getFungibleToken(result.token, { chainId: context.chainId })
                     : undefined
                 return {
                     chainId: context.chainId,

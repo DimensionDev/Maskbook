@@ -18,6 +18,6 @@ export function useNonFungibleRarity<T extends NetworkPluginID = NetworkPluginID
 
     return useAsyncRetry(async () => {
         if (!address && !id) return
-        return Hub.getNonFungibleRarity?.(address || '', id || '')
+        return Hub.getNonFungibleRarity(address || '', id || '')
     }, [address, id, Hub])
 }

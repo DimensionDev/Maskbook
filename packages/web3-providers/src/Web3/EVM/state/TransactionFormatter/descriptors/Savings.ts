@@ -10,13 +10,10 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
         const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
-        const Hub = this.useHub()
-        const Web3 = this.useConnection()
-
         for (const { name, parameters } of context.methods) {
             // Lido
             if (name === 'submit' && parameters?._referral) {
-                const token = await Web3?.getNativeToken({
+                const token = await this.Web3.getNativeToken({
                     chainId: context.chainId,
                 })
 
@@ -41,7 +38,7 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
 
             // Aave
             if (name === 'deposit' && parameters?.amount && parameters?.asset) {
-                const token = await Hub?.getFungibleToken?.(parameters?.asset ?? '', { chainId: context.chainId })
+                const token = await this.Hub.getFungibleToken(parameters?.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
@@ -63,7 +60,7 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
             }
 
             if (name === 'withdraw' && parameters?.amount && parameters?.asset) {
-                const token = await Hub?.getFungibleToken?.(parameters?.asset ?? '', { chainId: context.chainId })
+                const token = await this.Hub.getFungibleToken(parameters?.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,

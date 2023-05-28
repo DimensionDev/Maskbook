@@ -28,7 +28,7 @@ export class GitcoinDescriptor extends BaseDescriptor implements TransactionDesc
             if (name === 'donate' && parameters) {
                 const tokenAddress = parameters._donations[0].token
                 const address = tokenAddress === GITCOIN_ETH_ADDRESS ? nativeTokenAddress : tokenAddress
-                const token = await this.useHub()?.getFungibleToken?.(address, { chainId: context.chainId })
+                const token = await this.Hub.getFungibleToken(address, { chainId: context.chainId })
                 const amount = new BigNumber(parameters._donations[0].amount)
                     .plus(parameters._donations[1].amount)
                     .toFixed()

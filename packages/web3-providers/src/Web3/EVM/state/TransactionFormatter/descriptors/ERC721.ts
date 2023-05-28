@@ -6,7 +6,7 @@ import { BaseDescriptor } from './Base.js'
 
 export class ERC721Descriptor extends BaseDescriptor implements TransactionDescriptor {
     async getContractSymbol(chainId: ChainId, address: string) {
-        const contract = await this.useConnection()?.getNonFungibleTokenContract(address, undefined, { chainId })
+        const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
         return contract?.symbol && contract?.symbol.length > 15
             ? `${contract?.symbol.slice(0, 12)}...`
             : contract?.symbol

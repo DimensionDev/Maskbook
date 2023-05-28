@@ -14,13 +14,7 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { AllHubAPI } from '../../Router/apis/AllHubAPI.js'
 
 export class Base implements Translator<ConnectionContext> {
-    private AllHub = new AllHubAPI()
-
-    private useHub(chainId: ChainId) {
-        return this.AllHub.use(NetworkPluginID.PLUGIN_EVM, {
-            chainId,
-        })
-    }
+    private Hub = new AllHubAPI().use(NetworkPluginID.PLUGIN_EVM)!
 
     async encode(context: ConnectionContext) {
         const config = context.config
@@ -39,7 +33,9 @@ export class Base implements Translator<ConnectionContext> {
             }
 
             // add gas price
-            const options = await this.useHub(context.chainId)?.getGasOptions?.(context.chainId)
+            const options = await this.Hub.getGasOptions(context.chainId, {
+                chainId: context.chainId,
+            })
             const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
 
             if (chainResolver.isSupport(context.chainId, 'EIP1559')) {

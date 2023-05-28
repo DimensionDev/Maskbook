@@ -16,12 +16,12 @@ import {
     type TokenApprovalInfoAccountMap,
     type NFTApprovalInfoAccountMap,
 } from './approvalListState.js'
-import { ConnectionAPI } from '../Web3/EVM/apis/ConnectionAPI.js'
+import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import type { AuthorizationAPI } from '../entry-types.js'
 
 export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
-    private Web3 = new ConnectionAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         try {

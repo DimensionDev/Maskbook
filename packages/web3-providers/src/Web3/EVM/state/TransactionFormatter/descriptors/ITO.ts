@@ -17,7 +17,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         }
         if (!token_address) return
 
-        const token = await this.useHub()?.getFungibleToken?.(token_address ?? to_address ?? '', { chainId })
+        const token = await this.Hub.getFungibleToken(token_address ?? to_address ?? '', { chainId })
         if (!token) return
 
         return getTokenAmountDescription(to_value, token)
@@ -29,7 +29,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
         const method = context.methods?.find((x) => ['fill_pool', 'swap', 'claim', 'destruct'].includes(x.name ?? ''))
         if (method?.name === 'fill_pool') {
-            const token = await this.useHub()?.getFungibleToken?.(method.parameters?._token_addr ?? '', {
+            const token = await this.Hub.getFungibleToken(method.parameters?._token_addr ?? '', {
                 chainId: context.chainId,
             })
 

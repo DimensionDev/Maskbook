@@ -151,7 +151,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: spenderList, loading } = useAsync(
-        async () => Hub.getNonFungibleTokenSpenders?.(chainId, account),
+        async () => Hub.getNonFungibleTokenSpenders(chainId, account),
         [chainId, account],
     )
 

@@ -22,14 +22,14 @@ import {
     isValidDomain,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
-import { ContractAPI } from '../../Web3/EVM/apis/ContractAPI.js'
+import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 import { fetchJSON, parseJSON, getAssetFullName, resolveActivityType, getPaymentToken } from '../../entry-helpers.js'
 
-const Web3Contract = new ContractAPI()
+const Contract = new ContractReadonlyAPI()
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
     return fetchJSON<T>(
@@ -51,7 +51,7 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
 
 export async function getContractSymbol(chainId: ChainId, address: string) {
     try {
-        const contract = Web3Contract.getERC721Contract(address, { chainId })
+        const contract = Contract.getERC721Contract(address, { chainId })
         const symbol = await contract?.methods.symbol().call({})
         return symbol ?? ''
     } catch {

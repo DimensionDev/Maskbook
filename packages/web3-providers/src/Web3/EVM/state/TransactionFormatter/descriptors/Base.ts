@@ -3,29 +3,18 @@ import type { TransactionContext, TransactionDescriptor as TransactionDescriptor
 import { getTokenConstants, type ChainId, type Transaction, type TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
-import type { ConnectionOptions, HubOptions } from '../../../types/index.js'
 import { AllHubAPI } from '../../../../Router/apis/AllHubAPI.js'
-import { AllConnectionAPI } from '../../../../Router/apis/AllConnectionAPI.js'
+import { ConnectionReadonlyAPI } from '../../../apis/ConnectionReadonlyAPI.js'
 
 export class BaseDescriptor implements TransactionDescriptor {
-    protected AllHub = new AllHubAPI()
-    protected AllConnection = new AllConnectionAPI()
-
-    protected useHub(initial?: HubOptions) {
-        return this.AllHub.use(NetworkPluginID.PLUGIN_EVM, initial)
-    }
-
-    protected useConnection(initial?: ConnectionOptions) {
-        return this.AllConnection.use(NetworkPluginID.PLUGIN_EVM, initial)
-    }
+    protected Web3 = new ConnectionReadonlyAPI()
+    protected Hub = new AllHubAPI().use(NetworkPluginID.PLUGIN_EVM)!
 
     async compute(
         context: TransactionContext<ChainId, TransactionParameter>,
     ): Promise<Omit<TransactionDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined> {
         const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(context.chainId)
-        const nativeToken = await this.useHub({
-            chainId: context.chainId,
-        })?.getFungibleToken?.(NATIVE_TOKEN_ADDRESS!, { chainId: context.chainId })
+        const nativeToken = await this.Hub.getFungibleToken(NATIVE_TOKEN_ADDRESS!, { chainId: context.chainId })
 
         return {
             chainId: context.chainId,

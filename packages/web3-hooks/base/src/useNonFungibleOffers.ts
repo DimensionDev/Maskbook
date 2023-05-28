@@ -18,7 +18,7 @@ export function useNonFungibleOffers<T extends NetworkPluginID = NetworkPluginID
 
     return usePageableAsync(
         async (nextIndicator?: PageIndicator) => {
-            return Hub.getNonFungibleTokenOffers?.(address ?? '', id ?? '', { indicator: nextIndicator })
+            return Hub.getNonFungibleTokenOffers(address ?? '', id ?? '', { indicator: nextIndicator })
         },
         [address, id, Hub],
         `${options?.sourceType}_${address}_${id}`,

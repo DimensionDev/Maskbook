@@ -7,8 +7,7 @@ import { BaseDescriptor } from './Base.js'
 
 export class TransferTokenDescriptor extends BaseDescriptor implements TransactionDescriptor {
     override async compute(context: TransactionContext<ChainId, TransactionParameter>) {
-        const Web3 = this.useConnection()
-        const token = await Web3?.getNativeToken({
+        const token = await this.Web3.getNativeToken({
             chainId: context.chainId,
         })
 

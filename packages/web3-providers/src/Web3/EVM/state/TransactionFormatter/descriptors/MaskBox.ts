@@ -16,7 +16,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
         }
         if (!token_address) return
 
-        const token = await this.useHub()?.getFungibleToken?.(token_address ?? '', { chainId })
+        const token = await this.Hub.getFungibleToken(token_address ?? '', { chainId })
         if (!token) return
 
         return getTokenAmountDescription(amount, token)

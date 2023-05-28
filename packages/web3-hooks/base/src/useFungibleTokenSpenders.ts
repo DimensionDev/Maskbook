@@ -20,6 +20,6 @@ export function useFungibleTokenSpenders<T extends NetworkPluginID = NetworkPlug
     return useQuery({
         queryKey: ['fungible-tokens', 'spenders', chainId, account],
         enabled: true,
-        queryFn: async () => Hub.getFungibleTokenSpenders?.(chainId, account),
+        queryFn: async () => Hub.getFungibleTokenSpenders(chainId, account),
     })
 }

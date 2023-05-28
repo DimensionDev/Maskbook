@@ -9,13 +9,10 @@ import {
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
-import { ConnectionReadonlyAPI } from '../../../apis/ConnectionReadonlyAPI.js'
 import type { TransactionDescriptor } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
-    private Web3 = new ConnectionReadonlyAPI()
-
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
 
@@ -26,7 +23,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
         if (!token_address) return
 
-        const token = await this.useHub()?.getFungibleToken?.(token_address ?? '', { chainId })
+        const token = await this.Hub.getFungibleToken(token_address ?? '', { chainId })
         if (!token) return
 
         return getTokenAmountDescription(claimed_value, token)
@@ -42,7 +39,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
         if (!token_address) return
 
-        const token = await this.useHub()?.getFungibleToken?.(token_address ?? '', { chainId })
+        const token = await this.Hub.getFungibleToken(token_address ?? '', { chainId })
         if (!token) return
 
         return getTokenAmountDescription(remaining_balance, token)
@@ -93,7 +90,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 method?.parameters?._token_addr &&
                 method?.parameters?._total_tokens
             ) {
-                const token = await this.useHub()?.getFungibleToken?.(method?.parameters?._token_addr ?? '', {
+                const token = await this.Hub.getFungibleToken(method?.parameters?._token_addr ?? '', {
                     chainId: context.chainId,
                 })
                 const tokenAmountDescription = getTokenAmountDescription(method.parameters?._total_tokens, token)

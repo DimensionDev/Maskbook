@@ -1,17 +1,17 @@
 import type Web3 from 'web3'
-import {
+import type {
     AddressType,
     SchemaType,
-    type ChainId,
-    type Web3Provider,
-    type Transaction,
-    type TransactionDetailed,
-    type TransactionReceipt,
-    type Block,
-    type TransactionSignature,
-    type ProviderType,
-    type Signature,
-    type UserOperation,
+    ChainId,
+    Web3Provider,
+    Transaction,
+    TransactionDetailed,
+    TransactionReceipt,
+    Block,
+    TransactionSignature,
+    ProviderType,
+    Signature,
+    UserOperation,
 } from '@masknet/web3-shared-evm'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'

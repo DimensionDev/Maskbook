@@ -18,14 +18,11 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
         const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
-        const Hub = this.useHub({ chainId: context.chainId })
-        const Web3 = this.useConnection({ chainId: context.chainId })
-
         for (const { name, parameters } of context.methods) {
             switch (name) {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
-                    const token = await Hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
+                    const token = await this.Hub.getFungibleToken(context.to ?? '', { chainId: context.chainId })
 
                     const revokeTitle = i18NextInstance.t('plugin_infra_descriptor_token_revoke_title')
                     const approveTitle = i18NextInstance.t('plugin_infra_descriptor_token_approve_title')
@@ -46,7 +43,9 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                     const approveFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_fail')
 
                     if (Web3StateRef.value.Provider?.providerType?.getCurrentValue() === ProviderType.MetaMask) {
-                        const spenders = await Hub?.getFungibleTokenSpenders?.(context.chainId, context.from)
+                        const spenders = await this.Hub.getFungibleTokenSpenders(context.chainId, context.from, {
+                            chainId: context.chainId,
+                        })
 
                         const spender = spenders?.find(
                             (x) =>
@@ -129,9 +128,9 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                 parameters.value &&
                 !parameters.tokenId
             ) {
-                const schemaType = await Web3?.getSchemaType(context.to ?? '', { chainId: context.chainId })
+                const schemaType = await this.Web3.getSchemaType(context.to ?? '', { chainId: context.chainId })
                 if (schemaType === SchemaType.ERC721) return
-                const token = await Hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
+                const token = await this.Hub.getFungibleToken(context.to ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,

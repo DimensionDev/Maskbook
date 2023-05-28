@@ -18,7 +18,7 @@ export function useNonFungibleEvents<T extends NetworkPluginID = NetworkPluginID
 
     return usePageableAsync(
         async (nextIndicator?: PageIndicator) => {
-            return Hub.getNonFungibleTokenEvents?.(address ?? '', id ?? '', { indicator: nextIndicator })
+            return Hub.getNonFungibleTokenEvents(address ?? '', id ?? '', { indicator: nextIndicator })
         },
         [address, id, Hub],
         `${address}_${id}`,

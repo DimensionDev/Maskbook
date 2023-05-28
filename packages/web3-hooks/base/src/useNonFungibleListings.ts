@@ -19,7 +19,7 @@ export function useNonFungibleListings<T extends NetworkPluginID = NetworkPlugin
 
     return usePageableAsync(
         async (nextIndicator?: PageIndicator) => {
-            return Hub.getNonFungibleTokenOrders?.(address ?? '', id ?? '', OrderSide.Sell, {
+            return Hub.getNonFungibleTokenOrders(address ?? '', id ?? '', OrderSide.Sell, {
                 indicator: nextIndicator,
             })
         },

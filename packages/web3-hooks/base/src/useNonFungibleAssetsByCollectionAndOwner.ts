@@ -20,7 +20,7 @@ export function useNonFungibleAssetsByCollectionAndOwner<
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return Hub.getNonFungibleAssetsByCollectionAndOwner!(collectionId ?? '', owner ?? '', {
+            return Hub.getNonFungibleAssetsByCollectionAndOwner(collectionId ?? '', owner ?? '', {
                 indicator,
                 size: 50,
             })

@@ -29,7 +29,7 @@ import {
 import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
-import { AllConnectionAPI } from '../../Router/apis/AllConnectionAPI.js'
+import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
@@ -112,7 +112,7 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
 )
 
 export class IdentityService extends IdentityServiceState<ChainId> {
-    private AllConnection = new AllConnectionAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
@@ -265,10 +265,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const response = await Twitter.getUserNftContainer(userId)
         if (!response) return
-        const Web3 = this.AllConnection.use(NetworkPluginID.PLUGIN_EVM, {
+        const ownerAddress = await this.Web3.getNonFungibleTokenOwner(response.address, response.token_id, undefined, {
             chainId: ChainId.Mainnet,
         })
-        const ownerAddress = await Web3?.getNonFungibleTokenOwner(response.address, response.token_id)
         if (!ownerAddress || !isValidAddress(ownerAddress)) return
         return this.createSocialAddress(SocialAddressType.TwitterBlue, ownerAddress)
     }

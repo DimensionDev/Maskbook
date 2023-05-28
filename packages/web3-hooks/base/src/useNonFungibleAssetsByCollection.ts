@@ -20,7 +20,7 @@ export function useNonFungibleAssetsByCollection<
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return Hub.getNonFungibleAssetsByCollection!(address ?? '', {
+            return Hub.getNonFungibleAssetsByCollection(address ?? '', {
                 indicator,
                 size: 50,
                 ...options,

@@ -14,16 +14,15 @@ export function useNFT(
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
-    const hub = useWeb3Hub(pluginID, {
+    const Others = useWeb3Others(pluginID)
+    const Hub = useWeb3Hub(pluginID, {
         chainId,
         account,
     })
-    const Others = useWeb3Others(pluginID)
     const Web3 = useWeb3Connection(pluginID, {
         chainId,
         account,
     })
-    const Hub = useWeb3Hub(pluginID)
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return
         const allSettled = await Promise.allSettled([

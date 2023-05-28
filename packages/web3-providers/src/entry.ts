@@ -67,6 +67,8 @@ import { SID_DomainAPI } from './SID/index.js'
 import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
 import { ApprovalAPI } from './Approval/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
+import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
+import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { SignerAPI } from './Web3/EVM/apis/SignerAPI.js'
 import { Web3StateAPI } from './Web3/EVM/apis/Web3StateAPI.js'
 import { FlowFungibleAPI } from './Web3/Flow/apis/FungibleTokenAPI.js'
@@ -130,12 +132,13 @@ export const Web3HubAll = new AllHubAPI()
 export const Web3ConnectionAll = new AllConnectionAPI()
 export const Web3OthersAll = new AllOthersAPI()
 
-export const Web3Storage = new Web3StorageAPI()
-
 export const Contract = new ContractAPI()
+export const ContractReadonly = new ContractReadonlyAPI()
 export const Signer = new SignerAPI()
 export const Web3State = new Web3StateAPI()
+export const Web3Storage = new Web3StorageAPI()
 export const Web3 = Web3ConnectionAll.use(NetworkPluginID.PLUGIN_EVM)!
+export const Web3Readonly = new ConnectionReadonlyAPI()
 export const Hub = Web3HubAll.use(NetworkPluginID.PLUGIN_EVM)!
 export const Others = Web3OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 

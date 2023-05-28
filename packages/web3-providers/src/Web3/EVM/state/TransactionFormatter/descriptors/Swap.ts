@@ -22,18 +22,13 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
         )
         if (!context.methods?.find((x) => x.name)) return
 
-        const Hub = this.useHub({
-            chainId: context.chainId,
-        })
-        const Web3 = this.useConnection()
-
-        const nativeToken = await Web3?.getNativeToken({ chainId: context.chainId })
+        const nativeToken = await this.Web3.getNativeToken({ chainId: context.chainId })
 
         for (const method of context.methods) {
             const parameters = method.parameters
 
             if (method.name === 'swapExactETHForTokens' && parameters?.path && parameters.amountOutMin) {
-                const outputToken = await Hub?.getFungibleToken?.(last(parameters.path) ?? '', {
+                const outputToken = await this.Hub.getFungibleToken(last(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
                 return {
@@ -60,7 +55,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 parameters?.amountOutMin &&
                 parameters?.amountIn
             ) {
-                const outputToken = await Hub?.getFungibleToken?.(first(parameters.path) ?? '', {
+                const outputToken = await this.Hub.getFungibleToken(first(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
                 return {
@@ -87,11 +82,11 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 parameters?.amountIn &&
                 parameters?.amountOutMin
             ) {
-                const tokenIn = await Hub?.getFungibleToken?.(first(parameters.path) ?? '', {
+                const tokenIn = await this.Hub.getFungibleToken(first(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
 
-                const tokenOut = await Hub?.getFungibleToken?.(last(parameters.path) ?? '', {
+                const tokenOut = await this.Hub.getFungibleToken(last(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
 
@@ -123,10 +118,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             ) {
                 const tokenIn = isSameAddress(parameters.fromToken, DODO_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(parameters.fromToken ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(parameters.fromToken ?? '', { chainId: context.chainId })
                 const tokenOut = isSameAddress(parameters.toToken, DODO_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(parameters.toToken ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(parameters.toToken ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -152,7 +147,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 parameters?.fromTokenAmount &&
                 parameters?.minReturnAmount
             ) {
-                const tokenIn = await Hub?.getFungibleToken?.(parameters.fromToken ?? '', {
+                const tokenIn = await this.Hub.getFungibleToken(parameters.fromToken ?? '', {
                     chainId: context.chainId,
                 })
                 const tokenOut = nativeToken
@@ -194,10 +189,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                     return
                 const tokenIn = isSameAddress(_parameters[1].srcToken, OPENOCEAN_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(_parameters[1].srcToken ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(_parameters[1].srcToken ?? '', { chainId: context.chainId })
                 const tokenOut = isSameAddress(_parameters[1].dstToken, OPENOCEAN_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(_parameters[1].dstToken ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(_parameters[1].dstToken ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -225,10 +220,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             ) {
                 const tokenIn = isSameAddress(parameters.inputToken, ZERO_X_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(parameters.inputToken ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(parameters.inputToken ?? '', { chainId: context.chainId })
                 const tokenOut = isSameAddress(parameters.outputToken, ZERO_X_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(parameters.outputToken ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(parameters.outputToken ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -258,10 +253,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 const tokenOutAddress = last(parameters._path)
                 const tokenIn = isSameAddress(tokenInAddress, BANCOR_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(tokenInAddress ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(tokenInAddress ?? '', { chainId: context.chainId })
                 const tokenOut = isSameAddress(tokenOutAddress, BANCOR_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(tokenOutAddress ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(tokenOutAddress ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -314,10 +309,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
 
                     const tokenIn = isNativeTokenAddress(tokenInAddress)
                         ? nativeToken
-                        : await Hub?.getFungibleToken?.(tokenInAddress ?? '', { chainId: context.chainId })
+                        : await this.Hub.getFungibleToken(tokenInAddress ?? '', { chainId: context.chainId })
                     const tokenOut = isNativeTokenAddress(tokenOutAddress)
                         ? nativeToken
-                        : await Hub?.getFungibleToken?.(tokenOutAddress ?? '', { chainId: context.chainId })
+                        : await this.Hub.getFungibleToken(tokenOutAddress ?? '', { chainId: context.chainId })
                     return {
                         chainId: context.chainId,
                         title: 'Swap Token',
@@ -353,10 +348,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 const tokenOutAddress = last(parameters.tokens)
                 const tokenIn = isSameAddress(tokenInAddress, ZERO_X_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(tokenInAddress ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(tokenInAddress ?? '', { chainId: context.chainId })
                 const tokenOut = isSameAddress(tokenOutAddress, ZERO_X_ETH_ADDRESS)
                     ? nativeToken
-                    : await Hub?.getFungibleToken?.(tokenOutAddress ?? '', { chainId: context.chainId })
+                    : await this.Hub.getFungibleToken(tokenOutAddress ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -382,7 +377,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         ? i18NextInstance.t('plugin_trader_unwrap')
                         : i18NextInstance.t('plugin_trader_wrap')
                 const amount = method.name === 'withdraw' ? parameters?.wad : context.value
-                const withdrawToken = await Hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
+                const withdrawToken = await this.Hub.getFungibleToken(context.to ?? '', { chainId: context.chainId })
                 const tokenIn = method.name === 'withdraw' ? withdrawToken : nativeToken
                 const tokenOut = method.name === 'withdraw' ? nativeToken : withdrawToken
                 return {
@@ -409,7 +404,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 parameters?.amountOutMin &&
                 parameters?.path
             ) {
-                const tokenIn = await Hub?.getFungibleToken?.(first(parameters.path) ?? '', {
+                const tokenIn = await this.Hub.getFungibleToken(first(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
                 const tokenOut = nativeToken

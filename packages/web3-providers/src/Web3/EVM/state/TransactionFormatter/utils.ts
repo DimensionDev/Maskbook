@@ -23,17 +23,13 @@ export class DescriptorWithTransactionDecodedReceipt extends BaseDescriptor {
     ) {
         if (!hash || !contractAddress || !abi) return
 
-        const Web3 = this.useConnection({
-            readonly: true,
-        })
-
-        const receipt = await Web3?.getTransactionReceipt(hash, { chainId })
+        const receipt = await this.Web3.getTransactionReceipt(hash, { chainId })
         if (!receipt) return
 
         const contract = this.Contract.getWeb3Contract(contractAddress, abi)
         if (!contract) return
 
-        const web3 = Web3?.getWeb3({
+        const web3 = this.Web3.getWeb3({
             chainId,
         })
         if (!web3) return
