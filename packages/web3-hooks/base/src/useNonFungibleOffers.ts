@@ -1,27 +1,26 @@
 import type { NetworkPluginID, PageIndicator } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type { HubOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { usePageableAsync } from './usePageableAsync.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
-export function useNonFungibleOffers<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useNonFungibleOffers<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,
     id?: string,
-    options?: Web3Helper.Web3HubOptionsScope<S, T>,
+    options?: HubOptions<T>,
 ) {
     const { account } = useChainContext({ account: options?.account })
-    const hub = useWeb3Hub(pluginID, {
+    const Hub = useWeb3Hub(pluginID, {
         account,
         ...options,
     })
 
     return usePageableAsync(
         async (nextIndicator?: PageIndicator) => {
-            if (!hub) return
-            return hub.getNonFungibleTokenOffers?.(address ?? '', id ?? '', { ...options, indicator: nextIndicator })
+            return Hub.getNonFungibleTokenOffers(address ?? '', id ?? '', { indicator: nextIndicator })
         },
-        [address, id, hub],
+        [address, id, Hub],
         `${options?.sourceType}_${address}_${id}`,
     )
 }

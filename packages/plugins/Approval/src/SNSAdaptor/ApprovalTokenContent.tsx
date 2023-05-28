@@ -5,11 +5,11 @@ import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     useChainContext,
-    useWeb3State,
     useNetworkDescriptor,
     useFungibleTokenSpenders,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     type NetworkDescriptor,
@@ -190,7 +190,6 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,
     })
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const [_, transactionState, approveCallback] = useERC20TokenApproveCallback(
         spender.tokenInfo.address,
@@ -226,11 +225,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name || Others?.formatAddress(spender.address, 4)}
+                            {spender.name || Others.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, spender.address) ?? ''}
+                            href={Others.explorerResolver.addressLink(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import type { AbiItem } from 'web3-utils'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { type ChainId, createContract } from '@masknet/web3-shared-evm'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import { useWeb3 } from '@masknet/web3-hooks-base'
 
 /**
  * Create a contract which will forward its all transactions to the
@@ -13,8 +13,7 @@ import { useWeb3 } from '@masknet/web3-hooks-base'
  * @param chainId
  */
 export function useContract<T extends BaseContract>(chainId?: ChainId, address = '', ABI: AbiItem[] = EMPTY_LIST) {
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    return useMemo(() => createContract<T>(web3, address, ABI), [web3, address, ABI])
+    return useMemo(() => createContract<T>(Web3.getWeb3({ chainId }), address, ABI), [address, ABI])
 }
 
 /**
@@ -28,9 +27,11 @@ export function useContracts<T extends BaseContract>(
     listOfAddress: string[] = [],
     ABI: AbiItem[] = [],
 ) {
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useMemo(
-        () => listOfAddress.map((address) => createContract<T>(web3, address, ABI)).filter(Boolean) as T[],
-        [web3, JSON.stringify(listOfAddress), ABI],
+        () =>
+            listOfAddress
+                .map((address) => createContract<T>(Web3.getWeb3({ chainId }), address, ABI))
+                .filter(Boolean) as T[],
+        [JSON.stringify(listOfAddress), ABI],
     )
 }

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { List, ListItem, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
-import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
 import { formatCount, formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
@@ -192,16 +192,14 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
 function ProfileProposalListItemHeader(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, proposal.author)
 
     return (
         <section className={classes.header}>
             <div className={classes.authorInfo}>
                 <EthereumBlockie address={proposal.author} classes={{ icon: classes.blockieIcon }} />
-                <Typography className={classes.author}>
-                    {domain ?? Others?.formatAddress(proposal.author, 4)}
-                </Typography>
+                <Typography className={classes.author}>{domain ?? Others.formatAddress(proposal.author, 4)}</Typography>
             </div>
             <div className={classes.state}>
                 <Typography fontWeight={700} fontSize={12}>

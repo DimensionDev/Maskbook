@@ -18,14 +18,14 @@ export function useCheckTokenOwner(
     schemaType: SchemaType,
     socialIdentity?: SocialIdentity,
 ) {
-    const connection = useWeb3Connection(pluginID)
+    const Web3 = useWeb3Connection(pluginID)
     const getAddress = useGetAddress()
 
     return useAsyncRetry(async () => {
         if (!socialIdentity?.identifier?.userId || socialIdentity?.identifier.userId === '$unknown') return
         if (!address || !tokenId) return
 
-        const token = await connection?.getNonFungibleToken(address, tokenId)
+        const token = await Web3.getNonFungibleToken(address, tokenId)
 
         const wallets =
             socialIdentity.binding?.proofs.filter(
@@ -34,12 +34,7 @@ export function useCheckTokenOwner(
 
         const storage = await getAddress(getSiteType() as EnhanceableSite, socialIdentity.identifier?.userId ?? '')
         if (storage?.address) {
-            const isOwner = await connection?.getNonFungibleTokenOwnership(
-                address,
-                tokenId,
-                storage.address,
-                schemaType,
-            )
+            const isOwner = await Web3.getNonFungibleTokenOwnership(address, tokenId, storage.address, schemaType)
             if (isOwner)
                 return {
                     isOwner,
@@ -50,12 +45,7 @@ export function useCheckTokenOwner(
         }
 
         for (const wallet of wallets) {
-            const isOwner = await connection?.getNonFungibleTokenOwnership(
-                address,
-                tokenId,
-                wallet.identity,
-                schemaType,
-            )
+            const isOwner = await Web3.getNonFungibleTokenOwnership(address, tokenId, wallet.identity, schemaType)
             if (isOwner)
                 return {
                     isOwner,
@@ -70,5 +60,5 @@ export function useCheckTokenOwner(
             symbol: token?.contract?.symbol ?? 'ETH',
             schema: token?.schema,
         }
-    }, [address, tokenId, schemaType, connection, socialIdentity])
+    }, [address, tokenId, schemaType, socialIdentity, Web3])
 }

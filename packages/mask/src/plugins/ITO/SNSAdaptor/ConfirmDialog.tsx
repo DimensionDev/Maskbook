@@ -7,7 +7,7 @@ import {
     type SchemaType,
     type ChainId,
 } from '@masknet/web3-shared-evm'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, type FungibleToken, leftShift, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'

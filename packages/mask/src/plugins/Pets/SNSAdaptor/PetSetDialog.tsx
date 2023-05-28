@@ -1,9 +1,11 @@
+import { useMemo, useState, type ReactNode } from 'react'
+import { useTimeout } from 'react-use'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWallet } from '@masknet/web3-hooks-base'
 import type { Constant } from '@masknet/web3-shared-base'
 import {
     Autocomplete,
@@ -17,8 +19,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { useMemo, useState, type ReactNode } from 'react'
-import { useTimeout } from 'react-use'
+import { Web3Storage } from '@masknet/web3-providers'
 import { GLB3DIcon, PetsPluginID, initCollection, initMeta } from '../constants.js'
 import { useNFTs, useUser } from '../hooks/index.js'
 import { useI18N } from '../locales/index.js'
@@ -114,7 +115,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [isReady, cancel] = useTimeout(2000)
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
     const { nfts, state } = useNFTs()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
@@ -156,10 +156,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             chainId: chosenToken?.chainId,
         }
         try {
-            if (!Storage) return
-            const kvStorage = Storage.createKVStorage(PetsPluginID)
+            const kvStorage = Web3Storage.createKVStorage(PetsPluginID)
             await kvStorage.set(user.userId, user.address)
-            const storage = Storage.createStringStorage('Pets', user.address)
+            const storage = Web3Storage.createFireflyStorage('Pets', user.address)
             await storage.set('pet', { address: user.address, essay: meta })
             closeDialogHandle()
         } catch {

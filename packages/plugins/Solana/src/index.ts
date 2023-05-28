@@ -1,40 +1,15 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import type {
-    AddressType,
     ChainId,
     NetworkType,
     ProviderType,
     SchemaType,
-    Signature,
-    GasOption,
-    Block,
-    Operation,
     Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
     TransactionParameter,
-    TransactionSignature,
-    Web3,
 } from '@masknet/web3-shared-solana'
 import { base } from './base.js'
 
-registerPlugin<
-    ChainId,
-    AddressType,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    Signature,
-    GasOption,
-    Block,
-    Operation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    TransactionParameter,
-    Web3
->({
+registerPlugin<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>({
     ...base,
     SNSAdaptor: {
         load: () => import('./UI/SNSAdaptor/index.js'),

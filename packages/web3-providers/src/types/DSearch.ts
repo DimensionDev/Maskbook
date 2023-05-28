@@ -1,8 +1,7 @@
 import type { SearchResult, SearchResultType } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace DSearchBaseAPI {
-    export interface Provider<ChainId, SchemaType, T extends NetworkPluginID> {
+    export interface Provider<ChainId, SchemaType> {
         search(keyword: string, type?: SearchResultType): Promise<Array<SearchResult<ChainId, SchemaType>>>
     }
 

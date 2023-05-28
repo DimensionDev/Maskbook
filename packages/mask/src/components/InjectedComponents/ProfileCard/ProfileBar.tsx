@@ -1,18 +1,18 @@
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useCopyToClipboard } from 'react-use'
+import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { AddressItem, Image, TokenWithSocialGroupMenu, useSnackbarCallback } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useCopyToClipboard } from 'react-use'
-import { v4 as uuid } from 'uuid'
 import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useI18N } from '../../../utils/index.js'
@@ -124,7 +124,7 @@ export const ProfileBar = memo<ProfileBarProps>(
             successText: t('copy_success'),
         })
 
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
         const { chainId } = useChainContext()
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
@@ -173,7 +173,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                             />
                             <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
-                                href={Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                                href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"
                                 title={t('view_on_explorer')}
                                 rel="noopener noreferrer"

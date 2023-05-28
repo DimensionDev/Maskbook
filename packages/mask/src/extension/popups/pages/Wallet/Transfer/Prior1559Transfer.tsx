@@ -1,6 +1,8 @@
 import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
@@ -25,28 +27,20 @@ import {
     type FungibleAsset,
     GasOptionType,
 } from '@masknet/web3-shared-base'
-import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
-import { TransferAddressError } from '../type.js'
-import {
-    useChainContext,
-    useFungibleTokenBalance,
-    useWallet,
-    useWeb3Connection,
-    useWeb3Hub,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance, useWallet, useNetworkContext } from '@masknet/web3-hooks-base'
+import { Web3, Hub } from '@masknet/web3-providers'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
+import { TransferAddressError } from '../type.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -166,11 +160,9 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { pluginID: currentPluginID } = useNetworkContext()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
     const location = useLocation()
@@ -231,7 +223,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         methods.clearErrors('address')
 
-        if (address.includes('.eth') && currentPluginID !== NetworkPluginID.PLUGIN_EVM) {
+        if (address.includes('.eth') && pluginID !== NetworkPluginID.PLUGIN_EVM) {
             setAddressTip({
                 type: TransferAddressError.NETWORK_NOT_SUPPORT,
                 message: t('wallet_transfer_error_no_support_ens'),
@@ -247,7 +239,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             return
         }
 
-        const result = await connection?.getCode(address)
+        const result = await Web3.getCode(address)
 
         if (result !== '0x') {
             setAddressTip({
@@ -255,18 +247,17 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, EthereumAddress.isValid, methods.clearErrors, connection, currentPluginID])
+    }, [address, methods.clearErrors, pluginID])
 
     // #region Set default gas price
     useAsync(async () => {
-        const gasOptions = await hub?.getGasOptions?.(chainId)
-
+        const gasOptions = await Hub.getGasOptions(chainId)
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
             const gasPrice = formatWeiToGwei(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
             methods.setValue('gasPrice', gasPrice.toString())
         }
-    }, [methods.setValue, methods.getValues, chainId, hub])
+    }, [chainId, methods.setValue, methods.getValues])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address

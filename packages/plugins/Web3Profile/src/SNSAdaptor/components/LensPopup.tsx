@@ -1,9 +1,9 @@
-import { ShadowRootPopper, makeStyles } from '@masknet/theme'
-import { NextIDProof, type LensAccount } from '@masknet/web3-providers'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
-import { Fade } from '@mui/material'
 import { isEqual, sortBy, uniqBy } from 'lodash-es'
 import { memo, useEffect, useRef, useState } from 'react'
+import { ShadowRootPopper, makeStyles } from '@masknet/theme'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { FireflyBaseAPI, NextIDBaseAPI } from '@masknet/web3-providers/types'
+import { Fade } from '@mui/material'
 import { emitter } from '../emitter.js'
 import { useControlLensPopup } from '../hooks/Lens/useControlLensPopup.js'
 import { LensList } from './LensList.js'
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const NextIdLensToFireflyLens = (account: LensAccount): FireflyBaseAPI.LensAccount => {
+export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): FireflyBaseAPI.LensAccount => {
     return {
         address: account.address,
         name: account.displayName,

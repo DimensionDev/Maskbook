@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useChainContext, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import Color from 'color'
+import { TabContext, TabPanel } from '@mui/lab'
+import { useChainContext, useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
@@ -15,8 +17,6 @@ import { useTransactionCallback } from '@masknet/web3-hooks-evm'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
-import { TabContext, TabPanel } from '@mui/lab'
-import Color from 'color'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -197,7 +197,7 @@ export function PreviewCard(props: PreviewCardProps) {
         } catch {}
         setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds, onRefresh, retryMaskBoxStatus])
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     // #endregion
 
     if (boxState === BoxState.UNKNOWN)
@@ -321,7 +321,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     fontSize={14}
                                     fontWeight="bold"
                                     title={boxInfo.creator}>
-                                    {Others?.formatAddress(boxInfo.creator, 4)}
+                                    {Others.formatAddress(boxInfo.creator, 4)}
                                 </Typography>
                             </Box>
                         </Box>

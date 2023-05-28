@@ -84,7 +84,7 @@ const isValidHandle = (handle: string): boolean => {
 }
 
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
-    implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID>
+    implements DSearchBaseAPI.Provider<ChainId, SchemaType>
 {
     private NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
     private NFTScanCollectionClient = new NFTScanCollectionSearchAPI<ChainId, SchemaType>()

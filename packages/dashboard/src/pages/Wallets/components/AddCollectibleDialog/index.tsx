@@ -7,18 +7,17 @@ import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDashboardI18N } from '../../../../locales/index.js'
 import {
-    useWeb3Connection,
     useNonFungibleTokenContract,
     useChainContext,
     useWeb3State,
     useTrustedNonFungibleTokens,
-    useWeb3Hub,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { Web3, Hub } from '@masknet/web3-providers'
+import { useDashboardI18N } from '../../../../locales/index.js'
 
 export interface AddCollectibleDialogProps {
     selectedNetwork: Web3Helper.NetworkDescriptorAll
@@ -41,8 +40,6 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State<'all'>()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(pluginID)
-    const hub = useWeb3Hub()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
@@ -52,7 +49,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     })
 
     const onSubmit = useCallback(async () => {
-        if (loading || !account || !hub?.getNonFungibleAsset || !connection) return
+        if (loading || !account) return
         if (address && tokenId && !contract) throw new Error(FormErrorType.NotExist)
 
         // If the NonFungible token is added
@@ -62,12 +59,14 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         )
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
-        const tokenAsset = await hub.getNonFungibleAsset(address ?? '', tokenId, { chainId: selectedNetwork.chainId })
-        const token = await connection.getNonFungibleToken(address ?? '', tokenId, undefined, {
+        const tokenAsset = await Hub.getNonFungibleAsset(address ?? '', tokenId, {
+            chainId: selectedNetwork.chainId as ChainId,
+        })
+        const token = await Web3.getNonFungibleToken(address ?? '', tokenId, undefined, {
             chainId: selectedNetwork.chainId as ChainId,
         })
         const tokenDetailed = { ...token, ...tokenAsset }
-        const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
+        const isOwner = await Web3.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
             chainId: selectedNetwork.chainId as ChainId,
         })
 
@@ -80,16 +79,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
             await Token?.addToken?.(account, tokenDetailed)
             onClose()
         }
-    }, [
-        account,
-        address,
-        tokenId,
-        contract,
-        loading,
-        hub?.getNonFungibleAsset,
-        connection?.getNonFungibleToken,
-        trustedNonFungibleTokens.length,
-    ])
+    }, [account, address, tokenId, contract, loading, trustedNonFungibleTokens.length])
 
     return (
         <AddCollectibleDialogUI

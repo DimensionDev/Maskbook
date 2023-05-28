@@ -1,18 +1,25 @@
-import { NetworkPluginID } from '@masknet/shared-base'
-import type { HubOptions } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { HubOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
-export function useFungibleTokenSpenders(options?: HubOptions<ChainId>) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>(options)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
+export function useFungibleTokenSpenders<T extends NetworkPluginID = NetworkPluginID>(
+    pluginID?: T,
+    options?: HubOptions<T>,
+) {
+    const { account, chainId } = useChainContext<T>({
+        account: options?.account,
+        chainId: options?.chainId,
+    })
+    const Hub = useWeb3Hub(pluginID, {
+        account,
+        chainId,
+        ...options,
+    })
     return useQuery({
         queryKey: ['fungible-tokens', 'spenders', chainId, account],
-        enabled: !!hub?.getFungibleTokenSpenders,
-        queryFn: async () => {
-            return hub?.getFungibleTokenSpenders?.(chainId, account)
-        },
+        enabled: true,
+        queryFn: async () => Hub.getFungibleTokenSpenders(chainId, account),
     })
 }

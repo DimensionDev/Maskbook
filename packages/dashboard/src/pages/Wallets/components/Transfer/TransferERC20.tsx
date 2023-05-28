@@ -9,7 +9,7 @@ import {
     useGasPrice,
     useLookupAddress,
     useNetworkDescriptor,
-    useWeb3State,
+    useWeb3Others,
     useNativeToken,
     useNativeTokenPrice,
     useMaskTokenAddress,
@@ -73,7 +73,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     useEffect(() => {
         setSelectedToken(token)
@@ -176,7 +176,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         let hash: string | undefined
         if (isValidAddress(address)) {
             hash = await transferCallback(transferAmount, address, gasConfig, memo)
-        } else if (Others?.isValidDomain?.(address)) {
+        } else if (Others.isValidDomain(address)) {
             hash = await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
         }
         if (typeof hash === 'string') {
@@ -193,9 +193,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!(isValidAddress(address) || Others?.isValidDomain?.(address)))
+        if (!(isValidAddress(address) || Others.isValidDomain(address)))
             return t.wallets_transfer_error_invalid_address()
-        if (Others?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
+        if (Others.isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
             if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()
         }
@@ -233,7 +233,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             {address}
                         </Typography>
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
-                            <FormattedAddress address={registeredAddress} size={4} formatter={Others?.formatAddress} />
+                            <FormattedAddress address={registeredAddress} size={4} formatter={Others.formatAddress} />
                         </Typography>
                     </Link>
                     <Icons.Right />
@@ -251,7 +251,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Box>
                 )
             }
-            if (Others?.isValidDomain?.(address) && resolveDomainError) {
+            if (Others.isValidDomain(address) && resolveDomainError) {
                 return (
                     <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
@@ -266,7 +266,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [
         registeredAddress,
         address,
-        Others?.isValidDomain,
+        Others.isValidDomain,
         MaskColorVar,
         resolveDomainError,
         network?.type,

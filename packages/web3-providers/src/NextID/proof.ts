@@ -92,15 +92,6 @@ type NeighborList = Array<{
     from: NextIDIdentity
 }>
 
-/**
- * Lens account queried from next id
- */
-export interface LensAccount {
-    handle: string
-    displayName: string
-    address: string
-}
-
 const getPersonaQueryURL = (platform: string, identity: string) =>
     urlcat(BASE_URL, '/v1/proof', {
         platform,
@@ -312,7 +303,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
-    async queryAllLens(twitterId: string): Promise<LensAccount[]> {
+    async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchJSON<{
             data: {

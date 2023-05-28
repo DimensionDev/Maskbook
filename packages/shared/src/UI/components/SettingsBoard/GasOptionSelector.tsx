@@ -2,9 +2,8 @@ import React, { useCallback, useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
 import type { GasOptionType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { GasOption as GasOptionItem } from './GasOption.js'
 import { SettingsContext } from './Context.js'
 
@@ -43,9 +42,8 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
     const { chainId, options, onChange } = props
     const { classes } = useStyles()
     const { gasOptionType, setGasOptionType } = SettingsContext.useContainer()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
+    const isEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
 
     const onClick = useCallback(
         (type: GasOptionType, option: GasOption) => {

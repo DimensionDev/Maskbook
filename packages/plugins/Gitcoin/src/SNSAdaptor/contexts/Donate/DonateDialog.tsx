@@ -17,7 +17,8 @@ import {
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { formatBalance, type FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { type ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
@@ -85,9 +86,8 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         if (!availableChains.includes(chainId)) setChainId(availableChains[0])
     }, [chainId, setChainId, availableChains])
 
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useAsync(async () => {
-        return connection?.getNativeToken({ chainId })
+        return Web3.getNativeToken({ chainId })
     }, [chainId])
 
     const { BULK_CHECKOUT_ADDRESS, TOKEN_LIST } = useGitcoinConstants(chainId)

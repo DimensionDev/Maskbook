@@ -1,16 +1,16 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
-export function useNonFungibleTokensBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useNonFungibleTokensBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     listOfAddress?: string[],
-    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
+    options?: ConnectionOptions<T>,
 ) {
-    const connection = useWeb3Connection(pluginID, options)
+    const Web3 = useWeb3Connection(pluginID, options)
+
     return useAsyncRetry(async () => {
-        if (!connection) return EMPTY_OBJECT
-        return connection.getNonFungibleTokensBalance(listOfAddress ?? [])
-    }, [listOfAddress?.join(','), connection])
+        return Web3.getNonFungibleTokensBalance(listOfAddress ?? [])
+    }, [listOfAddress?.join(','), Web3])
 }

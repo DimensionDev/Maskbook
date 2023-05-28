@@ -1,11 +1,17 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
 import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
+import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
+import { Stack } from '@mui/system'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
-import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
@@ -13,11 +19,6 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainContext, useWeb3, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
-import { TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
-import { Stack } from '@mui/system'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -187,7 +188,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { t: i18n } = useBaseI18N()
     const t = useI18N()
 
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { pluginID } = useNetworkContext()
     const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
@@ -203,7 +203,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
-        web3?.eth.accounts.sign(account, payload.privateKey).signature ?? '',
+        Web3.getWeb3().eth.accounts.sign(account, payload.privateKey).signature ?? '',
     )
 
     const [isClaimed, setIsClaimed] = useState(false)

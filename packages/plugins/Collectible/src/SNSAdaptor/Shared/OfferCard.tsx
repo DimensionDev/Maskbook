@@ -2,10 +2,10 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { TokenIcon } from '@masknet/shared'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,7 +54,7 @@ export interface OfferCardProps {
 export function OfferCard(props: OfferCardProps) {
     const { offer } = props
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const t = useI18N()
 
     const renderTokenIcon = () => {
@@ -107,7 +107,7 @@ export function OfferCard(props: OfferCardProps) {
                     <Typography className={classes.textBase} style={{ marginRight: 6, fontSize: '12px' }}>
                         {offer.maker?.address ? (
                             <strong style={{ margin: '0px 4px' }}>
-                                {Others?.formatAddress(offer.maker.address, 4)}
+                                {Others.formatAddress(offer.maker.address, 4)}
                             </strong>
                         ) : (
                             '-'

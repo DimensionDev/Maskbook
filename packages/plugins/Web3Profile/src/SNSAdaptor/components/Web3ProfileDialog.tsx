@@ -1,13 +1,14 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { isEmpty, isEqual, range, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { hiddenAddressesAdapter, useChainContext, useHiddenAddressConfig, useWeb3State } from '@masknet/web3-hooks-base'
+import { Web3Storage } from '@masknet/web3-providers'
+import { hiddenAddressesAdapter, useChainContext, useHiddenAddressConfig } from '@masknet/web3-hooks-base'
 import { DialogActions, DialogContent } from '@mui/material'
-import { isEmpty, isEqual, range, uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useI18N } from '../../locales/index.js'
 import { context } from '../context.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
@@ -116,11 +117,10 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
         })
     }, [])
 
-    const { Storage } = useWeb3State()
     const { showSnackbar } = useCustomSnackbar()
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
-        if (!Storage || !currentPersona?.identifier) return
-        const storage = Storage.createNextIDStorage(
+        if (!currentPersona?.identifier) return
+        const storage = Web3Storage.createNextIDStorage(
             currentPersona?.identifier.publicKeyAsHex,
             NextIDPlatform.NextID,
             currentPersona.identifier,
@@ -142,7 +142,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
         }
 
         refetch()
-    }, [Storage, currentPersona?.identifier, pendingUnlistedConfig, t])
+    }, [currentPersona?.identifier, pendingUnlistedConfig, t])
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
