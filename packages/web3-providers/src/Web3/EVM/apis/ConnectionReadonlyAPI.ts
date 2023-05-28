@@ -34,7 +34,7 @@ import {
     type NonFungibleToken,
     type NonFungibleTokenContract,
     type NonFungibleTokenMetadata,
-    TransactionStatusType,
+    type TransactionStatusType,
     isSameAddress,
     createNonFungibleToken,
     resolveCrossOriginURL,
