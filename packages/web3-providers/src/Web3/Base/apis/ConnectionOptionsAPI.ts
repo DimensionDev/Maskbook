@@ -58,6 +58,7 @@ export class ConnectionOptionsAPI_Base<
     }
 
     protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
+        if (!this.Web3StateRef.value) return {}
         return {
             account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
             chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),

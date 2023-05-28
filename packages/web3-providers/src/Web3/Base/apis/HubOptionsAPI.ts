@@ -45,6 +45,7 @@ export class HubOptionsAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, 
     }
 
     protected get refs(): HubOptions_Base<ChainId> {
+        if (!this.Web3StateRef.value) return {}
         return {
             account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
             chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),

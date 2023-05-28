@@ -1,29 +1,14 @@
 import type { RequestArguments } from 'web3-core'
-import { Composer, EthereumMethodType, PayloadEditor, createWeb3, createWeb3Provider } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, createWeb3, createWeb3Provider } from '@masknet/web3-shared-evm'
+import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 import { Providers } from '../providers/index.js'
 import { createContext } from '../helpers/createContext.js'
-import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { Squash } from '../middleware/Squash.js'
-import { Nonce } from '../middleware/Nonce.js'
-import { Translator } from '../middleware/Translator.js'
-import { Interceptor } from '../middleware/Interceptor.js'
-import { RecentTransaction } from '../middleware/RecentTransaction.js'
-import { TransactionWatcher } from '../middleware/TransactionWatcher.js'
-import { AddressBook } from '../middleware/AddressBook.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
-    private Composers = Composer.from<ConnectionContext>(
-        new Squash(),
-        new Nonce(),
-        new Translator(),
-        new Interceptor(),
-        new RecentTransaction(),
-        new TransactionWatcher(),
-        new AddressBook(),
-    )
+    private Composer = new ComposerAPI()
 
     private get Provider() {
         return Web3StateRef.value.Provider
@@ -37,7 +22,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                 const context = createContext(requestArguments, options)
 
                 try {
-                    await this.Composers.dispatch(context, async () => {
+                    await this.Composer.compose().dispatch(context, async () => {
                         if (!context.writeable) return
                         try {
                             switch (context.method) {
