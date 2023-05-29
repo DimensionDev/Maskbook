@@ -1,0 +1,149 @@
+import { delay } from '@masknet/kit'
+import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { Checkbox, FormControlLabel, Typography } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { Services } from '../../API.js'
+import { TermsAgreedContext } from '../../hooks/useTermsAgreed.js'
+import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
+import { WelcomeFrame } from '../../components/WelcomeFrame/index.js'
+import { Article } from './Article.js'
+import { SecondaryButton } from '../../components/SecondaryButton/index.js'
+import { PrimaryButton } from '../../components/PrimaryButton/index.js'
+
+const useStyles = makeStyles()((theme) => ({
+    title: {
+        fontSize: 36,
+        lineHeight: 1.2,
+        fontWeight: 700,
+    },
+    checkboxRow: {
+        marginTop: theme.spacing(1),
+        marginLeft: 0,
+    },
+    label: {
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
+        fontFamily: 'PingFang SC',
+        marginRight: 0,
+        marginLeft: 0,
+    },
+    link: {
+        color: theme.palette.maskColor.main,
+        textDecoration: 'underline',
+    },
+    checkbox: {
+        padding: 0,
+        marginRight: theme.spacing(1.5),
+    },
+    buttonGroup: {
+        display: 'flex',
+        columnGap: 12,
+    },
+    policy: {
+        fontSize: 14,
+        lineHeight: '20px',
+        color: theme.palette.maskColor.second,
+        marginTop: 48,
+    },
+}))
+
+export default memo(function Welcome() {
+    const [, setAgreed] = TermsAgreedContext.useContainer()
+    const [allowedToCollect, setAllowedToCollect] = useState(true)
+    const [params] = useSearchParams()
+    const navigate = useNavigate()
+
+    const handleAgree = useCallback(async () => {
+        if (allowedToCollect) {
+            await Services.Settings.setTelemetryEnabled(true)
+        }
+        setAgreed(true)
+        const from = params.get('from')
+        const hasRedirect = from && from !== DashboardRoutes.Personas
+        if (hasRedirect) {
+            const search = params.get('search')
+            navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
+        }
+
+        // warm up, otherwise we can't access correct value from userGuideStatus
+        await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
+        const hasSetup = await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
+
+        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
+        if (!url) return
+        if (hasRedirect && (hasSetup || from === DashboardRoutes.Setup)) return
+
+        if (hasRedirect) {
+            // Delay opening sns page to let use realize the route has changed that happened above
+            await delay(300)
+            browser.tabs.create({
+                active: false,
+                url,
+            })
+        } else {
+            location.assign(url)
+        }
+    }, [params, allowedToCollect])
+
+    const t = useDashboardI18N()
+    const { classes } = useStyles()
+
+    return (
+        <WelcomeFrame
+            controller={
+                <>
+                    <div className={classes.buttonGroup}>
+                        <SecondaryButton width="125px" size="large" onClick={() => window.close()}>
+                            {t.cancel()}
+                        </SecondaryButton>
+                        <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
+                            {t.agree()}
+                        </PrimaryButton>
+                    </div>
+                    <Typography className={classes.policy}>
+                        <DashboardTrans.welcome_agreement_policy
+                            components={{
+                                agreement: (
+                                    <a
+                                        className={classes.link}
+                                        target="_blank"
+                                        href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
+                                    />
+                                ),
+                                policy: (
+                                    <a
+                                        className={classes.link}
+                                        target="_blank"
+                                        href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
+                                    />
+                                ),
+                            }}
+                        />
+                    </Typography>
+                </>
+            }>
+            <Typography variant="h1" className={classes.title}>
+                {t.welcome_to_use_mask_network()}
+            </Typography>
+            <Article />
+
+            <FormControlLabel
+                className={classes.checkboxRow}
+                classes={{ label: classes.label }}
+                control={
+                    <Checkbox
+                        className={classes.checkbox}
+                        checked={allowedToCollect}
+                        onChange={(event) => {
+                            setAllowedToCollect(event.currentTarget.checked)
+                        }}
+                    />
+                }
+                label={t.welcome_request_to_collect()}
+            />
+        </WelcomeFrame>
+    )
+})

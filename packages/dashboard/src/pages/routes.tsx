@@ -9,14 +9,13 @@ import { Messages } from '../API.js'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
-import { WelcomeFrame } from '../components/WelcomeFrame/index.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
 const SignUp = lazy(() => import('./SignUp/index.js'))
 const SignIn = lazy(() => import('./SignIn/index.js'))
 const PrivacyPolicy = lazy(() => import('./PrivacyPolicy/index.js'))
-const Welcome = lazy(() => import('./Welcome/index.js'))
+const Welcome = lazy(() => import('./NewWelcome/index.js'))
 const Personas = lazy(() => import(/* webpackPrefetch: true */ './Personas/index.js'))
 const Settings = lazy(() => import(/* webpackPrefetch: true */ './Settings/index.js'))
 const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
@@ -59,7 +58,7 @@ export function Pages() {
         <Suspense fallback={null}>
             <TermsGuard>
                 <Routes>
-                    <Route path={DashboardRoutes.Welcome} element={welcomeFrame(<Welcome />)} />
+                    <Route path={DashboardRoutes.Welcome} element={<Welcome />} />
                     <Route path={DashboardRoutes.Setup} element={<Setup />} />
                     <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
                     <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
@@ -75,9 +74,6 @@ export function Pages() {
     )
 }
 
-function welcomeFrame(x: React.ReactNode) {
-    return <WelcomeFrame />
-}
 function frame(x: React.ReactNode) {
     return <DashboardFrame children={x} />
 }

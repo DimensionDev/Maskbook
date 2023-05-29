@@ -394,6 +394,7 @@
     "recovery_smart_pay_wallet_description_one": "{{count}} local SmartPay wallet has been detected and successfully recovered.",
     "recovery_smart_pay_wallet_description_other": "{{count}} local SmartPay wallets have been detected and successfully recovered.",
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
+    "welcome_to_use_mask_network": "Welcome to use Mask Network",
     "wallet_history_no_data": "No history records.",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "wallets_history_burn": "Burn"

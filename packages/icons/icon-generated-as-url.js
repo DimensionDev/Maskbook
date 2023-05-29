@@ -55,6 +55,8 @@ export function mask_grey_light_url() { return new URL("./brands/MaskGrey.light.
 export function mask_placeholder_dark_url() { return new URL("./brands/MaskPlaceholder.dark.svg", import.meta.url) }
 export function mask_placeholder_dim_url() { return new URL("./brands/MaskPlaceholder.dim.svg", import.meta.url) }
 export function mask_placeholder_light_url() { return new URL("./brands/MaskPlaceholder.light.svg", import.meta.url) }
+export function mask_square_dark_url() { return new URL("./brands/MaskSquare.dark.svg", import.meta.url) }
+export function mask_square_light_url() { return new URL("./brands/MaskSquare.light.svg", import.meta.url) }
 export function mask_text_url() { return new URL("./brands/MaskText.svg", import.meta.url) }
 export function mask_text_nightly_url() { return new URL("./brands/MaskTextNightly.svg", import.meta.url) }
 export function mask_wallet_url() { return new URL("./brands/MaskWallet.png", import.meta.url) }

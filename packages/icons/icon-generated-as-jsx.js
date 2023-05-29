@@ -292,6 +292,16 @@ export const MaskPlaceholder = /*#__PURE__*/ __createIcon('MaskPlaceholder', [
         u: () => new URL('./brands/MaskPlaceholder.light.svg', import.meta.url),
     },
 ])
+export const MaskSquare = /*#__PURE__*/ __createIcon('MaskSquare', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/MaskSquare.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/MaskSquare.light.svg', import.meta.url),
+    },
+])
 export const MaskText = /*#__PURE__*/ __createIcon('MaskText', [
     {
         u: () => new URL('./brands/MaskText.svg', import.meta.url),
