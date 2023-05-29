@@ -34,7 +34,7 @@ const RELATION_SERVICE_URL =
         ? RELATION_SERVICE_URL_PROD
         : RELATION_SERVICE_URL_DEV
 
-const relationServiceQuery = `  domain(domainSystem: "ENS", name: $domain) {
+const relationServiceQuery = `  domain(domainSystem: $domainSystem, name: $domain) {
         source
         system
         name
@@ -249,9 +249,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { domain: domain.toLowerCase() },
+                    variables: { domainSystem: 'ENS', domain: domain.toLowerCase() },
                     query: `
-                    query GET_PROFILES_QUERY($domain: String) {
+                    query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
                       ${relationServiceQuery}
                     }
                 `,
@@ -284,9 +284,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                    variables: { identity: twitterId.toLowerCase() },
+                    variables: { domainSystem: 'ENS', domain: twitterId.toLowerCase() },
                     query: `
-                        query GET_PROFILES_BY_TWITTER_ID($identity: String) {
+                        query GET_PROFILES_BY_TWITTER_ID($domainSystem: String, $domain: String) {
                           ${relationServiceQuery}
                         }
                 `,
@@ -320,9 +320,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_LENS_PROFILES',
-                    variables: { identity: lowerCaseId },
+                    variables: { domainSystem: 'lens', domain: lowerCaseId },
                     query: `
-                        query GET_LENS_PROFILES($identity: String) {
+                        query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
                             ${relationServiceQuery}
                         }
                 `,
