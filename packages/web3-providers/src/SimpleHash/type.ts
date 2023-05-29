@@ -83,7 +83,7 @@ export interface Asset {
     }
 }
 
-interface PaymentToken {
+export interface PaymentToken {
     address: string | null
     decimals: number
     name: string

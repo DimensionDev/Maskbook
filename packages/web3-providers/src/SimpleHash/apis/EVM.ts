@@ -27,12 +27,12 @@ import {
     resolveSimpleHashRange,
     SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
 } from '../helpers.js'
-import { type Asset, type Collection, type PriceStat } from '../type.js'
+import { type Asset, type Collection, type PaymentToken, type PriceStat } from '../type.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
-import { compact } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 
@@ -125,7 +125,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         const range = resolveSimpleHashRange(days)
         const to_timeStamp = Math.round(Date.now() / 1000)
         const from_timeStamp = range ? to_timeStamp - range : SIMPLE_HASH_HISTORICAL_PRICE_START_TIME
-        let cursor = ''
+        let cursor = '' as string | null
         let results: PriceStat[] = []
         while (cursor !== null) {
             const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
@@ -135,15 +135,32 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                 cursor: cursor ? cursor : undefined,
             })
 
-            const response = await fetchFromSimpleHash<{ next_cursor: string; floor_prices: PriceStat[] }>(path)
-            console.log({ response })
-            cursor = response.next_cursor
+            const response = await fetchFromSimpleHash<{
+                next_cursor: string
+                floor_prices: PriceStat[]
+                payment_token: PaymentToken
+            }>(path)
 
-            results = results.concat(response.floor_prices)
+            const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
+            cursor =
+                !firstFloorPriceTimeStamp || new Date(firstFloorPriceTimeStamp).getTime() / 1000 < from_timeStamp
+                    ? null
+                    : response.next_cursor
+
+            results = results.concat(
+                response.floor_prices.map((x) => ({
+                    ...x,
+                    floor_price: Number(leftShift(x.floor_price, response.payment_token.decimals).toPrecision(2)) * 100,
+                })),
+            )
         }
 
-        console.log({ results })
-        return EMPTY_LIST
+        return uniqBy(
+            results.filter((x) => new Date(x.timestamp).getTime() / 1000 > from_timeStamp),
+            (x) => x.timestamp,
+        )
+            .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+            .map((x) => [new Date(x.timestamp).getTime(), x.floor_price])
     }
 
     async getCollectionsByOwner(
@@ -220,7 +237,6 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         if (!collection) {
             throw new Error(`SimpleHash: Can not find collection by address ${address}, chainId ${chainId}`)
         }
-        console.log({ collection })
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, address),
             this.opensea.getStats(address).catch(() => null),
