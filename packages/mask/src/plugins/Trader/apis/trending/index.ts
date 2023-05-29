@@ -64,7 +64,13 @@ export async function getPriceStats(
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.NFTScan:
-            return NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
+            return attemptUntil(
+                [SimpleHashEVM, NFTScanTrending_EVM].map(
+                    (x) => () => x.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days),
+                ),
+                EMPTY_LIST,
+            )
+
         default:
             return EMPTY_LIST
     }

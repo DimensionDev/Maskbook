@@ -24,8 +24,10 @@ import {
     createNonFungibleCollection,
     resolveChainId,
     getAllChainNames,
+    resolveSimpleHashRange,
+    SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
 } from '../helpers.js'
-import { type Asset, type Collection } from '../type.js'
+import { type Asset, type Collection, type PriceStat } from '../type.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
@@ -114,6 +116,36 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         )
     }
 
+    async getCoinPriceStats(
+        chainId: ChainId,
+        collectionId: string,
+        currency: TrendingAPI.Currency,
+        days: TrendingAPI.Days,
+    ): Promise<TrendingAPI.Stat[]> {
+        const range = resolveSimpleHashRange(days)
+        const to_timeStamp = Math.round(Date.now() / 1000)
+        const from_timeStamp = range ? to_timeStamp - range : SIMPLE_HASH_HISTORICAL_PRICE_START_TIME
+        let cursor = ''
+        let results: PriceStat[] = []
+        while (cursor !== null) {
+            const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
+                collectionId,
+                to_timeStamp,
+                from_timeStamp,
+                cursor: cursor ? cursor : undefined,
+            })
+
+            const response = await fetchFromSimpleHash<{ next_cursor: string; floor_prices: PriceStat[] }>(path)
+            console.log({ response })
+            cursor = response.next_cursor
+
+            results = results.concat(response.floor_prices)
+        }
+
+        console.log({ results })
+        return EMPTY_LIST
+    }
+
     async getCollectionsByOwner(
         account: string,
         { chainId, indicator, allChains }: HubOptions<ChainId> = {},
@@ -188,6 +220,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         if (!collection) {
             throw new Error(`SimpleHash: Can not find collection by address ${address}, chainId ${chainId}`)
         }
+        console.log({ collection })
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, address),
             this.opensea.getStats(address).catch(() => null),
@@ -226,7 +259,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
             currency,
             coin: {
-                id: address,
+                id: collection.collection_id,
                 name: collection.name,
                 symbol,
                 address,

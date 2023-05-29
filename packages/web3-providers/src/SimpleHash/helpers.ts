@@ -7,8 +7,9 @@ import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
-import { NetworkPluginID, queryClient } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, queryClient } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TrendingAPI } from '../entry-types.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
@@ -171,3 +172,17 @@ export const getAllChainNames = (pluginID: NetworkPluginID) => {
 export function resolveChain(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll): string | undefined {
     return ChainNameMap[pluginId][chainId]
 }
+
+export const SIMPLE_HASH_HISTORICAL_PRICE_START_TIME = 1669852800
+
+export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
+    {
+        [TrendingAPI.Days.ONE_DAY]: 60 * 60 * 24,
+        [TrendingAPI.Days.ONE_WEEK]: 60 * 60 * 24 * 7,
+        [TrendingAPI.Days.ONE_MONTH]: 60 * 60 * 24 * 30,
+        [TrendingAPI.Days.THREE_MONTHS]: 60 * 60 * 24 * 90,
+        [TrendingAPI.Days.ONE_YEAR]: 0,
+        [TrendingAPI.Days.MAX]: 0,
+    },
+    () => 0,
+)
