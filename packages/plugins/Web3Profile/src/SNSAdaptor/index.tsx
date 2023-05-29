@@ -77,12 +77,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
                 const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
 
+                const handle = accounts[0]?.handle
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
                     queryKey: ['next-id', 'all-lens', identity?.userId],
-                    enabled: isProfile && !!identity?.userId,
+                    enabled: isProfile && !!handle,
                     queryFn: async () => {
-                        const _accounts = await NextIDProof.queryAllLens(accounts[0]?.handle)
-                        return _accounts.map(NextIdLensToFireflyLens)
+                        const lensAccounts = await NextIDProof.queryAllLens(handle)
+                        return lensAccounts.map(NextIdLensToFireflyLens)
                     },
                 })
 
