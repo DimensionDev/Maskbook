@@ -10,7 +10,7 @@ import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } fr
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -212,7 +212,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { classes, cx } = useStyles(undefined, { props })
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
@@ -239,13 +239,13 @@ export const TradeForm = memo<AllTradeFormProps>(
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = BigNumber.max(
                 0,
-                Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
+                Others.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
             )
 
             return isZero(amount_)
                 ? ZERO.toString()
                 : formatBalance(amount_.integerValue(), inputToken?.decimals, undefined, true)
-        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
+        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(
             (amount: string) => {

@@ -11,19 +11,18 @@ import {
 } from '@masknet/web3-shared-evm'
 import { AssetPreviewer, PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { Web3 } from '@masknet/web3-providers'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { RedPacketRPC } from '../messages.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { openComposition } from './openComposition.js'
-import { SmartPayBundler } from '@masknet/web3-providers'
-import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -129,19 +128,13 @@ export interface RedpacketNftConfirmDialogProps {
     gasOption?: GasConfig
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const { onClose, message, contract, tokenList, senderName, gasOption } = props
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
-
-    const t = useI18N()
-    const { address: publicKey, privateKey } = useMemo(
-        () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
-        [web3],
-    )!
+    const { account: publicKey, privateKey = '' } = useMemo(() => Web3.createAccount(), [])!
 
     const duration = 60 * 60 * 24
 

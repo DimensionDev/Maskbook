@@ -1,13 +1,12 @@
-import type { HubOptions } from '@masknet/web3-shared-base'
 import { type ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { getTokenPrice, getTokenPriceByCoinId } from './base.js'
-import type { PriceAPI } from '../../entry-types.js'
+import type { HubOptions_Base, PriceAPI } from '../../entry-types.js'
 
 export class CoinGeckoPriceAPI_EVM implements PriceAPI.Provider<ChainId> {
     async getFungibleTokenPrice(
         chainId: ChainId,
         address: string,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions_Base<ChainId>,
     ): Promise<number> {
         const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options?.chainId ?? chainId)
 

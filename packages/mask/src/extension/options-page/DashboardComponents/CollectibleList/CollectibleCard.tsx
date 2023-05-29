@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { useWeb3Others, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { AssetPreviewer, ImageIcon } from '@masknet/shared'
@@ -74,7 +74,7 @@ export const CollectibleCard = memo(function CollectibleCard({
     ...rest
 }: CollectibleCardProps) {
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const networkDescriptor = useNetworkDescriptor(pluginID)
 
@@ -116,8 +116,7 @@ export const CollectibleCard = memo(function CollectibleCard({
             target="_blank"
             rel="noopener noreferrer"
             href={
-                asset.link ??
-                Others?.explorerResolver.nonFungibleTokenLink?.(asset.chainId, asset.address, asset.tokenId)
+                asset.link ?? Others.explorerResolver.nonFungibleTokenLink(asset.chainId, asset.address, asset.tokenId)
             }
             className={cx(classes.linkWrapper, className)}
             {...rest}>

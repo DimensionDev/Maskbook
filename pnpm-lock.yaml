@@ -1628,6 +1628,9 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
@@ -3305,6 +3308,9 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
@@ -3530,6 +3536,9 @@ importers:
       graphql-request:
         specifier: ^6.0.0
         version: 6.0.0(graphql@16.6.0)
+      immer:
+        specifier: ^10.0.1
+        version: 10.0.1
       json-stable-stringify:
         specifier: ^1.0.2
         version: 1.0.2

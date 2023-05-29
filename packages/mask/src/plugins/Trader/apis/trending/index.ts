@@ -1,6 +1,12 @@
-import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
+import { SourceType, type NonFungibleCollectionOverview, attemptUntil } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
+import {
+    CoinGeckoTrending,
+    CoinMarketCap,
+    NFTScanTrending_EVM,
+    NFTScanTrending_Solana,
+    SimpleHashEVM,
+} from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
@@ -26,7 +32,13 @@ export async function getCoinTrending(
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
                 ? NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
-                : NFTScanTrending_EVM.getCoinTrending(chainId as ChainIdEVM, address, currency)
+                : attemptUntil(
+                      [SimpleHashEVM, NFTScanTrending_EVM].map(
+                          (x) => () => x.getCoinTrending(chainId as ChainIdEVM, address, currency),
+                      ),
+                      undefined,
+                  )
+
         default:
             return
     }

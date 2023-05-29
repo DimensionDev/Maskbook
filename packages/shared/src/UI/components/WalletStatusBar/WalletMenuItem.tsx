@@ -11,7 +11,7 @@ import {
     useDefaultChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useWeb3State,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, type WalletDescriptionProps } from './WalletDescription.js'
@@ -44,13 +44,12 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
         })
 
         const name = useWalletName(address, pluginID, !!platform)
-
-        const { Others } = useWeb3State(pluginID)
+        const Others = useWeb3Others(pluginID)
 
         const providerDescriptor = useProviderDescriptor()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
-        const formattedAddress = Others?.formatAddress(address, 4)
-        const addressLink = Others?.explorerResolver.addressLink?.(chainId, address)
+        const formattedAddress = Others.formatAddress(address, 4)
+        const addressLink = Others.explorerResolver.addressLink(chainId, address)
 
         const descriptionProps = {
             name,

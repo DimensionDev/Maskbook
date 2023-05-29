@@ -1,20 +1,20 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
-export function useNativeTokenBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useNativeTokenBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
+    options?: ConnectionOptions<T>,
 ) {
     const { account } = useChainContext({ account: options?.account })
-    const connection = useWeb3Connection(pluginID, options)
+    const Web3 = useWeb3Connection(pluginID, {
+        account,
+        ...options,
+    })
 
     return useAsyncRetry(async () => {
-        if (!connection) return '0'
-        return connection.getNativeTokenBalance?.({
-            account,
-        })
-    }, [account, connection])
+        return Web3.getNativeTokenBalance()
+    }, [account, Web3])
 }

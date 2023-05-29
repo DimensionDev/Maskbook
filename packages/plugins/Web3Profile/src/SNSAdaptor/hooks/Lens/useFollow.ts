@@ -1,9 +1,10 @@
 import { useCallback, useRef, type MouseEvent, useState } from 'react'
+import { cloneDeep } from 'lodash-es'
 import { type AbiItem } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { Lens } from '@masknet/web3-providers'
+import { Lens, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
     ContractTransaction,
@@ -13,13 +14,12 @@ import {
 } from '@masknet/web3-shared-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, ProxyActionType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
-import { cloneDeep } from 'lodash-es'
 
 export function useFollow(
     profileId?: string,
@@ -30,7 +30,6 @@ export function useFollow(
 ) {
     const [loading, setLoading] = useState(false)
     const t = useI18N()
-    const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
@@ -53,35 +52,36 @@ export function useFollow(
 
     const followWithProxyAction = useCallback(
         async (token: string) => {
-            try {
-                if (!profileId || chainId !== ChainId.Matic || followModule || !connection || !hasDefaultProfile) return
-                const proxyAction = await Lens.followWithProxyAction(profileId, { token })
-                if (!proxyAction) return
-                for (let i = 0; i < 30; i += 1) {
-                    const receipt = await Lens.queryProxyStatus(proxyAction, { token })
-                    if (!receipt) return
-                    switch (receipt.__typename) {
-                        case ProxyActionType.ProxyActionError:
-                            throw new Error(receipt.reason)
-                        case ProxyActionType.ProxyActionQueued:
-                            await delay(1000)
-                            continue
-                        case ProxyActionType.ProxyActionStatusResult:
-                            const result = await connection.confirmTransaction(receipt.txHash)
-                            if (!result.status) return
-                            return proxyAction
-                        default:
-                            // TODO: error
-                            return
-                    }
-                }
-                return
-            } catch {
-                return
-            }
+            if (!profileId || chainId !== ChainId.Matic || followModule || !hasDefaultProfile) return
+            return Lens.followWithProxyAction(profileId, { token })
         },
-        [profileId, chainId, followModule, connection, hasDefaultProfile],
+        [profileId, chainId, followModule, hasDefaultProfile],
     )
+
+    const queryProxyActionStatus = useCallback(async (token: string, proxyAction?: string) => {
+        if (!proxyAction) return
+
+        for (let i = 0; i < 30; i += 1) {
+            const status = await Lens.queryProxyStatus(proxyAction, { token })
+            if (!status) return
+            switch (status.__typename) {
+                case ProxyActionType.ProxyActionError:
+                    throw new Error(status.reason)
+                case ProxyActionType.ProxyActionQueued:
+                    await delay(1000)
+                    continue
+                case ProxyActionType.ProxyActionStatusResult:
+                    const receipt = await Web3.confirmTransaction(status.txHash)
+                    if (!receipt.status) return
+                    return proxyAction
+                default:
+                    // TODO: error
+                    return
+            }
+        }
+
+        return
+    }, [])
 
     const handleFollow = useCallback<(event: MouseEvent<HTMLElement>) => Promise<void>>(
         async (event: MouseEvent<HTMLElement>) => {
@@ -89,20 +89,24 @@ export function useFollow(
 
             try {
                 setLoading(true)
-                if (!profileId || !connection || chainId !== ChainId.Matic) return
+                if (!profileId || chainId !== ChainId.Matic) return
                 const token = await handleQueryAuthenticate()
                 if (!token) return
-                onSuccess?.(cloneEvent)
-                setLoading(false)
                 const proxyAction = await followWithProxyAction(token)
+                if (proxyAction) {
+                    onSuccess?.(cloneEvent)
+                    setLoading(false)
+                }
 
-                if (!proxyAction) {
+                const result = await queryProxyActionStatus(token, proxyAction)
+
+                if (!result) {
                     setLoading(true)
                     const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
 
                     if (!typedData) return
 
-                    const signature = await connection.signMessage(
+                    const signature = await Web3.signMessage(
                         'typedData',
                         JSON.stringify(
                             encodeTypedData(
@@ -132,19 +136,17 @@ export function useFollow(
                             },
                         )
 
-                        hash = await connection.sendTransaction(tx)
+                        hash = await Web3.sendTransaction(tx)
                     }
 
                     if (!hash) return
                     onSuccess?.(cloneEvent)
                     setLoading(false)
-                    const result = await connection.confirmTransaction(hash, {
+
+                    const receipt = await Web3.confirmTransaction(hash, {
                         signal: AbortSignal.timeout(3 * 60 * 1000),
                     })
-
-                    if (!result.status) {
-                        throw new Error('Failed to Follow')
-                    }
+                    if (!receipt.status) throw new Error('Failed to Follow')
                 }
             } catch (error) {
                 if (
@@ -166,17 +168,7 @@ export function useFollow(
                 setLoading(false)
             }
         },
-        [
-            handleQueryAuthenticate,
-            profileId,
-            connection,
-            account,
-            chainId,
-            onSuccess,
-            fetchJSON,
-            showSingletonSnackbar,
-            onFailed,
-        ],
+        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, fetchJSON, showSingletonSnackbar, onFailed],
     )
 
     return { loading, handleFollow }

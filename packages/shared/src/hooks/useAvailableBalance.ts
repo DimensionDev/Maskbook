@@ -1,5 +1,7 @@
+import { useMemo } from 'react'
+import { useAsync } from 'react-use'
+import { BigNumber } from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
     useFungibleTokenBalance,
@@ -7,6 +9,7 @@ import {
     useNativeTokenBalance,
 } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -16,15 +19,12 @@ import {
     isNativeTokenAddress,
     formatEtherToWei,
 } from '@masknet/web3-shared-evm'
-import { BigNumber } from 'bignumber.js'
-import { useMemo } from 'react'
-import { useAsync } from 'react-use'
 
-export function useAvailableBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,
     address?: string,
     gasOption?: GasConfig,
-    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
+    options?: ConnectionOptions<T>,
 ) {
     const { chainId } = useChainContext(options)
     const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID)

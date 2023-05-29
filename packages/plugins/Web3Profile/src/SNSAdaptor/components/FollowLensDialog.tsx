@@ -1,5 +1,5 @@
 import { useMemo, useState, type MouseEvent, useCallback } from 'react'
-import { useAsyncRetry, useHover } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
@@ -107,6 +107,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const wallet = useWallet()
     const [isFollowing, setIsFollowing] = useState(false)
+    const [isHovering, setIsHovering] = useState(false)
     const { classes } = useStyles({ account: !!wallet })
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
@@ -240,64 +241,18 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         pluginID,
     ])
 
-    const [element] = useHover((isHovering) => {
-        const getButtonText = () => {
-            if (isFollowing) {
-                return isHovering ? t.unfollow() : t.following_action()
-            } else if (
-                profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
-                profile.followModule.amount
-            ) {
-                return t.follow_for_fees({
-                    value: profile.followModule.amount.value,
-                    symbol: profile.followModule.amount.asset.symbol,
-                })
-            }
-
-            return t.follow()
+    const buttonText = useMemo(() => {
+        if (isFollowing) {
+            return isHovering ? t.unfollow() : t.following_action()
+        } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
+            return t.follow_for_fees({
+                value: profile.followModule.amount.value,
+                symbol: profile.followModule.amount.asset.symbol,
+            })
         }
-        return (
-            <EthereumERC20TokenApprovedBoundary
-                spender={value?.profile.followModule?.contractAddress}
-                amount={approved.amount}
-                token={approved.token}
-                showHelperToken={false}
-                ActionButtonProps={{
-                    variant: 'roundedContained',
-                    className: classes.followAction,
-                    disabled,
-                }}
-                infiniteUnlockContent={t.unlock_token_tips({
-                    value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
-                    symbol: approved.token?.symbol ?? '',
-                })}
-                failedContent={t.unlock_token_tips({
-                    value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
-                    symbol: approved.token?.symbol ?? '',
-                })}>
-                <ChainBoundary
-                    disableConnectWallet
-                    expectedPluginID={pluginID}
-                    expectedChainId={ChainId.Matic}
-                    ActionButtonPromiseProps={{
-                        variant: 'roundedContained',
-                        className: classes.followAction,
-                        startIcon: null,
-                        disabled,
-                    }}
-                    switchText={t.switch_network_tips()}>
-                    <ActionButton
-                        variant="roundedContained"
-                        className={classes.followAction}
-                        disabled={disabled}
-                        loading={followLoading || unfollowLoading || loading}
-                        onClick={handleClick}>
-                        {getButtonText()}
-                    </ActionButton>
-                </ChainBoundary>
-            </EthereumERC20TokenApprovedBoundary>
-        )
-    })
+
+        return t.follow()
+    }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
         if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle })
@@ -370,7 +325,47 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 </Button>
                             ) : (
                                 <>
-                                    {element}
+                                    <EthereumERC20TokenApprovedBoundary
+                                        spender={value?.profile.followModule?.contractAddress}
+                                        amount={approved.amount}
+                                        token={!isFollowing ? approved.token : undefined}
+                                        showHelperToken={false}
+                                        ActionButtonProps={{
+                                            variant: 'roundedContained',
+                                            className: classes.followAction,
+                                            disabled,
+                                        }}
+                                        infiniteUnlockContent={t.unlock_token_tips({
+                                            value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
+                                            symbol: approved.token?.symbol ?? '',
+                                        })}
+                                        failedContent={t.unlock_token_tips({
+                                            value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
+                                            symbol: approved.token?.symbol ?? '',
+                                        })}>
+                                        <ChainBoundary
+                                            disableConnectWallet
+                                            expectedPluginID={pluginID}
+                                            expectedChainId={ChainId.Matic}
+                                            ActionButtonPromiseProps={{
+                                                variant: 'roundedContained',
+                                                className: classes.followAction,
+                                                startIcon: null,
+                                                disabled,
+                                            }}
+                                            switchText={t.switch_network_tips()}>
+                                            <ActionButton
+                                                variant="roundedContained"
+                                                className={classes.followAction}
+                                                disabled={disabled}
+                                                loading={followLoading || unfollowLoading || loading}
+                                                onClick={handleClick}
+                                                onMouseOver={() => setIsHovering(true)}
+                                                onMouseOut={() => setIsHovering(false)}>
+                                                {buttonText}
+                                            </ActionButton>
+                                        </ChainBoundary>
+                                    </EthereumERC20TokenApprovedBoundary>
                                     <Button
                                         variant="roundedOutlined"
                                         href={profile?.handle ? getLensterLink(profile.handle) : '#'}

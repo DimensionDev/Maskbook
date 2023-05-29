@@ -6,8 +6,9 @@ import type { TransactionReceipt } from 'web3-core'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { TransactionEventType, type ChainId, type SchemaType, FAKE_SIGN_PASSWORD } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { type FungibleToken, isGreaterThan, ONE } from '@masknet/web3-shared-base'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants.js'
 import type { AdvanceSettingData } from '../AdvanceSetting.js'
@@ -52,14 +53,12 @@ type paramsObjType = {
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: poolSettings?.token?.chainId })
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: poolSettings?.token?.chainId })
     const { contract: ITO_Contract } = useITO_Contract(poolSettings?.token?.chainId)
     const paramResult = useFillParams(poolSettings)
 
     const [state, fillCallback] = useAsyncFn(async () => {
-        if (!web3 || !poolSettings || !connection) return
+        if (!poolSettings) return
 
         const { password, startTime, endTime, token, unlockTime } = poolSettings
 
@@ -69,12 +68,12 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         if (!checkParams(paramsObj) || !poolSettings.token?.chainId) return
 
-        if (poolSettings.token?.chainId !== chainId) await connection?.switchChain?.(poolSettings.token?.chainId)
+        if (poolSettings.token?.chainId !== chainId) await Web3.switchChain?.(poolSettings.token?.chainId)
 
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await connection.signMessage('message', password, { account })
+            signedPassword = await Web3.signMessage('message', password, { account })
         } catch {
             signedPassword = ''
         }
@@ -120,7 +119,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, account, ITO_Contract, poolSettings, paramResult, connection])
+    }, [account, ITO_Contract, poolSettings, paramResult])
 
     return [state, fillCallback] as const
 }

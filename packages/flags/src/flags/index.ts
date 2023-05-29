@@ -35,13 +35,11 @@ export const flags = {
 
     using_emoji_flag: true,
 
-    // we still need to handle image encoding
-    v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: insiderOnly,
 
     // how many users should use blockpi rpc
-    blockpi_grayscale: 90,
+    blockpi_grayscale: 5,
 
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,

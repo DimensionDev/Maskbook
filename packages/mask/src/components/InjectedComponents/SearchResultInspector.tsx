@@ -17,7 +17,7 @@ import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Tab } from '@mui/material'
+import { Stack, Tab } from '@mui/material'
 import { decentralizedSearchSettings } from '../../../shared/legacy-settings/settings.js'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
@@ -111,7 +111,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                 <div className={classes.contentWrapper}>
                     <div>{contentComponent}</div>
                     {tabs.length ? (
-                        <div>
+                        <Stack px={2}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (
@@ -119,7 +119,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                                     ))}
                                 </MaskTabList>
                             </TabContext>
-                        </div>
+                        </Stack>
                     ) : null}
                 </div>
                 {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}

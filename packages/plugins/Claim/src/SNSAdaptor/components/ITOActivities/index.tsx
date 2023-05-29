@@ -1,7 +1,7 @@
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { memo, useCallback } from 'react'
 import { useClaimAll } from '../../../hooks/useClaimAll.js'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useITOConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Box } from '@mui/material'

@@ -9,11 +9,13 @@ export interface Collection {
     banner_image_url: string
     collection_id: number
     description: string
+    external_url: string
     spam_score?: number
     discord_url: string
     floor_prices: Array<{
         marketplace_id: string // opensea
         marketplace_name: string // Opensea
+        value: number
         payment_token: PaymentToken
     }>
     image_url: string
@@ -34,7 +36,10 @@ export interface Collection {
     top_contracts: string[]
     total_quantity: number
     /** twitter handler */
-    twitter_username: string
+    twitter_username: string | null
+    instagram_username: string | null
+    medium_username: string | null
+    telegram_url: string | null
 }
 export interface Asset {
     chain: string // ethereum

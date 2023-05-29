@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, PersonaAction, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, alpha } from '@mui/material'
-import { Flags } from '@masknet/flags'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
@@ -18,6 +15,9 @@ import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus.js'
+import { EncryptionMethodType } from './EncryptionMethodSelector.js'
+import { InjectedDialog, PersonaAction, useCurrentPersonaConnectStatus } from '@masknet/shared'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -66,7 +66,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
-    const [version, setVersion] = useState<-38 | -37>(Flags.v37PayloadDefaultEnabled ? -37 : -38)
     const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
     // #region Open
     const [open, setOpen] = useState(false)
@@ -127,12 +126,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
-    const isE2E_Disabled = (() => {
+    const isE2E_Disabled = (encode: EncryptionMethodType) => {
         if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
-        if (!hasLocalKey && version === -38) return E2EUnavailableReason.NoLocalKey
+        if (!hasLocalKey && encode === EncryptionMethodType.Image) return E2EUnavailableReason.NoLocalKey
         return
-    })()
+    }
     const persona = useCurrentPersona()
     const personaAction = persona ? (
         <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
@@ -149,8 +148,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI
                     type={type}
-                    version={version}
-                    setVersion={setVersion}
                     ref={UI}
                     hasClipboardPermission={hasClipboardPermission}
                     onRequestClipboardPermission={onRequestClipboardPermission}

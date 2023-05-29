@@ -4,7 +4,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { PluginWalletStatusBar, InjectedDialog, NetworkTab } from '@masknet/shared'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
@@ -125,9 +125,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const chainIdList = compact<ChainId>(
-        tab === Tabs.collectibles
-            ? [ChainId.Mainnet, ChainId.BSC]
-            : approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
+        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )
     const { classes } = useStyles()
 

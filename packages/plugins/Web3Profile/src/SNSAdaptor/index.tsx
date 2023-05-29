@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
-import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
+import { ApplicationEntry } from '@masknet/shared'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { NextIdLensToFireflyLens } from './components/LensPopup.js'
 import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
@@ -70,30 +70,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    SettingTabs: [
-        {
-            ID: PluginID.Web3Profile,
-            label: 'Web3Profile',
-            priority: 2,
-            UI: {
-                TabContent: PublicWalletSetting,
-            },
-        },
-    ],
     Lens: {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
                 const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
-
                 const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
 
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
                     queryKey: ['next-id', 'all-lens', identity?.userId],
                     enabled: isProfile && !!identity?.userId,
                     queryFn: async () => {
-                        const accounts = await NextIDProof.queryAllLens(identity!.userId)
-                        return accounts.map(NextIdLensToFireflyLens)
+                        const _accounts = await NextIDProof.queryAllLens(accounts[0]?.handle)
+                        return _accounts.map(NextIdLensToFireflyLens)
                     },
                 })
 

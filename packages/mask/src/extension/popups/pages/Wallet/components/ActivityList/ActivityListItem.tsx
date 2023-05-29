@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -9,10 +10,10 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
-import { Icons } from '@masknet/icons'
+import { useReverseAddress } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils/index.js'
-import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     item: {
@@ -56,7 +57,6 @@ export const ActivityListItem = memo<ActivityListItemProps>(
     ({ transaction, toAddress, onSpeedUpClick, onCancelClick, formatterTransaction }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
         const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
         const transactionIcon = useMemo(() => {
@@ -93,8 +93,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                             {transaction.createdAt ? `${formatDateTime(transaction.createdAt, 'MMM dd')}.  ` : null}
                             {toAddress
                                 ? t('popups_wallet_activity_to_address', {
-                                      address:
-                                          Others?.formatDomainName?.(domain) || Others?.formatAddress(toAddress, 4),
+                                      address: Others.formatDomainName(domain) || Others.formatAddress(toAddress, 4),
                                   })
                                 : null}
                         </Typography>

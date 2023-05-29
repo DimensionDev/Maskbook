@@ -95,44 +95,52 @@ const createSearchTabConfig = (
     }
 }
 
-const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Activities', {})
+const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
 
-const DonationTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Donation', {
-    tag: RSS3BaseAPI.Tag.Donation,
-})
+const DonationTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
+    'Donation',
+    {
+        tag: RSS3BaseAPI.Tag.Donation,
+    },
+    3,
+)
 const DonationsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
     'Donation',
     {
         tag: RSS3BaseAPI.Tag.Donation,
     },
-    2,
+    3,
 )
 const DonationsTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createSearchTabConfig(
     'Donation',
     {
         tag: RSS3BaseAPI.Tag.Donation,
     },
-    2,
+    3,
 )
 
-const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Social', {
-    tag: RSS3BaseAPI.Tag.Social,
-})
+const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
+    'Social',
+    {
+        tag: RSS3BaseAPI.Tag.Social,
+    },
+    1,
+)
 const SocialTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
         tag: RSS3BaseAPI.Tag.Social,
     },
-    2,
+    1,
 )
 const SocialTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createSearchTabConfig(
     'Social',
     {
         tag: RSS3BaseAPI.Tag.Social,
     },
-    2,
+    1,
 )
 
 const sns: Plugin.SNSAdaptor.Definition = {

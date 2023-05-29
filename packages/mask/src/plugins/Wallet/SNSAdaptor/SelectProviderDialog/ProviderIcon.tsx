@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         padding: theme.spacing(1),
         '&:hover': {
-            background: theme.palette.background.default,
+            background: theme.palette.maskColor.bg,
             '& p': {
                 fontWeight: 700,
                 color: theme.palette.text.primary,

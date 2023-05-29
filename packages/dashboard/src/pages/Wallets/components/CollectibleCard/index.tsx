@@ -4,10 +4,10 @@ import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip.js'
-import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -87,7 +87,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) =>
     const { chainId } = useChainContext()
     const { classes } = useStyles()
     const ref = useRef(null)
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
     const isOnCurrentChain = useMemo(() => chainId === asset.contract?.chainId, [chainId, asset])
@@ -102,7 +102,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) =>
     const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
     const nftLink = useMemo(() => {
-        return Others?.explorerResolver.nonFungibleTokenLink(asset.chainId, asset.address, asset.tokenId)
+        return Others.explorerResolver.nonFungibleTokenLink(asset.chainId, asset.address, asset.tokenId)
     }, [currentPluginId, asset.chainId, asset.address, asset.tokenId])
 
     // NFTScan can't recognize address uppercase

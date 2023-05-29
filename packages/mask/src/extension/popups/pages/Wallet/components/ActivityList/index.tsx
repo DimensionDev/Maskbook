@@ -11,14 +11,15 @@ import {
     type TransactionDescriptor,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
+import { Others } from '@masknet/web3-providers'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityListItem } from './ActivityListItem.js'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     list: {
@@ -57,7 +58,7 @@ export interface ActivityListProps {
 
 export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const { transactions } = useContainer(WalletContext)
-    const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { value: dataSource = EMPTY_LIST } = useAsync(async () => {
@@ -89,7 +90,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
         <ActivityListUI
             dataSource={dataSource}
             chainId={chainId}
-            formatterTransactionLink={Others?.explorerResolver.transactionLink}
+            formatterTransactionLink={Others.explorerResolver.transactionLink}
         />
     )
 })

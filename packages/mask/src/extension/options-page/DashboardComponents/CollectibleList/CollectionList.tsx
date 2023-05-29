@@ -1,19 +1,18 @@
-import { useEffect, useMemo, useState } from 'react'
-import { differenceWith, uniqBy } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
+import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, EMPTY_OBJECT, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { CollectionType } from '@masknet/web3-providers/types'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
+import { uniqBy } from 'lodash-es'
+import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
+import type { CollectibleGridProps } from '../../types.js'
 import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
-import type { CollectibleGridProps } from '../../types.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -106,25 +105,9 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
 
     const userId = profile?.identifier?.userId.toLowerCase()
 
-    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, persona, {
-        address: account,
-        hiddenAddressesKey: 'NFTs',
-        collectionKey: CollectionType.NFTs,
-    })
-
-    const unHiddenCollectibles = useMemo(() => {
-        if (!hiddenList.length) return collectibles
-
-        return differenceWith(
-            collectibles,
-            hiddenList,
-            (collection, id) => `${collection.id}_${collection.tokenId}`.toLowerCase() === id.toLowerCase(),
-        )
-    }, [hiddenList, collectibles])
-
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...unHiddenCollectibles,
+        ...collectibles,
     ]
 
     const renderCollectibles = useMemo(() => {
@@ -157,7 +140,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
 
     if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
 
-    if ((done && !allCollectibles.length) || !account || isHiddenAddress)
+    if ((done && !allCollectibles.length) || !account)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />

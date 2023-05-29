@@ -140,26 +140,26 @@ export function ActualChainContextProvider({ children }: { children: ReactNode |
     return <ChainContext.Provider value={value} children={children} />
 }
 
-export function useEnvironmentContext(defaults?: EnvironmentContext) {
+export function useEnvironmentContext(overrides?: EnvironmentContext) {
     const context = useContext(EnvironmentContext)
     return {
         ...context,
-        ...omitBy(defaults, isUndefined),
+        ...omitBy(overrides, isUndefined),
     }
 }
 
-export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: T) {
+export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(overrides?: T) {
     const context = useContext(NetworkContext)
     return {
         ...context,
-        pluginID: (defaults ?? context.pluginID) as T,
+        pluginID: (overrides ?? context.pluginID) as T,
     }
 }
 
-export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: ChainContextGetter<T>) {
+export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(overrides?: ChainContextGetter<T>) {
     const context = useContext(ChainContext)
     return {
         ...context,
-        ...omitBy(defaults, isUndefined),
+        ...omitBy(overrides, isUndefined),
     } as Required<ChainContextGetter<T> & ChainContextSetter<T>>
 }

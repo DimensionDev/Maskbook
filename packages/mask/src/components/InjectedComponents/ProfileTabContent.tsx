@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
@@ -9,7 +9,7 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { Link, Button, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
     AddressItem,
     ConnectPersonaBoundary,
@@ -21,7 +21,7 @@ import {
     SocialAccountList,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, ProfileTabs } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -121,9 +121,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 }
 
 function openWeb3ProfileSettingDialog() {
-    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
         open: true,
-        targetTab: PluginID.Web3Profile,
     })
 }
 
@@ -131,12 +130,12 @@ function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
-    const theme = useTheme()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
     const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
+    const closeMenu = useCallback(() => setMenuOpen(false), [])
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -167,7 +166,6 @@ function Content(props: ProfileTabContentProps) {
         retry: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
-
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
@@ -191,22 +189,9 @@ function Content(props: ProfileTabContentProps) {
                     x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 return x.pluginID !== PluginID.NextID && shouldDisplay
             })
-            .sort((a, z) => {
-                // order those tabs from next id first
-                if (a.pluginID === PluginID.NextID) return -1
-                if (z.pluginID === PluginID.NextID) return 1
-
-                // order those tabs from collectible first
-                if (a.pluginID === PluginID.Collectible) return -1
-                if (z.pluginID === PluginID.Collectible) return 1
-
-                // place those tabs from debugger last
-                if (a.pluginID === PluginID.Debugger) return 1
-                if (z.pluginID === PluginID.Debugger) return -1
-
-                return a.priority - z.priority
-            })
+            .sort((a, z) => a.priority - z.priority)
     })
+
     const tabs = displayPlugins.map((x) => ({
         id: x.ID,
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
@@ -310,8 +295,8 @@ function Content(props: ProfileTabContentProps) {
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
         if (!currentVisitingUserId) return EMPTY_LIST
-        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
-    }, [currentVisitingUserId])
+        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || '')
+    }, [selectedSocialAccount])
 
     if (hidden) return null
 
@@ -449,24 +434,24 @@ function Content(props: ProfileTabContentProps) {
                                     socialAccount={selectedSocialAccount}
                                 />
                             </Button>
-                            <ThemeProvider theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                <TokenWithSocialGroupMenu
-                                    walletMenuOpen={menuOpen}
-                                    setWalletMenuOpen={setMenuOpen}
-                                    containerRef={buttonRef}
-                                    onAddressChange={onSelect}
-                                    currentAddress={selectedAddress}
-                                    collectionList={collectionList}
-                                    socialAccounts={socialAccounts}
-                                    currentCollection={trendingResult}
-                                    onTokenChange={(currentResult, i) => {
-                                        setCurrentTrendingIndex(i)
-                                        hideInspector(false)
-                                        setMenuOpen(false)
-                                    }}
-                                    fromSocialCard
-                                />
-                            </ThemeProvider>
+
+                            <TokenWithSocialGroupMenu
+                                open={menuOpen}
+                                onClose={closeMenu}
+                                anchorEl={buttonRef.current}
+                                onAddressChange={onSelect}
+                                currentAddress={selectedAddress}
+                                collectionList={collectionList}
+                                socialAccounts={socialAccounts}
+                                currentCollection={trendingResult}
+                                onTokenChange={(currentResult, i) => {
+                                    setCurrentTrendingIndex(i)
+                                    hideInspector(false)
+                                    setMenuOpen(false)
+                                }}
+                                fromSocialCard
+                            />
+
                             <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>

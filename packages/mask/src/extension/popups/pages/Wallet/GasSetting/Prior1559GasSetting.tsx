@@ -10,7 +10,7 @@ import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -19,6 +19,7 @@ import {
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
+import { Web3 } from '@masknet/web3-providers'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -92,7 +93,6 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
@@ -152,14 +152,14 @@ export const Prior1559GasSetting = memo(() => {
                 value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return web3?.eth.estimateGas(value.formatterTransaction._tx) ?? 0
+                return Web3.estimateTransaction?.(value.formatterTransaction._tx) ?? 0
             } catch {
                 return 0
             }
         }
 
         return 0
-    }, [value, web3])
+    }, [value])
 
     const schema = useMemo(() => {
         return zod.object({

@@ -6,7 +6,7 @@ import {
     useNetworkContext,
     useChainContext,
     useSingleBlockBeatRetry,
-    useWeb3State,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { GasOptionType } from '@masknet/web3-shared-base'
@@ -40,14 +40,14 @@ export function useSettingsContext(initial?: {
     const { chainId } = useChainContext({
         chainId: initial?.chainId,
     })
-    const { Others } = useWeb3State<'all'>(pluginID)
-    const [transactionOptions, setTransactionOptions] = useState<Partial<Web3Helper.TransactionAll> | null>(
-        initial?.transaction ?? null,
-    )
+    const Others = useWeb3Others(pluginID)
+    const [transactionOptions, setTransactionOptions] = useState<
+        Web3Helper.Definition[typeof pluginID]['Transaction'] | undefined
+    >(initial?.transaction)
     const [slippageTolerance, setSlippageTolerance] = useState(initial?.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
 
     const networkSignature = `${pluginID}_${chainId}`
-    const transactionSignature = Others?.getTransactionSignature(chainId, transactionOptions ?? undefined) ?? ''
+    const transactionSignature = Others.getTransactionSignature(chainId, transactionOptions) ?? ''
     const needToResetByNetwork =
         !!IN_MEMORY_CACHE?.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
     const needToResetByTransaction =
@@ -68,7 +68,7 @@ export function useSettingsContext(initial?: {
         loading: gasOptionsLoading,
         error: gasOptionsError,
         retry: gasOptionRetry,
-    } = useGasOptions<'all'>(pluginID, {
+    } = useGasOptions(pluginID, {
         chainId,
     })
 
@@ -82,7 +82,7 @@ export function useSettingsContext(initial?: {
     const onResetAll = useCallback(() => {
         setSlippageTolerance(1)
         setGasOptionType(GasOptionType.NORMAL)
-        setTransactionOptions(null)
+        setTransactionOptions(undefined)
         gasOptionRetry()
         onClearInMemoryCache()
     }, [gasOptionRetry, onClearInMemoryCache])

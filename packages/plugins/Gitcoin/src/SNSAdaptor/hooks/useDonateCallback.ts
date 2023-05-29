@@ -1,14 +1,15 @@
 import { useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
+import type { AsyncFnReturn, AsyncState } from 'react-use/lib/useAsync.js'
 import { compact } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { type FungibleToken, toFixed } from '@masknet/web3-shared-base'
-import { type ChainId, ContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { useChainContext, useGasPrice, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { useBulkCheckoutContract } from './useBulkCheckoutWallet.js'
-import type { AsyncFnReturn, AsyncState } from 'react-use/lib/useAsync.js'
+import { Web3 } from '@masknet/web3-providers'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
+import { type ChainId, ContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
+import { useBulkCheckoutContract } from './useBulkCheckoutWallet.js'
 
 type DonationTuple = [string, string, string]
 
@@ -35,7 +36,6 @@ export function useDonateCallback(
 
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const bulkCheckoutContract = useBulkCheckoutContract(chainId)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const totalAmount = toFixed(new BigNumber(grantAmount).plus(tipAmount))
     const donations = useMemo<DonationTuple[]>(() => {
@@ -74,9 +74,7 @@ export function useDonateCallback(
     }, [gasPrice, defaultGasPrice, bulkCheckoutContract, token])
 
     const [callbackState, callback] = useAsyncFn(async () => {
-        if (!connection || !token || !bulkCheckoutContract || !donations.length) {
-            return
-        }
+        if (!token || !bulkCheckoutContract || !donations.length) return
 
         // estimate gas and compose transaction
         const tx = await new ContractTransaction(bulkCheckoutContract).fillAll(
@@ -86,8 +84,8 @@ export function useDonateCallback(
                 value: token.schema === SchemaType.Native ? totalAmount : '0',
             },
         )
-        return connection.sendTransaction(tx)
-    }, [account, totalAmount, token, donations, connection])
+        return Web3.sendTransaction(tx)
+    }, [account, totalAmount, token, donations])
 
     return [callbackState, gasState, callback]
 }

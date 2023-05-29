@@ -12,14 +12,13 @@ import {
     CircularProgress,
     Checkbox,
 } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useWeb3 } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../../../../utils/index.js'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     header: {
@@ -110,8 +109,7 @@ export interface DeriveWalletTableRowProps {
 }
 export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck, selected, symbol }) => {
     const { classes } = useStyles()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { loading, value: balance } = useAsync(async () => web3?.eth.getBalance(address) ?? '0', [web3, address])
+    const { loading, value: balance } = useAsync(async () => Web3.getBalance(address), [address])
 
     return (
         <TableRow key={address}>

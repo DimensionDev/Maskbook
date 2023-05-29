@@ -8,7 +8,7 @@ import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } f
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 
 export interface TraderInfoProps {
@@ -22,7 +22,7 @@ export interface TraderInfoProps {
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     // #region refresh pools
     useAsyncRetry(async () => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM)
@@ -33,7 +33,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     // #endregion
 
     // const nativeToken = createNativeToken(chainId)
-    const nativeToken = Others?.createNativeToken(chainId)
+    const nativeToken = Others.createNativeToken(chainId)
     const { value: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
@@ -68,7 +68,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
 export const DefaultTraderPlaceholder = memo(() => {
     const { chainId } = useChainContext()
-    const { Others } = useWeb3State()
-    const nativeToken = Others?.createNativeToken(chainId)
+    const Others = useWeb3Others()
+    const nativeToken = Others.createNativeToken(chainId)
     return <DefaultTraderPlaceholderUI nativeToken={nativeToken} />
 })

@@ -7,7 +7,8 @@ import { TableContainer, TablePagination, tablePaginationClasses, Typography } f
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { useNativeToken, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -67,8 +68,6 @@ const AddDeriveWallet = memo(() => {
     const walletName = new URLSearchParams(location.search).get('name')
     const { mnemonic } = state || {}
 
-    const connection = useWeb3Connection()
-
     const [page, setPage] = useState(0)
 
     const { loading, value: dataSource } = useAsync(async () => {
@@ -126,10 +125,10 @@ const AddDeriveWallet = memo(() => {
                 ),
         )
 
-        await connection?.connect({ account: firstWallet })
+        await Web3.connect({ account: firstWallet })
         await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [mnemonic, walletName, wallets.length, connection])
+    }, [mnemonic, walletName, wallets.length])
 
     useTitle(t('popups_add_derive'))
 

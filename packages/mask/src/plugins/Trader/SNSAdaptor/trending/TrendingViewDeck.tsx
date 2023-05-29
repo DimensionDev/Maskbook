@@ -19,8 +19,8 @@ import {
     CrossIsolationMessages,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
+import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
@@ -165,7 +165,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         stats,
         children,
         TrendingCardProps,
-        resultList = [],
+        resultList = EMPTY_LIST,
         result,
         setResult,
         setActive,
@@ -175,8 +175,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { coin, market } = trending
     const [walletMenuOpen, setWalletMenuOpen] = useState(false)
-    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, badgeBounding } =
-        useContext(TrendingViewContext)
+    const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
+    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
+    const { anchorEl, anchorBounding } = useAnchor()
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -226,19 +227,20 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 return CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
             }
 
-            if (!identity?.identifier?.userId || !badgeBounding) return
+            if (!identity?.identifier?.userId || !anchorBounding) return
 
             CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                 open: true,
                 userId: identity?.identifier?.userId,
-                badgeBounding,
+                anchorBounding,
+                anchorEl,
                 address,
                 external: true,
             })
 
             setActive?.(false)
         },
-        [JSON.stringify(identity), isCollectionProjectPopper, badgeBounding],
+        [JSON.stringify(identity), isCollectionProjectPopper, anchorBounding, anchorEl],
     )
 
     const floorPrice =
@@ -295,21 +297,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             onClick={() => setWalletMenuOpen((v) => !v)}>
                                             <Icons.ArrowDrop size={24} className={classes.icon} />
                                         </IconButton>
-                                        <ThemeProvider
-                                            theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                            <TokenWithSocialGroupMenu
-                                                disablePortal={false}
-                                                disableScrollLock={false}
-                                                walletMenuOpen={walletMenuOpen}
-                                                setWalletMenuOpen={setWalletMenuOpen}
-                                                containerRef={titleRef}
-                                                onAddressChange={openRss3Profile}
-                                                collectionList={collectionList}
-                                                socialAccounts={socialAccounts}
-                                                currentCollection={result}
-                                                onTokenChange={setResult}
-                                            />
-                                        </ThemeProvider>
+
+                                        <TokenWithSocialGroupMenu
+                                            disablePortal
+                                            disableScrollLock={false}
+                                            open={walletMenuOpen}
+                                            onClose={closeMenu}
+                                            anchorEl={titleRef.current}
+                                            onAddressChange={openRss3Profile}
+                                            collectionList={collectionList}
+                                            socialAccounts={socialAccounts}
+                                            currentCollection={result}
+                                            onTokenChange={setResult}
+                                        />
                                     </>
                                 ) : null}
                                 <ThemeProvider theme={MaskLightTheme}>

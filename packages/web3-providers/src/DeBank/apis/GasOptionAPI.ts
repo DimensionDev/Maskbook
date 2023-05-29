@@ -4,7 +4,7 @@ import { ChainId, formatGweiToWei, getDeBankConstants, type GasOption } from '@m
 import type { GasPriceDictResponse } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
 import { fetchJSON } from '../../entry-helpers.js'
-import type { GasOptionAPI } from '../../entry-types.js'
+import type { GasOptionAPI_Base } from '../../entry-types.js'
 
 /**
  * Debank's data might be outdated, like gas price for aurora which requires 1 Gwei at least
@@ -21,7 +21,7 @@ function gasModifier(gasDict: GasPriceDictResponse, chain: string) {
     return gasDict
 }
 
-export class DeBankGasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
+export class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')

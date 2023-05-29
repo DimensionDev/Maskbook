@@ -4,7 +4,7 @@ import { DialogContent, dialogClasses } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, type NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -45,23 +45,21 @@ export function ConnectWalletDialog() {
     )
     // #endregion
 
-    const { Connection, Others } = useWeb3State(pluginID)
+    const Web3 = useWeb3Connection(pluginID, { providerType })
+    const Others = useWeb3Others(pluginID)
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        if (!networkType || !providerType || !Others || !Connection) throw new Error('Failed to connect to provider.')
+        if (!networkType || !providerType) throw new Error('Failed to connect to provider.')
 
-        const chainId = Others?.networkResolver.networkChainId(networkType)
+        const chainId = Others.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
-        const connection = Connection.getConnection?.({
+        const account = await Web3.connect({
             chainId,
-            providerType,
         })
-        if (!connection) throw new Error('Failed to build connection.')
-
-        await connection.connect()
+        if (!account) throw new Error('Failed to build connection.')
 
         const site = getSiteType()
         if (pluginID && site) {
@@ -78,7 +76,7 @@ export function ConnectWalletDialog() {
         walletConnectedCallback?.()
 
         return true
-    }, [open, walletConnectedCallback])
+    }, [open, walletConnectedCallback, Others, Web3])
 
     if (!pluginID || !providerType || !networkType) return null
 
