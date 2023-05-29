@@ -82,7 +82,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     const selectedPubkeyList = compact(selected.map((x) => x.linkedPersona?.publicKeyAsHex))
     const frozenPubkeyList = compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex))
 
-    const onSelectedAll = useCallback(
+    const onSelectedAllChange = useCallback(
         (checked: boolean) => {
             if (checked) {
                 onSetSelected([...items])
@@ -161,7 +161,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 </div>
                 {!isEmpty ? (
                     <Stack alignItems="center" flexDirection="row">
-                        <Checkbox onChange={(e) => onSelectedAll(e.currentTarget.checked)} />
+                        <Checkbox onChange={(e) => onSelectedAllChange(e.currentTarget.checked)} />
                         <Typography>{t('select_all')}</Typography>
                     </Stack>
                 ) : null}

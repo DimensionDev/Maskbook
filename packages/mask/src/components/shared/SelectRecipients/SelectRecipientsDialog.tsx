@@ -196,7 +196,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 setSelectedAllProfiles([])
             }
         },
-        [results, props.items],
+        [results],
     )
 
     return (

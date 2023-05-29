@@ -133,9 +133,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         return
     }
     const persona = useCurrentPersona()
-    const personaAction = persona ? (
-        <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
-    ) : null
 
     return (
         <InjectedDialog
@@ -160,7 +157,11 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     e2eEncryptionDisabled={isE2E_Disabled}
                     isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     initialMetas={initialMetas}
-                    personaAction={personaAction}
+                    personaAction={
+                        persona ? (
+                            <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
+                        ) : null
+                    }
                 />
             </DialogContent>
         </InjectedDialog>
