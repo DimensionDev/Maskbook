@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, type FC, useState, useCallback, useMemo } from 'react'
+import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -129,6 +130,7 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
     const nickname = user?.legacy?.name || profile.name || profile.identity
     // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.
     const handle = user?.legacy?.screen_name || profile.identity
+    const avatarUrl = user?.legacy?.profile_image_url_https || avatar
     const handleSwitch = useCallback(
         (address: string) => {
             onToggle?.(profile.identity, address)
@@ -167,7 +169,7 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                 }}
                 avatar={
                     <PlatformAvatar
-                        networkIcon={avatar}
+                        networkIcon={avatarUrl}
                         providerIcon={new URL('../assets/Twitter.png', import.meta.url).href}
                         size={36}
                     />
@@ -199,12 +201,14 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                 <Collapse in={expanded} easing="ease-in-out">
                     <CardContent className={classes.content}>
                         <div className={classes.wallets}>
-                            {walletProofs.map((proof) => {
+                            {walletProofs.map((proof, i) => {
                                 const checked = listingAddresses.includes(proof.identity)
+                                const fallbackName = resolveNextIDPlatformWalletName(proof.platform)
                                 return (
                                     <WalletSettingCard
                                         key={proof.identity}
                                         wallet={proof}
+                                        fallbackName={`${fallbackName} ${walletProofs.length - i}`}
                                         checked={checked}
                                         onSwitchChange={handleSwitch}
                                     />

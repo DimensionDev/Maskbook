@@ -5,7 +5,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation } from 'react-router-dom'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes, SignType } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -60,11 +60,13 @@ const ConnectedWallets = memo(() => {
         return compact(results)
             .sort((a, z) => (isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1))
             .map((x, index, list) => {
-                if (!x.name)
+                if (!x.name) {
+                    const name = resolveNextIDPlatformWalletName(x.platform)
                     return {
                         ...x,
-                        name: `${x.platform} wallet ${list.length - index}`,
+                        name: `${name} ${list.length - index}`,
                     }
+                }
 
                 return x
             })

@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     profileCard: {
-        marginTop: theme.spacing(1.5),
+        margin: theme.spacing(1.5, 0),
     },
     actions: {
         padding: '0px !important',
