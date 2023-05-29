@@ -3,8 +3,8 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-es'
 import { z } from 'zod'
-import { EthereumAddress } from 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
+import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import {
@@ -20,7 +20,9 @@ import {
     NetworkType,
     type ChainId,
     explorerResolver,
+    isValidDomain,
     isValidAddress,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { FormattedAddress } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -35,9 +37,8 @@ import {
     useNativeToken,
     useNativeTokenPrice,
 } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
+import { Web3 } from '@masknet/web3-providers'
 import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
-import { Others, Web3 } from '@masknet/web3-providers'
 import { SelectNFTList } from './SelectNFTList.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -89,10 +90,7 @@ export const TransferERC721 = memo(() => {
     const schema = z.object({
         recipient: z
             .string()
-            .refine(
-                (address) => EthereumAddress.isValid(address) || Others.isValidDomain(address),
-                t.wallets_incorrect_address(),
-            ),
+            .refine((address) => isValidAddress(address) || isValidDomain(address), t.wallets_incorrect_address()),
         contract: z.string().min(1, t.wallets_collectible_contract_is_empty()),
         tokenId: z.string().min(1, t.wallets_collectible_token_id_is_empty()),
     })
@@ -157,7 +155,7 @@ export const TransferERC721 = memo(() => {
         SchemaType.ERC721,
         contract?.address,
         undefined,
-        EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
+        isValidAddress(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
         allFormFields.tokenId,
     )
 
@@ -202,16 +200,16 @@ export const TransferERC721 = memo(() => {
     const onTransfer = useCallback(
         async (data: FormInputs) => {
             let hash: string | undefined
-            if (EthereumAddress.isValid(data.recipient)) {
+            if (isValidAddress(data.recipient)) {
                 hash = await transferCallback(data.tokenId, data.recipient, gasConfig)
-            } else if (Others.isValidDomain(data.recipient) && EthereumAddress.isValid(registeredAddress)) {
+            } else if (isValidDomain(data.recipient) && isValidAddress(registeredAddress)) {
                 hash = await transferCallback(data.tokenId, registeredAddress, gasConfig)
             }
             if (typeof hash === 'string') {
                 navigate(DashboardRoutes.WalletsHistory)
             }
         },
-        [transferCallback, contract?.address, gasConfig, registeredAddress, Others.isValidDomain],
+        [transferCallback, contract?.address, gasConfig, registeredAddress],
     )
 
     const ensContent = useMemo(() => {
@@ -232,7 +230,7 @@ export const TransferERC721 = memo(() => {
                             {allFormFields.recipient}
                         </Typography>
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
-                            <FormattedAddress address={registeredAddress} size={4} formatter={Others.formatAddress} />
+                            <FormattedAddress address={registeredAddress} size={4} formatter={formatEthereumAddress} />
                         </Typography>
                     </Link>
                     <Icons.Right />
@@ -250,7 +248,7 @@ export const TransferERC721 = memo(() => {
                     </Box>
                 )
             }
-            if (Others.isValidDomain(allFormFields.recipient) && resolveDomainError) {
+            if (isValidDomain(allFormFields.recipient) && resolveDomainError) {
                 return (
                     <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
@@ -261,14 +259,7 @@ export const TransferERC721 = memo(() => {
             }
         }
         return
-    }, [
-        allFormFields.recipient,
-        resolveDomainError,
-        Others.isValidDomain,
-        resolveDomainLoading,
-        network,
-        registeredAddress,
-    ])
+    }, [allFormFields.recipient, resolveDomainError, resolveDomainLoading, network, registeredAddress])
 
     useUpdateEffect(() => {
         setPopoverOpen(!!ensContent && !!anchorEl.current)

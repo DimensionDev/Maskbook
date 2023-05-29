@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es'
-import { EthereumAddress } from 'wallet.ts'
+import { isAddress, toChecksumAddress } from 'web3-utils'
 import { getEnumAsArray } from '@masknet/kit'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -15,6 +15,10 @@ import {
 } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
+export function checksumAddress(address: string) {
+    return toChecksumAddress(address)
+}
+
 export function isEmptyHex(hex?: string): hex is undefined {
     return !hex || ['0x', '0x0'].includes(hex)
 }
@@ -25,7 +29,7 @@ export function isZeroString(str?: string): str is undefined {
 
 export function isValidAddress(address?: string): address is string {
     if (!address) return false
-    return EthereumAddress.isValid(address)
+    return isAddress(address)
 }
 
 export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {

@@ -1,9 +1,8 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
-import { EthereumAddress } from 'wallet.ts'
 import { SchemaType } from '../types/index.js'
-import { isValidAddress } from './address.js'
+import { checksumAddress, isValidAddress } from './address.js'
 import { isEnsSubdomain, isValidDomain } from './isValidDomain.js'
 
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
@@ -12,7 +11,7 @@ export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
 
 export function formatEthereumAddress(address: string, size = 0) {
     if (!isValidAddress(address)) return address
-    const address_ = EthereumAddress.checksumAddress(address)
+    const address_ = checksumAddress(address)
     if (size === 0 || size >= 20) return address_
     return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
 }
