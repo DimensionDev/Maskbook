@@ -4,7 +4,17 @@ import { useI18N } from '../../locales/index.js'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { Card, CardContent, CardHeader, Collapse, Skeleton, Typography, type CardProps, Button } from '@mui/material'
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    Collapse,
+    Skeleton,
+    Typography,
+    type CardProps,
+    Button,
+    alpha,
+} from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, type FC, useState, useCallback, useMemo } from 'react'
 
@@ -58,6 +68,17 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 'bold',
         color: theme.palette.maskColor.main,
     },
+    current: {
+        display: 'inline-block',
+        marginLeft: theme.spacing(1.5),
+        borderRadius: 4,
+        fontWeight: 'bold',
+        height: theme.spacing(2),
+        padding: '2px 6px',
+        boxSizing: 'border-box',
+        color: theme.palette.maskColor.primary,
+        backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
+    },
     subheader: {
         height: 16,
         lineHeight: '16px',
@@ -74,7 +95,8 @@ interface Props extends CardProps {
     walletProofs?: BindingProof[]
     unlistedAddresses: string[]
     pendingUnlistedAddresses: string[]
-    initialCollapsed?: boolean
+    initialExpanded?: boolean
+    isCurrent?: boolean
     onToggle?(identity: string, address: string): void
     onAddWallet?(): void
 }
@@ -86,14 +108,15 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
     className,
     unlistedAddresses,
     pendingUnlistedAddresses,
-    initialCollapsed = true,
+    initialExpanded = false,
+    isCurrent,
     onToggle,
     onAddWallet,
     ...rest
 }) {
     const { classes, cx } = useStyles()
     const t = useI18N()
-    const [collapsed, setCollapsed] = useState(initialCollapsed)
+    const [collapsed, setCollapsed] = useState(initialExpanded)
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', profile.identity],
         queryFn: () => Twitter.getUserByScreenName(profile.identity),
@@ -143,9 +166,16 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                     />
                 }
                 title={
-                    <Typography variant="subtitle1" className={classes.title}>
-                        {nickname}
-                    </Typography>
+                    <>
+                        <Typography variant="subtitle1" className={classes.title}>
+                            {nickname}
+                        </Typography>
+                        {isCurrent ? (
+                            <span className={classes.current} role="status">
+                                {t.current()}
+                            </span>
+                        ) : null}
+                    </>
                 }
                 subheader={
                     <Typography variant="subtitle2" className={classes.subheader}>

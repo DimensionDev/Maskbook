@@ -175,10 +175,11 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
                 ) : isFetched && !twitterProofs.length ? (
                     <EmptyStatus>{t.no_verified_account()}</EmptyStatus>
                 ) : (
-                    twitterProofs.map((proof, i) => {
+                    twitterProofs.map((proof) => {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
                         const unlistedAddresses = migratedUnlistedAddressConfig[proof.identity] ?? EMPTY_LIST
                         const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
+                        const isCurrent = proof.identity === myProfile?.identifier?.userId
                         return (
                             <ProfileCard
                                 key={proof.identity}
@@ -188,7 +189,8 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
                                 walletProofs={walletProofs}
                                 unlistedAddresses={unlistedAddresses}
                                 pendingUnlistedAddresses={pendingUnlistedAddresses}
-                                initialCollapsed={i !== 0}
+                                initialExpanded={!isCurrent}
+                                isCurrent={isCurrent}
                                 onToggle={toggleUnlisted}
                                 onAddWallet={openPopupsWindow}
                             />
