@@ -78,21 +78,17 @@ const useStyles = makeStyles<{
     }
 })
 
-interface Props {
-    closeDialog(): void
-}
-
-export function ApplicationBoard(props: Props) {
+export function ApplicationBoard() {
     return (
         <PersonaContext.Provider>
             <ApplicationEntryStatusProvider>
-                <ApplicationBoardContent {...props} />
+                <ApplicationBoardContent />
             </ApplicationEntryStatusProvider>
         </PersonaContext.Provider>
     )
 }
 
-function ApplicationBoardContent(props: Props) {
+function ApplicationBoardContent() {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
@@ -259,7 +255,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
-function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
+function ApplicationEntryStatusProvider({ children }: PropsWithChildren<{}>) {
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -300,9 +296,5 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
             personaConnectStatus.verified,
         ],
     )
-    return (
-        <ApplicationEntryStatusContext.Provider value={Context}>
-            {props.children}
-        </ApplicationEntryStatusContext.Provider>
-    )
+    return <ApplicationEntryStatusContext.Provider value={Context}>{children}</ApplicationEntryStatusContext.Provider>
 }

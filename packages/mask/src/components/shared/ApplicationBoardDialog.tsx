@@ -11,7 +11,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../utils/index.js'
-import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -66,10 +65,6 @@ export function ApplicationBoardDialog() {
         setFocusPluginID(undefined)
     }, [])
 
-    const { open: openPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
     const closeDialog = useCallback(() => {
         if (openSettings && !quickMode) {
             setOpenSettings(false)
@@ -119,10 +114,8 @@ export function ApplicationBoardDialog() {
                             </TabPanel>
                         </>
                     ) : (
-                        <ApplicationBoard closeDialog={closeDialog} />
+                        <ApplicationBoard />
                     )}
-                    {/* TODO: remove this*/}
-                    {openPersonaSelectPanelDialog ? <PersonaSelectPanelDialog /> : null}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>
