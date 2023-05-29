@@ -43,7 +43,8 @@ export function useHiddenAddressConfigOf(personaPubkey?: string, pluginID?: Plug
     const result = useHiddenAddressConfig(personaPubkey, pluginID)
     return {
         ...result,
-        data: result.data ? getHiddenAddressesOf(result.data, socialId) : undefined,
+        // Identities of Twitter proof get lowered case.
+        data: result.data ? getHiddenAddressesOf(result.data, socialId?.toLowerCase()) : undefined,
     }
 }
 

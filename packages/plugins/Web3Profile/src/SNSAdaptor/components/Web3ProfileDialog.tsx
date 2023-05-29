@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { isEmpty, isEqual, range, uniqBy } from 'lodash-es'
+import { useCallback, useMemo, useState } from 'react'
+import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
+import { isEqual, isEqualWith, range, sortBy, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
@@ -102,10 +102,17 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
     }, [unlistedAddressConfig, twitterProofs])
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
-    useEffect(() => {
-        setPendingUnlistedConfig((config) => (isEmpty(config) ? migratedUnlistedAddressConfig : config))
+    useUpdateEffect(() => {
+        setPendingUnlistedConfig(migratedUnlistedAddressConfig)
     }, [migratedUnlistedAddressConfig])
-    const isClean = isEqual(migratedUnlistedAddressConfig, pendingUnlistedConfig)
+    const isClean = useMemo(() => {
+        return isEqualWith(migratedUnlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
+            for (const key of Object.keys(config1)) {
+                if (!isEqual(sortBy(config1[key]), sortBy(config2[key]))) return false
+            }
+            return true
+        })
+    }, [migratedUnlistedAddressConfig, pendingUnlistedConfig])
 
     const toggleUnlisted = useCallback((identity: string, address: string) => {
         setPendingUnlistedConfig((config) => {
@@ -189,7 +196,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
                                 walletProofs={walletProofs}
                                 unlistedAddresses={unlistedAddresses}
                                 pendingUnlistedAddresses={pendingUnlistedAddresses}
-                                initialExpanded={!isCurrent}
+                                initialExpanded={isCurrent}
                                 isCurrent={isCurrent}
                                 onToggle={toggleUnlisted}
                                 onAddWallet={openPopupsWindow}

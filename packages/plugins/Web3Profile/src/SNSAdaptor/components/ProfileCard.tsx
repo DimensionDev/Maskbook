@@ -61,6 +61,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    titleWrapper: {
+        display: 'flex',
+    },
     title: {
         height: 18,
         lineHeight: '18px',
@@ -73,8 +76,10 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1.5),
         borderRadius: 4,
         fontWeight: 'bold',
+        fontSize: '10px',
         height: theme.spacing(2),
-        padding: '2px 6px',
+        lineHeight: '16px',
+        padding: '0 6px',
         boxSizing: 'border-box',
         color: theme.palette.maskColor.primary,
         backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
@@ -116,12 +121,14 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
 }) {
     const { classes, cx } = useStyles()
     const t = useI18N()
-    const [collapsed, setCollapsed] = useState(initialExpanded)
+    const [expanded, setExpanded] = useState(initialExpanded)
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', profile.identity],
         queryFn: () => Twitter.getUserByScreenName(profile.identity),
     })
     const nickname = user?.legacy?.name || profile.name || profile.identity
+    // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.
+    const handle = user?.legacy?.screen_name || profile.identity
     const handleSwitch = useCallback(
         (address: string) => {
             onToggle?.(profile.identity, address)
@@ -140,7 +147,7 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                 {listingAddresses.length}/{walletProofs.length}
             </Typography>
             <div className={classes.arrowWrapper}>
-                {collapsed ? <Icons.ArrowDrop size={20} /> : <Icons.ArrowUp size={20} />}
+                {expanded ? <Icons.ArrowUp size={20} /> : <Icons.ArrowDrop size={20} />}
             </div>
         </>
     ) : (
@@ -166,7 +173,7 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                     />
                 }
                 title={
-                    <>
+                    <div className={classes.titleWrapper}>
                         <Typography variant="subtitle1" className={classes.title}>
                             {nickname}
                         </Typography>
@@ -175,36 +182,38 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                                 {t.current()}
                             </span>
                         ) : null}
-                    </>
+                    </div>
                 }
                 subheader={
                     <Typography variant="subtitle2" className={classes.subheader}>
-                        @{profile.identity}
+                        @{handle}
                     </Typography>
                 }
                 action={action}
                 onClick={() => {
                     if (!walletProofs.length) return
-                    return setCollapsed((v) => !v)
+                    return setExpanded((v) => !v)
                 }}
             />
-            <Collapse in={!collapsed} easing="ease-in-out">
-                <CardContent className={classes.content}>
-                    <div className={classes.wallets}>
-                        {walletProofs.map((proof) => {
-                            const checked = listingAddresses.includes(proof.identity)
-                            return (
-                                <WalletSettingCard
-                                    key={proof.identity}
-                                    wallet={proof}
-                                    checked={checked}
-                                    onSwitchChange={handleSwitch}
-                                />
-                            )
-                        })}
-                    </div>
-                </CardContent>
-            </Collapse>
+            {walletProofs.length ? (
+                <Collapse in={expanded} easing="ease-in-out">
+                    <CardContent className={classes.content}>
+                        <div className={classes.wallets}>
+                            {walletProofs.map((proof) => {
+                                const checked = listingAddresses.includes(proof.identity)
+                                return (
+                                    <WalletSettingCard
+                                        key={proof.identity}
+                                        wallet={proof}
+                                        checked={checked}
+                                        onSwitchChange={handleSwitch}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </CardContent>
+                </Collapse>
+            ) : null}
         </Card>
     )
 })
