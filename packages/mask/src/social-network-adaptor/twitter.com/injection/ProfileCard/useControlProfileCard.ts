@@ -42,7 +42,10 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
     }, [])
     useEffect(() => {
         const holder = holderRef.current
-        if (!holder) return
+        if (!holder) {
+            hideProfileCard()
+            return
+        }
         const enter = () => {
             hoverRef.current = true
             clearTimeout(closeTimerRef.current)
