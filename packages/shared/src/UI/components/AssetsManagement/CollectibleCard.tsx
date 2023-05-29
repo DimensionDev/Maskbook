@@ -58,13 +58,13 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableNetworkIcon?: boolean
     /** disable inspect NFT details */
     disableInspect?: boolean
-    selectedAsset?: Web3Helper.NonFungibleAssetScope
+    selectedAsset?: Web3Helper.NonFungibleAssetAll
 }
 
 export function isSameNFT(
     pluginID: NetworkPluginID,
-    a: Web3Helper.NonFungibleAssetScope,
-    b?: Web3Helper.NonFungibleAssetScope,
+    a: Web3Helper.NonFungibleAssetAll,
+    b?: Web3Helper.NonFungibleAssetAll,
 ): boolean {
     return pluginID !== NetworkPluginID.PLUGIN_SOLANA
         ? isSameAddress(a.contract?.address, b?.contract?.address) &&
