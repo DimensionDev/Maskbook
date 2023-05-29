@@ -149,7 +149,6 @@ export const Collection: FC<CollectionProps> = memo(
                 pluginID={pluginID}
                 key={`${collection.id}.${asset.address}.${asset.tokenId}`}
                 disableNetworkIcon
-                selectedAsset={selectedAsset}
             />
         ))
         return (

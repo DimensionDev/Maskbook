@@ -2,10 +2,9 @@ import { memo, type HTMLProps, type FC } from 'react'
 import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { resolveImageURL } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
     },
-    icon: {
+    indicator: {
         position: 'absolute',
         top: 5,
         right: 5,
@@ -58,19 +57,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableNetworkIcon?: boolean
     /** disable inspect NFT details */
     disableInspect?: boolean
-    selectedAsset?: Web3Helper.NonFungibleAssetAll
-}
-
-export function isSameNFT(
-    pluginID: NetworkPluginID,
-    a: Web3Helper.NonFungibleAssetAll,
-    b?: Web3Helper.NonFungibleAssetAll,
-): boolean {
-    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
-        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
-              a.contract?.chainId === b?.contract?.chainId &&
-              a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId && a.id === b.id
+    isSelected?: boolean
 }
 
 export const CollectibleCard: FC<CollectibleCardProps> = memo(
@@ -87,7 +74,6 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
             asset.collection?.name,
             asset.contract?.address,
         )
-        const selected = isSameNFT(pluginID ?? NetworkPluginID.PLUGIN_EVM, asset, rest.selectedAsset)
 
         return (
             <div className={cx(classes.root, className)} {...rest}>
@@ -102,7 +88,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                {selected ? <Icons.CheckCircle className={classes.icon} size={24} /> : null}
+                {rest.isSelected ? <Icons.CheckCircle className={classes.indicator} size={24} /> : null}
             </div>
         )
     },
