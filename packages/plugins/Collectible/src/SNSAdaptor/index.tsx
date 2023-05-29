@@ -46,7 +46,7 @@ const gridProps = {
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
-    priority: 1,
+    priority: 4,
     UI: {
         TabContent({ socialAccount, identity }) {
             useMountReport(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
@@ -118,7 +118,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ProfileCardTabs: [
         {
             ...TabConfig,
-            priority: 1,
+            priority: 4,
             UI: {
                 TabContent({ socialAccount, identity }) {
                     useMountReport(TelemetryAPI.EventID.AccessWeb3ProfileDialogNFTsTab)
@@ -159,7 +159,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultTabs: [
         {
             ...TabConfig,
-            priority: 1,
+            priority: 4,
             UI: {
                 TabContent({ result }) {
                     const socialAccount = {

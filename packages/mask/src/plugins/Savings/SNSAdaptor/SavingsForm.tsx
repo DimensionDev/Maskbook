@@ -1,53 +1,47 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
+import type { AbiItem } from 'web3-utils'
 import {
-    isLessThan,
-    rightShift,
-    ZERO,
-    formatBalance,
-    formatCurrency,
-    isPositive,
-    isZero,
-} from '@masknet/web3-shared-base'
+    ActionButtonPromise,
+    EthereumERC20TokenApprovedBoundary,
+    FormattedCurrency,
+    FungibleTokenInput,
+    InjectedDialog,
+    PluginWalletStatusBar,
+    TokenIcon,
+    WalletConnectedBoundary,
+    useOpenShareTxDialog,
+} from '@masknet/shared'
+import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import {
-    createContract,
-    SchemaType,
-    getAaveConstants,
-    ZERO_ADDRESS,
-    chainResolver,
-    isNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
+import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import {
     useChainContext,
     useFungibleTokenBalance,
-    useWeb3State,
     useFungibleTokenPrice,
-    useWeb3Connection,
     useNativeToken,
-    useWeb3,
 } from '@masknet/web3-hooks-base'
 import {
-    FungibleTokenInput,
-    FormattedCurrency,
-    InjectedDialog,
-    TokenIcon,
-    useOpenShareTxDialog,
-    PluginWalletStatusBar,
-    ActionButtonPromise,
-    WalletConnectedBoundary,
-    EthereumERC20TokenApprovedBoundary,
-} from '@masknet/shared'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { useI18N } from '../../../utils/index.js'
-import { ProtocolType, type SavingsProtocol, TabType } from '../types.js'
+    ZERO,
+    formatBalance,
+    formatCurrency,
+    isLessThan,
+    isLessThanOrEqualTo,
+    isPositive,
+    isZero,
+    rightShift,
+} from '@masknet/web3-shared-base'
+import { Contract, Others, Web3 } from '@masknet/web3-providers'
+import { SchemaType, chainResolver, getAaveConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
+import { useQueryClient } from '@tanstack/react-query'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
+import { useI18N } from '../../../utils/index.js'
+import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
+import { useApr, useBalance } from './hooks/index.js'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -109,10 +103,9 @@ export const resolveProtocolName = createLookupTableResolver<ProtocolType, strin
 export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFormDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const isDeposit = tab === TabType.Deposit
 
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const web3Connection = useWeb3Connection()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
     const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
@@ -121,7 +114,6 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
         chainId,
     })
-    const { Others } = useWeb3State()
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
@@ -133,30 +125,32 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         () => new BigNumber(rightShift(inputAmount || '0', protocol.bareToken.decimals)),
         [inputAmount, protocol.bareToken.decimals],
     )
+    const { data: apr = '0.00' } = useApr(protocol, true)
+    const { data: balance = ZERO } = useBalance(protocol, true)
     const balanceAsBN = useMemo(
-        () => (tab === TabType.Deposit ? new BigNumber(inputTokenBalance || '0') : protocol.balance),
-        [tab, protocol.balance, inputTokenBalance],
+        () => (isDeposit ? new BigNumber(inputTokenBalance || '0') : balance),
+        [isDeposit, balance, inputTokenBalance],
     )
 
-    const balanceGasMinus = Others?.isNativeTokenAddress(protocol.bareToken.address)
+    const balanceGasMinus = Others.isNativeTokenAddress(protocol.bareToken.address)
         ? balanceAsBN.minus(estimatedGas)
         : balanceAsBN
 
-    const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
+    const needsSwap = protocol.type === ProtocolType.Lido && !isDeposit
 
     const { loading } = useAsync(async () => {
-        if (!web3 || !(tokenAmount.toNumber() > 0)) return
+        if (isLessThanOrEqualTo(tokenAmount, 0)) return
         try {
             setEstimatedGas(
-                tab === TabType.Deposit
-                    ? await protocol.depositEstimate(account, chainId, web3, tokenAmount)
-                    : await protocol.withdrawEstimate(account, chainId, web3, tokenAmount),
+                isDeposit
+                    ? await protocol.depositEstimate(account, chainId, Web3.getWeb3({ chainId }), tokenAmount)
+                    : await protocol.withdrawEstimate(account, chainId, Web3.getWeb3({ chainId }), tokenAmount),
             )
         } catch {
             // do nothing
             console.log('Failed to estimate gas')
         }
-    }, [chainId, tab, protocol, tokenAmount])
+    }, [chainId, isDeposit, protocol, tokenAmount])
     // #endregion
 
     // #region form validation
@@ -164,15 +158,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         if (needsSwap) return ''
         if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
         if (isLessThan(tokenAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
-
         if (isLessThan(balanceGasMinus, tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
-                symbol: tab === TabType.Deposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol,
+                symbol: isDeposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol,
             })
         }
-
         return ''
-    }, [inputAmount, tokenAmount, nativeTokenBalance, balanceGasMinus])
+    }, [inputAmount, tokenAmount, nativeTokenBalance, balanceGasMinus, isDeposit])
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
@@ -187,41 +179,39 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     // #endregion
 
     const { value: approvalData } = useAsync(async () => {
-        const token = protocol.bareToken
-        const aavePoolAddress =
-            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+        const aavePoolAddress = getAaveConstant(chainId, 'AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS')
+        if (!aavePoolAddress) return
 
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
+        const lPoolAddressProviderContract = Contract.getWeb3Contract<AaveLendingPoolAddressProvider>(
             aavePoolAddress,
             AaveLendingPoolAddressProviderABI as AbiItem[],
         )
 
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
+        const token = protocol.bareToken
 
         return {
             approveToken: token.schema === SchemaType.ERC20 ? token : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: poolAddress,
+            approveAddress: await lPoolAddressProviderContract?.methods.getLendingPool().call(),
         }
-    }, [protocol.bareToken, inputAmount, chainId])
+    }, [chainId, protocol.bareToken, inputAmount])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = t(tab === TabType.Deposit ? 'promote_savings' : 'promote_withdraw', {
+    const shareText = t(isDeposit ? 'promote_savings' : 'promote_withdraw', {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
         chain: chainResolver.chainName(chainId),
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     })
-    const [{ loading: loadingExecution }, executor] = useAsyncFn(async () => {
-        if (!web3) return
-        const methodName = tab === TabType.Deposit ? 'deposit' : 'withdraw'
-        if (chainId !== currentChainId) await web3Connection?.switchChain?.(chainId)
-        const hash = await protocol[methodName](account, chainId, web3, tokenAmount)
+    const queryClient = useQueryClient()
+    const [, executor] = useAsyncFn(async () => {
+        const methodName = isDeposit ? 'deposit' : 'withdraw'
+        if (chainId !== currentChainId) await Web3.switchChain?.(chainId)
+        const hash = await protocol[methodName](account, chainId, Web3.getWeb3({ chainId }), tokenAmount)
         if (typeof hash !== 'string') {
             throw new Error('Failed to deposit token.')
         } else {
-            await protocol.updateBalance(chainId, web3, account)
+            queryClient.invalidateQueries(['savings', 'balance', chainId, protocol.bareToken.address, account])
         }
         openShareTxDialog({
             hash,
@@ -229,7 +219,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
-    }, [tab, protocol, account, chainId, web3, tokenAmount, openShareTxDialog, currentChainId])
+    }, [isDeposit, protocol, account, chainId, tokenAmount, openShareTxDialog, currentChainId])
 
     const buttonDom = useMemo(() => {
         return (
@@ -237,7 +227,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 expectedChainId={chainId}
                 ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                 classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                {tab === TabType.Deposit ? (
+                {isDeposit ? (
                     inputTokenBalance && !isZero(inputTokenBalance) ? (
                         <EthereumERC20TokenApprovedBoundary
                             amount={approvalData?.approveAmount.toFixed() ?? ''}
@@ -290,10 +280,10 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 )}
             </WalletConnectedBoundary>
         )
-    }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId, inputTokenBalance])
+    }, [executor, validationMessage, needsSwap, protocol, isDeposit, approvalData, chainId, inputTokenBalance])
     return (
         <InjectedDialog
-            title={tab === TabType.Deposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
+            title={isDeposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
             open
             onClose={onClose}>
             <DialogContent className={classes.containerWrap}>
@@ -329,7 +319,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     )}
 
                     <div className={classes.infoRow}>
-                        <Typography variant="body2" className={classes.infoRowLeft}>
+                        <Typography variant="body2" component="div" className={classes.infoRowLeft}>
                             <TokenIcon
                                 className={classes.rowImage}
                                 address={protocol.bareToken.address}
@@ -340,7 +330,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             {protocol.bareToken.name} {t('plugin_savings_apr')}%
                         </Typography>
                         <Typography variant="body2" className={classes.infoRowRight}>
-                            {protocol.apr}%
+                            {apr}%
                         </Typography>
                     </div>
                 </div>

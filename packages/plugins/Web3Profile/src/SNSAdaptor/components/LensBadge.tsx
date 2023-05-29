@@ -21,9 +21,10 @@ const useStyles = makeStyles()({
 interface Props {
     slot: Plugin.SNSAdaptor.LensSlot
     accounts: FireflyBaseAPI.LensAccount[]
+    userId: string
 }
 
-export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
+export const LensBadge: FC<Props> = memo(({ slot, accounts, userId }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes } = useStyles()
 
@@ -35,7 +36,11 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
             clearTimeout(openTimer)
 
             openTimer = setTimeout(() => {
-                openPopup(button.getBoundingClientRect().toJSON(), accounts)
+                openPopup({
+                    lensAccounts: accounts,
+                    userId,
+                    popupAnchorEl: buttonRef.current,
+                })
             }, 200)
         }
         const leave = () => {
@@ -48,7 +53,7 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
             button.removeEventListener('mouseenter', enter)
             button.removeEventListener('mouseleave', leave)
         }
-    }, [accounts])
+    }, [accounts, userId])
 
     return (
         <IconButton disableRipple className={classes.badge} ref={buttonRef}>

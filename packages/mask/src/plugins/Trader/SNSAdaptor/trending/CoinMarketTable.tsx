@@ -141,7 +141,8 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
-    const chainId = props.result.chainId ?? props.trending.coin.chainId
+    const { trending } = props
+    const chainId = props.result.chainId ?? trending.coin.chainId
     const { value: overview } = useTrendingOverview(props.result.pluginID, props.result, chainId)
     const { classes, cx } = useStyles()
     const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
@@ -154,7 +155,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_total_assets')}
                     </Typography>
                     <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
-                        {formatSupply(overview?.items_total, '--')}
+                        {formatSupply(overview?.items_total ?? trending.market?.total_supply, '--')}
                     </Typography>
                 </Grid>
                 <Grid item className={classes.gridItem}>
@@ -162,7 +163,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_owners_count')}
                     </Typography>
                     <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
-                        {formatInteger(overview?.owners_total, '--')}
+                        {formatInteger(overview?.owners_total ?? trending.market?.owners_count, '--')}
                     </Typography>
                 </Grid>
                 <Grid item className={classes.gridItem}>
@@ -175,7 +176,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             color="textPrimary"
                             variant="body2"
                             className={cx(classes.gridItemValue, classes.amount)}>
-                            {formatInteger(overview?.market_cap, '--')}
+                            {formatInteger(overview?.market_cap ?? trending.market?.market_cap, '--')}
                         </Typography>
                     </div>
                 </Grid>
@@ -189,7 +190,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             color="textPrimary"
                             variant="body2"
                             className={cx(classes.gridItemValue, classes.amount)}>
-                            {formatSupply(overview?.highest_price, '--')}
+                            {formatSupply(overview?.highest_price ?? trending.market?.highest_price, '--')}
                         </Typography>
                     </div>
                 </Grid>
@@ -204,7 +205,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             color="textPrimary"
                             variant="body2"
                             className={cx(classes.gridItemValue, classes.amount)}>
-                            {formatSupply(overview?.total_volume, '--')}
+                            {formatSupply(overview?.total_volume ?? trending.market?.total_volume, '--')}
                         </Typography>
                     </div>
                 </Grid>
@@ -234,7 +235,10 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             color="textPrimary"
                             variant="body2"
                             className={cx(classes.gridItemValue, classes.amount)}>
-                            {formatSupply(overview?.volume_24h ?? overview?.volume, '--')}
+                            {formatSupply(
+                                overview?.volume_24h ?? overview?.volume ?? trending.market?.volume_24h,
+                                '--',
+                            )}
                         </Typography>
                     </div>
                 </Grid>
@@ -244,7 +248,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_one_day_sale')}
                     </Typography>
                     <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
-                        {formatSupply(overview?.sales_24h ?? overview?.sales, '--')}
+                        {formatSupply(overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h, '--')}
                     </Typography>
                 </Grid>
             </Grid>

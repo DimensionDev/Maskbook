@@ -1,10 +1,10 @@
-import { useCallback, useRef } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useCallback, useRef, type MouseEvent, useState } from 'react'
+import { cloneDeep } from 'lodash-es'
 import { type AbiItem } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { Lens } from '@masknet/web3-providers'
+import { Lens, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
     ContractTransaction,
@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, ProxyActionType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
@@ -25,10 +25,11 @@ export function useFollow(
     profileId?: string,
     followModule?: FollowModuleTypedData,
     hasDefaultProfile?: boolean,
-    onSuccess?: () => void,
+    onSuccess?: (event: MouseEvent<HTMLElement>) => void,
+    onFailed?: () => void,
 ) {
+    const [loading, setLoading] = useState(false)
     const t = useI18N()
-    const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
@@ -51,103 +52,124 @@ export function useFollow(
 
     const followWithProxyAction = useCallback(
         async (token: string) => {
-            try {
-                if (!profileId || chainId !== ChainId.Matic || followModule || !connection || !hasDefaultProfile) return
-                const proxyAction = await Lens.followWithProxyAction(profileId, { token })
-                if (!proxyAction) return
-                for (let i = 0; i < 30; i += 1) {
-                    const receipt = await Lens.queryProxyStatus(proxyAction, { token })
-                    if (!receipt) return
-                    switch (receipt.__typename) {
-                        case ProxyActionType.ProxyActionError:
-                            throw new Error(receipt.reason)
-                        case ProxyActionType.ProxyActionQueued:
-                            await delay(1000)
-                            continue
-                        case ProxyActionType.ProxyActionStatusResult:
-                            const result = await connection.confirmTransaction(receipt.txHash)
-                            if (!result.status) return
-                            onSuccess?.()
-                            return proxyAction
-                        default:
-                            // TODO: error
-                            return
-                    }
-                }
-                return
-            } catch {
-                return
-            }
+            if (!profileId || chainId !== ChainId.Matic || followModule || !hasDefaultProfile) return
+            return Lens.followWithProxyAction(profileId, { token })
         },
-        [profileId, chainId, followModule, connection, hasDefaultProfile],
+        [profileId, chainId, followModule, hasDefaultProfile],
     )
 
-    return useAsyncFn(async () => {
-        try {
-            if (!profileId || !connection || chainId !== ChainId.Matic) return
-            const token = await handleQueryAuthenticate()
-            if (!token) return
+    const queryProxyActionStatus = useCallback(async (token: string, proxyAction?: string) => {
+        if (!proxyAction) return
 
-            const proxyAction = await followWithProxyAction(token)
+        for (let i = 0; i < 30; i += 1) {
+            const status = await Lens.queryProxyStatus(proxyAction, { token })
+            if (!status) return
+            switch (status.__typename) {
+                case ProxyActionType.ProxyActionError:
+                    throw new Error(status.reason)
+                case ProxyActionType.ProxyActionQueued:
+                    await delay(1000)
+                    continue
+                case ProxyActionType.ProxyActionStatusResult:
+                    const receipt = await Web3.confirmTransaction(status.txHash)
+                    if (!receipt.status) return
+                    return proxyAction
+                default:
+                    // TODO: error
+                    return
+            }
+        }
 
-            if (!proxyAction) {
-                const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
+        return
+    }, [])
 
-                if (!typedData) return
+    const handleFollow = useCallback<(event: MouseEvent<HTMLElement>) => Promise<void>>(
+        async (event: MouseEvent<HTMLElement>) => {
+            const cloneEvent = cloneDeep(event)
 
-                const signature = await connection.signMessage(
-                    'typedData',
-                    JSON.stringify(
-                        encodeTypedData(
-                            typedData.typedData.domain,
-                            typedData.typedData.types,
-                            typedData.typedData.value,
-                        ),
-                    ),
-                )
-
-                const { v, r, s } = splitSignature(signature)
-
-                const { deadline, profileIds, datas } = typedData.typedData.value
-
-                let hash: string | undefined
-
-                try {
-                    const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
-                    if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
-                    else hash = broadcast?.txHash
-                } catch {
-                    const tx = await new ContractTransaction(lensHub).fillAll(
-                        lensHub?.methods.followWithSig([account, profileIds, datas, [v, r, s, deadline]]),
-                        {
-                            from: account,
-                        },
-                    )
-
-                    hash = await connection.sendTransaction(tx)
+            try {
+                setLoading(true)
+                if (!profileId || chainId !== ChainId.Matic) return
+                const token = await handleQueryAuthenticate()
+                if (!token) return
+                const proxyAction = await followWithProxyAction(token)
+                if (proxyAction) {
+                    onSuccess?.(cloneEvent)
+                    setLoading(false)
                 }
 
-                if (!hash) return
-                const result = await connection.confirmTransaction(hash, {
-                    signal: AbortSignal.timeout(3 * 60 * 1000),
-                })
+                const result = await queryProxyActionStatus(token, proxyAction)
 
-                if (!result.status) return
-                onSuccess?.()
+                if (!result) {
+                    setLoading(true)
+                    const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
+
+                    if (!typedData) return
+
+                    const signature = await Web3.signMessage(
+                        'typedData',
+                        JSON.stringify(
+                            encodeTypedData(
+                                typedData.typedData.domain,
+                                typedData.typedData.types,
+                                typedData.typedData.value,
+                            ),
+                        ),
+                    )
+
+                    const { v, r, s } = splitSignature(signature)
+
+                    const { deadline, profileIds, datas } = typedData.typedData.value
+
+                    let hash: string | undefined
+
+                    try {
+                        const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
+                        if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
+                        else hash = broadcast?.txHash
+                    } catch {
+                        onFailed?.()
+                        const tx = await new ContractTransaction(lensHub).fillAll(
+                            lensHub?.methods.followWithSig([account, profileIds, datas, [v, r, s, deadline]]),
+                            {
+                                from: account,
+                            },
+                        )
+
+                        hash = await Web3.sendTransaction(tx)
+                    }
+
+                    if (!hash) return
+                    onSuccess?.(cloneEvent)
+                    setLoading(false)
+
+                    const receipt = await Web3.confirmTransaction(hash, {
+                        signal: AbortSignal.timeout(3 * 60 * 1000),
+                    })
+                    if (!receipt.status) throw new Error('Failed to Follow')
+                }
+            } catch (error) {
+                if (
+                    error instanceof Error &&
+                    !error.message.includes('Transaction was rejected') &&
+                    !error.message.includes('Signature canceled') &&
+                    !error.message.includes('User rejected the request') &&
+                    !error.message.includes('User rejected transaction') &&
+                    !error.message.includes('RPC Error')
+                ) {
+                    onFailed?.()
+                    showSingletonSnackbar(t.follow_lens_handle(), {
+                        processing: false,
+                        variant: 'error',
+                        message: t.network_error(),
+                    })
+                }
+            } finally {
+                setLoading(false)
             }
-        } catch (error) {
-            if (
-                error instanceof Error &&
-                !error.message.includes('Transaction was rejected') &&
-                !error.message.includes('Signature canceled') &&
-                !error.message.includes('User rejected the request') &&
-                !error.message.includes('User rejected transaction')
-            )
-                showSingletonSnackbar(t.follow_lens_handle(), {
-                    processing: false,
-                    variant: 'error',
-                    message: t.network_error(),
-                })
-        }
-    }, [handleQueryAuthenticate, profileId, connection, account, chainId, onSuccess, fetchJSON, showSingletonSnackbar])
+        },
+        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, fetchJSON, showSingletonSnackbar, onFailed],
+    )
+
+    return { loading, handleFollow }
 }

@@ -278,7 +278,7 @@ export async function getCoinInfo(chainId: Web3Helper.ChainIdAll, id: string) {
     return {
         token,
         marketInfo: {
-            current_price: currentPrice.toNumber(),
+            current_price: currentPrice.toString(),
             price_change_percentage_1h,
             price_change_24h,
             price_change_percentage_7d_in_currency,

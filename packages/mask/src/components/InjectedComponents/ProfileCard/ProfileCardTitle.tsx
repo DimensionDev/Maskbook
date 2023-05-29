@@ -1,12 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { SocialAccountList } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    PluginID,
-    type SocialAccount,
-    type SocialIdentity,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -47,15 +41,13 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function openWeb3ProfileSettingDialog() {
-    CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
         open: true,
-        targetTab: PluginID.Web3Profile,
     })
 }
 
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    badgeBounding?: DOMRect
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?(address: string): void
@@ -66,7 +58,6 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     address,
     identity,
     onAddressChange,
-    badgeBounding,
     ...rest
 }) => {
     const me = useLastRecognizedIdentity()
@@ -83,12 +74,13 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
             <ProfileBar
                 className={classes.profileBar}
                 identity={identity}
-                badgeBounding={badgeBounding}
                 socialAccounts={socialAccounts}
                 address={address}
                 onAddressChange={onAddressChange}>
                 <div className={classes.operations}>
-                    {nextIdBindings.length ? <SocialAccountList nextIdBindings={nextIdBindings} disablePortal /> : null}
+                    {nextIdBindings.length ? (
+                        <SocialAccountList nextIdBindings={nextIdBindings} userId={userId} disablePortal />
+                    ) : null}
                     {identity.identifier?.userId === me?.identifier?.userId ? (
                         <Icons.Gear className={classes.gearIcon} onClick={openWeb3ProfileSettingDialog} />
                     ) : (

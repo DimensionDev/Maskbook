@@ -1,19 +1,19 @@
 import urlcat from 'urlcat'
 import { unionWith } from 'lodash-es'
-import { type HubOptions, isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import { createPageable, createIndicator } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleTokenAPI as EVM_FungibleTokenAPI } from '../../Connection/index.js'
+import { FungibleTokenAPI as EVM_FungibleTokenAPI } from '../../Web3/EVM/apis/FungibleTokenAPI.js'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
 import type { WalletTokenRecord } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
 import { Duration, fetchJSON, getNativeAssets } from '../../entry-helpers.js'
-import type { FungibleTokenAPI } from '../../entry-types.js'
+import type { FungibleTokenAPI, HubOptions_Base } from '../../entry-types.js'
 
 export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     private fungibleToken = new EVM_FungibleTokenAPI()
 
-    async getAssets(address: string, options?: HubOptions<ChainId>) {
+    async getAssets(address: string, options?: HubOptions_Base<ChainId>) {
         const result = await fetchJSON<WalletTokenRecord[] | undefined>(
             urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
                 id: address,
@@ -54,7 +54,7 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
     async getTrustedAssets(
         address: string,
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
-        options?: HubOptions<ChainId>,
+        options?: HubOptions_Base<ChainId>,
     ) {
         const trustTokenAssets = await this.fungibleToken.getTrustedAssets(address, trustedFungibleTokens, options)
         return createPageable(

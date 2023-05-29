@@ -14,7 +14,8 @@ export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
             PluginTraderMessages.trendingAnchorObserved.sendToLocal({
                 name: content,
                 type,
-                badgeBounding: element.getBoundingClientRect(),
+                anchorBounding: element.getBoundingClientRect(),
+                anchorEl: element,
             })
         }, 500)
         return () => {

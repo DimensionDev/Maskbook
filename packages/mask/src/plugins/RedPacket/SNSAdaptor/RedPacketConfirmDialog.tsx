@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import { useChainContext, useBalance, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import {
     chainResolver,
     explorerResolver,
@@ -12,12 +12,13 @@ import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { FormattedBalance, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
-import { useI18N } from '../locales/index.js'
-import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
+import { useI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -76,13 +77,9 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
     const contract_version = 4
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { address: publicKey, privateKey } = useMemo(
-        () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
-        [web3],
-    )!
+    const { account: publicKey, privateKey = '' } = useMemo(() => Web3.createAccount(), [])
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // #region amount minus estimate gas fee

@@ -29,6 +29,7 @@ export function facebook_round_url() { return new URL("./brands/FacebookRound.sv
 export function facebook_round_gray_url() { return new URL("./brands/FacebookRoundGray.svg", import.meta.url) }
 export function fantom_url() { return new URL("./brands/Fantom.svg", import.meta.url) }
 export function farcaster_url() { return new URL("./brands/Farcaster.svg", import.meta.url) }
+export function firefly_url() { return new URL("./brands/Firefly.svg", import.meta.url) }
 export function flow_url() { return new URL("./brands/Flow.svg", import.meta.url) }
 export function game_url() { return new URL("./brands/Game.svg", import.meta.url) }
 export function gem_url() { return new URL("./brands/Gem.svg", import.meta.url) }
@@ -110,6 +111,7 @@ export function zk_scan_url() { return new URL("./brands/zkScan.svg", import.met
 export function zora_url() { return new URL("./brands/Zora.svg", import.meta.url) }
 export function zrx_url() { return new URL("./brands/zrx.svg", import.meta.url) }
 export function add_url() { return new URL("./general/Add.svg", import.meta.url) }
+export function add_no_border_url() { return new URL("./general/AddNoBorder.svg", import.meta.url) }
 export function add_user_url() { return new URL("./general/AddUser.svg", import.meta.url) }
 export function airdrop_url() { return new URL("./general/Airdrop.svg", import.meta.url) }
 export function application_nft_url() { return new URL("./general/ApplicationNFT.svg", import.meta.url) }
@@ -120,6 +122,7 @@ export function arrow_downward_url() { return new URL("./general/ArrowDownward.s
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url) }
 export function arrow_right_url() { return new URL("./general/ArrowRight.svg", import.meta.url) }
 export function arrow_right_ios_url() { return new URL("./general/ArrowRightIos.svg", import.meta.url) }
+export function arrow_up_url() { return new URL("./general/ArrowUp.svg", import.meta.url) }
 export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.svg", import.meta.url) }
 export function asset_loading_url() { return new URL("./general/AssetLoading.svg", import.meta.url) }
 export function author_url() { return new URL("./general/Author.svg", import.meta.url) }

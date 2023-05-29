@@ -1,3 +1,4 @@
+import { NetworkPluginID } from '@masknet/shared-base'
 import { CoinGeckoTrendingAPI, CoinGeckoPriceAPI_EVM, CoinGeckoPriceAPI_Solana } from './CoinGecko/index.js'
 import { OpenSeaAPI } from './OpenSea/index.js'
 import { LooksRareAPI } from './LooksRare/index.js'
@@ -47,20 +48,6 @@ import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { LensAPI } from './Lens/index.js'
-import { Web3SignerAPI } from './Connection/EVM/apis/Web3SignerAPI.js'
-import {
-    Web3API,
-    Web3StateAPI,
-    Web3GasOptionAPI,
-    FlowWeb3API,
-    FlowWeb3StateAPI,
-    FlowFungibleAPI,
-    SolanaDomainAPI,
-    SolanaWeb3API,
-    SolanaWeb3StateAPI,
-    SolanaFungibleAPI,
-    SolanaNonFungibleAPI,
-} from './Connection/index.js'
 import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
@@ -78,6 +65,22 @@ import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
 import { SID_DomainAPI } from './SID/index.js'
 import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
+import { ApprovalAPI } from './Approval/index.js'
+import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
+import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
+import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { SignerAPI } from './Web3/EVM/apis/SignerAPI.js'
+import { Web3StateAPI } from './Web3/EVM/apis/Web3StateAPI.js'
+import { FlowFungibleAPI } from './Web3/Flow/apis/FungibleTokenAPI.js'
+import { FlowWeb3StateAPI } from './Web3/Flow/apis/Web3StateAPI.js'
+import { SolanaDomainAPI } from './Web3/Solana/apis/DomainAPI.js'
+import { SolanaFungibleTokenAPI } from './Web3/Solana/apis/FungibleTokenAPI.js'
+import { SolanaNonFungibleTokenAPI } from './Web3/Solana/apis/NonFungibleTokenAPI.js'
+import { SolanaWeb3StateAPI } from './Web3/Solana/apis/Web3StateAPI.js'
+import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
+import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
+import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
+import { Web3StorageAPI } from './Storage/apis/Storage.js'
 export { UniSwapV2Like } from './Trader/UniSwapV2.js'
 export { UniSwapV3Like } from './Trader/UniSwapV3.js'
 export { Balancer } from './Trader/Balancer.js'
@@ -119,37 +122,45 @@ export const SimpleHashEVM = new SimpleHashAPI_EVM()
 export const SimpleHashSolana = new SimpleHashAPI_Solana()
 export const SnapshotSearch = new SnapshotSearchAPI()
 export const Snapshot = new SnapshotAPI()
-
-// Wallet
-export {
-    BaseContractWalletProvider,
-    EVM_Providers,
-    FlowProviders,
-    SolanaProviders,
-    EVM_Composers,
-} from './Connection/index.js'
+export const Approval = new ApprovalAPI()
 
 // Plugin Context
 export const SharedUIPluginContext = new SharedUIContextAPI()
 export const SNSAdaptorPluginContext = new SNSAdaptorContextAPI()
 
-// EVM Connection
-export const Web3 = new Web3API()
-export const Web3GasOption = new Web3GasOptionAPI()
-export const Web3Signer = new Web3SignerAPI()
+export { Providers } from './Web3/EVM/providers/index.js'
+export { FlowProviders } from './Web3/Flow/providers/index.js'
+export { SolanaProviders } from './Web3/Solana/providers/index.js'
+export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
+
+// Web3
+export const HubAll = new AllHubAPI()
+export const Web3All = new AllConnectionAPI()
+export const OthersAll = new AllOthersAPI()
+
+export const Contract = new ContractAPI()
+export const ContractReadonly = new ContractReadonlyAPI()
+export const Signer = new SignerAPI()
 export const Web3State = new Web3StateAPI()
+export const Web3Storage = new Web3StorageAPI()
+export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
+export const Web3Readonly = new ConnectionReadonlyAPI()
+export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
+export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 
-// Flow Connection
-export const FlowWeb3 = new FlowWeb3API()
-export const FlowWeb3State = new FlowWeb3StateAPI()
 export const FlowFungible = new FlowFungibleAPI()
+export const FlowWeb3State = new FlowWeb3StateAPI()
+export const FlowWeb3 = Web3All.use(NetworkPluginID.PLUGIN_FLOW)!
+export const FlowHub = HubAll.use(NetworkPluginID.PLUGIN_FLOW)!
+export const FlowOthers = OthersAll.use(NetworkPluginID.PLUGIN_FLOW)!
 
-// Solana Connection
 export const SolanaDomain = new SolanaDomainAPI()
-export const SolanaWeb3 = new SolanaWeb3API()
+export const SolanaFungible = new SolanaFungibleTokenAPI()
+export const SolanaNonFungible = new SolanaNonFungibleTokenAPI()
 export const SolanaWeb3State = new SolanaWeb3StateAPI()
-export const SolanaFungible = new SolanaFungibleAPI()
-export const SolanaNonFungible = new SolanaNonFungibleAPI()
+export const SolanaWeb3 = Web3All.use(NetworkPluginID.PLUGIN_SOLANA)!
+export const SolanaHub = HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
+export const SolanaOthers = OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
@@ -158,7 +169,6 @@ export const EtherscanRedPacket = new EtherscanRedPacketAPI()
 // NextID
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorageProvider = new NextIDStorageAPI()
-export type { LensAccount } from './NextID/index.js'
 
 // Web3Bio
 export const Web3Bio = new Web3BioAPI()
@@ -225,9 +235,6 @@ export const SmartPayAccount = new SmartPayAccountAPI()
 
 // RSS3
 export const RSS3 = new RSS3API()
-
-// Storage
-export * from './Storage/index.js'
 
 // Airdrop
 export const Airdrop = new AirdropAPI()

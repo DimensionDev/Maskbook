@@ -1,53 +1,28 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { type BindingProof, EMPTY_LIST, type MaskEvents } from '@masknet/shared-base'
+import { EMPTY_LIST, type BindingProof, type MaskEvents } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useCallback, useEffect } from 'react'
-import { useAsyncFn } from 'react-use'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useMemo } from 'react'
 
-export function usePersonaProofs(
-    publicKey?: string,
-    message?: WebExtensionMessage<MaskEvents>,
-): AsyncStateRetry<BindingProof[]> {
-    const [state, queryBinding] = useAsyncFn(async (publicKey?: string) => {
-        try {
-            if (!publicKey) return EMPTY_LIST
-
-            const binding = await NextIDProof.queryExistedBindingByPersona(publicKey)
+export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessage<MaskEvents>) {
+    const queryKey = useMemo(() => ['next-id', 'bindings-by-persona', publicKey], [publicKey])
+    const result = useQuery<BindingProof[], Error>({
+        queryKey,
+        enabled: !!publicKey,
+        queryFn: async () => {
+            const binding = await NextIDProof.queryExistedBindingByPersona(publicKey!)
             return binding?.proofs ?? EMPTY_LIST
-        } catch {
-            return EMPTY_LIST
-        }
-    }, [])
+        },
+    })
+    const { refetch } = result
 
-    useEffect(() => {
-        queryBinding(publicKey)
-    }, [publicKey])
+    useEffect(
+        () =>
+            message?.events.ownProofChanged.on(() => {
+                refetch()
+            }),
+        [queryKey],
+    )
 
-    const retry = useCallback(() => {
-        queryBinding(publicKey)
-    }, [publicKey])
-
-    useEffect(() => message?.events.ownProofChanged.on(retry), [retry])
-
-    if (state.loading) {
-        return {
-            loading: true,
-            retry,
-        }
-    }
-
-    if (state.error) {
-        return {
-            loading: false,
-            error: state.error,
-            retry,
-        }
-    }
-
-    return {
-        value: state.value ?? EMPTY_LIST,
-        loading: state.loading,
-        retry,
-    }
+    return result
 }

@@ -1,11 +1,12 @@
+import { memo, useState } from 'react'
 import { QRCode } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
-import { memo, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 
@@ -68,7 +69,6 @@ interface Props {
 export const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return usePortalShadowRoot((container) => (
@@ -88,7 +88,7 @@ export const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, 
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <QRCode
-                    text={`${Others?.chainResolver.chainPrefix(chainId)}:${address}`}
+                    text={`${Others.chainResolver.chainPrefix(chainId)}:${address}`}
                     options={{ width: 250 }}
                     canvasProps={{ width: 250, height: 250 }}
                 />

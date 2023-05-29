@@ -40,12 +40,12 @@ export interface AlchemyNFT_EVM {
     timeLastUpdated: string
 }
 
-export interface AlchemyResponse_FLOW {
+export interface AlchemyResponse_Flow {
     ownerAddress: string
-    nfts: AlchemyNFT_FLOW[]
+    nfts: AlchemyNFT_Flow[]
 }
 
-export interface AlchemyNFT_FLOW {
+export interface AlchemyNFT_Flow {
     contract: {
         name: string
         address: string
@@ -134,7 +134,7 @@ export interface AlchemyResponse_EVM_Owners {
     owners: string[]
 }
 
-export interface AlchemyResponse_FLOW_Metadata {
+export interface AlchemyResponse_Flow_Metadata {
     contract: {
         name: string
         address: string

@@ -12,19 +12,19 @@ export function usePriceStats({
     coinId,
     currency,
     days = TrendingAPI.Days.MAX,
-    dataProvider,
+    sourceType,
 }: {
     chainId: Web3Helper.ChainIdAll
     coinId?: string
     currency?: Currency
     days?: TrendingAPI.Days
-    dataProvider?: SourceType
+    sourceType?: SourceType
 }) {
     const { chainId } = useChainContext({
         chainId: expectedChainId,
     })
     return useAsyncRetry(async () => {
-        if (isUndefined(days) || isUndefined(coinId) || isUndefined(dataProvider) || isUndefined(currency)) return []
-        return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, dataProvider)
-    }, [coinId, dataProvider, currency?.id, days])
+        if (isUndefined(days) || isUndefined(coinId) || isUndefined(sourceType) || isUndefined(currency)) return []
+        return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, sourceType)
+    }, [coinId, sourceType, currency?.id, days])
 }

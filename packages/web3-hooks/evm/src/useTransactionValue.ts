@@ -4,8 +4,11 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useGasConfig } from './useGasConfig.js'
 
 export function useTransactionValue(originalValue?: BigNumber.Value, gas?: string, gasCurrency?: string) {
-    const { value: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { value: gasCurrencyBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, gasCurrency)
+    const { value: nativeTokenBalance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { value: gasCurrencyBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        gasCurrency,
+    )
 
     const balance = gasCurrency ? gasCurrencyBalance : nativeTokenBalance
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -25,5 +28,5 @@ export function useTransactionValue(originalValue?: BigNumber.Value, gas?: strin
         ? new BigNumber(originalValue ?? '0').minus(estimateGasFee ?? '0').toFixed()
         : (originalValue as string)
 
-    return { transactionValue, estimateGasFee }
+    return { transactionValue, estimateGasFee, loading: loadingBalance || loadingTokenBalance }
 }

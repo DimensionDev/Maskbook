@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import format from 'date-fns/format'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import {
@@ -91,7 +91,8 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
         [TransactionStatusType.FAILED]: t('recent_transaction_failed'),
     }
 
-    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State()
+    const Others = useWeb3Others()
+    const { TransactionFormatter, TransactionWatcher } = useWeb3State()
 
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
 
@@ -137,12 +138,12 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
                 <Typography variant="body1" className={classes.linkText}>
                     {address && isSameAddress(domainOrAddress, address)
-                        ? Others?.formatAddress?.(address, 4)
+                        ? Others.formatAddress(address, 4)
                         : domainOrAddress || address}
                 </Typography>
                 <Link
                     className={classes.link}
-                    href={Others?.explorerResolver.transactionLink?.(chainId, tx.id)}
+                    href={Others.explorerResolver.transactionLink?.(chainId, tx.id)}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut className={classes.linkIcon} />

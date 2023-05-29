@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { PersonaImageIcon } from './PersonaImageIcon.js'
+import { memo } from 'react'
 
 interface StyleProps {
     size: number
@@ -36,7 +37,7 @@ interface PlatformAvatarProps extends withClasses<'networkIcon' | 'providerIcon'
     isBorderColorNotDefault?: boolean
 }
 
-export const PlatformAvatar = (props: PlatformAvatarProps) => {
+export const PlatformAvatar = memo(function PlatformAvatar(props: PlatformAvatarProps) {
     const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
     const { classes, cx } = useStyles(
         {
@@ -51,7 +52,6 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
         ? [cx(classes.badgeIcon, classes.providerIcon), cx(classes.mainIcon, classes.networkIcon)]
         : [cx(classes.mainIcon, classes.networkIcon), cx(classes.badgeIcon, classes.providerIcon)]
     // #endregion
-
     return (
         <div
             className={classes.root}
@@ -87,4 +87,4 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
             ) : null}
         </div>
     )
-}
+})

@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useReverseAddress, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useReverseAddress, useWallet, useWeb3Others } from '@masknet/web3-hooks-base'
 import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
@@ -61,7 +61,7 @@ export const WalletInfo = memo(() => {
     const navigate = useNavigate()
     const address = new URLSearchParams(useLocation().search).get('address')
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address ?? wallet?.address)
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const excludePath = useMatch(PopupRoutes.WalletSettings)
 
@@ -75,7 +75,7 @@ export const WalletInfo = memo(() => {
             onSettingClick={() => navigate(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
             domain={domain}
-            formatDomainName={Others?.formatDomainName}
+            formatDomainName={Others.formatDomainName}
         />
     )
 })

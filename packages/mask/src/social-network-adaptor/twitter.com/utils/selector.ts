@@ -206,7 +206,7 @@ export const selfInfoSelectors = () => ({
 export const searchSelfHandleSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] > div:nth-child(2) > div > div:nth-child(2) span', // desktop
+            '[data-testid="SideNav_AccountSwitcher_Button"] > div > div[data-testid^="UserAvatar-Container-"]', // desktop
             '#layers [role="group"] [role="dialog"] [tabindex="-1"] [dir="ltr"] > span', // sidebar opened in mobile
         ].join(','),
     )
@@ -215,7 +215,7 @@ export const searchSelfHandleSelector = () => {
 export const searchSelfNicknameSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span',
+            '[data-testid="SideNav_AccountSwitcher_Button"] span span:first-child',
             '#layers [role="group"] [role="dialog"] [role="link"] span > span', // sidebar opened in mobile
         ].join(','),
     )
@@ -275,16 +275,6 @@ export const searchTwitterAvatarNFTSelector = () =>
 export const searchTwitterAvatarNFTStyleSelector = () => querySelector<E>('a[href$="/nft"] > div')
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
-
-export const inpageAvatarSelector = () =>
-    querySelectorAll<HTMLDivElement>(
-        [
-            // Avatars in post
-            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
-            // Avatars in side panel
-            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
-        ].join(','),
-    )
 
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(

@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3Storage } from '@masknet/web3-providers'
 import { ImageType } from '../types.js'
 import type { User, ShowMeta, EssayRSSNode } from '../types.js'
 import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from '../constants.js'
 import { useUser } from './useUser.js'
 
 export function useEssay(user: User, refresh?: number) {
-    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value } = useAsync(async () => {
-        if (!Storage || !user.address) return null
-        const stringStorage = Storage.createStringStorage('Pets', user.address)
-        let result = await stringStorage.get<EssayRSSNode>('pet')
+        if (!user.address) return null
+        const stringStorage = Web3Storage.createFireflyStorage('Pets', user.address)
+        let result: EssayRSSNode | undefined = await stringStorage.get<EssayRSSNode>('pet')
         if (!result?.essay || result.essay.userId !== user.userId) {
-            const rss3Storage = Storage.createRSS3Storage(user.address)
+            const rss3Storage = Web3Storage.createRSS3Storage(user.address)
             result = await rss3Storage.get<EssayRSSNode>('_pet')
         }
         return result?.essay.userId === user.userId ? result.essay : null

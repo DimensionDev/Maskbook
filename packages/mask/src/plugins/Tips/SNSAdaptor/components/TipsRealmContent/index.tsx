@@ -6,9 +6,9 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
+import { useTipsUserGuide } from '../../../storage/index.js'
 import { TipButton } from '../../../components/index.js'
 import { useI18N } from '../../../locales/index.js'
-import { useTipsUserGuide } from '../../../storage/index.js'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     postButtonWrapper: {

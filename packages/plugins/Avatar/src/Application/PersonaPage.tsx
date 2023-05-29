@@ -1,16 +1,15 @@
 import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import { LoadingBase } from '@masknet/theme'
+import { DialogActions, DialogContent, Stack } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { PersonaAction, usePersonasFromNextID } from '@masknet/shared'
+import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { Icons } from '@masknet/icons'
 import {
     useAllPersonas,
     useLastRecognizedSocialIdentity,
@@ -21,23 +20,10 @@ import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { uniqBy } from 'lodash-es'
 
-const useStyles = makeStyles()((theme) => ({
-    messageBox: {
-        display: 'flex',
-        borderRadius: 4,
-        padding: 12,
-        backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
-        fontSize: 14,
-        alignItems: 'center',
-        color: theme.palette.text.primary,
-        gap: 10,
-    },
-}))
-
 export function PersonaPage() {
     const t = useI18N()
-    const { classes } = useStyles()
     const [visible, setVisible] = useState(true)
+    const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()
     const { setProofs, setTokenInfo, setProof } = useAvatarManagement()
     const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
@@ -89,15 +75,9 @@ export function PersonaPage() {
                     </Stack>
                 ) : (
                     <>
-                        {visible ? (
-                            <Box className={classes.messageBox}>
-                                <Icons.Info size={20} />
-                                <Typography fontSize={14} fontFamily="Helvetica">
-                                    {t.persona_hint()}
-                                </Typography>
-                                <Icons.Close size={20} onClick={() => setVisible(true)} />
-                            </Box>
-                        ) : null}
+                        <Alert open={visible} onClose={dismissAlert}>
+                            {t.persona_hint()}
+                        </Alert>
                         {bindingProofs
                             .filter((x) => x.identity.toLowerCase() === userId?.toLowerCase())
                             .map((x, i) => (

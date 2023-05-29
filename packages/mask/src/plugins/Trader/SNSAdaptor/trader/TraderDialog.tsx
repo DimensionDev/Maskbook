@@ -6,7 +6,7 @@ import {
     useChainContext,
     useChainIdValid,
     useNetworkContext,
-    useWeb3State,
+    useWeb3Others,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
 import { type ChainId, GasEditor, SchemaType, type Transaction } from '@masknet/web3-shared-evm'
@@ -77,7 +77,7 @@ export function TraderDialog() {
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
     const { chainId, setChainId } = useChainContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -103,7 +103,7 @@ export function TraderDialog() {
 
     const inputFungibleToken = useMemo(
         () =>
-            Others?.createFungibleToken(
+            Others.createFungibleToken(
                 chainId,
                 Others.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
                 defaultInputCoin?.address ?? '',
@@ -116,7 +116,7 @@ export function TraderDialog() {
 
     const outputFungibleToken = useMemo(
         () =>
-            Others?.createFungibleToken(
+            Others.createFungibleToken(
                 chainId,
                 Others.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
                 defaultOutputCoin?.address ?? '',

@@ -163,6 +163,11 @@ export const Farcaster = /*#__PURE__*/ __createIcon('Farcaster', [
         u: () => new URL('./brands/Farcaster.svg', import.meta.url),
     },
 ])
+export const Firefly = /*#__PURE__*/ __createIcon('Firefly', [
+    {
+        u: () => new URL('./brands/Firefly.svg', import.meta.url),
+    },
+])
 export const Flow = /*#__PURE__*/ __createIcon('Flow', [
     {
         u: () => new URL('./brands/Flow.svg', import.meta.url),
@@ -592,6 +597,11 @@ export const Add = /*#__PURE__*/ __createIcon('Add', [
         s: true,
     },
 ])
+export const AddNoBorder = /*#__PURE__*/ __createIcon('AddNoBorder', [
+    {
+        u: () => new URL('./general/AddNoBorder.svg', import.meta.url),
+    },
+])
 export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
     {
         u: () => new URL('./general/AddUser.svg', import.meta.url),
@@ -738,6 +748,21 @@ export const ArrowRight = /*#__PURE__*/ __createIcon('ArrowRight', [
 export const ArrowRightIos = /*#__PURE__*/ __createIcon('ArrowRightIos', [
     {
         u: () => new URL('./general/ArrowRightIos.svg', import.meta.url),
+    },
+])
+export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
+    {
+        u: () => new URL('./general/ArrowUp.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'm12.566 9.066 5.068 5.068a.8.8 0 0 1-.566 1.366H6.931a.8.8 0 0 1-.565-1.366l5.068-5.068a.8.8 0 0 1 1.132 0Z',
+                }),
+            }),
+        s: true,
     },
 ])
 export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [

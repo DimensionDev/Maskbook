@@ -7,7 +7,7 @@ import {
     useNetworkContext,
     useReverseAddress,
     useLookupAddress,
-    useWeb3State,
+    useWeb3Others,
     useChainContext,
 } from '@masknet/web3-hooks-base'
 import {
@@ -32,7 +32,7 @@ const useStyles = makeStyles()({
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
     const { pluginID: currentPluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { account, chainId, networkType, providerType } = useChainContext()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
@@ -69,7 +69,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
         },
         {
             name: 'Account',
-            content: <Typography variant="body2">{Others?.formatAddress(account, 4) || 'Not Connected'}</Typography>,
+            content: <Typography variant="body2">{Others.formatAddress(account, 4) || 'Not Connected'}</Typography>,
         },
         {
             name: 'ChainId',

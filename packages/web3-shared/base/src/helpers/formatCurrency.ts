@@ -22,6 +22,7 @@ const DIGITAL_CURRENCY_SYMBOLS: Record<string, string> = {
     SOL: '\u25CE',
     BNB: 'BNB',
     POLYGON: 'MATIC',
+    WETH: 'WETH',
     AVAX: 'AVAX',
     GLMR: 'GLMR',
     MATIC: 'MATIC',

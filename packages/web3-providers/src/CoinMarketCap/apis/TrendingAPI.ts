@@ -1,16 +1,9 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
-import {
-    type ChainId,
-    chainResolver,
-    getTokenConstant,
-    isNativeTokenSymbol,
-    isValidAddress,
-    isValidChainId,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
-import { fetchFromCoinMarketCap, resolveCoinMarketCapChainId } from '../helpers.js'
+import { fetchFromCoinMarketCap, resolveCoinMarketCapChainId, resolveCoinMarketCapAddress } from '../helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
 import { FuseCoinAPI } from '../../Fuse/index.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
@@ -165,28 +158,16 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const { data: coinInfo, status } = coinInfoRes
 
         const contracts: TrendingAPI.Contract[] = coinInfo.contract_address
+            .sort((a, b) => (a.platform.coin.id === String(id) && b.platform.coin.id !== String(id) ? -1 : 1))
             .map((x) => ({
                 chainId: resolveCoinMarketCapChainId(x.platform.name),
-                address: x.contract_address,
+                address: resolveCoinMarketCapAddress(x.contract_address),
                 pluginID: NetworkPluginID.PLUGIN_EVM,
                 icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
             }))
             .filter((x) => isValidChainId(x.chainId))
 
-        function getPlatform(coinInfo: CoinInfo, contracts: TrendingAPI.Contract[], contract_address?: string) {
-            if (isNativeTokenSymbol(coinInfo.symbol) && chainResolver.chainId(coinInfo.name))
-                return {
-                    chainId: chainResolver.chainId(coinInfo.name),
-                    address: getTokenConstant(chainResolver.chainId(coinInfo.name)!, 'NATIVE_TOKEN_ADDRESS'),
-                }
-            const _contracts = contracts.filter(
-                (x) =>
-                    contract_address === x.address && isValidChainId(x.chainId as ChainId) && isValidAddress(x.address),
-            )
-            if (_contracts.length > 0) return _contracts[0]
-
-            return contracts.filter((x) => isValidChainId(x.chainId as ChainId) && isValidAddress(x.address))?.[0]
-        }
+        const currentContract = contracts[0]
 
         const trending: TrendingAPI.Trending = {
             lastUpdated: status.timestamp,
@@ -194,7 +175,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contracts,
             coin: {
                 id,
-                chainId: getPlatform(coinInfo, contracts, coinInfo.platform?.token_address)?.chainId,
+                chainId: currentContract?.chainId,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,
@@ -222,9 +203,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
-                contract_address:
-                    getPlatform(coinInfo, contracts, coinInfo.platform?.token_address)?.address ??
-                    coinInfo.platform?.token_address,
+                contract_address: currentContract?.address ?? coinInfo.platform?.token_address,
             },
             currency,
             dataProvider: SourceType.CoinMarketCap,
@@ -257,7 +236,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 total_supply: quotesInfo_.total_supply ?? void 0,
                 max_supply: quotesInfo_.max_supply ?? void 0,
                 market_cap: quotesInfo_.quote[currencyName].market_cap,
-                current_price: quotesInfo_.quote[currencyName].price,
+                current_price: quotesInfo_.quote[currencyName].price.toString(),
                 total_volume: quotesInfo_.quote[currencyName].volume_24h,
                 price_change_percentage_1h: quotesInfo_.quote[currencyName].percent_change_1h,
                 price_change_24h: quotesInfo_.quote[currencyName].percent_change_24h,

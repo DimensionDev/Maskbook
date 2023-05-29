@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { Contract } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { safeNonPayableTransactionCall } from '@masknet/web3-shared-evm'
-import { useERC721TokenContract } from './useERC721TokenContract.js'
 
 /**
  * @param contractAddress NFT contract address.
@@ -18,9 +18,11 @@ export function useERC721ContractIsApproveForAll(
     expectedChainId: ChainId,
 ) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
-    const erc721TokenContract = useERC721TokenContract(chainId, contractAddress)
     return useAsyncRetry(async () => {
-        if (!erc721TokenContract || !owner || !operator) return
-        return safeNonPayableTransactionCall(erc721TokenContract.methods.isApprovedForAll(owner, operator))
-    }, [erc721TokenContract, owner, operator])
+        if (!owner || !operator || !contractAddress) return
+
+        return safeNonPayableTransactionCall(
+            Contract.getERC721Contract(contractAddress, { chainId })?.methods.isApprovedForAll(owner, operator),
+        )
+    }, [owner, operator])
 }

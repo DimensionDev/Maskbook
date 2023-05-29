@@ -1,14 +1,19 @@
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { Emitter } from '@servie/events'
-import type { BadgeBounding } from './types.js'
 
+interface OpenPopupOptions {
+    lensAccounts: FireflyBaseAPI.LensAccount[]
+    /** For lazy load lens accounts from NextID */
+    userId: string
+    popupAnchorEl: HTMLElement | null
+}
 export const emitter = new Emitter<{
-    open: [{ badgeBounding: BadgeBounding; lensAccounts: FireflyBaseAPI.LensAccount[] }]
+    open: [OpenPopupOptions]
     close: []
 }>()
 
-export function openPopup(badgeBounding: BadgeBounding, lensAccounts: FireflyBaseAPI.LensAccount[]) {
-    emitter.emit('open', { badgeBounding, lensAccounts })
+export function openPopup(options: OpenPopupOptions) {
+    emitter.emit('open', options)
 }
 
 export function closePopup() {

@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import type { z as zod } from 'zod'
+import { BigNumber } from 'bignumber.js'
 import { Grid, Typography } from '@mui/material'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainId,
     formatGweiToWei,
@@ -16,9 +16,8 @@ import {
     type Transaction,
 } from '@masknet/web3-shared-evm'
 import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { useGasSchema } from './hooks/index.js'
-import { BigNumber } from 'bignumber.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {
@@ -84,9 +83,8 @@ export function GasForm(props: GasFormProps) {
     } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
+    const isEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
     const baseFeePerGas = gasOptions[GasOptionType.FAST].baseFeePerGas ?? '0'
 
     const schema = useGasSchema(chainId, transaction, gasOptions)

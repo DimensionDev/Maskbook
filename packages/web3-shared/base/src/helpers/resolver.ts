@@ -7,6 +7,7 @@ import {
     type ProviderDescriptor,
     SourceType,
 } from '../specs/index.js'
+import { memoize } from 'lodash-es'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -191,6 +192,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.SPACE_ID]: 'https://space.id/',
         [SocialAddressType.RSS3]: 'https://rss3.bio/',
         [SocialAddressType.Crossbell]: 'https://crossbell.io/',
+        [SocialAddressType.Firefly]: '',
         [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
         [SocialAddressType.NEXT_ID]: 'https://next.id/',
         [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
@@ -199,6 +201,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.TwitterBlue]: '',
         [SocialAddressType.Mask]: '',
         [SocialAddressType.Lens]: '',
+        [SocialAddressType.OpenSea]: '',
     },
     () => '',
 )
@@ -239,6 +242,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.Etherscan]: 'Etherscan',
         [SourceType.CryptoPunks]: 'CryptoPunks',
         [SourceType.SimpleHash]: 'SimpleHash',
+        [SourceType.Approval]: 'Approval',
     },
     (providerType) => {
         throw new Error(`Unknown source type: ${providerType}.`)
@@ -266,6 +270,14 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
         throw new Error(`Unknown network plugin-id: ${network}`)
     },
 )
+
+export const resolveNextIDPlatformWalletName: (platform: NextIDPlatform) => string = memoize(function (
+    platform: NextIDPlatform,
+) {
+    const pluginId = resolveNextID_NetworkPluginID(platform)
+    if (!pluginId) return `${platform} wallet`
+    return resolveNetworkWalletName(pluginId)
+})
 
 export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
     {

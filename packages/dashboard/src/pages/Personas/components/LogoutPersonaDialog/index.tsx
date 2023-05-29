@@ -1,18 +1,18 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { LoadingButton } from '@mui/lab'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { Providers } from '@masknet/web3-providers'
 import { DashboardRoutes, type PersonaIdentifier } from '@masknet/shared-base'
 import { MaskDialog } from '@masknet/theme'
 import { ManageWallet } from '@masknet/shared'
-import { EVM_Providers } from '@masknet/web3-providers'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { PluginServices, Services } from '../../../../API.js'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import PasswordField from '../../../../components/PasswordField/index.js'
-import { LoadingButton } from '@mui/lab'
 
 export interface LogoutPersonaDialogProps {
     open: boolean
@@ -64,7 +64,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
 
         const handleLogout = useCallback(async () => {
             if (address && manageWallets.length) {
-                const maskProvider = EVM_Providers[ProviderType.MaskWallet]
+                const maskProvider = Providers[ProviderType.MaskWallet]
                 await maskProvider?.removeWallets(manageWallets)
             }
             await Services.Identity.logoutPersona(identifier)

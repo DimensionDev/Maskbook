@@ -1,22 +1,22 @@
-import type { AbiItem, AbiOutput } from 'web3-utils'
+import type { AbiOutput } from 'web3-utils'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
-import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
 import {
     type ChainId,
     ContractTransaction,
-    createContract,
     decodeOutputString,
     getEthereumConstant,
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { RequestReadonlyAPI } from '../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
-import { Web3API } from '../Connection/index.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI implements MulticallBaseAPI.Provider {
-    private Web3 = new Web3API()
+    private Request = new RequestReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
 
     private results: {
         [chainId: number]: {
@@ -25,16 +25,11 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
         }
     } = {}
 
-    private createWeb3(chainId: ChainId) {
-        return this.Web3.getWeb3(chainId)
-    }
-
     private createContract(chainId: ChainId) {
         const address = getEthereumConstant(chainId, 'MULTICALL_ADDRESS')
         if (!address) throw new Error('Failed to create multicall contract.')
 
-        const web3 = this.createWeb3(chainId)
-        const contract = createContract<Multicall>(web3, address, MulticallABI as unknown as AbiItem[])
+        const contract = this.Contract.getMulticallContract(address, { chainId })
         if (!contract) throw new Error('Failed to create multicall contract.')
 
         return contract
@@ -114,8 +109,8 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
         const contract = this.createContract(chainId)
         if (!contract) return EMPTY_LIST
 
-        const web3 = this.createWeb3(chainId)
-        const blockNumber_ = blockNumber ?? (await web3.eth.getBlockNumber()) ?? 0
+        const web3 = this.Request.getWeb3({ chainId })
+        const blockNumber_ = blockNumber ?? (await web3.eth.getBlockNumber())
 
         // filter out cached calls
         const unresolvedCalls = calls.filter((call_) => !this.getCallResult(call_, chainId, blockNumber_))

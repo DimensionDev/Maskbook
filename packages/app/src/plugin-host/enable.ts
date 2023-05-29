@@ -96,7 +96,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             getNextIDPlatform: () => undefined,
             getPersonaAvatar: reject,
             getSocialIdentity: reject,
-            getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal }),
+            getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
             getWallets: reject,
             hasPaymentPassword: reject,
             lastRecognizedProfile: createConstantSubscription(undefined),

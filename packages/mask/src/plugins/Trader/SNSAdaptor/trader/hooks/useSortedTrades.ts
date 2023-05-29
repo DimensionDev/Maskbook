@@ -5,7 +5,7 @@ import {
     useFungibleTokenPrice,
     useNativeTokenPrice,
     useNetworkContext,
-    useWeb3State,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { MINIMUM_AMOUNT } from '../../../constants/index.js'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
@@ -19,7 +19,7 @@ export function useSortedTrades(
     gasPrice?: string,
 ) {
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { value: nativeToken } = useFungibleToken(pluginID, '', undefined, { chainId })
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
@@ -47,7 +47,7 @@ export function useSortedTrades(
 
                         const finalPrice = leftShift(trade.value.value.outputAmount, outputToken.decimals)
                             .times(
-                                !Others?.isNativeTokenSchemaType(outputToken.schema)
+                                !Others.isNativeTokenSchemaType(outputToken.schema)
                                     ? outputTokenPrice
                                     : nativeTokenPrice,
                             )
@@ -98,6 +98,6 @@ export function useSortedTrades(
         outputTokenPrice,
         nativeTokenPrice,
         nativeToken,
-        Others?.isNativeTokenSchemaType,
+        Others.isNativeTokenSchemaType,
     ])
 }

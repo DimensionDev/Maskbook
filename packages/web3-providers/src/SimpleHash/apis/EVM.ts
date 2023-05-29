@@ -1,4 +1,6 @@
 import urlcat from 'urlcat'
+import { compact } from 'lodash-es'
+import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
     createPageable,
@@ -8,7 +10,13 @@ import {
     createNextIndicator,
     NetworkPluginID,
 } from '@masknet/shared-base'
-import { type HubOptions, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import {
+    SourceType,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    TokenType,
+    leftShift,
+} from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
@@ -19,10 +27,33 @@ import {
     getAllChainNames,
 } from '../helpers.js'
 import { type Asset, type Collection } from '../type.js'
-import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import { LooksRareAPI } from '../../LooksRare/index.js'
+import { OpenSeaAPI } from '../../OpenSea/index.js'
+import { getContractSymbol } from '../../helpers/getContractSymbol.js'
+import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
+import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    private looksrare = new LooksRareAPI()
+    private opensea = new OpenSeaAPI()
+
+    private async getCollectionByContractAddress(
+        address: string,
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
+    ): Promise<Collection | undefined> {
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
+        if (!chain || !address || !isValidChainId(chainId)) return
+        const path = urlcat('/api/v0/nfts/collections/:chain/:address', {
+            chain,
+            address,
+        })
+
+        const { collections } = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+
+        return collections[0]
+    }
+
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
@@ -34,7 +65,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return createNonFungibleAsset(response)
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -58,7 +89,10 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         )
     }
 
-    async getAssetsByCollection(address: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssetsByCollection(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -84,7 +118,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator, allChains }: HubOptions<ChainId> = {},
+        { chainId, indicator, allChains }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const pluginId = NetworkPluginID.PLUGIN_EVM
         const chain = allChains || !chainId ? getAllChainNames(pluginId) : resolveChain(pluginId, chainId)
@@ -110,7 +144,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
     async getAssetsByCollectionAndOwner(
         collectionId: string,
         owner: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !isValidChainId(chainId) || !collectionId || !owner)
@@ -145,5 +179,122 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         if (!response.collections.length) return []
         const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)
+    }
+
+    async getCoinTrending(
+        chainId: ChainId,
+        address: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
+        const collection = await this.getCollectionByContractAddress(address, { chainId })
+        if (!collection) {
+            throw new Error(`SimpleHash: Can not find collection by address ${address}, chainId ${chainId}`)
+        }
+        const [symbol, openseaStats, looksrareStats] = await Promise.all([
+            getContractSymbol(chainId, address),
+            this.opensea.getStats(address).catch(() => null),
+            this.looksrare.getStats(address).catch(() => null),
+        ])
+
+        const tickers: TrendingAPI.Ticker[] = compact([
+            openseaStats
+                ? {
+                      logo_url: MaskIconURLs.open_sea_url().toString(),
+                      // TODO
+                      trade_url: `https://opensea.io/assets/ethereum/${address}`,
+                      market_name: NonFungibleMarketplace.OpenSea,
+                      volume_24h: openseaStats.volume24h,
+                      floor_price: openseaStats.floorPrice,
+                      price_symbol: collection.floor_prices[0].payment_token.symbol,
+                      sales_24: openseaStats.count24h,
+                  }
+                : null,
+            looksrareStats
+                ? {
+                      logo_url: MaskIconURLs.looks_rare_url().toString(),
+                      trade_url: `https://looksrare.org/collections/${address}`,
+                      market_name: NonFungibleMarketplace.LooksRare,
+                      volume_24h: looksrareStats.volume24h,
+                      floor_price: looksrareStats.floorPrice,
+                      price_symbol: collection.floor_prices[0].payment_token.symbol,
+                      sales_24: looksrareStats.count24h,
+                  }
+                : null,
+        ])
+
+        return {
+            lastUpdated: new Date().toJSON(),
+            dataProvider: SourceType.SimpleHash,
+            contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
+            currency,
+            coin: {
+                id: address,
+                name: collection.name,
+                symbol,
+                address,
+                contract_address: address,
+                type: TokenType.NonFungible,
+                description: collection.description,
+                image_url: collection.image_url,
+                home_urls: [collection.external_url],
+                community_urls: [
+                    {
+                        type: 'twitter',
+                        link: collection.twitter_username ? `https://twitter.com/${collection.twitter_username}` : null,
+                    },
+                    {
+                        type: 'facebook',
+                        // TODO format of facebook url is unknown
+                        link: null,
+                    },
+                    {
+                        type: 'discord',
+                        link: collection.discord_url,
+                    },
+                    {
+                        type: 'instagram',
+                        link: collection.instagram_username
+                            ? `https://www.instagram.com/${collection.instagram_username}`
+                            : null,
+                    },
+                    {
+                        type: 'medium',
+                        link: collection.medium_username ? `https://medium.com/@${collection.medium_username}` : null,
+                    },
+                    {
+                        type: 'reddit',
+                        link: null,
+                    },
+                    {
+                        type: 'telegram',
+                        link: collection.telegram_url,
+                    },
+                    {
+                        type: 'youtube',
+                        link: null,
+                    },
+                    {
+                        type: 'github',
+                        link: null,
+                    },
+                ].filter((x) => x.link) as TrendingAPI.CommunityUrls,
+            },
+            market: {
+                total_supply: collection.total_quantity,
+                current_price: leftShift(
+                    collection.floor_prices[0].value,
+                    collection.floor_prices[0].payment_token.decimals,
+                ).toString(),
+                floor_price: leftShift(
+                    collection.floor_prices[0].value,
+                    collection.floor_prices[0].payment_token.decimals,
+                ).toString(),
+                owners_count: collection.distinct_owner_count,
+                volume_24h: tickers?.[0]?.volume_24h,
+                total_24h: tickers?.[0]?.sales_24,
+                price_symbol: collection.floor_prices[0].payment_token.symbol || 'ETH',
+            },
+            tickers,
+        }
     }
 }

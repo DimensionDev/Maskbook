@@ -1,5 +1,6 @@
 export * from '@masknet/base'
 
+export * from './constant.js'
 export * from './Account/index.js'
 export * from './MIME/index.js'
 export * from './Messages/Mask.js'

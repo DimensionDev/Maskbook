@@ -3,12 +3,17 @@ import { attachListener } from './utils.js'
 function init() {
     const controller = new AbortController()
 
-    // this code runs in a invisible page, therefore it's requestAnimationFrame is not being called.
-    // some UI libraries (like react-window) require that to work.
-    globalThis.requestAnimationFrame = function (callback) {
-        return requestIdleCallback((x) => callback(x.timeRemaining()))
+    // See https://github.com/facebook/react/pull/26193
+    const FRAME_TIME = 16
+    let lastTime = 0
+    globalThis.requestAnimationFrame = function (callback: FrameRequestCallback) {
+        const now = window.performance.now()
+        const nextTime = Math.max(lastTime + FRAME_TIME, now)
+        return setTimeout(function () {
+            callback((lastTime = nextTime))
+        }, nextTime - now)
     }
-    globalThis.cancelAnimationFrame = cancelIdleCallback
+    window.cancelAnimationFrame = clearTimeout
 
     import(/* webpackMode: 'eager' */ './react.js').then((m) => m.startReactDevTools(controller.signal))
 

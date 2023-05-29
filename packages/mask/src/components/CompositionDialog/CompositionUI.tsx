@@ -16,7 +16,7 @@ import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-b
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { LoadingButton } from '@mui/lab'
-import { Button, Checkbox, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
@@ -91,7 +91,7 @@ export interface CompositionProps {
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
     isOpenFromApplicationBoard: boolean
-    e2eEncryptionDisabled: E2EUnavailableReason | undefined
+    e2eEncryptionDisabled(encode: EncryptionMethodType): E2EUnavailableReason | undefined
     recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
@@ -101,15 +101,13 @@ export interface CompositionProps {
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
-    version: -38 | -37
-    setVersion(version: -38 | -37): void
     initialMetas?: Record<string, unknown>
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
     content: SerializableTypedMessages
     encode: 'text' | 'image'
-    version: -38 | -37
+    version: -37 | -38
 }
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
@@ -137,8 +135,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         startTransition(() => __updatePostSize(size))
     }, [])
 
-    const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
+    const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props, encodingKind)
     const reset = useCallback(() => {
         startTransition(() => {
             Editor.current?.reset()
@@ -195,10 +193,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     encryptionKind === EncryptionTargetType.Public
                         ? { type: 'public' }
                         : { type: 'E2E', target: recipients.map((x) => x.identifier) },
-                version: props.version,
+                version: encodingKind === EncryptionMethodType.Text ? -37 : -38,
             })
             .finally(reset)
-    }, [encodingKind, encryptionKind, recipients, props.onSubmit, props.version])
+    }, [encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
@@ -228,7 +226,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionTargetSelector
                         target={encryptionKind}
-                        e2eDisabled={props.e2eEncryptionDisabled}
+                        e2eDisabled={props.e2eEncryptionDisabled(encodingKind)}
                         selectedRecipientLength={recipients.length}
                         onChange={(target) => {
                             setEncryptionKind(target)
@@ -253,19 +251,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         onChange={setEncoding}
                     />
                 </div>
-                {process.env.NODE_ENV === 'development' || process.env.channel !== 'stable' ? (
-                    <div className={cx(classes.flex, classes.between)}>
-                        <Typography component="label" htmlFor={id}>
-                            Next generation payload
-                        </Typography>
-                        <div style={{ flex: 1 }} />
-                        <Checkbox
-                            id={id}
-                            checked={props.version === -37}
-                            onChange={() => props.setVersion(props.version === -38 ? -37 : -38)}
-                        />
-                    </div>
-                ) : null}
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
@@ -298,7 +283,7 @@ export enum E2EUnavailableReason {
     NoLocalKey = 2,
     NoConnection = 3,
 }
-function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>) {
+function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>, encoding: EncryptionMethodType) {
     const [internal_encryptionKind, setEncryptionKind] = useState<EncryptionTargetType>(EncryptionTargetType.Public)
     // TODO: Change to ProfileIdentifier
     const [recipients, setRecipients] = useState<ProfileInformation[]>([])
@@ -306,7 +291,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabl
     let encryptionKind = internal_encryptionKind
     if (encryptionKind === EncryptionTargetType.E2E && recipients.length === 0)
         encryptionKind = EncryptionTargetType.Self
-    if (props.e2eEncryptionDisabled) encryptionKind = EncryptionTargetType.Public
+    if (props.e2eEncryptionDisabled(encoding)) encryptionKind = EncryptionTargetType.Public
 
     return {
         recipients,

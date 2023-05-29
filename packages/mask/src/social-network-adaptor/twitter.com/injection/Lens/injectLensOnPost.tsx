@@ -77,9 +77,5 @@ function PostLensSlot({ userId }: Props) {
 
     if (!component) return null
 
-    return (
-        <span data-testid="post" className={cx(classes.slot, disabled ? classes.hide : null)}>
-            {component}
-        </span>
-    )
+    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
 }

@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect, useMemo, unstable_useCacheRefresh } from 'react'
-import { toChecksumAddress } from 'web3-utils'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWeb3Connection, useNetworkContext } from '@masknet/web3-hooks-base'
+import { checksumAddress } from '@masknet/web3-shared-evm'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
+import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../utils/index.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useProposal } from './hooks/useProposal.js'
@@ -51,9 +52,8 @@ export function VotingCard() {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const proposal = useProposal(identifier.id)
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: power } = usePower(identifier)
     const choices = proposal.choices
     const [choices_, setChoices_] = useState<number[]>([])
@@ -76,7 +76,7 @@ export function VotingCard() {
         async () => {
             setLoading(true)
             const message = {
-                from: toChecksumAddress(account),
+                from: checksumAddress(account),
                 space: identifier.space,
                 timestamp: Math.floor(Date.now() / 1000),
                 proposal: identifier.id,
@@ -90,7 +90,7 @@ export function VotingCard() {
                 domain,
                 types,
             }
-            const sig = await connection?.signMessage(
+            const sig = await Web3.signMessage(
                 'typedData',
                 JSON.stringify({
                     domain,
@@ -104,12 +104,12 @@ export function VotingCard() {
                     primaryType: 'Vote',
                     message,
                 }),
-                { account: toChecksumAddress(account) },
+                { account: checksumAddress(account) },
             )
-            const body = JSON.stringify({ data, sig, address: toChecksumAddress(account) })
+            const body = JSON.stringify({ data, sig, address: checksumAddress(account) })
             return PluginSnapshotRPC.vote(body)
         },
-        [choices_, identifier, account, proposal, connection, chainId],
+        [choices_, identifier, account, proposal],
         () => {
             setLoading(false)
             setOpen(false)

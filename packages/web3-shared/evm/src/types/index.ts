@@ -6,15 +6,7 @@ import type {
 } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
-import type {
-    Web3UI as Web3UIShared,
-    Web3State as Web3StateShared,
-    Connection,
-    ConnectionOptions,
-    Hub,
-    HubOptions,
-} from '@masknet/web3-shared-base'
-import type { PageIndicator } from '@masknet/shared-base'
+import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@masknet/web3-shared-base'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -316,45 +308,12 @@ export type Web3UI = Web3UIShared<ChainId, ProviderType, NetworkType>
 
 export type Web3State = Web3StateShared<
     ChainId,
-    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,
-    Signature,
-    GasOption,
-    Block,
-    UserOperation,
     Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    TransactionParameter,
-    Web3,
-    Web3Provider
+    TransactionParameter
 >
-
-export type Web3Connection = Connection<
-    ChainId,
-    AddressType,
-    SchemaType,
-    ProviderType,
-    Signature,
-    Block,
-    UserOperation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    Web3,
-    Web3Provider,
-    Web3ConnectionOptions
->
-
-export type Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>
-
-export type Web3Hub = Hub<ChainId, SchemaType, GasOption>
-
-export type Web3HubOptions<Indicator = PageIndicator> = HubOptions<ChainId, Indicator>
 
 export type Web3Definition = {
     ChainId: ChainId
@@ -376,8 +335,4 @@ export type Web3Definition = {
     Web3UI: Web3UI
     Web3Provider: Web3Provider
     Web3State: Web3State
-    Web3Connection: Web3Connection
-    Web3ConnectionOptions: Web3ConnectionOptions
-    Web3Hub: Web3Hub
-    Web3HubOptions: Web3HubOptions
 }

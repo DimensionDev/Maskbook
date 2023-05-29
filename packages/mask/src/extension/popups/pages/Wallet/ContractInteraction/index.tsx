@@ -1,9 +1,11 @@
 import { toHex } from 'web3-utils'
+import { isString } from 'lodash-es'
+import { useContainer } from 'unstated-next'
+import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import {
     DepositPaymaster,
     formatGweiToWei,
@@ -13,12 +15,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@masknet/kit'
-import { BigNumber } from 'bignumber.js'
-import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import {
     useChainContext,
     useChainIdSupport,
@@ -41,14 +40,16 @@ import {
     TransactionDescriptorType,
     ZERO,
 } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
+import { Others, Web3 } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
-import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
-import { Icons } from '@masknet/icons'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
-import { isString } from 'lodash-es'
+import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -158,7 +159,7 @@ const ContractInteraction = memo(() => {
     const navigate = useNavigate()
 
     const { smartPayChainId } = useContainer(PopupContext)
-    const { Others, TransactionFormatter, Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading, error } = useUnconfirmedRequest()
@@ -280,9 +281,8 @@ const ContractInteraction = memo(() => {
             })
 
             if (!signableConfig) return
-            const connection = Connection?.getConnection?.()
 
-            const gas = await connection?.estimateTransaction?.(signableConfig, undefined, {
+            const gas = await Web3.estimateTransaction?.(signableConfig, undefined, {
                 paymentToken: address,
             })
 
@@ -375,7 +375,7 @@ const ContractInteraction = memo(() => {
         isSupport1559,
         gasPriceEIP1559,
         gasPricePriorEIP1559,
-        Others?.isNativeTokenAddress,
+        Others.isNativeTokenAddress,
         request?.paymentToken,
         currencyRatio,
     ])
@@ -403,8 +403,8 @@ const ContractInteraction = memo(() => {
             <main className={classes.container}>
                 <div className={classes.info} style={{ marginBottom: 20 }}>
                     <Typography className={classes.title}>{typeName}</Typography>
-                    {domain && Others?.formatDomainName ? (
-                        <Typography className={classes.domain}>{Others?.formatDomainName(domain)}</Typography>
+                    {domain ? (
+                        <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                     ) : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
@@ -454,13 +454,13 @@ const ContractInteraction = memo(() => {
                             <FormattedBalance
                                 value={gasFee}
                                 decimals={
-                                    request?.paymentToken && !Others?.isNativeTokenAddress(request?.paymentToken)
+                                    request?.paymentToken && !Others.isNativeTokenAddress(request?.paymentToken)
                                         ? maskToken?.decimals
                                         : nativeToken?.decimals
                                 }
                                 significant={4}
                                 symbol={
-                                    request?.paymentToken && !Others?.isNativeTokenAddress(request?.paymentToken)
+                                    request?.paymentToken && !Others.isNativeTokenAddress(request?.paymentToken)
                                         ? maskToken?.symbol
                                         : nativeToken?.symbol
                                 }

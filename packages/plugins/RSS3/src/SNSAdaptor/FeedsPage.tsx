@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { range } from 'lodash-es'
 import { ElementAnchor, EmptyStatus, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { ScopedDomainsContainer, useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, Skeleton } from '@mui/material'
 import { useI18N } from '../locales/index.js'
@@ -28,7 +28,7 @@ export interface FeedPageProps {
 export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const { feeds, loading: loadingFeeds, error, next } = useFeeds(address, tag)
 
@@ -40,16 +40,12 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const name = address ? getDomain(address) || reversedName : reversedName
     const feedOwner = useMemo((): FeedOwnerOptions | undefined => {
         if (!address) return
-        const showDomain = !!name && !!Others?.formatDomainName
-        const ownerDisplay = showDomain
-            ? Others?.formatDomainName(name)
-            : Others?.formatAddress?.(address, 4) ?? address
         return {
             address,
             name,
-            ownerDisplay,
+            ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(address, 4) ?? address,
         }
-    }, [address, name, Others?.formatDomainName])
+    }, [address, name, Others.formatDomainName])
 
     if (error && !feeds.length)
         return (

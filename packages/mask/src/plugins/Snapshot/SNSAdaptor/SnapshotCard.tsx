@@ -1,5 +1,9 @@
-import { Card, CardContent, CardHeader, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader, Skeleton, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { memo, useEffect, useRef, useState, useTransition } from 'react'
+import { range } from 'lodash-es'
+import { useIntersection } from 'react-use'
+
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
@@ -43,16 +47,27 @@ const useStyles = makeStyles()((theme) => {
 export interface SnapshotCardProps {
     title: (JSX.Element & React.ReactNode) | string
     children?: React.ReactNode
+    lazy?: boolean
 }
 
-export function SnapshotCard(props: SnapshotCardProps) {
-    const { title, children } = props
-
+export const SnapshotCard = memo(function SnapshotCard(props: SnapshotCardProps) {
+    const { title, children, lazy } = props
     const { classes } = useStyles()
+    const ref = useRef(null)
+    const [seen, setSeen] = useState(!lazy)
+    const [isPending, setTransition] = useTransition()
+    const ob = useIntersection(ref, {})
+    useEffect(() => {
+        if (ob?.isIntersecting) {
+            setTransition(() => setSeen(true))
+        }
+    }, [ob?.isIntersecting])
+
     return (
-        <Card className={classes.root} variant="outlined">
+        <Card className={classes.root} variant="outlined" ref={ref}>
             <CardHeader className={classes.header} title={<Typography className={classes.title}>{title}</Typography>} />
-            <CardContent className={classes.content}>{children}</CardContent>
+            {isPending ? range(6).map((i) => <Skeleton key={i} animation="wave" height={30} sx={{ m: 1 }} />) : null}
+            {seen ? <CardContent className={classes.content}>{children}</CardContent> : null}
         </Card>
     )
-}
+})

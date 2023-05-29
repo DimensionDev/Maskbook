@@ -2,7 +2,7 @@ import { type FC, useCallback } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useWeb3Others, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
@@ -123,7 +123,7 @@ export const NFTList: FC<Props> = ({
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     return (
         <List className={cx(classes.list, className)}>
@@ -131,7 +131,7 @@ export const NFTList: FC<Props> = ({
                 const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
                 const disabled = !isRadio && reachedLimit && !selected
                 const name = token.collection?.name || token.contract?.name
-                const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
+                const title = `${name} ${Others.formatTokenId(token.tokenId, 2)}`
                 return (
                     <Tooltip
                         classes={{ tooltip: classes.tooltip }}

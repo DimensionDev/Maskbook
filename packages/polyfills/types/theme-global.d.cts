@@ -18,6 +18,7 @@ declare module '@mui/material/styles/createPalette.d' {
             line: string
             secondaryLine: string
             tips: string
+            whiteBlue: string
             primary: string
             success: string
             warn: string

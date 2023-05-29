@@ -36,9 +36,9 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     height: defaultTabSize,
     width: defaultTabSize,
     minWidth: `${defaultTabSize}px !important`,
-    background: theme.palette.maskColor.input,
+    background: theme.palette.background.input,
     '&:hover': {
-        background: theme.palette.maskColor.input,
+        background: theme.palette.background.input,
     },
 }))
 

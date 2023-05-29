@@ -6,7 +6,7 @@ import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType, isZero, plus, formatCurrency } from '@masknet/web3-shared-base'
 import { type ChainId, formatGweiToWei, formatWeiToGwei, type Transaction } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { GasOptionSelector } from './GasOptionSelector.js'
 import { SettingsContext } from './Context.js'
 import { Section } from './Section.js'
@@ -53,13 +53,12 @@ export function GasSection(props: GasSectionProps) {
         gasOptionType,
         GAS_OPTION_NAMES,
     } = SettingsContext.useContainer()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState('0')
 
     // EVM only
     if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
 
-    const isEIP1559 = Others?.chainResolver.isSupport(chainId as ChainId, 'EIP1559')
+    const isEIP1559 = Others.chainResolver.isSupport(chainId as ChainId, 'EIP1559')
     const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas
     const suggestedMaxPriorityFeePerGas =
         gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas
@@ -124,7 +123,7 @@ export function GasSection(props: GasSectionProps) {
                         transactionOptions={transactionOptions as Partial<Transaction>}
                         gasOptions={gasOptions}
                         onChange={(transactionOptions) => {
-                            setTransactionOptions(transactionOptions ?? null)
+                            setTransactionOptions(transactionOptions)
                         }}
                         maxPriorityFeePerGasByUser={maxPriorityFeePerGasByUser}
                         setMaxPriorityFeePerGasByUser={setMaxPriorityFeePerGasByUser}

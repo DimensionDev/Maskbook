@@ -1,11 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, RetryHint } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
-import { Button, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { ActivityCard } from './ActivityCard.js'
 
@@ -58,9 +58,11 @@ export function ActivitiesList(props: ActivitiesListProps) {
             ))}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
                 {!events.ended && (
-                    <Button sx={{ mb: 2 }} onClick={() => events.next()} variant="roundedContained">
-                        {t.load_more()}
-                    </Button>
+                    <Stack py={1}>
+                        <ElementAnchor callback={() => events.next()}>
+                            {events.loading ? <LoadingBase /> : null}
+                        </ElementAnchor>
+                    </Stack>
                 )}
             </Stack>
         </div>

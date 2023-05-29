@@ -1,13 +1,13 @@
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
-import { type Transaction, attemptUntil, type HubOptions, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
-import type { RedPacketBaseAPI } from '../entry-types.js'
+import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
@@ -48,7 +48,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator }: HubOptions<ChainId> = {},
+        { chainId, indicator }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const result = await fetchFromDSearch<{
             [owner: string]: Array<NonFungibleCollection<ChainId, SchemaType>>

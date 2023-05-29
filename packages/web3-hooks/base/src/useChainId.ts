@@ -11,5 +11,6 @@ export function useChainId<S extends 'all' | void = void, T extends NetworkPlugi
     const { Provider } = useWeb3State<S, T>(pluginID)
     const defaultChainId = useDefaultChainId(pluginID)
     const actualChainId = useSubscription(Provider?.chainId ?? UNDEFINED)
+
     return (expectedChainId ?? actualChainId ?? defaultChainId) as Web3Helper.ChainIdScope<S, T>
 }

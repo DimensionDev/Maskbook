@@ -2,6 +2,7 @@ import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { Trans } from 'react-i18next'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
@@ -14,20 +15,19 @@ import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/we
 import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import {
     useChainContext,
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
     useChainIdSupport,
-    useWeb3Connection,
 } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { ReplaceType } from '../type.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     label: {
@@ -67,7 +67,6 @@ const ReplaceTransaction = memo(() => {
     const { transaction } = useContainer(WalletContext)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: formatterTransaction } = useAsync(async () => {
         if (!TransactionFormatter?.formatTransaction || !transaction) return
         return TransactionFormatter.formatTransaction(chainId, transaction)
@@ -165,9 +164,9 @@ const ReplaceTransaction = memo(() => {
                 if (!transaction || !formatterTransaction) return
 
                 if (type === ReplaceType.CANCEL) {
-                    await connection?.cancelTransaction(transaction?.id, config)
+                    await Web3.cancelTransaction(transaction?.id, config)
                 } else {
-                    await connection?.replaceTransaction(transaction?.id, config)
+                    await Web3.replaceTransaction(transaction?.id, config)
                 }
 
                 navigate(-1)

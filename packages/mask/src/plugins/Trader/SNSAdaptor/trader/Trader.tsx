@@ -19,7 +19,7 @@ import {
     useMaskTokenAddress,
     useNetworkContext,
     useWallet,
-    useWeb3State,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
@@ -73,8 +73,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const chainIdValid = useChainIdValid(pluginID, chainId)
-    const { Others } = useWeb3State()
     const showConfirm = useShowConfirm()
+    const Others = useWeb3Others()
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -115,9 +115,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: Others?.createNativeToken(chainId),
+            token: Others.createNativeToken(chainId),
         })
-    }, [chainId, chainIdValid, Others?.createNativeToken])
+    }, [chainId, chainIdValid, Others.createNativeToken])
     // #endregion
 
     const updateTradingCoin = useCallback(
@@ -330,9 +330,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (!Others?.isValidChainId(chainId)) return
+        if (!Others.isValidChainId(chainId)) return
         setGasConfig(undefined)
-    }, [chainId])
+    }, [chainId, Others])
     // #endregion
 
     // #region if target chain id be changed, reset output token
