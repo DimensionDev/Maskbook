@@ -1,6 +1,5 @@
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, FormControl, InputBase, Typography } from '@mui/material'
 import { useChainContext, useNetworkDescriptors, useWeb3State } from '@masknet/web3-hooks-base'
@@ -8,7 +7,7 @@ import { ImageIcon, InjectedDialog, type InjectedDialogProps } from '@masknet/sh
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Contract, Web3 } from '@masknet/web3-providers'
 import { isSameAddress, type NonFungibleToken } from '@masknet/web3-shared-base'
-import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, SchemaType, isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,7 +72,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     }, [tokenId, contractAddress])
 
     const [state, handleAdd] = useAsyncFn(async () => {
-        if (!EthereumAddress.isValid(contractAddress)) {
+        if (!isValidAddress(contractAddress)) {
             setMessage(t.tip_add_collectibles_error())
             return
         }

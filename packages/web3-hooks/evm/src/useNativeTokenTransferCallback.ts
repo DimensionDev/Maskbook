@@ -1,11 +1,10 @@
 import { useAsyncFn } from 'react-use'
-import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { Web3 } from '@masknet/web3-providers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { type GasConfig } from '@masknet/web3-shared-evm'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { isValidAddress, type GasConfig } from '@masknet/web3-shared-evm'
 
 export function useNativeTransferCallback() {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -15,7 +14,7 @@ export function useNativeTransferCallback() {
             if (!account || !recipient || !amount || isZero(amount)) return
 
             // error: invalid recipient address
-            if (!EthereumAddress.isValid(recipient)) return
+            if (!isValidAddress(recipient)) return
 
             // error: insufficient balance
             const balance = await Web3.getBalance(account)

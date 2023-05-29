@@ -8,7 +8,6 @@ import { toHex } from 'web3-utils'
 import { useContainer } from 'unstated-next'
 import { mapValues } from 'lodash-es'
 import { z as zod } from 'zod'
-import { EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
@@ -20,6 +19,8 @@ import {
     formatGweiToWei,
     formatWeiToGwei,
     isNativeTokenAddress,
+    isValidAddress,
+    isValidDomain,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
@@ -234,7 +235,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_address_absence'))
                     .refine(
-                        (address) => EthereumAddress.isValid(address) || Others.isValidDomain(address),
+                        (address) => isValidAddress(address) || isValidDomain(address),
                         t('wallet_transfer_error_invalid_address'),
                     ),
                 amount: zod
@@ -350,7 +351,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         setAddressTip(null)
 
         if (!address && !registeredAddress) return
-        if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
+        if (!isValidAddress(address) && !isValidAddress(registeredAddress)) return
         methods.clearErrors('address')
 
         if (isSameAddress(address, wallet?.address) || isSameAddress(registeredAddress, wallet?.address)) {
@@ -369,16 +370,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [
-        address,
-        pluginID,
-        EthereumAddress.isValid,
-        registeredAddress,
-        methods.clearErrors,
-        wallet?.address,
-        resolveDomainError,
-        Others,
-    ])
+    }, [address, pluginID, registeredAddress, methods.clearErrors, wallet?.address, resolveDomainError, Others])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address
@@ -386,7 +378,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         selectedAsset?.schema,
         selectedAsset?.address,
         rightShift(amount ?? 0, selectedAsset?.decimals).toFixed(),
-        EthereumAddress.isValid(address) ? address : registeredAddress,
+        isValidAddress(address) ? address : registeredAddress,
     )
     // #endregion
 

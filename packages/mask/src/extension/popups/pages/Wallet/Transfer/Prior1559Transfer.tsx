@@ -7,7 +7,6 @@ import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     formatGweiToWei,
@@ -15,6 +14,7 @@ import {
     type ChainId,
     SchemaType,
     formatWeiToGwei,
+    isValidAddress,
 } from '@masknet/web3-shared-evm'
 import {
     isZero,
@@ -177,7 +177,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             address: zod
                 .string()
                 .min(1, t('wallet_transfer_error_address_absence'))
-                .refine(EthereumAddress.isValid, t('wallet_transfer_error_invalid_address')),
+                .refine(isValidAddress, t('wallet_transfer_error_invalid_address')),
             amount: zod
                 .string()
                 .refine((amount) => {
@@ -219,7 +219,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     useAsync(async () => {
         setAddressTip(null)
-        if (!address || !EthereumAddress.isValid(address)) return
+        if (!isValidAddress(address)) return
 
         methods.clearErrors('address')
 
@@ -265,7 +265,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         selectedAsset?.schema,
         selectedAsset?.address,
         rightShift(amount ? amount : 0, selectedAsset?.decimals).toFixed(),
-        EthereumAddress.isValid(address) ? address : '',
+        isValidAddress(address) ? address : '',
     )
     // #endregion
 
