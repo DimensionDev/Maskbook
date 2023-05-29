@@ -1,26 +1,27 @@
 import React, { memo, useCallback } from 'react'
+import { useAsyncFn } from 'react-use'
+import { delay } from '@masknet/kit'
 import { Box } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip, ActionButton, useCustomSnackbar } from '@masknet/theme'
 import {
     useNetworkContext,
     useChainContext,
     useNetworkDescriptor,
     useAllowTestnet,
-    useWeb3State,
     useChainIdValid,
     ActualChainContextProvider,
+    useWeb3Others,
+    useWeb3Connection,
 } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
-import { Icons } from '@masknet/icons'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useAsyncFn } from 'react-use'
-import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -77,7 +78,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
 
-    const { Others: actualOthers, Connection } = useWeb3State(actualPluginID)
+    const Web3 = useWeb3Connection(actualPluginID)
 
     const { showSnackbar } = useCustomSnackbar()
     const {
@@ -86,14 +87,14 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         providerType: actualProviderType,
     } = useChainContext({ account: expectedAccount })
 
-    const { Others: expectedOthers } = useWeb3State(expectedPluginID)
+    const expectedOthers = useWeb3Others(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
 
     const chainIdValid = useChainIdValid(actualPluginID)
 
-    const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
+    const expectedChainName = expectedOthers.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-    const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
+    const expectedChainAllowed = expectedOthers.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
@@ -112,10 +113,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
         try {
             if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
-            const connection = Connection?.getConnection?.()
-            if (!connection) return
-
-            await connection.switchChain?.(expectedChainId)
+            await Web3.switchChain?.(expectedChainId)
             await delay(1500)
 
             return 'complete'
@@ -130,7 +128,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
             }
             return 'failed'
         }
-    }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Connection])
+    }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Web3])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (

@@ -4,7 +4,8 @@ import { Stack } from '@mui/system'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useTransactionConfirmDialog } from '../context/TokenTransactionConfirmDialogContext.js'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
@@ -137,9 +138,6 @@ export function RedPacket(props: RedPacketProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
 
-    // context
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
@@ -166,7 +164,9 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3 ? web3?.eth.accounts.sign(account, payload.password).signature : payload.password,
+        payload.contract_version > 3
+            ? Web3.getWeb3().eth.accounts.sign(account, payload.password).signature
+            : payload.password,
         payloadChainId,
     )
 

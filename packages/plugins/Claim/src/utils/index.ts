@@ -1,10 +1,11 @@
-import { type ChainId, EtherscanURL, getITOConstants, SchemaType, type Web3Connection } from '@masknet/web3-shared-evm'
+import { type ChainId, EtherscanURL, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'
 import { BigNumber } from 'bignumber.js'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
+import { Web3 } from '@masknet/web3-providers'
 import { isSameAddress, type FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../constants.js'
 import { checkAvailability } from './checkAvailability.js'
@@ -20,15 +21,10 @@ type TxType = {
     blockNumber: string
 }
 
-export async function getClaimAllPools(
-    chainId: ChainId,
-    endBlock: number,
-    swapperAddress: string,
-    connection: Web3Connection,
-) {
+export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapperAddress: string) {
     const { ITO2_CONTRACT_ADDRESS, ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: startBlock } = getITOConstants(chainId)
 
-    if (!ITO2_CONTRACT_ADDRESS || !startBlock || !connection) return []
+    if (!ITO2_CONTRACT_ADDRESS || !startBlock) return []
     // #region
     // 1. Filter out `swap` transactions,
     // 2. Retrieve payload major data from its decoded input param.
@@ -84,13 +80,7 @@ export async function getClaimAllPools(
     const swapRawFilteredData = (
         await Promise.allSettled(
             swapRawData.map(async (value) => {
-                const availability = await checkAvailability(
-                    value.pid,
-                    swapperAddress,
-                    ITO2_CONTRACT_ADDRESS,
-                    chainId,
-                    connection,
-                )
+                const availability = await checkAvailability(value.pid, swapperAddress, ITO2_CONTRACT_ADDRESS, chainId)
                 const unlockTime = new Date(Number(availability.unlock_time) * 1000)
                 if (isEqual(unlockTime, new Date(ITO_CONTRACT_BASE_TIMESTAMP)) || availability.claimed) return null
 
@@ -110,7 +100,7 @@ export async function getClaimAllPools(
     const swappedTokenUnmergedList = (
         await Promise.allSettled(
             swapRawFilteredData.map(async (value) => {
-                const result = await connection.getTransactionReceipt(value.txHash, { chainId })
+                const result = await Web3.getTransactionReceipt(value.txHash, { chainId })
                 if (!result) return null
                 const log = result.logs.find((log) => isSameAddress(log.address, ITO2_CONTRACT_ADDRESS))
                 if (!log) return null

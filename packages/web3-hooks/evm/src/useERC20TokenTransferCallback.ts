@@ -2,34 +2,36 @@ import { useAsyncFn } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { Contract } from '@masknet/web3-providers'
 import { type GasConfig, TransactionEventType, isValidAddress } from '@masknet/web3-shared-evm'
-import { useERC20TokenContract } from './useERC20TokenContract.js'
 
 export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const erc20Contract = useERC20TokenContract(chainId, address)
 
     return useAsyncFn(
         async (amount?: string, recipient?: string, gasConfig?: GasConfig) => {
-            if (!account || !recipient || !amount || isZero(amount) || !erc20Contract) {
+            if (!account || !address || !recipient || !amount || isZero(amount)) {
                 return
             }
 
             // error: invalid recipient address
             if (!isValidAddress(recipient)) return
 
+            const contract = Contract.getERC20Contract(address, { chainId })
+            if (!contract) return
+
             // error: insufficient balance
-            const balance = await erc20Contract.methods.balanceOf(account).call()
+            const balance = await contract.methods.balanceOf(account).call()
 
             if (isGreaterThan(amount, balance)) return
 
             // send transaction and wait for hash
             return new Promise<string>(async (resolve, reject) => {
-                erc20Contract.methods
+                contract.methods
                     .transfer(recipient, amount)
                     .send({
                         from: account,
-                        gas: await erc20Contract.methods
+                        gas: await contract.methods
                             .transfer(recipient, amount)
                             .estimateGas({
                                 from: account,
@@ -47,6 +49,6 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
                     })
             })
         },
-        [account, address, amount, recipient, erc20Contract],
+        [account, address, amount, recipient],
     )
 }

@@ -8,7 +8,6 @@ import {
     EMPTY_LIST,
 } from '@masknet/shared-base'
 import {
-    type HubOptions,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
@@ -23,10 +22,10 @@ import {
     createNonFungibleCollectionFromGroup,
     createNonFungibleCollectionFromCollection,
 } from '../helpers/EVM.js'
-import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/assets/:address/:token_id', {
             address,
@@ -41,7 +40,10 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         return createNonFungibleAsset(chainId, response.data, collection)
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
+    async getAssets(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
+    ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
             from: account,
@@ -54,7 +56,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
 
     async getAssetsByCollection(
         address: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId) || !address) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/assets/:address', {
@@ -75,7 +77,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
 
     async getCollectionsByOwner(
         account: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
@@ -90,7 +92,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
 
     async getCollectionRaw(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenAPI.Collection | undefined> {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/collections/:address', {
@@ -102,7 +104,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
 
     async getCollection(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleCollection<ChainId, SchemaType> | undefined> {
         const rawCollection = await this.getCollectionRaw(address, { chainId })
         if (!rawCollection) return
@@ -111,7 +113,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         const path = urlcat('/api/v2/collections/:address', {
             address,
@@ -124,7 +126,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/transactions/:address/:tokenId', {

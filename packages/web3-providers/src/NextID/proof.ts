@@ -13,8 +13,14 @@ import {
     type NextIDPersonaBindings,
     type NextIDEnsRecord,
     createBindingProofFromProfileQuery,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import {
+    PROOF_BASE_URL_DEV,
+    PROOF_BASE_URL_PROD,
+    RELATION_SERVICE_URL_DEV,
+    RELATION_SERVICE_URL_PROD,
+} from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON } from '../entry-helpers.js'
@@ -23,6 +29,45 @@ import type { NextIDBaseAPI } from '../entry-types.js'
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
+const RELATION_SERVICE_URL =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+        ? RELATION_SERVICE_URL_PROD
+        : RELATION_SERVICE_URL_DEV
+
+const relationServiceQuery = `  domain(domainSystem: "ENS", name: $domain) {
+        source
+        system
+        name
+        fetcher
+        resolved {
+          identity
+          platform
+          displayName
+        }
+        owner {
+          identity
+          platform
+          displayName
+          neighborWithTraversal(depth: 5) {
+            ... on ProofRecord {
+              __typename
+              source
+              from {
+                uuid
+                platform
+                identity
+                displayName
+              }
+              to {
+                uuid
+                platform
+                identity
+                displayName
+              }
+            }
+          }
+        }
+    }`
 interface CreatePayloadBody {
     action: string
     platform: string
@@ -46,15 +91,6 @@ type NeighborList = Array<{
     to: NextIDIdentity
     from: NextIDIdentity
 }>
-
-/**
- * Lens account queried from next id
- */
-export interface LensAccount {
-    handle: string
-    displayName: string
-    address: string
-}
 
 const getPersonaQueryURL = (platform: string, identity: string) =>
     urlcat(BASE_URL, '/v1/proof', {
@@ -197,13 +233,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByAddress(address: string) {
+    async queryProfilesByDomain(domain: string) {
         const { data } = await fetchJSON<{
             data: {
-                identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborList
-                }
+                domain: {
+                    owner: {
+                        neighborWithTraversal: NeighborList
+                    }
+                } | null
             }
         }>(
             RELATION_SERVICE_URL,
@@ -212,33 +249,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { platform: 'ethereum', identity: address.toLowerCase() },
+                    variables: { domain: domain.toLowerCase() },
                     query: `
-                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                        identity(platform: $platform, identity: $identity) {
-                            nft(category: ["ENS"]) {
-                                uuid
-                                category
-                                chain
-                                address
-                                id
-                            }
-                            neighborWithTraversal(depth: 5) {
-                                source
-                                to {
-                                    uuid
-                                    platform
-                                    identity
-                                    displayName
-                                }
-                                from {
-                                    uuid
-                                    platform
-                                    identity
-                                    displayName
-                                }
-                            }
-                        }
+                    query GET_PROFILES_QUERY($domain: String) {
+                      ${relationServiceQuery}
                     }
                 `,
                 }),
@@ -246,7 +260,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             { enableSquash: true },
         )
 
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        if (!data.domain) return EMPTY_LIST
+        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, [])
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
@@ -256,10 +271,11 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryProfilesByTwitterId(twitterId: string) {
         const { data } = await fetchJSON<{
             data: {
-                identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborList
-                }
+                domain: {
+                    owner: {
+                        neighborWithTraversal: NeighborList
+                    }
+                } | null
             }
         }>(
             RELATION_SERVICE_URL,
@@ -268,33 +284,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                    variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                    variables: { identity: twitterId.toLowerCase() },
                     query: `
-                        query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
-                            identity(platform: $platform, identity: $identity) {
-                                nft(category: ["ENS"]) {
-                                    uuid
-                                    category
-                                    chain
-                                    address
-                                    id
-                                }
-                                neighborWithTraversal(depth: 5) {
-                                    source
-                                    to {
-                                        uuid
-                                        platform
-                                        identity
-                                        displayName
-                                    }
-                                    from {
-                                        uuid
-                                        platform
-                                        identity
-                                        displayName
-                                    }
-                                }
-                            }
+                        query GET_PROFILES_BY_TWITTER_ID($identity: String) {
+                          ${relationServiceQuery}
                         }
                 `,
                 }),
@@ -302,20 +295,22 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             { enableSquash: true },
         )
 
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        if (!data.domain) return EMPTY_LIST
+        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, [])
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
     }
 
-    async queryAllLens(twitterId: string): Promise<LensAccount[]> {
+    async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchJSON<{
             data: {
-                identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborList
+                domain: {
+                    owner: {
+                        neighborWithTraversal: NeighborList
+                    }
                 } | null
             }
         }>(
@@ -325,33 +320,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_LENS_PROFILES',
-                    variables: { platform: 'twitter', identity: lowerCaseId },
+                    variables: { identity: lowerCaseId },
                     query: `
-                        query GET_LENS_PROFILES($platform: String, $identity: String) {
-                            identity(platform: $platform, identity: $identity) {
-                                nft(category: ["ENS"]) {
-                                    uuid
-                                    category
-                                    chain
-                                    address
-                                    id
-                                }
-                                neighborWithTraversal(depth: 5) {
-                                    source
-                                    to {
-                                        uuid
-                                        platform
-                                        identity
-                                        displayName
-                                    }
-                                    from {
-                                        uuid
-                                        platform
-                                        identity
-                                        displayName
-                                    }
-                                }
-                            }
+                        query GET_LENS_PROFILES($identity: String) {
+                            ${relationServiceQuery}
                         }
                 `,
                 }),
@@ -360,10 +332,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
 
         const connectionsTo =
-            data.identity?.neighborWithTraversal.filter((x) => x.to.platform === NextIDPlatform.LENS) || []
+            data.domain?.owner.neighborWithTraversal.filter((x) => x.to.platform === NextIDPlatform.LENS) || []
 
         const connectionsFrom =
-            data.identity?.neighborWithTraversal.filter((x) => x.from.platform === NextIDPlatform.LENS) || []
+            data.domain?.owner.neighborWithTraversal.filter((x) => x.from.platform === NextIDPlatform.LENS) || []
 
         const id = lowerCaseId as keyof typeof PRESET_LENS
         if (connectionsTo.length === 0 && connectionsFrom.length === 0 && PRESET_LENS[id]) {

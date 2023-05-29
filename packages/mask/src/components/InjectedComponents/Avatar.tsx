@@ -10,14 +10,14 @@ const useStyles = makeStyles()(() => ({
     root: {},
 }))
 
-interface AvatarProps {
+interface AvatarProps extends withClasses<'root'> {
     userId: string
     sourceType?: Plugin.SNSAdaptor.AvatarRealmSourceType
 }
 
 export function Avatar(props: AvatarProps) {
     const { userId, sourceType } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles(undefined, { props })
 
     const { value: identity } = useSocialIdentityByUserId(userId)
     const { value: socialAccounts = EMPTY_LIST, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)

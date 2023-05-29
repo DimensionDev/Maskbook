@@ -1,7 +1,11 @@
 import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { Trans } from 'react-i18next'
+import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
+import { toHex } from 'web3-utils'
+import { useContainer } from 'unstated-next'
 import { mapValues } from 'lodash-es'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
@@ -34,36 +38,31 @@ import {
     rightShift,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { LoadingButton } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ExpandMore } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { toHex } from 'web3-utils'
 import {
     useChainContext,
     useFungibleToken,
     useLookupAddress,
     useNativeTokenPrice,
     useWallet,
-    useWeb3State,
-    useWeb3Connection,
     useGasOptions,
     useNetworkContext,
     useMaskTokenAddress,
 } from '@masknet/web3-hooks-base'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import { Others, Web3 } from '@masknet/web3-providers'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import Services from '../../../../service.js'
-import { Trans } from 'react-i18next'
-import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
@@ -199,8 +198,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const navigate = useNavigate()
@@ -237,7 +234,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_address_absence'))
                     .refine(
-                        (address) => EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
+                        (address) => EthereumAddress.isValid(address) || Others.isValidDomain(address),
                         t('wallet_transfer_error_invalid_address'),
                     ),
                 amount: zod
@@ -298,7 +295,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Others])
+    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees])
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -341,7 +338,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
 
         // The input is ens domain but the binding address cannot be found
-        if (Others?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
+        if (Others.isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
             setAddressTip({
                 type: TransferAddressError.RESOLVE_FAILED,
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
@@ -364,7 +361,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             return
         }
 
-        const result = await connection?.getCode?.(address)
+        const result = await Web3.getCode(address)
 
         if (result !== '0x') {
             setAddressTip({
@@ -480,7 +477,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
 
             // If input address is ens domain, use registeredAddress to transfer
-            if (Others?.isValidDomain?.(data.address)) {
+            if (Others.isValidDomain(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),

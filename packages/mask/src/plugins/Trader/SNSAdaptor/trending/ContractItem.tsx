@@ -1,13 +1,13 @@
+import { noop } from 'lodash-es'
+import { useCopyToClipboard } from 'react-use'
 import { Icons } from '@masknet/icons'
+import { Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { FormattedAddress, ImageIcon, useSnackbarCallback } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
-import { Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material'
-import { noop } from 'lodash-es'
-import { useCopyToClipboard } from 'react-use'
+import { useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,9 +43,9 @@ interface ContractItemProps {
     iconURL?: string
 }
 export function ContractItem(props: ContractItemProps) {
-    const { pluginID, chainId, address, name, symbol, iconURL } = props
+    const { pluginID, chainId, address } = props
     const { classes } = useStyles()
-    const { Others } = useWeb3State(pluginID)
+    const Others = useWeb3Others(pluginID)
     const [, copyToClipboard] = useCopyToClipboard()
 
     const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
@@ -66,9 +66,9 @@ export function ContractItem(props: ContractItemProps) {
                     <Typography
                         className={classes.address}
                         onClick={
-                            chainId ? () => openWindow(Others?.explorerResolver.addressLink(chainId, address)) : noop
+                            chainId ? () => openWindow(Others.explorerResolver.addressLink(chainId, address)) : noop
                         }>
-                        <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
+                        <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
                     </Typography>
                 </Stack>
                 <Stack className={classes.icon}>

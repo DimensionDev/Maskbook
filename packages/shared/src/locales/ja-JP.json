@@ -190,6 +190,8 @@
     "applications_create_persona_hint": "本機能を利用するには、ペルソナを作成し、アカウントを認証してください。",
     "applications_create_persona_action": "ペルソナを作成",
     "lens_follow": "フォロー",
+    "lens_following": "フォロー中",
+    "view": "表示",
     "verified_by": "{{ marketplace }} によって検証されました",
     "no_NFTs_found": "NFTが見つかりません。"
 }

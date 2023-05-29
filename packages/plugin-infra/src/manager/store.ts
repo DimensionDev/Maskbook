@@ -33,39 +33,12 @@ export function getPluginDefine(id: PluginID | NetworkPluginID) {
 
 export function registerPlugin<
     ChainId = unknown,
-    AddressType = unknown,
     SchemaType = unknown,
     ProviderType = unknown,
     NetworkType = unknown,
-    Signature = unknown,
-    GasOption = unknown,
-    Block = unknown,
-    Operation = unknown,
     Transaction = unknown,
-    TransactionReceipt = unknown,
-    TransactionDetailed = unknown,
-    TransactionSignature = unknown,
     TransactionParameter = unknown,
-    Web3 = unknown,
->(
-    def: Plugin.DeferredDefinition<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        Signature,
-        GasOption,
-        Block,
-        Operation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        TransactionParameter,
-        Web3
-    >,
-) {
+>(def: Plugin.DeferredDefinition<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def)) return
     __registered.set(def.ID, def as any)

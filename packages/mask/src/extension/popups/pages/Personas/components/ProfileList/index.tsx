@@ -97,6 +97,9 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ProfileListProps {}
 
+/**
+ * @deprecated unused
+ */
 export const ProfileList = memo(() => {
     const { currentPersona } = PersonaContext.useContainer()
 
@@ -146,12 +149,12 @@ export const ProfileList = memo(() => {
     const proofs = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex, MaskMessages)
 
     const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
-        if (!proofs.loading) return EMPTY_LIST
+        if (proofs.isLoading) return EMPTY_LIST
         if (!currentPersona) return EMPTY_LIST
-        if (!currentPersona.identifier.publicKeyAsHex || !proofs.value) return currentPersona.linkedProfiles
+        if (!currentPersona.identifier.publicKeyAsHex || !proofs.data) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
-            const target = proofs.value?.find(
+            const target = proofs.data.find(
                 (x) =>
                     profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
                     profile.identifier.network.replace('.com', '') === x.platform,
@@ -164,7 +167,7 @@ export const ProfileList = memo(() => {
                 is_valid: target?.is_valid,
             }
         })
-    }, [proofs, currentPersona])
+    }, [proofs.isLoading, proofs.data, currentPersona])
 
     const [confirmState, onConfirmDisconnect] = useAsyncFn(async () => {
         // fetch signature payload

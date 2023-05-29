@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
-import { Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getArbConstants,
@@ -65,6 +65,10 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
                 isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
             )
     }
+}
+
+export function getNetworkPluginID() {
+    return NetworkPluginID.PLUGIN_EVM
 }
 
 export function getDefaultChainId() {

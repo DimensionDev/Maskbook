@@ -18,7 +18,6 @@ export function TagInspector() {
             type?: TrendingAPI.TagType,
             currentResult?: Web3Helper.TokenResultAll,
             setActive?: (x: boolean) => void,
-            badgeBounding?: DOMRect,
             identity?: SocialIdentity,
             address?: string,
             isCollectionProjectPopper?: boolean,
@@ -30,7 +29,6 @@ export function TagInspector() {
                     currentResult={currentResult}
                     identity={identity}
                     setActive={setActive}
-                    badgeBounding={badgeBounding}
                     name={name}
                     type={type}
                     reposition={reposition}
@@ -53,7 +51,6 @@ interface TrendingViewWrapperProps {
     type?: TrendingAPI.TagType
     currentResult?: Web3Helper.TokenResultAll
     setActive?: (x: boolean) => void
-    badgeBounding?: DOMRect
     identity?: SocialIdentity
     address?: string
     isCollectionProjectPopper?: boolean
@@ -66,7 +63,6 @@ function TrendingViewWrapper({
     reposition,
     currentResult,
     setActive,
-    badgeBounding,
     address,
     identity,
     isCollectionProjectPopper,
@@ -86,7 +82,6 @@ function TrendingViewWrapper({
         <TrendingViewProvider
             isDSearch={false}
             isCollectionProjectPopper={!!isCollectionProjectPopper}
-            badgeBounding={badgeBounding}
             isProfilePage={false}
             isTokenTagPopper={!isCollectionProjectPopper}
             isPreciseSearch={false}>

@@ -186,8 +186,7 @@ export function CollectionList({
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
         useCollections(pluginID, currentChainId, account)
 
-    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isHiddenAddress, isAllHidden } =
-        useUserAssets()
+    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy } = useUserAssets()
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
@@ -271,7 +270,7 @@ export function CollectionList({
             </Box>
         )
 
-    if ((!loading && !collections.length) || !account || isHiddenAddress || isAllHidden)
+    if ((!loading && !collections.length) || !account)
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>

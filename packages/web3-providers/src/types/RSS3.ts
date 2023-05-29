@@ -1,7 +1,8 @@
 import type RSS3 from 'rss3-next'
 import type { Pageable, MimeType } from '@masknet/shared-base'
-import type { HubOptions } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { HubOptions_Base } from '../entry-types.js'
+
 /**
  * Conform to the RFC3339 Datetime format.
  * @example "2022-08-23T07:15:00Z"
@@ -565,6 +566,6 @@ export namespace RSS3BaseAPI {
         getDonations(address: string): Promise<Pageable<Donation>>
         getFootprints(address: string): Promise<Pageable<Footprint>>
         getNameInfo(id: string): Promise<NameInfo | undefined>
-        getWeb3Feeds(address: string, HubOptions?: HubOptions<ChainId>): Promise<Pageable<Activity>>
+        getWeb3Feeds(address: string, HubOptions?: HubOptions_Base<ChainId>): Promise<Pageable<Activity>>
     }
 }

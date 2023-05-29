@@ -8,7 +8,7 @@ import {
     useChainContext,
     useNetworkDescriptors,
     useProviderDescriptor,
-    useWeb3State,
+    useWeb3Connection,
     useWeb3UI,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -34,20 +34,15 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptors = useNetworkDescriptors()
     const Web3UI = useWeb3UI()
+    const Web3 = useWeb3Connection(pluginID)
     const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
-    const { Connection } = useWeb3State(pluginID)
 
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll) => {
-            if (!chainId || !Connection) throw new Error('Failed to connect to provider.')
-            const connection = Connection.getConnection?.({
-                providerType: providerDescriptor?.type,
-            })
-            if (!connection) throw new Error('Failed to build connection.')
-
-            await connection.switchChain?.(chainId)
+            if (!chainId) throw new Error('Failed to connect to provider.')
+            await Web3.switchChain?.(chainId, { providerType: providerDescriptor?.type })
         },
-        [Connection, providerDescriptor],
+        [Web3, providerDescriptor],
     )
 
     return useMenu(

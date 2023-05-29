@@ -41,7 +41,6 @@ import { TwitterRenderFragments } from './customization/render-fragments.js'
 import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
-import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
 import { injectLens } from './injection/Lens/index.js'
 import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 
@@ -205,7 +204,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         tips: injectTips,
         lens: injectLens,
         profileCard: injectProfileCardHolder,
-        PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
         themeSettings: {

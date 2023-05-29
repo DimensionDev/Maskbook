@@ -1,31 +1,30 @@
 import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import type { SwappedTokenType } from '../../types.js'
 import * as chain from '../utils/chain.js'
 
 export function useClaimAll(swapperAddress: string, chainId: ChainId) {
-    const allPoolsRef = useRef<SwappedTokenType[]>([])
+    const allPoolsRef = useRef<SwappedTokenType[]>(EMPTY_LIST)
 
     useEffect(() => {
-        allPoolsRef.current = []
+        allPoolsRef.current = EMPTY_LIST
     }, [chainId])
 
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const asyncResult = useAsyncRetry(async () => {
-        if (allPoolsRef.current.length > 0 || !connection) return allPoolsRef.current
-        const blockNumber = await connection.getBlockNumber()
-        const results = await chain.getClaimAllPools(chainId, blockNumber, swapperAddress, connection)
+        if (allPoolsRef.current.length > 0) return allPoolsRef.current
+        const blockNumber = await Web3.getBlockNumber({ chainId })
+        const results = await chain.getClaimAllPools(chainId, blockNumber, swapperAddress)
         allPoolsRef.current = results
         return allPoolsRef.current
-    }, [swapperAddress, chainId, connection])
+    }, [swapperAddress, chainId])
 
     return {
         ...asyncResult,
         retry: () => {
-            allPoolsRef.current = []
+            allPoolsRef.current = EMPTY_LIST
             asyncResult.retry()
         },
     }

@@ -31,10 +31,10 @@ import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
-    useWeb3State,
     useNetworkContext,
     useFungibleToken,
     useFungibleTokenPrice,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SmartPayBundler } from '@masknet/web3-providers'
@@ -145,11 +145,11 @@ export function SelectGasSettingsToolbarUI({
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
     const { chainId } = useChainContext()
-    const { Others } = useWeb3State<'all'>()
+    const Others = useWeb3Others()
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
-    const isSupportEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
+    const isSupportEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
             onChange?.(

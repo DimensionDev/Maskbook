@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
@@ -86,7 +86,7 @@ export function CollectibleList(props: CollectibleListProps) {
     } = props
     const { t } = useI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const availableKeys = useMemo(() => collectibles.map(getCollectibleKey), [collectibles])
     const handleItemChange = useCallback(
@@ -123,7 +123,7 @@ export function CollectibleList(props: CollectibleListProps) {
                     <Box className={classes.root}>
                         {collectibles.map((token, index) => {
                             const name = token.metadata?.name
-                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+                            const uiTokenId = Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
                             const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
                             const collectibleKey = getCollectibleKey(token)
                             const checked = selectable ? value?.includes(collectibleKey) : false

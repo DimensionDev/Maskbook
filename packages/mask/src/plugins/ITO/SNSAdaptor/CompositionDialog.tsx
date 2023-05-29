@@ -1,20 +1,16 @@
+import { omit, set } from 'lodash-es'
+import { useCallback, useState } from 'react'
+import Web3Utils from 'web3-utils'
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, type InjectedDialogProps, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
-import {
-    useChainContext,
-    useWeb3Connection,
-    useChainIdValid,
-    Web3ContextProvider,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { omit, set } from 'lodash-es'
-import { useCallback, useState } from 'react'
-import Web3Utils from 'web3-utils'
+import { Icons } from '@masknet/icons'
+import { Web3 } from '@masknet/web3-providers'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
@@ -31,7 +27,6 @@ import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
 import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
-import { Icons } from '@masknet/icons'
 
 interface StyleProps {
     snsId: string
@@ -86,7 +81,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: chainIdValid ? undefined : ChainId.Mainnet,
     })
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
@@ -192,7 +186,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
                 payload.password =
-                    (await connection?.signMessage('message', Web3Utils.sha3(title) ?? '', {
+                    (await Web3.signMessage('message', Web3Utils.sha3(title) ?? '', {
                         account,
                     })) ?? ''
             }
