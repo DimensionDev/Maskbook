@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { type GeneratedIcon, Icons } from '@masknet/icons'
-import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
+import { Icons, type GeneratedIcon } from '@masknet/icons'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterColored />,
@@ -21,23 +21,3 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, G
     [EnhanceableSite.Mirror]: Icons.Mirror,
     [EnhanceableSite.Localhost]: null,
 }
-
-export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
-    [EnhanceableSite.Twitter]: 'Twitter',
-    [EnhanceableSite.Facebook]: 'Facebook',
-    [EnhanceableSite.Minds]: 'Minds',
-    [EnhanceableSite.Instagram]: 'Instagram',
-    [EnhanceableSite.OpenSea]: 'OpenSea',
-    [EnhanceableSite.Localhost]: 'Localhost',
-    [EnhanceableSite.Mirror]: 'Mirror',
-}
-
-export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {
-    [NextIDPlatform.Twitter]: EnhanceableSite.Twitter,
-}
-
-export const SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID = [EnhanceableSite.Twitter]
-
-export const MEDIA_VIEWER_URL = 'https://media-viewer.r2d2.to/index.html'
-
-export const MAX_WALLET_LIMIT = 100

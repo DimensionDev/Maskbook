@@ -14,17 +14,19 @@ export interface DevtoolsMessage {
     //
     farewell: void
 }
-export const DevtoolsMessage = new WebExtensionMessage<DevtoolsMessage>({
+const message = new WebExtensionMessage<DevtoolsMessage>({
     domain: 'devtools',
 })
+export const DevtoolsMessage = message.events
 
-export function createReactDevToolsWall(id: string): Wall {
+export function createReactDevToolsWall(id: string, signal: AbortSignal): Wall {
     const channel = `_${id}` as const
     return {
-        listen: DevtoolsMessage.events[channel].on,
+        listen: (f) => DevtoolsMessage[channel].on(f, { signal }),
         send(event, payload, transferable) {
+            if (signal.aborted) return
             if (transferable) throw new TypeError('transferable is not supported')
-            DevtoolsMessage.events[channel].sendByBroadcast({ event, payload })
+            DevtoolsMessage[channel].sendByBroadcast({ event, payload })
         },
     }
 }

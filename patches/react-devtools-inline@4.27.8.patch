@@ -1,0 +1,88 @@
+diff --git a/dist/backend.js b/dist/backend.js
+index fa3bcbbfe17c0b977a1ec8d545fb4247b6bc419a..6ab0b3a3d3664cc833a7dd503082e62ab03a4dfd 100644
+--- a/dist/backend.js
++++ b/dist/backend.js
+@@ -1684,7 +1684,7 @@ function setupHighlighter(bridge, agent) {
+       window.addEventListener('mouseover', onMouseEvent, true);
+       window.addEventListener('mouseup', onMouseEvent, true);
+       window.addEventListener('pointerdown', onPointerDown, true);
+-      window.addEventListener('pointerover', onPointerOver, true);
++      window.addEventListener('pointermove', onPointerMove, true);
+       window.addEventListener('pointerup', onPointerUp, true);
+     } else {
+       agent.emit('startInspectingNative');
+@@ -1711,7 +1711,7 @@ function setupHighlighter(bridge, agent) {
+       window.removeEventListener('mouseover', onMouseEvent, true);
+       window.removeEventListener('mouseup', onMouseEvent, true);
+       window.removeEventListener('pointerdown', onPointerDown, true);
+-      window.removeEventListener('pointerover', onPointerOver, true);
++      window.removeEventListener('pointermove', onPointerMove, true);
+       window.removeEventListener('pointerup', onPointerUp, true);
+     } else {
+       agent.emit('stopInspectingNative');
+@@ -1780,13 +1780,15 @@ function setupHighlighter(bridge, agent) {
+   function onPointerDown(event) {
+     event.preventDefault();
+     event.stopPropagation();
+-    selectFiberForNode(event.target);
++    selectFiberForNode(event.composed ? event.composedPath()[0] : event.target);
+   }
+ 
+-  function onPointerOver(event) {
++  let lastHoveredNode = null;
++  function onPointerMove(event) {
+     event.preventDefault();
+     event.stopPropagation();
+-    const target = event.target;
++    const target = event.composed ? event.composedPath()[0] : event.target;
++    if (lastHoveredNode === target) return;
+ 
+     if (target.tagName === 'IFRAME') {
+       const iframe = target;
+@@ -6457,7 +6459,7 @@ class Bridge extends _events__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"] {
+     } // Queue the shutdown outgoing message for subscribers.
+ 
+ 
+-    this.send('shutdown'); // Mark this bridge as destroyed, i.e. disable its public API.
++    this.emit('shutdown'); // Mark this bridge as destroyed, i.e. disable its public API.
+ 
+     this._isShutdown = true; // Disable the API inherited from EventEmitter that can add more listeners and send more messages.
+     // $FlowFixMe[cannot-write] This property is not writable.
+@@ -14790,7 +14792,8 @@ function attach(hook, rendererID, renderer, global) {
+     initialIDToRootMap = new Map(idToRootMap);
+     idToContextsMap = new Map();
+     hook.getFiberRoots(rendererID).forEach(root => {
+-      const rootID = getFiberIDThrows(root.current);
++      // maybe related to https://github.com/facebook/react/pull/23162#issuecomment-1564632827
++      const rootID = getOrGenerateFiberID(root.current);
+       displayNamesByRootID.set(rootID, getDisplayNameForRoot(root.current));
+ 
+       if (shouldRecordChangeDescriptions) {
+diff --git a/dist/backend.js.map b/dist/backend.js.map
+deleted file mode 100644
+index 8d1e8c215304e19f0c0bd70c39e30d377e908c91..0000000000000000000000000000000000000000
+diff --git a/dist/frontend.js b/dist/frontend.js
+index 9d1e1d98b5224968eff5a7b9c275d7ac01018747..8c780e83fbebb060612d51a7a3b1dd6527682f0d 100644
+--- a/dist/frontend.js
++++ b/dist/frontend.js
+@@ -1492,7 +1492,7 @@ function addStyle (obj, options) {
+ 	// If a transform function was defined, run it on the css
+ 	if (options.transform && obj.css) {
+ 	    result = typeof options.transform === 'function'
+-		 ? options.transform(obj.css) 
++		 ? options.transform(obj.css)
+ 		 : options.transform.default(obj.css);
+ 
+ 	    if (result) {
+@@ -3572,7 +3572,7 @@ class Bridge extends _events__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"] {
+     } // Queue the shutdown outgoing message for subscribers.
+ 
+ 
+-    this.send('shutdown'); // Mark this bridge as destroyed, i.e. disable its public API.
++    this.emit('shutdown'); // Mark this bridge as destroyed, i.e. disable its public API.
+ 
+     this._isShutdown = true; // Disable the API inherited from EventEmitter that can add more listeners and send more messages.
+     // $FlowFixMe[cannot-write] This property is not writable.
+diff --git a/dist/frontend.js.map b/dist/frontend.js.map
+deleted file mode 100644
+index 095f19b7c265752854d5ecc9ffa96b5efa6ade10..0000000000000000000000000000000000000000
