@@ -47,11 +47,8 @@ export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<
         return attemptUntil(
             [
                 () =>
-                    SolanaWeb3StateRef.value.Token?.createFungibleToken?.(
-                        initial?.chainId ?? ChainId.Mainnet,
-                        address ?? '',
-                    ),
-                () => this.Web3.getFungibleToken(address ?? '', initial),
+                    SolanaWeb3StateRef.value.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
+                () => this.Web3.getFungibleToken(address, initial),
             ],
             undefined,
         )

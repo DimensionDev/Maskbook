@@ -50,7 +50,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
             const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId, {
                 chainId,
             })
-            this.storage.credibleFungibleTokenList.setValue({
+            await this.storage.credibleFungibleTokenList.setValue({
                 ...fungibleTokenListFromStorage,
                 [chainId]: fungibleTokenList,
             })
@@ -75,7 +75,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
 
         if (!nonFungibleTokenListByChainFromStorage) {
             const nonFungibleTokenList = await this.Hub.getNonFungibleTokensFromTokenList(chainId, { chainId })
-            this.storage.credibleNonFungibleTokenList.setValue({
+            await this.storage.credibleNonFungibleTokenList.setValue({
                 ...nonFungibleTokenListFromStorage,
                 [chainId]: nonFungibleTokenList,
             })
