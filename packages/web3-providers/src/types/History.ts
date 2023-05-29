@@ -1,5 +1,6 @@
 import type { Pageable } from '@masknet/shared-base'
-import type { Transaction, HubOptions } from '@masknet/web3-shared-base'
+import type { Transaction } from '@masknet/web3-shared-base'
+import type { HubOptions_Base } from '../entry-types.js'
 
 export namespace HistoryAPI {
     export enum TransactionType {
@@ -18,7 +19,7 @@ export namespace HistoryAPI {
     export interface Provider<ChainId, SchemaType> {
         getTransactions(
             address: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions_Base<ChainId>,
         ): Promise<Pageable<Transaction<ChainId, SchemaType>>>
     }
 }

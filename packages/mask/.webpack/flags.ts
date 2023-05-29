@@ -13,6 +13,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         reproducibleBuild = false,
         devtools = mode === 'development' || channel !== 'stable',
         sourceMapPreference = mode === 'development',
+        devtoolsEditorURI = 'vscode://file/{path}:{line}',
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
@@ -22,9 +23,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
 
     // CSP of Twitter bans connection to the HMR server and blocks the app to start.
     if (engine === 'firefox') hmr = false
-
-    // React Devtools integration is not supported in Firefox yet.
-    if (engine !== 'chromium') devtools = false
 
     if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
@@ -41,6 +39,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         reactRefresh,
         sourceMapPreference,
         devtools,
+        devtoolsEditorURI,
         // CI / profiling
         profiling,
         readonlyCache,

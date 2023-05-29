@@ -1,10 +1,10 @@
 {
   "name": "mask-network",
   "type": "module",
-  "packageManager": "pnpm@8.5.1",
+  "packageManager": "pnpm@8.6.0",
   "engines": {
     "node": ">=18.7.0",
-    "pnpm": ">=8.1.0",
+    "pnpm": ">=8.6.0",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
@@ -48,8 +48,8 @@
     "@typescript/lib-dom": "npm:@types/web@^0.0.99",
     "i18next": "^22.4.14",
     "lodash-es": "^4.17.21",
-    "react": "0.0.0-experimental-21021fb0f-20230412",
-    "react-dom": "0.0.0-experimental-21021fb0f-20230412",
+    "react": "0.0.0-experimental-9a72e6227-20230525",
+    "react-dom": "0.0.0-experimental-9a72e6227-20230525",
     "react-i18next": "^12.2.0",
     "ses": "0.18.3",
     "ts-results-es": "^3.6.0"
@@ -121,8 +121,8 @@
         "typescript"
       ],
       "allowedVersions": {
-        "react": "0.0.0-experimental-21021fb0f-20230412",
-        "react-dom": "0.0.0-experimental-21021fb0f-20230412",
+        "react": "0.0.0-experimental-9a72e6227-20230525",
+        "react-dom": "0.0.0-experimental-9a72e6227-20230525",
         "typescript": "5",
         "rollup": "3"
       }
@@ -150,10 +150,10 @@
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
       "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
       "web3-core@1.8.0": "patches/web3-core@1.8.0.patch",
-      "react-devtools-inline@4.27.4": "patches/react-devtools-inline@4.27.4.patch",
       "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
       "@chainsafe/as-sha256@0.3.1": "patches/@chainsafe__as-sha256@0.3.1.patch",
-      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch"
+      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
+      "react-devtools-inline@4.27.8": "patches/react-devtools-inline@4.27.8.patch"
     }
   }
 }

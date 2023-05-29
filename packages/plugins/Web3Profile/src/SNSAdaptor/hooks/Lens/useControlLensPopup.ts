@@ -19,7 +19,10 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>) {
     }, [])
     useEffect(() => {
         const holder = holderRef.current
-        if (!holder) return
+        if (!holder) {
+            hidePopup()
+            return
+        }
         const enter = () => {
             hoverRef.current = true
             clearTimeout(closeTimerRef.current)
@@ -35,7 +38,7 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>) {
             holder.removeEventListener('mouseenter', enter)
             holder.removeEventListener('mouseleave', leave)
         }
-    }, [hidePopup])
+    }, [holderRef.current])
 
     useEffect(() => {
         const unsubscribe = emitter.on('open', showProfileCard)

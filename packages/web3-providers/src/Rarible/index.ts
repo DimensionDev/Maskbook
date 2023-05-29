@@ -9,7 +9,6 @@ import {
     EMPTY_LIST,
 } from '@masknet/shared-base'
 import {
-    type HubOptions,
     type NonFungibleAsset,
     type NonFungibleTokenEvent,
     type NonFungibleTokenOrder,
@@ -23,7 +22,7 @@ import { ChainId, SchemaType, createNativeToken, isValidChainId, resolveImageURL
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import { getPaymentToken, getAssetFullName, resolveActivityType, fetchGlobal } from '../entry-helpers.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -197,7 +196,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createAsset(chainId, asset)
     }
 
-    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {}) {
         if (chainId !== ChainId.Mainnet) return createPageable(EMPTY_LIST, createIndicator(indicator, ''))
 
         const requestPath = urlcat('/v0.1/items/byOwner', {
@@ -226,7 +225,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getOffers(
         tokenAddress: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -264,7 +263,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getListings(
         tokenAddress: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -292,7 +291,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getOrders(tokenAddress: string, tokenId: string, side: OrderSide, options: HubOptions<ChainId> = {}) {
+    async getOrders(tokenAddress: string, tokenId: string, side: OrderSide, options: HubOptions_Base<ChainId> = {}) {
         switch (side) {
             case OrderSide.Buy:
                 return this.getOffers(tokenAddress, tokenId, options)
@@ -306,7 +305,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getEvents(
         tokenAddress: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 

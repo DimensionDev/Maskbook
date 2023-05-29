@@ -1,3 +1,5 @@
+import { useCallback, useMemo, useState, useTransition } from 'react'
+import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
 import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -9,6 +11,7 @@ import {
     useFungibleTokensBalance,
     useNetworkContext,
     useTrustedFungibleTokens,
+    useWeb3Others,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -22,8 +25,6 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Stack } from '@mui/material'
-import { uniqBy } from 'lodash-es'
-import { useCallback, useMemo, useState, useTransition } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
@@ -83,11 +84,12 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)
     const chainId = props.chainId
-    const { Token, Others } = useWeb3State<'all'>(pluginID)
+    const { Token } = useWeb3State<'all'>(pluginID)
+    const Others = useWeb3Others(pluginID)
 
     const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
     const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
-    const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
+    const nativeToken = useMemo(() => Others.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
         const allFungibleTokens = uniqBy(
@@ -118,11 +120,11 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
 
-            const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
-            const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+            const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
+            const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
 
-            const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
-            const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
+            const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
+            const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
 
             // native token
             if (isNativeTokenA) return -1
@@ -163,11 +165,11 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
                 const aUSD = getTokenValue(a.address)
                 const zUSD = getTokenValue(z.address)
 
-                const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
-                const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+                const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
+                const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
 
-                const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
-                const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
+                const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
+                const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
 
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
@@ -233,7 +235,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         if (
             (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
             keyword.length > 3 &&
-            !Others?.isValidAddress(keyword)
+            !Others.isValidAddress(keyword)
         ) {
             setSearchError(t.erc20_search_wrong_address())
             return
@@ -241,7 +243,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
 
         if (mode === TokenListMode.Manage) return ''
 
-        return Others?.isValidAddress(keyword) &&
+        return Others.isValidAddress(keyword) &&
             !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''

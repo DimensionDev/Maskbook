@@ -1,15 +1,14 @@
+import urlcat from 'urlcat'
+import { useState, useEffect, useCallback } from 'react'
+import { useAsync } from 'react-use'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography, FormControlLabel, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { Twitter as TwitterIcon, Link as LinkIcon, Description as DescriptionIcon } from '@mui/icons-material'
 import Checkbox from '@mui/material/Checkbox'
+import { openWindow } from '@masknet/shared-base-ui'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
-import { useAsync } from 'react-use'
-import { useState, useEffect, useCallback } from 'react'
-import { openWindow } from '@masknet/shared-base-ui'
 import { useI18N } from '../locales/i18n_generated.js'
-import urlcat from 'urlcat'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,7 +64,6 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
     const { classes } = useStyles()
     const [autoReport, setAutoReport] = useState(false)
     const t = useI18N()
-    const { Storage } = useWeb3State()
 
     useEffect(() => {
         if (autoReport) {
@@ -73,14 +71,10 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         }
     }, [autoReport, result])
 
-    const handleClick = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-            if (!Storage) return
-            setAutoReport(checked)
-            PluginScamRPC.enableAutoReport(checked, Storage)
-        },
-        [Storage],
-    )
+    const handleClick = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+        setAutoReport(checked)
+        PluginScamRPC.enableAutoReport(checked)
+    }, [])
 
     const openTwitter = () => {
         const link = urlcat('https://twitter.com', '/:username', { username: result.twitterUsername })
@@ -92,13 +86,9 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
     }
 
     useAsync(async () => {
-        if (!Storage) {
-            setAutoReport(false)
-            return
-        }
-        const enabled = await PluginScamRPC.isAutoReportEnabled(Storage)
+        const enabled = await PluginScamRPC.isAutoReportEnabled()
         setAutoReport(enabled)
-    }, [Storage])
+    }, [])
     return (
         <div className={classes.root}>
             <div className={classes.scam}>

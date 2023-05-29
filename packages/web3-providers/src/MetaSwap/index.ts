@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { type ChainId, formatGweiToWei, type GasOption, isValidChainId } from '@masknet/web3-shared-evm'
 import type { EstimateSuggestResponse } from './types.js'
-import type { GasOptionAPI } from '../entry-types.js'
+import type { GasOptionAPI_Base } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
 
 const METASWAP_API = 'https://gas-api.metaswap.codefi.network/'
@@ -11,7 +11,7 @@ function formatAmountAsWei(amount = '0') {
     return formatGweiToWei(amount).toFixed()
 }
 
-export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
+export class MetaSwapAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
         if (!isValidChainId(chainId)) return
         const result = await fetchJSON<EstimateSuggestResponse>(

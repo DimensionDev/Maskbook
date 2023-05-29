@@ -1,23 +1,24 @@
 import { useMemo } from 'react'
 import { type NetworkPluginID, pageableToIterator } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type { HubOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
-export function useTransactions<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useTransactions<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: NetworkPluginID,
-    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
+    options?: HubOptions<T>,
 ) {
     const { account, chainId } = useChainContext()
-    const hub = useWeb3Hub(pluginID, options)
+    const Hub = useWeb3Hub(pluginID, options)
+
     return useMemo(() => {
         return pageableToIterator(
             async (indicator) => {
-                return hub?.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
+                return Hub.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
                     indicator,
                 })
             },
             { maxSize: 999 },
         )
-    }, [account, chainId, hub, options?.chainId, options?.account])
+    }, [account, chainId, Hub, options?.chainId, options?.account])
 }

@@ -9,7 +9,7 @@ import {
     useNetworkDescriptor,
     useWallet,
     useReverseAddress,
-    useWeb3State,
+    useWeb3Others,
     useChainContext,
     NetworkContextProvider,
     ActualChainContextProvider,
@@ -80,7 +80,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
         const { data: domain } = useReverseAddress(pluginID, account)
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
 
         const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
@@ -104,8 +104,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const walletName = useMemo(() => {
             if (domain) return domain
             if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
-            return providerDescriptor?.name || Others?.formatAddress(account, 4)
-        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others?.formatAddress])
+            return providerDescriptor?.name || Others.formatAddress(account, 4)
+        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others.formatAddress])
 
         if (!account) {
             return (
@@ -125,8 +125,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     networkIcon={networkDescriptor?.icon}
                     iconFilterColor={providerDescriptor?.iconFilterColor}
                     name={walletName}
-                    formattedAddress={Others?.formatAddress(account, 4)}
-                    addressLink={Others?.explorerResolver.addressLink?.(chainId, account)}
+                    formattedAddress={Others.formatAddress(account, 4)}
+                    addressLink={Others.explorerResolver.addressLink(chainId, account)}
                     onClick={onClick ?? openSelectProviderDialog}
                     onPendingClick={openWalletStatusDialog}
                 />

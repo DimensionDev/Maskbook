@@ -5,6 +5,7 @@ export enum Preset {
 
 export interface BuildFlags {
     engine: 'chromium' | 'firefox'
+    /** @default 2 */
     manifest?: 2 | 3
     mode: 'development' | 'production'
     /** @default 'stable' */
@@ -22,6 +23,9 @@ export interface BuildFlags {
     outputPath?: string
     /** @default true */
     devtools?: boolean
+    /** @default "vscode://file/{path}:{line}" */
+    devtoolsEditorURI?: string
+    /** @default true */
     sourceMapPreference?: boolean | string
 }
 

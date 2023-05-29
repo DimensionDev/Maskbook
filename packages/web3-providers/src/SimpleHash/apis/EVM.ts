@@ -1,4 +1,6 @@
 import urlcat from 'urlcat'
+import { compact, uniqBy } from 'lodash-es'
+import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
     createPageable,
@@ -10,7 +12,6 @@ import {
 } from '@masknet/shared-base'
 import {
     SourceType,
-    type HubOptions,
     type NonFungibleAsset,
     type NonFungibleCollection,
     TokenType,
@@ -30,12 +31,10 @@ import {
 import { type Asset, type Collection, type PaymentToken, type PriceStat } from '../type.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
-import type { NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
-import { compact, uniqBy } from 'lodash-es'
-import { MaskIconURLs } from '@masknet/icons'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 import { BigNumber } from 'bignumber.js'
+import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private looksrare = new LooksRareAPI()
@@ -43,7 +42,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
     private async getCollectionByContractAddress(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<Collection | undefined> {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) return
@@ -57,7 +56,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return collections[0]
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
@@ -69,7 +68,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return createNonFungibleAsset(response)
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -93,7 +92,10 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         )
     }
 
-    async getAssetsByCollection(address: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssetsByCollection(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -168,7 +170,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator, allChains }: HubOptions<ChainId> = {},
+        { chainId, indicator, allChains }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const pluginId = NetworkPluginID.PLUGIN_EVM
         const chain = allChains || !chainId ? getAllChainNames(pluginId) : resolveChain(pluginId, chainId)
@@ -194,7 +196,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
     async getAssetsByCollectionAndOwner(
         collectionId: string,
         owner: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !isValidChainId(chainId) || !collectionId || !owner)

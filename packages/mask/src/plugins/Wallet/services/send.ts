@@ -62,7 +62,7 @@ async function internalSend(
                         null,
                         createJsonRpcResponse(
                             pid,
-                            await Web3.sendSignedTransaction(chainId, await signer.signTransaction(signableConfig)),
+                            await Web3.sendSignedTransaction(await signer.signTransaction(signableConfig), { chainId }),
                         ),
                     )
                 }
@@ -111,7 +111,7 @@ async function internalSend(
             callback(new Error('Method not implemented.'))
             break
         default:
-            await Web3.getWeb3Provider(chainId).send(payload, callback)
+            await Web3.getWeb3Provider({ chainId }).send(payload, callback)
             break
     }
 }

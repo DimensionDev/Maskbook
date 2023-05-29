@@ -4,7 +4,6 @@ import Web3Utils from 'web3-utils'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import {
     useChainContext,
-    useWeb3Connection,
     useChainIdValid,
     Web3ContextProvider,
     useGasPrice,
@@ -22,6 +21,9 @@ import {
 } from '../../../components/DataSource/useActivatedUI.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Icons } from '@masknet/icons'
+import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
@@ -30,8 +32,6 @@ import { DialogTabs, type RedPacketJSONPayload } from '../types.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
-import { TabContext, TabPanel } from '@mui/lab'
-import { Icons } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
@@ -90,7 +90,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
@@ -138,12 +137,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    if (!connection) return
-                    payload.password = await connection.signMessage(
-                        'message',
-                        Web3Utils.sha3(payload.sender.message) ?? '',
-                        { account },
-                    )
+                    payload.password = await Web3.signMessage('message', Web3Utils.sha3(payload.sender.message) ?? '', {
+                        account,
+                    })
                     payload.password = payload.password.slice(2)
                 }
             }
@@ -153,7 +149,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             closeApplicationBoardDialog()
             onClose()
         },
-        [chainId, senderName, connection],
+        [chainId, senderName],
     )
 
     const onBack = useCallback(() => {

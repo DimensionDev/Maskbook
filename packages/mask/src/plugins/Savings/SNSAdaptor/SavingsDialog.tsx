@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import { useQuery } from '@tanstack/react-query'
 import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
@@ -8,26 +9,25 @@ import {
     Web3ContextProvider,
     useChainContext,
     useFungibleTokens,
-    useWeb3,
     ActualChainContextProvider,
     useNetworkContext,
     ChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { ChainId, createContract, getAaveConstant } from '@masknet/web3-shared-evm'
+import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
+import { Contract } from '@masknet/web3-providers'
+import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
+import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { useI18N } from '../../../utils/index.js'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { SavingsFormDialog } from './SavingsForm.js'
-import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
-import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
-import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -90,26 +90,27 @@ const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
-    const { pluginID } = useNetworkContext()
     const { classes } = useStyles()
+    const { pluginID } = useNetworkContext()
 
     const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
     const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
-        enabled: open && chainId === ChainId.Mainnet && !!web3,
+        enabled: open && chainId === ChainId.Mainnet,
         queryKey: ['savings', 'aave', 'tokens', chainId],
         queryFn: async () => {
             const address = getAaveConstant(chainId, 'AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS')
             if (!address) return EMPTY_LIST
 
-            const protocolDataContract = createContract<AaveProtocolDataProvider>(
-                web3,
+            const protocolDataContract = Contract.getWeb3Contract<AaveProtocolDataProvider>(
                 address,
                 AaveProtocolDataProviderABI as AbiItem[],
+                {
+                    chainId,
+                },
             )
 
             const [tokens, aTokens] = await Promise.all([
