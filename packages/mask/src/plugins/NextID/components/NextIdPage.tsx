@@ -68,7 +68,7 @@ export function NextIdPage() {
         return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
     }, [isOwn, statusLoading, handleAddWallets, personaConnectStatus])
 
-    if (proofs.loading || loadingPersona) {
+    if (proofs.isLoading || loadingPersona) {
         return <PluginCardFrameMini />
     }
 
@@ -84,8 +84,8 @@ export function NextIdPage() {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={proofs.value ?? EMPTY_LIST}
-                    onBound={proofs.retry}
+                    bounds={proofs.data ?? EMPTY_LIST}
+                    onBound={proofs.refetch}
                 />
             ) : null}
         </>

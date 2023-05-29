@@ -5,6 +5,7 @@ import { ClickAwayListener, Fade } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages.js'
+import { AnchorProvider } from '@masknet/shared-base-ui'
 
 export interface TrendingPopperProps {
     children?: (
@@ -12,14 +13,9 @@ export interface TrendingPopperProps {
         type?: TrendingAPI.TagType,
         currentResult?: Web3Helper.TokenResultAll,
         setActive?: (x: boolean) => void,
-        badgeBounding?: DOMRect,
         identity?: SocialIdentity,
         address?: string,
         isCollectionProjectPopper?: boolean,
-        /**
-         * @deprecated Not used anymore
-         */
-        reposition?: () => void,
     ) => React.ReactNode
     locked?: boolean
 }
@@ -30,6 +26,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
     const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [identity, setIdentity] = useState<SocialIdentity | undefined>()
     const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [address, setAddress] = useState('')
     const [currentResult, setCurrentResult] = useState<Web3Helper.TokenResultAll>()
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
@@ -43,7 +40,8 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
             setName(ev.name)
             setCurrentResult(ev.currentResult)
             setType(ev.type)
-            setBadgeBounding(ev.badgeBounding)
+            setBadgeBounding(ev.anchorBounding)
+            setAnchorEl(ev.anchorEl)
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
             setIsNFTProjectPopper(!!ev.isCollectionProjectPopper)
@@ -86,16 +84,9 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
                             ? { top: badgeBoundingBottom + initialOffsetY + 10 }
                             : { bottom: window.innerHeight - badgeBoundingBottom + 10 - initialOffsetY }),
                     }}>
-                    {children?.(
-                        name,
-                        type,
-                        currentResult,
-                        setActive,
-                        badgeBounding,
-                        identity,
-                        address,
-                        isCollectionProjectPopper,
-                    )}
+                    <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
+                        {children?.(name, type, currentResult, setActive, identity, address, isCollectionProjectPopper)}
+                    </AnchorProvider>
                 </div>
             </Fade>
         </ClickAwayListener>

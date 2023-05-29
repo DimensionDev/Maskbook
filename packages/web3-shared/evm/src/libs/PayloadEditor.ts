@@ -13,7 +13,7 @@ import {
 } from '../types/index.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
-import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
+import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 

@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -15,17 +15,15 @@ export function useNativeTradeGasLimit(
 ): AsyncState<string> {
     const { account } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const wrapperContract = useNativeTokenWrapperContract(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
     )
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useAsync(async () => {
         if (
             !trade?.trade_?.isNativeTokenWrapper ||
             !trade.inputToken ||
             !trade.outputToken ||
-            !connection?.estimateTransaction ||
             pluginID !== NetworkPluginID.PLUGIN_EVM
         )
             return '0'
@@ -35,8 +33,8 @@ export function useNativeTradeGasLimit(
         if (!tradeAmount || !wrapperContract) return '0'
 
         if (
-            (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken.schema)) ||
-            (trade.strategy === TradeStrategy.ExactOut && Others?.isNativeTokenSchemaType(trade.outputToken.schema))
+            (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken.schema)) ||
+            (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken.schema))
         ) {
             const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract.methods.deposit(), {
                 from: account,
@@ -47,5 +45,5 @@ export function useNativeTradeGasLimit(
         }
 
         return '0'
-    }, [account, wrapperContract, trade, pluginID, Others?.isNativeTokenSchemaType])
+    }, [account, wrapperContract, trade, pluginID, Others.isNativeTokenSchemaType])
 }

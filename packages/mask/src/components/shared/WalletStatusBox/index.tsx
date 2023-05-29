@@ -9,10 +9,10 @@ import {
     useReverseAddress,
     useNativeToken,
     useWallet,
-    useWeb3State,
     useWeb3Connection,
     useBalance,
     useChainIdValid,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -121,7 +121,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 : theme.palette.text.primary,
     })
 
-    const connection = useWeb3Connection()
+    const Web3 = useWeb3Connection()
+    const Others = useWeb3Others()
     const { account, chainId } = useChainContext()
 
     const chainIdValid = useChainIdValid()
@@ -129,7 +130,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { value: balance = '0', loading: loadingBalance } = useBalance()
     const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State()
     const { data: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard
@@ -159,7 +159,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
-    if (!Others?.isValidAddress(account)) {
+    if (!Others.isValidAddress(account)) {
         return (
             <section className={classes.connectButtonWrapper}>
                 <Button
@@ -194,10 +194,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     ) : null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
-                            {domain && Others?.formatDomainName ? (
+                            {domain ? (
                                 Others.formatDomainName(domain)
                             ) : (
-                                <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
+                                <FormattedAddress address={account} size={4} formatter={Others.formatAddress} />
                             )}
                         </Typography>
                         <Link
@@ -211,7 +211,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         {chainIdValid ? (
                             <Link
                                 className={classes.link}
-                                href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                                href={Others.explorerResolver.addressLink(chainId, account) ?? ''}
                                 target="_blank"
                                 title={t('plugin_wallet_view_on_explorer')}
                                 rel="noopener noreferrer">
@@ -242,7 +242,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
                                 closeWalletStatusDialog()
-                                await connection?.disconnect()
+                                await Web3.disconnect()
                             }}>
                             {t('plugin_wallet_disconnect')}
                         </Button>

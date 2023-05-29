@@ -3,14 +3,14 @@ import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { pick } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<string> {
-    const { account, chainId: targetChainId } = useChainContext()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
-    const connection = useWeb3Connection(pluginID, { chainId: targetChainId })
 
     const trade: SwapBancorRequest | null = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
@@ -18,8 +18,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
     }, [account, tradeComputed])
 
     return useAsync(async () => {
-        if (!account || !trade || !connection?.estimateTransaction || pluginID !== NetworkPluginID.PLUGIN_EVM)
-            return '0'
+        if (!account || !trade || pluginID !== NetworkPluginID.PLUGIN_EVM) return '0'
 
         const [data, err] = await PluginTraderRPC.swapTransactionBancor(trade)
 
@@ -29,6 +28,8 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
         const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
         const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
-        return connection.estimateTransaction(config)
-    }, [trade, account, connection, pluginID])
+        return Web3.estimateTransaction?.(config, undefined, {
+            chainId,
+        })
+    }, [account, chainId, pluginID, trade])
 }

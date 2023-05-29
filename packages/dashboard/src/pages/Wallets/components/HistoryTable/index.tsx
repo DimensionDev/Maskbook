@@ -3,12 +3,12 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTransactions, useNetworkContext, useIterator } from '@masknet/web3-hooks-base'
-import type { Transaction } from '@masknet/web3-shared-base'
-import { HistoryTableRow } from '../HistoryTableRow/index.js'
-import { useDashboardI18N } from '../../../../locales/index.js'
 import { ElementAnchor } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
+import type { Transaction } from '@masknet/web3-shared-base'
+import { HistoryTableRow } from '../HistoryTableRow/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

@@ -25,5 +25,7 @@ declare module NodeJS {
          */
         RUN_SKIP_TESTS: string
         DIRTY: string
+        /** Only in development mode. */
+        REACT_DEVTOOLS_EDITOR_URL: string
     }
 }

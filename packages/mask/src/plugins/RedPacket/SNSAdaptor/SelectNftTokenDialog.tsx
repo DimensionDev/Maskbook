@@ -2,14 +2,15 @@ import { useCallback, useState, useEffect } from 'react'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-es'
 import { AssetPreviewer } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, type ChainId } from '@masknet/web3-shared-evm'
 import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
 import { QuestionMark as QuestionMarkIcon, Check as CheckIcon } from '@mui/icons-material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
@@ -248,7 +249,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         useState<OrderedERC721Token[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [searchTokenListInput, setSearchTokenListInput] = useState('')
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
     const isSelectSharesExceed =
@@ -323,7 +323,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setLoadingToken(true)
         const allSettled = await Promise.allSettled(
             tokenIdList.map((tokenId) =>
-                connection?.getNonFungibleToken(contract?.address ?? '', tokenId, SchemaType.ERC721, {
+                Web3.getNonFungibleToken(contract?.address ?? '', tokenId, SchemaType.ERC721, {
                     account,
                     chainId,
                 }),
@@ -337,7 +337,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setSearchedTokenDetailedList(searchedTokenDetailedList)
         setSearched(true)
         setLoadingToken(false)
-    }, [connection, contract, searchTokenListInput, chainId, account])
+    }, [contract, searchTokenListInput, chainId, account])
 
     useEffect(() => {
         setSearched(false)

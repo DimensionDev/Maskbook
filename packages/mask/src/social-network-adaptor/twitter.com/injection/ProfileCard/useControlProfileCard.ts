@@ -1,15 +1,15 @@
-import { CrossIsolationMessages, attachRectangle } from '@masknet/shared-base'
-import { type CSSProperties, type RefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useDialogStacking } from '@masknet/theme'
+import type { PopperPlacementType } from '@mui/material'
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
+import { CARD_HEIGHT } from './constants.js'
 
 interface Result {
     active: boolean
-    style: CSSProperties
+    placement: PopperPlacementType
 }
 
 const LEAVE_DURATION = 500
-const MARGIN = 12
 
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
     const hoverRef = useRef(false)
@@ -17,7 +17,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
     const skipClick = useRef(false)
 
     const [active, setActive] = useState(false)
-    const [style, setStyle] = useState<CSSProperties>({})
+    const [placement, setPlacement] = useState<PopperPlacementType>('bottom')
     const hasDialogRef = useRef(false)
     const { stack } = useDialogStacking()
     hasDialogRef.current = stack.length > 0
@@ -35,18 +35,17 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
         }, LEAVE_DURATION)
     }, [])
 
-    const showProfileCard = useCallback((patchStyle: CSSProperties) => {
+    const showProfileCard = useCallback((placement: PopperPlacementType) => {
         clearTimeout(closeTimerRef.current)
         setActive(true)
-        setStyle((old) => {
-            const { left, top } = old
-            if (left === patchStyle.left && top === patchStyle.top) return old
-            return { ...old, ...patchStyle }
-        })
+        setPlacement(placement)
     }, [])
     useEffect(() => {
         const holder = holderRef.current
-        if (!holder) return
+        if (!holder) {
+            hideProfileCard()
+            return
+        }
         const enter = () => {
             hoverRef.current = true
             clearTimeout(closeTimerRef.current)
@@ -61,7 +60,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
             holder.removeEventListener('mouseenter', enter)
             holder.removeEventListener('mouseleave', leave)
         }
-    }, [])
+    }, [holderRef.current])
 
     useEffect(() => {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
@@ -70,20 +69,9 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
                 return
             }
             if (event.external) skipClick.current = true
-            const { x, y } = attachRectangle({
-                anchorBounding: event.badgeBounding,
-                targetDimension: { height: CARD_HEIGHT, width: CARD_WIDTH },
-                containerDimension: { height: window.innerHeight, width: window.innerWidth },
-                margin: MARGIN,
-            })
+            const reachedBottom = event.anchorBounding.bottom + CARD_HEIGHT > window.innerHeight
 
-            const pageOffset = document.scrollingElement?.scrollTop || 0
-            const newLeft = x
-            const newTop = y + pageOffset
-            showProfileCard({
-                left: newLeft,
-                top: newTop,
-            })
+            showProfileCard(reachedBottom ? 'auto' : 'bottom')
         })
     }, [])
 
@@ -100,5 +88,5 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
         }
     }, [])
 
-    return { style, active }
+    return { placement, active }
 }

@@ -1,6 +1,5 @@
 import { socialNetworkEncoder } from '@masknet/encryption'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
-import { PluginID, type ProfileIdentifier } from '@masknet/shared-base'
+import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service.js'
@@ -44,7 +43,9 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             if (encode === 'image') {
                 const decoratedText = decorateEncryptedText('', t, content.meta)
-                const defaultText = t('additional_post_box__encrypted_post_pre', { encrypted: '' })
+                const defaultText = t('additional_post_box__encrypted_post_pre', {
+                    encrypted: 'https://mask.io/',
+                })
                 await pasteImage(
                     decoratedText || defaultText,
                     // We can send raw binary through the image, but for the text we still use the old way.

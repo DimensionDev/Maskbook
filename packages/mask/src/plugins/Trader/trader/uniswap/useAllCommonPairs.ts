@@ -7,14 +7,14 @@ import { PairState, usePairs } from './usePairs.js'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const { chainId } = useChainContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { pluginID } = useNetworkContext()
-    const chainIdValid = Others?.chainResolver.isValid(chainId)
+    const chainIdValid = Others.chainResolver.isValid(chainId)
     const context = useGetTradeContext(tradeProvider)
 
     const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]

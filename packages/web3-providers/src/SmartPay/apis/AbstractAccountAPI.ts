@@ -10,15 +10,15 @@ import {
     isEmptyHex,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
-import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Web3API } from '../../Connection/EVM/apis/Web3API.js'
+import { RequestReadonlyAPI } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayOwnerAPI } from './OwnerAPI.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
 
-export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
-    private Web3 = new Web3API()
+export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
+    private Request = new RequestReadonlyAPI()
     private Owner = new SmartPayOwnerAPI()
     private Bundler = new SmartPayBundlerAPI()
 
@@ -75,12 +75,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             return
         }
 
-        await userTransaction.fillUserOperation(this.Web3.getWeb3(chainId), await getOverrides())
+        await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }), await getOverrides())
         return this.Bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
-        await userTransaction.fillUserOperation(this.Web3.getWeb3(chainId))
+        await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }))
         return userTransaction.estimateUserOperation()
     }
 

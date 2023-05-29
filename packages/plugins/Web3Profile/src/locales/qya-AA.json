@@ -81,6 +81,12 @@
     "wallet_setting_hint": "crwdns18110:0crwdne18110:0",
     "no_authenticated_wallet": "crwdns18112:0crwdne18112:0",
     "no_items_found": "crwdns18114:0crwdne18114:0",
+    "no_verified_account": "crwdns20197:0crwdne20197:0",
     "account_empty": "crwdns18200:0crwdne18200:0",
-    "load_more": "crwdns18308:0crwdne18308:0"
+    "load_more": "crwdns18308:0crwdne18308:0",
+    "setup_tips": "crwdns20199:0crwdne20199:0",
+    "save_successfully": "crwdns20201:0crwdne20201:0",
+    "save_successfully_message": "crwdns20203:0crwdne20203:0",
+    "save_failed": "crwdns20205:0crwdne20205:0",
+    "save_failed_message": "crwdns20207:0crwdne20207:0"
 }

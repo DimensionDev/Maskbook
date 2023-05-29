@@ -1,13 +1,14 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { AbiOutput } from 'web3-utils'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import {
     type ChainId,
     ContractTransaction,
     decodeOutputString,
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
 import { useMulticallContract } from './useMulticallContract.js'
@@ -118,7 +119,6 @@ export type MulticallState =
  */
 export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?: number) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: targetChainId })
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const multicallContract = useMulticallContract(chainId)
     const [multicallState, setMulticallState] = useState<MulticallState>({
         type: MulticallStateType.UNKNOWN,
@@ -133,7 +133,12 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 return
             }
 
-            const blockNumber = targetBlockNumber ?? (await connection?.getBlockNumber()) ?? 0
+            const blockNumber =
+                targetBlockNumber ??
+                (await Web3.getBlockNumber({
+                    chainId,
+                })) ??
+                0
 
             try {
                 setMulticallState({
@@ -147,13 +152,11 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 if (unresolvedCalls.length) {
                     await Promise.all(
                         chunkArray(unresolvedCalls).map(async (chunk) => {
-                            // we don't mind the actual block number of the current call
-                            if (!connection) return
                             const tx = new ContractTransaction(multicallContract).fill(
                                 multicallContract.methods.multicall(chunk),
                                 overrides,
                             )
-                            const hex = await connection.callTransaction(tx)
+                            const hex = await Web3.callTransaction(tx, { chainId })
 
                             const outputType = multicallContract.options.jsonInterface.find(
                                 ({ name }) => name === 'multicall',
@@ -161,8 +164,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
 
                             if (!outputType) return
 
-                            const web3 = connection.getWeb3()
-                            const decodeResult = decodeOutputString(web3, outputType, hex) as
+                            const decodeResult = decodeOutputString(Web3.getWeb3({ chainId }), outputType, hex) as
                                 | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
                                 | undefined
 
@@ -188,7 +190,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 throw error
             }
         },
-        [chainId, targetBlockNumber, multicallContract, connection],
+        [chainId, targetBlockNumber, multicallContract],
     )
     return [multicallState, multicallCallback] as const
 }
@@ -200,7 +202,6 @@ export function useMulticallStateDecoded<
     K extends keyof T['methods'],
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticallState, chainId?: ChainId) {
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     type Result = {
         succeed: boolean
         gasUsed: string
@@ -215,20 +216,20 @@ export function useMulticallStateDecoded<
           }
     )
     return useMemo(() => {
-        if (!web3 || state.type !== MulticallStateType.SUCCEED || contracts.length !== state.results.length) return []
+        if (state.type !== MulticallStateType.SUCCEED || contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {
             const outputs: AbiOutput[] =
                 contracts[index].options.jsonInterface.find(
                     ({ type, name }) => type === 'function' && name === names[index],
                 )?.outputs ?? []
             try {
-                const value = decodeOutputString(web3, outputs, result) as R
+                const value = decodeOutputString(Web3.getWeb3({ chainId }), outputs, result) as R
                 return { succeed, gasUsed, value, error: null }
             } catch (error) {
                 return { succeed: false, gasUsed, value: null, error }
             }
         })
-    }, [web3, contracts.map((x) => x.options.address).join(','), names.join(','), state])
+    }, [contracts.map((x) => x.options.address).join(','), names.join(','), state])
 }
 // #endregion
 

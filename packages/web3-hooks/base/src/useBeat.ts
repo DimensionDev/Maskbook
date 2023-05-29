@@ -2,8 +2,8 @@ import { type DependencyList, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3State } from './useWeb3State.js'
 import { useChainContext } from './useContext.js'
+import { useWeb3Others } from './useWeb3Others.js'
 
 const DEFAULT_SINGLE_BLOCK_DELAY = 10 * 1000 // 10 seconds
 const DEFAULT_DOUBLE_BLOCK_DELAY = DEFAULT_SINGLE_BLOCK_DELAY * 2
@@ -28,8 +28,8 @@ export function useSingleBlockBeatRetry<T extends NetworkPluginID, R>(
     deps: DependencyList = [],
 ): AsyncStateRetry<R> {
     const { chainId } = useChainContext()
-    const { Others } = useWeb3State(pluginID)
-    return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
+    const Others = useWeb3Others(pluginID)
+    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
 }
 
 export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
@@ -38,8 +38,8 @@ export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
     deps: DependencyList = [],
 ): AsyncStateRetry<R> {
     const { chainId } = useChainContext()
-    const { Others } = useWeb3State(pluginID)
-    return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
+    const Others = useWeb3Others(pluginID)
+    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
 }
 
 export function useCustomBlockBeatRetry<T extends NetworkPluginID, R>(
@@ -49,6 +49,6 @@ export function useCustomBlockBeatRetry<T extends NetworkPluginID, R>(
     scale = 1,
 ): AsyncStateRetry<R> {
     const { chainId } = useChainContext()
-    const { Others } = useWeb3State(pluginID)
-    return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId, scale) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
+    const Others = useWeb3Others(pluginID)
+    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId, scale) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
 }

@@ -2,7 +2,7 @@ import { memo, type HTMLProps, type FC } from 'react'
 import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { resolveImageURL } from '@masknet/web3-shared-evm'
 

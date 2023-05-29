@@ -1,17 +1,16 @@
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { Lens } from '@masknet/web3-providers'
-import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
+import { useCallback } from 'react'
 import isBefore from 'date-fns/isBefore'
 import add from 'date-fns/add'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Lens, Web3 } from '@masknet/web3-providers'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { context, lensTokenStorage as storage } from '../../context.js'
-import { useCallback } from 'react'
 
 export function useQueryAuthenticate(address: string) {
     const { chainId } = useChainContext()
-    const connection = useWeb3Connection()
 
     return useCallback(async () => {
-        if (!address || !connection || chainId !== ChainId.Matic || !isValidAddress(address)) return
+        if (!address || chainId !== ChainId.Matic || !isValidAddress(address)) return
 
         const accessToken = storage.accessToken?.value?.[address]
         const refreshToken = storage.refreshToken?.value?.[address]
@@ -32,10 +31,9 @@ export function useQueryAuthenticate(address: string) {
 
         const challenge = await Lens.queryChallenge(address)
         if (!challenge) return
-        const signature = await connection.signMessage('message', challenge)
 
+        const signature = await Web3.signMessage('message', challenge)
         const authenticate = await Lens.authenticate(address, signature)
-
         if (!authenticate) return
 
         /**
@@ -58,5 +56,5 @@ export function useQueryAuthenticate(address: string) {
         })
 
         return authenticate.accessToken
-    }, [address, connection, chainId, context.createKVStorage])
+    }, [address, chainId, context.createKVStorage])
 }

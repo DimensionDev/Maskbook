@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { AccountIcon, ReversedAddress } from '@masknet/shared'
 import { Link, MenuItem, Select, Typography } from '@mui/material'
-import { useDefaultChainId, useWeb3State } from '@masknet/web3-hooks-base'
+import { useDefaultChainId, useWeb3Others } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
@@ -116,14 +116,14 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
 const ExternalLink: FC<{ account: SocialAccount<Web3Helper.ChainIdAll> }> = ({ account }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State(account.pluginID)
+    const Others = useWeb3Others(account.pluginID)
     const chainId = useDefaultChainId(account.pluginID)
 
     return (
         <Link
             className={cx(classes.link, classes.actionIcon, classes.icon)}
             onClick={(e) => e.stopPropagation()}
-            href={Others?.explorerResolver.addressLink(chainId, account.address) ?? ''}
+            href={Others.explorerResolver.addressLink(chainId, account.address) ?? ''}
             target="_blank"
             title={t.view_on_explorer()}
             rel="noopener noreferrer">

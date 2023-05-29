@@ -3,6 +3,9 @@ import { PluginSettingsDialog } from '../../../components/InjectedComponents/Plu
 import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
 import { rootSelector } from '../utils/selector.js'
 
+/**
+ * @deprecated unused
+ */
 export function injectPluginSettingsDialogAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(rootSelector())
     startWatch(watcher, signal)

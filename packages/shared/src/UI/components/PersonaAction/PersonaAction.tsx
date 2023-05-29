@@ -12,7 +12,7 @@ import { useSharedI18N } from '../../../locales/index.js'
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
         width: '100%',
-        height: 36,
+        minHeight: 36,
         display: 'flex',
         justifyContent: 'space-between',
         padding: 16,

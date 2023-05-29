@@ -3,7 +3,7 @@ import type { NetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { PluginTraderRPC } from '../messages.js'
-import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -12,8 +12,8 @@ export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAl
         chainId: targetChainId,
     })
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
-    const networkType = Others?.chainResolver.networkType(chainId)
+    const Others = useWeb3Others()
+    const networkType = Others.chainResolver.networkType(chainId)
 
     return useAsync(async () => {
         switch (pluginID) {

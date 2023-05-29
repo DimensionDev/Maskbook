@@ -35,3 +35,11 @@
 
 # devtools=false
 # Disable Devtools integration in development mode.
+
+### React devtools default editor
+
+# devtoolsEditorURI=vscode://file/{path}:{line}
+# (default) VSCode
+
+# devtoolsEditorURI=...
+# Any URI that can open the editor you used.

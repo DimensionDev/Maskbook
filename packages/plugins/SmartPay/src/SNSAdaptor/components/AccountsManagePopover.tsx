@@ -13,6 +13,14 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(3),
         background: theme.palette.maskColor.bottom,
         width: 320,
+        filter:
+            theme.palette.mode === 'light'
+                ? 'drop-shadow(0px 4px 30px rgba(0, 0, 0, 0.1))'
+                : 'drop-shadow(0px 4px 30px rgba(255, 255, 255, 0.15))',
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? '0px 4px 30px 0px rgba(0, 0, 0, 0.1)'
+                : '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
     },
     title: {
         fontSize: 16,
@@ -30,6 +38,13 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
         fontWeight: 700,
+    },
+    changeOwner: {
+        height: 32,
+        fontSize: 12,
+        lineHeight: '16px',
+        fontWeight: 700,
+        padding: '8px 12px',
     },
 }))
 
@@ -96,6 +111,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                         <Typography className={classes.second}>{ownerInfo?.publicKey}</Typography>
                     </Box>
                     <Button
+                        className={classes.changeOwner}
                         variant="roundedContained"
                         onClick={() =>
                             openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address, toBeClose: true })

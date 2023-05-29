@@ -1,9 +1,10 @@
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
@@ -16,9 +17,8 @@ export function useClaimCallback(
 ) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const redPacketContract = useRedPacketContract(chainId, version)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useAsyncFn(async () => {
-        if (!connection || !redPacketContract || !id || !password) return
+        if (!redPacketContract || !id || !password) return
 
         const config = {
             from,
@@ -37,6 +37,8 @@ export function useClaimCallback(
                       config,
                   )
 
-        return connection.sendTransaction(tx)
-    }, [id, password, from, redPacketContract, chainId, version, connection])
+        return Web3.sendTransaction(tx, {
+            chainId,
+        })
+    }, [id, password, from, chainId, redPacketContract, version])
 }

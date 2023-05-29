@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { timeout } from '@masknet/kit'
-import { Web3Signer } from '@masknet/web3-providers'
+import { Signer } from '@masknet/web3-providers'
 import {
     type PersonaIdentifier,
     fromBase64URL,
@@ -52,5 +52,5 @@ export async function signWithPersona<T>(
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier_)
     if (!persona?.privateKey.d) throw new Error('Persona not found')
 
-    return Web3Signer.sign(type, Buffer.from(fromBase64URL(persona.privateKey.d)), message)
+    return Signer.sign(type, Buffer.from(fromBase64URL(persona.privateKey.d)), message)
 }

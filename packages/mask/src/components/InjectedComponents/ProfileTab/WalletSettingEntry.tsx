@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -15,18 +15,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const WalletSettingEntry = memo(() => {
+function openWeb3ProfileSettingDialog() {
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
+        open: true,
+    })
+}
+export const WalletSettingEntry = memo(function WalletSettingEntry() {
     const { t } = useI18N()
     const { classes } = useStyles()
-
-    const handleOpenSettingDialog = useCallback(
-        () =>
-            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
-                open: true,
-                targetTab: PluginID.Web3Profile,
-            }),
-        [],
-    )
 
     return (
         <>
@@ -36,7 +32,7 @@ export const WalletSettingEntry = memo(() => {
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
-                <Button className={classes.button} onClick={handleOpenSettingDialog}>
+                <Button className={classes.button} onClick={openWeb3ProfileSettingDialog}>
                     <Icons.Settings size={18} />
                     {t('show_wallet_setting_button')}
                 </Button>

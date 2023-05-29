@@ -1,6 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { HubOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
@@ -8,16 +9,16 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
     pluginID?: T,
     address?: string,
     id?: string,
-    options?: Web3Helper.Web3HubOptionsScope<S, T>,
+    options?: HubOptions<T>,
 ) {
     const { account } = useChainContext({ account: options?.account })
-    const hub = useWeb3Hub(pluginID, {
+    const Hub = useWeb3Hub(pluginID, {
         account,
         ...options,
     })
 
     return useAsyncRetry<Web3Helper.NonFungibleAssetScope<S, T> | undefined>(async () => {
-        if (!hub || !address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return
-        return hub.getNonFungibleAsset?.(address ?? '', id ?? '', options)
-    }, [address, id, hub, JSON.stringify(options)])
+        if (!address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return
+        return Hub.getNonFungibleAsset(address ?? '', id ?? '')
+    }, [address, id, Hub])
 }

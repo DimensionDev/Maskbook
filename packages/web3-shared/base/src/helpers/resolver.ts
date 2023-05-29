@@ -7,6 +7,7 @@ import {
     type ProviderDescriptor,
     SourceType,
 } from '../specs/index.js'
+import { memoize } from 'lodash-es'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -269,6 +270,14 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
         throw new Error(`Unknown network plugin-id: ${network}`)
     },
 )
+
+export const resolveNextIDPlatformWalletName: (platform: NextIDPlatform) => string = memoize(function (
+    platform: NextIDPlatform,
+) {
+    const pluginId = resolveNextID_NetworkPluginID(platform)
+    if (!pluginId) return `${platform} wallet`
+    return resolveNetworkWalletName(pluginId)
+})
 
 export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
     {

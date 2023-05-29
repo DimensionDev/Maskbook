@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useChainContext, useBalance, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useBalance, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -10,7 +10,7 @@ export function useUpdateBalance(chainId: Web3Helper.ChainIdAll) {
         tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
     } = AllProviderTradeContext.useContainer()
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const balance = useBalance(pluginID, {
         chainId,
@@ -32,23 +32,23 @@ export function useUpdateBalance(chainId: Web3Helper.ChainIdAll) {
 
     useEffect(() => {
         if (!account) return
-        if (Others?.isNativeTokenSchemaType(inputToken?.schema)) {
+        if (Others.isNativeTokenSchemaType(inputToken?.schema)) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: balance.value || '0',
             })
         }
-    }, [account, inputToken?.schema, balance.value, Others?.isNativeTokenSchemaType])
+    }, [account, inputToken?.schema, balance.value, Others.isNativeTokenSchemaType])
 
     useEffect(() => {
         if (!account) return
         const value =
-            Others?.isNativeTokenSchemaType(outputToken?.schema) || isNativeTokenAddress(outputToken?.address)
+            Others.isNativeTokenSchemaType(outputToken?.schema) || isNativeTokenAddress(outputToken?.address)
                 ? balance.value
                 : '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: value || '0',
         })
-    }, [account, outputToken?.schema, outputToken?.address, balance.value, Others?.isNativeTokenSchemaType])
+    }, [account, outputToken?.schema, outputToken?.address, balance.value, Others.isNativeTokenSchemaType])
 }

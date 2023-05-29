@@ -78,7 +78,9 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
      */
     sync() {
         if (!this.isLastStorageResultFresh) {
-            localStorage.removeItem(this.KEY)
+            try {
+                localStorage.removeItem(this.KEY)
+            } catch {}
         }
 
         const lastFetchResult = this.lastFetchResult
@@ -91,7 +93,9 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
                 lastStorageResult.timestamp < lastFetchResult.timestamp)
         ) {
             console.log('[RemoteFlags] sync from remote')
-            localStorage.setItem(this.KEY, JSON.stringify(lastFetchResult))
+            try {
+                localStorage.setItem(this.KEY, JSON.stringify(lastFetchResult))
+            } catch {}
         } else if (lastStorageResult?.timestamp) {
             console.log('[RemoteFlags] sync from storage')
             this.lastFetchResult = lastStorageResult

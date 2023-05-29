@@ -1,6 +1,5 @@
-import { type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import type {
-    HubOptions,
     NetworkDescriptor,
     ProviderDescriptor,
     FungibleToken,
@@ -16,9 +15,6 @@ import type {
     FungibleTokenResult,
     NonFungibleTokenResult,
     NonFungibleCollection,
-    Connection,
-    ConnectionOptions,
-    Hub,
     Web3State as Web3StateShared,
     Web3UI as Web3UIShared,
 } from '@masknet/web3-shared-base'
@@ -55,56 +51,12 @@ export declare namespace Web3Helper {
         ? never
         : Web3StateShared<
               Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['NetworkType'],
-              Definition[T]['Signature'],
-              Definition[T]['GasOption'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
               Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['TransactionParameter'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
+              Definition[T]['TransactionParameter']
           >
-
-    export type Web3Connection<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Connection<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['Signature'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
-
-    export type Web3ConnectionOptions<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : ConnectionOptions<
-              Definition[NetworkPluginID]['ChainId'],
-              Definition[NetworkPluginID]['ProviderType'],
-              Definition[NetworkPluginID]['Transaction']
-          >
-
-    export type Web3Hub<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
-
-    export type Web3HubOptions<T extends NetworkPluginID = never, Indicator = PageIndicator> = T extends never
-        ? never
-        : HubOptions<Definition[T]['ChainId'], Indicator>
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
 
@@ -196,53 +148,13 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['ProviderType']
     >
 
-    export type Web3ConnectionAll = Connection<
-        Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['AddressType'],
-        Definition[NetworkPluginID]['SchemaType'],
-        Definition[NetworkPluginID]['ProviderType'],
-        Definition[NetworkPluginID]['Signature'],
-        Definition[NetworkPluginID]['Block'],
-        Definition[NetworkPluginID]['Operation'],
-        Definition[NetworkPluginID]['Transaction'],
-        Definition[NetworkPluginID]['TransactionReceipt'],
-        Definition[NetworkPluginID]['TransactionDetailed'],
-        Definition[NetworkPluginID]['TransactionSignature'],
-        Definition[NetworkPluginID]['Web3'],
-        Definition[NetworkPluginID]['Web3Provider']
-    >
-
-    export type Web3ConnectionOptionsAll = ConnectionOptions<
-        Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['ProviderType'],
-        Definition[NetworkPluginID]['Transaction']
-    >
-
-    export type Web3HubAll = Hub<
-        Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['SchemaType'],
-        Definition[NetworkPluginID]['GasOption']
-    >
-
-    export type Web3HubOptionsAll = HubOptions<Definition[NetworkPluginID]['ChainId']>
-
     export type Web3StateAll = Web3StateShared<
         Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['AddressType'],
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['NetworkType'],
-        Definition[NetworkPluginID]['Signature'],
-        Definition[NetworkPluginID]['GasOption'],
-        Definition[NetworkPluginID]['Block'],
-        Definition[NetworkPluginID]['Operation'],
         Definition[NetworkPluginID]['Transaction'],
-        Definition[NetworkPluginID]['TransactionReceipt'],
-        Definition[NetworkPluginID]['TransactionDetailed'],
-        Definition[NetworkPluginID]['TransactionSignature'],
-        Definition[NetworkPluginID]['TransactionParameter'],
-        Definition[NetworkPluginID]['Web3'],
-        Definition[NetworkPluginID]['Web3Provider']
+        Definition[NetworkPluginID]['TransactionParameter']
     >
 
     export type Web3UIAll = Web3UIShared<
@@ -260,6 +172,11 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all' ? AddressTypeAll : Definition[T]['AddressType']
+
+    export type GasOptionScope<
+        S extends 'all' | void = void,
+        T extends NetworkPluginID = NetworkPluginID,
+    > = S extends 'all' ? GasOptionAll : Definition[T]['GasOption']
 
     export type NetworkTypeScope<
         S extends 'all' | void = void,
@@ -342,50 +259,12 @@ export declare namespace Web3Helper {
         ? Web3StateAll
         : Web3StateShared<
               Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['NetworkType'],
-              Definition[T]['Signature'],
-              Definition[T]['GasOption'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
               Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['TransactionParameter'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
+              Definition[T]['TransactionParameter']
           >
-
-    export type Web3ConnectionScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3ConnectionAll
-        : Connection<
-              Definition[T]['ChainId'],
-              Definition[T]['AddressType'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['Signature'],
-              Definition[T]['Block'],
-              Definition[T]['Operation'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionReceipt'],
-              Definition[T]['TransactionDetailed'],
-              Definition[T]['TransactionSignature'],
-              Definition[T]['Web3'],
-              Definition[T]['Web3Provider']
-          >
-
-    export type Web3ConnectionOptionsScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3ConnectionOptionsAll
-        : ConnectionOptions<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['Transaction']>
 
     export type Web3UIScope<
         S extends 'all' | void = void,
@@ -393,19 +272,6 @@ export declare namespace Web3Helper {
     > = S extends 'all'
         ? Web3UIAll
         : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
-
-    export type Web3HubScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3HubAll
-        : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
-
-    export type Web3HubOptionsScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-        Indicator = PageIndicator,
-    > = S extends 'all' ? Web3HubOptionsAll : HubOptions<Definition[T]['ChainId'], Indicator>
 
     export type Scope<S extends 'all' | void = void, T = unknown, F = unknown> = S extends 'all' ? T : F
 
