@@ -51,7 +51,9 @@ function resolveLastRecognizedIdentityInner(
 
         const selfInfo = collectSelfInfo()
         const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || selfInfo.avatar) ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || selfInfo.handle
+        const handle =
+            searchSelfHandleSelector().evaluate()?.dataset.testid?.trim().slice('UserAvatar-Container-'.length) ||
+            selfInfo.handle
         const nickname = getNickname(selfInfo.nickname) ?? ''
 
         if (handle) {
