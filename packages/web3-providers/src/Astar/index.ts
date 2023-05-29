@@ -1,12 +1,12 @@
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import type { ChainId, GasOption } from '@masknet/web3-shared-evm'
 import type { EstimateSuggestResponse } from './types.js'
-import type { GasOptionAPI } from '../entry-types.js'
+import type { GasOptionAPI_Base } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
 
 const ASTAR_API = 'https://gas.astar.network/api/gasnow?network=astar'
 
-export class AstarAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
+export class AstarAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
         const { data: result } = await fetchJSON<{ data: EstimateSuggestResponse }>(ASTAR_API)
 

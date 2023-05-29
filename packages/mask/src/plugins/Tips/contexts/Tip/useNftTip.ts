@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TipTuple } from './type.js'
 
@@ -9,30 +9,20 @@ export function useNftTip<T extends NetworkPluginID>(
     recipient: string,
     contractAddress: string,
     tokenId?: string | null,
-    options?: Web3Helper.Web3ConnectionOptions<T>,
+    options?: ConnectionOptions<T>,
 ): TipTuple {
-    const { Token, Connection } = useWeb3State<'all'>(pluginID)
+    const { Token } = useWeb3State<'all'>(pluginID)
     const { account, chainId } = useChainContext()
-    const connectionOptions = {
+    const Web3 = useWeb3Connection(pluginID, {
         account,
         ...options,
-        overrides: {
-            from: account,
-        },
-    }
+        overrides: {},
+    })
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
-        const connection = Connection?.getConnection?.()
-        if (!connection || !contractAddress) return
+        if (!contractAddress) return
         if (pluginID === NetworkPluginID.PLUGIN_EVM && !tokenId) return
-        const txid = await connection.transferNonFungibleToken(
-            contractAddress,
-            tokenId ?? '',
-            recipient,
-            '1',
-            undefined,
-            connectionOptions,
-        )
-        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress, tokenId ?? '', undefined, {
+        const txid = await Web3.transferNonFungibleToken(contractAddress, tokenId ?? '', recipient, '1')
+        const tokenDetailed = await Web3.getNonFungibleToken(contractAddress, tokenId ?? '', undefined, {
             chainId,
             account,
         })
@@ -40,7 +30,7 @@ export function useNftTip<T extends NetworkPluginID>(
             await Token?.removeToken?.(account, tokenDetailed)
         }
         return txid
-    }, [account, tokenId, pluginID, Connection, contractAddress, recipient, JSON.stringify(connectionOptions)])
+    }, [account, tokenId, pluginID, contractAddress, recipient, Web3])
 
     return [isTransferring, sendTip]
 }

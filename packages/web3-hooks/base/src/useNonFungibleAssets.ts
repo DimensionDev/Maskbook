@@ -1,40 +1,40 @@
 import { useMemo } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { HubOptions } from '@masknet/web3-providers/types'
 import { pageableToIterator, flattenAsyncIterator, type NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { useChainContext } from './useContext.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'
-import { useWeb3State } from './useWeb3State.js'
 import { useIterator } from './useIterator.js'
+import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
-    options?: Web3Helper.Web3HubOptionsScope<S, T>,
+    options?: HubOptions<T>,
 ) {
-    const { Hub } = useWeb3State(pluginID)
     const { account, chainId } = useChainContext({ account: options?.account })
+    const Hub = useWeb3Hub(pluginID, { account, chainId, ...options })
     const networks = useNetworkDescriptors(pluginID)
 
     // create iterator
     const iterator = useMemo(() => {
-        const hub = Hub?.getHub?.({ account, chainId, ...options })
-        if (!account || !hub?.getNonFungibleAssets) return
+        if (!account) return
 
         return flattenAsyncIterator(
             networks
                 .filter((x) => x.isMainnet && (options?.chainId ? x.chainId === options.chainId : true))
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
-                        return hub.getNonFungibleAssets!(account, {
+                        return Hub.getNonFungibleAssets!(account, {
                             indicator,
                             size: 50,
-                            ...options,
                             chainId: x.chainId,
                         })
                     })
                 }),
         )
-    }, [Hub, account, JSON.stringify(options), networks, chainId])
+    }, [Hub, account, networks, chainId])
+
     const { value: assets, next, retry, loading, done, error } = useIterator(iterator)
 
     const value = useMemo(() => {

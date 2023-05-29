@@ -2,15 +2,7 @@
 /// <reference types="@masknet/global-types/webpack" />
 
 import type { MutateOptions, BlockObject, TransactionObject, QueryOptions, BlockHeaderObject } from '@blocto/fcl'
-import type { PageIndicator } from '@masknet/shared-base'
-import type {
-    Web3State as Web3StateShared,
-    Web3UI as Web3UIShared,
-    Connection,
-    ConnectionOptions,
-    Hub,
-    HubOptions,
-} from '@masknet/web3-shared-base'
+import type { Web3State as Web3StateShared, Web3UI as Web3UIShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
     Mainnet = 1,
@@ -75,45 +67,12 @@ export type Web3UI = Web3UIShared<ChainId, ProviderType, NetworkType>
 
 export type Web3State = Web3StateShared<
     ChainId,
-    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,
-    Signature,
-    GasOption,
-    Block,
-    Operation,
     Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    TransactionParameter,
-    Web3,
-    Web3Provider
+    TransactionParameter
 >
-
-export type Web3Connection = Connection<
-    ChainId,
-    AddressType,
-    SchemaType,
-    ProviderType,
-    Signature,
-    Block,
-    Operation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    Web3,
-    Web3Provider,
-    Web3ConnectionOptions
->
-
-export type Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>
-
-export type Web3Hub = Hub<ChainId, SchemaType, GasOption>
-
-export type Web3HubOptions<Indicator = PageIndicator> = HubOptions<ChainId, Indicator>
 
 export type Web3Definition = {
     ChainId: ChainId
@@ -135,8 +94,4 @@ export type Web3Definition = {
     Web3UI: Web3UI
     Web3Provider: Web3Provider
     Web3State: Web3State
-    Web3Connection: Web3Connection
-    Web3ConnectionOptions: Web3ConnectionOptions
-    Web3Hub: Web3Hub
-    Web3HubOptions: Web3HubOptions
 }

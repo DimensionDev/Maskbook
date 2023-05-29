@@ -26,6 +26,7 @@ export interface MaskSNSEvents {
     // TODO: move to plugin message
     profileTabUpdated: ProfileTabEvent
     profileTabHidden: { hidden: boolean }
+    postReplacerHidden: postReplacerHiddenEvent
     profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
@@ -128,7 +129,8 @@ export type ProfileCardEvent =
           open: true
           userId: string
           address?: string
-          badgeBounding: DOMRect
+          anchorBounding: DOMRect
+          anchorEl: HTMLElement | null
           external?: boolean
       }
 
@@ -191,6 +193,11 @@ export enum ProfileTabs {
 export interface ProfileTabEvent {
     show: boolean
     type?: ProfileTabs
+}
+
+export interface postReplacerHiddenEvent {
+    hidden: boolean
+    postId: string
 }
 
 export interface OpenPageConfirmEvent {

@@ -1,20 +1,22 @@
-import { type HTMLProps, memo, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
-import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { Box, Link, Typography } from '@mui/material'
-import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
-import { AddressItem, Image, useSnackbarCallback, TokenWithSocialGroupMenu } from '@masknet/shared'
+import { AddressItem, Image, TokenWithSocialGroupMenu, useSnackbarCallback } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import { Box, Link, Typography } from '@mui/material'
+import type { BoxProps } from '@mui/system'
+import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
+import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
-import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
-import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
@@ -93,11 +95,10 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     },
 }))
 
-export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
+export interface ProfileBarProps extends BoxProps {
     identity: SocialIdentity
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
-    badgeBounding?: DOMRect
     onAddressChange?: (address: string) => void
 }
 
@@ -107,11 +108,11 @@ export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ socialAccounts, address, identity, onAddressChange, className, children, badgeBounding, ...rest }) => {
+    ({ socialAccounts, address, identity, onAddressChange, className, children, ...rest }) => {
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
-        const containerRef = useRef<HTMLDivElement>(null)
         const { current: avatarClipPathId } = useRef<string>(uuid())
+        const { anchorEl, anchorBounding } = useAnchor()
 
         const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
 
@@ -123,10 +124,11 @@ export const ProfileBar = memo<ProfileBarProps>(
             successText: t('copy_success'),
         })
 
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
         const { chainId } = useChainContext()
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
+        const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
         useEffect(() => {
             const closeMenu = () => setWalletMenuOpen(false)
             window.addEventListener('scroll', closeMenu, false)
@@ -137,7 +139,7 @@ export const ProfileBar = memo<ProfileBarProps>(
         const selectedAddress = socialAccounts.find((x) => isSameAddress(x.address, address))
 
         return (
-            <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
+            <Box className={cx(classes.root, className)} {...rest}>
                 <div className={classes.avatar}>
                     <Image
                         src={identity.avatar}
@@ -171,7 +173,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                             />
                             <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
-                                href={Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                                href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"
                                 title={t('view_on_explorer')}
                                 rel="noopener noreferrer"
@@ -193,9 +195,8 @@ export const ProfileBar = memo<ProfileBarProps>(
                 </Box>
 
                 <TokenWithSocialGroupMenu
-                    walletMenuOpen={walletMenuOpen}
-                    setWalletMenuOpen={setWalletMenuOpen}
-                    containerRef={containerRef}
+                    open={walletMenuOpen}
+                    onClose={closeMenu}
                     fromSocialCard
                     onAddressChange={onAddressChange}
                     currentAddress={address}
@@ -203,12 +204,13 @@ export const ProfileBar = memo<ProfileBarProps>(
                     collectionList={collectionList}
                     onTokenChange={(currentResult) => {
                         setWalletMenuOpen(false)
-                        if (!badgeBounding) return
+                        if (!anchorBounding) return
                         PluginTraderMessages.trendingAnchorObserved.sendToLocal({
                             name: identity.identifier?.userId || '',
                             identity,
                             address,
-                            badgeBounding,
+                            anchorBounding,
+                            anchorEl,
                             type: TrendingAPI.TagType.HASH,
                             isCollectionProjectPopper: true,
                             currentResult,
@@ -216,6 +218,11 @@ export const ProfileBar = memo<ProfileBarProps>(
 
                         CrossIsolationMessages.events.profileCardEvent.sendToLocal({ open: false })
                     }}
+                    anchorPosition={{
+                        top: 60,
+                        left: 60,
+                    }}
+                    anchorReference="anchorPosition"
                 />
 
                 {children}

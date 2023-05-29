@@ -48,7 +48,6 @@ function openWeb3ProfileSettingDialog() {
 
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
-    badgeBounding?: DOMRect
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?(address: string): void
@@ -59,7 +58,6 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     address,
     identity,
     onAddressChange,
-    badgeBounding,
     ...rest
 }) => {
     const me = useLastRecognizedIdentity()
@@ -76,7 +74,6 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
             <ProfileBar
                 className={classes.profileBar}
                 identity={identity}
-                badgeBounding={badgeBounding}
                 socialAccounts={socialAccounts}
                 address={address}
                 onAddressChange={onAddressChange}>

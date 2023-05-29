@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
 import { createIndicator, createNextIndicator, createPageable, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    type HubOptions,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
@@ -15,10 +14,10 @@ import {
     fetchFromNFTScanV2,
 } from '../helpers/Solana.js'
 import type { PageableResponse, Response, Solana } from '../types/index.js'
-import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, _?: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, _?: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/sol/assets/:address', {
             address,
@@ -30,7 +29,10 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         return asset
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
+    async getAssets(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
+    ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/account/own/:from', {
             from: account,
@@ -50,7 +52,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
 
     async getAssetsByCollection(
         name: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId) || !name) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/assets/collection/:name', {
@@ -70,7 +72,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
 
     async getCollection(
         name: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleCollection<ChainId, SchemaType> | undefined> {
         const path = urlcat('/api/sol/collections/:name', {
             collection: name,
@@ -82,7 +84,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         const path = urlcat('/api/v2/collections/:address', {
             address,
@@ -95,7 +97,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
     async getEvents(
         address: string,
         _: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/transactions/:address', {

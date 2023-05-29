@@ -15,7 +15,12 @@ import {
     createBindingProofFromProfileQuery,
     EMPTY_LIST,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import {
+    PROOF_BASE_URL_DEV,
+    PROOF_BASE_URL_PROD,
+    RELATION_SERVICE_URL_DEV,
+    RELATION_SERVICE_URL_PROD,
+} from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON } from '../entry-helpers.js'
@@ -24,7 +29,12 @@ import type { NextIDBaseAPI } from '../entry-types.js'
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
-const relationServiceQuery = `  domain(domainSystem: "ENS", name: $identity) {
+const RELATION_SERVICE_URL =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+        ? RELATION_SERVICE_URL_PROD
+        : RELATION_SERVICE_URL_DEV
+
+const relationServiceQuery = `  domain(domainSystem: $domainSystem, name: $domain) {
         source
         system
         name
@@ -81,15 +91,6 @@ type NeighborList = Array<{
     to: NextIDIdentity
     from: NextIDIdentity
 }>
-
-/**
- * Lens account queried from next id
- */
-export interface LensAccount {
-    handle: string
-    displayName: string
-    address: string
-}
 
 const getPersonaQueryURL = (platform: string, identity: string) =>
     urlcat(BASE_URL, '/v1/proof', {
@@ -232,7 +233,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByAddress(address: string) {
+    async queryProfilesByDomain(domain: string) {
         const { data } = await fetchJSON<{
             data: {
                 domain: {
@@ -248,9 +249,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { identity: address.toLowerCase() },
+                    variables: { domainSystem: 'ENS', domain: domain.toLowerCase() },
                     query: `
-                    query GET_PROFILES_QUERY($identity: String) {
+                    query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
                       ${relationServiceQuery}
                     }
                 `,
@@ -283,9 +284,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                    variables: { identity: twitterId.toLowerCase() },
+                    variables: { domainSystem: 'ENS', domain: twitterId.toLowerCase() },
                     query: `
-                        query GET_PROFILES_BY_TWITTER_ID($identity: String) {
+                        query GET_PROFILES_BY_TWITTER_ID($domainSystem: String, $domain: String) {
                           ${relationServiceQuery}
                         }
                 `,
@@ -302,7 +303,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
-    async queryAllLens(twitterId: string): Promise<LensAccount[]> {
+    async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchJSON<{
             data: {
@@ -319,9 +320,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_LENS_PROFILES',
-                    variables: { identity: lowerCaseId },
+                    variables: { domainSystem: 'lens', domain: lowerCaseId },
                     query: `
-                        query GET_LENS_PROFILES($identity: String) {
+                        query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
                             ${relationServiceQuery}
                         }
                 `,

@@ -2,21 +2,18 @@ import { first, range as rangeNum } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox.js'
 import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { useMaskBoxContract } from './useMaskBoxContract.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
 
 // dynamically set the block range window size
 const FRAGMENT_SIZE = 3000
 const MAX_PAGE_SIZE = 10
 
 export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddress: string, boxId: string) {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const maskBoxContract = useMaskBoxContract()
     const { MASK_BOX_CONTRACT_FROM_BLOCK } = useMaskBoxConstants()
 
     return useAsyncRetry(async () => {
-        if (!connection) return null
         if (!maskBoxContract) return null
 
         const getPastEvents = (fromBlock: number, toBlock: number) => {
@@ -31,7 +28,7 @@ export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddr
             })
         }
 
-        const blockNumber = await connection.getBlockNumber()
+        const blockNumber = await Web3.getBlockNumber()
         const range = blockNumber - (MASK_BOX_CONTRACT_FROM_BLOCK ?? Math.max(0, blockNumber - FRAGMENT_SIZE))
         const size = Math.min(MAX_PAGE_SIZE, Math.ceil(range / FRAGMENT_SIZE))
         const allSettled = await Promise.allSettled(

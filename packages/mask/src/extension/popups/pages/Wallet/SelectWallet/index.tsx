@@ -7,7 +7,7 @@ import { Button, List, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainIdValid, useWallets, useChainContext } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
@@ -95,7 +95,6 @@ const SelectWallet = memo(() => {
     const navigate = useNavigate()
     const { smartPayChainId } = PopupContext.useContainer()
 
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
     ) as Array<Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>>
@@ -157,7 +156,7 @@ const SelectWallet = memo(() => {
                   },
         ])
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isPopup, connection, wallets, smartPayChainId])
+    }, [chainId, selected, isPopup, wallets, smartPayChainId])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')

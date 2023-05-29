@@ -1,10 +1,10 @@
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useSharedI18N } from '../../../locales/index.js'
-import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -21,7 +21,7 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
     const { owner, collection, operator, children, validationMessage: _validationMessage, chainId } = props
     const t = useSharedI18N()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { classes } = useStyles(undefined, { props })
     const {
         value: isApproveForAll,
@@ -40,10 +40,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         retry()
     }, [approveState.loading])
     const validationMessage = useMemo(() => {
-        if (!collection?.address || !Others?.isValidAddress(collection?.address))
+        if (!collection?.address || !Others.isValidAddress(collection?.address))
             return t.plugin_wallet_select_a_nft_contract()
-        if (!owner || !Others?.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
-        if (!operator || !Others?.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
+        if (!owner || !Others.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
+        if (!operator || !Others.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
         if (_validationMessage) return _validationMessage
         return ''
     }, [collection, owner, operator, _validationMessage])

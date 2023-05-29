@@ -1,6 +1,5 @@
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ConnectionContent } from './ConnectionContent.js'
@@ -14,7 +13,7 @@ export function ConnectionDialog(props: ConnectionDialogProps) {
     return (
         <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                     <ConnectionContent onClose={closeDialog} />
                 </Web3ContextProvider>
             </DialogContent>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
@@ -135,6 +135,7 @@ function Content(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
+    const closeMenu = useCallback(() => setMenuOpen(false), [])
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -165,7 +166,6 @@ function Content(props: ProfileTabContentProps) {
         retry: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
-
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
@@ -295,8 +295,8 @@ function Content(props: ProfileTabContentProps) {
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
         if (!currentVisitingUserId) return EMPTY_LIST
-        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
-    }, [currentVisitingUserId])
+        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || '')
+    }, [selectedSocialAccount])
 
     if (hidden) return null
 
@@ -436,9 +436,9 @@ function Content(props: ProfileTabContentProps) {
                             </Button>
 
                             <TokenWithSocialGroupMenu
-                                walletMenuOpen={menuOpen}
-                                setWalletMenuOpen={setMenuOpen}
-                                containerRef={buttonRef}
+                                open={menuOpen}
+                                onClose={closeMenu}
+                                anchorEl={buttonRef.current}
                                 onAddressChange={onSelect}
                                 currentAddress={selectedAddress}
                                 collectionList={collectionList}

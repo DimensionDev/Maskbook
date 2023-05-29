@@ -10,8 +10,6 @@ import {
     isPositive,
     multipliedBy,
 } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -21,7 +19,7 @@ export function useGasSchema(
     gasOptions: Record<GasOptionType, GasOption> | undefined,
 ) {
     const t = useSharedI18N()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     return useMemo(() => {
         return zod
             .object({
@@ -99,5 +97,5 @@ export function useGasSchema(
                 message: t.gas_settings_error_max_priority_gas_fee_imbalance(),
                 path: ['maxFeePerGas'],
             })
-    }, [t, transaction?.gas, gasOptions, Others])
+    }, [t, transaction?.gas, gasOptions])
 }

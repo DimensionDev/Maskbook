@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { CrossIsolationMessages, ProfileIdentifier, queryClient, type SocialIdentity } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { LoadingBase, ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { Fade } from '@mui/material'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
 import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
 import { twitterBase } from '../../base.js'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 import { useControlProfileCard } from './useControlProfileCard.js'
+import { Fade } from '@mui/material'
+import { AnchorProvider } from '@masknet/shared-base-ui'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
     attachReactTreeWithoutContainer('profile-card', <ProfileCardHolder />, signal)
@@ -17,10 +18,11 @@ export function injectProfileCardHolder(signal: AbortSignal) {
 
 const useStyles = makeStyles()({
     root: {
-        position: 'absolute',
         borderRadius: 10,
         width: CARD_WIDTH,
+        maxWidth: CARD_WIDTH,
         height: CARD_HEIGHT,
+        maxHeight: CARD_HEIGHT,
     },
     loading: {
         height: '100%',
@@ -36,15 +38,17 @@ function ProfileCardHolder() {
     const holderRef = useRef<HTMLDivElement>(null)
     const [twitterId, setTwitterId] = useState('')
     const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
-    const { active, style } = useControlProfileCard(holderRef)
+    const { active, placement } = useControlProfileCard(holderRef)
     const [address, setAddress] = useState('')
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     useEffect(() => {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) return
             setAddress(event.address ?? '')
             setTwitterId(event.userId)
-            setBadgeBounding(event.badgeBounding)
+            setBadgeBounding(event.anchorBounding)
+            setAnchorEl(event.anchorEl)
         })
     }, [])
 
@@ -72,15 +76,24 @@ function ProfileCardHolder() {
 
     return (
         <Fade in={active} easing="linear" timeout={250}>
-            <div className={classes.root} style={style} ref={holderRef} onClick={stopPropagation}>
+            <ShadowRootPopper
+                open={!!anchorEl}
+                anchorEl={anchorEl}
+                keepMounted
+                placement={placement}
+                className={classes.root}
+                ref={holderRef}
+                onClick={stopPropagation}>
                 {loading || resolving ? (
                     <div className={classes.loading}>
                         <LoadingBase size={36} />
                     </div>
                 ) : resolvedIdentity ? (
-                    <ProfileCard identity={resolvedIdentity} badgeBounding={badgeBounding} currentAddress={address} />
+                    <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
+                        <ProfileCard identity={resolvedIdentity} currentAddress={address} />
+                    </AnchorProvider>
                 ) : null}
-            </div>
+            </ShadowRootPopper>
         </Fade>
     )
 }

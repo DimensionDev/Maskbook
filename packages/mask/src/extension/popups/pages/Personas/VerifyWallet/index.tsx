@@ -11,9 +11,9 @@ import {
     type Account,
 } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
+import { NextIDProof, Others, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { type ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps.js'
 import Services from '../../../../service.js'
@@ -48,9 +48,7 @@ const VerifyWallet = memo(() => {
 
     const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
 
     const { value: isBound } = useAsync(async () => {
@@ -63,7 +61,7 @@ const VerifyWallet = memo(() => {
     }, [wallet.account, currentPersona?.identifier.publicKeyAsHex])
 
     const walletName = () => {
-        if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
+        if (domain) return Others.formatDomainName(domain)
         if (wallet.providerType !== ProviderType.MaskWallet)
             return `${providerResolver.providerName(wallet.providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, wallet.account))?.name ?? 'Wallet'
@@ -113,7 +111,7 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage('message', payload.signPayload, {
+            const walletSignature = await Web3.signMessage('message', payload.signPayload, {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
@@ -142,7 +140,7 @@ const VerifyWallet = memo(() => {
             showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
             return false
         }
-    }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature, connection])
+    }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
 
     const changeWallet = () => {
         navigate(PopupRoutes.ConnectWallet)
@@ -171,10 +169,9 @@ const VerifyWallet = memo(() => {
     // disconnect when router changes
     useEffect(
         () => () => {
-            if (!connection) return
-            connection.disconnect()
+            Web3.disconnect()
         },
-        [connection],
+        [],
     )
     useTitle(t('popups_add_wallet'))
 

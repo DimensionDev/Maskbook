@@ -10,7 +10,6 @@ import {
 } from '@masknet/shared-base'
 import {
     CurrencyType,
-    type HubOptions,
     type NonFungibleAsset,
     type NonFungibleCollection,
     type NonFungibleTokenEvent,
@@ -32,7 +31,7 @@ import {
 } from './types.js'
 import { GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 import { getAssetFullName, resolveActivityType } from '../entry-helpers.js'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -245,7 +244,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         )
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await this.request<{
             token: {
@@ -261,7 +260,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
     async getAssets(
         account: string,
-        options?: HubOptions<ChainId>,
+        options?: HubOptions_Base<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
@@ -283,7 +282,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 

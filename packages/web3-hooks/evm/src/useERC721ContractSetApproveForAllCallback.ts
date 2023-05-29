@@ -1,8 +1,8 @@
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { useERC721TokenContract } from './useERC721TokenContract.js'
+import { Web3 } from '@masknet/web3-providers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 /**
  * @param contractAddress NFT contract Address.
@@ -19,21 +19,18 @@ export function useERC721ContractSetApproveForAllCallback(
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: _chainId,
     })
-    const erc721TokenContract = useERC721TokenContract(chainId, contractAddress)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: _chainId })
 
     return useAsyncFn(async () => {
-        if (!erc721TokenContract || !contractAddress || !operator || !connection) {
-            return
-        }
+        if (!contractAddress || !operator) return
 
-        const hash = await connection?.approveAllNonFungibleTokens(contractAddress, operator, approved)
-        const receipt = await connection.confirmTransaction(hash, {
+        const hash = await Web3.approveAllNonFungibleTokens(contractAddress, operator, approved, undefined, {
+            chainId: _chainId,
+        })
+        const receipt = await Web3.confirmTransaction(hash, {
+            chainId: _chainId,
             signal: AbortSignal.timeout(5 * 60 * 1000),
         })
 
-        if (receipt) {
-            callback?.()
-        }
-    }, [account, chainId, erc721TokenContract, approved, contractAddress, operator, connection])
+        if (receipt) callback?.()
+    }, [account, approved, contractAddress, operator])
 }

@@ -1,12 +1,13 @@
 import { useAsyncFn } from 'react-use'
+import { toHex } from 'web3-utils'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { type GasConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { type SwapResponse, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
-import { toHex } from 'web3-utils'
 import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(
@@ -16,19 +17,16 @@ export function useTradeCallback(
     gasConfig?: GasConfig,
 ) {
     const notifyError = useSwapErrorCallback()
-    const { account, chainId } = useChainContext()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
-    const connection = useWeb3Connection()
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     return useAsyncFn(async () => {
         if (
-            !connection ||
-            !trade ||
-            !trade.inputToken ||
-            !trade.outputToken ||
+            !trade?.inputToken ||
+            !trade?.outputToken ||
             !exchangeProxyContract ||
             !BALANCER_ETH_ADDRESS ||
             pluginID !== NetworkPluginID.PLUGIN_EVM
@@ -56,18 +54,18 @@ export function useTradeCallback(
         )
 
         // balancer use a different address for the native token
-        const inputTokenAddress = Others?.isNativeTokenSchemaType(trade.inputToken.schema)
+        const inputTokenAddress = Others.isNativeTokenSchemaType(trade.inputToken.schema)
             ? BALANCER_ETH_ADDRESS
             : trade.inputToken.address
-        const outputTokenAddress = Others?.isNativeTokenSchemaType(trade.outputToken.schema)
+        const outputTokenAddress = Others.isNativeTokenSchemaType(trade.outputToken.schema)
             ? BALANCER_ETH_ADDRESS
             : trade.outputToken.address
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken.schema))
+        if (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken.schema))
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && Others?.isNativeTokenSchemaType(trade.outputToken.schema))
+        else if (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken.schema))
             transactionValue = trade.outputAmount.toFixed()
 
         try {
@@ -94,8 +92,8 @@ export function useTradeCallback(
                 },
             )
             // send transaction and wait for hash
-            const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
-            const receipt = await connection.getTransactionReceipt(hash)
+            const hash = await Web3.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
+            const receipt = await Web3.getTransactionReceipt(hash)
             return receipt?.transactionHash
         } catch (error) {
             if (error instanceof Error) {
@@ -103,15 +101,5 @@ export function useTradeCallback(
             }
             return
         }
-    }, [
-        chainId,
-        trade,
-        tradeAmount,
-        exchangeProxyContract,
-        BALANCER_ETH_ADDRESS,
-        connection,
-        pluginID,
-        Others?.isNativeTokenSchemaType,
-        notifyError,
-    ])
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, pluginID, notifyError, Others])
 }

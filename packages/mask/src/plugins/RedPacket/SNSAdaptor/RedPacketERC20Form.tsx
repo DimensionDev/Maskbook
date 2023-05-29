@@ -1,7 +1,9 @@
 import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
 import { makeStyles, ActionButton } from '@masknet/theme'
+import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import {
     type FungibleToken,
     isGreaterThan,
@@ -18,7 +20,7 @@ import {
     useRedPacketConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useSelectFungibleToken,
@@ -31,21 +33,18 @@ import {
 } from '@masknet/shared'
 import {
     useChainContext,
-    useWeb3,
     useWallet,
     useNativeToken,
     useNativeTokenPrice,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
+import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
-import { useAsync } from 'react-use'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
-import { useTransactionValue } from '@masknet/web3-hooks-evm'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -179,8 +178,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [creatingParams, onChange, onNext])
 
     // #region gas
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
+    const { account: publicKey } = useMemo(() => Web3.createAccount(), [])
     const contract_version = 4
     const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
     // #endregion

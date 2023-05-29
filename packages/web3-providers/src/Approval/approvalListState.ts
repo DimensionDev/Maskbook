@@ -1,6 +1,6 @@
 import { produce, enableMapSet } from 'immer'
-import { type ChainId } from '@masknet/web3-shared-evm'
 import type { BigNumber } from 'bignumber.js'
+import { type ChainId } from '@masknet/web3-shared-evm'
 
 export type TokenApprovalInfoAccountMap = Record<
     string,

@@ -3,7 +3,6 @@ import { getEnumAsArray } from '@masknet/kit'
 import { createPageable, createIndicator, createNextIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import {
     type Transaction,
-    type HubOptions,
     isSameAddress,
     TokenType,
     SourceType,
@@ -32,7 +31,14 @@ import {
     zerionChainIdResolver,
 } from './base-api.js'
 import { getAssetFullName, getNativeAssets } from '../entry-helpers.js'
-import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../entry-types.js'
+import type {
+    FungibleTokenAPI,
+    GasOptionAPI_Base,
+    HistoryAPI,
+    HubOptions_Base,
+    NonFungibleTokenAPI,
+    TrendingAPI,
+} from '../entry-types.js'
 
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
@@ -40,7 +46,7 @@ const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 export class ZerionAPI
     implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
 {
-    async getAssets(address: string, options?: HubOptions<ChainId>) {
+    async getAssets(address: string, options?: HubOptions_Base<ChainId>) {
         const { meta, payload } = await getAssetsList(address, 'positions')
         if (meta.status !== 'ok') return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
@@ -71,7 +77,7 @@ export class ZerionAPI
 
     async getTransactions(
         address: string,
-        { indicator, chainId }: HubOptions<ChainId> = {},
+        { indicator, chainId }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const pairs = getEnumAsArray(ChainId)
             .filter((x) => x.value === chainId)
@@ -151,7 +157,11 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         }
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet, account }: HubOptions<ChainId> = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet, account }: HubOptions_Base<ChainId> = {},
+    ) {
         if (!account || !isValidChainId(chainId)) return
         const response = await getNonFungibleAsset(account, address, tokenId)
         if (!response.payload.nft.length) return
@@ -159,7 +169,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         if (!payload) return
         return this.createNonFungibleTokenAssetFromNFT(chainId, payload)
     }
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {}) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size)
         if (!response.payload.nft.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -174,7 +184,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
 
     async getAssetsByCollection(
         address: string,
-        { chainId = ChainId.Mainnet, indicator, size, account }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size, account }: HubOptions_Base<ChainId> = {},
     ) {
         if (!account || !isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size, address)
@@ -187,7 +197,11 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         )
     }
 
-    async getFloorPrice(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getFloorPrice(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
+    ) {
         if (!isValidChainId(chainId)) return
         const response = await getNonFungibleInfo(address, tokenId)
 
@@ -242,7 +256,7 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 }
 
-export class ZerionGasAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
+export class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
         if (!isValidChainId(chainId)) return
         const result = await getGasOptions(chainId)

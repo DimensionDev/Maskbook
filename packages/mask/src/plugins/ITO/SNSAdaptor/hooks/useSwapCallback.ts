@@ -15,12 +15,12 @@ import {
     type FungibleToken,
     currySameAddress,
 } from '@masknet/web3-shared-base'
-import { fromHex, toHex, NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { fromHex, toHex, type NetworkPluginID } from '@masknet/shared-base'
+import type { JSON_PayloadInMask } from '../../types.js'
 import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'
-import type { JSON_PayloadInMask } from '../../types.js'
 import { checkAvailability } from '../utils/checkAvailability.js'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
@@ -29,7 +29,6 @@ export function useSwapCallback(
     isQualificationHasLucky = false,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)
     const { contract: qualificationContract } = useQualificationContract(
@@ -39,10 +38,9 @@ export function useSwapCallback(
     )
 
     return useAsyncFn(async () => {
-        if (!ITO_Contract || !qualificationContract || !payload || !connection) return
+        if (!ITO_Contract || !qualificationContract || !payload) return
 
         const { pid, password } = payload
-
         if (!password) return
 
         // error: poll has expired
@@ -77,7 +75,6 @@ export function useSwapCallback(
                 account,
                 payload.contract_address,
                 chainId,
-                connection,
                 isSameAddress(payload.contract_address, ITO_CONTRACT_ADDRESS),
             )
             if (isZero(availability.remaining)) {

@@ -3,7 +3,7 @@ import { useCopyToClipboard } from 'react-use'
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import { DialogContent, Typography, DialogActions, Button } from '@mui/material'
-import { useChainContext, useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { chainResolver } from '@masknet/web3-shared-evm'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer/index.js'
@@ -35,7 +35,7 @@ export interface ReceiveDialogProps {
 }
 
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, address, onClose }) => {
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const { chainId } = useChainContext()
     const { data: domain } = useReverseAddress(undefined, address)
@@ -45,7 +45,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, address, onClose 
             open={open}
             chainId={chainId}
             address={address}
-            domain={Others?.formatDomainName(domain)}
+            domain={Others.formatDomainName(domain)}
             onClose={onClose}
         />
     )

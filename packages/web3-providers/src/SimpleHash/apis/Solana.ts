@@ -8,11 +8,11 @@ import {
     type PageIndicator,
     type Pageable,
 } from '@masknet/shared-base'
-import { type HubOptions, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-solana'
-import type { NonFungibleTokenAPI } from '../../entry-types.js'
-import { fetchFromSimpleHash, resolveChain } from '../helpers.js'
 import { type Asset, type Collection } from '../type.js'
+import { fetchFromSimpleHash, resolveChain } from '../helpers.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 import {
     createSolanaNonFungibleAsset,
     createSolanaNonFungibleCollection,
@@ -20,7 +20,7 @@ import {
 } from '../solana-helpers.js'
 
 export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
@@ -32,7 +32,7 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
         return createSolanaNonFungibleAsset(response)
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -56,7 +56,10 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
         )
     }
 
-    async getAssetsByCollection(address: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssetsByCollection(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -82,7 +85,7 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator }: HubOptions<ChainId> = {},
+        { chainId, indicator }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -106,7 +109,7 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
     async getAssetsByCollectionAndOwner(
         collectionId: string,
         owner: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !isValidChainId(chainId) || !collectionId || !owner)

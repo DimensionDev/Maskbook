@@ -43,7 +43,9 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             if (encode === 'image') {
                 const decoratedText = decorateEncryptedText('', t, content.meta)
-                const defaultText = t('additional_post_box__encrypted_post_pre', { encrypted: '' })
+                const defaultText = t('additional_post_box__encrypted_post_pre', {
+                    encrypted: 'https://mask.io/',
+                })
                 await pasteImage(
                     decoratedText || defaultText,
                     // We can send raw binary through the image, but for the text we still use the old way.

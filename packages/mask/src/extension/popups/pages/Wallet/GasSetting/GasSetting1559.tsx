@@ -1,18 +1,17 @@
-import { z as zod } from 'zod'
-import { toHex, fromWei } from 'web3-utils'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
-import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
+import { z as zod } from 'zod'
+import { toHex, fromWei } from 'web3-utils'
+import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import {
     formatCurrency,
@@ -26,7 +25,9 @@ import {
     toFixed,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
@@ -107,7 +108,6 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 export const GasSetting1559 = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const [getGasLimitError, setGetGasLimitError] = useState(false)
@@ -160,8 +160,7 @@ export const GasSetting1559 = memo(() => {
                 value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                if (!web3) return 0
-                return web3.eth.estimateGas({
+                return Web3.estimateTransaction?.({
                     data: value.formatterTransaction._tx.data,
                     from: value.formatterTransaction._tx.from,
                     to: value.formatterTransaction._tx.to,
@@ -174,7 +173,7 @@ export const GasSetting1559 = memo(() => {
         }
 
         return 0
-    }, [value, web3])
+    }, [value])
     // #endregion
 
     // #region Form field define schema

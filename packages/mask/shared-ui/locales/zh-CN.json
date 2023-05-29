@@ -138,7 +138,6 @@
     "no_NFTs_found": "没有找到任何NFT。",
     "dashboard_collectible_menu_all": "全部 ({{count}})",
     "days": "每隔 {{days}} 天",
-    "decrypted_postbox_add_recipients": "追加收件人",
     "decrypted_postbox_decrypting": "Mask正在解密中…",
     "decrypted_postbox_decoding": "Mask正在解码中…",
     "decrypted_postbox_decrypting_finding_person_key": "Mask 正在寻找作者的公钥…",

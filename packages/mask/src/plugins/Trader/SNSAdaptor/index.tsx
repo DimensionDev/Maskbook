@@ -1,18 +1,19 @@
 import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
-import { TrendingViewProvider } from './trending/context.js'
-import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { TraderDialog } from './trader/TraderDialog.js'
-import { TagInspector } from './trending/TagInspector.js'
-import { enhanceTag } from './cashTag.js'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Others } from '@masknet/web3-providers'
+import { base } from '../base.js'
+import { TrendingViewProvider } from './trending/context.js'
+import { TraderDialog } from './trader/TraderDialog.js'
+import { TagInspector } from './trending/TagInspector.js'
+import { enhanceTag } from './cashTag.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -26,7 +27,6 @@ const sns: Plugin.SNSAdaptor.Definition<ChainId> = {
         ID: PluginID.Trader,
         UI: {
             Content({ currentResult, resultList, isProfilePage, identity }) {
-                const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 if (!resultList.length || !currentResult) return null
                 const { chainId, keyword, pluginID } = currentResult
                 return (
@@ -40,7 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition<ChainId> = {
                             isCollectionProjectPopper={false}
                             isProfilePage={!!isProfilePage}
                             isTokenTagPopper={false}
-                            isPreciseSearch={!!Others?.isValidAddress(keyword)}>
+                            isPreciseSearch={Others.isValidAddress(keyword)}>
                             <TrendingView
                                 resultList={resultList as Web3Helper.TokenResultAll[]}
                                 identity={identity}
