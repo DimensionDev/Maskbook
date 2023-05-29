@@ -74,7 +74,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST
         return uniqBy(
-            proofs.filter((proof) => proof.platform === NextIDPlatform.Twitter),
+            proofs.filter((proof) => proof.platform === NextIDPlatform.Twitter && proof.is_valid),
             (x) => x.identity,
         )
     }, [proofs])
