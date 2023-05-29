@@ -4,9 +4,20 @@ import { useI18N } from '../../locales/index.js'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { Card, CardContent, CardHeader, Collapse, Skeleton, Typography, type CardProps, Button } from '@mui/material'
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    Collapse,
+    Skeleton,
+    Typography,
+    type CardProps,
+    Button,
+    alpha,
+} from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, type FC, useState, useCallback, useMemo } from 'react'
+import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -51,12 +62,28 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    titleWrapper: {
+        display: 'flex',
+    },
     title: {
         height: 18,
         lineHeight: '18px',
         fontSize: 14,
         fontWeight: 'bold',
         color: theme.palette.maskColor.main,
+    },
+    current: {
+        display: 'inline-block',
+        marginLeft: theme.spacing(1.5),
+        borderRadius: 4,
+        fontWeight: 'bold',
+        fontSize: '10px',
+        height: theme.spacing(2),
+        lineHeight: '16px',
+        padding: '0 6px',
+        boxSizing: 'border-box',
+        color: theme.palette.maskColor.primary,
+        backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
     },
     subheader: {
         height: 16,
@@ -74,7 +101,8 @@ interface Props extends CardProps {
     walletProofs?: BindingProof[]
     unlistedAddresses: string[]
     pendingUnlistedAddresses: string[]
-    initialCollapsed?: boolean
+    initialExpanded?: boolean
+    isCurrent?: boolean
     onToggle?(identity: string, address: string): void
     onAddWallet?(): void
 }
@@ -86,19 +114,23 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
     className,
     unlistedAddresses,
     pendingUnlistedAddresses,
-    initialCollapsed = true,
+    initialExpanded = false,
+    isCurrent,
     onToggle,
     onAddWallet,
     ...rest
 }) {
     const { classes, cx } = useStyles()
     const t = useI18N()
-    const [collapsed, setCollapsed] = useState(initialCollapsed)
+    const [expanded, setExpanded] = useState(initialExpanded)
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', profile.identity],
         queryFn: () => Twitter.getUserByScreenName(profile.identity),
     })
     const nickname = user?.legacy?.name || profile.name || profile.identity
+    // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.
+    const handle = user?.legacy?.screen_name || profile.identity
+    const avatarUrl = user?.legacy?.profile_image_url_https || avatar
     const handleSwitch = useCallback(
         (address: string) => {
             onToggle?.(profile.identity, address)
@@ -117,7 +149,7 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                 {listingAddresses.length}/{walletProofs.length}
             </Typography>
             <div className={classes.arrowWrapper}>
-                {collapsed ? <Icons.ArrowDrop size={20} /> : <Icons.ArrowUp size={20} />}
+                {expanded ? <Icons.ArrowUp size={20} /> : <Icons.ArrowDrop size={20} />}
             </div>
         </>
     ) : (
@@ -137,44 +169,55 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                 }}
                 avatar={
                     <PlatformAvatar
-                        networkIcon={avatar}
+                        networkIcon={avatarUrl}
                         providerIcon={new URL('../assets/Twitter.png', import.meta.url).href}
                         size={36}
                     />
                 }
                 title={
-                    <Typography variant="subtitle1" className={classes.title}>
-                        {nickname}
-                    </Typography>
+                    <div className={classes.titleWrapper}>
+                        <Typography variant="subtitle1" className={classes.title}>
+                            {nickname}
+                        </Typography>
+                        {isCurrent ? (
+                            <span className={classes.current} role="status">
+                                {t.current()}
+                            </span>
+                        ) : null}
+                    </div>
                 }
                 subheader={
                     <Typography variant="subtitle2" className={classes.subheader}>
-                        @{profile.identity}
+                        @{handle}
                     </Typography>
                 }
                 action={action}
                 onClick={() => {
                     if (!walletProofs.length) return
-                    return setCollapsed((v) => !v)
+                    return setExpanded((v) => !v)
                 }}
             />
-            <Collapse in={!collapsed} easing="ease-in-out">
-                <CardContent className={classes.content}>
-                    <div className={classes.wallets}>
-                        {walletProofs.map((proof) => {
-                            const checked = listingAddresses.includes(proof.identity)
-                            return (
-                                <WalletSettingCard
-                                    key={proof.identity}
-                                    wallet={proof}
-                                    checked={checked}
-                                    onSwitchChange={handleSwitch}
-                                />
-                            )
-                        })}
-                    </div>
-                </CardContent>
-            </Collapse>
+            {walletProofs.length ? (
+                <Collapse in={expanded} easing="ease-in-out">
+                    <CardContent className={classes.content}>
+                        <div className={classes.wallets}>
+                            {walletProofs.map((proof, i) => {
+                                const checked = listingAddresses.includes(proof.identity)
+                                const fallbackName = resolveNextIDPlatformWalletName(proof.platform)
+                                return (
+                                    <WalletSettingCard
+                                        key={proof.identity}
+                                        wallet={proof}
+                                        fallbackName={`${fallbackName} ${walletProofs.length - i}`}
+                                        checked={checked}
+                                        onSwitchChange={handleSwitch}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </CardContent>
+                </Collapse>
+            ) : null}
         </Card>
     )
 })

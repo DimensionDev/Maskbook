@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { isEmpty, isEqual, range, uniqBy } from 'lodash-es'
+import { useCallback, useMemo, useState } from 'react'
+import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
+import { isEqual, isEqualWith, range, sortBy, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     profileCard: {
-        marginTop: theme.spacing(1.5),
+        margin: theme.spacing(1.5, 0),
     },
     actions: {
         padding: '0px !important',
@@ -102,10 +102,17 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
     }, [unlistedAddressConfig, twitterProofs])
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
-    useEffect(() => {
-        setPendingUnlistedConfig((config) => (isEmpty(config) ? migratedUnlistedAddressConfig : config))
+    useUpdateEffect(() => {
+        setPendingUnlistedConfig(migratedUnlistedAddressConfig)
     }, [migratedUnlistedAddressConfig])
-    const isClean = isEqual(migratedUnlistedAddressConfig, pendingUnlistedConfig)
+    const isClean = useMemo(() => {
+        return isEqualWith(migratedUnlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
+            for (const key of Object.keys(config1)) {
+                if (!isEqual(sortBy(config1[key]), sortBy(config2[key]))) return false
+            }
+            return true
+        })
+    }, [migratedUnlistedAddressConfig, pendingUnlistedConfig])
 
     const toggleUnlisted = useCallback((identity: string, address: string) => {
         setPendingUnlistedConfig((config) => {
@@ -175,10 +182,11 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
                 ) : isFetched && !twitterProofs.length ? (
                     <EmptyStatus>{t.no_verified_account()}</EmptyStatus>
                 ) : (
-                    twitterProofs.map((proof, i) => {
+                    twitterProofs.map((proof) => {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
                         const unlistedAddresses = migratedUnlistedAddressConfig[proof.identity] ?? EMPTY_LIST
                         const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
+                        const isCurrent = proof.identity === myProfile?.identifier?.userId
                         return (
                             <ProfileCard
                                 key={proof.identity}
@@ -188,7 +196,8 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
                                 walletProofs={walletProofs}
                                 unlistedAddresses={unlistedAddresses}
                                 pendingUnlistedAddresses={pendingUnlistedAddresses}
-                                initialCollapsed={i !== 0}
+                                initialExpanded={isCurrent}
+                                isCurrent={isCurrent}
                                 onToggle={toggleUnlisted}
                                 onAddWallet={openPopupsWindow}
                             />
