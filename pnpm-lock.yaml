@@ -3432,6 +3432,9 @@ importers:
 
   packages/web3-providers:
     dependencies:
+      '@balancer-labs/sor':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@bonfida/spl-name-service':
         specifier: ^0.1.50
         version: 0.1.50(@solana/buffer-layout@4.0.1)(@solana/spl-token@0.1.8)(@solana/web3.js@1.75.0)(bn.js@4.12.0)(borsh@0.7.0)
@@ -3441,6 +3444,15 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
+      '@ethersproject/address':
+        specifier: ^5.4.0
+        version: 5.4.0
+      '@ethersproject/providers':
+        specifier: 5.7.2
+        version: 5.7.2
+      '@ethersproject/solidity':
+        specifier: ^5.4.0
+        version: 5.4.0
       '@masknet/flags':
         specifier: workspace:^
         version: link:../flags
@@ -3507,6 +3519,15 @@ importers:
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
+      '@uniswap/sdk-core':
+        specifier: ^3.0.1
+        version: 3.0.1
+      '@uniswap/v2-sdk':
+        specifier: 3.0.0-alpha.2
+        version: 3.0.0-alpha.2
+      '@uniswap/v3-sdk':
+        specifier: 3.9.0
+        version: 3.9.0(patch_hash=i674dmxu47nk67u5bur7yueebu)(hardhat@2.13.0)
       '@walletconnect/client':
         specifier: 1.7.8
         version: 1.7.8(patch_hash=2krbsxzv524dzcdemy7vploqza)

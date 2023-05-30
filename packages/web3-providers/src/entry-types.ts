@@ -46,6 +46,8 @@ export * from './Zerion/types.js'
 export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
 
+export * from './types/Trader.js'
+
 export * from './Web3/Router/types/index.js'
 
 export type { ConnectionOptions_Base } from './Web3/Base/apis/ConnectionOptionsAPI.js'

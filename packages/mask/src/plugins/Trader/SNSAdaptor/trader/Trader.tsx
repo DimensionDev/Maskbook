@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
-import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { ImageIcon, useSelectFungibleToken, useShowConfirm } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -29,21 +29,22 @@ import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeCallback } from '../../trader/useTradeCallback.js'
-import { TokenPanelType, type TradeInfo } from '../../types/index.js'
+import { TokenPanelType } from '../../types/index.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { TraderStateBar } from './TraderStateBar.js'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { TelemetryAPI, type TraderAPI } from '@masknet/web3-providers/types'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { BigNumber } from 'bignumber.js'
-
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { TraderStateBar } from './TraderStateBar.js'
+import { Box, Typography, useTheme } from '@mui/material'
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
@@ -53,16 +54,17 @@ export interface TraderProps extends withClasses<'root'> {
 
 export interface TraderRef {
     gasConfig?: GasConfig
-    focusedTrade?: TradeInfo
+    focusedTrade?: TraderAPI.TradeInfo
     refresh: () => void
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
+    const theme = useTheme()
     const telemetry = useTelemetry()
     const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
-    const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
+    const [focusedTrade, setFocusTrade] = useState<AsyncStateRetry<TraderAPI.TradeInfo> | undefined>()
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
@@ -71,6 +73,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const chainIdValid = useChainIdValid(pluginID, chainId)
+    const showConfirm = useShowConfirm()
     const Others = useWeb3Others()
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
@@ -94,12 +97,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         ref,
         () => ({
             gasConfig,
-            focusedTrade,
+            focusedTrade: focusedTrade?.value,
             refresh: () => {
                 allTradeComputed.map((x) => x.retry())
             },
         }),
-        [allTradeComputed, focusedTrade, gasConfig],
+        [allTradeComputed, focusedTrade?.value, gasConfig],
     )
 
     useEffect(() => {
@@ -209,8 +212,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region blocking (swap)
     const [{ loading: isTrading }, tradeCallback] = useTradeCallback(
-        focusedTrade?.provider,
-        focusedTrade?.value,
+        focusedTrade?.value?.provider,
+        focusedTrade?.value?.value,
         gasConfig,
     )
 
@@ -226,9 +229,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
         return focusedTrade?.value && inputToken && outputToken
             ? t.share_text({
-                  input_amount: formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6),
+                  input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, 6),
                   input_symbol: `${cashTag}${inputToken.symbol}`,
-                  output_amount: formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6),
+                  output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, 6),
                   output_symbol: `${cashTag}${outputToken.symbol}`,
                   account_promote: t.account_promote({
                       context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
@@ -236,28 +239,56 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
               })
             : ''
     }, [focusedTrade?.value, inputToken, outputToken, t])
-    const openShareTxDialog = useOpenShareTxDialog()
+
     const onConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
+
         const hash = await tradeCallback()
 
         setTemporarySlippage(undefined)
 
         if (typeof hash !== 'string') return
-        await openShareTxDialog({
-            hash,
-            buttonLabel: activatedSocialNetworkUI.utils.share ? 'Share' : 'Confirm',
-            onShare() {
+
+        await showConfirm({
+            title: t.swap(),
+            content: (
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                    <ImageIcon icon={inputToken?.logoURL} size={90} />
+                    <Typography
+                        fontSize={20}
+                        lineHeight="24px"
+                        fontWeight={700}
+                        color={theme.palette.maskColor.success}
+                        marginTop="20px">
+                        {t.congratulations()}
+                    </Typography>
+                    <Typography fontSize={16} lineHeight="20px" fontWeight={700} mt={5}>
+                        {t.swap_successfully_description({
+                            input: `${formatBalance(
+                                focusedTrade?.value?.value?.inputAmount,
+                                focusedTrade?.value?.value?.inputToken?.decimals,
+                            )} ${focusedTrade?.value?.value?.inputToken?.symbol}`,
+                            output: `${formatBalance(
+                                focusedTrade?.value?.value?.outputAmount,
+                                focusedTrade?.value?.value?.outputToken?.decimals,
+                            )} ${focusedTrade?.value?.value?.outputToken?.symbol}`,
+                        })}
+                    </Typography>
+                </Box>
+            ),
+            confirmLabel: t.share(),
+            onSubmit: () => {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
+            maxWidthOfContent: 420,
         })
         telemetry.captureEvent(TelemetryAPI.EventType.Interact, TelemetryAPI.EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, openShareTxDialog, telemetry])
+    }, [tradeCallback, shareText, showConfirm, telemetry, focusedTrade])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
@@ -278,7 +309,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps the native token
-        if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value)) tradeCallback()
+        if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value.value)) tradeCallback()
         else setOpenConfirmDialog(true)
     }, [focusedTrade, tradeCallback])
     // #endregion
@@ -335,7 +366,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #region if trade has been changed, update the focused trade
     useUpdateEffect(() => {
         setFocusTrade((prev) => {
-            const target = allTradeComputed.find((x) => prev?.provider === x.provider)
+            const target = allTradeComputed.find((x) => prev?.value?.provider === x.value?.provider)
             return target ?? prev
         })
     }, [allTradeComputed])
@@ -369,8 +400,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
                 new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
                     .multipliedBy(
-                        focusedTrade?.gas.value && !isZero(focusedTrade?.gas.value)
-                            ? addGasMargin(focusedTrade?.gas.value)
+                        focusedTrade?.value?.gas && !isZero(focusedTrade?.value?.gas)
+                            ? addGasMargin(focusedTrade?.value.gas)
                             : '150000',
                     )
                     .integerValue()
@@ -413,11 +444,14 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
             />
-            {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
+            {focusedTrade?.value?.value &&
+            !isNativeTokenWrapper(focusedTrade.value.value) &&
+            inputToken &&
+            outputToken ? (
                 <ConfirmDialog
                     open={openConfirmDialog}
-                    trade={focusedTrade.value}
-                    gas={focusedTrade.gas.value}
+                    trade={focusedTrade.value.value}
+                    gas={focusedTrade.value.gas}
                     gasPrice={gasPrice}
                     gasConfig={gasConfig}
                     inputToken={inputToken}
@@ -428,7 +462,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             ) : null}
 
             <TraderStateBar
-                settings={settings}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}

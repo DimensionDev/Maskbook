@@ -10,5 +10,9 @@
     "adjust_order": "Adjust order",
     "make_trade_anyway": "Make Trade Anyway",
     "swap_failed": "Swap Failed",
-    "swap_failed_description": "Network or Dex provider errors"
+    "swap_failed_description": "Network or Dex provider errors",
+    "swap": "Swap",
+    "congratulations": "Congratulations!",
+    "swap_successfully_description": "Swap {{input}} for {{output}}",
+    "share": "Share"
 }

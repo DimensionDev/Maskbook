@@ -1,7 +1,9 @@
 import { useReducer, useState } from 'react'
-import { useAllTradeComputed } from './useAllTradeComputed.js'
 import { createContainer } from 'unstated-next'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAllTradeComputed } from './useAllTradeComputed.js'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export const INITIAL_STATE = {
     inputAmount: '',
@@ -103,7 +105,12 @@ export function useAllProviderTradeContext() {
     const [isSwapping, setIsSwapping] = useState(false)
     const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
     const { inputAmount, inputToken, outputToken } = tradeStore
-    const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken, temporarySlippage)
+    const allTradeComputed: Array<AsyncStateRetry<TraderAPI.TradeInfo>> = useAllTradeComputed(
+        inputAmount,
+        inputToken,
+        outputToken,
+        temporarySlippage,
+    )
 
     return {
         isSwapping,
