@@ -1,6 +1,34 @@
+import { type AbiItem, toHex } from 'web3-utils'
+import { flatMap, compact } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ZERO, isZero, toFixed } from '@masknet/web3-shared-base'
 import { CurrencyAmount, type Currency, type Token, TradeType, Percent } from '@uniswap/sdk-core'
+import { Pair as UniSwapPair, Trade as UniSwapTrade } from '@uniswap/v2-sdk'
+import { SwapRouter as V3Router } from '@uniswap/v3-sdk'
+import {
+    isValidChainId,
+    ChainId,
+    isNativeTokenSchemaType,
+    type SchemaType,
+    getTokenConstants,
+    ContractTransaction,
+} from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { TradeProvider } from '@masknet/public-api'
+import { getTradeContext, isTradeBetter } from './helpers/trade.js'
+import { getPairAddress } from './helpers/pair.js'
+import { MulticallAPI } from '../Multicall/index.js'
+import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import {
+    BETTER_TRADE_LESS_HOPS_THRESHOLD,
+    DEFAULT_TRANSACTION_DEADLINE,
+    L2_TRANSACTION_DEADLINE,
+    MAX_HOP,
+    SLIPPAGE_DEFAULT,
+    UNISWAP_BIPS_BASE,
+} from './constants/index.js'
 import {
     computeRealizedLPFeePercent,
     swapCallParameters,
@@ -15,32 +43,6 @@ import {
     uniswapTokenTo,
 } from './helpers/uniswap.js'
 import {
-    isValidChainId,
-    ChainId,
-    createContract,
-    isNativeTokenSchemaType,
-    type SchemaType,
-    getTokenConstants,
-    ContractTransaction,
-} from '@masknet/web3-shared-evm'
-import type { TradeProvider } from '@masknet/public-api'
-import { getTradeContext, isTradeBetter } from './helpers/trade.js'
-import { flatMap } from 'lodash-es'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { getPairAddress } from './helpers/pair.js'
-import { Web3API } from '../Connection/index.js'
-import type { Pair } from '@masknet/web3-contracts/types/Pair.js'
-import PairABI from '@masknet/web3-contracts/abis/Pair.json'
-import { type AbiItem, toHex } from 'web3-utils'
-import {
-    BETTER_TRADE_LESS_HOPS_THRESHOLD,
-    DEFAULT_TRANSACTION_DEADLINE,
-    L2_TRANSACTION_DEADLINE,
-    MAX_HOP,
-    SLIPPAGE_DEFAULT,
-    UNISWAP_BIPS_BASE,
-} from './constants/index.js'
-import {
     PairState,
     type TokenPair,
     type Trade,
@@ -51,20 +53,12 @@ import {
     type FailedCall,
     type TraderAPI,
 } from '../types/Trader.js'
-import { Pair as UniSwapPair, Trade as UniSwapTrade } from '@uniswap/v2-sdk'
-import { BigNumber } from 'bignumber.js'
-import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
-import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2.js'
-import SwapRouterABI from '@masknet/web3-contracts/abis/SwapRouter.json'
-import type { SwapRouter } from '@masknet/web3-contracts/types/SwapRouter.js'
-import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
-import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
-import { SwapRouter as V3Router } from '@uniswap/v3-sdk'
-import { MulticallAPI } from '../Multicall/index.js'
 
 export class UniSwapV2Like implements TraderAPI.Provider {
-    public Web3 = new Web3API()
+    public Web3 = new ConnectionReadonlyAPI()
+    public Contract = new ContractReadonlyAPI()
     public Multicall = new MulticallAPI()
+
     constructor(public provider: TradeProvider) {}
 
     public getAllCommonPairs(chainId: ChainId, currencyA?: Currency, currencyB?: Currency) {
@@ -121,7 +115,6 @@ export class UniSwapV2Like implements TraderAPI.Provider {
     }
 
     private async getPairs(chainId: ChainId, tokenPairs: readonly TokenPair[]) {
-        const web3 = this.Web3.getWeb3(chainId)
         const context = getTradeContext(chainId, this.provider)
         if (!context) return EMPTY_LIST
 
@@ -135,9 +128,11 @@ export class UniSwapV2Like implements TraderAPI.Provider {
                 : undefined,
         )
 
-        const contracts = ([...new Set(listOfPairAddress)].filter(Boolean) as string[])
-            .map((address) => createContract(web3, address, PairABI as AbiItem[]))
-            .filter(Boolean) as Pair[]
+        const contracts = compact(
+            compact([...new Set(listOfPairAddress)]).map((address) =>
+                this.Contract.getPairContract(address, { chainId }),
+            ),
+        )
 
         const names = Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves')
 
@@ -192,25 +187,17 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         trade: TradeComputed<Trade> | null,
         allowedSlippage: number = SLIPPAGE_DEFAULT,
     ) {
-        const web3 = this.Web3.getWeb3(chainId)
         const context = getTradeContext(chainId, this.provider)
-        const timestamp = await this.Web3.getBlockTimestamp(chainId)
+        const timestamp = await this.Web3.getBlockTimestamp({ chainId })
         const timestamp_ = new BigNumber(timestamp ?? '0')
         const deadline = timestamp_.plus(
             chainId === ChainId.Mainnet ? DEFAULT_TRANSACTION_DEADLINE : L2_TRANSACTION_DEADLINE,
         )
 
-        const routerV2Contract = createContract<RouterV2>(
-            web3,
-            context?.ROUTER_CONTRACT_ADDRESS ?? '',
-            RouterV2ABI as AbiItem[],
-        )
-
-        const swapRouterContract = createContract<SwapRouter>(
-            web3,
-            context?.ROUTER_CONTRACT_ADDRESS ?? '',
-            SwapRouterABI as AbiItem[],
-        )
+        const routerV2Contract = this.Contract.getRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS, { chainId })
+        const swapRouterContract = this.Contract.getSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS, {
+            chainId,
+        })
 
         if (!trade?.trade_) return []
 
@@ -411,12 +398,11 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
-        const web3 = this.Web3.getWeb3(chainId)
-        const tradeAmount = new BigNumber(inputAmount || '0')
         const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -471,13 +457,13 @@ export class UniSwapV2Like implements TraderAPI.Provider {
                 }
 
                 try {
-                    const gas = await this.Web3.estimateTransaction(chainId, config)
+                    const gas = await this.Web3.estimateTransaction(config, { chainId })
                     return {
                         call: x,
                         gasEstimate: gas ?? '0',
                     }
                 } catch (error) {
-                    return this.Web3.callTransaction(chainId, config)
+                    return this.Web3.callTransaction(config, { chainId })
                         .then(() => {
                             return {
                                 call: x,

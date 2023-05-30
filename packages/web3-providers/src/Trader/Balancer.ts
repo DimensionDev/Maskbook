@@ -1,3 +1,6 @@
+import { first, memoize } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
+import { SOR } from '@balancer-labs/sor'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     getTokenConstants,
@@ -8,25 +11,17 @@ import {
     isNativeTokenSchemaType,
     type SchemaType,
     ContractTransaction,
-    createContract,
 } from '@masknet/web3-shared-evm'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
-import { ZERO, isSameAddress, isZero } from '@masknet/web3-shared-base'
-import ExchangeProxyABI from '@masknet/web3-contracts/abis/ExchangeProxy.json'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
-
-import { Web3API } from '../Connection/index.js'
-import { first, memoize } from 'lodash-es'
-import { SOR } from '@balancer-labs/sor'
+import { TradeProvider } from '@masknet/public-api'
+import { ZERO, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { BALANCER_SOR_GAS_PRICE, BALANCER_MAX_NO_POOLS } from './constants/balancer.js'
+import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { BALANCER_SWAP_TYPE, type SwapResponse, type Route } from './types/balancer.js'
-import { BigNumber } from 'bignumber.js'
-import { TradeProvider } from '@masknet/public-api'
-import type { AbiItem } from 'web3-utils'
 import { ONE_BIPS, SLIPPAGE_DEFAULT } from './constants/index.js'
-import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
-import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
+import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 
 const MIN_VALUE = new BigNumber('1e-5')
 const createSOR_ = memoize((chainId: ChainId) => {
@@ -41,13 +36,13 @@ const createSOR_ = memoize((chainId: ChainId) => {
 })
 
 export class Balancer implements TraderAPI.Provider {
-    private Web3 = new Web3API()
+    public Web3 = new ConnectionReadonlyAPI()
+    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.BALANCER
 
     private createSOR(chainId: ChainId) {
         const sor = createSOR_(chainId)
         sor.poolsUrl = `${getTraderConstants(chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
-
         return sor
     }
 
@@ -144,8 +139,8 @@ export class Balancer implements TraderAPI.Provider {
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
-        const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
         if (!inputToken || !outputToken || isZero(inputAmount)) return null
+        const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
 
         // the WETH address is used for looking for available pools
         const sellToken = isNativeTokenAddress(inputToken.address) ? WNATIVE_ADDRESS : inputToken.address
@@ -222,12 +217,11 @@ export class Balancer implements TraderAPI.Provider {
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
-        const web3 = this.Web3.getWeb3(chainId)
-        const tradeAmount = new BigNumber(inputAmount || '0')
         const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -269,11 +263,9 @@ export class Balancer implements TraderAPI.Provider {
 
     public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<SwapResponse>) {
         const { BALANCER_ETH_ADDRESS, BALANCER_EXCHANGE_PROXY_ADDRESS } = getTraderConstants(chainId)
-        const exchangeProxyContract = this.Web3.getWeb3Contract(
+        const exchangeProxyContract = this.Contract.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
             chainId,
-            BALANCER_EXCHANGE_PROXY_ADDRESS ?? '',
-            ExchangeProxyABI as AbiItem[],
-        )
+        })
 
         if (!trade?.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS)
             return ZERO.toString()

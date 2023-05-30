@@ -1,3 +1,7 @@
+import urlcat from 'urlcat'
+import { BigNumber } from 'bignumber.js'
+import { toChecksumAddress } from 'web3-utils'
+import { pick } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     getTraderConstants,
@@ -5,29 +9,23 @@ import {
     isNativeTokenAddress,
     ContractTransaction,
     type SchemaType,
-    createContract,
     getTokenConstants,
     isNativeTokenSchemaType,
 } from '@masknet/web3-shared-evm'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
+import { TradeProvider } from '@masknet/public-api'
 import { ONE, isZero, leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import type {
     BancorApiErrorResponse,
     ExpectedTargetAmountResponse,
     SwapBancorRequest,
     TradeTransactionCreationResponse,
 } from './types/bancor.js'
-import urlcat from 'urlcat'
 import { BANCOR_API_BASE_URL } from './constants/bancor.js'
-import { fetchJSON } from '../entry-helpers.js'
-import { BigNumber } from 'bignumber.js'
 import { BIPS_BASE } from './constants/index.js'
-import { toChecksumAddress, type AbiItem } from 'web3-utils'
-import { pick } from 'lodash-es'
-import { Web3API } from '../Connection/index.js'
-import { TradeProvider } from '@masknet/public-api'
-import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
-import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
+import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
@@ -49,7 +47,8 @@ const calculateMinimumReturn = ({
 }
 
 export class Bancor implements TraderAPI.Provider {
-    private Web3 = new Web3API()
+    public Web3 = new ConnectionReadonlyAPI()
+    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.BANCOR
 
     private async swapTransactionBancor(request: SwapBancorRequest) {
@@ -189,12 +188,11 @@ export class Bancor implements TraderAPI.Provider {
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
-        const web3 = this.Web3.getWeb3(chainId)
-        const tradeAmount = new BigNumber(inputAmount || '0')
         const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -244,6 +242,6 @@ export class Bancor implements TraderAPI.Provider {
 
         const config = pick(transaction.transaction, ['to', 'data', 'value', 'from'])
 
-        return this.Web3.estimateTransaction(chainId, config, 0)
+        return this.Web3.estimateTransaction(config, 0, { chainId })
     }
 }

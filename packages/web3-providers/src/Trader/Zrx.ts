@@ -1,3 +1,7 @@
+import urlcat from 'urlcat'
+import { BigNumber } from 'bignumber.js'
+import { first, pick } from 'lodash-es'
+import { TradeProvider } from '@masknet/public-api'
 import {
     NetworkType,
     chainResolver,
@@ -5,18 +9,12 @@ import {
     type ChainId,
     ContractTransaction,
     type SchemaType,
-    createContract,
     getTokenConstants,
     isNativeTokenSchemaType,
 } from '@masknet/web3-shared-evm'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ZERO, isZero } from '@masknet/web3-shared-base'
 import { safeUnreachable } from '@masknet/kit'
-import { BigNumber } from 'bignumber.js'
-
-import { fetchJSON } from '../entry-helpers.js'
-import urlcat from 'urlcat'
 import type {
     SwapErrorResponse,
     SwapQuoteRequest,
@@ -25,13 +23,11 @@ import type {
     SwapValidationErrorResponse,
 } from './types/0x.js'
 import { BIPS_BASE } from './constants/index.js'
-import { first, pick } from 'lodash-es'
 import { ZRX_AFFILIATE_ADDRESS, ZRX_BASE_URL } from './constants/0x.js'
-import { Web3API } from '../Connection/index.js'
-import { TradeProvider } from '@masknet/public-api'
-import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
-import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
-import type { AbiItem } from 'web3-utils'
+import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
+import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -62,7 +58,8 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 }
 
 export class Zrx implements TraderAPI.Provider {
-    private Web3 = new Web3API()
+    public Web3 = new ConnectionReadonlyAPI()
+    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.ZRX
 
     private async swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
@@ -192,12 +189,11 @@ export class Zrx implements TraderAPI.Provider {
         inputToken?: Web3Helper.FungibleTokenAll,
         outputToken?: Web3Helper.FungibleTokenAll,
     ) {
-        const web3 = this.Web3.getWeb3(chainId)
-        const tradeAmount = new BigNumber(inputAmount || '0')
         const { WNATIVE_ADDRESS } = getTokenConstants(chainId)
+        const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = createContract<WETH>(web3, WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -245,6 +241,6 @@ export class Zrx implements TraderAPI.Provider {
             ...pick(trade.trade_, 'to', 'data', 'value'),
         }
 
-        return this.Web3.estimateTransaction(chainId, config, 0)
+        return this.Web3.estimateTransaction(config, 0, { chainId })
     }
 }
