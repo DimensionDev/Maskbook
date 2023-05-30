@@ -5,9 +5,9 @@ exports[`Serialize Text 1`] = `Uint8Array [ 9300ab48656c6c6f20776f726c6482b0636f
 exports[`Serialize Text 2`] = `
 Ok({
   "content": "Hello world",
-  "meta": {
-    "com.example.test": "hi",
-    "com.example.test2": {
+  "meta": Map {
+    "com.example.test" => "hi",
+    "com.example.test2" => {
       "a": 1,
       "b": [
         2,
@@ -28,9 +28,9 @@ Ok({
   "items": [
     {
       "content": "Hello world",
-      "meta": {
-        "com.example.test": "hi",
-        "com.example.test2": {
+      "meta": Map {
+        "com.example.test" => "hi",
+        "com.example.test2" => {
           "a": 1,
           "b": [
             2,
