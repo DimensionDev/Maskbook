@@ -10,5 +10,9 @@
     "adjust_order": "crwdns17712:0crwdne17712:0",
     "make_trade_anyway": "crwdns17714:0crwdne17714:0",
     "swap_failed": "crwdns19871:0crwdne19871:0",
-    "swap_failed_description": "crwdns19877:0crwdne19877:0"
+    "swap_failed_description": "crwdns19877:0crwdne19877:0",
+    "swap": "crwdns20213:0crwdne20213:0",
+    "congratulations": "crwdns20215:0crwdne20215:0",
+    "swap_successfully_description": "crwdns20217:0{{input}}crwdnd20217:0{{output}}crwdne20217:0",
+    "share": "crwdns20219:0crwdne20219:0"
 }
