@@ -111,7 +111,7 @@ export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E, 
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(' [role="tablist"] a[aria-selected="false"]')
+    querySelector<E>('[role="tablist"] a[aria-selected="false"]')
 
 // for getting activated tab style
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
