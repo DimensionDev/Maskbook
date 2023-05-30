@@ -205,7 +205,7 @@ export const ProfileList = memo(() => {
         <>
             <ProfileListUI
                 networks={definedSocialNetworks}
-                profiles={mergedProfiles ?? []}
+                profiles={mergedProfiles ?? EMPTY_LIST}
                 onConnect={onConnect}
                 onDisconnect={onDisconnect}
                 openProfilePage={openProfilePage}

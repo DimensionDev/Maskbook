@@ -37,6 +37,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
         container: {
             boxSizing: 'border-box',
             overflow: 'auto',
+            flex: 1,
         },
         columns: {
             height: '100%',
@@ -150,6 +151,7 @@ export interface CollectionListProps
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
+    selectedAsset?: Web3Helper.NonFungibleAssetAll
 }
 
 export function CollectionList({
@@ -163,6 +165,7 @@ export function CollectionList({
     disableWindowScroll,
     onActionClick,
     onItemClick,
+    selectedAsset,
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
@@ -318,6 +321,7 @@ export function CollectionList({
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
                             onActionClick={onActionClick}
+                            selectedAsset={selectedAsset}
                             onItemClick={onItemClick}
                         />
                     ) : (
@@ -337,6 +341,7 @@ export function CollectionList({
                                         disableAction={disableAction}
                                         onActionClick={onActionClick}
                                         onItemClick={onItemClick}
+                                        selectedAsset={selectedAsset}
                                     />
                                 )
                             })}

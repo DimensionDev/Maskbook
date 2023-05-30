@@ -21,7 +21,7 @@ export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessa
             message?.events.ownProofChanged.on(() => {
                 refetch()
             }),
-        [queryKey],
+        [publicKey],
     )
 
     return result
