@@ -1,14 +1,13 @@
-import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
+import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 300,
         flexDirection: 'column',
     },
     text: {
@@ -19,14 +18,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const EmptyStatus = memo(function EmptyStatus({ className, children, ...rest }: BoxProps) {
+export const LoadingStatus = memo(function LoadingStatus({ className, children, ...rest }: BoxProps) {
     const { classes, cx } = useStyles()
+    const t = useSharedI18N()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
-            <Icons.EmptySimple size={32} />
-            <Typography className={classes.text} component="div">
-                {children}
-            </Typography>
+            <LoadingBase size={32} />
+            <Typography className={classes.text}>{children ?? t.loading()}</Typography>
         </Box>
     )
 })

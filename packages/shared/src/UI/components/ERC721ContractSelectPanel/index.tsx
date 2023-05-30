@@ -8,6 +8,8 @@ import { type SelectNftContractDialogEvent, WalletMessages } from '@masknet/plug
 import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
+import { useSelectNonFungibleContract } from '../../../index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface StyleProps {
     hasIcon: boolean
@@ -82,13 +84,19 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             [onContractChange],
         ),
     )
+    const selectNFTContract = useSelectNonFungibleContract<NetworkPluginID.PLUGIN_EVM>()
 
-    const openDialog = useCallback(() => {
-        setNftContractDialog({
-            open: true,
+    const openDialog = useCallback(async () => {
+        // setNftContractDialog({
+        //     open: true,
+        //     chainId,
+        // })
+        const contract = await selectNFTContract({
+            pluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
         })
-    }, [setNftContractDialog, chainId])
+        if (contract) onContractChange(contract)
+    }, [setNftContractDialog, chainId, selectNFTContract])
     // #endregion
 
     return (

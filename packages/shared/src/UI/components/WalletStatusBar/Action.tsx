@@ -6,7 +6,7 @@ interface ActionProps extends PropsWithChildren<{}> {
     openSelectWalletDialog: () => void
 }
 
-export const Action = memo<ActionProps>(({ children, openSelectWalletDialog }) => {
+export const Action = memo<ActionProps>(function Action({ children, openSelectWalletDialog }) {
     const ref = useRef<HTMLDivElement>()
     const t = useSharedI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)

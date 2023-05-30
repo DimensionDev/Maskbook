@@ -9,6 +9,7 @@ import { useSharedI18N } from '../../../index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
+import { isSameNFT } from '../../../utils/index.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -136,7 +137,7 @@ export const Collection: FC<CollectionProps> = memo(
                     onActionClick={onActionClick}
                     onItemClick={onItemClick}
                     verifiedBy={verifiedBy}
-                    selectedAsset={selectedAsset}
+                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                 />
             ))
             return <>{renderAssets}</>

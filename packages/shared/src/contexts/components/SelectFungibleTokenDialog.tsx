@@ -6,13 +6,13 @@ import {
     useFungibleAssets,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
+import { FungibleTokenList, LoadingStatus, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { DialogContent, type Theme, useMediaQuery, Stack, Typography } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { DialogContent, type Theme, useMediaQuery } from '@mui/material'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { useBaseUIRuntime } from '../base/index.js'
-import { InjectedDialog } from '../components/index.js'
+import { InjectedDialog } from './InjectedDialog.js'
 import { useRowSize } from '../../hooks/useRowSize.js'
 import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
@@ -40,10 +40,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     wrapper: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
-    },
-    prompt: {
-        marginTop: 13,
-        fontSize: 14,
     },
 }))
 
@@ -113,17 +109,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 {loadingTokens && mode !== TokenListMode.Manage ? (
-                    <Stack
-                        height={500}
-                        width={'100%'}
-                        justifyContent="center"
-                        alignContent="center"
-                        alignItems="center"
-                        marginTop="18px"
-                        marginBottom="48px">
-                        <LoadingBase size={33} />
-                        <Typography className={classes.prompt}>{t.loading()}</Typography>
-                    </Stack>
+                    <LoadingStatus height={500} />
                 ) : (
                     <FungibleTokenList
                         mode={mode}
