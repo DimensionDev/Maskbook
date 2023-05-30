@@ -7,7 +7,6 @@ import {
     DashboardRoutes,
     type MaskEvents,
     type PersonaInformation,
-    type PluginID,
     isSamePersona,
     isSameProfile,
     resolveNextIDIdentityToProfile,
@@ -28,11 +27,10 @@ const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
 
 export function useCurrentPersonaConnectStatus(
     personas: PersonaInformation[],
-    currentPersonaIdentifier: string,
-    openDashboard: (route?: DashboardRoutes, search?: string) => Promise<any>,
+    currentPersonaIdentifier?: string,
+    openDashboard?: (route?: DashboardRoutes, search?: string) => Promise<any>,
     identity?: IdentityResolved,
     message?: WebExtensionMessage<MaskEvents>,
-    directTo?: PluginID,
 ) {
     const t = useSharedI18N()
 
@@ -44,9 +42,9 @@ export function useCurrentPersonaConnectStatus(
     )
 
     const create = useCallback(
-        (target?: string, position?: 'center' | 'top-right', enableVerify?: boolean, direct = false) => {
+        (target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
             if (direct) {
-                openDashboard(DashboardRoutes.Setup)
+                openDashboard?.(DashboardRoutes.Setup)
             } else {
                 setCreatePersonaConfirmDialog({
                     open: true,
@@ -139,13 +137,13 @@ export function useCurrentPersonaConnectStatus(
         openDashboard,
     ])
 
-    useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message])
+    useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message?.events.ownPersonaChanged])
 
     useEffect(() => {
         return message?.events.ownProofChanged.on(() => {
             retry()
         })
-    }, [message, retry])
+    }, [message?.events.ownPersonaChanged, retry])
 
     return { value, loading, retry, error }
 }

@@ -115,7 +115,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             if (!status.verified || !status.hasPersona || !status.connected)
                 status.action?.(directTo, handlerPosition, enableVerify, !createConfirm)
             afterAction?.(status)
-        }, [directTo, handlerPosition, JSON.stringify(status), createConfirm])
+        }, [directTo, handlerPosition, status, createConfirm])
 
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
