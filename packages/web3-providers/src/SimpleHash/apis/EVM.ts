@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -25,12 +25,15 @@ import {
     createNonFungibleCollection,
     resolveChainId,
     getAllChainNames,
+    resolveSimpleHashRange,
+    SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
 } from '../helpers.js'
-import { type Asset, type Collection } from '../type.js'
+import { type Asset, type Collection, type PaymentToken, type PriceStat } from '../type.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
+import { BigNumber } from 'bignumber.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -116,6 +119,55 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         )
     }
 
+    async getCoinPriceStats(
+        chainId: ChainId,
+        collectionId: string,
+        currency: TrendingAPI.Currency,
+        days: TrendingAPI.Days,
+    ): Promise<TrendingAPI.Stat[]> {
+        const range = resolveSimpleHashRange(days)
+        const to_timeStamp = Math.round(Date.now() / 1000)
+        const from_timeStamp = range ? to_timeStamp - range : SIMPLE_HASH_HISTORICAL_PRICE_START_TIME
+        let cursor = '' as string | null
+        let results: PriceStat[] = []
+        while (cursor !== null) {
+            const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
+                collectionId,
+                to_timeStamp,
+                from_timeStamp,
+                cursor: cursor ? cursor : undefined,
+            })
+
+            const response = await fetchFromSimpleHash<{
+                next_cursor: string
+                floor_prices: PriceStat[]
+                payment_token: PaymentToken
+            }>(path)
+
+            const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
+            cursor =
+                !firstFloorPriceTimeStamp || new Date(firstFloorPriceTimeStamp).getTime() / 1000 < from_timeStamp
+                    ? null
+                    : response.next_cursor
+
+            results = results.concat(
+                response.floor_prices.map((x) => ({
+                    ...x,
+                    floor_price: new BigNumber(
+                        leftShift(x.floor_price, response.payment_token.decimals).toPrecision(4),
+                    ).toNumber(),
+                })),
+            )
+        }
+
+        return uniqBy(
+            results.filter((x) => new Date(x.timestamp).getTime() / 1000 > from_timeStamp),
+            (x) => x.timestamp,
+        )
+            .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+            .map((x) => [new Date(x.timestamp).getTime(), x.floor_price])
+    }
+
     async getCollectionsByOwner(
         account: string,
         { chainId, indicator, allChains }: HubOptions_Base<ChainId> = {},
@@ -190,11 +242,14 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         if (!collection) {
             throw new Error(`SimpleHash: Can not find collection by address ${address}, chainId ${chainId}`)
         }
+
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, address),
             this.opensea.getStats(address).catch(() => null),
             this.looksrare.getStats(address).catch(() => null),
         ])
+
+        const paymentToken = collection.floor_prices[0].payment_token
 
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
@@ -205,7 +260,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                       market_name: NonFungibleMarketplace.OpenSea,
                       volume_24h: openseaStats.volume24h,
                       floor_price: openseaStats.floorPrice,
-                      price_symbol: collection.floor_prices[0].payment_token.symbol,
+                      price_symbol: paymentToken.symbol,
                       sales_24: openseaStats.count24h,
                   }
                 : null,
@@ -216,7 +271,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
                       floor_price: looksrareStats.floorPrice,
-                      price_symbol: collection.floor_prices[0].payment_token.symbol,
+                      price_symbol: paymentToken.symbol,
                       sales_24: looksrareStats.count24h,
                   }
                 : null,
@@ -226,9 +281,14 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             lastUpdated: new Date().toJSON(),
             dataProvider: SourceType.SimpleHash,
             contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
-            currency,
+            currency: {
+                id: paymentToken.payment_token_id,
+                symbol: paymentToken.symbol,
+                name: paymentToken.symbol,
+                chainId,
+            },
             coin: {
-                id: address,
+                id: collection.collection_id,
                 name: collection.name,
                 symbol,
                 address,
@@ -281,18 +341,12 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             },
             market: {
                 total_supply: collection.total_quantity,
-                current_price: leftShift(
-                    collection.floor_prices[0].value,
-                    collection.floor_prices[0].payment_token.decimals,
-                ).toString(),
-                floor_price: leftShift(
-                    collection.floor_prices[0].value,
-                    collection.floor_prices[0].payment_token.decimals,
-                ).toString(),
+                current_price: leftShift(collection.floor_prices[0].value, paymentToken.decimals).toString(),
+                floor_price: leftShift(collection.floor_prices[0].value, paymentToken.decimals).toString(),
                 owners_count: collection.distinct_owner_count,
                 volume_24h: tickers?.[0]?.volume_24h,
                 total_24h: tickers?.[0]?.sales_24,
-                price_symbol: collection.floor_prices[0].payment_token.symbol || 'ETH',
+                price_symbol: paymentToken.symbol || 'ETH',
             },
             tickers,
         }

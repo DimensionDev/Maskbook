@@ -7,7 +7,7 @@ export interface Collection {
     id: string
     chain: string
     banner_image_url: string
-    collection_id: number
+    collection_id: string
     description: string
     external_url: string
     spam_score?: number
@@ -83,11 +83,16 @@ export interface Asset {
     }
 }
 
-interface PaymentToken {
+export interface PaymentToken {
     address: string | null
     decimals: number
     name: string
     payment_token_id: string // ethereum.native
     symbol: string
     value: BigNumber.Value
+}
+
+export interface PriceStat {
+    timestamp: string
+    floor_price: number
 }
