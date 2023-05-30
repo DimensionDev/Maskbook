@@ -1,9 +1,10 @@
 import { safeUnreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkType } from '@masknet/web3-shared-evm'
 
 export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
-    if (!networkType) return []
+    if (!networkType) return EMPTY_LIST
     switch (networkType) {
         case NetworkType.Ethereum:
             return [
@@ -58,9 +59,9 @@ export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
         case NetworkType.Conflux:
         case NetworkType.Moonbeam:
             console.error('To be implement network:', networkType)
-            return []
+            return EMPTY_LIST
         default:
             safeUnreachable(networkType)
-            return []
+            return EMPTY_LIST
     }
 }

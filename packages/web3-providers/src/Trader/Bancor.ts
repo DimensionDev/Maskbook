@@ -241,7 +241,6 @@ export class Bancor implements TraderAPI.Provider {
         const transaction = data.length === 1 ? data[0] : data[1]
 
         const config = pick(transaction.transaction, ['to', 'data', 'value', 'from'])
-
         return this.Web3.estimateTransaction(config, 0, { chainId })
     }
 }

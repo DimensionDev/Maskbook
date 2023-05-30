@@ -343,7 +343,6 @@ export class UniSwapV2Like implements TraderAPI.Provider {
             if (isNotAvailable || !tradeAmount || !outputCurrency) return null
 
             const trade = await this.getBestTradeExactIn(chainId, tradeAmount, outputCurrency)
-
             if (!trade) return null
 
             const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
