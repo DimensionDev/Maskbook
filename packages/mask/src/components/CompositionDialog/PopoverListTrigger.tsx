@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { RadioGroup, Typography, Popover } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
@@ -54,7 +54,7 @@ export function PopoverListTrigger({
 }: PopoverListTriggerProp) {
     const { classes } = useStyles()
 
-    return (
+    return usePortalShadowRoot((ref) => (
         <>
             <div
                 className={classes.popperText}
@@ -65,7 +65,8 @@ export function PopoverListTrigger({
                 <Icons.RightArrow />
             </div>
             <Popover
-                disablePortal
+                container={ref}
+                disableScrollLock
                 className={classes.popper}
                 classes={{ paper: classes.paperRoot }}
                 open={!!anchorEl}
@@ -78,5 +79,5 @@ export function PopoverListTrigger({
                 </RadioGroup>
             </Popover>
         </>
-    )
+    ))
 }
