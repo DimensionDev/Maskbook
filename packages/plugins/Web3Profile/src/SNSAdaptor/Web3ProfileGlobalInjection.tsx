@@ -8,7 +8,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { memo, useEffect, useState } from 'react'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { LensPopup } from './components/LensPopup.js'
-import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
+import { Web3ProfileDialogWrapper } from './components/Web3ProfileDialog.js'
 import { context } from './context.js'
 
 export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjection() {
@@ -37,7 +37,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
 
     return (
         <SNSAdaptorContext.Provider value={context}>
-            {profileOpen ? <Web3ProfileDialog open onClose={() => setProfileOpen(false)} /> : null}
+            {profileOpen ? <Web3ProfileDialogWrapper open onClose={() => setProfileOpen(false)} /> : null}
 
             {lensOpen && handle ? (
                 <ChainContextProvider value={{ chainId: ChainId.Matic }}>
