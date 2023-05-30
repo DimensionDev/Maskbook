@@ -11,6 +11,7 @@ import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export function useOpenOcean(
     inputAmount_: string,
+    scale: number,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
@@ -37,5 +38,6 @@ export function useOpenOcean(
                 : provider.getTradeInfo(chainId as ChainId, account, inputAmount_, slippage, inputToken, outputToken)
         },
         [inputAmount_, isNativeTokenWrapper, chainId, account, provider, inputToken, outputToken],
+        scale,
     )
 }
