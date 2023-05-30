@@ -86,6 +86,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         tradeState: [{ inputToken, outputToken, inputTokenBalance, inputAmount }, dispatchTradeStore],
         allTradeComputed,
         setTemporarySlippage,
+        openConfirmDialog,
+        setOpenConfirmDialog,
     } = AllProviderTradeContext.useContainer()
     // #endregion
 
@@ -220,8 +222,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         setIsSwapping(isTrading)
     }, [isTrading])
-
-    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
 
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
@@ -451,6 +451,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 <ConfirmDialog
                     open={openConfirmDialog}
                     trade={focusedTrade.value.value}
+                    loading={focusedTrade.loading}
                     gas={focusedTrade.value.gas}
                     gasPrice={gasPrice}
                     gasConfig={gasConfig}

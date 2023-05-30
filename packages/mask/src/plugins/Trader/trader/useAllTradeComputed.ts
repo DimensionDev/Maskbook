@@ -15,6 +15,7 @@ import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export function useAllTradeComputed(
     inputAmount: string,
+    scale: number,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
@@ -33,6 +34,7 @@ export function useAllTradeComputed(
     const uniswapV2 = useUniswapV2Like(
         TradeProvider.UNISWAP_V2,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -43,6 +45,7 @@ export function useAllTradeComputed(
     const sushiSwap = useUniswapV2Like(
         TradeProvider.SUSHISWAP,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -53,6 +56,7 @@ export function useAllTradeComputed(
     const quickSwap = useUniswapV2Like(
         TradeProvider.QUICKSWAP,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -62,6 +66,7 @@ export function useAllTradeComputed(
     const pancakeSwap = useUniswapV2Like(
         TradeProvider.PANCAKESWAP,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -69,21 +74,29 @@ export function useAllTradeComputed(
     )
 
     // uniswap-v3 like providers
-    const uniswapV3 = useUniswapV3Like(inputAmount_, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
+    const uniswapV3 = useUniswapV3Like(
+        inputAmount_,
+        scale,
+        inputToken,
+        outputToken,
+        temporarySlippage,
+        isNativeTokenWrapper,
+    )
 
     // zrx
-    const zrx = useZrx(inputAmount_, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
+    const zrx = useZrx(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
 
     // balancer
-    const balancer = useBalancer(inputAmount_, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
+    const balancer = useBalancer(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
 
     // bancor
-    const bancor = useBancor(inputAmount_, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
+    const bancor = useBancor(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
     // traderjoe
 
     const traderJoe = useUniswapV2Like(
         TradeProvider.TRADERJOE,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -94,18 +107,27 @@ export function useAllTradeComputed(
     const pangolindex = useUniswapV2Like(
         TradeProvider.PANGOLIN,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
         isNativeTokenWrapper,
     )
     // openocean
-    const openocean = useOpenOcean(inputAmount_, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
+    const openocean = useOpenOcean(
+        inputAmount_,
+        scale,
+        inputToken,
+        outputToken,
+        temporarySlippage,
+        isNativeTokenWrapper,
+    )
 
     // trisolaris
     const trisolaris = useUniswapV2Like(
         TradeProvider.TRISOLARIS,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -116,6 +138,7 @@ export function useAllTradeComputed(
     const wannaswap = useUniswapV2Like(
         TradeProvider.WANNASWAP,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -125,6 +148,7 @@ export function useAllTradeComputed(
     const mdex = useUniswapV2Like(
         TradeProvider.MDEX,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -135,6 +159,7 @@ export function useAllTradeComputed(
     const arthswap = useUniswapV2Like(
         TradeProvider.ARTHSWAP,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -144,6 +169,7 @@ export function useAllTradeComputed(
     const versa = useUniswapV2Like(
         TradeProvider.VERSA,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -153,6 +179,7 @@ export function useAllTradeComputed(
     const astarexchange = useUniswapV2Like(
         TradeProvider.ASTAREXCHANGE,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,
@@ -162,6 +189,7 @@ export function useAllTradeComputed(
     const yumiswap = useUniswapV2Like(
         TradeProvider.YUMISWAP,
         inputAmount_,
+        scale,
         inputToken,
         outputToken,
         temporarySlippage,

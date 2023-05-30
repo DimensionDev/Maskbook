@@ -13,6 +13,7 @@ import type { TraderAPI } from '@masknet/web3-providers/types'
 export function useUniswapV2Like(
     traderProvider: TradeProvider,
     inputAmount_: string,
+    scale: number,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
