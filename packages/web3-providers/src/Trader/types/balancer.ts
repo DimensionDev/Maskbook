@@ -1,5 +1,5 @@
-import type { Swap } from '@balancer-labs/sor/dist/types.js'
 import type { BigNumber } from 'bignumber.js'
+import type { Swap } from '@balancer-labs/sor/dist/types.js'
 
 export enum BALANCER_SWAP_TYPE {
     EXACT_IN = 'swapExactIn',

@@ -18,6 +18,8 @@ import type { SwapRouter } from '@masknet/web3-contracts/types/SwapRouter.js'
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import type { Pair } from '@masknet/web3-contracts/types/Pair.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
+import type { Quoter } from '@masknet/web3-contracts/types/Quoter.js'
+import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
 
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
@@ -34,6 +36,9 @@ import SwapRouterABI from '@masknet/web3-contracts/abis/SwapRouter.json'
 import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
 import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import ExchangeProxyABI from '@masknet/web3-contracts/abis/ExchangeProxy.json'
+import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
+import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
+
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
@@ -109,5 +114,13 @@ export class ContractReadonlyAPI {
 
     getExchangeProxyContract(address: string | undefined, initial?: ConnectionOptions) {
         return this.getWeb3Contract<ExchangeProxy>(address, ExchangeProxyABI as AbiItem[], initial)
+    }
+
+    getQuoterContract(address: string | undefined, initial?: ConnectionOptions) {
+        return this.getWeb3Contract<Quoter>(address, QuoterABI as AbiItem[], initial)
+    }
+
+    getPoolStateV3(address: string | undefined, initial?: ConnectionOptions) {
+        return this.getWeb3Contract<PoolStateV3>(address, PoolStateV3ABI as AbiItem[], initial)
     }
 }

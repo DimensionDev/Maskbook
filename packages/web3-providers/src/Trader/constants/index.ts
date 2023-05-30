@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js'
 import {
     ChainId,
     AMPL,
@@ -34,7 +35,6 @@ import {
 import { ONE } from '@masknet/web3-shared-base'
 import { Percent } from '@uniswap/sdk-core'
 import type { ERC20TokenCustomizedBase } from '../../types/Trader.js'
-import { BigNumber } from 'bignumber.js'
 
 export const UNISWAP_BIPS_BASE = 10000
 export const BIPS_BASE = new BigNumber(10000)

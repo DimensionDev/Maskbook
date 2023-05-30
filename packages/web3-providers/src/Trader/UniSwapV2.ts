@@ -1,4 +1,4 @@
-import { type AbiItem, toHex } from 'web3-utils'
+import { toHex } from 'web3-utils'
 import { flatMap, compact } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -457,7 +457,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
                 }
 
                 try {
-                    const gas = await this.Web3.estimateTransaction(config, { chainId })
+                    const gas = await this.Web3.estimateTransaction(config, 0, { chainId })
                     return {
                         call: x,
                         gasEstimate: gas ?? '0',

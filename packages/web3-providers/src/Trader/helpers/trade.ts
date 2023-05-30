@@ -1,5 +1,8 @@
 import { TradeProvider } from '@masknet/public-api'
 import { type ChainId, getTraderConstants } from '@masknet/web3-shared-evm'
+import { unreachable } from '@masknet/kit'
+import type { Trade } from '@uniswap/v2-sdk'
+import { type Currency, type Percent, type TradeType } from '@uniswap/sdk-core'
 import {
     ARTHSWAP_BASE_AGAINST_TOKENS,
     ARTHSWAP_CUSTOM_BASES,
@@ -30,9 +33,6 @@ import {
     YUMISWAP_CUSTOM_BASES,
     ZERO_PERCENT,
 } from '../constants/index.js'
-import { unreachable } from '@masknet/kit'
-import type { Trade } from '@uniswap/v2-sdk'
-import { type Currency, type Percent, type TradeType } from '@uniswap/sdk-core'
 import type { TradeContext } from '../../types/Trader.js'
 
 export function getTradeContext(chainId: ChainId, tradeProvider?: TradeProvider): TradeContext | null {

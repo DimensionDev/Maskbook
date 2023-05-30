@@ -1,19 +1,16 @@
+import { compact } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import { TradeProvider } from '@masknet/public-api'
-import { UniSwapV2Like } from './UniSwapV2.js'
-import { createContract, type ChainId, getTraderConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, getTraderConstants } from '@masknet/web3-shared-evm'
 import { CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import type { Currency, Token } from '@uniswap/sdk-core'
-import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
-import { type AbiItem } from 'web3-utils'
-import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
-import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
 import { FeeAmount, Pool, type Route, computePoolAddress, encodeRouteToPath, Trade } from '@uniswap/v3-sdk'
-import { getTradeContext } from './helpers/trade.js'
-import { PoolState, type TradeContext, type Trade as TradeResult } from '../types/Trader.js'
 import { isZero } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { getTradeContext } from './helpers/trade.js'
 import { computeAllRoutes } from './helpers/uniswap.js'
-import { BigNumber } from 'bignumber.js'
+import { PoolState, type TradeContext, type Trade as TradeResult } from '../types/Trader.js'
+import { UniSwapV2Like } from './UniSwapV2.js'
 
 export class UniSwapV3Like extends UniSwapV2Like {
     constructor() {
@@ -55,7 +52,6 @@ export class UniSwapV3Like extends UniSwapV2Like {
         chainId: ChainId,
         poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]>,
     ) {
-        const web3 = this.Web3.getWeb3(chainId)
         const context = getTradeContext(chainId, this.provider)
 
         if (!context) return EMPTY_LIST
@@ -72,9 +68,7 @@ export class UniSwapV3Like extends UniSwapV2Like {
         )
 
         const poolAddresses = this.getPoolAddresses(transformed, context)
-        const poolContracts = poolAddresses
-            .map((x) => createContract<PoolStateV3>(web3, x, PoolStateV3ABI as AbiItem[]))
-            .filter(Boolean) as PoolStateV3[]
+        const poolContracts = compact(poolAddresses.map((x) => this.Contract.getPoolStateV3(x, { chainId })))
 
         const slot0sCalls = this.Multicall.createMultipleContractSingleData(
             poolContracts,
@@ -130,10 +124,10 @@ export class UniSwapV3Like extends UniSwapV2Like {
         currencyAmountIn: CurrencyAmount<Currency>,
         currencyOut: Currency,
     ): Promise<TradeResult | null> {
-        const web3 = this.Web3.getWeb3(chainId)
         const { UNISWAP_V3_QUOTER_ADDRESS } = getTraderConstants(chainId)
         if (!UNISWAP_V3_QUOTER_ADDRESS) return null
-        const quoterContract = createContract(web3, UNISWAP_V3_QUOTER_ADDRESS, QuoterABI as AbiItem[])
+
+        const quoterContract = this.Contract.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
 
         const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyAmountIn?.currency, currencyOut)
 
