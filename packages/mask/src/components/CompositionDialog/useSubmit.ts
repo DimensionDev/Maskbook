@@ -46,7 +46,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 const defaultText = t('additional_post_box__encrypted_post_pre', {
                     encrypted: 'https://mask.io/',
                 })
-                await await pasteImage(
+                await pasteImage(
                     decoratedText || defaultText,
                     // We can send raw binary through the image, but for the text we still use the old way.
                     // For text, it must send the text _after_ socialNetworkEncoder, otherwise it will break backward compatibility.
