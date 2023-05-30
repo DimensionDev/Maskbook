@@ -21,9 +21,9 @@ if (process.argv[2] === '--' || process.argv[2] === '\\--') {
     const task = series(
         //
         buildExtensionFlag('build', extensionArgsParser('production')),
-        function buildSandboxedPlugin() {
-            return buildSandboxedPluginConfigurable(fileURLToPath(new URL('./build/', ROOT_PATH)), true)
-        },
+        // function buildSandboxedPlugin() {
+        // return buildSandboxedPluginConfigurable(fileURLToPath(new URL('./build/', ROOT_PATH)), true)
+        // },
     )
     await awaitTask(task)
 }

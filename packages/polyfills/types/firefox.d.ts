@@ -15,7 +15,15 @@ declare var exportFunction:
 /** @see https://udn.realityripple.com/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.cloneInto Firefox only */
 declare var cloneInto:
     | undefined
-    | (<T>(object: T, targetRealm: object, opts?: { cloneFunctions?: boolean; wrapReflectors?: boolean }) => T)
+    | (<T>(
+          object: T,
+          targetRealm: object,
+          opts?: {
+              cloneFunctions?: boolean
+              wrapReflectors?: boolean
+              __proto__: null
+          },
+      ) => T)
 
 /** @deprecated Only available in Manifest V2. */
 declare var content:

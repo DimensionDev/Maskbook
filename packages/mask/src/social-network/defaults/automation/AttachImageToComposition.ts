@@ -1,5 +1,5 @@
 import { downloadUrl, MaskMessages, pasteImageToActiveElements } from '../../../utils/index.js'
-import { delay, waitDocumentReadyState } from '@masknet/kit'
+import { waitDocumentReadyState } from '@masknet/kit'
 import type { SocialNetworkUI } from '@masknet/types'
 import { activatedSocialNetworkUI } from '../../ui.js'
 
@@ -11,10 +11,11 @@ export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean
         const image = typeof url === 'string' ? await downloadUrl(url) : url
         await waitDocumentReadyState('interactive')
         if (relatedTextPayload) {
-            activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(relatedTextPayload, {
-                recover: false,
-            })
-            await delay(500)
+            const p: Promise<void> | undefined =
+                activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(relatedTextPayload, {
+                    recover: false,
+                })
+            await p
         }
         await pasteImageToActiveElements(image)
 

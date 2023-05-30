@@ -1,19 +1,19 @@
 import { makeStyles } from '@masknet/theme'
-import { Box, Radio, Typography } from '@mui/material'
-import type { ReactNode } from 'react'
+import { Box, FormControlLabel, Radio, Typography } from '@mui/material'
+import { type ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
-    item: {
+    root: { marginLeft: 'unset', marginRight: 'unset' },
+    label: {
         display: 'flex',
         alignItems: 'center',
+        flex: 1,
     },
     mainTitle: {
-        color: theme.palette.text.primary,
         fontWeight: 700,
         fontSize: 14,
     },
     subTitle: {
-        color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
         fontSize: 14,
     },
@@ -27,24 +27,28 @@ interface PopoverListItemProps {
     title: string
     subTitle?: string
     disabled?: boolean
-    onItemClick?(): void
 }
 export function PopoverListItem(props: PopoverListItemProps) {
-    const { title, subTitle, value, itemTail, disabled, onItemClick } = props
+    const { title, subTitle, value, itemTail, disabled } = props
     const { classes, cx } = useStyles()
     return (
-        <>
-            <div
-                style={disabled ? { opacity: 0.5, pointerEvents: 'none' } : {}}
-                className={itemTail ? cx(classes.item, classes.pointer) : classes.item}
-                onClick={onItemClick}>
-                <Radio disabled={disabled} value={value} />
-                <Box>
-                    <Typography className={classes.mainTitle}>{title}</Typography>
-                    <Typography className={classes.subTitle}>{subTitle}</Typography>
-                </Box>
-                {itemTail}
-            </div>
-        </>
+        <FormControlLabel
+            classes={{
+                root: classes.root,
+                label: itemTail ? cx(classes.label, classes.pointer) : classes.label,
+            }}
+            disabled={disabled}
+            value={value}
+            control={<Radio />}
+            label={
+                <>
+                    <Box>
+                        <Typography className={classes.mainTitle}>{title}</Typography>
+                        <Typography className={classes.subTitle}>{subTitle}</Typography>
+                    </Box>
+                    {itemTail}
+                </>
+            }
+        />
     )
 }

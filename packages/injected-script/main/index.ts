@@ -3,5 +3,7 @@
 import './communicate.js'
 import './sceneChange/index.js'
 import './locationChange.js'
+// uncomment this when debugging this script
+// import './debugger.js'
 
-if (document.currentScript) document.currentScript.remove()
+document.currentScript?.remove()

@@ -52,5 +52,5 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             throw e
         }
 
-        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
+        return worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }

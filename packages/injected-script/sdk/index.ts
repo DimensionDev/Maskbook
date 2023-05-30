@@ -28,8 +28,8 @@ export function pasteText(text: string) {
 export function pasteImage(image: Uint8Array) {
     sendEvent('pasteImage', Array.from(image))
 }
-export function pasteInstagram(url: string) {
-    sendEvent('instagramUpload', url)
+export function pasteInstagram(image: Uint8Array) {
+    sendEvent('instagramUpload', Array.from(image))
 }
 export function inputText(text: string) {
     sendEvent('input', text)
