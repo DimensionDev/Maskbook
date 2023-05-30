@@ -1,4 +1,9 @@
+import { type ReactNode, useCallback } from 'react'
+import { useAsync } from 'react-use'
+import type { Option } from 'ts-results-es'
+import { useSubscription } from 'use-subscription'
 import { Icons } from '@masknet/icons'
+import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
 import {
     BooleanPreference,
     type Plugin,
@@ -11,11 +16,6 @@ import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
-import { type ReactNode, useCallback } from 'react'
-import { useAsync } from 'react-use'
-import type { Option } from 'ts-results-es'
-import { useSubscription } from 'use-subscription'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
 
@@ -43,10 +43,10 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
 }
 
 export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
-    const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
     if (!meta) return EMPTY_LIST
-    const keys = [...meta.keys()]
 
+    const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
+    const keys = [...Object.keys(meta)]
     const matches = disabled.filter((x) => {
         const contributes = x.contribution!.metadataKeys!
         return keys.some((key) => contributes.has(key))
