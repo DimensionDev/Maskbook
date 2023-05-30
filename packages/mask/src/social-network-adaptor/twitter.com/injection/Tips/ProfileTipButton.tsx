@@ -3,14 +3,14 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
 import { useCurrentVisitingIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { ButtonStyle } from '../../constant.js'
 import { profileFollowButtonSelector as selector } from '../../utils/selector.js'
 
 export function injectOpenTipsButtonOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipsSlot />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipsSlot />)
 }
 
 interface StyleProps {

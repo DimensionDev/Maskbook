@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { SearchResultInspector } from '../../../components/InjectedComponents/SearchResultInspector.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { searchResultHeadingSelector } from '../utils/selector.js'
 
@@ -13,5 +13,5 @@ export function injectSearchResultInspectorAtTwitter(signal: AbortSignal) {
             rule: 'https://twitter.com/search?q=',
         },
     })
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<SearchResultInspector />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { signal }).render(<SearchResultInspector />)
 }

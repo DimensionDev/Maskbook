@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostComment, type PostCommentProps } from '../../../components/InjectedComponents/PostComments.js'
 import { makeStyles } from '@masknet/theme'
 import { collectNodeText } from '../../../utils/index.js'
@@ -34,7 +34,7 @@ export function injectPostCommentsDefault<T extends string>(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
                 const needZipF = needZip || (() => undefined)
-                const root = createReactRootShadowed(meta.afterShadow, { signal })
+                const root = attachReactTreeWithContainer(meta.afterShadow, { signal })
                 root.render(
                     <PostInfoProvider post={current}>
                         <PostCommentDefault needZip={needZipF} comment={commentRef} />

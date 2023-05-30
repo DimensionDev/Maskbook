@@ -1,5 +1,5 @@
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { followUserAvatarSelector, postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
@@ -27,7 +27,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
 
-                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div
                         style={{

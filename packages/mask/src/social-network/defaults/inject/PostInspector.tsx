@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostInspector, type PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
 import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
@@ -29,7 +29,7 @@ export function injectPostInspectorDefault<T extends string>(
                 <PostInspectorDefault zipPost={() => zipPostF(current.rootElement)} />
             </PostInfoProvider>
         )
-        const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
+        const root = attachReactTreeWithContainer(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
             key: 'post-inspector',
             untilVisible: true,
             signal,

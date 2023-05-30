@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -52,7 +52,7 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, options)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal: options.signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal: options.signal }).render(
         <PostDialogHintAtTwitter reason={reason} />,
     )
 }

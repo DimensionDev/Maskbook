@@ -2,7 +2,7 @@ import Color from 'color'
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
 import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { ProfileTabs, PluginID } from '@masknet/shared-base'
@@ -264,7 +264,7 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
                     rule: isProfilePageLike,
                 },
             })
-            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
                 <>
                     <ProfileTabForTokenAndPersona />
                     <ProfileTabForDAO />

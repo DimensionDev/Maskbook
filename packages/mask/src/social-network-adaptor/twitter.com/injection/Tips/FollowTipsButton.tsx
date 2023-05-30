@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import { getUserIdentity } from '../../utils/user.js'
@@ -31,7 +31,7 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
 
-                const root = createReactRootShadowed(proxy.beforeShadow, { signal })
+                const root = attachReactTreeWithContainer(proxy.beforeShadow, { signal })
                 root.render(<FollowButtonTipsSlot userId={twitterId} />)
                 remover = root.destroy
             }

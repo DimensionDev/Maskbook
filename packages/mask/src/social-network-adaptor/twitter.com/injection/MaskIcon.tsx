@@ -5,7 +5,7 @@ import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { memoize, noop } from 'lodash-es'
 import Services from '../../../extension/service.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
 import {
     bioPageUserIDSelector,
@@ -33,7 +33,10 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, options: W
             ifUsingMask(
                 ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(null),
             ).then(() => {
-                const root = createReactRootShadowed(meta.afterShadow, { untilVisible: true, signal: options.signal })
+                const root = attachReactTreeWithContainer(meta.afterShadow, {
+                    untilVisible: true,
+                    signal: options.signal,
+                })
                 root.render(<Icon size={size} />)
                 remover = root.destroy
             }, remove)
@@ -67,7 +70,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
         proxy.realCurrent = node
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+        const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
         root.render(<Icon size={24} />)
         remover = root.destroy
     }
