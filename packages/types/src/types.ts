@@ -173,7 +173,7 @@ export namespace SocialNetworkUI {
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
-            reason?: 'timeline' | 'popup' | 'reply'
+            reason?: 'timeline' | 'popup' | 'reply' | 'verify'
         }
         export interface MaskCompositionDialog {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
