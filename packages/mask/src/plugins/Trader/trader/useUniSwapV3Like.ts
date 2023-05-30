@@ -7,11 +7,11 @@ import { UniSwapV3Like } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { getEVMAvailableTraderProviders } from '../utils.js'
-import { BLOCK_TIME_SCALE } from '../constants/trader.js'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export function useUniswapV3Like(
     inputAmount_: string,
+    scale: number,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
@@ -38,6 +38,6 @@ export function useUniswapV3Like(
                 : provider.getTradeInfo(chainId as ChainId, account, inputAmount_, slippage, inputToken, outputToken)
         },
         [inputAmount_, isNativeTokenWrapper, chainId, account, provider, inputToken, outputToken],
-        BLOCK_TIME_SCALE[chainId],
+        scale,
     )
 }
