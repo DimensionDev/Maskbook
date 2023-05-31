@@ -20,42 +20,67 @@ import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
+import { isLens } from '@masknet/web3-shared-evm'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
-const relationServiceQuery = `  domain(domainSystem: $domainSystem, name: $domain) {
-        source
-        system
-        name
-        fetcher
-        resolved {
-          identity
-          platform
-          displayName
-        }
-        owner {
-          identity
-          platform
-          displayName
-          neighborWithTraversal(depth: 5) {
-            ... on ProofRecord {
-              __typename
-              source
-              from {
-                uuid
-                platform
-                identity
-                displayName
+function getDomainSystem(domain: string) {
+    if (isLens(domain)) return 'lens'
+    if (domain.endsWith('.eth')) return 'ENS'
+    if (domain.endsWith('.bit')) return 'dotbit'
+    if (domain.endsWith('.csb')) return 'Crossbell'
+    return 'ENS'
+}
+
+const relationServiceQuery = `domain(domainSystem: $domainSystem, name: $domain) {
+          source
+          system
+          name
+          fetcher
+          resolved {
+            identity
+            platform
+            displayName
+          }
+          owner {
+            identity
+            platform
+            displayName
+            neighborWithTraversal(depth: 5) {
+              ... on ProofRecord {
+                __typename
+                source
+                from {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
+                to {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
               }
-              to {
-                uuid
-                platform
-                identity
-                displayName
+              ... on HoldRecord {
+                __typename
+                source
+                from {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
+                to {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
               }
             }
-          }
         }
     }`
 interface CreatePayloadBody {
@@ -223,7 +248,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByDomain(domain: string) {
+    async queryProfilesByDomain(domain?: string) {
+        if (!domain) return EMPTY_LIST
         const { data } = await fetchJSON<{
             data: {
                 domain: {
@@ -239,7 +265,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { domainSystem: 'ENS', domain: domain.toLowerCase() },
+                    variables: { domainSystem: getDomainSystem(domain), domain: domain.toLowerCase() },
                     query: `
                     query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
                       ${relationServiceQuery}
@@ -252,7 +278,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         if (!data.domain) return EMPTY_LIST
         const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, [])
-
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
