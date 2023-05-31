@@ -102,7 +102,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     )
 
     useEffect(() => {
-        if (personas.length || !finishTarget || loading || error) return
+        if (personas.length || loading || error) return
 
         onClose?.()
         setCreatePersonaConfirmDialog({
@@ -113,7 +113,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [!personas.length, !finishTarget, loading, !error])
+    }, [!personas.length, loading, !error])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -235,6 +235,10 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
     if (error) {
         return <ErrorPanel onRetry={retry} />
+    }
+
+    if (!personas.length) {
+        return <Stack height="100%" justifyContent="space-between" />
     }
 
     return (

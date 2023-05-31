@@ -29,7 +29,7 @@ export function useConnectedPersonas() {
                 avatar: avatars.get(x.identifier),
             }
         })
-    }, [personasInDB.length])
+    }, [personasInDB])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 
