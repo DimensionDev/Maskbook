@@ -17,6 +17,11 @@
       "types": "./dist/entry-hooks.d.ts",
       "mask-src": "./src/entry-hooks.ts",
       "default": "./dist/entry-hooks.js"
+    },
+    "./types": {
+      "types": "./dist/entry-types.d.ts",
+      "mask-src": "./src/entry-types.ts",
+      "default": "./dist/entry-types.js"
     }
   },
   "types": "./dist/entry.d.ts",
@@ -31,7 +36,6 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
-    "@masknet/web3-providers": "workspace:^",
     "react-use": "^17.4.0"
   }
 }

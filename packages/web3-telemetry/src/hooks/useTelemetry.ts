@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Sentry } from '@masknet/web3-providers'
-import type { TelemetryAPI } from '@masknet/web3-providers/types'
+import type { EventID, EventType, ExceptionID, ExceptionType } from '../types/index.js'
 import { useTelemetryContext } from './context.js'
 
 export function useTelemetry() {
@@ -8,18 +8,14 @@ export function useTelemetry() {
 
     return useMemo(() => {
         return {
-            captureEvent(eventType: TelemetryAPI.EventType, eventID: TelemetryAPI.EventID) {
+            captureEvent(eventType: EventType, eventID: EventID) {
                 Sentry.captureEvent({
                     ...options,
                     eventType,
                     eventID,
                 })
             },
-            captureException(
-                exceptionType: TelemetryAPI.ExceptionType,
-                exceptionID: TelemetryAPI.ExceptionID,
-                error: Error,
-            ) {
+            captureException(exceptionType: ExceptionType, exceptionID: ExceptionID, error: Error) {
                 Sentry.captureException({
                     ...options,
                     exceptionType,

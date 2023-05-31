@@ -3840,9 +3840,6 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../web3-hooks/base
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../web3-providers
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
