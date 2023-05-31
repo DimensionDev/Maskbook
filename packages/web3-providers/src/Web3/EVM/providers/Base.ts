@@ -1,8 +1,9 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
+import { delay } from '@masknet/kit'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     chainResolver,
     createWeb3,
@@ -14,7 +15,7 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -23,7 +24,8 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
 
     constructor(protected providerType: ProviderType) {}
 
-    emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
+    public emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
+    public Request = new RequestReadonlyAPI()
 
     get subscription() {
         return {

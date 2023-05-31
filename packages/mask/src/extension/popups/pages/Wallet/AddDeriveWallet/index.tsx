@@ -5,6 +5,7 @@ import { first } from 'lodash-es'
 import { LoadingButton } from '@mui/lab'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
@@ -125,7 +126,7 @@ const AddDeriveWallet = memo(() => {
                 ),
         )
 
-        await Web3.connect({ account: firstWallet })
+        await Web3.connect({ account: firstWallet, providerType: ProviderType.MaskWallet })
         await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length])

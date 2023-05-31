@@ -165,6 +165,7 @@ export default function ChangeOwner() {
             await Web3.connect({
                 account: contractAccount?.address,
                 chainId: smartPayChainId,
+                providerType: ProviderType.MaskWallet,
             })
         const hash = await Web3.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
@@ -181,17 +182,22 @@ export default function ChangeOwner() {
         })
         if (!receipt.status) return
 
-        await Web3.updateOrAddWallet?.({
-            name: 'Smart Pay',
-            owner: manageAccount.address,
-            identifier: manageAccount.identifier?.toText(),
-            address: contractAccount.address,
-            hasDerivationPath: false,
-            hasStoredKeyInfo: false,
-            id: contractAccount.address,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        })
+        await Web3.updateOrAddWallet?.(
+            {
+                name: 'Smart Pay',
+                owner: manageAccount.address,
+                identifier: manageAccount.identifier?.toText(),
+                address: contractAccount.address,
+                hasDerivationPath: false,
+                hasStoredKeyInfo: false,
+                id: contractAccount.address,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                providerType: ProviderType.MaskWallet,
+            },
+        )
     }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
 
     useTitle(t('popups_wallet_change_owner'))

@@ -9,7 +9,7 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import { JsonFileBox } from '../components/JsonFileBox/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
@@ -150,6 +150,7 @@ const ImportWallet = memo(() => {
                         )
                         await Web3.connect({
                             account: address,
+                            providerType: ProviderType.MaskWallet,
                         })
                         await WalletRPC.resolveMaskAccount([{ address }])
                         await Services.Helper.removePopupWindow()
@@ -160,6 +161,7 @@ const ImportWallet = memo(() => {
                         await Web3.connect({
                             account,
                             chainId: ChainId.Mainnet,
+                            providerType: ProviderType.MaskWallet,
                         })
                         await WalletRPC.resolveMaskAccount([{ address: account }])
                         await Services.Helper.removePopupWindow()

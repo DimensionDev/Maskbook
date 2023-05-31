@@ -13,7 +13,7 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { useHasPassword } from '../../../hook/useHasPassword.js'
@@ -116,28 +116,28 @@ const WalletRecovery = memo(() => {
     const onSubmit = handleSubmit(handleSetPassword)
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
-        const backupId = new URLSearchParams(location.search).get('backupId')
         // If the payment password does not exist, set it first
         if (!hasPassword) {
             await onSubmit()
         }
 
-        if (backupId) {
-            if (value) {
-                await Services.Backup.restoreUnconfirmedBackup({
-                    id: backupId,
-                    action: 'confirm',
-                    countOfSmartPay: value.wallets.filter((x) => x.isSmartPay).length,
-                })
-                const wallet = first(value.wallets)
+        const backupId = new URLSearchParams(location.search).get('backupId')
 
-                // Set default wallet
-                if (wallet) {
-                    await Web3.connect({
-                        account: wallet.address,
-                        chainId: ChainId.Mainnet,
-                    })
-                }
+        if (backupId && value) {
+            await Services.Backup.restoreUnconfirmedBackup({
+                id: backupId,
+                action: 'confirm',
+                countOfSmartPay: value.wallets.filter((x) => x.isSmartPay).length,
+            })
+            const wallet = first(value.wallets)
+
+            // Set default wallet
+            if (wallet) {
+                await Web3.connect({
+                    account: wallet.address,
+                    chainId: ChainId.Mainnet,
+                    providerType: ProviderType.MaskWallet,
+                })
             }
         }
         await Services.Helper.removePopupWindow()

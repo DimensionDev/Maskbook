@@ -169,7 +169,9 @@ const VerifyWallet = memo(() => {
     // disconnect when router changes
     useEffect(
         () => () => {
-            Web3.disconnect()
+            Web3.disconnect({
+                providerType: ProviderType.MaskWallet,
+            })
         },
         [],
     )
