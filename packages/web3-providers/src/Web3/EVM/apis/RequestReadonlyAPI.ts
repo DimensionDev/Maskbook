@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider, RequestArguments } from 'web3-core'
-import { createWeb3Provider, ProviderURL, createWeb3Request } from '@masknet/web3-shared-evm'
+import { createWeb3Provider, ProviderURL, createWeb3Request, PayloadEditor } from '@masknet/web3-shared-evm'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
@@ -17,7 +17,9 @@ export class RequestReadonlyAPI {
 
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
-            return (await this.getWeb3Provider(initial).request(requestArguments)) as T
+            return (await this.getWeb3Provider(initial).request(
+                PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
+            )) as T
         }
     }
 
