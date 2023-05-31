@@ -1,4 +1,5 @@
 import type { AbiItem } from 'web3-utils'
+import { isUndefined, omitBy } from 'lodash-es'
 import { createContract } from '@masknet/web3-shared-evm'
 import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
@@ -49,7 +50,13 @@ export class ContractReadonlyAPI {
 
     getWeb3Contract<T extends BaseContract>(address: string | undefined, ABI: AbiItem[], initial?: ConnectionOptions) {
         const web3 = this.Request.getWeb3(initial)
-        return createContract<T>(web3, address, ABI)
+        const options = omitBy(
+            {
+                from: initial?.overrides?.from ?? initial?.account,
+            },
+            isUndefined,
+        )
+        return createContract<T>(web3, address, ABI, options)
     }
 
     getERC20Contract(address: string | undefined, initial?: ConnectionOptions) {
