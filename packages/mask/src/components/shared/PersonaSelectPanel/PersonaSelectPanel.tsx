@@ -14,7 +14,7 @@ import {
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
@@ -101,7 +101,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         CrossIsolationMessages.events.openPageConfirm,
     )
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (personas.length || loading || error) return
 
         onClose?.()
