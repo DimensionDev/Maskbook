@@ -67,7 +67,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
         if (!socialAccounts[0].label) return EMPTY_LIST
         return NextIDProof.queryProfilesByDomain(socialAccounts[0].label)
-    }, [socialAccounts])
+    }, [socialAccounts[0].label])
 
     return (
         <div className={cx(classes.title, className)} {...rest}>

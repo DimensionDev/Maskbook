@@ -248,7 +248,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByDomain(domain: string) {
+    async queryProfilesByDomain(domain?: string) {
+        if (!domain) return EMPTY_LIST
         const { data } = await fetchJSON<{
             data: {
                 domain: {

@@ -304,7 +304,7 @@ function Content(props: ProfileTabContentProps) {
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
         if (!selectedSocialAccount?.label && !domain) return EMPTY_LIST
-        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || domain || '')
+        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || domain)
     }, [selectedSocialAccount, domain])
 
     if (hidden) return null
