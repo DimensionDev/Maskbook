@@ -3,11 +3,11 @@
     "private": true,
     "type": "module",
     "exports": {
-      ".": {
-        "types": "./dist/index.d.js",
-        "mask-src": "./src/index.ts",
-        "default": "./dist/index.js"
-      }
+        ".": {
+            "types": "./dist/index.d.js",
+            "mask-src": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
     },
     "types": "./dist/index.d.js",
     "dependencies": {
@@ -38,4 +38,4 @@
         "web3-eth-abi": "1.8.0",
         "web3-utils": "1.8.0"
     }
-  }
+}
