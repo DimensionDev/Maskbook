@@ -19,6 +19,7 @@
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "bignumber.js": "9.1.1",
     "ethereum-blockies": "^0.1.1",
     "ethers": "^5.7.2",

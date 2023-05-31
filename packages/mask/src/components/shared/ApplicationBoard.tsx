@@ -1,14 +1,14 @@
+import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
+import { useTimeout } from 'react-use'
+import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { Typography } from '@mui/material'
-import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
-import { useTimeout } from 'react-use'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
 import Services from '../../extension/service.js'
@@ -20,7 +20,6 @@ import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgain
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -134,7 +133,7 @@ function ApplicationBoardContent() {
         isCarouselReady: !!isCarouselReady(),
     })
 
-    useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
+    useMountReport(EventID.AccessApplicationBoard)
 
     return (
         <>

@@ -2592,6 +2592,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -3270,6 +3273,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../../web3-shared/solana
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@types/ethereum-blockies':
         specifier: ^0.1.0
         version: 0.1.0
@@ -3492,6 +3498,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../web3-telemetry
       '@metamask/eth-sig-util':
         specifier: ^5.0.2
         version: 5.0.2
@@ -3610,15 +3619,6 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
     devDependencies:
-      '@sentry/browser':
-        specifier: ^7.50.0
-        version: 7.50.0
-      '@sentry/tracing':
-        specifier: ^7.50.0
-        version: 7.50.0
-      '@sentry/types':
-        specifier: ^7.50.0
-        version: 7.50.0
       '@types/bn.js':
         specifier: ^4.11.6
         version: 4.11.6
@@ -3698,6 +3698,9 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../base
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       bignumber.js:
         specifier: 9.1.1
         version: 9.1.1
@@ -3828,18 +3831,21 @@ importers:
 
   packages/web3-telemetry:
     dependencies:
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
-      '@masknet/web3-helpers':
-        specifier: workspace:^
-        version: link:../web3-helpers
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../web3-hooks/base
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../web3-providers
+      '@sentry/browser':
+        specifier: ^7.50.0
+        version: 7.50.0
+      '@sentry/tracing':
+        specifier: ^7.50.0
+        version: 7.50.0
+      '@sentry/types':
+        specifier: ^7.50.0
+        version: 7.50.0
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -9860,6 +9866,7 @@ packages:
       '@sentry/types': 7.50.0
       '@sentry/utils': 7.50.0
       tslib: 1.14.1
+    dev: false
 
   /@sentry/browser@7.50.0:
     resolution: {integrity: sha512-a+UYbP89+SAvW47/p9wxEi9eWlyp/SkYl52OCdZNXnplQY4kQIOVyiaIs5nnCxIxZgXKrhAX4eo1E9ykleFuNQ==}
@@ -9871,6 +9878,7 @@ packages:
       '@sentry/types': 7.50.0
       '@sentry/utils': 7.50.0
       tslib: 1.14.1
+    dev: false
 
   /@sentry/core@5.30.0:
     resolution: {integrity: sha512-TmfrII8w1PQZSZgPpUESqjB+jC6MvZJZdLtE/0hZ+SrnKhW3x5WlYLvTXZpcWePYBku7rl2wn1RZu6uT0qCTeg==}
@@ -9890,6 +9898,7 @@ packages:
       '@sentry/types': 7.50.0
       '@sentry/utils': 7.50.0
       tslib: 1.14.1
+    dev: false
 
   /@sentry/hub@5.30.0:
     resolution: {integrity: sha512-2tYrGnzb1gKz2EkMDQcfLrDTvmGcQPuWxLnJKXJvYTQDGLlEvi2tWz1VIHjunmOvJrB5aIQLhm+dcMRwFZDCqQ==}
@@ -9933,6 +9942,7 @@ packages:
       '@sentry/core': 7.50.0
       '@sentry/types': 7.50.0
       '@sentry/utils': 7.50.0
+    dev: false
 
   /@sentry/tracing@5.30.0:
     resolution: {integrity: sha512-dUFowCr0AIMwiLD7Fs314Mdzcug+gBVo/+NCMyDw8tFxJkwWAKl7Qa2OZxLQ0ZHjakcj1hNKfCQJ9rhyfOl4Aw==}
@@ -9950,7 +9960,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       '@sentry-internal/tracing': 7.50.0
-    dev: true
+    dev: false
 
   /@sentry/types@5.30.0:
     resolution: {integrity: sha512-R8xOqlSTZ+htqrfteCWU5Nk0CDN5ApUTvrlvBuiH1DyP6czDZ4ktbZB0hAgBlVcK0U+qpD3ag3Tqqpa5Q67rPw==}
@@ -9960,6 +9970,7 @@ packages:
   /@sentry/types@7.50.0:
     resolution: {integrity: sha512-Zo9vyI98QNeYT0K0y57Rb4JRWDaPEgmp+QkQ4CRQZFUTWetO5fvPZ4Gb/R7TW16LajuHZlbJBHmvmNj2pkL2kw==}
     engines: {node: '>=8'}
+    dev: false
 
   /@sentry/utils@5.30.0:
     resolution: {integrity: sha512-zaYmoH0NWWtvnJjC9/CBseXMtKHm/tm40sz3YfJRxeQjyzRqNQPgivpd9R/oDJCYj999mzdW382p/qi2ypjLww==}
@@ -9975,6 +9986,7 @@ packages:
     dependencies:
       '@sentry/types': 7.50.0
       tslib: 1.14.1
+    dev: false
 
   /@servie/events@3.0.0:
     resolution: {integrity: sha512-Zd79bWhTuG8NvPgSiOcivorJIDg+goMw76TIqYTIR5ua5HOEkS29fmIh2VVSeDeabNF6z8ceTwzB0pSh/BhXyw==}

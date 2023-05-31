@@ -48,7 +48,6 @@ import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { LensAPI } from './Lens/index.js'
-import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
@@ -114,7 +113,6 @@ export const Mirror = new MirrorAPI()
 export const CryptoScamDB = new CryptoScamDB_API()
 export const Multicall = new MulticallAPI()
 export const Lens = new LensAPI()
-export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()

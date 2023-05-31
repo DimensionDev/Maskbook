@@ -16,8 +16,9 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
-import { joinsABTest, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { joinsABTest } from '@masknet/web3-telemetry/helpers'
 
 export interface ConsoleContentProps {
     onClose?: () => void

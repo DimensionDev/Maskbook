@@ -1,5 +1,5 @@
 import { Flags } from '@masknet/flags'
-import { getABTestSeed, joinsABTest } from '@masknet/shared-base'
+import { getABTestSeed, joinsABTest } from '@masknet/web3-telemetry/helpers'
 import { getRPCConstants } from '../constants/constants.js'
 import { ChainId } from '../types/index.js'
 
