@@ -21,9 +21,14 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         display: 'flex',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         gap: 4,
         cursor: 'pointer',
+        padding: 0,
+        border: 0,
+        background: 'none',
+        minWidth: 70,
     },
     paper: {
         width: 280,
@@ -56,14 +61,15 @@ export function PopoverListTrigger({
 
     return usePortalShadowRoot((ref) => (
         <>
-            <div
+            <button
+                type="button"
                 className={classes.popperText}
                 onClick={(e) => {
                     setAnchorEl(anchorEl ? null : e.currentTarget)
                 }}>
                 <Typography className={classes.selected}>{selectedTitle}</Typography>
                 <Icons.RightArrow />
-            </div>
+            </button>
             <Popover
                 container={ref}
                 disableScrollLock

@@ -88,7 +88,9 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: Abort
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = info.element
 
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })

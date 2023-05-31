@@ -202,13 +202,17 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                     </div>
                                     <div className={classes.buttonContainer}>
                                         {step === total ? (
-                                            <NextButton style={{ width: '100%' }} onClick={onTry}>
+                                            <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
                                                 {t('try')}
                                             </NextButton>
                                         ) : (
                                             <>
-                                                <ActionButton onClick={onSkip}>{t('skip')}</ActionButton>
-                                                <NextButton onClick={onNext}>{t('next')}</NextButton>
+                                                <ActionButton type="button" onClick={onSkip}>
+                                                    {t('skip')}
+                                                </ActionButton>
+                                                <NextButton type="button" onClick={onNext}>
+                                                    {t('next')}
+                                                </NextButton>
                                             </>
                                         )}
                                     </div>

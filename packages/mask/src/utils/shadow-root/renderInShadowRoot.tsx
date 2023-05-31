@@ -22,7 +22,7 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
 ]
 export function setupReactShadowRootEnvironment() {
     const shadow = setupReactShadowRootEnvironmentUpper(
-        { mode: process.env.shadowRootMode },
+        { mode: process.env.shadowRootMode, delegatesFocus: true },
         captureEvents,
         MaskUIRootSNS,
     )
@@ -48,7 +48,7 @@ function AttachReactTreeWithoutContainerRedirect(props: React.PropsWithChildren<
 export function attachReactTreeWithoutContainer(debugKey: string, jsx: React.ReactNode, signal?: AbortSignal) {
     // Note: do not attach this DOM to window. We don't need it
     const dom = document.createElement('main')
-    const shadow = dom.attachShadow({ mode: 'closed' })
+    const shadow = dom.attachShadow({ mode: 'closed', delegatesFocus: true })
 
     attachReactTreeWithContainer(shadow, { signal, key: debugKey }).render(
         <AttachReactTreeWithoutContainerRedirect children={jsx} debugKey={debugKey} />,

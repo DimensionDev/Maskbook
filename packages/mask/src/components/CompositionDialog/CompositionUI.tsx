@@ -3,7 +3,6 @@ import {
     startTransition,
     useCallback,
     useEffect,
-    useId,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -121,7 +120,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 ) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
-    const id = useId()
 
     const [currentPostSize, __updatePostSize] = useState(0)
 

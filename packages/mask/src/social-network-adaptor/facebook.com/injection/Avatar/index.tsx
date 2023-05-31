@@ -12,7 +12,9 @@ export async function injectAvatar(signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 // create stacking context
                 ele.style.position = 'relative'

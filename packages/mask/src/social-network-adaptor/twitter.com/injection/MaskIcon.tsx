@@ -68,7 +68,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true } })
         proxy.realCurrent = node
         const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
         root.render(<Icon size={24} />)
