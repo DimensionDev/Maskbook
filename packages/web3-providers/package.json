@@ -95,9 +95,6 @@
   "devDependencies": {
     "@types/bs58": "^4.0.1",
     "@types/bn.js": "^4.11.6",
-    "@sentry/browser": "^7.50.0",
-    "@sentry/tracing": "^7.50.0",
-    "@sentry/types": "^7.50.0",
     "@types/json-stable-stringify": "^1.0.34",
     "@types/use-subscription": "^1.0.0"
   }

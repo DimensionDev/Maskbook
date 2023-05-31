@@ -1,5 +1,4 @@
 import type { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 export enum GroupID {
     Event = 'event',
@@ -60,11 +59,11 @@ export enum ExceptionID {
 }
 
 export interface NetworkOptions {
-    chainId?: Web3Helper.ChainIdAll
+    chainId?: number
     pluginID?: PluginID
     networkID?: NetworkPluginID
-    networkType?: Web3Helper.NetworkTypeAll
-    providerType?: Web3Helper.ProviderTypeAll
+    networkType?: string
+    providerType?: string
 }
 
 export interface UserOptions {
@@ -80,4 +79,28 @@ export interface CommonOptions {
     network?: NetworkOptions
     // default to 1 (100%)
     sampleRate?: number
+}
+
+export interface EventOptions extends CommonOptions {
+    eventType: EventType
+    eventID: EventID
+    message?: string
+}
+
+export interface ExceptionOptions extends CommonOptions {
+    exceptionType: ExceptionType
+    exceptionID: ExceptionID
+    error: Error
+}
+
+export interface Provider<Event, Exception> {
+    user?: UserOptions
+    device?: DeviceOptions
+    network?: NetworkOptions
+
+    enable(): void
+    disable(): void
+
+    captureEvent(options: EventOptions): void
+    captureException(options: ExceptionOptions): void
 }

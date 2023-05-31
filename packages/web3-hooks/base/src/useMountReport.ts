@@ -1,7 +1,7 @@
 import { useMount } from 'react-use'
 import { type Unresolved, resolve } from '@masknet/shared-base'
+import { type EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useTelemetry } from './useTelemetry.js'
-import { type EventID, EventType } from '../types/index.js'
 
 /**
  * Log an access event

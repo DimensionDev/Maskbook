@@ -13,11 +13,6 @@
       "mask-src": "./src/entry-helpers.ts",
       "default": "./dist/entry-helpers.js"
     },
-    "./hooks": {
-      "types": "./dist/entry-hooks.d.ts",
-      "mask-src": "./src/entry-hooks.ts",
-      "default": "./dist/entry-hooks.js"
-    },
     "./types": {
       "types": "./dist/entry-types.d.ts",
       "mask-src": "./src/entry-types.ts",
@@ -33,9 +28,11 @@
     }
   },
   "dependencies": {
+    "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@masknet/web3-helpers": "workspace:^",
-    "@masknet/web3-hooks-base": "workspace:^",
+    "@sentry/browser": "^7.50.0",
+    "@sentry/tracing": "^7.50.0",
+    "@sentry/types": "^7.50.0",
     "react-use": "^17.4.0"
   }
 }

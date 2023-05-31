@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useMemo } from 'react'
-import { useNetworkContext, useChainContext, useProviderType, useNetworkType } from '@masknet/web3-hooks-base'
-import type { CommonOptions } from '../types/index.js'
+import type { CommonOptions } from '@masknet/web3-telemetry/types'
+import { useChainContext, useNetworkContext } from '../useContext.js'
+import { useNetworkType } from '../useNetworkType.js'
+import { useProviderType } from '../useProviderType.js'
 
 const Telemetry = createContext<CommonOptions>(null!)
 Telemetry.displayName = 'TelemetryContext'

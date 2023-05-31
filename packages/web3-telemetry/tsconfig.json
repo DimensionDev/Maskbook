@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": [{ "path": "../web3-shared/base" }, { "path": "../web3-hooks/base" }, { "path": "../web3-helpers" }]
+  "references": [{ "path": "../shared-base" }]
 }

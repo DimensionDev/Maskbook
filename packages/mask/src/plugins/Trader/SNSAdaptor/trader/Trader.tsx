@@ -1,6 +1,9 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
+import { Box, Typography, useTheme } from '@mui/material'
 import { ImageIcon, useSelectFungibleToken, useShowConfirm } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
@@ -20,7 +23,16 @@ import {
     useNetworkContext,
     useWallet,
     useWeb3Others,
+    useMountReport,
+    useTelemetry,
 } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { type TraderAPI } from '@masknet/web3-providers/types'
+import { SmartPayBundler } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base.js'
@@ -34,17 +46,8 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI, type TraderAPI } from '@masknet/web3-providers/types'
-import { SmartPayBundler } from '@masknet/web3-providers'
-import { BigNumber } from 'bignumber.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { TraderStateBar } from './TraderStateBar.js'
-import { Box, Typography, useTheme } from '@mui/material'
+
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
@@ -283,7 +286,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             },
             maxWidthOfContent: 420,
         })
-        telemetry.captureEvent(TelemetryAPI.EventType.Interact, TelemetryAPI.EventID.SendTraderTransactionSuccessfully)
+        telemetry.captureEvent(EventType.Interact, EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
@@ -361,7 +364,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         })
     })
 
-    useMountReport(TelemetryAPI.EventID.AccessTradePlugin)
+    useMountReport(EventID.AccessTradePlugin)
 
     // #region if trade has been changed, update the focused trade
     useUpdateEffect(() => {

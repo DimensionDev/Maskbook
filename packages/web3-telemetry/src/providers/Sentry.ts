@@ -1,12 +1,27 @@
 import '@sentry/tracing'
 import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import { Flags } from '@masknet/flags'
-import { TelemetryID } from '@masknet/web3-telemetry'
-import { joinsABTest, getABTestSeed } from '@masknet/web3-telemetry/helpers'
 import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
-import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
-import { isNewerThan, isSameVersion } from '../entry-helpers.js'
-import { TelemetryAPI } from '../entry-types.js'
+import { joinsABTest } from '../helpers/joinsABTest.js'
+import { getABTestSeed } from '../helpers/getABTestSeed.js'
+import { isNewerThan } from '../helpers/isNewerThan.js'
+import { isSameVersion } from '../helpers/isSameVersion.js'
+import { removeSensitiveTelemetryInfo } from '../helpers/removeSensitiveTelemetryInfo.js'
+import {
+    type Provider,
+    type UserOptions,
+    type DeviceOptions,
+    type NetworkOptions,
+    type CommonOptions,
+    type EventOptions,
+    type ExceptionOptions,
+    type EventType,
+    type ExceptionType,
+    type EventID,
+    type ExceptionID,
+    GroupID,
+} from '../types/index.js'
+import { TelemetryID } from '../constants/index.js'
 
 const IGNORE_ERRORS = [
     // FIXME
@@ -30,7 +45,7 @@ const IGNORE_ERRORS = [
     'An attempt was made to break through the security policy of the user agent.',
 ]
 
-export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
+export class SentryAPI implements Provider<Event, Event> {
     constructor() {
         const release =
             process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
@@ -112,9 +127,9 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     // The sentry needs to be opened at the runtime.
     private status = 'off'
-    private userOptions?: TelemetryAPI.UserOptions
-    private deviceOptions?: TelemetryAPI.DeviceOptions
-    private networkOptions?: TelemetryAPI.NetworkOptions
+    private userOptions?: UserOptions
+    private deviceOptions?: DeviceOptions
+    private networkOptions?: NetworkOptions
 
     get user() {
         return {
@@ -122,7 +137,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    set user(options: TelemetryAPI.UserOptions) {
+    set user(options: UserOptions) {
         this.userOptions = {
             ...this.userOptions,
             ...options,
@@ -135,7 +150,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    set device(options: TelemetryAPI.DeviceOptions) {
+    set device(options: DeviceOptions) {
         this.deviceOptions = {
             ...this.deviceOptions,
             ...options,
@@ -148,14 +163,14 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    set network(options: TelemetryAPI.NetworkOptions) {
+    set network(options: NetworkOptions) {
         this.networkOptions = {
             ...this.networkOptions,
             ...options,
         }
     }
 
-    private getOptions(initials?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
+    private getOptions(initials?: CommonOptions): CommonOptions {
         return {
             user: {
                 ...this.userOptions,
@@ -179,17 +194,17 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     }
 
     private createCommonEvent(
-        groupID: TelemetryAPI.GroupID,
-        type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
-        ID: TelemetryAPI.EventID | TelemetryAPI.ExceptionID,
-        initials: TelemetryAPI.CommonOptions,
+        groupID: GroupID,
+        type: EventType | ExceptionType,
+        ID: EventID | ExceptionID,
+        initials: CommonOptions,
     ): Event {
         const options = this.getOptions(initials)
         return {
-            level: groupID === TelemetryAPI.GroupID.Event ? 'info' : 'error',
+            level: groupID === GroupID.Event ? 'info' : 'error',
             message: ID,
             tags: {
-                group_id: TelemetryAPI.GroupID.Event,
+                group_id: GroupID.Event,
                 track_id: ID,
                 track_type: type,
                 chain_id: options.network?.chainId,
@@ -203,17 +218,12 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    private createEvent(options: TelemetryAPI.EventOptions): Event {
-        return this.createCommonEvent(TelemetryAPI.GroupID.Event, options.eventType, options.eventID, options)
+    private createEvent(options: EventOptions): Event {
+        return this.createCommonEvent(GroupID.Event, options.eventType, options.eventID, options)
     }
 
-    private createException(options: TelemetryAPI.ExceptionOptions): Event {
-        return this.createCommonEvent(
-            TelemetryAPI.GroupID.Exception,
-            options.exceptionType,
-            options.exceptionID,
-            options,
-        )
+    private createException(options: ExceptionOptions): Event {
+        return this.createCommonEvent(GroupID.Exception, options.exceptionType, options.exceptionID, options)
     }
 
     enable() {
@@ -224,7 +234,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         this.status = 'off'
     }
 
-    captureEvent(options: TelemetryAPI.EventOptions) {
+    captureEvent(options: EventOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
@@ -244,7 +254,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    captureException(options: TelemetryAPI.ExceptionOptions) {
+    captureException(options: ExceptionOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return

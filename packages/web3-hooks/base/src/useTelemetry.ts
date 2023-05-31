@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { Sentry } from '@masknet/web3-providers'
-import type { EventID, EventType, ExceptionID, ExceptionType } from '../types/index.js'
-import { useTelemetryContext } from './context.js'
+import { Sentry } from '@masknet/web3-telemetry'
+import type { EventID, EventType, ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
+import { useTelemetryContext } from './Telemetry/index.js'
 
 export function useTelemetry() {
     const options = useTelemetryContext()
@@ -24,5 +24,5 @@ export function useTelemetry() {
                 })
             },
         }
-    }, [options])
+    }, [JSON.stringify(options)])
 }
