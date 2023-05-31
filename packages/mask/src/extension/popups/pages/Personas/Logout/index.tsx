@@ -91,6 +91,7 @@ const Logout = memo(() => {
                 await Web3.connect({
                     account: newWallet?.address,
                     chainId: newWallet?.owner ? smartPayChainId : undefined,
+                    providerType: ProviderType.MaskWallet,
                 })
             }
 

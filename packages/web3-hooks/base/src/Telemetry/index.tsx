@@ -1,18 +1,20 @@
 import React, { createContext, useContext, useMemo } from 'react'
-import type { TelemetryAPI } from '@masknet/web3-providers/types'
-import { useNetworkContext, useChainContext, useProviderType, useNetworkType } from '@masknet/web3-hooks-base'
+import type { CommonOptions } from '@masknet/web3-telemetry/types'
+import { useChainContext, useNetworkContext } from '../useContext.js'
+import { useNetworkType } from '../useNetworkType.js'
+import { useProviderType } from '../useProviderType.js'
 
-const Telemetry = createContext<TelemetryAPI.CommonOptions>(null!)
+const Telemetry = createContext<CommonOptions>(null!)
 Telemetry.displayName = 'TelemetryContext'
 
-export function TelemetryProvider({ value, children }: Partial<React.ProviderProps<TelemetryAPI.CommonOptions>>) {
+export function TelemetryProvider({ value, children }: Partial<React.ProviderProps<CommonOptions>>) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
 
     const networkType = useNetworkType()
     const providerType = useProviderType()
 
-    const options = useMemo<TelemetryAPI.CommonOptions>(() => {
+    const options = useMemo<CommonOptions>(() => {
         return {
             device: {
                 ...value?.device,

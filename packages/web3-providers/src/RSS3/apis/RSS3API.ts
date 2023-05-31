@@ -1,5 +1,7 @@
 import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
+import { Sentry } from '@masknet/web3-telemetry'
+import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createIndicator, createNextIndicator, createPageable, queryClient } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_ENDPOINT } from '../constants.js'
@@ -129,7 +131,12 @@ export class RSS3API implements RSS3BaseAPI.Provider {
             result: RSS3BaseAPI.Web3Feed[]
             cursor?: string
         }>(url)
-        if (!res.result) Sentry.captureException(new Error(`No feeds response from ${url}`))
+        if (!res.result)
+            Sentry.captureException({
+                exceptionType: ExceptionType.Error,
+                exceptionID: ExceptionID.FetchError,
+                error: new Error(`No feeds response from ${url}`),
+            })
         const { result = [], cursor } = res
         result.forEach(normalizedFeed)
         // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`

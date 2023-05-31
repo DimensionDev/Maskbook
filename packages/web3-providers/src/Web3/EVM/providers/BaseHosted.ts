@@ -16,7 +16,6 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
-import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseHostedProvider
@@ -30,8 +29,6 @@ export class BaseHostedProvider
               wallets: Wallet[]
           }>
         | undefined
-
-    private Request = new RequestReadonlyAPI()
 
     constructor(
         protected override providerType: ProviderType,

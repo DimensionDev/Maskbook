@@ -1,4 +1,4 @@
-import { captureFetchTransaction } from './captureFetchTransaction.js'
+import { captureFetchTransaction } from '@masknet/web3-telemetry/helpers'
 
 const { fetch: originalFetch } = globalThis
 

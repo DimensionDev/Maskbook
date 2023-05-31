@@ -1,6 +1,6 @@
 // Note: this file should import as less file as possible because it will be evaluated in the initial stage.
 // therefore don't import from @masknet/shared-base but from the source directly.
-import { TelemetryID } from '../../../../shared-base/src/utils/TelemetryID.js'
+import { TelemetryID } from '@masknet/web3-telemetry'
 
 export async function getTelemetryID(): Promise<string> {
     const { telemetry_id } = await browser.storage.local.get('telemetry_id')

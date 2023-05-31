@@ -30,7 +30,6 @@ export * from './types/TokenIcon.js'
 export * from './types/TokenList.js'
 export * from './types/Trending.js'
 export * from './types/Twitter.js'
-export * from './types/Telemetry.js'
 export * from './types/RedPacket.js'
 export * from './types/NameService.js'
 export * from './types/Wallet.js'
@@ -39,15 +38,13 @@ export * from './types/Lido.js'
 export * from './types/Storage.js'
 export * from './types/Snapshot.js'
 export * from './types/PluginContext.js'
+export * from './types/Trader.js'
 
 // Implementations
 export * from './DeBank/types.js'
 export * from './Zerion/types.js'
 export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
-
-export * from './types/Trader.js'
-
 export * from './Web3/Router/types/index.js'
 
 export type { ConnectionOptions_Base } from './Web3/Base/apis/ConnectionOptionsAPI.js'

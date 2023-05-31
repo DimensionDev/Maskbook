@@ -6,7 +6,7 @@ import { useContainer } from 'unstated-next'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ManageWallet } from '@masknet/shared'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
@@ -91,8 +91,12 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (!wallet?.address) return
         try {
-            await Web3.removeWallet?.(wallet.address, password)
-            const wallets = await Web3.getWallets?.()
+            await Web3.removeWallet?.(wallet.address, password, {
+                providerType: ProviderType.MaskWallet,
+            })
+            const wallets = await Web3.getWallets?.({
+                providerType: ProviderType.MaskWallet,
+            })
             const newWallet = first(
                 wallets?.filter(
                     (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
@@ -101,6 +105,7 @@ const DeleteWallet = memo(() => {
             await Web3.connect({
                 account: newWallet?.address,
                 chainId: newWallet?.owner ? smartPayChainId : undefined,
+                providerType: ProviderType.MaskWallet,
             })
             navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {

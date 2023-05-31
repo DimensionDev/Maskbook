@@ -1,11 +1,18 @@
-import type { ProfileIdentifier } from '@masknet/shared-base'
-import { useAsync } from 'react-use'
-import Services from '../../../extension/service.js'
+import { resolveNetworkToNextIDPlatform } from '@masknet/shared-base'
+import { useQuery } from '@tanstack/react-query'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useBaseUIRuntime } from '@masknet/shared'
 
-export function useProfilePublicKey(receiver: ProfileIdentifier | null | undefined) {
-    return useAsync(async () => {
-        if (!receiver) return
-        const persona = await Services.Identity.queryPersonaByProfile(receiver)
-        return persona?.identifier?.publicKeyAsHex
-    }, [receiver])
+export function useProfilePublicKey(userId?: string) {
+    const { networkIdentifier } = useBaseUIRuntime()
+    const platform = resolveNetworkToNextIDPlatform(networkIdentifier)
+    return useQuery({
+        enabled: !!userId && !!platform,
+        queryKey: ['next-id', 'lasted-active', platform, userId],
+        queryFn: async () => {
+            if (!userId || !platform) return
+            const binding = await NextIDProof.queryLatestBindingByPlatform(platform, userId)
+            return binding?.persona
+        },
+    })
 }

@@ -9,8 +9,9 @@
   "references": [
     { "path": "../base" },
     { "path": "../../flags" },
-    { "path": "../../shared-base" },
     { "path": "../../injected-script/sdk" },
-    { "path": "../../polyfills" }
+    { "path": "../../polyfills" },
+    { "path": "../../shared-base" },
+    { "path": "../../web3-telemetry" }
   ]
 }

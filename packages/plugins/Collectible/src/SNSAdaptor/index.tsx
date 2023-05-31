@@ -12,11 +12,10 @@ import { Box } from '@mui/material'
 import { CrossIsolationMessages, NetworkPluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
+import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { setupContext } from '../context.js'
@@ -49,7 +48,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 4,
     UI: {
         TabContent({ socialAccount, identity }) {
-            useMountReport(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
+            useMountReport(EventID.AccessWeb3TabNFTsTab)
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
@@ -121,7 +120,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 4,
             UI: {
                 TabContent({ socialAccount, identity }) {
-                    useMountReport(TelemetryAPI.EventID.AccessWeb3ProfileDialogNFTsTab)
+                    useMountReport(EventID.AccessWeb3ProfileDialogNFTsTab)
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
                     if (!socialAccount) return null

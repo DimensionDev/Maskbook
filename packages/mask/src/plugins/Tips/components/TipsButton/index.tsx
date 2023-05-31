@@ -1,14 +1,15 @@
-import { type FC, type HTMLProps, type MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useNetworkContext } from '@masknet/web3-hooks-base'
 import {
-    type ProfileIdentifier,
-    NetworkPluginID,
     EMPTY_LIST,
-    type SocialAccount,
+    NetworkPluginID,
     SocialAddressType,
+    type ProfileIdentifier,
+    type SocialAccount,
 } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { useCallback, useEffect, useMemo, type FC, type HTMLProps, type MouseEventHandler } from 'react'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUserId,
@@ -16,7 +17,6 @@ import {
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
@@ -56,7 +56,7 @@ export const TipButton: FC<Props> = (props) => {
     } = props
     const { classes, cx } = useStyles({ iconSize })
 
-    const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
+    const { data: personaPubkey, isLoading: loadingPersona } = useProfilePublicKey(receiver?.userId)
     const receiverUserId = receiver?.userId
 
     const { pluginID } = useNetworkContext()
