@@ -349,20 +349,20 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
 export interface NonFungibleCollectionOverview {
     // collection name
     collection?: string
-    market_cap?: number
-    highest_price?: number
-    volume_24h?: number
-    average_price_24h?: number
-    average_price_change_1d: string
-    average_price_change: string
-    average_price_change_7d: string
+    market_cap?: string
+    highest_price?: string
+    volume_24h?: string
+    average_price_24h?: string
+    average_price_change_1d?: string
+    average_price_change?: string
+    average_price_change_7d?: string
     sales_24h?: number
     owners_total?: number
-    total_volume?: number
+    total_volume?: string
     items_total?: number
     sales?: number
     volume?: number
-    average_price?: number
+    average_price?: string
 }
 
 export interface NonFungibleTokenActivity<ChainId, SchemaType> {
