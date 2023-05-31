@@ -180,10 +180,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const onSelectedProfiles = useCallback((item: Profile, checked: boolean) => {
         if (checked) {
             setSelectedAllProfiles((profiles) => [...profiles, item])
-        } else
-            setSelectedAllProfiles((profiles) =>
-                profiles.filter((x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex),
-            )
+        } else setSelectedAllProfiles((profiles) => profiles.filter((x) => x !== item))
     }, [])
 
     const selectedPubkeyList = compact(selectedAllProfiles.map((x) => x.linkedPersona?.publicKeyAsHex))
