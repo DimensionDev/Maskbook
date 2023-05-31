@@ -325,7 +325,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
             'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
-        ID: `${PLUGIN_ID}_walletconnectv2`,
+        ID: `${PLUGIN_ID}_walletconnect_V2`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.WalletConnectV2,
         name: 'WalletConnect V2',
