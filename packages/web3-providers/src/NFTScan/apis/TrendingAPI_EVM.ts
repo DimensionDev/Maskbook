@@ -161,7 +161,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         chainId: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending | undefined> {
+    ): Promise<TrendingAPI.Trending> {
         const collection = await this.getCollection(chainId, id)
         if (!collection) {
             throw new Error(`NFTSCAN: Can not find token by id ${id}`)
