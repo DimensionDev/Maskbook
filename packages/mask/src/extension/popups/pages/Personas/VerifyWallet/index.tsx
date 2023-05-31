@@ -170,10 +170,10 @@ const VerifyWallet = memo(() => {
     useEffect(
         () => () => {
             Web3.disconnect({
-                providerType: ProviderType.MaskWallet,
+                providerType: wallet.providerType,
             })
         },
-        [],
+        [wallet.providerType],
     )
     useTitle(t('popups_add_wallet'))
 
