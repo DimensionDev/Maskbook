@@ -34,7 +34,6 @@ const useStyles = makeStyles()((theme) => ({
     article: {
         minHeight: 500,
     },
-    checkboxGroup: {},
     checkboxRow: {
         marginTop: theme.spacing(2),
         marginLeft: 0,
@@ -51,8 +50,11 @@ const useStyles = makeStyles()((theme) => ({
         textDecoration: 'underline',
     },
     checkbox: {
-        padding: 0,
-        marginRight: theme.spacing(1.5),
+        // do not set padding to 0, it will make the keyboard indicator (focus ripple) invisible.
+        marginTop: -9,
+        marginBottom: -9,
+        marginLeft: -9,
+        marginRight: `calc(-9px + ${theme.spacing(1.5)})`,
     },
     buttonGroup: {
         margin: '16px auto 0',
@@ -69,8 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: '0 auto',
     },
 }))
-
-export default memo(function Welcome() {
+function Welcome() {
     const [, setAgreed] = TermsAgreedContext.useContainer()
     const [read, setRead] = useState(true)
     const [allowedToCollect, setAllowedToCollect] = useState(true)
@@ -116,7 +117,7 @@ export default memo(function Welcome() {
             <HeaderLine className={classes.header} />
             <main className={classes.content}>
                 <Article className={classes.article} />
-                <FormGroup className={classes.checkboxGroup}>
+                <FormGroup>
                     <FormControlLabel
                         className={classes.checkboxRow}
                         classes={{ label: classes.label }}
@@ -177,4 +178,7 @@ export default memo(function Welcome() {
             <FooterLine className={classes.footer} />
         </div>
     )
-})
+}
+const _Welcome = memo(Welcome)
+_Welcome.displayName = 'Welcome'
+export default _Welcome

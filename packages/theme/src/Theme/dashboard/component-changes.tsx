@@ -348,7 +348,7 @@ export const Checkbox: Theme = (mode, colors) => ({
                 size: 'medium',
                 checkedIcon: <Icons.Checkbox size={18} color="#1C68F3" />,
                 icon: <Icons.CheckboxBlank size={18} />,
-                disableRipple: true,
+                disableTouchRipple: true,
             },
         },
     },
