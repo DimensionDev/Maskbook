@@ -1,14 +1,9 @@
 import '@sentry/tracing'
 import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import { Flags } from '@masknet/flags'
-import {
-    getSiteType,
-    getAgentType,
-    getExtensionId,
-    joinsABTest,
-    getABTestSeed,
-    TelemetryID,
-} from '@masknet/shared-base'
+import { TelemetryID } from '@masknet/web3-telemetry'
+import { joinsABTest, getABTestSeed } from '@masknet/web3-telemetry/helpers'
+import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
 import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
 import { isNewerThan, isSameVersion } from '../entry-helpers.js'
 import { TelemetryAPI } from '../entry-types.js'

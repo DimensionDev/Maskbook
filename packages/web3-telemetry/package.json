@@ -3,6 +3,16 @@
   "type": "module",
   "private": true,
   "exports": {
+    ".": {
+      "types": "./dist/entry.d.ts",
+      "mask-src": "./src/entry.ts",
+      "default": "./dist/entry.js"
+    },
+    "./helpers": {
+      "types": "./dist/entry-helpers.d.ts",
+      "mask-src": "./src/entry-helpers.ts",
+      "default": "./dist/entry-helpers.js"
+    },
     "./hooks": {
       "types": "./dist/entry-hooks.d.ts",
       "mask-src": "./src/entry-hooks.ts",

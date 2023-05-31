@@ -3492,6 +3492,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../web3-telemetry
       '@metamask/eth-sig-util':
         specifier: ^5.0.2
         version: 5.0.2

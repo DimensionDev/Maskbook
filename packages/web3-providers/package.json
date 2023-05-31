@@ -41,6 +41,7 @@
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-flow": "workspace:^",
