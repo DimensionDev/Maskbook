@@ -1,5 +1,12 @@
 # @masknet/encryption
 
+## 0.1.3
+
+### Patch Changes
+
+- 149d286c6: fix: key passed to DecryptIO.setPostKeyCache cannot be exported
+- a5a8b3646: fix: v37 decrypted result is not a Map
+
 ## 0.1.2
 
 ### Patch Changes
