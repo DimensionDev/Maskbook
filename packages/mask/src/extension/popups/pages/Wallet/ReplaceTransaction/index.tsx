@@ -11,7 +11,7 @@ import { hexToNumber, toHex } from 'web3-utils'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { ProviderType, formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -164,9 +164,13 @@ const ReplaceTransaction = memo(() => {
                 if (!transaction || !formatterTransaction) return
 
                 if (type === ReplaceType.CANCEL) {
-                    await Web3.cancelTransaction(transaction?.id, config)
+                    await Web3.cancelTransaction(transaction?.id, config, {
+                        providerType: ProviderType.MaskWallet,
+                    })
                 } else {
-                    await Web3.replaceTransaction(transaction?.id, config)
+                    await Web3.replaceTransaction(transaction?.id, config, {
+                        providerType: ProviderType.MaskWallet,
+                    })
                 }
 
                 navigate(-1)
