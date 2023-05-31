@@ -43,9 +43,10 @@ type FooterLinkBaseProps = React.PropsWithChildren<{
 }>
 type FooterLinkAnchorProps = FooterLinkBaseProps & {
     href: string
+    onClick?(e: React.MouseEvent<HTMLAnchorElement>): void
 }
 
-function FooterLinkExternal(props: FooterLinkAnchorProps) {
+function FooterLinkItem(props: FooterLinkAnchorProps) {
     const { classes } = useStyles()
     return (
         <Link
@@ -54,25 +55,6 @@ function FooterLinkExternal(props: FooterLinkAnchorProps) {
             rel="noopener noreferrer"
             color="textPrimary"
             href={props.href}
-            className={classes.footerLink}>
-            <Typography variant="body2" component="span">
-                {props.children}
-            </Typography>
-        </Link>
-    )
-}
-
-type FooterLinkAnchorButtonProps = FooterLinkBaseProps & {
-    onClick(e: React.MouseEvent<HTMLAnchorElement>): void
-}
-function FooterLinkButton(props: FooterLinkAnchorButtonProps) {
-    const { classes } = useStyles()
-    return (
-        <Link
-            underline="none"
-            component="a"
-            style={{ cursor: 'pointer' }}
-            color="textPrimary"
             onClick={props.onClick}
             className={classes.footerLink}>
             <Typography variant="body2" component="span">
@@ -90,10 +72,11 @@ export const FooterLine = memo((props: Props) => {
     const [isOpen, setOpen] = useState(false)
     const version = process.env.VERSION
 
+    const defaultVersionLink = `${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
         if (process.env.channel === 'stable' && !event.metaKey) {
-            openWindow(`${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`)
+            openWindow(defaultVersionLink)
         } else {
             openWindow(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${process.env.COMMIT_HASH}`)
         }
@@ -104,14 +87,21 @@ export const FooterLine = memo((props: Props) => {
                 classes={{ separator: classes.separator, ol: classes.ol, root: classes.navRoot }}
                 separator="|"
                 aria-label="breadcrumb">
-                <FooterLinkExternal href={links.MASK_OFFICIAL_WEBSITE}>Mask.io</FooterLinkExternal>
-                <FooterLinkButton onClick={() => setOpen(true)}>{t.about()}</FooterLinkButton>
-                <FooterLinkButton onClick={openVersionLink} title={process.env.VERSION}>
+                <FooterLinkItem href={links.MASK_OFFICIAL_WEBSITE}>Mask.io</FooterLinkItem>
+                <FooterLinkItem
+                    href="https://mask.io/about"
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setOpen(true)
+                    }}>
+                    {t.about()}
+                </FooterLinkItem>
+                <FooterLinkItem href={defaultVersionLink} onClick={openVersionLink} title={process.env.VERSION}>
                     <Version />
-                </FooterLinkButton>
-                <FooterLinkExternal href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
-                <FooterLinkExternal href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkExternal>
-                <FooterLinkExternal href={links.MASK_PRIVACY_POLICY}>{t.privacy_policy()}</FooterLinkExternal>
+                </FooterLinkItem>
+                <FooterLinkItem href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkItem>
+                <FooterLinkItem href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkItem>
+                <FooterLinkItem href={links.MASK_PRIVACY_POLICY}>{t.privacy_policy()}</FooterLinkItem>
             </Breadcrumbs>
             <AboutDialog open={isOpen} title="" onClose={() => setOpen(false)}>
                 <About />
@@ -127,3 +117,4 @@ export const FooterLine = memo((props: Props) => {
         </div>
     )
 })
+FooterLine.displayName = 'FooterLine'

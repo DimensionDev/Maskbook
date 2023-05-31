@@ -18,7 +18,9 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(

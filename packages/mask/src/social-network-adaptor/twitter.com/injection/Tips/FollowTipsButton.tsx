@@ -26,7 +26,9 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
             const run = async () => {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = ele
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return

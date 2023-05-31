@@ -1,7 +1,7 @@
 import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor, type Plugin } from '@masknet/plugin-infra/content-script'
 import type { PluginID } from '@masknet/shared-base'
 import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
-import { List, ListItem, Typography } from '@mui/material'
+import { List, ListItemButton, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../shared/index.js'
@@ -54,7 +54,6 @@ const useStyles = makeStyles<{
         }`,
         justifyContent: 'center',
         alignItems: 'center',
-        cursor: 'pointer',
         borderRadius: 8,
         position: 'relative',
     },
@@ -172,11 +171,12 @@ const AppListItem = memo(function AppListItem({ pluginID, entry, isListing }: Ap
             }
             placement="bottom"
             arrow>
-            <ListItem
+            <ListItemButton
+                disableTouchRipple
                 className={classes.listItem}
                 onClick={() => toggleEntryListing(entry.ApplicationEntryID, !isListing)}>
                 <div className={classes.iconWrapper}>{entry.icon}</div>
-            </ListItem>
+            </ListItemButton>
         </ShadowRootTooltip>
     )
 })

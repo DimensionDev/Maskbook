@@ -38,8 +38,8 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
 
     watcher
         .setDOMProxyOption({
-            afterShadowRootInit: { mode: process.env.shadowRootMode },
-            beforeShadowRootInit: { mode: process.env.shadowRootMode },
+            afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+            beforeShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
         })
         .startWatch({ subtree: true, childList: true }, signal)
     return watcher

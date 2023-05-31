@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { DialogContent, Tab } from '@mui/material'
+import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
@@ -23,9 +23,6 @@ const useStyles = makeStyles<{
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-        },
-        settingIcon: {
-            cursor: 'pointer',
         },
     }
 })
@@ -100,7 +97,9 @@ export function ApplicationBoardDialog() {
                 title={openSettings ? t('application_settings') : t('applications')}
                 titleTail={
                     openSettings ? null : (
-                        <Icons.Gear size={24} className={classes.settingIcon} onClick={() => setOpenSettings(true)} />
+                        <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>
+                            <Icons.Gear size={24} />
+                        </IconButton>
                     )
                 }>
                 <DialogContent className={classes.content}>
