@@ -4,7 +4,14 @@ import { SignClient } from '@walletconnect/sign-client'
 import type { SessionTypes } from '@walletconnect/types'
 import { Flags } from '@masknet/flags'
 import type { UnboxPromise } from '@masknet/shared-base'
-import { ProviderType, ChainId, type Web3, type Web3Provider, chainResolver } from '@masknet/web3-shared-evm'
+import {
+    ProviderType,
+    ChainId,
+    type Web3,
+    type Web3Provider,
+    chainResolver,
+    EIP155Editor,
+} from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -124,21 +131,8 @@ export default class WalletConnectV2Provider
 
         this.session = session
 
-        return {
-            chainId: ChainId.Mainnet,
-            account: '',
-        }
-
-        // const accounts = await this.client?.enable()
-        // this.web3Modal?.closeModal()
-
-        // const account = first(accounts)
-        // if (!isValidAddress(account)) return
-
-        // return {
-        //     account,
-        //     chainId,
-        // }
+        const editor = EIP155Editor.from(this.session.namespaces.eip155.accounts[0])
+        return editor.account
     }
 
     private async logout() {
