@@ -43,7 +43,7 @@ export const flags = {
 
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,
-    sentry_sample_rate: 0.1,
+    sentry_sample_rate: 0.05,
     sentry_enabled: prodOnly,
     sentry_event_enabled: prodOnly,
     sentry_exception_enabled: prodOnly,
