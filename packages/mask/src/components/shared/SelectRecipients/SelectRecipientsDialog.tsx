@@ -1,7 +1,7 @@
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog } from '@masknet/shared'
+import { EmptyStatus, InjectedDialog } from '@masknet/shared'
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
@@ -233,12 +233,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <div className={classes.listBody}>
                                 <div className={classes.list}>
                                     {results.length === 0 ? (
-                                        <div className={classes.empty}>
-                                            <Icons.EmptySimple size={36} />
-                                            <Typography>
-                                                {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
-                                            </Typography>
-                                        </div>
+                                        <EmptyStatus>
+                                            {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
+                                        </EmptyStatus>
                                     ) : (
                                         results.map((item) => {
                                             const pubkey = item.linkedPersona?.publicKeyAsHex as string
