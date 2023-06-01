@@ -2,7 +2,7 @@ import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
 import { noop } from 'lodash-es'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
 function getTwitterId(ele: HTMLElement) {
@@ -35,14 +35,16 @@ export async function injectAvatar(signal: AbortSignal) {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 const isSuggestion = ele.closest('[data-testid=UserCell]')
                 const sourceType = isSuggestion
                     ? Plugin.SNSAdaptor.AvatarRealmSourceType.Suggestion
                     : Plugin.SNSAdaptor.AvatarRealmSourceType.Post
 
-                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div
                         style={{

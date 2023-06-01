@@ -1,13 +1,13 @@
-export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
+export const CustomEventId = '413f832d-db5c-4779-8d7e-1f7127bd167b'
 export interface InternalEvents {
     /** Simulate a paste event on the activeElement */
     paste: [text: string]
     /** Simulate an image paste event on the activeElement */
-    pasteImage: [number[]]
+    pasteImage: [image: number[]]
     /** Simulate a input event on the activeElement */
     input: [text: string]
     /** Simulate a image upload on the activeElement on instagram */
-    instagramUpload: [url: string]
+    instagramUpload: [image: number[]]
     /**
      * Simulate an image upload event.
      *
@@ -63,16 +63,25 @@ export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
     : never
 const { parse, stringify } = JSON
 const { isArray } = Array
-export function encodeEvent<T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) {
-    return stringify([key, args])
-}
-export function decodeEvent(data: string): EventItemBeforeSerialization {
-    const result = parse(data)
-    // Do not throw new Error cause it requires a global lookup.
+const { setPrototypeOf } = Object
+// @ts-expect-error firefox api
+const isFirefox = typeof XPCNativeWrapper === 'function'
+export const encodeEvent: <T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) => unknown = isFirefox
+    ? (key, args) => [key, args]
+    : (key, args) => stringify(setPrototypeOf([key, args], null))
 
-    if (!isEventItemBeforeSerialization(result)) throw null
-    return result
-}
+export const decodeEvent: (data: unknown) => EventItemBeforeSerialization = isFirefox
+    ? (data) => {
+          if (!isEventItemBeforeSerialization(data)) throw null
+          return data
+      }
+    : (data) => {
+          const result = parse(data as any)
+          // Do not throw new Error cause it requires a global lookup.
+
+          if (!isEventItemBeforeSerialization(result)) throw null
+          return result
+      }
 
 function isEventItemBeforeSerialization(data: unknown): data is EventItemBeforeSerialization {
     if (!isArray(data)) return false

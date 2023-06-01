@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
@@ -49,7 +49,7 @@ if (isMobileFacebook) {
 export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<UI />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<UI />)
 
     signal.addEventListener(
         'abort',

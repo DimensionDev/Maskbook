@@ -662,7 +662,7 @@ export const Radio: ThemeOverride = (mode, colors) => ({
                 size: 'medium',
                 icon: <Icons.RadioButtonUnChecked size={20} />,
                 checkedIcon: <Icons.RadioButtonChecked size={20} />,
-                disableRipple: true,
+                disableTouchRipple: true,
             },
             styleOverrides: {
                 root: {
@@ -692,7 +692,7 @@ export const Checkbox: ThemeOverride = (mode, colors) => ({
                 size: 'medium',
                 checkedIcon: <Icons.Checkbox color="#1C68F3" />,
                 icon: <Icons.CheckboxBlank />,
-                disableRipple: true,
+                disableTouchRipple: true,
             },
             styleOverrides: {
                 root: {
@@ -935,7 +935,7 @@ export const Switch: ThemeOverride = (mode, colors) => ({
     components: {
         MuiSwitch: {
             defaultProps: {
-                disableRipple: true,
+                disableTouchRipple: true,
             },
             styleOverrides: {
                 root: {

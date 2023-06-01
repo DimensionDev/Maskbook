@@ -1,4 +1,5 @@
 import { ONE } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 
 export const MIN_GAS_LIMIT = '150000'
@@ -24,3 +25,36 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = 1000 // 10%
 export const PRICE_IMPACT_NON_EXPERT_BLOCKED = 1500 // 15%
 
 export const MINIMUM_AMOUNT = new BigNumber('1e-6')
+
+export const BLOCK_TIME_SCALE: Record<ChainId, number> = {
+    [ChainId.Mainnet]: 3,
+    [ChainId.Ropsten]: 3,
+    [ChainId.Rinkeby]: 3,
+    [ChainId.Gorli]: 3,
+    [ChainId.Kovan]: 3,
+    [ChainId.BSC]: 6,
+    [ChainId.BSCT]: 6,
+    [ChainId.Matic]: 6,
+    [ChainId.Mumbai]: 6,
+    [ChainId.Arbitrum]: 6,
+    [ChainId.Arbitrum_Rinkeby]: 6,
+    [ChainId.xDai]: 6,
+    [ChainId.Avalanche]: 6,
+    [ChainId.Avalanche_Fuji]: 6,
+    [ChainId.Celo]: 6,
+    [ChainId.Fantom]: 6,
+    [ChainId.Aurora]: 6,
+    [ChainId.Aurora_Testnet]: 6,
+    [ChainId.Fuse]: 6,
+    [ChainId.Boba]: 6,
+    [ChainId.Metis]: 6,
+    [ChainId.Optimism]: 6,
+    [ChainId.Optimism_Kovan]: 6,
+    [ChainId.Optimism_Goerli]: 6,
+    [ChainId.Conflux]: 6,
+    [ChainId.Astar]: 6,
+    [ChainId.ZKSync_Alpha_Testnet]: 6,
+    [ChainId.Crossbell]: 6,
+    [ChainId.Moonbeam]: 6,
+    [ChainId.Invalid]: 0,
+}

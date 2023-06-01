@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 
 const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
     (theme, { disabled, iconFilterColor }) => ({
@@ -58,6 +58,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             justifyContent: 'space-between',
             padding: 10,
             borderRadius: 8,
+            boxSizing: 'content-box',
         },
         recommendFeatureAppIconWrapper: {
             marginRight: 12,
@@ -106,15 +107,16 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
     const { classes, cx } = useStyles({ disabled, iconFilterColor })
     const popperProps = useBoundedPopperProps()
     const jsx = recommendFeature ? (
-        <div
-            style={{
-                background: recommendFeature.backgroundGradient,
-            }}
+        <Button
+            variant="text"
+            // do not change to sx. the hover image will be changed in applicationBoxHover
+            style={{ background: recommendFeature.backgroundGradient }}
+            disabled={disabled}
             className={cx(
                 classes.recommendFeatureApplicationBox,
                 disabled ? classes.disabled : classes.applicationBoxHover,
             )}
-            onClick={disabled ? () => {} : onClick}>
+            onClick={disabled ? undefined : onClick}>
             <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
             <div>
                 <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
@@ -125,11 +127,13 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                     {recommendFeature.description}
                 </Typography>
             </div>
-        </div>
+        </Button>
     ) : (
-        <div
+        <Button
             className={cx(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
-            onClick={disabled ? () => {} : onClick}>
+            onClick={disabled ? undefined : onClick}
+            variant="text"
+            disabled={disabled}>
             <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
                 {title}
@@ -139,7 +143,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                     {secondTitle}
                 </Typography>
             ) : null}
-        </div>
+        </Button>
     )
     return tooltipHint ? (
         <ShadowRootTooltip

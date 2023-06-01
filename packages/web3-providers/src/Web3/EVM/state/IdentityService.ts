@@ -26,7 +26,6 @@ import {
     SpaceID,
     Twitter,
 } from '@masknet/web3-providers'
-import { captureAsyncTransaction } from '@masknet/web3-providers/helpers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
@@ -308,19 +307,16 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const socialAddressFromNextID = this.getSocialAddressesFromNextID(identity)
         const allSettled = await Promise.allSettled([
-            captureAsyncTransaction('getSocialAddressFromBio', this.getSocialAddressFromBio(identity)),
-            captureAsyncTransaction('getSocialAddressFromENS', this.getSocialAddressFromENS(identity)),
-            captureAsyncTransaction('getSocialAddressFromSpaceID', this.getSocialAddressFromSpaceID(identity)),
-            captureAsyncTransaction('getSocialAddressFromARBID', this.getSocialAddressFromARBID(identity)),
-            captureAsyncTransaction(
-                'getSocialAddressFromAvatarNextID',
-                this.getSocialAddressFromAvatarNextID(identity),
-            ),
-            captureAsyncTransaction('getSocialAddressFromCrossbell', this.getSocialAddressFromCrossbell(identity)),
-            captureAsyncTransaction('getSocialAddressFromTwitterBlue', this.getSocialAddressFromTwitterBlue(identity)),
-            captureAsyncTransaction('getSocialAddressesFromNextID', socialAddressFromNextID),
-            captureAsyncTransaction('getSocialAddressesFromMaskX', socialAddressFromMaskX),
-            captureAsyncTransaction('getSocialAddressFromLens', this.getSocialAddressFromLens(identity)),
+            this.getSocialAddressFromBio(identity),
+            this.getSocialAddressFromENS(identity),
+            this.getSocialAddressFromSpaceID(identity),
+            this.getSocialAddressFromARBID(identity),
+            this.getSocialAddressFromAvatarNextID(identity),
+            this.getSocialAddressFromCrossbell(identity),
+            this.getSocialAddressFromTwitterBlue(identity),
+            socialAddressFromNextID,
+            socialAddressFromMaskX,
+            this.getSocialAddressFromLens(identity),
         ])
         const identities_ = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 

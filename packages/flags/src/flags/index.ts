@@ -36,14 +36,14 @@ export const flags = {
     using_emoji_flag: true,
 
     i18nTranslationHotUpdate: true,
-    sandboxedPluginRuntime: insiderOnly,
+    sandboxedPluginRuntime: false,
 
     // how many users should use blockpi rpc
     blockpi_grayscale: 5,
 
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,
-    sentry_sample_rate: 0.1,
+    sentry_sample_rate: 0.05,
     sentry_enabled: prodOnly,
     sentry_event_enabled: prodOnly,
     sentry_exception_enabled: prodOnly,

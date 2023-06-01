@@ -1,7 +1,12 @@
 import { useReducer, useState } from 'react'
-import { useAllTradeComputed } from './useAllTradeComputed.js'
 import { createContainer } from 'unstated-next'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAllTradeComputed } from './useAllTradeComputed.js'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { BLOCK_TIME_SCALE } from '../constants/trader.js'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export const INITIAL_STATE = {
     inputAmount: '',
@@ -99,11 +104,19 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
 }
 
 export function useAllProviderTradeContext() {
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const [tradeStore, dispatchTradeStore] = useReducer(reducer, INITIAL_STATE)
     const [isSwapping, setIsSwapping] = useState(false)
     const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
     const { inputAmount, inputToken, outputToken } = tradeStore
-    const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken, temporarySlippage)
+    const allTradeComputed: Array<AsyncStateRetry<TraderAPI.TradeInfo>> = useAllTradeComputed(
+        inputAmount,
+        openConfirmDialog ? 1 : BLOCK_TIME_SCALE[chainId],
+        inputToken,
+        outputToken,
+        temporarySlippage,
+    )
 
     return {
         isSwapping,
@@ -112,6 +125,8 @@ export function useAllProviderTradeContext() {
         temporarySlippage,
         setTemporarySlippage,
         allTradeComputed,
+        openConfirmDialog,
+        setOpenConfirmDialog,
     }
 }
 

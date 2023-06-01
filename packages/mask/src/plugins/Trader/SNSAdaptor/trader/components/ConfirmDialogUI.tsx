@@ -12,6 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
+import { DotLoading } from './DotLoading.js'
 
 const useStyles = makeStyles()((theme) => ({
     section: {
@@ -180,6 +181,7 @@ export interface ConfirmDialogUIProps {
     onClose: () => void
     openSettingDialog?: () => void
     onConfirm: () => void
+    loading: boolean
 }
 
 export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
@@ -198,6 +200,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         openSettingDialog,
         isGreatThanSlippageSetting,
         onConfirm,
+        loading,
     }) => {
         const { t } = useI18N()
         const { classes, cx } = useStyles()
@@ -344,14 +347,18 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                 />
                                 {outputToken.symbol}
                             </Typography>
-                            <Typography className={classes.amount}>
-                                <FormattedBalance
-                                    value={outputAmount.toFixed() ?? '0'}
-                                    decimals={outputToken.decimals}
-                                    significant={6}
-                                    formatter={formatBalance}
-                                />
-                            </Typography>
+                            {loading ? (
+                                <DotLoading />
+                            ) : (
+                                <Typography className={classes.amount}>
+                                    <FormattedBalance
+                                        value={outputAmount.toFixed() ?? '0'}
+                                        decimals={outputToken.decimals}
+                                        significant={6}
+                                        formatter={formatBalance}
+                                    />
+                                </Typography>
+                            )}
                         </Box>
                     </Box>
                     <Box className={classes.section}>

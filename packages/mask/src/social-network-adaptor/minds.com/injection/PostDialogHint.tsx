@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { postEditorInDialogSelector, postEditorInTimelineSelector } from '../utils/selector.js'
 import { isMinds } from '../base.js'
@@ -19,7 +19,7 @@ function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, {
         signal,
     }).render(<PostDialogHintAtMinds reason={reason} />)
 }

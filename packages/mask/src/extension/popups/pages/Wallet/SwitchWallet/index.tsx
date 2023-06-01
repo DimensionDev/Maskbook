@@ -2,9 +2,9 @@ import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { MAX_WALLET_LIMIT } from '@masknet/shared'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, MAX_WALLET_LIMIT } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { WalletItem } from './WalletItem.js'
@@ -75,6 +75,7 @@ const SwitchWallet = memo(() => {
             await Web3.connect({
                 account: address,
                 chainId: options?.owner && smartPayChainId ? smartPayChainId : chainId,
+                providerType: ProviderType.MaskWallet,
                 ...options,
             })
             if (options?.owner && smartPayChainId) setChainId(smartPayChainId)

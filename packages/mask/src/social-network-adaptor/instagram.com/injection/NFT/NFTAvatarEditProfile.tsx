@@ -4,7 +4,7 @@ import {
     searchInstagramProfileAvatarButtonSelector,
     searchInstagramProfileEditButton,
 } from '../../utils/selector.js'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
@@ -14,13 +14,13 @@ import { useLocation } from 'react-use'
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramProfileAvatarButtonSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <OpenNFTAvatarEditProfileButtonInInstagram />,
     )
 
     const dialogWatcher = new MutationObserverWatcher(searchInstagramAvatarSettingDialog())
     startWatch(dialogWatcher, signal)
-    createReactRootShadowed(dialogWatcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarSettingDialog />)
+    attachReactTreeWithContainer(dialogWatcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarSettingDialog />)
 }
 
 const useStyles = makeStyles()(() => ({

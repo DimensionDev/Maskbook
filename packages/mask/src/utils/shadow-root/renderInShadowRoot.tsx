@@ -22,22 +22,19 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
 ]
 export function setupReactShadowRootEnvironment() {
     const shadow = setupReactShadowRootEnvironmentUpper(
-        { mode: process.env.shadowRootMode },
+        { mode: process.env.shadowRootMode, delegatesFocus: true },
         captureEvents,
         MaskUIRootSNS,
     )
     // Inject variable for Portals
-    attachReactTreeToGlobalContainer(shadow, { key: 'css-vars' }).render(
+    attachReactTreeWithContainer(shadow, { key: 'css-vars' }).render(
         <>
             <CSSVariableInjector />
         </>,
     )
 }
 
-export const attachReactTreeToGlobalContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)
-
-/** @deprecated Renamed to attachReactTreeToGlobalContainer */
-export const createReactRootShadowed = attachReactTreeToGlobalContainer
+export const attachReactTreeWithContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)
 
 function AttachReactTreeWithoutContainerRedirect(props: React.PropsWithChildren<{ debugKey: string }>) {
     // Note: since it is the direct children of attachReactTreeWithoutContainer, it MUST inside a ShadowRoot environment.
@@ -51,9 +48,9 @@ function AttachReactTreeWithoutContainerRedirect(props: React.PropsWithChildren<
 export function attachReactTreeWithoutContainer(debugKey: string, jsx: React.ReactNode, signal?: AbortSignal) {
     // Note: do not attach this DOM to window. We don't need it
     const dom = document.createElement('main')
-    const shadow = dom.attachShadow({ mode: 'closed' })
+    const shadow = dom.attachShadow({ mode: 'closed', delegatesFocus: true })
 
-    attachReactTreeToGlobalContainer(shadow, { signal, key: debugKey }).render(
+    attachReactTreeWithContainer(shadow, { signal, key: debugKey }).render(
         <AttachReactTreeWithoutContainerRedirect children={jsx} debugKey={debugKey} />,
     )
 }

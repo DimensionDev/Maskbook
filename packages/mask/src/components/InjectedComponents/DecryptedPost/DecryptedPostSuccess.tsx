@@ -3,7 +3,7 @@ import { MaskMessages, useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Typography, useTheme } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
 import { EMPTY_LIST, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
@@ -16,6 +16,7 @@ import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { delay } from '@masknet/kit'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { RecipientsToolTip } from './RecipientsToolTip.js'
+import { Icons } from '@masknet/icons'
 
 export interface DecryptPostSuccessProps {
     message: TypedMessage
@@ -67,10 +68,23 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
 const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canAppendShareTarget }) => {
     return {
         visibilityBox: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             padding: theme.spacing(0.5, 1),
             background: theme.palette.maskColor.bg,
             borderRadius: '999px',
             cursor: canAppendShareTarget ? 'pointer' : 'default',
+        },
+        iconAdd: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 8,
+            background: theme.palette.maskColor.primary,
+            borderRadius: '50%',
+            height: 16,
+            width: 16,
         },
     }
 })
@@ -79,6 +93,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
     const { classes } = useStyles({ canAppendShareTarget })
     const { t } = useI18N()
     const [showDialog, setShowDialog] = useState(false)
+    const theme = useTheme()
     const recipients = useRecipientsList()
     const { value: alreadySelectedPreviously = EMPTY_LIST, retry } = useSelectedRecipientsList()
 
@@ -96,6 +111,9 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                             <Typography color="textPrimary" fontSize={12} fontWeight={500}>
                                 {t('decrypted_postbox_only_visible_to_yourself')}
                             </Typography>
+                            <div className={classes.iconAdd}>
+                                <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
+                            </div>
                         </section>
                     )}
 

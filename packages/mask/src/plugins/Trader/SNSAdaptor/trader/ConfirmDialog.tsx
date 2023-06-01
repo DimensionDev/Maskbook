@@ -33,6 +33,7 @@ export interface ConfirmDialogProps {
     gasPrice?: string
     gasConfig?: GasConfig
     onConfirm: () => void
+    loading: boolean
 }
 const PERCENT_DENOMINATOR = 10000
 

@@ -7,6 +7,7 @@ import type { z as zod } from 'zod'
 import { makeStyles } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -52,7 +53,9 @@ const WalletRename = memo(() => {
     const [{ loading }, renameWallet] = useAsyncFn(
         async ({ name }: zod.infer<typeof schema>) => {
             if (!wallet?.address || !name) return
-            await Web3.renameWallet?.(wallet.address, name)
+            await Web3.renameWallet?.(wallet.address, name, {
+                providerType: ProviderType.MaskWallet,
+            })
             return navigate(-1)
         },
         [wallet?.address],

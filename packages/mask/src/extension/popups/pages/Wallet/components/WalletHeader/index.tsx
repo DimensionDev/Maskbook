@@ -3,7 +3,7 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '@masknet/flags'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { ProviderType, type ChainId, type NetworkType } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { MenuItem, Typography } from '@mui/material'
@@ -47,7 +47,9 @@ export const WalletHeader = memo(() => {
 
     const onChainChange = useCallback(async (chainId: ChainId) => {
         setChainId(chainId)
-        await Web3.switchChain?.(chainId)
+        await Web3.switchChain?.(chainId, {
+            providerType: ProviderType.MaskWallet,
+        })
     }, [])
 
     const [menu, openMenu] = useMenuConfig(

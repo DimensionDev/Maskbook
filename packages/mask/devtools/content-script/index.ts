@@ -9,15 +9,16 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 let bridge: Bridge<any, any> | undefined = undefined
-DevtoolsMessage.events.activateBackend.on((id) => {
+DevtoolsMessage.activateBackend.on((id) => {
     if (bridge) return
     const localID = String(Reflect.get(globalThis, GLOBAL_ID_KEY))
     if (localID !== id) return
-    bridge = createBridge(window, createReactDevToolsWall(localID))
+    bridge = createBridge(window, createReactDevToolsWall(localID, new AbortController().signal))
     activate(window, { bridge })
+    bridge.send('extensionBackendInitialized')
 })
-DevtoolsMessage.events.helloFromBackend.sendByBroadcast()
-DevtoolsMessage.events.farewell.on(() => {
+DevtoolsMessage.helloFromBackend.sendByBroadcast()
+DevtoolsMessage.farewell.on(() => {
     if (!bridge) return
     bridge.shutdown()
     bridge = undefined

@@ -25,9 +25,11 @@ import {
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
+import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
+import { HubOptionsAPI } from './HubOptionsAPI.js'
 
 export class HubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,
@@ -37,6 +39,10 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    protected override HubOptions = new HubOptionsAPI(this.options)
+
+    private Web3 = new ConnectionReadonlyAPI()
+
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {
         const { indicator } = this.HubOptions.fill(initial)
 
@@ -78,7 +84,10 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
 
     override getFungibleToken(address: string, initial?: HubOptions_Base<ChainId> | undefined) {
         return attemptUntil(
-            [() => Web3StateRef.value.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address ?? '')],
+            [
+                () => Web3StateRef.value.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
+                () => this.Web3.getFungibleToken(address, initial),
+            ],
             undefined,
         )
     }

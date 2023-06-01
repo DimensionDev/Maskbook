@@ -1,7 +1,7 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { Banner } from '../../../components/Welcomes/Banner.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector.js'
 
@@ -14,7 +14,7 @@ function injectBanner<T>(ls: LiveSelector<T, true>, signal: AbortSignal, element
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, {
         signal,
     }).render(element)
 }

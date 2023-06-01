@@ -1,7 +1,6 @@
 import { type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { EthereumAddress } from 'wallet.ts'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -15,7 +14,7 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { isValidAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Web3, Hub } from '@masknet/web3-providers'
 import { useDashboardI18N } from '../../../../locales/index.js'
 
@@ -110,7 +109,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             address: z
                 .string()
                 .min(1, t.wallets_collectible_field_contract_require())
-                .refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
+                .refine((address) => isValidAddress(address), t.wallets_incorrect_address()),
             tokenId: z.string().min(1, t.wallets_collectible_field_token_id_require()),
         })
 

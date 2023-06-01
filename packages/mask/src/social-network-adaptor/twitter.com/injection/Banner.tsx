@@ -1,6 +1,6 @@
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { Banner } from '../../../components/Welcomes/Banner.js'
 import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
@@ -21,5 +21,5 @@ function injectBanner<T>(ls: LiveSelector<T, true>, options: WatchOptions) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, options)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal: options.signal }).render(<Banner />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal: options.signal }).render(<Banner />)
 }

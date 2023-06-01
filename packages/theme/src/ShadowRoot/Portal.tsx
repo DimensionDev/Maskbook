@@ -40,7 +40,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
 
         const root = document.createElement('div')
         root.dataset.portalShadowRoot = debugKey || ''
-        const shadow = root.attachShadow({ mode: process.env.shadowRootMode })
+        const shadow = root.attachShadow({ mode: process.env.shadowRootMode, delegatesFocus: true })
 
         for (const each of preventEventPropagationList) {
             shadow.addEventListener(each, stopPropagation, { signal: signal.current.signal })

@@ -1,9 +1,7 @@
-import { cloneElement, type PropsWithChildren, type ReactElement, useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-use'
-import { debounce } from 'lodash-es'
+import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Portal, styled, Typography } from '@mui/material'
+import { Box, Modal, styled, Typography } from '@mui/material'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -72,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ActionButton = styled('div')(({ theme }) => ({
+const ActionButton = styled('button')({
     boxSizing: 'border-box',
     width: 104,
     height: 32,
@@ -83,7 +81,9 @@ const ActionButton = styled('div')(({ theme }) => ({
     borderColor: '#fff',
     cursor: 'pointer',
     fontFamily: 'PingFang SC',
-}))
+    background: 'none',
+    color: 'inherit',
+})
 
 const NextButton = styled(ActionButton)({
     border: 'none',
@@ -91,7 +91,8 @@ const NextButton = styled(ActionButton)({
     background: '#fff',
 })
 
-export interface GuideStepProps extends PropsWithChildren<{}> {
+export interface GuideStepProps {
+    children: ReactElement
     total: number
     step: number
     tip: string
@@ -103,22 +104,18 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
-    const [clientRect, setClientRect] = useState<DOMRect>()
+    const [clientRect, setClientRect] = useState<Pick<DOMRect, 'width' | 'height' | 'top' | 'left'>>()
     const [bottomAvailable, setBottomAvailable] = useState(true)
     const { networkIdentifier } = activatedSocialNetworkUI
     const currentStep = useValueRef(userGuideStatus[networkIdentifier])
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const isCurrentStep = +currentStep === step
 
-    const history = useLocation()
+    const box1Ref = useRef<HTMLDivElement>(null)
+    const box2Ref = useRef<HTMLDivElement>(null)
+    const box3Ref = useRef<HTMLDivElement>(null)
 
     const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
-
-    useEffect(() => {
-        document.documentElement.style.overflow =
-            stepVisible && Number.parseInt(currentStep, 10) === total ? 'hidden' : ''
-        document.documentElement.style.paddingLeft = 'calc(100vw - 100%)'
-    }, [stepVisible, currentStep])
 
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
@@ -139,103 +136,90 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         onComplete?.()
     }
 
-    const [inserted, setInserted] = useState(false)
-    useEffect(() => {
-        const observer = new MutationObserver((_, observer) => {
+    useLayoutEffect(() => {
+        let stopped = false
+        requestAnimationFrame(function self() {
+            if (stopped) return
+            requestAnimationFrame(self)
             if (!childrenRef.current) return
             const cr = childrenRef.current.getBoundingClientRect()
             if (!cr.height) return
-            setInserted(true)
-            observer.disconnect()
-        })
-        observer.observe(document.body, { childList: true, subtree: true })
-
-        return () => observer.disconnect()
-    }, [])
-
-    useEffect(() => {
-        const setGuideStepRect = () => {
-            if (!inserted) return
-            const cr = childrenRef.current?.getBoundingClientRect()
-            if (cr) {
-                const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
-                setBottomAvailable(bottomAvailable)
+            const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
+            setBottomAvailable(bottomAvailable)
+            let update = false
+            setClientRect((old) => {
+                if (
+                    old &&
+                    (old.height === cr.height || old.left === cr.left || old.top === cr.top || old.width === cr.width)
+                )
+                    return old
+                update = true
+                return cr
+            })
+            if (box1Ref.current) {
+                box1Ref.current.style.top = cr.top + 'px'
+                box1Ref.current.style.left = cr.left + 'px'
             }
-            setClientRect(cr)
-        }
-        setGuideStepRect()
-
-        const onResize = debounce(setGuideStepRect, 500)
-
-        window.addEventListener('resize', onResize)
-
-        return () => {
-            window.removeEventListener('resize', onResize)
-        }
-    }, [childrenRef.current, inserted, currentStep, history])
-
-    const scrollWidth = (() => {
-        if (stepVisible && Number.parseInt(currentStep, 10) === total) return 0
-        const cWidth = document.documentElement.clientWidth || document.body.clientWidth
-        return window.innerWidth - cWidth
-    })()
+            if (box2Ref.current) {
+                box2Ref.current.style.width = cr.width + 'px'
+                box2Ref.current.style.height = cr.height + 'px'
+            }
+            if (box3Ref.current) {
+                box3Ref.current.style.left = (cr.width < 50 ? -cr.width / 2 : 0) + 'px'
+                box3Ref.current.style.top = bottomAvailable ? cr.height + 16 + 'px' : ''
+                box3Ref.current.style.bottom = bottomAvailable ? '' : cr.height + 16 + 'px'
+            }
+        })
+        return () => void (stopped = true)
+    }, [])
 
     return (
         <>
-            {cloneElement(children as ReactElement, { ref: childrenRef })}
+            {cloneElement(children, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (
-                    <Portal container={container}>
-                        <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
-                            <div
-                                className={cx(classes.container, step === 3 ? classes.noBoxShadowCover : null)}
-                                style={{
-                                    top: clientRect.top,
-                                    left: clientRect.left - scrollWidth,
-                                }}>
-                                <Box
-                                    className={classes.target}
-                                    style={{
-                                        width: clientRect.width,
-                                        height: clientRect.height,
-                                    }}>
-                                    <div
-                                        className={cx(
-                                            classes.card,
-                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
-                                        )}
-                                        style={{
-                                            left: clientRect.width < 50 ? -clientRect.width / 2 : 0,
-                                            [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
-                                        }}>
-                                        <div style={{ paddingBottom: '16px' }}>
-                                            <Typography sx={{ fontSize: 20 }}>
-                                                {step}/{total}
-                                            </Typography>
-                                        </div>
-                                        <div>
-                                            <Typography fontSize={14} fontWeight={600}>
-                                                {tip}
-                                            </Typography>
-                                        </div>
-                                        <div className={classes.buttonContainer}>
-                                            {step === total ? (
-                                                <NextButton style={{ width: '100%' }} onClick={onTry}>
-                                                    {t('try')}
-                                                </NextButton>
-                                            ) : (
-                                                <>
-                                                    <ActionButton onClick={onSkip}>{t('skip')}</ActionButton>
-                                                    <NextButton onClick={onNext}>{t('next')}</NextButton>
-                                                </>
-                                            )}
-                                        </div>
+                    <Modal open hideBackdrop container={container} className={classes.mask} onClose={onSkip}>
+                        <div
+                            ref={box1Ref}
+                            className={cx(classes.container, step === 3 ? classes.noBoxShadowCover : null)}>
+                            <Box ref={box2Ref} className={classes.target}>
+                                <div
+                                    ref={box3Ref}
+                                    className={cx(
+                                        classes.card,
+                                        arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
+                                    )}>
+                                    <Box paddingBottom="16px">
+                                        <Typography fontSize={20}>
+                                            {step}/{total}
+                                        </Typography>
+                                    </Box>
+                                    <div>
+                                        <Typography fontSize={14} fontWeight={600}>
+                                            {tip}
+                                        </Typography>
                                     </div>
-                                </Box>
-                            </div>
+                                    <div className={classes.buttonContainer}>
+                                        {step === total ? (
+                                            <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
+                                                {t('try')}
+                                            </NextButton>
+                                        ) : (
+                                            <>
+                                                <ActionButton type="button" onClick={onSkip}>
+                                                    {t('skip')}
+                                                </ActionButton>
+                                                <NextButton type="button" onClick={onNext}>
+                                                    {t('next')}
+                                                </NextButton>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </Box>
                         </div>
-                    </Portal>
+                    </Modal>
                 )
             })}
         </>

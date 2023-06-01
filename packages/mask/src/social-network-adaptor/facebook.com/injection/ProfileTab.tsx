@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { debounce } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
 import {
     profileTabSelectedSelector,
     profileTabUnselectedSelector,
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
-            padding: theme.spacing(0, props.padding),
+            padding: theme.spacing(0, props.padding || 0),
             color: props.color,
             font: props.font,
             fontSize: props.fontSize,
@@ -142,7 +142,7 @@ export function ProfileTabAtFacebook() {
 export function injectProfileTabAtFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtFacebook />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtFacebook />)
 
     const assign = () => {
         const web3Tab = web3TabSelector().evaluate()

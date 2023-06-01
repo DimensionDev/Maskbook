@@ -259,7 +259,7 @@ function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
 
 function importAESKeyFromRaw(aes_raw: Uint8Array) {
     return Result.wrapAsync(async () => {
-        return crypto.subtle.importKey('raw', aes_raw, { name: 'AES-GCM', length: 256 }, false, [
+        return crypto.subtle.importKey('raw', aes_raw, { name: 'AES-GCM', length: 256 }, true, [
             'decrypt',
         ]) as Promise<AESCryptoKey>
     })

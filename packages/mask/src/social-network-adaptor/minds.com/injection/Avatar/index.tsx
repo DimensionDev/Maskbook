@@ -1,7 +1,7 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
 import { noop } from 'lodash-es'
 
@@ -12,12 +12,14 @@ export async function injectAvatar(signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 // TODO fetch userId
                 const userId = ''
 
-                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div
                         style={{

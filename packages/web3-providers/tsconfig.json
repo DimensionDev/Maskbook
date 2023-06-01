@@ -8,6 +8,7 @@
   "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../flags" },
+    { "path": "../web3-telemetry" },
     { "path": "../web3-shared/base" },
     { "path": "../web3-shared/evm" },
     { "path": "../web3-shared/flow" },

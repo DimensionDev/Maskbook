@@ -2,7 +2,12 @@
     "name": "@masknet/plugin-claim",
     "private": true,
     "type": "module",
-    "exports": { ".": { "mask-src": "./src/index.ts", "default": "./dist/index.js" } },
+    "exports": {
+        ".": {
+            "mask-src": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    },
     "dependencies": {
         "@masknet/icons": "workspace:^",
         "@masknet/theme": "workspace:^",

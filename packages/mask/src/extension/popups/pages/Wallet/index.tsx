@@ -48,7 +48,7 @@ export default function Wallet() {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const { smartPayChainId, initLoading } = PopupContext.useContainer()
+    const { smartPayChainId } = PopupContext.useContainer()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
     })
@@ -115,7 +115,7 @@ export default function Wallet() {
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
                 <WalletHeader />
-                {loading || initLoading ? (
+                {loading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Routes>

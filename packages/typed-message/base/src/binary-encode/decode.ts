@@ -39,7 +39,7 @@ function decodeMetadata(meta: unknown): ReadonlyMap<string, unknown> | undefined
     if (meta === null) return undefined
     if (typeof meta !== 'object') throw new TypeError(`${HEAD}Invalid TypedMessage`)
     if (Object.getPrototypeOf(meta) !== Object.prototype) throw new TypeError(`${HEAD}Invalid TypedMessage`)
-    return meta as any
+    return new Map(Object.entries(meta))
 }
 
 function assertNumber(x: unknown): asserts x is number {

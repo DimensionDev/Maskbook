@@ -94,7 +94,7 @@ export function createManager<
         for (const [, plugin] of registeredPlugins.getCurrentValue()) {
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
         }
-        checkRequirementAndStartOrStop().then(host.onInitialComplete).catch(console.error)
+        checkRequirementAndStartOrStop().then().catch(console.error)
 
         async function checkRequirementAndStartOrStop() {
             for (const [id] of registeredPlugins.getCurrentValue()) {

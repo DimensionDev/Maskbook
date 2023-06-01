@@ -8,13 +8,14 @@ import {
     isSameProfile,
     type PersonaInformation,
     ProfileIdentifier,
+    NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP,
 } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../service.js'
 import { MaskMessages } from '../../../../../utils/index.js'
 import type { Account } from '../type.js'
 import { initialPersonaInformation } from './PersonaContextInitialData.js'
-import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP, usePersonaProofs } from '@masknet/shared'
+import { usePersonaProofs } from '@masknet/shared'
 
 function useSSRPersonaInformation() {
     const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))

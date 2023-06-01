@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { Banner } from '../../../components/Welcomes/Banner.js'
 import { startWatch } from '../../../utils/watcher.js'
@@ -18,7 +18,7 @@ if (isMobileFacebook) {
 export function injectBannerAtFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <span
             style={{
                 display: 'block',

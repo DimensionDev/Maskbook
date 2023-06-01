@@ -3,7 +3,7 @@ import { attachReactTreeToMountedRoot_noHost, type ReactRootShadowed } from '@ma
 import * as Components from './Components/index.js'
 import { RenderContext } from './RenderContext.js'
 
-const createReactRootShadowed = attachReactTreeToMountedRoot_noHost()
+const attachReactTreeWithContainer = attachReactTreeToMountedRoot_noHost()
 setDOMImpl({
     Node,
     document: new Proxy(document, {
@@ -52,7 +52,7 @@ function createElement(element: string, options: ElementCreationOptions) {
 
 function render(f: Components.Component<any>, props: any, shadow: ShadowRoot) {
     const root: ReactRootShadowed =
-        (shadow as any).__root || ((shadow as any).__root = createReactRootShadowed(shadow, { tag: 'span' }))
+        (shadow as any).__root || ((shadow as any).__root = attachReactTreeWithContainer(shadow, { tag: 'span' }))
     root.render(
         <RenderContext.Provider value={createRenderContextProxy(shadow)}>
             <HooksContainer f={() => f(props, (event) => void shadow.host.dispatchEvent(event))} />

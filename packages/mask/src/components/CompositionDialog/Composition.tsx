@@ -137,7 +137,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     return (
         <InjectedDialog
             classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
-            keepMounted
             open={open}
             onClose={onClose}
             title={t('post_dialog__title')}

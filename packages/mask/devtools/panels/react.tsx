@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { TabID } from 'react-devtools-inline/commons.js'
 import { flushSync } from 'react-dom'
+import type { ProfilingDataFrontend, Store, TabID } from 'react-devtools-inline/commons.js'
 import { createRoot } from 'react-dom/client'
 import { DevtoolsMessage, createReactDevToolsWall, GLOBAL_ID_KEY } from '../shared.js'
 import { initialize, createBridge, type DevtoolsProps, createStore } from 'react-devtools-inline/frontend.js'
@@ -11,19 +11,21 @@ import type { DevtoolsPanels } from 'webextension-polyfill/namespaces/devtools_p
 const registerOnStyleChange = (() => {
     let lastText = ''
     type StyleChangeListener = (newText: string) => void
-    const styleChangeListeners = new Set<StyleChangeListener>()
-    function registerOnStyleChange(callback: StyleChangeListener) {
-        styleChangeListeners.add(callback)
+    const StyleChange = new EventTarget()
+    function registerOnStyleChange(callback: StyleChangeListener, signal: AbortSignal) {
+        StyleChange.addEventListener('style', () => callback(lastText), { signal })
         callback(lastText)
     }
-    const watcher = new MutationObserver(() => {
+    function updateStyle() {
         const cssText = Array.from(document.head.querySelectorAll('style'))
-            .map((x) => x.textContent || '')
+            .map((style) => style.textContent || '')
             .join('\n')
         if (cssText === lastText) return
         lastText = cssText
-        for (const listener of styleChangeListeners) listener(cssText)
-    })
+        StyleChange.dispatchEvent(new Event('style'))
+    }
+    updateStyle()
+    const watcher = new MutationObserver(updateStyle)
     watcher.observe(document.head, { characterData: true, childList: true, subtree: true })
     return registerOnStyleChange
 })()
@@ -32,44 +34,151 @@ let components: DevtoolsPanels.ExtensionPanel
 let profiler: DevtoolsPanels.ExtensionPanel
 let componentsWindow: Window
 let profilerWindow: Window
+let store: Store
+let profilingData: ProfilingDataFrontend | null
+let uninstallLast: () => void
+
+function syncSavedPreferences(runInContentScript: boolean) {
+    const obj = {
+        __REACT_DEVTOOLS_APPEND_COMPONENT_STACK__: !!getLocalStorage('React::DevTools::appendComponentStack', true),
+        __REACT_DEVTOOLS_BREAK_ON_CONSOLE_ERRORS__: !!getLocalStorage('React::DevTools::breakOnConsoleErrors', false),
+        __REACT_DEVTOOLS_COMPONENT_FILTERS__: getLocalStorage('React::DevTools::componentFilters', {
+            type: 1,
+            value: 7,
+            isEnabled: true,
+        }),
+        __REACT_DEVTOOLS_SHOW_INLINE_WARNINGS_AND_ERRORS__: !!getLocalStorage(
+            'React::DevTools::showInlineWarningsAndErrors',
+            true,
+        ),
+        __REACT_DEVTOOLS_HIDE_CONSOLE_LOGS_IN_STRICT_MODE__: !!getLocalStorage(
+            'React::DevTools::hideConsoleLogsInStrictMode',
+            false,
+        ),
+        __REACT_DEVTOOLS_BROWSER_THEME__: browser.devtools.panels.themeName === 'dark' ? 'dark' : 'light',
+    }
+    const data = JSON.stringify(obj)
+    devtoolsEval(runInContentScript)`
+        Object.assign(window, ${data});
+        undefined;
+    `
+}
 
 export async function startReactDevTools(signal: AbortSignal) {
-    // default preset for VSCode users
-    if (!localStorage.getItem('React::DevTools::openInEditorUrl')) {
-        localStorage.setItem('React::DevTools::openInEditorUrl', '"vscode://file/{path}:{line}"')
-    }
-    const runInContentScript = (await devtoolsEval<string>('location.href', false)).startsWith('http')
-    const id = Math.random().toString(36)
-    await devtoolsEval(`globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}`, runInContentScript)
-    const wall = createReactDevToolsWall(id)
+    const runInContentScript = (await devtoolsEval(false)<string>`location.href`).startsWith('http')
+    const __eval = devtoolsEval(runInContentScript)
+
+    const id = String(browser.devtools.inspectedWindow.tabId)
+    await __eval`
+        globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
+    `
+    setEditorPreference()
+    syncSavedPreferences(runInContentScript)
+
+    // TODO: registerDevToolsEventLogger?
+
+    const wall = createReactDevToolsWall(id, signal)
     const bridge = createBridge(null!, wall)
-    const store = createStore(bridge, {
-        isProfiling: false,
-        supportsReloadAndProfile: false,
+    bridge.addListener('reloadAppForProfiling', () => {
+        setLocalStorage('React::DevTools::supportsProfiling', 'true')
+        __eval`
+            sessionStorage.setItem('React::DevTools::reloadAndProfile', 'true')
+            sessionStorage.setItem('React::DevTools::recordChangeDescriptions', 'true')
+            window.location.reload();
+        `
+    })
+    bridge.addListener('syncSelectionToNativeElementsPanel', () => {
+        __eval`
+            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) {
+                inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
+            }
+        `
+    })
+
+    let isProfiling = false
+    // reload and profile
+    {
+        const LOCAL_STORAGE_SUPPORTS_PROFILING_KEY = 'React::DevTools::supportsProfiling'
+        if (getLocalStorage(LOCAL_STORAGE_SUPPORTS_PROFILING_KEY, false)) {
+            isProfiling = true
+            if (store) profilingData = store.profilerStore.profilingData
+            removeLocalStorage(LOCAL_STORAGE_SUPPORTS_PROFILING_KEY)
+        }
+    }
+
+    bridge.addListener('extensionBackendInitialized', () => {
+        bridge.send('setTraceUpdatesEnabled', !!getLocalStorage('React::DevTools::traceUpdatesEnabled', false))
+    })
+
+    store = createStore(bridge, {
+        isProfiling,
+        supportsReloadAndProfile: process.env.engine === 'chromium',
         supportsProfiling: true,
-        supportsTimeline: true,
+        supportsTimeline: process.env.engine === 'chromium',
         supportsTraceUpdates: true,
         supportsNativeInspection: true,
     })
+    if (!isProfiling && profilingData!) store.profilerStore.profilingData = profilingData
+
+    function viewAttributeSourceFunction(id: number, path: Array<string | number>) {
+        const rendererID = store.getRendererIDForElement(id)
+        if (rendererID !== null) {
+            bridge.send('viewAttributeSource', { id, path, rendererID })
+            setTimeout(() => {
+                __eval`
+                    window.$attribute && inspect($attribute)
+                `
+            }, 100)
+        }
+    }
+    function viewElementSourceFunction(id: number) {
+        const rendererID = store.getRendererIDForElement(id)
+        if (rendererID !== null) {
+            bridge.send('viewElementSource', { id, rendererID })
+            setTimeout(() => {
+                __eval`
+                    if (window.$type !== null) {
+                        if ($type?.prototype?.isReactComponent) {
+                            // inspect Component.render, not constructor
+                            inspect($type.prototype.render);
+                        } else {
+                            // inspect Functional Component
+                            inspect($type);
+                        }
+                    }
+                `
+            }, 100)
+        }
+    }
+    const viewUrlSourceFunction =
+        'openResource' in browser.devtools.panels
+            ? (url: string, line: number, col: number) => (browser.devtools.panels as any).openResource(url, line, col)
+            : undefined
+    // fetchFileWithCaching, hookNamesModuleLoaderFunction: we skip this because we don't minify our files
 
     // Note: since we manually passed bridge and wall, the first argument is unused in the implementation
     const ReactDevTools: ComponentType<Partial<DevtoolsProps>> = initialize(null!, { bridge, store })
-    DevtoolsMessage.events.helloFromBackend.on(() => DevtoolsMessage.events.activateBackend.sendByBroadcast(id), {
+    DevtoolsMessage.helloFromBackend.on(() => DevtoolsMessage.activateBackend.sendByBroadcast(id), {
         signal,
     })
-    DevtoolsMessage.events.activateBackend.sendByBroadcast(id)
+    DevtoolsMessage.activateBackend.sendByBroadcast(id)
 
     // If this is the first open, we wait for devtools message to show UI.
-    if (!components)
-        await new Promise((resolve) => DevtoolsMessage.events[`_${id}`].on(resolve, { once: true, signal }))
-    components ??= await createPanel('\u269B\uFE0F Components')
-    profiler ??= await createPanel('\u269B\uFE0F Profile')
+    if (!components && runInContentScript) {
+        if (!(await devtoolsEval(true)`globalThis[Symbol.for('mask_init_patch')]`)) {
+            await new Promise((resolve) => DevtoolsMessage[`_${id}`].on(resolve, { once: true, signal }))
+        }
+    }
+    components ??= await createPanel('\u{1F332} Components')
+    profiler ??= await createPanel('\u26A1 Profile')
 
     let needsToSyncElementSelection = false
 
     function Host() {
-        const [componentRef, setComponentRef] = useState<HTMLElement | undefined>(getMountPoint(componentsWindow))
-        const [profilerRef, setProfilerRef] = useState<HTMLElement | undefined>(getMountPoint(profilerWindow))
+        const [componentRef, setComponentRef] = useState<HTMLElement | undefined>(
+            getMountPoint(componentsWindow, signal),
+        )
+        const [profilerRef, setProfilerRef] = useState<HTMLElement | undefined>(getMountPoint(profilerWindow, signal))
         const [tab, setTab] = useState<TabID | undefined>(undefined)
         useEffect(() => {
             function onComponent(window: Window) {
@@ -78,12 +187,12 @@ export async function startReactDevTools(signal: AbortSignal) {
                     bridge.send('syncSelectionFromNativeElementsPanel')
                 }
                 componentsWindow = window
-                setComponentRef(getMountPoint(window))
+                setComponentRef(getMountPoint(window, signal))
                 setTab('components')
             }
             function onProfile(window: Window) {
                 profilerWindow = window
-                setProfilerRef(getMountPoint(window))
+                setProfilerRef(getMountPoint(window, signal))
                 setTab('profiler')
             }
             attachListener(components.onShown, onComponent, { signal })
@@ -93,7 +202,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         useEffect(() => () => profilerRef?.remove(), [profilerRef])
         return (
             <ReactDevTools
-                browserTheme={(browser.devtools.panels as any).themeName === 'dark' ? 'dark' : 'light'}
+                browserTheme={browser.devtools.panels.themeName === 'dark' ? 'dark' : 'light'}
                 componentsPortalContainer={componentRef}
                 profilerPortalContainer={profilerRef}
                 // Note: we're not providing this ability because without source map it is useless.
@@ -108,12 +217,7 @@ export async function startReactDevTools(signal: AbortSignal) {
                 viewAttributeSourceFunction={viewAttributeSourceFunction}
                 viewElementSourceFunction={viewElementSourceFunction}
                 overrideTab={tab}
-                viewUrlSourceFunction={
-                    'openResource' in browser.devtools.panels
-                        ? (url: string, line: number, col: number) =>
-                              (browser.devtools.panels as any).openResource(url, line, col)
-                        : undefined
-                }
+                viewUrlSourceFunction={viewUrlSourceFunction}
             />
         )
     }
@@ -121,85 +225,76 @@ export async function startReactDevTools(signal: AbortSignal) {
     // Mount the ReactDevTools
     {
         const container = document.createElement('main')
+
         const root = createRoot(container)
         document.body.appendChild(container)
+        uninstallLast?.()
+        componentsWindow && removeDisabled(componentsWindow)
+        profilerWindow && removeDisabled(profilerWindow)
         root.render(<Host />)
         signal.addEventListener(
             'abort',
             () => {
-                flushSync(() => root.unmount())
-                container.remove()
+                componentsWindow && showDisabled(componentsWindow)
+                profilerWindow && showDisabled(profilerWindow)
+                uninstallLast = () => {
+                    flushSync(() => root.unmount())
+                    container.remove()
+                }
             },
             { once: true },
         )
+        function removeDisabled(window: Window) {
+            const container = getMountPoint(window, signal)!
+            container.style.opacity = 'unset'
+            container.style.pointerEvents = 'unset'
+            window.document.querySelector('#refresh')?.remove()
+        }
+        function showDisabled(window: Window) {
+            const container = getMountPoint(window, signal)!
+            container.style.opacity = '0.8'
+            container.style.pointerEvents = 'none'
+            const refresh = window.document.createElement('div')
+            refresh.textContent = 'Waiting for the page to reload...'
+            refresh.id = 'refresh'
+            Object.assign(refresh.style, {
+                background: 'rgba(0, 0, 0, 0.8)',
+                color: 'white',
+                padding: '24px',
+                display: 'inline-block',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+            })
+            window.document.body.appendChild(refresh)
+        }
     }
-
-    // Send farewell message when closed
-    window.addEventListener('beforeunload', () => DevtoolsMessage.events.farewell.sendByBroadcast(), { signal })
-
-    // when click "inspect DOM"
-    bridge.addListener('syncSelectionToNativeElementsPanel', () => {
-        devtoolsEval<boolean>(
-            `
-            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) {
-                inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
-            }`,
-            runInContentScript,
-        )
-    })
 
     // When select an element in DOM panel, track it in devtools.
     {
-        attachListener((browser.devtools.panels as any).elements.onSelectionChanged, setReactSelectionFromBrowser, {
-            signal,
-        })
         async function setReactSelectionFromBrowser() {
-            const didSelectionChange = await devtoolsEval<boolean>(
-                `if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
+            const didSelectionChange = await __eval<boolean>`
+                if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
                     window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = $0
                     true
                 } else {
                     false
-                }`,
-                runInContentScript,
-            )
+                }
+            `
+
             if (didSelectionChange) needsToSyncElementSelection = true
         }
+        attachListener(browser.devtools.panels.elements.onSelectionChanged, setReactSelectionFromBrowser, { signal })
+        setReactSelectionFromBrowser()
     }
 
-    function viewAttributeSourceFunction(id: number, path: Array<string | number>) {
-        const rendererID = store.getRendererIDForElement(id)
-        if (rendererID !== null) {
-            bridge.send('viewAttributeSource', { id, path, rendererID })
-            setTimeout(() => {
-                devtoolsEval('window.$attribute && inspect($attribute)', runInContentScript)
-            }, 100)
-        }
-    }
-
-    function viewElementSourceFunction(id: number) {
-        const rendererID = store.getRendererIDForElement(id)
-        if (rendererID !== null) {
-            bridge.send('viewElementSource', { id, rendererID })
-            setTimeout(() => {
-                devtoolsEval(
-                    `if (window.$type !== null) {
-                        if ($type && $type.prototype && $type.prototype.isReactComponent) {
-                            // inspect Component.render, not constructor
-                            inspect($type.prototype.render);
-                        } else {
-                            // inspect Functional Component
-                            inspect($type);
-                        }
-                    }`,
-                    runInContentScript,
-                )
-            }, 100)
-        }
-    }
+    window.addEventListener('beforeunload', () => DevtoolsMessage.farewell.sendByBroadcast(), { signal })
 }
 
-function getMountPoint(window: Window | undefined) {
+function getMountPoint(window: Window, signal: AbortSignal): HTMLElement
+function getMountPoint(window: Window | undefined, signal: AbortSignal): HTMLElement | undefined
+function getMountPoint(window: Window | undefined, signal: AbortSignal) {
     if (!window) return undefined
     const dom = window.document.getElementById('container')
     if (dom) return dom
@@ -212,7 +307,36 @@ function getMountPoint(window: Window | undefined) {
 
     const style = window.document.createElement('style')
     window.document.head.appendChild(style)
-    registerOnStyleChange((newText) => (style.textContent = newText))
+    registerOnStyleChange((newText) => (style.textContent = newText), signal)
 
     return dom2
+}
+function setEditorPreference() {
+    let preset = 'vscode://file/{path}:{line}'
+    try {
+        preset = process.env.REACT_DEVTOOLS_EDITOR_URL
+    } catch {}
+    const editorURL = 'React::DevTools::openInEditorUrl'
+    if (!getLocalStorage(editorURL)) {
+        setLocalStorage(editorURL, JSON.stringify(preset))
+    }
+}
+function getLocalStorage<T = string>(key: string, defaultValue?: T | undefined): T | undefined {
+    try {
+        const item = localStorage.getItem(key)
+        if (item === null) return defaultValue
+        return JSON.parse(item)
+    } catch {
+        return defaultValue
+    }
+}
+function setLocalStorage(key: string, value: string) {
+    try {
+        localStorage.setItem(key, value)
+    } catch {}
+}
+function removeLocalStorage(key: string) {
+    try {
+        localStorage.removeItem(key)
+    } catch {}
 }

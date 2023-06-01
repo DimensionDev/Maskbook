@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { toChecksumAddress } from 'web3-utils'
+import { checksumAddress } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type {
     BancorApiErrorResponse,
@@ -36,7 +36,7 @@ const getSourceAmount = async (
     const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/pricing/source-amount', {
         source_dlt_type: 'ethereum',
-        source_dlt_id: toChecksumAddress(request.fromToken?.address),
+        source_dlt_id: checksumAddress(request.fromToken?.address),
         target_dlt_type: 'ethereum',
         target_dlt_id: request.toToken?.address,
         amount: roundDecimal(request.toAmount, request.toToken.decimals),
@@ -50,9 +50,9 @@ export const swapTransactionBancor = async (
     const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/transactions/swap', {
         source_dlt_type: 'ethereum',
-        source_dlt_id: toChecksumAddress(request.fromToken.address),
+        source_dlt_id: checksumAddress(request.fromToken.address),
         target_dlt_type: 'ethereum',
-        target_dlt_id: toChecksumAddress(request.toToken.address),
+        target_dlt_id: checksumAddress(request.toToken.address),
         amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
         min_return: roundDecimal(request.minimumReceived, request.toToken.decimals),
         user_source_dlt_id: request.user,

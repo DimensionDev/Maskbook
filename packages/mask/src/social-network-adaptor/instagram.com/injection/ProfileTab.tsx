@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { createReactRootShadowed, MaskMessages, startWatch, useMatchXS } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, MaskMessages, startWatch, useMatchXS } from '../../../utils/index.js'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
@@ -19,7 +19,9 @@ export function injectProfileTabAtInstagram(signal: AbortSignal) {
         if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
             startWatch(watcher, signal)
-            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtInstagram />)
+            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
+                <ProfileTabAtInstagram />,
+            )
             tabInjected = true
         }
     })

@@ -1,20 +1,24 @@
 import type { Events } from 'webextension-polyfill'
 
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/devtools/inspectedWindow/eval
-export async function devtoolsEval<T>(script: string, runInContentScript: boolean): Promise<T> {
-    const [result, exception] = await browser.devtools.inspectedWindow.eval(
-        script,
-        runInContentScript ? { useContentScriptContext: true } : undefined,
-    )
-    if (exception) {
-        if ('isException' in exception) throw new EvalError(exception.value)
-        else throw new Error((exception as any).code)
+export function devtoolsEval(runInContentScript: boolean) {
+    return async <T>(val: TemplateStringsArray, ...args: string[]) => {
+        const script = String.raw(val, ...args)
+        const [result, exception] = await browser.devtools.inspectedWindow.eval(
+            script,
+            runInContentScript ? { useContentScriptContext: true } : undefined,
+        )
+        if (exception) {
+            console.warn('Code run failed:', script)
+            if ('isException' in exception) throw new EvalError(exception.value)
+            else throw new Error((exception as any).code)
+        }
+        return result as T
     }
-    return result
 }
 
 export function createPanel(name: string) {
-    return browser.devtools.panels.create(name + ' (\u{1F3AD})', '128x128.png', 'empty.html')
+    return browser.devtools.panels.create(name, '128x128.png', 'empty.html')
 }
 
 export function attachListener<T>(

@@ -30,7 +30,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const { classes } = useStyles()
     const Others = useWeb3Others()
 
-    const { feeds, loading: loadingFeeds, error, next } = useFeeds(address, tag)
+    const { feeds, isLoading: loadingFeeds, error, next } = useFeeds(address, tag)
 
     const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
@@ -45,7 +45,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
             name,
             ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(address, 4) ?? address,
         }
-    }, [address, name, Others.formatDomainName])
+    }, [address, name, Others.formatDomainName, Others.formatAddress])
 
     if (error && !feeds.length)
         return (
@@ -68,8 +68,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         )
     }
     if (!feeds.length && !loading) {
-        const context = tag ? tag : 'activities'
-        return <EmptyStatus>{t.no_data({ context })}</EmptyStatus>
+        return <EmptyStatus>{t.no_data({ context: tag || 'activities' })}</EmptyStatus>
     }
 
     return (

@@ -15,57 +15,72 @@ import {
     createBindingProofFromProfileQuery,
     EMPTY_LIST,
 } from '@masknet/shared-base'
-import {
-    PROOF_BASE_URL_DEV,
-    PROOF_BASE_URL_PROD,
-    RELATION_SERVICE_URL_DEV,
-    RELATION_SERVICE_URL_PROD,
-} from './constants.js'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
+import { isLens } from '@masknet/web3-shared-evm'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
-const RELATION_SERVICE_URL =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
-        ? RELATION_SERVICE_URL_PROD
-        : RELATION_SERVICE_URL_DEV
+function getDomainSystem(domain: string) {
+    if (isLens(domain)) return 'lens'
+    if (domain.endsWith('.eth')) return 'ENS'
+    if (domain.endsWith('.bit')) return 'dotbit'
+    if (domain.endsWith('.csb')) return 'Crossbell'
+    return 'ENS'
+}
 
-const relationServiceQuery = `  domain(domainSystem: "ENS", name: $domain) {
-        source
-        system
-        name
-        fetcher
-        resolved {
-          identity
-          platform
-          displayName
-        }
-        owner {
-          identity
-          platform
-          displayName
-          neighborWithTraversal(depth: 5) {
-            ... on ProofRecord {
-              __typename
-              source
-              from {
-                uuid
-                platform
-                identity
-                displayName
+const relationServiceQuery = `domain(domainSystem: $domainSystem, name: $domain) {
+          source
+          system
+          name
+          fetcher
+          resolved {
+            identity
+            platform
+            displayName
+          }
+          owner {
+            identity
+            platform
+            displayName
+            neighborWithTraversal(depth: 5) {
+              ... on ProofRecord {
+                __typename
+                source
+                from {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
+                to {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
               }
-              to {
-                uuid
-                platform
-                identity
-                displayName
+              ... on HoldRecord {
+                __typename
+                source
+                from {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
+                to {
+                  uuid
+                  platform
+                  identity
+                  displayName
+                }
               }
             }
-          }
         }
     }`
 interface CreatePayloadBody {
@@ -233,7 +248,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByDomain(domain: string) {
+    async queryProfilesByDomain(domain?: string) {
+        if (!domain) return EMPTY_LIST
         const { data } = await fetchJSON<{
             data: {
                 domain: {
@@ -249,9 +265,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { domain: domain.toLowerCase() },
+                    variables: { domainSystem: getDomainSystem(domain), domain: domain.toLowerCase() },
                     query: `
-                    query GET_PROFILES_QUERY($domain: String) {
+                    query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
                       ${relationServiceQuery}
                     }
                 `,
@@ -262,7 +278,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         if (!data.domain) return EMPTY_LIST
         const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, [])
-
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
@@ -284,9 +299,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                    variables: { identity: twitterId.toLowerCase() },
+                    variables: { domainSystem: 'ENS', domain: twitterId.toLowerCase() },
                     query: `
-                        query GET_PROFILES_BY_TWITTER_ID($identity: String) {
+                        query GET_PROFILES_BY_TWITTER_ID($domainSystem: String, $domain: String) {
                           ${relationServiceQuery}
                         }
                 `,
@@ -320,9 +335,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_LENS_PROFILES',
-                    variables: { identity: lowerCaseId },
+                    variables: { domainSystem: 'lens', domain: lowerCaseId },
                     query: `
-                        query GET_LENS_PROFILES($identity: String) {
+                        query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
                             ${relationServiceQuery}
                         }
                 `,

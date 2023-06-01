@@ -17,8 +17,8 @@ import {
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '@masknet/flags'
-import { Sentry } from '@masknet/web3-providers'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { Sentry } from '@masknet/web3-telemetry'
+import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
@@ -58,10 +58,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         error.stack = ''
         Sentry.captureException({
             error,
-            exceptionID: TelemetryAPI.ExceptionID.Debug,
-            exceptionType: TelemetryAPI.ExceptionType.Error,
-            // drop 90% of selector missing reports
-            sampleRate: 0.1,
+            exceptionID: ExceptionID.Debug,
+            exceptionType: ExceptionType.Error,
+            sampleRate: 0.01,
         })
     })
     setupReactShadowRootEnvironment()

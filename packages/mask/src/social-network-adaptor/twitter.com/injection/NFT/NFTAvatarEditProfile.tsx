@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
-import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
+import { startWatch, attachReactTreeWithContainer, MaskMessages } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
@@ -22,7 +22,7 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
 export function injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
         <OpenNFTAvatarEditProfileButtonInTwitter />,
     )
 }

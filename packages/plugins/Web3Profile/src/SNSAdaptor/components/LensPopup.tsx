@@ -44,7 +44,7 @@ export const LensPopup = memo(() => {
                 return isEqual(oldAccounts, lensAccounts) ? oldAccounts : lensAccounts
             })
             setAnchorEl(popupAnchorEl)
-            const accounts = await NextIDProof.queryAllLens(userId)
+            const accounts = await NextIDProof.queryAllLens(lens[0].handle)
             if (!accounts.length) return
             setLens((oldAccounts) => {
                 if (accounts.length <= oldAccounts.length) return oldAccounts

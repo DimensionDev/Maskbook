@@ -2,9 +2,10 @@ import { memo, type HTMLProps, type FC } from 'react'
 import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { resolveImageURL } from '@masknet/web3-shared-evm'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -41,6 +42,13 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
     },
+    indicator: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        color: theme.palette.maskColor.primary,
+        zIndex: 1,
+    },
 }))
 
 export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
@@ -49,6 +57,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableNetworkIcon?: boolean
     /** disable inspect NFT details */
     disableInspect?: boolean
+    isSelected?: boolean
 }
 
 export const CollectibleCard: FC<CollectibleCardProps> = memo(
@@ -79,6 +88,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
+                {rest.isSelected ? <Icons.CheckCircle className={classes.indicator} size={24} /> : null}
             </div>
         )
     },
