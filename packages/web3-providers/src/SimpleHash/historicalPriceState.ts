@@ -21,7 +21,7 @@ export class HistoricalPriceState {
     public getPriceStats(id: string, range?: number) {
         const allStats = this._priceState[id]
 
-        return range ? allStats.filter((x) => (x[0] as number) > range) : allStats
+        return range ? allStats.filter((x) => x[0] > range) : allStats
     }
 
     public getHighestPrice(id: string) {
@@ -31,7 +31,7 @@ export class HistoricalPriceState {
     public isLoaded(id: string, fromTimeStamp?: number) {
         return (
             Boolean(this._allLoadedIdListState.find((x) => x === id)) ||
-            (fromTimeStamp && Boolean(this._priceState[id]?.find((x) => (x[0] as number) < fromTimeStamp)))
+            (fromTimeStamp && Boolean(this._priceState[id]?.find((x) => x[0] < fromTimeStamp)))
         )
     }
 
@@ -56,7 +56,7 @@ export class HistoricalPriceState {
                             new BigNumber(leftShift(x.floor_price, paymentToken.decimals).toPrecision(4)).toNumber(),
                         ]),
                     )
-                    .sort((a, b) => (a[0] as number) - (b[0] as number)),
+                    .sort((a, b) => a[0] - b[0]),
                 (x) => x[0],
             )
         })
