@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, useSharedI18N } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, ReloadStatus, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -60,13 +60,8 @@ const useStyles = makeStyles()((theme) => ({
             cursor: 'not-allowed',
         },
     },
-    footnote: {
-        position: 'absolute',
-        bottom: theme.spacing(9),
+    error: {
         backgroundColor: theme.palette.maskColor.bottom,
-        padding: theme.spacing(0, 2),
-        left: 0,
-        right: 0,
     },
     toolbar: {
         position: 'absolute',
@@ -143,11 +138,16 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
             queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
         })),
     })
-    const { data: contract, isLoading: isLoadingContract } = useQuery({
+    const {
+        data: contract,
+        isLoading: isLoadingContract,
+        isError,
+        refetch,
+    } = useQuery({
         queryKey: ['nft-contract', pluginID, chainId, address],
         queryFn: () => connection.getNonFungibleTokenContract(address),
     })
-    const noResult = assetsQueries.every((x) => !x.isLoading && !x.data)
+    const noResults = assetsQueries.every((x) => !x.isLoading && !x.data)
     const someNotMine = assetsQueries.some((x) => (x.data ? !isSameAddress(x.data.owner?.address, account) : false))
 
     const handleFormSubmit = useCallback(
@@ -191,7 +191,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                             <>
                                 <MaskTextField
                                     {...field}
-                                    placeholder="Input contract address"
+                                    placeholder={t.add_collectibles_address_placeholder()}
                                     error={!!errors.address}
                                     InputProps={{
                                         endAdornment: field.value ? (
@@ -215,7 +215,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                                 <>
                                     <MaskTextField
                                         {...field}
-                                        placeholder="Token ID separated by comma, e.g. 1223,1224,"
+                                        placeholder={t.add_collectibles_token_id_placeholder()}
                                         error={!!errors.tokenIds}
                                         InputProps={{
                                             endAdornment: field.value ? (
@@ -233,40 +233,42 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                             )}
                         />
                     </Box>
-                    <div className={classes.main}>
-                        {noResult ? (
-                            <EmptyStatus>{t.no_results()}</EmptyStatus>
-                        ) : (
-                            <>
-                                <Box className={classes.grid}>
-                                    {assetsQueries.map(({ data: asset, isLoading }, i) => {
-                                        if (isLoading) return <CollectibleItemSkeleton key={i} />
-                                        if (!asset) return null
-                                        const isMine = isSameAddress(account, asset.owner?.address)
-                                        return (
-                                            <CollectibleItem
-                                                key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
-                                                className={isMine ? undefined : classes.notMine}
-                                                asset={asset}
-                                                pluginID={pluginID}
-                                                disableName
-                                                actionLabel={t.send()}
-                                                disableAction
-                                                onItemClick={isMine ? toggleSelect : undefined}
-                                                indicatorIcon={Icons.Checkbox}
-                                                isSelected={selectedTokenIds.includes(asset.tokenId)}
-                                            />
-                                        )
-                                    })}
-                                </Box>
-                            </>
-                        )}
-                    </div>
                     {someNotMine ? (
-                        <Typography color={MaskColorVar.redMain} className={classes.footnote}>
+                        <Typography color={MaskColorVar.redMain} className={classes.error} mt={1}>
                             {t.collection_not_belong_to_you()}
                         </Typography>
                     ) : null}
+                    <div className={classes.main}>
+                        {isLoadingContract ? (
+                            <LoadingStatus flexGrow={1} />
+                        ) : isError ? (
+                            <ReloadStatus flexGrow={1} onRetry={refetch} />
+                        ) : noResults ? (
+                            <EmptyStatus>{t.no_results()}</EmptyStatus>
+                        ) : (
+                            <Box className={classes.grid}>
+                                {assetsQueries.map(({ data: asset, isLoading }, i) => {
+                                    if (isLoading) return <CollectibleItemSkeleton key={i} />
+                                    if (!asset) return null
+                                    const isMine = isSameAddress(account, asset.owner?.address)
+                                    return (
+                                        <CollectibleItem
+                                            key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
+                                            className={isMine ? undefined : classes.notMine}
+                                            asset={asset}
+                                            pluginID={pluginID}
+                                            disableName
+                                            actionLabel={t.send()}
+                                            disableAction
+                                            onItemClick={isMine ? toggleSelect : undefined}
+                                            indicatorIcon={Icons.Checkbox}
+                                            isSelected={selectedTokenIds.includes(asset.tokenId)}
+                                        />
+                                    )
+                                })}
+                            </Box>
+                        )}
+                    </div>
                     <Stack className={classes.toolbar} direction="row" justifyContent="center">
                         <Button
                             fullWidth

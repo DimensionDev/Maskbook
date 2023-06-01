@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { LoadingStatus, useSharedI18N } from '@masknet/shared'
-import { Sniffings, type NetworkPluginID, EMPTY_ENTRY, EMPTY_LIST } from '@masknet/shared-base'
+import { EmptyStatus, LoadingStatus, ReloadStatus, useSharedI18N } from '@masknet/shared'
+import { Sniffings, NetworkPluginID, EMPTY_ENTRY, EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
@@ -13,10 +13,13 @@ import { ContractItem } from './ContractItem.js'
 import { AddCollectibleDialog, type AddCollectibleDialogProps } from './AddCollectibleDialog.js'
 import { useSubscription } from 'use-subscription'
 import { compact } from 'lodash-es'
+import { FuseNonFungibleCollection } from '@masknet/web3-providers'
+import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
+        minHeight: 564,
         padding: theme.spacing(2, 0, 0),
         backgroundColor: theme.palette.maskColor.bottom,
         flexDirection: 'column',
@@ -74,7 +77,12 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
         const handleClear = () => {
             setKeyword('')
         }
-        const { data: collections = [], isLoading } = useNonFungibleCollections(pluginID, {
+        const {
+            data: collections = EMPTY_LIST,
+            isLoading,
+            isError,
+            refetch,
+        } = useNonFungibleCollections(pluginID, {
             chainId,
             // TODO: remove this line, after SimpleHash can recognize ERC721 Collections.
             sourceType: SourceType.NFTScan,
@@ -103,6 +111,28 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
                     source: contract.source,
                 }))
         }, [customizedCollectionMap[account], collections])
+
+        const filteredCollections = useMemo(() => {
+            const allCollections = [...customizedCollections, ...collections]
+            return pluginID === NetworkPluginID.PLUGIN_EVM
+                ? allCollections.filter((x) => {
+                      return (
+                          x.address &&
+                          x.schema === SchemaType.ERC721 &&
+                          !isLensCollect(x.name) &&
+                          !isLensFollower(x.name) &&
+                          !isLensProfileAddress(x.address)
+                      )
+                  })
+                : allCollections
+        }, [customizedCollections, collections, pluginID])
+        const fuse = useMemo(() => {
+            return FuseNonFungibleCollection.create(filteredCollections)
+        }, [filteredCollections])
+        const searchResults = useMemo(() => {
+            if (!keyword) return filteredCollections
+            return fuse.search(keyword).map((x) => x.item)
+        }, [fuse, keyword, filteredCollections])
 
         const closeAddDialog = useCallback(() => setAddVisible(false), [])
         const handleAdd: NonNullable<AddCollectibleDialogProps['onAdd']> = useCallback(
@@ -136,7 +166,7 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
                         <MaskTextField
                             value={keyword}
                             onChange={(evt) => setKeyword(evt.target.value)}
-                            placeholder="Name or Contract address eg.PUNK or 0x234..."
+                            placeholder={t.collectible_search_placeholder()}
                             autoFocus
                             fullWidth
                             InputProps={{
@@ -147,11 +177,15 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
                             }}
                         />
                     </Box>
-                    {isLoading && !collections.length ? (
+                    {isError ? (
+                        <ReloadStatus height={500} onRetry={refetch} />
+                    ) : isLoading && !collections.length ? (
                         <LoadingStatus height={500} />
+                    ) : !searchResults.length ? (
+                        <EmptyStatus height={500}>{t.no_results()}</EmptyStatus>
                     ) : (
                         <List className={classes.contractList}>
-                            {[...customizedCollections, ...collections].map((collection) => (
+                            {searchResults.map((collection) => (
                                 <ContractItem
                                     key={collection.address}
                                     className={classes.contractItem}

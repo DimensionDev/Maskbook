@@ -201,5 +201,8 @@
     "collectible_contract_require": "The collectible address is required",
     "collectible_contract_invalid": "Incorrect contract address.",
     "collectible_token_id_require": "The collectible token id is required",
-    "collection_not_belong_to_you": "The contract address is incorrect or the collection does not belong to you."
+    "collection_not_belong_to_you": "The contract address is incorrect or the collection does not belong to you.",
+    "collectible_search_placeholder": "Name or Contract address eg.PUNK or 0x234...",
+    "add_collectibles_address_placeholder": "Input contract address",
+    "add_collectibles_token_id_placeholder": "Token ID separated by comma, e.g. 1223,1224,"
 }
