@@ -30,9 +30,8 @@ const define: SocialNetworkUI.Definition = {
     ...instagramBase,
     automation: {
         nativeCompositionDialog: {
-            attachImage(url, options) {
-                if (url instanceof Blob) url = URL.createObjectURL(url)
-                pasteInstagram(url)
+            async attachImage(url, options) {
+                pasteInstagram(new Uint8Array(await url.arrayBuffer()))
             },
         },
     },

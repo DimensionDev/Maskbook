@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { toolboxInSidebarSelector, toolboxInSidebarSelectorWithNoLeftRailStart } from '../utils/selector.js'
 import { ToolboxAtFacebook } from './ToolbarUI.js'
@@ -11,7 +11,7 @@ export function injectToolboxHintAtFacebook(signal: AbortSignal, category: 'wall
     )
     startWatch(watcher, signal)
     const hasTopNavBar = !!document.querySelector<HTMLElement>('#ssrb_top_nav_start ~ [role="banner"]')
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxAtFacebook
             category={category}
             hasTopNavBar={hasTopNavBar}

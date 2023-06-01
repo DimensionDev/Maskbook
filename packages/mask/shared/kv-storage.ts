@@ -72,8 +72,8 @@ async function migrateUnlistedEntries() {
     const unlisted = pairs.filter((x) => x[1])
     if (unlisted.length && !newData.length) {
         const legacyList = unlisted.map((x) => x[0])
-        PersistentStorages.ApplicationEntryUnListed.storage.data.setValue(legacyList)
-        PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({})
+        await PersistentStorages.ApplicationEntryUnListed.storage.data.setValue(legacyList)
+        await PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({})
     }
 }
 migrateUnlistedEntries()

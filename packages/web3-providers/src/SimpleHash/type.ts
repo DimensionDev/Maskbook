@@ -7,7 +7,7 @@ export interface Collection {
     id: string
     chain: string
     banner_image_url: string
-    collection_id: number
+    collection_id: string
     description: string
     external_url: string
     spam_score?: number
@@ -83,11 +83,30 @@ export interface Asset {
     }
 }
 
-interface PaymentToken {
+export interface PaymentToken {
     address: string | null
     decimals: number
     name: string
-    payment_token_id: string // ethereum.native
+    payment_token_id: string // e.g. ethereum.native
     symbol: string
     value: BigNumber.Value
+}
+
+export interface PriceStat {
+    timestamp: string
+    floor_price: number
+}
+
+export interface CollectionOverview {
+    collection_id: string
+    name: string
+    all_time_volume: number
+    market_cap: number
+    payment_token: PaymentToken
+    '1_day_volume': number
+    '1_day_prior_volume': number
+    '1_day_volume_change_percent': number
+    '7_day_volume': number
+    '30_day_volume': number
+    '90_day_volume': number
 }

@@ -78,7 +78,9 @@ const ConnectWalletPage = memo(() => {
             provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
         ) => {
             if (provider.type === ProviderType.MaskWallet) {
-                await Web3.disconnect()
+                await Web3.disconnect({
+                    providerType: ProviderType.MaskWallet,
+                })
 
                 if (isLocked && !getLockStatusLoading) {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
@@ -99,7 +101,7 @@ const ConnectWalletPage = memo(() => {
                 )
             } else {
                 const chainId = await Web3.getChainId()
-                const account = await Web3.connect({ chainId })
+                const account = await Web3.connect({ chainId, providerType: provider.type })
 
                 navigate(PopupRoutes.VerifyWallet, {
                     state: {

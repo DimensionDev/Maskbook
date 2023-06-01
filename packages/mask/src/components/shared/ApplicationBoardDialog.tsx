@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { DialogContent, Tab } from '@mui/material'
+import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
@@ -11,7 +11,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../utils/index.js'
-import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -24,9 +23,6 @@ const useStyles = makeStyles<{
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-        },
-        settingIcon: {
-            cursor: 'pointer',
         },
     }
 })
@@ -66,10 +62,6 @@ export function ApplicationBoardDialog() {
         setFocusPluginID(undefined)
     }, [])
 
-    const { open: openPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
     const closeDialog = useCallback(() => {
         if (openSettings && !quickMode) {
             setOpenSettings(false)
@@ -105,7 +97,9 @@ export function ApplicationBoardDialog() {
                 title={openSettings ? t('application_settings') : t('applications')}
                 titleTail={
                     openSettings ? null : (
-                        <Icons.Gear size={24} className={classes.settingIcon} onClick={() => setOpenSettings(true)} />
+                        <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>
+                            <Icons.Gear size={24} />
+                        </IconButton>
                     )
                 }>
                 <DialogContent className={classes.content}>
@@ -119,10 +113,8 @@ export function ApplicationBoardDialog() {
                             </TabPanel>
                         </>
                     ) : (
-                        <ApplicationBoard closeDialog={closeDialog} />
+                        <ApplicationBoard />
                     )}
-                    {/* TODO: remove this*/}
-                    {openPersonaSelectPanelDialog ? <PersonaSelectPanelDialog /> : null}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

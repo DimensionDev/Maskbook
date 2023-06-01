@@ -1,6 +1,6 @@
 import { MaskMessages, useI18N } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
 import { useState } from 'react'
 import { PopoverListItem } from './PopoverListItem.js'
@@ -69,6 +69,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
+                <Box flex={1} />
                 <ConnectPersonaBoundary
                     personas={allPersonas}
                     identity={lastRecognized}
@@ -116,16 +117,17 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 selectedTitle={selectedTitle()}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
-                onChange={props.onChange}>
+                onChange={(v) => {
+                    props.onChange(v as EncryptionTargetType)
+                    if (v === EncryptionTargetType.E2E) setAnchorEl(null)
+                }}>
                 <PopoverListItem
-                    onItemClick={() => props.onChange(EncryptionTargetType.Public)}
                     value={EncryptionTargetType.Public}
                     title={t('compose_encrypt_visible_to_all')}
                     subTitle={t('compose_encrypt_visible_to_all_sub')}
                 />
                 <div className={classes.divider} />
                 <PopoverListItem
-                    onItemClick={() => props.onChange(EncryptionTargetType.Self)}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.Self}
                     title={t('compose_encrypt_visible_to_private')}
@@ -135,10 +137,6 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 {noLocalKeyMessage}
                 <div className={classes.divider} />
                 <PopoverListItem
-                    onItemClick={() => {
-                        props.onChange(EncryptionTargetType.E2E)
-                        setAnchorEl(null)
-                    }}
                     itemTail={<Icons.RightArrow className={classes.rightIcon} />}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.E2E}

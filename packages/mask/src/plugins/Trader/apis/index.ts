@@ -1,6 +1,5 @@
 export * from './0x/index.js'
 export * from './balancer/index.js'
-export * from './trader/index.js'
 export * from './trending/index.js'
 export * from './blocks/index.js'
 export * from './dodo/index.js'

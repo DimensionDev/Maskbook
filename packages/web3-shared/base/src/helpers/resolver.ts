@@ -262,9 +262,9 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
 
 export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginID, string>(
     {
-        [NetworkPluginID.PLUGIN_EVM]: 'Ethereum wallet',
-        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
-        [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+        [NetworkPluginID.PLUGIN_EVM]: 'Ethereum Wallet',
+        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana Wallet',
+        [NetworkPluginID.PLUGIN_FLOW]: 'Flow Wallet',
     },
     (network) => {
         throw new Error(`Unknown network plugin-id: ${network}`)

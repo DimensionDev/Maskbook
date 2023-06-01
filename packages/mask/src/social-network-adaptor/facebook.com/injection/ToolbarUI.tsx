@@ -21,7 +21,11 @@ const Text = styled(Typography)`
     color: var(--primary-text);
     font-weight: 500;
 `
-const Icon = styled(ListItemIcon)<{
+const Icon = styled(ListItemIcon, {
+    shouldForwardProp(name) {
+        return name !== 'hasTopNavBar' && name !== 'hasSpecificLeftRailStartBar'
+    },
+})<{
     hasTopNavBar: boolean
     hasSpecificLeftRailStartBar: boolean
 }>`

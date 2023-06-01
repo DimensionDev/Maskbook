@@ -8,7 +8,7 @@ import {
 import { editTypedMessageMeta } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
-import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
+import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo, useEffect } from 'react'
 import { useI18N } from '../../utils/index.js'
 import { BadgeRenderer } from './BadgeRenderer.js'
 
@@ -64,6 +64,7 @@ export interface TypedMessageEditorRef {
     value: SerializableTypedMessages
     /** The length of the current message. */
     readonly estimatedLength: number
+    focus(): void
     /** Clean the editor. */
     reset(): void
     /**
@@ -85,6 +86,11 @@ export const TypedMessageEditor = memo(
 
         const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
         const currentValue = useRef(value)
+        const [inputRef, setInputRef] = useState<{ focus(): void } | null>(null)
+        useEffect(() => {
+            props.autoFocus && inputRef?.focus()
+        }, [props.autoFocus, inputRef])
+
         currentValue.current = value
 
         const setMessage = useCallback(
@@ -123,6 +129,7 @@ export const TypedMessageEditor = memo(
                 set value(val) {
                     setMessage(val)
                 },
+                focus: () => inputRef?.focus(),
                 reset: () => setMessage(emptyMessage),
                 attachMetadata(meta, data) {
                     setMessage(editTypedMessageMeta(currentValue.current, (map) => map.set(meta, data)))
@@ -150,6 +157,7 @@ export const TypedMessageEditor = memo(
         return (
             <>
                 <InputBase
+                    inputRef={setInputRef}
                     startAdornment={
                         value.meta ? (
                             <div className={classes.badge}>
@@ -163,7 +171,6 @@ export const TypedMessageEditor = memo(
                         input: classes.textarea,
                     }}
                     className={cx(classes.input, value.meta ? classes.badgeInput : undefined)}
-                    autoFocus={props.autoFocus}
                     value={value.content}
                     onChange={setAsText}
                     fullWidth

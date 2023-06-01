@@ -1,14 +1,14 @@
+import { memo, useEffect, useState } from 'react'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainContextProvider } from '@masknet/web3-hooks-base'
-import { Sentry } from '@masknet/web3-providers'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { memo, useEffect, useState } from 'react'
+import { Sentry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { LensPopup } from './components/LensPopup.js'
-import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
+import { Web3ProfileDialogWrapper } from './components/Web3ProfileDialog.js'
 import { context } from './context.js'
 
 export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjection() {
@@ -18,8 +18,8 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
             setProfileOpen(open)
             if (open)
                 Sentry.captureEvent({
-                    eventType: TelemetryAPI.EventType.Access,
-                    eventID: TelemetryAPI.EventID.AccessWeb3ProfileDialog,
+                    eventType: EventType.Access,
+                    eventID: EventID.AccessWeb3ProfileDialog,
                 })
         })
     }, [])
@@ -37,7 +37,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
 
     return (
         <SNSAdaptorContext.Provider value={context}>
-            {profileOpen ? <Web3ProfileDialog open onClose={() => setProfileOpen(false)} /> : null}
+            {profileOpen ? <Web3ProfileDialogWrapper open onClose={() => setProfileOpen(false)} /> : null}
 
             {lensOpen && handle ? (
                 <ChainContextProvider value={{ chainId: ChainId.Matic }}>

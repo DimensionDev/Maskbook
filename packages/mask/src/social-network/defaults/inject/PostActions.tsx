@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
 import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostActions } from '../../../components/InjectedComponents/PostActions.js'
-import { attachReactTreeToGlobalContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 
 function createRootElement() {
     const root = document.createElement('div')
@@ -21,7 +21,7 @@ export function createPostActionsInjector() {
                     <PostActions />
                 </PostInfoProvider>
             )
-            const root = attachReactTreeToGlobalContainer(postInfo.actionsElement.afterShadow, {
+            const root = attachReactTreeWithContainer(postInfo.actionsElement.afterShadow, {
                 tag: createRootElement,
                 key: 'post-actions',
                 untilVisible: true,

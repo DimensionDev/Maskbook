@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
 import { isEqual, isEqualWith, range, sortBy, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
+import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PersonaGuard, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Web3Storage } from '@masknet/web3-providers'
@@ -47,7 +47,7 @@ interface Props {
     open: boolean
     onClose(): void
 }
-export function Web3ProfileDialog({ open, onClose }: Props) {
+export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext()
@@ -74,7 +74,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST
         return uniqBy(
-            proofs.filter((proof) => proof.platform === NextIDPlatform.Twitter),
+            proofs.filter((proof) => proof.platform === NextIDPlatform.Twitter && proof.is_valid),
             (x) => x.identity,
         )
     }, [proofs])
@@ -186,7 +186,7 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
                         const unlistedAddresses = migratedUnlistedAddressConfig[proof.identity] ?? EMPTY_LIST
                         const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
-                        const isCurrent = proof.identity === myProfile?.identifier?.userId
+                        const isCurrent = proof.identity.toLowerCase() === myProfile?.identifier?.userId.toLowerCase()
                         return (
                             <ProfileCard
                                 key={proof.identity}
@@ -223,4 +223,19 @@ export function Web3ProfileDialog({ open, onClose }: Props) {
             ) : null}
         </InjectedDialog>
     )
-}
+})
+
+export const Web3ProfileDialogWrapper = memo(function Web3ProfileDialogWrapper(props: Props) {
+    const personas = useAllPersonas()
+    const persona = useCurrentPersona()
+    const identity = useLastRecognizedProfile()
+    return (
+        <PersonaGuard
+            personas={personas}
+            currentPersonaIdentifier={persona?.toText()}
+            identity={identity}
+            onDiscard={props.onClose}>
+            <Web3ProfileDialog {...props} />
+        </PersonaGuard>
+    )
+})

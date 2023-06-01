@@ -200,8 +200,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 scroll="paper"
                 fullWidth
                 maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
                     !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
@@ -225,7 +223,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             }}>
                             <IconButton
                                 size="large"
-                                disableRipple
+                                disableTouchRipple
                                 classes={{ root: cx(dialogCloseButton, titleTabs ? dialogCloseButtonWithTabs : '') }}
                                 aria-label={t.dialog_dismiss()}
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>

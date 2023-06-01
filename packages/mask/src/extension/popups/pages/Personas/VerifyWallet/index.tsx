@@ -169,9 +169,11 @@ const VerifyWallet = memo(() => {
     // disconnect when router changes
     useEffect(
         () => () => {
-            Web3.disconnect()
+            Web3.disconnect({
+                providerType: wallet.providerType,
+            })
         },
-        [],
+        [wallet.providerType],
     )
     useTitle(t('popups_add_wallet'))
 

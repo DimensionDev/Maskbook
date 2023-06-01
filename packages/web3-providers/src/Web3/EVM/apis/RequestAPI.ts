@@ -12,6 +12,7 @@ export class RequestAPI extends RequestReadonlyAPI {
     private Request = new RequestReadonlyAPI(this.options)
 
     private get Provider() {
+        if (!Web3StateRef.value.Provider) throw new Error('The provider does not load yet.')
         return Web3StateRef.value.Provider
     }
 

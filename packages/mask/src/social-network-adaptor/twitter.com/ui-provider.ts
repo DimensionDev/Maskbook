@@ -139,7 +139,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionTwitter(() => false),
+            attachImage: pasteImageToCompositionTwitter,
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,

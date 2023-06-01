@@ -162,8 +162,8 @@ export namespace SocialNetworkUI {
         }
         export interface NativeCompositionDialog {
             /** Upload the designated image on to the social network composition dialog */
-            attachImage?(url: string | Blob, options?: NativeCompositionAttachImageOptions): void
-            appendText?(text: string, options?: NativeCompositionAttachTextOptions): void
+            attachImage?(url: Blob, options?: NativeCompositionAttachImageOptions): void
+            appendText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
             open?(): void
         }
         export interface NativeCompositionAttachImageOptions {
@@ -173,7 +173,7 @@ export namespace SocialNetworkUI {
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
-            reason?: 'timeline' | 'popup' | 'reply'
+            reason?: 'timeline' | 'popup' | 'reply' | 'verify'
         }
         export interface MaskCompositionDialog {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void

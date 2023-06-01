@@ -25,7 +25,9 @@ import { useI18N } from '../../../../utils/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
-import type { TradeInfo } from '../../types/trader.js'
+import type { TradeComputed, TraderAPI } from '@masknet/web3-providers/types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -53,18 +55,16 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TradeStateBarProps {
     inputAmount: string
-    settings?: boolean
-    focusedTrade?: TradeInfo
+    focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
     inputToken?: Web3Helper.FungibleTokenAll
     outputToken?: Web3Helper.FungibleTokenAll
-    trades: TradeInfo[]
+    trades: Array<AsyncStateRetry<TraderAPI.TradeInfo>>
     inputTokenBalance?: string
     gasPrice?: string
     onSwap: () => void
 }
 export function TraderStateBar({
     trades,
-    settings,
     focusedTrade,
     inputToken,
     outputToken,
@@ -93,8 +93,8 @@ export function TraderStateBar({
 
     // #region approve token
     const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
-        focusedTrade?.value ?? null,
-        focusedTrade?.provider,
+        focusedTrade?.value?.value ?? null,
+        focusedTrade?.value?.provider,
         inputToken,
     )
     // #endregion
@@ -123,7 +123,7 @@ export function TraderStateBar({
 
     const maxAmount = useMemo(() => {
         const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
-        const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
+        const gasFee = multipliedBy(marginGasPrice, focusedTrade?.value?.gas ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
         amount_ = Others.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
         return leftShift(BigNumber.max(0, amount_), inputToken?.decimals).toFixed(5)
@@ -146,7 +146,8 @@ export function TraderStateBar({
                 symbol: inputToken?.symbol,
             })
 
-        if (focusedTrade?.value && !focusedTrade.value.outputAmount) return t('plugin_trader_no_enough_liquidity')
+        if (focusedTrade?.value && !focusedTrade.value.value?.outputAmount)
+            return t('plugin_trader_no_enough_liquidity')
         return ''
     }, [
         inputAmount,
@@ -164,8 +165,9 @@ export function TraderStateBar({
     // #region native wrap message
     const nativeWrapMessage = useMemo(() => {
         if (focusedTrade?.value) {
-            if (isNativeTokenWrapper(focusedTrade.value)) {
-                return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
+            if (isNativeTokenWrapper(focusedTrade.value.value)) {
+                const trade_ = focusedTrade.value.value as TradeComputed<NativeTokenWrapper> | null
+                return trade_?.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
             }
             return t('plugin_trader_swap_amount_symbol')
         } else {
@@ -185,12 +187,14 @@ export function TraderStateBar({
                         spender={approveAddress}
                         amount={approveAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}
-                        contractName={focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''}
+                        contractName={
+                            focusedTrade?.value?.provider ? resolveTradeProviderName(focusedTrade.value?.provider) : ''
+                        }
                         infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                             symbol: approveToken?.symbol,
                         })}
                         token={
-                            !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                            !isNativeTokenWrapper(focusedTrade?.value?.value ?? null) &&
                             approveToken?.schema === SchemaType.ERC20 &&
                             !!approveAmount.toNumber()
                                 ? approveToken

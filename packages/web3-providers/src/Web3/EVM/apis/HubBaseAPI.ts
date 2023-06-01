@@ -26,8 +26,8 @@ export class HubBaseAPI extends HubBaseAPI_Base<
     TransactionParameter,
     GasOption
 > {
-    protected GasOptions = new GasOptionAPI()
     protected override HubOptions = new HubOptionsAPI(this.options)
+    private GasOptions = new GasOptionAPI()
 
     override async getGasOptions(chainId: ChainId, initial?: HubOptions) {
         const options = this.HubOptions.fill({

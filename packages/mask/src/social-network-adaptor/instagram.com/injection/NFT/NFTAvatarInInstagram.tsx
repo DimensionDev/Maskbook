@@ -7,14 +7,14 @@ import { useLocation, useWindowSize } from 'react-use'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { RSS3_KEY_SNS, useNFT, useNFTAvatar, useWallet, NFTBadge, rainbowBorderKeyFrames } from '@masknet/plugin-avatar'
 import type { AvatarMetaDB } from '@masknet/plugin-avatar'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { searchInstagramAvatarSelector } from '../../utils/selector.js'
 import { getAvatarId } from '../../utils/user.js'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInInstagram />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInInstagram />)
 }
 
 const useStyles = makeStyles()(() => ({

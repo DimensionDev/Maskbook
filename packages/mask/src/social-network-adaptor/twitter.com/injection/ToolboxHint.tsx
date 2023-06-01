@@ -1,5 +1,5 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { querySelector, sideBarProfileSelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/watcher.js'
@@ -30,7 +30,7 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
             },
         },
     })
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxHintAtTwitter category={category} />,
     )
     injectProfile(signal)
@@ -62,5 +62,5 @@ export function useSideBarNativeItemStyleVariants() {
 function injectProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(sideBarProfileSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileLinkAtTwitter />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileLinkAtTwitter />)
 }

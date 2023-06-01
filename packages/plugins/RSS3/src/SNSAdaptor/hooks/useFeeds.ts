@@ -6,7 +6,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
-    const { data, isLoading, error, hasNextPage, fetchNextPage } = useInfiniteQuery({
+    const { data, isLoading, error, fetchNextPage } = useInfiniteQuery({
         queryKey: ['rss3-feeds', address, tag],
         queryFn: async ({ pageParam }) => {
             if (!address) return
@@ -23,9 +23,8 @@ export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
 
     return {
         feeds,
-        loading: isLoading,
+        isLoading,
         error: error as Error | undefined,
-        finished: !hasNextPage,
         next: fetchNextPage,
     }
 }

@@ -1,12 +1,11 @@
 import { useCallback } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useTelemetry } from '@masknet/web3-telemetry/hooks'
+import { useChainContext, useNetworkContext, useTelemetry } from '@masknet/web3-hooks-base'
+import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Web3, Contract } from '@masknet/web3-providers'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -25,15 +24,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const telemetry = useTelemetry()
 
     const onCaptureEvent = useCallback(async () => {
-        telemetry.captureEvent(TelemetryAPI.EventType.Debug, TelemetryAPI.EventID.Debug)
+        telemetry.captureEvent(EventType.Debug, EventID.Debug)
     }, [telemetry])
 
     const onCaptureException = useCallback(async () => {
-        telemetry.captureException(
-            TelemetryAPI.ExceptionType.Error,
-            TelemetryAPI.ExceptionID.Debug,
-            new Error(`An error message ${Date.now()}.`),
-        )
+        telemetry.captureException(ExceptionType.Error, ExceptionID.Debug, new Error(`An error message ${Date.now()}.`))
     }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {

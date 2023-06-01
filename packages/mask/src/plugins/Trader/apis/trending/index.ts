@@ -64,7 +64,13 @@ export async function getPriceStats(
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.NFTScan:
-            return NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
+            return attemptUntil(
+                [SimpleHashEVM, NFTScanTrending_EVM].map(
+                    (x) => () => x.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days),
+                ),
+                EMPTY_LIST,
+            )
+
         default:
             return EMPTY_LIST
     }
@@ -75,11 +81,26 @@ export async function getPriceStats(
 export async function getNFT_TrendingOverview(
     pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
-    result: Web3Helper.TokenResultAll,
+    id: string,
 ): Promise<NonFungibleCollectionOverview | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, result.name)
-        : NFTScanTrending_EVM.getCollectionOverview(chainId as ChainIdEVM, result.address ?? '')
+        ? NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, id)
+        : attemptUntil(
+              [SimpleHashEVM, NFTScanTrending_EVM].map((x) => () => x.getCollectionOverview(chainId as ChainIdEVM, id)),
+              undefined,
+          )
+}
+// #endregion
+
+// #region get hightest historical floor price
+export async function getHighestFloorPrice(id: string) {
+    return SimpleHashEVM.getHighestFloorPrice(id)
+}
+// #endregion
+
+// #region get 24h sale amounts
+export async function getOneDaySaleAmounts(id: string) {
+    return SimpleHashEVM.getOneDaySaleAmounts(id)
 }
 // #endregion
 

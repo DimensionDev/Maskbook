@@ -2,11 +2,12 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Sniffings } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
+import { DotLoading } from './DotLoading.js'
 
 // TODO: remove isDashboard after remove Dashboard page
 const useStyles = makeStyles()((theme) => ({
@@ -22,19 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         position: 'relative',
         minHeight: 82,
-    },
-    loading: {
-        marginBottom: 8,
-        height: 80,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
-        backgroundColor: `${
-            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
-        }!important`,
-        borderRadius: 8,
-        cursor: 'pointer',
     },
     warningText: {
         lineHeight: '18px',
@@ -80,6 +68,11 @@ const useStyles = makeStyles()((theme) => ({
         top: -12,
         right: 22,
     },
+    dotLoading: {
+        position: 'absolute',
+        top: 32,
+        right: 10,
+    },
 }))
 
 export interface TraderInfoUIProps {
@@ -114,13 +107,6 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         const { t } = useI18N()
         const { classes, cx } = useStyles()
 
-        if (loading)
-            return (
-                <Box className={classes.loading}>
-                    <LoadingBase />
-                </Box>
-            )
-
         return (
             <TextField
                 key={providerName}
@@ -128,7 +114,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                 type="text"
                 variant="filled"
                 onClick={onClick}
-                value={balance}
+                value={!loading ? balance : ''}
                 InputProps={{
                     className: cx(classes.trade, isFocus ? classes.focus : null),
                     disableUnderline: true,
@@ -174,6 +160,11 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                         percent: priceImpact,
                                     })}
                                 </Typography>
+                            ) : null}
+                            {loading ? (
+                                <div className={classes.dotLoading}>
+                                    <DotLoading />
+                                </div>
                             ) : null}
                         </>
                     ),

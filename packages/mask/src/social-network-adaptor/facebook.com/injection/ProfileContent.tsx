@@ -1,13 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
-import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
 import { profileSectionSelector, searchProfileTabPageSelector } from '../utils/selector.js'
 
 function injectProfileTabContentState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTabContentAtFacebook />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTabContentAtFacebook />)
 }
 
 export function injectProfileTabContentAtFacebook(signal: AbortSignal) {

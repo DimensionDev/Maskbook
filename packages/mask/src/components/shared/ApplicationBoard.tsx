@@ -1,14 +1,14 @@
+import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
+import { useTimeout } from 'react-use'
+import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { Typography } from '@mui/material'
-import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
-import { useTimeout } from 'react-use'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
 import Services from '../../extension/service.js'
@@ -20,7 +20,6 @@ import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgain
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -78,21 +77,17 @@ const useStyles = makeStyles<{
     }
 })
 
-interface Props {
-    closeDialog(): void
-}
-
-export function ApplicationBoard(props: Props) {
+export function ApplicationBoard() {
     return (
         <PersonaContext.Provider>
             <ApplicationEntryStatusProvider>
-                <ApplicationBoardContent {...props} />
+                <ApplicationBoardContent />
             </ApplicationEntryStatusProvider>
         </PersonaContext.Provider>
     )
 }
 
-function ApplicationBoardContent(props: Props) {
+function ApplicationBoardContent() {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
@@ -138,7 +133,7 @@ function ApplicationBoardContent(props: Props) {
         isCarouselReady: !!isCarouselReady(),
     })
 
-    useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
+    useMountReport(EventID.AccessApplicationBoard)
 
     return (
         <>
@@ -259,7 +254,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
-function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
+function ApplicationEntryStatusProvider({ children }: PropsWithChildren<{}>) {
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -300,9 +295,5 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
             personaConnectStatus.verified,
         ],
     )
-    return (
-        <ApplicationEntryStatusContext.Provider value={Context}>
-            {props.children}
-        </ApplicationEntryStatusContext.Provider>
-    )
+    return <ApplicationEntryStatusContext.Provider value={Context}>{children}</ApplicationEntryStatusContext.Provider>
 }

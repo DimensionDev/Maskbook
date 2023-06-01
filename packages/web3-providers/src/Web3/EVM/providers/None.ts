@@ -1,5 +1,5 @@
 import type { RequestArguments } from 'web3-core'
-import { type ChainId, PayloadEditor, ProviderType, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
+import { type ChainId, ProviderType, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -13,10 +13,8 @@ export class NoneProvider
 
     override async request<T>(
         requestArguments: RequestArguments,
-        options?: WalletAPI.ProviderOptions<ChainId>,
+        initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.createWeb3Provider(options).request<T>(
-            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-        )
+        return this.Request.request(requestArguments, initial)
     }
 }

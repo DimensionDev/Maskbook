@@ -3,7 +3,7 @@ import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { max, pickBy } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { type NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { useSaveStringStorage, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
@@ -19,7 +19,7 @@ export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
     if (!isMobileFacebook) {
         startWatch(watcher, signal)
-        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+        attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
             <NFTAvatarInFacebook />,
         )
         return
@@ -28,7 +28,7 @@ export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     // mobile
     const mobileWatcher = new MutationObserverWatcher(searchFacebookAvatarOnMobileSelector())
     startWatch(mobileWatcher, signal)
-    createReactRootShadowed(mobileWatcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+    attachReactTreeWithContainer(mobileWatcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <NFTAvatarInFacebook />,
     )
 }

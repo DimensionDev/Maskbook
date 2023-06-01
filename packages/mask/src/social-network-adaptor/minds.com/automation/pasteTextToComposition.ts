@@ -57,7 +57,7 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             throw e
         }
 
-        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
+        return worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }
 
 function SimulateTextareaInput(id: string) {

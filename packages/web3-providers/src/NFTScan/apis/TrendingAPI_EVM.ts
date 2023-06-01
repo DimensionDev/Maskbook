@@ -197,6 +197,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                   }
                 : null,
         ])
+
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: SourceType.NFTScan,
@@ -271,8 +272,10 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             },
             market: {
                 total_supply: collection.items_total,
-                current_price: collection.floor_price.toString(),
-                floor_price: collection.floor_price.toString(),
+                current_price: collection.floor_price
+                    ? collection.floor_price.toString()
+                    : openseaStats?.floorPrice.toString() ?? '',
+                floor_price: collection.floor_price?.toString(),
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'ETH',
                 royalty: collection.royalty?.toString(),

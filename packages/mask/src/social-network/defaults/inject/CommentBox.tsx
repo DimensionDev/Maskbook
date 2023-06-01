@@ -2,7 +2,7 @@ import { memo, useCallback, useContext } from 'react'
 import { type PostInfo, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { type DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, type CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '../../../utils/messages.js'
 import { startWatch } from '../../../utils/watcher.js'
@@ -51,7 +51,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             try {
                 mountPointCallback?.(meta)
             } catch {}
-            const root = createReactRootShadowed(meta.afterShadow, { signal })
+            const root = attachReactTreeWithContainer(meta.afterShadow, { signal })
             root.render(
                 <PostInfoContext.Provider value={current}>
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
