@@ -35,8 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         textDecoration: 'underline',
     },
     checkbox: {
-        padding: 0,
-        marginRight: theme.spacing(1.5),
+        margin: '-9px 12px -9px -9px',
     },
     buttonGroup: {
         display: 'flex',

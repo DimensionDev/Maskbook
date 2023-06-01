@@ -10,6 +10,10 @@ const useStyles = makeStyles()((theme) => ({
     // eslint-disable-next-line tss-unused-classes/unused-classes
     root: {
         backgroundColor: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.bottom,
+        fontWeight: 700,
+        fontSize: 16,
+        lineHeight: '20px',
         ['&:hover']: {
             backgroundColor: theme.palette.maskColor.main,
             boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)',
