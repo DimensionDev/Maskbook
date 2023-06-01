@@ -6,7 +6,6 @@ import WebExtensionPlugin from 'webpack-target-webextension'
 import CopyPlugin = require('copy-webpack-plugin')
 import HTMLPlugin = require('html-webpack-plugin')
 import ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-import { ReadonlyCachePlugin } from './ReadonlyCachePlugin'
 import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin'
 import { emitManifestFile } from './manifest'
 import { emitGitInfo, getGitInfo } from './git-info'
@@ -39,6 +38,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         experiments: { backCompat: false, asyncWebAssembly: true, deferImport: { asyncModule: 'error' } },
         cache: {
             type: 'filesystem',
+            readonly: flags.readonlyCache,
             buildDependencies: {
                 config: [__filename],
                 patches: pnpmPatches,
@@ -193,8 +193,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
-            // https://github.com/webpack/webpack/issues/13581
-            flags.readonlyCache && new ReadonlyCachePlugin(),
             new CopyPlugin({
                 patterns: [
                     { from: join(__dirname, '../public/'), to: flags.outputPath },

@@ -423,7 +423,7 @@ importers:
         version: 0.2.3(@swc/core@1.3.59)(webpack@5.80.0)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+        version: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-cli:
         specifier: ^5.0.1
         version: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
@@ -661,7 +661,7 @@ importers:
         version: 9.1.2(@babel/core@7.21.4)(webpack@5.80.0)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+        version: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
 
   packages/empty: {}
 
@@ -1195,7 +1195,7 @@ importers:
         version: 0.2.3(@swc/core@1.3.59)(webpack@5.80.0)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+        version: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-cli:
         specifier: ^5.0.1
         version: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
@@ -3049,7 +3049,7 @@ importers:
         version: 0.2.3(@swc/core@1.3.59)(webpack@5.80.0)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+        version: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
 
   packages/test-serializer: {}
 
@@ -9136,7 +9136,7 @@ packages:
     peerDependencies:
       webpack: '>= 5'
     dependencies:
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /@nice-labs/git-rev@3.5.1:
@@ -9555,7 +9555,7 @@ packages:
       react-refresh: 0.14.0
       schema-utils: 3.1.1
       source-map: 0.7.4
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-dev-server: 4.13.3(webpack-cli@5.0.1)(webpack@5.80.0)
     dev: true
 
@@ -10463,7 +10463,7 @@ packages:
       react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - eslint
@@ -10779,7 +10779,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.1.0-dev.20230418
       util-deprecate: 1.0.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-dev-middleware: 4.3.0(webpack@5.80.0)
       webpack-hot-middleware: 2.25.3
       webpack-virtual-modules: 0.4.6
@@ -10968,7 +10968,7 @@ packages:
       typescript: 5.1.0-dev.20230418
       unfetch: 4.2.0
       util-deprecate: 1.0.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /@storybook/core-common@6.5.13(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418):
@@ -11333,7 +11333,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.1.0-dev.20230418
       util-deprecate: 1.0.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-dev-middleware: 4.3.0(webpack@5.80.0)
       webpack-virtual-modules: 0.4.6
     transitivePeerDependencies:
@@ -13437,7 +13437,7 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
     dev: true
 
@@ -13448,7 +13448,7 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
     dev: true
 
@@ -13463,7 +13463,7 @@ packages:
       webpack-dev-server:
         optional: true
     dependencies:
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
       webpack-dev-server: 4.13.3(webpack-cli@5.0.1)(webpack@5.80.0)
     dev: true
@@ -14427,7 +14427,7 @@ packages:
       loader-utils: 2.0.4
       make-dir: 3.1.0
       schema-utils: 2.7.1
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /babel-loader@9.1.2(@babel/core@7.21.4)(webpack@5.80.0):
@@ -14443,7 +14443,7 @@ packages:
       '@babel/core': 7.21.4
       find-cache-dir: 3.3.2
       schema-utils: 4.0.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /babel-plugin-add-react-displayname@0.0.5:
@@ -16322,7 +16322,7 @@ packages:
       normalize-path: 3.0.0
       schema-utils: 4.0.0
       serialize-javascript: 6.0.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /core-js-builder@3.30.1:
@@ -16800,7 +16800,7 @@ packages:
       postcss-value-parser: 4.2.0
       schema-utils: 3.1.2
       semver: 7.3.8
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /css-loader@6.7.3(webpack@5.80.0):
@@ -16817,7 +16817,7 @@ packages:
       postcss-modules-values: 4.0.0(postcss@8.4.22)
       postcss-value-parser: 4.2.0
       semver: 7.3.8
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /css-select@4.3.0:
@@ -19605,7 +19605,7 @@ packages:
       semver: 7.3.8
       tapable: 1.1.3
       typescript: 5.1.0-dev.20230418
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /form-data-encoder@1.7.1:
@@ -20906,7 +20906,7 @@ packages:
       lodash: 4.17.21
       pretty-error: 4.0.0
       tapable: 2.2.1
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /htmlparser2@6.1.0:
@@ -29061,7 +29061,7 @@ packages:
       abab: 2.0.6
       iconv-lite: 0.6.3
       source-map-js: 1.0.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /source-map-resolve@0.5.3:
@@ -29693,7 +29693,7 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.1.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /style-loader@3.3.2(webpack@5.80.0):
@@ -29702,7 +29702,7 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /style-to-object@0.3.0:
@@ -29842,7 +29842,7 @@ packages:
       webpack: '>=2'
     dependencies:
       '@swc/core': 1.3.59
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /symbol-tree@3.2.4:
@@ -30029,7 +30029,7 @@ packages:
       schema-utils: 3.1.2
       serialize-javascript: 6.0.1
       terser: 5.17.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /terser-webpack-plugin@5.3.7(@swc/core@1.3.59)(webpack@5.80.0):
@@ -30054,7 +30054,7 @@ packages:
       schema-utils: 3.1.2
       serialize-javascript: 6.0.1
       terser: 5.17.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /terser@4.8.1:
@@ -32131,7 +32131,7 @@ packages:
       import-local: 3.1.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-dev-server: 4.13.3(webpack-cli@5.0.1)(webpack@5.80.0)
       webpack-merge: 5.8.0
     dev: true
@@ -32162,7 +32162,7 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 3.1.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /webpack-dev-middleware@5.3.3(webpack@5.80.0):
@@ -32176,7 +32176,7 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 4.0.0
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /webpack-dev-server@4.13.3(webpack-cli@5.0.1)(webpack@5.80.0):
@@ -32220,7 +32220,7 @@ packages:
       serve-index: 1.9.1
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
       webpack-cli: 5.0.1(webpack-dev-server@4.13.3)(webpack@5.80.0)
       webpack-dev-middleware: 5.3.3(webpack@5.80.0)
       ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
@@ -32290,7 +32290,7 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      webpack: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1)
+      webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
     dev: true
 
   /webpack-virtual-modules@0.2.2:
@@ -32983,9 +32983,9 @@ packages:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}
     dev: false
 
-  github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc(@swc/core@1.3.59)(webpack-cli@5.0.1):
-    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc}
-    id: github.com/Jack-Works/webpack/7772dd48d18a5ac0e13f151ea15260d5bc97c5bc
+  github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1):
+    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/dce45baa66911794145e1e943d2211dbb9661463}
+    id: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463
     name: webpack
     version: 5.80.0
     engines: {node: '>=10.13.0'}
