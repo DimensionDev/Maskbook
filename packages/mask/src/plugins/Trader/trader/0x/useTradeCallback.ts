@@ -36,10 +36,14 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         }
 
         try {
-            const gas = await Web3.estimateTransaction?.({
-                from: account,
-                ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
-            })
+            const gas = await Web3.estimateTransaction?.(
+                {
+                    from: account,
+                    ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+                },
+                undefined,
+                { chainId },
+            )
             const hash = await Web3.sendTransaction(
                 {
                     ...config,
