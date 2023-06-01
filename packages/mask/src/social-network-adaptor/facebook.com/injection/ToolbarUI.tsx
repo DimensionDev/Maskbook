@@ -2,8 +2,6 @@ import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from 
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useMemo } from 'react'
 
-const fbBreakPoint = 700 /** px */
-
 const FB_BREAKPOINT = 1159
 
 const Container = styled('div')`
@@ -33,7 +31,7 @@ const Icon = styled(ListItemIcon, {
 }>`
     min-width: ${(props) => (!props.hasSpecificLeftRailStartBar ? '24px' : props.hasTopNavBar ? '46px' : 'auto')};
     margin-right: ${(props) => (props.hasTopNavBar && props.hasSpecificLeftRailStartBar ? '0px' : '12px')};
-    @media screen and (max-height: ${fbBreakPoint}px) {
+    @media screen and (max-height: ${FB_BREAKPOINT}px) {
         min-width: ${(props) => (props.hasTopNavBar ? '36px' : 'auto')};
     }
 `
