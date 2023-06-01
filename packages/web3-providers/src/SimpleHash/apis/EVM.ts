@@ -21,6 +21,8 @@ import {
 import { formatBalance } from '@masknet/web3-shared-base'
 import subSeconds from 'date-fns/subSeconds'
 import isAfter from 'date-fns/isAfter'
+import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
+import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
@@ -154,11 +156,11 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         days: TrendingAPI.Days,
     ): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
-        const to_timeStamp = Math.round(Date.now() / 1000)
+        const to_timeStamp = millisecondsToSeconds(Date.now())
         const isLoadAll = !range
         const from_timeStamp = isLoadAll ? SIMPLE_HASH_HISTORICAL_PRICE_START_TIME : to_timeStamp - range
         let cursor = '' as string | null
-        while (cursor !== null && !historicalPriceState.isLoaded(collectionId, from_timeStamp * 1000)) {
+        while (cursor !== null && !historicalPriceState.isLoaded(collectionId, secondsToMilliseconds(from_timeStamp))) {
             const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
                 collectionId,
                 to_timeStamp,
@@ -174,7 +176,8 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
             const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
             cursor =
-                !firstFloorPriceTimeStamp || isAfter(from_timeStamp * 1000, new Date(firstFloorPriceTimeStamp))
+                !firstFloorPriceTimeStamp ||
+                isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
                     ? null
                     : response.next_cursor
 
@@ -214,8 +217,8 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
     }
 
     async getOneDaySaleAmounts(collectionId: string) {
-        const to_timeStamp = Math.round(Date.now() / 1000)
-        const from_timeStamp = Math.round(Date.now() / 1000) - 60 * 60 * 24
+        const to_timeStamp = millisecondsToSeconds(Date.now())
+        const from_timeStamp = millisecondsToSeconds(subSeconds(Date.now(), 60 * 60 * 24).getTime())
         let sales: Array<{ timestamp: string }> = []
         let cursor = '' as string | null
         while (cursor !== null) {
@@ -235,14 +238,15 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             const firstFloorPriceTimeStamp = response.transfers?.[0]?.timestamp
 
             cursor =
-                !firstFloorPriceTimeStamp || isAfter(from_timeStamp * 1000, new Date(firstFloorPriceTimeStamp))
+                !firstFloorPriceTimeStamp ||
+                isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
                     ? null
                     : response.next_cursor
 
             sales = sales.concat(response.transfers)
         }
 
-        return sales.filter((x) => isAfter(new Date(x.timestamp), from_timeStamp * 1000)).length
+        return sales.filter((x) => isAfter(new Date(x.timestamp), secondsToMilliseconds(from_timeStamp))).length
     }
 
     async getCollectionsByOwner(
