@@ -113,7 +113,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
                   yield `importScripts(\n`
                   for (const file of mv3PreloadList) {
                       if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
-                      yield '    "/sandboxed-modules/'
+                      yield '    "./sandboxed-modules/'
                       yield file
                       yield '", \n'
                   }
