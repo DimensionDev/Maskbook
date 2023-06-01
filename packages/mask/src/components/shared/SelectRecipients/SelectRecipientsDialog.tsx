@@ -138,7 +138,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { items, onSearch } = props
     const [searchInput, setSearchInput] = useState('')
     const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(searchInput))
-    const [selectedAllProfiles, setSelectedAllProfiles] = useState<Profile[]>(props.items)
+    const [selectedAllProfiles, setSelectedAllProfiles] = useState<readonly Profile[]>(props.items)
     const keyword = registeredAddress || searchInput
 
     const results = useMemo(() => {

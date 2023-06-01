@@ -252,7 +252,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 </div>
             </div>
             <DialogActions className={classes.action}>
-                <div className={classes.personaAction}>{props.personaAction}</div>
+                {props.personaAction ? <div className={classes.personaAction}>{props.personaAction}</div> : <div />}
                 <div>
                     {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
                     {props.requireClipboardPermission && !props.hasClipboardPermission ? (
