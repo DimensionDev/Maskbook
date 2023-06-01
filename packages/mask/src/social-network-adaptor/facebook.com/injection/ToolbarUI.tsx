@@ -40,7 +40,7 @@ export function ToolboxAtFacebook(props: {
     hasTopNavBar: boolean
     hasSpecificLeftRailStartBar: boolean
 }) {
-    const isSmall = useMediaQuery(`(max-width: ${FB_BREAKPOINT}px)`)
+    const showMenuName = useMediaQuery(`(max-width: ${FB_BREAKPOINT}px)`)
     const ListItemIcon = useMemo(() => {
         return ({ children }: React.PropsWithChildren<{}>) => (
             <Icon hasTopNavBar={props.hasTopNavBar} hasSpecificLeftRailStartBar={props.hasSpecificLeftRailStartBar}>
@@ -50,8 +50,8 @@ export function ToolboxAtFacebook(props: {
     }, [props.hasTopNavBar, props.hasSpecificLeftRailStartBar])
     return (
         <ToolboxHintUnstyled
-            mini={isSmall}
-            iconSize={isSmall || !props.hasTopNavBar || !props.hasSpecificLeftRailStartBar ? 24 : 32}
+            mini={showMenuName}
+            iconSize={showMenuName || !props.hasTopNavBar || !props.hasSpecificLeftRailStartBar ? 24 : 32}
             Container={props.hasTopNavBar ? ContainerHasNavBar : Container}
             ListItemButton={Item}
             Typography={Text}
