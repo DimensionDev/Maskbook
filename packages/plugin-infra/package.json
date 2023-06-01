@@ -73,7 +73,7 @@
     "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "wallet.ts": "^1.0.1",
-    "web3": "1.8.0",
+    "web3": "1.10.0",
     "web3-core": "1.8.0",
     "web3-core-helpers": "1.8.0",
     "web3-utils": "1.8.0"
