@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact, uniqBy, maxBy } from 'lodash-es'
+import { compact } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -35,8 +35,8 @@ import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
-import { BigNumber } from 'bignumber.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
+import { historicalPriceState } from '../historicalPriceState.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private looksrare = new LooksRareAPI()
@@ -153,10 +153,10 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
     ): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
         const to_timeStamp = Math.round(Date.now() / 1000)
-        const from_timeStamp = range ? to_timeStamp - range : SIMPLE_HASH_HISTORICAL_PRICE_START_TIME
+        const isLoadAll = !range
+        const from_timeStamp = isLoadAll ? SIMPLE_HASH_HISTORICAL_PRICE_START_TIME : to_timeStamp - range
         let cursor = '' as string | null
-        let results: PriceStat[] = []
-        while (cursor !== null) {
+        while (cursor !== null && !historicalPriceState.isLoaded(collectionId, from_timeStamp * 1000)) {
             const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
                 collectionId,
                 to_timeStamp,
@@ -176,29 +176,18 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                     ? null
                     : response.next_cursor
 
-            results = results.concat(
-                response.floor_prices.map((x) => ({
-                    ...x,
-                    floor_price: new BigNumber(
-                        leftShift(x.floor_price, response.payment_token.decimals).toPrecision(4),
-                    ).toNumber(),
-                })),
-            )
+            historicalPriceState.updatePriceState(collectionId, response.floor_prices, response.payment_token)
         }
 
-        return uniqBy(
-            results.filter((x) => new Date(x.timestamp).getTime() / 1000 > from_timeStamp),
-            (x) => x.timestamp,
-        )
-            .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
-            .map((x) => [new Date(x.timestamp).getTime(), x.floor_price])
+        if (isLoadAll) historicalPriceState.updateAllLoadedIdListState(collectionId)
+
+        return historicalPriceState.getPriceStats(collectionId, isLoadAll ? undefined : (to_timeStamp - range) * 1000)
     }
 
     async getHighestFloorPrice(collectionId: string) {
         let cursor = '' as string | null
-        let results: PriceStat[] = []
-        let paymentToken: PaymentToken | undefined = undefined
-        while (cursor !== null) {
+
+        while (cursor !== null && !historicalPriceState.isLoaded(collectionId)) {
             const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
                 collectionId,
                 cursor: cursor ? cursor : undefined,
@@ -211,13 +200,12 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             }>(path)
 
             cursor = response.next_cursor
-            paymentToken = response.payment_token
-            results = results.concat(response.floor_prices)
+            historicalPriceState.updatePriceState(collectionId, response.floor_prices, response.payment_token)
         }
 
-        const highestFloorPrice = maxBy(results, (x) => x.floor_price)
+        historicalPriceState.updateAllLoadedIdListState(collectionId)
 
-        return highestFloorPrice ? formatBalance(highestFloorPrice.floor_price, paymentToken?.decimals) : undefined
+        return historicalPriceState.getHighestPrice(collectionId)
     }
 
     async getOneDaySaleAmounts(collectionId: string) {
