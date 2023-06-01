@@ -1,25 +1,12 @@
-import { first } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { getSdkError } from '@walletconnect/utils'
-import { Web3Modal } from '@web3modal/standalone'
 import { SignClient } from '@walletconnect/sign-client'
-import {
-    ProviderType,
-    ChainId,
-    type Web3,
-    type Web3Provider,
-    isValidAddress,
-    chainResolver,
-    isValidChainId,
-} from '@masknet/web3-shared-evm'
-import type { WalletAPI } from '../../../entry-types.js'
-import { BaseProvider } from './Base.js'
-import type { UnboxPromise } from '@masknet/shared-base'
 import type { SessionTypes } from '@walletconnect/types'
-
-const DEFAULT_LOGGER = process.env.NODE_ENV === 'production' ? 'error' : 'debug'
-const DEFAULT_RELAY_URL = 'wss://relay.walletconnect.com'
-const DEFAULT_PROJECT_ID = '8f1769933420afe8873860925fcca14f'
+import { Flags } from '@masknet/flags'
+import type { UnboxPromise } from '@masknet/shared-base'
+import { ProviderType, ChainId, type Web3, type Web3Provider, chainResolver } from '@masknet/web3-shared-evm'
+import { BaseProvider } from './Base.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export default class WalletConnectV2Provider
     extends BaseProvider
@@ -27,7 +14,6 @@ export default class WalletConnectV2Provider
 {
     private session: SessionTypes.Struct | undefined
     private client: UnboxPromise<ReturnType<typeof SignClient.init>> | undefined
-    private web3Modal: Web3Modal | undefined
 
     constructor() {
         super(ProviderType.WalletConnectV2)
@@ -37,22 +23,13 @@ export default class WalletConnectV2Provider
         return !!this.session
     }
 
-    private async setupModal() {
-        if (this.web3Modal) return
-
-        this.web3Modal = new Web3Modal({
-            projectId: DEFAULT_PROJECT_ID,
-            walletConnectVersion: 2,
-        })
-    }
-
     private async setupClient() {
         if (this.client) return
 
-        const client = await SignClient.init({
-            projectId: DEFAULT_PROJECT_ID,
-            logger: DEFAULT_LOGGER,
-            relayUrl: DEFAULT_RELAY_URL,
+        this.client = await SignClient.init({
+            projectId: Flags.wc_project_id,
+            logger: Flags.wc_mode,
+            relayUrl: Flags.wc_relay_url,
             metadata: {
                 name: 'Mask Network',
                 description: 'Your Portal To The New, Open Internet.',
@@ -61,15 +38,15 @@ export default class WalletConnectV2Provider
             },
         })
 
-        client.on('session_ping', (args) => {
+        this.client.on('session_ping', (args) => {
             console.log('[DEBUG EVENT]', 'session_ping', args)
         })
 
-        client.on('session_event', (args) => {
+        this.client.on('session_event', (args) => {
             console.log('[DEBUG EVENT]', 'session_event', args)
         })
 
-        client.on('session_update', ({ topic, params }) => {
+        this.client.on('session_update', ({ topic, params }) => {
             console.log('[DEBUG EVENT]', 'session_update', { topic, params })
             // const { namespaces } = params
             // const _session = client.session.get(topic)
@@ -77,12 +54,10 @@ export default class WalletConnectV2Provider
             // onSessionConnected(updatedSession);
         })
 
-        client.on('session_delete', () => {
+        this.client.on('session_delete', () => {
             console.log('[DEBUG EVENT]', 'session_delete')
             // reset()
         })
-
-        this.client = client
 
         // // @ts-expect-error the client type mismatch
         // this.client.on('display_uri', (uri: string) => {
@@ -118,7 +93,6 @@ export default class WalletConnectV2Provider
 
     private async login(chainId: ChainId) {
         await this.setupClient()
-        // await this.setupModal()
 
         const connected = await this.client?.connect({
             requiredNamespaces: {
@@ -140,15 +114,13 @@ export default class WalletConnectV2Provider
 
         const { uri, approval } = connected
 
-        this.web3Modal.openModal({
-            uri,
-            standaloneChains: [`eip155:${chainId}`],
-        })
+        console.log('DEBUG: uri')
+        console.log({ uri })
 
         const session = await approval()
 
         console.log('DEBUG: session')
-        console.log(session)
+        console.log({ session })
 
         this.session = session
 
@@ -170,9 +142,9 @@ export default class WalletConnectV2Provider
     }
 
     private async logout() {
-        if (!this.client || !this.session) throw new Error('WalletConnect is not initialized')
-
         try {
+            if (!this.client || !this.session) throw new Error('WalletConnect is not initialized')
+
             await this.client.disconnect({
                 topic: this.session.topic,
                 reason: getSdkError('USER_DISCONNECTED'),
@@ -195,6 +167,14 @@ export default class WalletConnectV2Provider
     }
 
     override request<T>(requestArguments: RequestArguments): Promise<T> {
-        throw new Error('To be implemented.')
+        if (!this.client || !this.session) throw new Error('WalletConnect is not initialized')
+        return this.client.request<T>({
+            topic: this.session.topic,
+            chainId: `eip155:${ChainId.Mainnet}`,
+            request: {
+                method: requestArguments.method,
+                params: requestArguments.params,
+            },
+        })
     }
 }
