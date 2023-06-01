@@ -1,4 +1,4 @@
-import { produce, enableMapSet } from 'immer'
+import { produce } from 'immer'
 import type { PaymentToken, PriceStat } from './type.js'
 import { maxBy, uniqBy } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -30,13 +30,9 @@ export class HistoricalPriceState {
 
     public isLoaded(id: string, fromTimeStamp?: number) {
         return (
-            Boolean(this._allLoadedIdListState.find((x) => x === id)) ||
-            (fromTimeStamp && Boolean(this._priceState[id]?.find((x) => x[0] < fromTimeStamp)))
+            !!this._allLoadedIdListState.find((x) => x === id) ||
+            (fromTimeStamp && !!this._priceState[id]?.find((x) => x[0] < fromTimeStamp))
         )
-    }
-
-    constructor() {
-        enableMapSet()
     }
 
     public updatePriceState(id: string, priceStats: PriceStat[], paymentToken: PaymentToken | undefined) {
@@ -67,7 +63,7 @@ export class HistoricalPriceState {
     }
 
     public updateAllLoadedIdListState(id: string) {
-        this._allLoadedIdListState = produce(this._allLoadedIdListState, (draft) => (draft = draft.concat(id)))
+        this._allLoadedIdListState = produce(this._allLoadedIdListState, (draft) => draft.concat(id))
     }
 }
 

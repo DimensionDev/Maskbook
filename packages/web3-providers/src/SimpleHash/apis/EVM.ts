@@ -19,6 +19,7 @@ import {
     type NonFungibleCollectionOverview,
 } from '@masknet/web3-shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
+import subSeconds from 'date-fns/subSeconds'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
@@ -181,7 +182,10 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
         if (isLoadAll) historicalPriceState.updateAllLoadedIdListState(collectionId)
 
-        return historicalPriceState.getPriceStats(collectionId, isLoadAll ? undefined : (to_timeStamp - range) * 1000)
+        return historicalPriceState.getPriceStats(
+            collectionId,
+            isLoadAll ? undefined : subSeconds(Date.now(), range).getTime(),
+        )
     }
 
     async getHighestFloorPrice(collectionId: string) {
