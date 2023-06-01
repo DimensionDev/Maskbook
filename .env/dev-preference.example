@@ -12,6 +12,14 @@
 # sourceMap=...
 # Any valid value listed in https://webpack.js.org/configuration/devtool/, but it might not work in our environment.
 
+### SourceMap hide frameworks
+
+# sourceMapHideFrameworks=true
+# (default) Hide frameworks in sourceMap.
+
+# sourceMapHideFrameworks=false
+# Show frameworks in sourceMap.
+
 ### Preferred Manifest Version
 
 # manifest=2

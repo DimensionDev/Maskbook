@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact, uniqBy, maxBy } from 'lodash-es'
+import { compact } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -19,6 +19,10 @@ import {
     type NonFungibleCollectionOverview,
 } from '@masknet/web3-shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
+import subSeconds from 'date-fns/subSeconds'
+import isAfter from 'date-fns/isAfter'
+import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
+import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
@@ -35,8 +39,8 @@ import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
-import { BigNumber } from 'bignumber.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
+import { historicalPriceState } from '../historicalPriceState.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private looksrare = new LooksRareAPI()
@@ -152,11 +156,11 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         days: TrendingAPI.Days,
     ): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
-        const to_timeStamp = Math.round(Date.now() / 1000)
-        const from_timeStamp = range ? to_timeStamp - range : SIMPLE_HASH_HISTORICAL_PRICE_START_TIME
+        const to_timeStamp = millisecondsToSeconds(Date.now())
+        const isLoadAll = !range
+        const from_timeStamp = isLoadAll ? SIMPLE_HASH_HISTORICAL_PRICE_START_TIME : to_timeStamp - range
         let cursor = '' as string | null
-        let results: PriceStat[] = []
-        while (cursor !== null) {
+        while (cursor !== null && !historicalPriceState.isLoaded(collectionId, secondsToMilliseconds(from_timeStamp))) {
             const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
                 collectionId,
                 to_timeStamp,
@@ -172,33 +176,26 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
             const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
             cursor =
-                !firstFloorPriceTimeStamp || new Date(firstFloorPriceTimeStamp).getTime() / 1000 < from_timeStamp
+                !firstFloorPriceTimeStamp ||
+                isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
                     ? null
                     : response.next_cursor
 
-            results = results.concat(
-                response.floor_prices.map((x) => ({
-                    ...x,
-                    floor_price: new BigNumber(
-                        leftShift(x.floor_price, response.payment_token.decimals).toPrecision(4),
-                    ).toNumber(),
-                })),
-            )
+            historicalPriceState.updatePriceState(collectionId, response.floor_prices, response.payment_token)
         }
 
-        return uniqBy(
-            results.filter((x) => new Date(x.timestamp).getTime() / 1000 > from_timeStamp),
-            (x) => x.timestamp,
+        if (isLoadAll) historicalPriceState.updateAllLoadedIdListState(collectionId)
+
+        return historicalPriceState.getPriceStats(
+            collectionId,
+            isLoadAll ? undefined : subSeconds(Date.now(), range).getTime(),
         )
-            .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
-            .map((x) => [new Date(x.timestamp).getTime(), x.floor_price])
     }
 
     async getHighestFloorPrice(collectionId: string) {
         let cursor = '' as string | null
-        let results: PriceStat[] = []
-        let paymentToken: PaymentToken | undefined = undefined
-        while (cursor !== null) {
+
+        while (cursor !== null && !historicalPriceState.isLoaded(collectionId)) {
             const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
                 collectionId,
                 cursor: cursor ? cursor : undefined,
@@ -211,18 +208,17 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             }>(path)
 
             cursor = response.next_cursor
-            paymentToken = response.payment_token
-            results = results.concat(response.floor_prices)
+            historicalPriceState.updatePriceState(collectionId, response.floor_prices, response.payment_token)
         }
 
-        const highestFloorPrice = maxBy(results, (x) => x.floor_price)
+        historicalPriceState.updateAllLoadedIdListState(collectionId)
 
-        return highestFloorPrice ? formatBalance(highestFloorPrice.floor_price, paymentToken?.decimals) : undefined
+        return historicalPriceState.getHighestPrice(collectionId)
     }
 
     async getOneDaySaleAmounts(collectionId: string) {
-        const to_timeStamp = Math.round(Date.now() / 1000)
-        const from_timeStamp = Math.round(Date.now() / 1000) - 60 * 60 * 24
+        const to_timeStamp = millisecondsToSeconds(Date.now())
+        const from_timeStamp = millisecondsToSeconds(subSeconds(Date.now(), 60 * 60 * 24).getTime())
         let sales: Array<{ timestamp: string }> = []
         let cursor = '' as string | null
         while (cursor !== null) {
@@ -242,14 +238,15 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             const firstFloorPriceTimeStamp = response.transfers?.[0]?.timestamp
 
             cursor =
-                !firstFloorPriceTimeStamp || new Date(firstFloorPriceTimeStamp).getTime() / 1000 < from_timeStamp
+                !firstFloorPriceTimeStamp ||
+                isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
                     ? null
                     : response.next_cursor
 
             sales = sales.concat(response.transfers)
         }
 
-        return sales.filter((x) => new Date(x.timestamp).getTime() / 1000 > from_timeStamp).length
+        return sales.filter((x) => isAfter(new Date(x.timestamp), secondsToMilliseconds(from_timeStamp))).length
     }
 
     async getCollectionsByOwner(

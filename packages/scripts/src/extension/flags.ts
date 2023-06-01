@@ -27,6 +27,8 @@ export interface BuildFlags {
     devtoolsEditorURI?: string
     /** @default true */
     sourceMapPreference?: boolean | string
+    /** @default true */
+    sourceMapHideFrameworks?: boolean
 }
 
 export interface BuildFlagsExtended extends BuildFlags {

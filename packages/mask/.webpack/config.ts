@@ -3,6 +3,7 @@ import { Configuration, ProvidePlugin, DefinePlugin, EnvironmentPlugin } from 'w
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 import WebExtensionPlugin from 'webpack-target-webextension'
+import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import CopyPlugin = require('copy-webpack-plugin')
 import HTMLPlugin = require('html-webpack-plugin')
 import ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
@@ -157,6 +158,13 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             ],
         },
         plugins: [
+            flags.sourceMapHideFrameworks !== false &&
+                new DevtoolsIgnorePlugin({
+                    shouldIgnorePath: (path) => {
+                        if (path.includes('masknet') || path.includes('dimensiondev')) return false
+                        return path.includes('/node_modules/') || path.includes('/webpack/')
+                    },
+                }),
             new ProvidePlugin({
                 // Polyfill for Node global "Buffer" variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
