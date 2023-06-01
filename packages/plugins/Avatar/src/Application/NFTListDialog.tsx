@@ -205,7 +205,10 @@ export const NFTListDialog: FC = () => {
                             onClick={openAddDialog}>
                             {t.add_collectible()}
                         </Button>
-                    ) : null}
+                    ) : (
+                        <div />
+                    )}
+
                     <Stack sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Typography
                             style={{ paddingRight: 4 }}
