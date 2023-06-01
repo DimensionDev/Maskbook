@@ -126,6 +126,7 @@ export function useTradeCallback(
                 },
             )
             const receipt = await Web3.confirmTransaction(hash, { chainId })
+            if (!receipt.status) return
             return receipt.transactionHash
         } catch (error: any) {
             if (!error?.code) {

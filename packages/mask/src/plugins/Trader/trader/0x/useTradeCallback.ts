@@ -52,7 +52,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 { chainId, overrides: { ...gasConfig } },
             )
             const receipt = await Web3.getTransactionReceipt(hash)
-
+            if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error: unknown) {
             if (error instanceof Error) {
