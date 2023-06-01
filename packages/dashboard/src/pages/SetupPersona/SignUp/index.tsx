@@ -57,7 +57,7 @@ export const SignUp = memo(function SignUp() {
             return setError(t.create_account_persona_exists())
         }
 
-        navigate(DashboardRoutes.SignupPersonaMnemonic, {
+        navigate(DashboardRoutes.SignUpPersonaMnemonic, {
             replace: true,
             state: {
                 personaName,

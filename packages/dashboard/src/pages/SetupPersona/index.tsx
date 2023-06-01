@@ -12,7 +12,7 @@ export default function SetupPersona() {
             <Routes>
                 <Route path={r(DashboardRoutes.Welcome)} element={<Welcome />} />
                 <Route path={r(DashboardRoutes.SignUpPersona)} element={<SignUp />} />
-                <Route path={r(DashboardRoutes.SignupPersonaMnemonic)} element={<SignUpMnemonic />} />
+                <Route path={r(DashboardRoutes.SignUpPersonaMnemonic)} element={<SignUpMnemonic />} />
             </Routes>
         </SetupFrame>
     )

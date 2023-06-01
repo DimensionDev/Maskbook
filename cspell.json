@@ -6,6 +6,7 @@
         "./packages/app/postcss.config.cjs",
         "./packages/app/src/styles/index.css",
         "./packages/app/tailwind.config.cjs",
+        "./packages/dashboard/src/assets/Welcome.splinecode",
         "./packages/web3-contracts/types/**",
         ".github",
         ".gitignore",
@@ -400,6 +401,7 @@
         "renfil",
         "shapeclip",
         "simplehash",
+        "splinetool",
         "ssrb",
         "steth",
         "swaptoken",
@@ -428,7 +430,8 @@
         "xyumi",
         "yumi",
         "yumiswap",
-        "zkscan"
+        "zkscan",
+        "splinecode"
     ],
     "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [
