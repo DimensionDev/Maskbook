@@ -161,7 +161,7 @@ export namespace TrendingAPI {
     }
 
     // #region historical
-    export type Stat = [number | string, number]
+    export type Stat = [number, number]
 
     export interface HistoricalCoinInfo {
         id: number

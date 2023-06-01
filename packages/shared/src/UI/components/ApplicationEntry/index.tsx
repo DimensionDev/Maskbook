@@ -25,6 +25,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             },
         },
         title: {
+            whiteSpace: 'nowrap',
             fontSize: 14,
         },
         disabled: {
@@ -68,12 +69,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             },
         },
         recommendFeatureAppListItemName: {
+            textAlign: 'left',
             fontSize: 14,
             fontWeight: 500,
             cursor: disabled ? 'default' : 'pointer',
             color: theme.palette.common.white,
         },
         recommendFeatureAppListItemDescription: {
+            textAlign: 'left',
             fontSize: 12,
             fontWeight: 500,
             cursor: disabled ? 'default' : 'pointer',

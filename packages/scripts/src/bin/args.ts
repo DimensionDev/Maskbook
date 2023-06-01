@@ -32,6 +32,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
         .options('reactRefresh', { type: 'boolean', description: 'Enable react-refresh', implies: 'hmr' })
         .options('devtools', { type: 'boolean', description: 'Enable devtools' })
+        .options('devtoolsEditorURI', { type: 'string', description: 'Editor URI to be used in React Devtools.' })
         .options('sourceMap', {
             type: 'string',
             description: 'Enable source map',
@@ -40,6 +41,10 @@ export function extensionArgsParser(mode: 'development' | 'production') {
                 if (arg === 'false') return false
                 return arg
             },
+        })
+        .options('sourceMapHideFrameworks', {
+            type: 'boolean',
+            description: 'Hide node_modules and webpack internal stack when using sourceMap',
         })
 
         .hide('version')
@@ -59,7 +64,9 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         hmr: opts.hmr,
         reactRefresh: opts.reactRefresh,
         devtools: opts.devtools,
+        devtoolsEditorURI: opts.devtoolsEditorURI,
         sourceMapPreference: opts.sourceMap,
+        sourceMapHideFrameworks: opts.sourceMapHideFrameworks,
     }
     applyDotEnv(extensionOpts)
     return extensionOpts
