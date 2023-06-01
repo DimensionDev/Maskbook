@@ -60,8 +60,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             error,
             exceptionID: ExceptionID.Debug,
             exceptionType: ExceptionType.Error,
-            // drop 90% of selector missing reports
-            sampleRate: 0.1,
+            sampleRate: 0.01,
         })
     })
     setupReactShadowRootEnvironment()

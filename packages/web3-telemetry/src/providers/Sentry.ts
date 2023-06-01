@@ -74,18 +74,29 @@ export class SentryAPI implements Provider<Event, Event> {
                 }),
             ],
             environment: process.env.NODE_ENV,
-            tracesSampleRate: Flags.sentry_sample_rate,
-            beforeSend(event) {
+            beforeSend: (event) => {
+                // version control
                 if (
                     !isSameVersion(process.env.VERSION, Flags.sentry_earliest_version) &&
                     !isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)
                 )
                     return null
 
+                // ignored errors
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
+                if (event.message && IGNORE_ERRORS.some((x) => event.message?.includes(x))) return null
 
-                if (event.message) {
-                    if (IGNORE_ERRORS.some((x) => event.message?.includes(x))) return null
+                // send automatically by sentry tracker
+                if (!event.tags?.group_id) {
+                    // ignored in development mode
+                    if (process.env.NODE_ENV === 'development') {
+                        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                        console.log(`[LOG EXCEPTION]: ${event}`)
+                        return null
+                    }
+
+                    // throttle
+                    if (!this.shouldRecord()) return null
                 }
 
                 event.exception?.values?.forEach((error) => {
@@ -95,13 +106,6 @@ export class SentryAPI implements Provider<Event, Event> {
                 if (event.message) {
                     event.message = removeSensitiveTelemetryInfo(event.message)
                 }
-
-                if (process.env.NODE_ENV === 'development') {
-                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                    console.log(`[LOG EXCEPTION]: ${event}`)
-                    return null
-                }
-
                 return event
             },
         })
@@ -187,7 +191,7 @@ export class SentryAPI implements Provider<Event, Event> {
         }
     }
 
-    private shouldRecord(sampleRate = 1) {
+    private shouldRecord(sampleRate: number = Flags.sentry_sample_rate) {
         const rate = sampleRate % 1
         if (rate >= 1 || rate < 0) return true
         return crypto.getRandomValues(new Uint8Array(1))[0] > 255 - Math.floor(255 * sampleRate)
@@ -259,6 +263,10 @@ export class SentryAPI implements Provider<Event, Event> {
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
         if (!this.shouldRecord(options.sampleRate)) return
-        Sentry.captureException(options.error, this.createException(options))
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
+        } else {
+            Sentry.captureException(options.error, this.createException(options))
+        }
     }
 }
