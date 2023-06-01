@@ -1,17 +1,17 @@
-import { delay } from '@masknet/kit'
 import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Checkbox, FormControlLabel, Typography } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { Services } from '../../API.js'
-import { TermsAgreedContext } from '../../hooks/useTermsAgreed.js'
-import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
-import { WelcomeFrame } from '../../components/WelcomeFrame/index.js'
+import { Services } from '../../../API.js'
+import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
+import { DashboardTrans, useDashboardI18N } from '../../../locales/index.js'
+import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { Article } from './Article.js'
-import { SecondaryButton } from '../../components/SecondaryButton/index.js'
-import { PrimaryButton } from '../../components/PrimaryButton/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export default memo(function Welcome() {
+export const Welcome = memo(function Welcome() {
     const [, setAgreed] = TermsAgreedContext.useContainer()
     const [allowedToCollect, setAllowedToCollect] = useState(true)
     const [params] = useSearchParams()
@@ -70,61 +70,18 @@ export default memo(function Welcome() {
 
         // warm up, otherwise we can't access correct value from userGuideStatus
         await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
-        const hasSetup = await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
 
         const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
-        if (hasRedirect && (hasSetup || from === DashboardRoutes.Setup)) return
 
-        if (hasRedirect) {
-            // Delay opening sns page to let use realize the route has changed that happened above
-            await delay(300)
-            browser.tabs.create({
-                active: false,
-                url,
-            })
-        } else {
-            location.assign(url)
-        }
+        navigate(DashboardRoutes.SignUpPersona)
     }, [params, allowedToCollect])
 
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
     return (
-        <WelcomeFrame
-            controller={
-                <>
-                    <div className={classes.buttonGroup}>
-                        <SecondaryButton width="125px" size="large" onClick={() => window.close()}>
-                            {t.cancel()}
-                        </SecondaryButton>
-                        <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
-                            {t.agree()}
-                        </PrimaryButton>
-                    </div>
-                    <Typography className={classes.policy}>
-                        <DashboardTrans.welcome_agreement_policy
-                            components={{
-                                agreement: (
-                                    <a
-                                        className={classes.link}
-                                        target="_blank"
-                                        href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
-                                    />
-                                ),
-                                policy: (
-                                    <a
-                                        className={classes.link}
-                                        target="_blank"
-                                        href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
-                                    />
-                                ),
-                            }}
-                        />
-                    </Typography>
-                </>
-            }>
+        <Box>
             <Typography variant="h1" className={classes.title}>
                 {t.welcome_to_use_mask_network()}
             </Typography>
@@ -144,6 +101,36 @@ export default memo(function Welcome() {
                 }
                 label={t.welcome_request_to_collect()}
             />
-        </WelcomeFrame>
+            <SetupFrameController>
+                <div className={classes.buttonGroup}>
+                    <SecondaryButton width="125px" size="large" onClick={() => window.close()}>
+                        {t.cancel()}
+                    </SecondaryButton>
+                    <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
+                        {t.agree()}
+                    </PrimaryButton>
+                </div>
+                <Typography className={classes.policy}>
+                    <DashboardTrans.welcome_agreement_policy
+                        components={{
+                            agreement: (
+                                <a
+                                    className={classes.link}
+                                    target="_blank"
+                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
+                                />
+                            ),
+                            policy: (
+                                <a
+                                    className={classes.link}
+                                    target="_blank"
+                                    href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
+                                />
+                            ),
+                        }}
+                    />
+                </Typography>
+            </SetupFrameController>
+        </Box>
     )
 })

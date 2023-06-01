@@ -1,5 +1,6 @@
 {
     "about": "About",
+    "continue": "Continue",
     "wallets": "Wallets",
     "personas": "Personas",
     "persona": "Persona",
@@ -17,6 +18,7 @@
     "save": "Save",
     "manage": "Manage",
     "recovery": "Recovery",
+    "skip": "Skip",
     "successful": "Successful",
     "close": "Close",
     "send": "Send",
@@ -395,6 +397,12 @@
     "recovery_smart_pay_wallet_description_other": "{{count}} local SmartPay wallets have been detected and successfully recovered.",
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
     "welcome_to_use_mask_network": "Welcome to use Mask Network",
+    "persona_create_step": "Step {{step}}/2",
+    "persona_create_title": "Create New MASK identity",
+    "persona_create_tips": "Create your persona to get started",
+    "persona_phrase_title": "Your Recovery phrase",
+    "persona_phrase_tips": "Please select the correct method to restore the backup.",
+    "persona_phrase_copy_description": "The mnemonic has been copied, please keep it in a safe place.",
     "wallet_history_no_data": "No history records.",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "wallets_history_burn": "Burn"

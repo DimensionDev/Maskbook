@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { FC, HTMLProps } from 'react'
 import { useAsync } from 'react-use'
-import { Services } from '../../API.js'
+import { Services } from '../../../API.js'
 
 const useStyles = makeStyles()((theme) => ({
     article: {},
