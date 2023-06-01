@@ -20,6 +20,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import subSeconds from 'date-fns/subSeconds'
+import isAfter from 'date-fns/isAfter'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
@@ -173,7 +174,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
             const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
             cursor =
-                !firstFloorPriceTimeStamp || new Date(firstFloorPriceTimeStamp).getTime() / 1000 < from_timeStamp
+                !firstFloorPriceTimeStamp || isAfter(from_timeStamp * 1000, new Date(firstFloorPriceTimeStamp))
                     ? null
                     : response.next_cursor
 
@@ -234,14 +235,14 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             const firstFloorPriceTimeStamp = response.transfers?.[0]?.timestamp
 
             cursor =
-                !firstFloorPriceTimeStamp || new Date(firstFloorPriceTimeStamp).getTime() / 1000 < from_timeStamp
+                !firstFloorPriceTimeStamp || isAfter(from_timeStamp * 1000, new Date(firstFloorPriceTimeStamp))
                     ? null
                     : response.next_cursor
 
             sales = sales.concat(response.transfers)
         }
 
-        return sales.filter((x) => new Date(x.timestamp).getTime() / 1000 > from_timeStamp).length
+        return sales.filter((x) => isAfter(new Date(x.timestamp), from_timeStamp * 1000)).length
     }
 
     async getCollectionsByOwner(
