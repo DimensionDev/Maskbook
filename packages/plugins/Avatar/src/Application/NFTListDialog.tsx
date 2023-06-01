@@ -196,18 +196,19 @@ export const NFTListDialog: FC = () => {
                         padding: '8px 16px',
                         justifyContent: 'space-between',
                     }}>
-                    <div>
-                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
-                            <Button
-                                variant="text"
-                                size="small"
-                                className={classes.addButton}
-                                disableRipple
-                                onClick={openAddDialog}>
-                                {t.add_collectible()}
-                            </Button>
-                        ) : null}
-                    </div>
+                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                        <Button
+                            variant="text"
+                            size="small"
+                            className={classes.addButton}
+                            disableRipple
+                            onClick={openAddDialog}>
+                            {t.add_collectible()}
+                        </Button>
+                    ) : (
+                        <div />
+                    )}
+
                     <Stack sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Typography
                             style={{ paddingRight: 4 }}
