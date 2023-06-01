@@ -6,6 +6,7 @@ import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postB
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import { MaskMessages } from '../../../utils/messages.js'
+import { selectElementContents } from '../../../utils/utils.js'
 
 /**
  * Wait for up to 5000 ms
@@ -39,6 +40,12 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
                 checkSignal()
                 await delay(interval)
             }
+
+            if (opt?.reason === 'verify') {
+                selectElementContents(i.evaluate()!)
+                await untilElementAvailable(i)
+            }
+
             // paste
             isMobileTwitter ? inputText(text) : pasteText(text)
             await delay(interval)
