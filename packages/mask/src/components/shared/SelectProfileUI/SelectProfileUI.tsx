@@ -90,7 +90,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 onSetSelected([])
             }
         },
-        [items, selected],
+        [items],
     )
 
     const onSelectedProfiles = useCallback(
