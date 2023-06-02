@@ -2,7 +2,8 @@ import { cache, startListen } from './cache.js'
 import { hmr } from '../../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (browser.runtime.getManifest().manifest_version === 3) {
+// https://bugs.chromium.org/p/chromium/issues/detail?id=1219164
+if (typeof Worker === 'undefined') {
     browser.runtime.onMessage.addListener(f)
     signal.addEventListener('abort', () => browser.runtime.onMessage.removeListener(f), { once: true })
 

@@ -36,8 +36,7 @@ async function openWindow(url: string): Promise<void> {
             // has no physical dimensions
 
             // Note: DOM is only available in MV2 or MV3 page mode.
-            // @ts-expect-error DOM
-            const { screenX, outerWidth } = globalThis
+            const { screenX, outerWidth } = globalThis as any
             if (typeof screenX === 'number' && typeof outerWidth === 'number') {
                 top = Math.max(screenY, 0)
                 left = Math.max(screenX + (outerWidth - 350), 0)

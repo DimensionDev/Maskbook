@@ -4,7 +4,7 @@ import { cache, startListen } from './cache.js'
 
 const worker = new OnDemandWorker(new URL('./worker_init.ts', import.meta.url), { name: 'PopupSSR-Worker' })
 const { signal } = hmr(import.meta.webpackHot)
-if (browser.runtime.getManifest().manifest_version === 2) {
+if (typeof Worker === 'function') {
     browser.runtime.onMessage.addListener(listener)
 
     signal.addEventListener('abort', () => {

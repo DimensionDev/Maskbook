@@ -6,15 +6,11 @@ import {
     contentScriptURL,
     injectedScriptURL,
     maskSDK_URL,
-} from './InjectContentScripts.js'
+} from './InjectContentScripts_imperative.js'
 import type { Scripting } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (browser.runtime.getManifest().manifest_version === 3) {
-    NewImplementation(signal)
-}
-
-async function NewImplementation(signal: AbortSignal) {
+if (typeof browser.scripting?.registerContentScripts === 'function') {
     await unregisterExistingScripts()
     await browser.scripting.registerContentScripts([
         ...prepareMainWorldScript(['<all_urls>']),
@@ -23,6 +19,7 @@ async function NewImplementation(signal: AbortSignal) {
 
     signal.addEventListener('abort', unregisterExistingScripts)
 }
+
 async function unregisterExistingScripts() {
     await browser.scripting
         .unregisterContentScripts({
