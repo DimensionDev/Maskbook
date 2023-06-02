@@ -8,18 +8,18 @@ declare module NodeJS {
         /**
          * Debug flags
          */
-        BUILD_DATE: string
-        VERSION: string
-        COMMIT_HASH: string
-        COMMIT_DATE: string
-        BRANCH_NAME: string
+        readonly BUILD_DATE: string
+        readonly VERSION: string
+        readonly COMMIT_HASH: string
+        readonly COMMIT_DATE: string
+        readonly BRANCH_NAME: string
         /**
          * Run skip tests like
          * RUN_SKIP_TESTS=1 pnpm test
          */
-        RUN_SKIP_TESTS: string
-        DIRTY: string
+        readonly RUN_SKIP_TESTS: string
+        readonly DIRTY: string
         /** Only in development mode. */
-        REACT_DEVTOOLS_EDITOR_URL: string
+        readonly REACT_DEVTOOLS_EDITOR_URL: string
     }
 }
