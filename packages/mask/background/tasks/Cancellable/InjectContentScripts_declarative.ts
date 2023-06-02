@@ -21,11 +21,7 @@ if (typeof browser.scripting?.registerContentScripts === 'function') {
 }
 
 async function unregisterExistingScripts() {
-    await browser.scripting
-        .unregisterContentScripts({
-            ids: (await browser.scripting.getRegisteredContentScripts()).map((x) => x.id),
-        })
-        .catch(noop)
+    await browser.scripting.unregisterContentScripts().catch(noop)
 }
 
 function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {
