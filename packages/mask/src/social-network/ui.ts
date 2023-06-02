@@ -17,12 +17,14 @@ import {
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '@masknet/flags'
+import { Sentry } from '@masknet/web3-telemetry'
+import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
-import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
+import { configureSelectorMissReporter, MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
@@ -50,6 +52,17 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
+    configureSelectorMissReporter((name) => {
+        if (crypto.getRandomValues(new Uint8Array(1))[0] > 26) return
+        const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
+        error.stack = ''
+        Sentry.captureException({
+            error,
+            exceptionID: ExceptionID.Debug,
+            exceptionType: ExceptionType.Error,
+            sampleRate: 0.01,
+        })
+    })
     setupReactShadowRootEnvironment()
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
 

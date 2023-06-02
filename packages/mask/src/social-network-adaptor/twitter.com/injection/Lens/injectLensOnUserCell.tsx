@@ -5,12 +5,12 @@ import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
-import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 
 const selector = () => {
     // [href^="/search"] is a hash tag
     return querySelectorAll<HTMLElement>(
-        '[data-testid=sidebarColumn] [data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
+        '[data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
     )
 }
 
@@ -24,7 +24,7 @@ export function injectLensOnUserCell(signal: AbortSignal) {
         const userId = node.closest('[role=link]')?.getAttribute('href')?.slice(1)
         if (!userId) return
         // Intended to set `untilVisible` to true, but mostly user cells are fixed and visible
-        attachReactTreeToGlobalContainer(proxy.afterShadow, { signal }).render(<UserCellLensSlot userId={userId} />)
+        attachReactTreeWithContainer(proxy.afterShadow, { signal }).render(<UserCellLensSlot userId={userId} />)
     })
 }
 

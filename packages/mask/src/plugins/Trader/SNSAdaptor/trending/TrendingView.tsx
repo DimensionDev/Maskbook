@@ -1,12 +1,17 @@
-import { useEffect, useMemo, useState, useContext, useCallback } from 'react'
+import { useEffect, useMemo, useState, useContext, useCallback, useLayoutEffect } from 'react'
 import { compact, first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Box, useTheme } from '@mui/system'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useNonFungibleAssetsByCollection, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNativeToken,
+    useNonFungibleAssetsByCollection,
+    Web3ContextProvider,
+} from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType, type SocialIdentity } from '@masknet/shared-base'
@@ -28,6 +33,7 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 import { ContentTabs } from '../../types/index.js'
+import { FailedTrendingView } from './FailedTrendingView.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -136,12 +142,16 @@ export function TrendingView(props: TrendingViewProps) {
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
+    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+        chainId: result.chainId ?? chainId,
+    })
+
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
     // #region merge trending
-    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
+    const { value: { trending } = {}, loading: loadingTrending, error } = useTrendingById(result, result.address)
     // #endregion
 
     useEffect(() => {
@@ -149,30 +159,31 @@ export function TrendingView(props: TrendingViewProps) {
     }, [currentResult])
 
     // #region stats
-    const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
+    const [days, setDays] = useState(TrendingAPI.Days.ONE_DAY)
     const [currentPriceChange, setCurrentPriceChange] = useState(
-        trending?.market?.price_change_percentage_7d_in_currency,
+        trending?.market?.price_change_percentage_24h_in_currency,
     )
     const onPriceDaysControlChange = useCallback(
         (days: number) => {
             setDays(days)
-            if (days === TrendingAPI.Days.ONE_DAY)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_24h_in_currency)
-            if (days === TrendingAPI.Days.ONE_MONTH)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_30d_in_currency)
-            if (days === TrendingAPI.Days.ONE_WEEK)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_7d_in_currency)
-            if (days === TrendingAPI.Days.ONE_YEAR)
-                setCurrentPriceChange(trending?.market?.price_change_percentage_1y_in_currency)
-            if (days === TrendingAPI.Days.MAX) setCurrentPriceChange(trending?.market?.atl_change_percentage)
+            const Days = TrendingAPI.Days
+            const map: Partial<Record<TrendingAPI.Days, number | undefined>> = {
+                [Days.ONE_DAY]: trending?.market?.price_change_percentage_24h_in_currency,
+                [Days.ONE_WEEK]: trending?.market?.price_change_percentage_7d_in_currency,
+                [Days.ONE_MONTH]: trending?.market?.price_change_percentage_30d_in_currency,
+                [Days.ONE_YEAR]: trending?.market?.price_change_percentage_1y_in_currency,
+                [Days.MAX]: trending?.market?.atl_change_percentage,
+            }
+            setCurrentPriceChange(map[days as TrendingAPI.Days])
         },
         [JSON.stringify(trending?.market)],
     )
 
     useEffect(() => {
-        onPriceDaysControlChange(TrendingAPI.Days.ONE_WEEK)
+        onPriceDaysControlChange(TrendingAPI.Days.ONE_DAY)
     }, [JSON.stringify(trending?.market)])
 
+    const isNFT = trending?.coin.type === TokenType.NonFungible
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,
@@ -180,12 +191,11 @@ export function TrendingView(props: TrendingViewProps) {
     } = usePriceStats({
         chainId: result.chainId,
         coinId: trending?.coin.id,
-        dataProvider: trending?.dataProvider,
+        sourceType: isNFT ? SourceType.NFTScan : trending?.dataProvider,
         currency: trending?.currency,
         days,
     })
     // #endregion
-    const isNFT = trending?.coin.type === TokenType.NonFungible
 
     // #region expected chainId
     const swapExpectedContract = useMemo(() => {
@@ -223,6 +233,10 @@ export function TrendingView(props: TrendingViewProps) {
         return list
     }, [isSwappable, isNFT])
     const [currentTab, , , setTab] = useTabs<ContentTabs>(tabs[0], ...tabs)
+    useLayoutEffect(() => {
+        setTab(tabs[0])
+    }, [result, tabs[0]])
+
     const tabComponents = useMemo(() => {
         const configs = [
             {
@@ -276,6 +290,17 @@ export function TrendingView(props: TrendingViewProps) {
         chainId: result.chainId,
     })
 
+    if (error) {
+        return (
+            <FailedTrendingView
+                result={result}
+                resultList={resultList}
+                setResult={setResult}
+                classes={{ root: classes.root }}
+            />
+        )
+    }
+
     // #region display loading skeleton
     if (!trending?.currency || loadingTrending)
         return (
@@ -288,7 +313,7 @@ export function TrendingView(props: TrendingViewProps) {
         )
     // #endregion
 
-    const { coin, tickers, market } = trending
+    const { coin, tickers } = trending
     const component = (
         <TrendingViewDeck
             classes={{
@@ -331,7 +356,9 @@ export function TrendingView(props: TrendingViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={currentPriceChange ?? trending?.market?.price_change_percentage_7d_in_currency ?? 0}
+                            amount={
+                                currentPriceChange ?? trending?.market?.price_change_percentage_24h_in_currency ?? 0
+                            }
                             currency={trending.currency}
                             stats={stats}
                             retry={retryStats}
@@ -364,42 +391,31 @@ export function TrendingView(props: TrendingViewProps) {
                     <Web3ContextProvider
                         value={{
                             pluginID: context.pluginID,
-                            chainId: isNativeTokenSymbol(trending.coin.symbol)
-                                ? trending.coin.chainId
-                                : swapExpectedContract?.chainId,
+                            chainId: isNativeTokenSymbol(coin.symbol) ? coin.chainId : swapExpectedContract?.chainId,
                         }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
-                                defaultInputCoin: coin.address
-                                    ? createFungibleToken(
-                                          chainId,
-                                          isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
-                                          coin.address,
-                                          coin.name,
-                                          coin.symbol,
+                                defaultInputCoin: createFungibleToken(
+                                    result.chainId,
+                                    SchemaType.Native,
+                                    nativeToken?.address ?? '',
+                                    nativeToken?.name ?? '',
+                                    nativeToken?.symbol ?? '',
+                                    nativeToken?.decimals ?? 0,
+                                    isNativeTokenAddress(result.address) ? result.logoURL : undefined,
+                                ),
+                                defaultOutputCoin: isNativeTokenAddress(coin.contract_address)
+                                    ? undefined
+                                    : createFungibleToken(
+                                          swapExpectedContract?.chainId as ChainId,
+                                          SchemaType.ERC20,
+                                          swapExpectedContract?.address || '',
+                                          coin.name ?? coin.name,
+                                          coin.symbol ?? coin.symbol ?? '',
                                           coin.decimals ?? 0,
-                                      )
-                                    : undefined,
-                                defaultOutputCoin: trending.coin
-                                    ? isNativeTokenAddress(trending.coin.contract_address)
-                                        ? createFungibleToken(
-                                              trending.coin.chainId as ChainId,
-                                              SchemaType.Native,
-                                              trending.coin.contract_address,
-                                              '',
-                                              '',
-                                              trending.coin.decimals ?? 0,
-                                          )
-                                        : createFungibleToken(
-                                              swapExpectedContract?.chainId as ChainId,
-                                              SchemaType.ERC20,
-                                              swapExpectedContract?.address || '',
-                                              '',
-                                              '',
-                                              trending.coin.decimals ?? 0,
-                                          )
-                                    : undefined,
+                                          result.logoURL,
+                                      ),
                             }}
                         />
                     </Web3ContextProvider>

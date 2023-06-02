@@ -12,6 +12,14 @@
 # sourceMap=...
 # Any valid value listed in https://webpack.js.org/configuration/devtool/, but it might not work in our environment.
 
+### SourceMap hide frameworks
+
+# sourceMapHideFrameworks=true
+# (default) Hide frameworks in sourceMap.
+
+# sourceMapHideFrameworks=false
+# Show frameworks in sourceMap.
+
 ### Preferred Manifest Version
 
 # manifest=2
@@ -35,3 +43,11 @@
 
 # devtools=false
 # Disable Devtools integration in development mode.
+
+### React devtools default editor
+
+# devtoolsEditorURI=vscode://file/{path}:{line}
+# (default) VSCode
+
+# devtoolsEditorURI=...
+# Any URI that can open the editor you used.

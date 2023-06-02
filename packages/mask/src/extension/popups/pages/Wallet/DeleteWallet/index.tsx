@@ -6,11 +6,12 @@ import { useContainer } from 'unstated-next'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ManageWallet } from '@masknet/shared'
-import { useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
@@ -78,7 +79,6 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const connection = useWeb3Connection()
     const { selectedWallet } = WalletContext.useContainer()
     const currentWallet = useWallet()
     const wallet = selectedWallet ?? currentWallet
@@ -91,16 +91,21 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (!wallet?.address) return
         try {
-            await connection?.removeWallet?.(wallet.address, password)
-            const wallets = await connection?.getWallets?.()
+            await Web3.removeWallet?.(wallet.address, password, {
+                providerType: ProviderType.MaskWallet,
+            })
+            const wallets = await Web3.getWallets?.({
+                providerType: ProviderType.MaskWallet,
+            })
             const newWallet = first(
                 wallets?.filter(
                     (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
                 ),
             )
-            await connection?.connect({
+            await Web3.connect({
                 account: newWallet?.address,
                 chainId: newWallet?.owner ? smartPayChainId : undefined,
+                providerType: ProviderType.MaskWallet,
             })
             navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {
@@ -110,7 +115,7 @@ const DeleteWallet = memo(() => {
                 )
             }
         }
-    }, [wallet, password, connection, smartPayChainId])
+    }, [wallet, password, smartPayChainId])
 
     const manageWallets = useMemo(() => {
         return wallets.filter((x) => isSameAddress(x.owner, wallet?.address))

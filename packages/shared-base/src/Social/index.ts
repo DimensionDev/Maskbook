@@ -1,16 +1,19 @@
 import type { ProfileIdentifier } from '@masknet/base'
-import type { NextIDPersonaBindings } from '../NextID/type.js'
+import type { NextIDPersonaBindings } from '../NextID/types.js'
 import type { NetworkPluginID } from '../index.js'
 
 export enum SocialAddressType {
     Address = 'Address',
     ENS = 'ENS',
+    ARBID = 'ARBID',
     SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
     SOL = 'SOL',
     NEXT_ID = 'NEXT_ID',
     CyberConnect = 'CyberConnect',
+    Firefly = 'Firefly',
     Leaderboard = '.eth Leaderboard',
+    OpenSea = 'OpenSea',
     Sybil = 'Sybil',
     TwitterBlue = 'TwitterBlue',
     Mask = 'Mask Network',

@@ -23,5 +23,30 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Astar": ""
+    },
+    "ENS_NAME_WRAPPER_CONTRACT_ADDRESS": {
+        "Mainnet": "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Astar": ""
     }
 }

@@ -4,8 +4,9 @@ import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { isTronAddress } from './isTronAddress.js'
+import { memoize } from 'lodash-es'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -51,17 +52,22 @@ export function isValidAddress(address?: string, strict?: boolean): address is s
     }
 }
 
-export function isValidChainId(chainId?: ChainId) {
+export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
-}
+})
 
 export function isZeroAddress(address?: string) {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
+const nativeTokenSet = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'SOL_ADDRESS')))
+
 export function isNativeTokenAddress(address?: string) {
-    const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'SOL_ADDRESS')))
-    return !!(address && set.has(address))
+    return !!(address && nativeTokenSet.has(address))
+}
+
+export function getNetworkPluginID() {
+    return NetworkPluginID.PLUGIN_SOLANA
 }
 
 export function getDefaultChainId() {

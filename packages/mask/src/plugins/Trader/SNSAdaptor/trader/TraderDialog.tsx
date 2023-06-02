@@ -1,18 +1,12 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import {
-    PluginID,
-    NetworkPluginID,
-    isDashboardPage,
-    CrossIsolationMessages,
-    type TokenType,
-} from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, CrossIsolationMessages, type TokenType, Sniffings } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     useChainContext,
     useChainIdValid,
     useNetworkContext,
-    useWeb3State,
+    useWeb3Others,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
 import { type ChainId, GasEditor, SchemaType, type Transaction } from '@masknet/web3-shared-evm'
@@ -28,8 +22,6 @@ import { useI18N } from '../../../../utils/index.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 
-const isDashboard = isDashboardPage()
-
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
@@ -37,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 0,
         zIndex: 2,
 
-        '& > div .MuiBox-root': isDashboard
+        '& > div .MuiBox-root': Sniffings.is_dashboard_page
             ? {
                   background: MaskColorVar.mainBackground,
               }
@@ -85,7 +77,7 @@ export function TraderDialog() {
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
     const { chainId, setChainId } = useChainContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -111,7 +103,7 @@ export function TraderDialog() {
 
     const inputFungibleToken = useMemo(
         () =>
-            Others?.createFungibleToken(
+            Others.createFungibleToken(
                 chainId,
                 Others.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
                 defaultInputCoin?.address ?? '',
@@ -124,7 +116,7 @@ export function TraderDialog() {
 
     const outputFungibleToken = useMemo(
         () =>
-            Others?.createFungibleToken(
+            Others.createFungibleToken(
                 chainId,
                 Others.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
                 defaultOutputCoin?.address ?? '',
@@ -167,7 +159,7 @@ export function TraderDialog() {
             disableGasLimit: true,
             disableSlippageTolerance: false,
             transaction: {
-                gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                gas: tradeRef.current?.focusedTrade?.gas ?? MIN_GAS_LIMIT,
                 ...tradeRef.current?.gasConfig,
             },
             slippageTolerance: currentSlippageSettings.value / 100,
@@ -189,7 +181,7 @@ export function TraderDialog() {
                 setOpen(false)
             }}
             title={t('plugin_trader_swap')}
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             titleTail={
                 <div className={classes.tail}>
                     <IconButton onClick={() => tradeRef.current?.refresh()}>

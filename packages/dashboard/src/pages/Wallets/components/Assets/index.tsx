@@ -1,16 +1,17 @@
-import { memo, useEffect, useState } from 'react'
-import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
-import { useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { CollectionList, UserAssetsProvider, useSelectFungibleToken, type CollectibleGridProps } from '@masknet/shared'
+import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ContentContainer } from '../../../../components/ContentContainer/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { AddCollectibleDialog } from '../AddCollectibleDialog/index.js'
-import { CollectibleList } from '../CollectibleList/index.js'
 import { FungibleTokenTable } from '../FungibleTokenTable/index.js'
+import { useNavigate } from 'react-router-dom'
+import { TransferTab } from '../Transfer/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -37,9 +38,15 @@ export interface AssetsProps {
     network: Web3Helper.NetworkDescriptorAll | null
 }
 
+const gridProps: CollectibleGridProps = {
+    columns: 'repeat(auto-fill, minmax(180px, 1fr))',
+    gap: 4,
+}
 export const Assets = memo<AssetsProps>(({ network }) => {
     const t = useDashboardI18N()
+    const navigate = useNavigate()
     const { pluginID } = useNetworkContext()
+    const { account } = useChainContext()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
@@ -57,6 +64,19 @@ export const Assets = memo<AssetsProps>(({ network }) => {
 
     const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
     const selectFungibleToken = useSelectFungibleToken()
+    const handleActionClick = useCallback(
+        (asset: Web3Helper.NonFungibleAssetAll) => {
+            // Sending NFT is only available on EVM currently.
+            if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
+            navigate(DashboardRoutes.WalletsTransfer, {
+                state: {
+                    type: TransferTab.Collectibles,
+                    nonFungibleToken: asset,
+                },
+            })
+        },
+        [pluginID],
+    )
 
     return (
         <>
@@ -101,7 +121,17 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <CollectibleList selectedChain={network} />
+                        <UserAssetsProvider pluginID={pluginID} address={account}>
+                            <CollectionList
+                                pluginID={pluginID}
+                                defaultChainId={network?.chainId}
+                                account={account}
+                                gridProps={gridProps}
+                                disableSidebar
+                                disableAction={false}
+                                onActionClick={handleActionClick}
+                            />
+                        </UserAssetsProvider>
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
@@ -111,3 +141,5 @@ export const Assets = memo<AssetsProps>(({ network }) => {
         </>
     )
 })
+
+Assets.displayName = 'Assets'

@@ -20,7 +20,6 @@
     { "path": "../web3-shared/solana/" },
     { "path": "../web3-helpers" },
     { "path": "../web3-providers" },
-    { "path": "../web3-state" },
     { "path": "../plugin-infra" },
     { "path": "../plugins/Solana/" },
     { "path": "../plugins/EVM/" },

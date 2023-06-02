@@ -11,8 +11,8 @@ import { ManageWallet } from '@masknet/shared'
 import { Button, Typography, Box } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { PopupRoutes, type PersonaInformation, NetworkPluginID, type Wallet } from '@masknet/shared-base'
-import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { EVM_Providers } from '@masknet/web3-providers'
+import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { Providers, Web3 } from '@masknet/web3-providers'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
@@ -66,7 +66,6 @@ const Logout = memo(() => {
     const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection()
     const { Provider } = useWeb3State()
     const { smartPayChainId } = useContainer(PopupContext)
 
@@ -89,14 +88,15 @@ const Logout = memo(() => {
         if (selectedPersona.address) {
             if (isSameAddress(selectedPersona.address, wallet?.owner)) {
                 const newWallet = first(wallets)
-                await connection?.connect({
+                await Web3.connect({
                     account: newWallet?.address,
                     chainId: newWallet?.owner ? smartPayChainId : undefined,
+                    providerType: ProviderType.MaskWallet,
                 })
             }
 
             if (manageWallets.length) {
-                const maskProvider = EVM_Providers[ProviderType.MaskWallet]
+                const maskProvider = Providers[ProviderType.MaskWallet]
                 await maskProvider?.removeWallets(manageWallets)
             }
         }
@@ -107,7 +107,7 @@ const Logout = memo(() => {
             await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
         }
         navigate(PopupRoutes.Personas, { replace: true })
-    }, [selectedPersona, history, Provider, wallet, wallets, connection, smartPayChainId, manageWallets.length])
+    }, [selectedPersona, history, Provider, wallet, wallets, smartPayChainId, manageWallets.length])
 
     return (
         <LogoutUI

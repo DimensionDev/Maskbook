@@ -6,18 +6,29 @@ import type { BuildFlags } from './flags.js'
 export function applyDotEnv(flags: BuildFlags) {
     if (flags.mode === 'production') return
 
-    const noMV3Support = flags.engine !== 'chromium'
-    const { parsed } = config({ path: fileURLToPath(new URL('./.env/dev-preference', ROOT_PATH)) })
+    const { parsed, error } = config({ path: fileURLToPath(new URL('./.env/dev-preference', ROOT_PATH)) })
+    if (error) console.error(new TypeError('Failed to parse env file', { cause: error }))
     if (!parsed) return
 
-    if ('sourceMap' in parsed && flags.sourceMapPreference === undefined) {
-        flags.sourceMapPreference =
-            parsed.sourceMap === 'true' ? true : parsed.sourceMap === 'false' ? false : parsed.sourceMap
+    flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
+    if (parsed.manifest) {
+        if (parsed.manifest === '2') flags.manifest ??= 2
+        else if (parsed.manifest === '3') flags.manifest ??= 3
+        throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
     }
-    if (parsed.manifest && flags.manifest === undefined) {
-        if (parsed.manifest === '2') flags.manifest = 2
-        else if (parsed.manifest === '3' && !noMV3Support) flags.manifest = 3
-    }
-    if (parsed.hmr === 'false' && flags.hmr === undefined) flags.hmr = false
-    if (parsed.devtools === 'false' && flags.devtools === undefined) flags.devtools = false
+    flags.hmr ??= parseBoolean(parsed.hmr)
+    flags.devtools ??= parseBoolean(parsed.devtools)
+    flags.devtoolsEditorURI ??= parsed.devtoolsEditorURI
+    flags.sourceMapHideFrameworks ??= parseBoolean(parsed.sourceMapHideFrameworks)
+}
+function parseBoolean(val: string | undefined) {
+    if (val === undefined) return undefined
+    else if (val === 'true') return true
+    else if (val === 'false') return false
+    throw new TypeError(`Unexpected value "${val}" in env file, expected true or false.`)
+}
+function parseBooleanOrString(val: string | undefined) {
+    if (val === 'true') return true
+    else if (val === 'false') return false
+    return val
 }

@@ -2,17 +2,17 @@ import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
-import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
 import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null, gasConfig?: GasConfig) {
     const notifyError = useSwapErrorCallback()
-    const { account, chainId } = useChainContext()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
-    const connection = useWeb3Connection(pluginID, { chainId })
 
     // compose transaction config
     const config = useMemo(() => {
@@ -24,26 +24,28 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
     }, [account, tradeComputed])
 
     return useAsyncFn(async () => {
-        if (!account || !config || !connection || pluginID !== NetworkPluginID.PLUGIN_EVM) {
+        if (!account || !config || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return
         }
 
         try {
-            const gas = await connection.estimateTransaction?.(config)
-            const hash = await connection.sendTransaction(
+            const gas = await Web3.estimateTransaction?.(config, undefined, {
+                chainId,
+            })
+            const hash = await Web3.sendTransaction(
                 {
                     ...config,
                     gas,
                 },
                 { chainId, overrides: { ...gasConfig } },
             )
-            const receipt = await connection.getTransactionReceipt(hash)
-            return receipt?.transactionHash
+            const receipt = await Web3.confirmTransaction(hash, { chainId })
+            return receipt.transactionHash
         } catch (error) {
             if (error instanceof Error) {
                 notifyError(error.message)
             }
             return
         }
-    }, [connection, account, chainId, stringify(config), gasConfig, pluginID, notifyError])
+    }, [account, chainId, stringify(config), gasConfig, pluginID, notifyError])
 }

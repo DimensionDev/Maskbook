@@ -10,22 +10,20 @@ import type { NextIDAvatarMeta } from '../../types.js'
 import { useSaveAvatar } from './useSaveAvatar.js'
 
 export function useSaveKV(pluginID: NetworkPluginID) {
-    const connection = useWeb3Connection<'all'>(pluginID)
+    const Web3 = useWeb3Connection(pluginID)
     const saveAvatar = useSaveAvatar(pluginID)
 
     return useCallback(
         async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
-            if (!connection) return
-
             const siteType = getEnhanceableSiteType()
             if (!siteType) return
 
-            const sign = await connection.signMessage('message', JSON.stringify(info), {
+            const sign = await Web3.signMessage('message', JSON.stringify(info), {
                 account,
             })
 
             return saveAvatar(account, siteType, info, sign)
         },
-        [connection, saveAvatar],
+        [Web3, saveAvatar],
     )
 }

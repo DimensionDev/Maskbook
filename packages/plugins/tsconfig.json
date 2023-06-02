@@ -16,6 +16,7 @@
     { "path": "./ScamWarning/" },
     { "path": "./SmartPay/" },
     { "path": "./Transak/" },
-    { "path": "./Avatar" }
+    { "path": "./Avatar" },
+    { "path": "./Claim/" }
   ]
 }

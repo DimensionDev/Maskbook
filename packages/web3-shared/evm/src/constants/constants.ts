@@ -28,6 +28,8 @@ import LensProfile from '@masknet/web3-constants/evm/lens-profile.json'
 import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json'
 import Lens from '@masknet/web3-constants/evm/lens.json'
 import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json'
+import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
+
 import {
     transformAllHook,
     transformHook,
@@ -176,3 +178,8 @@ export const useLensConstant = transformHook(getLensConstants)
 export const useLensConstants = transformAllHook(getLensConstants)
 
 export const getCryptoPunksConstants = transformAll(ChainId, CryptoPunks)
+
+export const getAirdropClaimersConstant = transform(ChainId, Airdrop)
+export const getAirdropClaimersConstants = transformAll(ChainId, Airdrop)
+export const useAirdropClaimersConstant = transformHook(getAirdropClaimersConstants)
+export const useAirdropClaimersConstants = transformAllHook(getAirdropClaimersConstants)

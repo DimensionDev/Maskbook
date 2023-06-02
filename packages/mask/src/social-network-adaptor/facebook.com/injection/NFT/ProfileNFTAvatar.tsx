@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { NFTAvatar, toPNG } from '@masknet/plugin-avatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
@@ -25,14 +25,14 @@ export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
         // The first step in setting an avatar
         const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
         startWatch(watcher, signal)
-        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+        attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
             <NFTAvatarInFacebookFirstStep />,
         )
 
         // The second step in setting an avatar
         const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector()).useForeach(
             (node, key, proxy) => {
-                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(<NFTAvatarInFacebookSecondStep />)
                 return () => root.destroy()
             },
@@ -42,7 +42,7 @@ export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     }
     const watcher = new MutationObserverWatcher(searchFacebookAvatarMobileListSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <NFTAvatarListInFaceBookMobile />,
     )
 }

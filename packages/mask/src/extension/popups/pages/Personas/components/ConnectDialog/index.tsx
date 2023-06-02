@@ -4,8 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { useI18N } from '../../../../../../utils/index.js'
 import { Close } from '@mui/icons-material'
-import { SOCIAL_MEDIA_ROUND_ICON_MAPPING, SOCIAL_MEDIA_NAME } from '@masknet/shared'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
+import { type EnhanceableSite, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     dialog: {

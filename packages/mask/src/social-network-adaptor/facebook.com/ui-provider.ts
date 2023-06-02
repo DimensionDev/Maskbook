@@ -11,7 +11,7 @@ import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposit
 import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
 import { injectCompositionFacebook } from './injection/Composition.js'
-import { injectSetupPromptFacebook } from './injection/SetupPrompt.js'
+import { injectBannerAtFacebook } from './injection/Banner.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/inject/Comments.js'
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook.js'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox.js'
@@ -180,7 +180,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
         userBadge: undefined,
         searchResult: injectSearchResultInspectorAtFacebook,
-        setupPrompt: injectSetupPromptFacebook,
+        banner: injectBannerAtFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
             commentInspector: injectCommentBoxDefaultFactory(

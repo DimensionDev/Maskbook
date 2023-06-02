@@ -1,4 +1,5 @@
 {
+    "send": "Send",
     "approve": "Approve",
     "approve_mask": "Approve MASK?",
     "approve_mask_description": "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token.",
@@ -189,5 +190,9 @@
     "applications_create_persona_title": "Persona",
     "applications_create_persona_hint": "Please create a Persona and verify your account to use this function.",
     "applications_create_persona_action": "Create persona",
-    "lens_follow": "Follow"
+    "lens_follow": "Follow",
+    "lens_following": "Following",
+    "view": "View",
+    "verified_by": "Verified by {{ marketplace }}",
+    "no_NFTs_found": "No NFTs found."
 }

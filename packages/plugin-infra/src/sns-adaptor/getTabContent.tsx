@@ -31,6 +31,15 @@ export function getSearchResultContent(result: SearchResult<Web3Helper.ChainIdAl
     })
 }
 
+export function getSearchResultContentForProfileTab(
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+) {
+    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
+        const shouldDisplay = x.SearchResultInspector?.Utils?.shouldDisplay?.(result) ?? true
+        return shouldDisplay ? x.SearchResultInspector?.UI?.Content : undefined
+    })
+}
+
 export function getSearchResultTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode, (x) => {
         const tab = x.SearchResultTabs?.find((x) => x.ID === tabId)

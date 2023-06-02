@@ -1,13 +1,6 @@
-import { useEffect, useMemo } from 'react'
-import {
-    PluginID,
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    SocialAddressType,
-    type SocialAccount,
-    type SocialIdentity,
-} from '@masknet/shared-base'
-import { useHiddenAddressSettings, useSocialAccountsAll } from '@masknet/web3-hooks-base'
+import { useCallback, useMemo } from 'react'
+import { PluginID, EMPTY_LIST, SocialAddressType, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { useHiddenAddressConfigOf, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { currySameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -22,33 +15,34 @@ export const useSocialAccountsBySettings = (
         error: loadSocialAccountsError,
         retry: retrySocialAccounts,
     } = useSocialAccountsAll(identity, typeWhitelist, sorter)
+    const userId = identity?.identifier?.userId
     const {
-        value: hiddenAddress,
-        loading: loadingHiddenAddress,
+        data: hiddenAddress,
+        isFetching: loadingHiddenAddress,
+        isInitialLoading,
         error: loadingHiddenAddressError,
-        retry: retryLoadHiddenAddress,
-    } = useHiddenAddressSettings(PluginID.Web3Profile, identity?.publicKey)
+        refetch: retryLoadHiddenAddress,
+    } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId)
 
     const addresses = useMemo(() => {
-        if (loadingSocialAccounts || loadingHiddenAddress) return EMPTY_LIST
         if (!hiddenAddress?.length) return socialAccounts
 
         return socialAccounts.filter((x) => {
             if (!x.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)) return true
             return !hiddenAddress.some(currySameAddress(x.address))
         })
-    }, [socialAccounts, hiddenAddress, loadingSocialAccounts, loadingHiddenAddress])
+    }, [socialAccounts, hiddenAddress, loadingHiddenAddress])
 
-    useEffect(() => {
-        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
-            if (pluginID === PluginID.Web3Profile) retryLoadHiddenAddress()
-        })
-    }, [retryLoadHiddenAddress])
+    const retry = useCallback(() => {
+        retrySocialAccounts()
+        retryLoadHiddenAddress()
+    }, [])
 
     return {
         value: addresses,
         loading: loadingSocialAccounts || loadingHiddenAddress,
+        isInitialLoading,
         error: loadSocialAccountsError || loadingHiddenAddressError,
-        retry: retrySocialAccounts || retryLoadHiddenAddress,
+        retry,
     }
 }

@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
-import { createReactRootShadowed, startWatch, MaskMessages } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch, MaskMessages } from '../../../utils/index.js'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
@@ -12,7 +12,7 @@ import {
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ProfileTabContentAtTwitter floating />,
     )
 }
@@ -20,7 +20,7 @@ function injectProfileTabContentForEmptyState(signal: AbortSignal) {
 function injectProfileTabContentState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
 }
 
 export function injectProfileTabContentAtTwitter(signal: AbortSignal) {

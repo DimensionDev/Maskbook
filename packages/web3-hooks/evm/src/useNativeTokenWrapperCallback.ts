@@ -1,18 +1,18 @@
 import { useCallback } from 'react'
 import { isLessThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { type ChainId, ContractTransaction, type GasConfig } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wrapperContract = useNativeTokenWrapperContract(chainId)
-    const connection = useWeb3Connection()
 
     const wrapCallback = useCallback(
         async (amount: string, gasConfig?: GasConfig) => {
-            if (!connection || !wrapperContract || !amount) {
+            if (!wrapperContract || !amount) {
                 return
             }
 
@@ -27,18 +27,18 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             })
 
             // send transaction and wait for hash
-            const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
+            const hash = await Web3.sendTransaction(tx, { overrides: { ...gasConfig } })
+            const receipt = await Web3.getTransactionReceipt(hash)
 
-            const receipt = await connection.getTransactionReceipt(hash)
-
+            if (!receipt?.status) return
             return receipt?.transactionHash
         },
-        [account, wrapperContract, chainId],
+        [account, wrapperContract],
     )
 
     const unwrapCallback = useCallback(
         async (all = true, amount = '0', gasConfig?: GasConfig) => {
-            if (!connection || !wrapperContract || !amount) {
+            if (!wrapperContract || !amount) {
                 return
             }
 
@@ -65,9 +65,8 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             )
 
             // send transaction and wait for hash
-
-            const hash = await connection.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
-            const receipt = await connection.getTransactionReceipt(hash)
+            const hash = await Web3.sendTransaction(tx, { overrides: { ...gasConfig } })
+            const receipt = await Web3.getTransactionReceipt(hash)
 
             return receipt?.transactionHash
         },

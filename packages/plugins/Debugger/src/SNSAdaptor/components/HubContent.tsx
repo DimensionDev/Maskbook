@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { type Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
-import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
-import { getEnumAsArray } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
+import { getEnumAsArray } from '@masknet/kit'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { Hub } from '@masknet/web3-providers/types'
+import { HubAll } from '@masknet/web3-providers'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
+import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export interface HubContentProps {
     onClose?: () => void
@@ -19,15 +21,15 @@ const useStyles = makeStyles()({
 
 export function HubContent(props: HubContentProps) {
     const { classes } = useStyles()
-    const hub = useWeb3Hub()
+    const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
-    const [keyword, setKeyword] = useState<string>('PUNK')
-    const [address, setAddress] = useState<string>('0x932261f9fc8da46c4a22e31b45c4de60623848bf')
-    const [tokenId, setTokenId] = useState<string>('32342')
+    const [keyword, setKeyword] = useState('PUNK')
+    const [address, setAddress] = useState('0x932261f9fc8da46c4a22e31b45c4de60623848bf')
+    const [tokenId, setTokenId] = useState('32342')
     const [sourceType, setSourceType] = useState<SourceType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-    type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
+    type HubAll = Required<Hub<NetworkPluginID>>
     type API<T extends keyof HubAll = keyof HubAll> = readonly [T, Parameters<HubAll[T]>]
 
     const APIs: API[] = [
@@ -48,17 +50,14 @@ export function HubContent(props: HubContentProps) {
         ['getFungibleTokenIconURLs', [chainId, address]],
         ['getNonFungibleTokenIconURLs', [chainId, address, tokenId]],
 
-        ['getFungibleTokenStats', [address]],
         ['getFungibleTokensFromTokenList', [chainId]],
         ['getFungibleTokenSpenders', [chainId, account]],
 
         // non-fungible tokens
-        ['getNonFungibleTokenOwner', [address, tokenId]],
         ['getNonFungibleTokenPrice', [chainId, address, tokenId]],
         ['getNonFungibleTokensFromTokenList', [chainId]],
         ['getNonFungibleTokenSpenders', [chainId, address]],
         ['getNonFungibleTokenBalance', [address]],
-        ['getNonFungibleTokenStats', [address]],
         ['getNonFungibleTokenSecurity', [chainId, address]],
         ['getNonFungibleTokenContract', [address]],
         ['getNonFungibleCollectionsByOwner', [account]],
@@ -170,7 +169,7 @@ export function HubContent(props: HubContentProps) {
                                                 console.log(`Query ${key}:`)
                                                 console.log(
                                                     // @ts-expect-error the ...parameters call is unsafe
-                                                    await hub?.[key]?.(...parameters, {
+                                                    await HubAll.use(pluginID)[key]?.(...parameters, {
                                                         chainId,
                                                         account,
                                                         sourceType,

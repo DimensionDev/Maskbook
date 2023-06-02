@@ -10,13 +10,14 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
-import { fetchFromNFTScanV2, getContractSymbol, createNonFungibleAsset } from '../helpers/EVM.js'
+import { fetchFromNFTScanV2, createNonFungibleAsset } from '../helpers/EVM.js'
+import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { resolveNFTScanHostName, resolveNFTScanRange, NonFungibleMarketplace } from '../helpers/utils.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
-import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
 import type { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
 import { getPaymentToken } from '../../entry-helpers.js'
+import { MaskIconURLs } from '@masknet/icons'
 
 export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
@@ -174,7 +175,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
                 ? {
-                      logo_url: OpenSeaLogo,
+                      logo_url: MaskIconURLs.open_sea_url().toString(),
                       // TODO
                       trade_url: `https://opensea.io/assets/ethereum/${address}`,
                       market_name: NonFungibleMarketplace.OpenSea,
@@ -186,7 +187,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 : null,
             looksrareStats
                 ? {
-                      logo_url: LooksRareLogo,
+                      logo_url: MaskIconURLs.looks_rare_url().toString(),
                       trade_url: `https://looksrare.org/collections/${address}`,
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
@@ -196,6 +197,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                   }
                 : null,
         ])
+
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: SourceType.NFTScan,
@@ -270,16 +272,13 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             },
             market: {
                 total_supply: collection.items_total,
-                current_price: collection.floor_price,
-                floor_price: collection.floor_price,
-                highest_price: undefined,
+                current_price: collection.floor_price
+                    ? collection.floor_price.toString()
+                    : openseaStats?.floorPrice.toString() ?? '',
+                floor_price: collection.floor_price?.toString(),
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'ETH',
                 royalty: collection.royalty?.toString(),
-                total_24h: undefined,
-                volume_24h: undefined,
-                average_volume_24h: undefined,
-                volume_all: undefined,
             },
             tickers,
         }

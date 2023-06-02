@@ -1,20 +1,14 @@
 import urlcat from 'urlcat'
 import { createIndicator, createPageable } from '@masknet/shared-base'
-import {
-    resolveArweaveURL,
-    type HubOptions,
-    type NonFungibleAsset,
-    TokenType,
-    SourceType,
-} from '@masknet/web3-shared-base'
+import { resolveArweaveURL, type NonFungibleAsset, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getContractAddress, SchemaType, isValidChainId } from '@masknet/web3-shared-flow'
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
-import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types.js'
+import type { AlchemyNFT_Flow, AlchemyResponse_Flow, AlchemyResponse_Flow_Metadata } from '../types.js'
 import { formatAlchemyTokenId, formatAlchemyTokenAddress } from '../helpers.js'
-import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 import { getAssetFullName, fetchJSON } from '../../entry-helpers.js'
 
-function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse_FLOW_Metadata) {
+function createNonFungibleTokenImageURL(asset: AlchemyNFT_Flow | AlchemyResponse_Flow_Metadata) {
     return (
         asset?.metadata?.metadata?.find((data) => data?.name === 'img')?.value ||
         asset?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
@@ -24,7 +18,7 @@ function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse
     )
 }
 
-function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFungibleAsset<ChainId, SchemaType> {
+function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_Flow): NonFungibleAsset<ChainId, SchemaType> {
     const tokenId = formatAlchemyTokenId(asset.id.tokenId)
     const address = formatAlchemyTokenAddress(asset.contract.address, asset.contract.name)
     return {
@@ -56,7 +50,7 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_FLOW): NonFu
 function createNonFungibleAsset(
     chainId: ChainId,
     ownerAddress: string,
-    metadata: AlchemyResponse_FLOW_Metadata,
+    metadata: AlchemyResponse_Flow_Metadata,
 ): NonFungibleAsset<ChainId, SchemaType> {
     const tokenId = formatAlchemyTokenId(metadata.id.tokenId)
     const address = formatAlchemyTokenAddress(metadata.contract.address, metadata.contract.name)
@@ -103,11 +97,15 @@ function createNonFungibleAsset(
 }
 
 export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { account, chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        { account, chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
+    ) {
         const { address: contractAddress, identifier: contractName } = getContractAddress(address) ?? {}
         if (!account || !contractAddress || !contractName || !isValidChainId(chainId)) return
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
-        const metadata = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
+        const metadata = await fetchJSON<AlchemyResponse_Flow_Metadata>(
             urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
                 owner: account,
                 contractAddress,
@@ -120,10 +118,10 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
         return createNonFungibleAsset(chainId, account, metadata)
     }
 
-    async getAssets(from: string, { chainId, indicator }: HubOptions<ChainId> = {}) {
+    async getAssets(from: string, { chainId, indicator }: HubOptions_Base<ChainId> = {}) {
         if (!from || !isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
-        const res = await fetchJSON<AlchemyResponse_FLOW>(
+        const res = await fetchJSON<AlchemyResponse_Flow>(
             urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,

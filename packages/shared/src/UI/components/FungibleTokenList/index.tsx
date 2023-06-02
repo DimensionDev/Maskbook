@@ -1,48 +1,46 @@
-import { memo, type ReactNode, useCallback, useMemo, useState, useTransition } from 'react'
+import { useCallback, useMemo, useState, useTransition } from 'react'
 import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps, SearchableList } from '@masknet/theme'
-import { Box, Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import {
+    useAccount,
     useBlockedFungibleTokens,
-    useNetworkContext,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokensBalance,
+    useNetworkContext,
     useTrustedFungibleTokens,
+    useWeb3Others,
     useWeb3State,
-    useAccount,
 } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     CurrencyType,
+    ZERO,
     currySameAddress,
-    type FungibleToken,
     isSameAddress,
     leftShift,
     minus,
     toZero,
+    type FungibleToken,
 } from '@masknet/web3-shared-base'
+import { Box, Stack } from '@mui/material'
+import { useSharedI18N } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
-import { Icons } from '@masknet/icons'
 
-const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
 export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'channel' | 'bar' | 'listBox'> {
     pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
+    chainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: Array<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedTokens?: string[]
     disableSearch?: boolean
-    onSelect?(
-        token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> | null,
-    ): void
+    onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
@@ -52,7 +50,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     fungibleAssets: Web3Helper.FungibleAssetScope[]
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     channel: {
         position: 'relative',
     },
@@ -63,24 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
     },
     listBox: {},
-}))
-
-const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => {
-    const h = height ?? DEFAULT_LIST_HEIGHT
-    return (
-        <Stack
-            minHeight={typeof h === 'number' ? h + 52 : h}
-            justifyContent="center"
-            alignContent="center"
-            marginTop="12px">
-            <Stack justifyContent="center" gap={1.5} alignItems="center">
-                <Icons.EmptySimple size={36} />
-                <Typography color="textSecondary" textAlign="center">
-                    {message}
-                </Typography>
-            </Stack>
-        </Stack>
-    )
 })
 
 export const FungibleTokenList = function <T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
@@ -104,11 +84,12 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)
     const chainId = props.chainId
-    const { Token, Others } = useWeb3State<'all'>(pluginID)
+    const { Token } = useWeb3State<'all'>(pluginID)
+    const Others = useWeb3Others(pluginID)
 
     const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
     const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
-    const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
+    const nativeToken = useMemo(() => Others.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
         const allFungibleTokens = uniqBy(
@@ -123,12 +104,11 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         )
     }, [nativeToken, tokens, fungibleTokens, trustedFungibleTokens, includeTokens, excludeTokens])
 
-    const { value: fungibleTokensBalance = EMPTY_OBJECT, loading: loadingFungibleTokensBalance } =
-        useFungibleTokensBalance(
-            pluginID,
-            filteredFungibleTokens.map((x) => x.address),
-            { account, chainId },
-        )
+    const { value: fungibleTokensBalance = EMPTY_OBJECT } = useFungibleTokensBalance(
+        pluginID,
+        filteredFungibleTokens.map((x) => x.address),
+        { account, chainId },
+    )
 
     // To avoid SearchableList re-render, reduce the dep
     const sortedFungibleTokensForManage = useMemo(() => {
@@ -140,11 +120,11 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
 
-            const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
-            const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+            const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
+            const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
 
-            const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
-            const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
+            const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
+            const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
 
             // native token
             if (isNativeTokenA) return -1
@@ -172,20 +152,24 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
+        const getTokenValue = (address: string) => {
+            const value = fungibleAssetsTable[address]?.value?.[CurrencyType.USD]
+            return value ? toZero(value) : ZERO
+        }
         return filteredFungibleTokens
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-                const zBalance = toZero(leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals))
+                const aBalance = leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals)
+                const zBalance = leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals)
 
-                const aUSD = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
-                const zUSD = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')
+                const aUSD = getTokenValue(a.address)
+                const zUSD = getTokenValue(z.address)
 
-                const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
-                const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+                const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
+                const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
 
-                const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
-                const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
+                const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
+                const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
 
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
@@ -251,7 +235,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         if (
             (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
             keyword.length > 3 &&
-            !Others?.isValidAddress(keyword)
+            !Others.isValidAddress(keyword)
         ) {
             setSearchError(t.erc20_search_wrong_address())
             return
@@ -259,20 +243,15 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
 
         if (mode === TokenListMode.Manage) return ''
 
-        return Others?.isValidAddress(keyword) &&
+        return Others.isValidAddress(keyword) &&
             !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''
     }, [keyword, sortedFungibleTokensForList, Others, mode])
 
-    const { value: searchedToken, loading: searchingToken } = useFungibleToken(
-        pluginID,
-        searchedTokenAddress,
-        undefined,
-        {
-            chainId,
-        },
-    )
+    const { value: searchedToken } = useFungibleToken(pluginID, searchedTokenAddress, undefined, {
+        chainId,
+    })
     const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
         chainId,
         account,
@@ -295,14 +274,14 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             (address) => selectedTokens.some((x) => isSameAddress(x, address)),
             mode,
             async (
-                token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+                token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'add' | 'remove',
             ) => {
                 if (strategy === 'add') Token?.addToken?.(account, token)
                 if (strategy === 'remove') Token?.removeToken?.(account, token)
             },
             async (
-                token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+                token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'trust' | 'block',
             ) => {
                 if (strategy === 'trust') Token?.trustToken?.(account, token)
@@ -321,10 +300,10 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         [searchError, JSON.stringify(props.SearchTextFieldProps)],
     )
 
-    const [isPending, startTransition] = useTransition()
+    const [, startTransition] = useTransition()
 
     const handleSelect = useCallback(
-        (token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> | null) =>
+        (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null) =>
             startTransition(() => onSelect?.(token)),
         [onSelect],
     )
@@ -332,7 +311,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
     return (
         <Stack className={classes.channel}>
             <SearchableList<
-                FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> & {
+                FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> & {
                     balance?: string
                 }
             >

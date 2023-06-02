@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import { parse40 } from './version-40.js'
 import { PayloadException } from '../types/index.js'
 import type { PayloadParserResult } from './index.js'

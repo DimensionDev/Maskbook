@@ -12,13 +12,12 @@ import {
     useTokenSecurity,
     ChainBoundary,
 } from '@masknet/shared'
-import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID, PopupRoutes, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-
 import Services from '../../../../extension/service.js'
 import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/trader.js'
 import { isNativeTokenWrapper } from '../../helpers/trader.js'
@@ -26,7 +25,9 @@ import { useI18N } from '../../../../utils/index.js'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
-import type { TradeInfo } from '../../types/trader.js'
+import type { TradeComputed, TraderAPI } from '@masknet/web3-providers/types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -54,18 +55,16 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TradeStateBarProps {
     inputAmount: string
-    settings?: boolean
-    focusedTrade?: TradeInfo
+    focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
     inputToken?: Web3Helper.FungibleTokenAll
     outputToken?: Web3Helper.FungibleTokenAll
-    trades: TradeInfo[]
+    trades: Array<AsyncStateRetry<TraderAPI.TradeInfo>>
     inputTokenBalance?: string
     gasPrice?: string
     onSwap: () => void
 }
 export function TraderStateBar({
     trades,
-    settings,
     focusedTrade,
     inputToken,
     outputToken,
@@ -76,16 +75,15 @@ export function TraderStateBar({
 }: TradeStateBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isPopup = isPopupPage()
 
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const { pluginID: actualPluginID } = useEnvironmentContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
 
-    // #region if `isPopup` be true, click the plugin status bar need to  open popup window
+    // #region if `isPopupPage` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
@@ -95,8 +93,8 @@ export function TraderStateBar({
 
     // #region approve token
     const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
-        focusedTrade?.value ?? null,
-        focusedTrade?.provider,
+        focusedTrade?.value?.value ?? null,
+        focusedTrade?.value?.provider,
         inputToken,
     )
     // #endregion
@@ -125,11 +123,11 @@ export function TraderStateBar({
 
     const maxAmount = useMemo(() => {
         const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
-        const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
+        const gasFee = multipliedBy(marginGasPrice, focusedTrade?.value?.gas ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
-        amount_ = Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
+        amount_ = Others.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
         return leftShift(BigNumber.max(0, amount_), inputToken?.decimals).toFixed(5)
-    }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
+    }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others.isNativeTokenSchemaType])
 
     // #region UI logic
     // validate form return a message if an error exists
@@ -141,14 +139,15 @@ export function TraderStateBar({
 
         if (
             inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount) ||
-            (Others?.isNativeTokenSchemaType(inputToken.schema) &&
+            (Others.isNativeTokenSchemaType(inputToken.schema) &&
                 formatWeiToEther(inputTokenTradeAmount).isGreaterThan(maxAmount))
         )
             return t('plugin_trader_error_insufficient_balance', {
                 symbol: inputToken?.symbol,
             })
 
-        if (focusedTrade?.value && !focusedTrade.value.outputAmount) return t('plugin_trader_no_enough_liquidity')
+        if (focusedTrade?.value && !focusedTrade.value.value?.outputAmount)
+            return t('plugin_trader_no_enough_liquidity')
         return ''
     }, [
         inputAmount,
@@ -159,15 +158,16 @@ export function TraderStateBar({
         inputTokenBalanceAmount.toFixed(),
         inputTokenTradeAmount.toFixed(),
         maxAmount,
-        Others?.isNativeTokenSchemaType,
+        Others.isNativeTokenSchemaType,
     ])
     // #endregion
 
     // #region native wrap message
     const nativeWrapMessage = useMemo(() => {
         if (focusedTrade?.value) {
-            if (isNativeTokenWrapper(focusedTrade.value)) {
-                return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
+            if (isNativeTokenWrapper(focusedTrade.value.value)) {
+                const trade_ = focusedTrade.value.value as TradeComputed<NativeTokenWrapper> | null
+                return trade_?.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
             }
             return t('plugin_trader_swap_amount_symbol')
         } else {
@@ -180,19 +180,21 @@ export function TraderStateBar({
         <Box className={classes.stateBar}>
             <PluginWalletStatusBar
                 actualPluginID={actualPluginID}
-                onClick={isPopup ? openSelectWalletPopup : undefined}>
+                onClick={Sniffings.is_popup_page ? openSelectWalletPopup : undefined}>
                 <WalletConnectedBoundary offChain expectedChainId={chainId}>
                     <EthereumERC20TokenApprovedBoundary
                         onlyInfiniteUnlock
                         spender={approveAddress}
                         amount={approveAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}
-                        contractName={focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''}
+                        contractName={
+                            focusedTrade?.value?.provider ? resolveTradeProviderName(focusedTrade.value?.provider) : ''
+                        }
                         infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                             symbol: approveToken?.symbol,
                         })}
                         token={
-                            !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                            !isNativeTokenWrapper(focusedTrade?.value?.value ?? null) &&
                             approveToken?.schema === SchemaType.ERC20 &&
                             !!approveAmount.toNumber()
                                 ? approveToken

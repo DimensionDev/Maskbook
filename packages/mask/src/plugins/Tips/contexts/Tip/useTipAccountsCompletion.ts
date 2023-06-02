@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -10,20 +10,19 @@ export function useTipAccountsCompletion(accounts: Array<SocialAccount<Web3Helpe
     const [map, setMap] = useState<Record<string, string>>({})
 
     const { NameService } = useWeb3State()
-    const { chainId } = useChainContext()
     useEffect(() => {
         if (!NameService?.reverse) return
         accounts.forEach(async ({ address, label: originalName }) => {
             if (originalName) return
 
-            const name = await NameService.reverse!(chainId, address)
+            const name = await NameService.reverse!(address)
             if (!name) return
             setMap((oldMap) => ({
                 ...oldMap,
                 [address]: name,
             }))
         })
-    }, [chainId, accounts, NameService])
+    }, [accounts, NameService])
 
     return useMemo(() => {
         if (!Object.keys(map).length) return accounts

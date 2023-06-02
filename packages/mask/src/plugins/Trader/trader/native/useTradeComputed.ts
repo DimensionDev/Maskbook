@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { type TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 
 export interface NativeTokenWrapper {
     /**
@@ -25,7 +25,7 @@ export function useTradeComputed(
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
 ) {
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     return useMemo((): TradeComputed<NativeTokenWrapper> | null => {
         if (!isNativeTokenWrapper) return null
 
@@ -48,8 +48,8 @@ export function useTradeComputed(
             fee: ZERO,
             trade_: {
                 isWrap:
-                    (strategy === TradeStrategy.ExactIn && !!Others?.isNativeTokenSchemaType(inputToken?.schema)) ||
-                    (strategy === TradeStrategy.ExactOut && !!Others?.isNativeTokenSchemaType(outputToken?.schema)),
+                    (strategy === TradeStrategy.ExactIn && !!Others.isNativeTokenSchemaType(inputToken?.schema)) ||
+                    (strategy === TradeStrategy.ExactOut && !!Others.isNativeTokenSchemaType(outputToken?.schema)),
                 isNativeTokenWrapper,
             },
         }
@@ -60,6 +60,6 @@ export function useTradeComputed(
         outputAmount,
         inputToken,
         outputToken,
-        Others?.isNativeTokenSchemaType,
+        Others.isNativeTokenSchemaType,
     ])
 }

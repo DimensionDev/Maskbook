@@ -6,6 +6,7 @@ export type { AaveLendingPoolAddressProvider } from './AaveLendingPoolAddressPro
 export type { AaveProtocolDataProvider } from './AaveProtocolDataProvider.js'
 export type { AaveStableDebtToken } from './AaveStableDebtToken.js'
 export type { Airdrop } from './Airdrop.js'
+export type { AirdropV2 } from './AirdropV2.js'
 export type { ArtBlocksMinterContract } from './ArtBlocksMinterContract.js'
 export type { BalanceChecker } from './BalanceChecker.js'
 export type { BancorNetwork } from './BancorNetwork.js'

@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import {
-    type HubOptions,
     type NonFungibleAsset,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
@@ -16,7 +15,7 @@ import { ChainId, createERC20Token, formatWeiToEther, isValidChainId, SchemaType
 import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 import { fetchJSON, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -125,16 +124,16 @@ function createNonFungibleTokenOrderFromOrder(
     chainId: ChainId,
     order: Order,
 ): NonFungibleTokenOrder<ChainId, SchemaType> {
-    const paymentToken = getPaymentToken(chainId, { address: order.currencyAddress })
+    const paymentToken = getPaymentToken(chainId, { address: order.currency })
     return {
         id: order.hash,
         chainId,
-        quantity: order.amount.toString(),
+        quantity: order.amounts.length.toString(),
         hash: order.hash,
-        side: order.isOrderAsk ? OrderSide.Sell : OrderSide.Buy,
+        side: order.quoteType === 1 ? OrderSide.Sell : OrderSide.Buy,
         assetPermalink: urlcat('https://looksrare.org/collections/:address/:tokenId', {
-            address: order.collectionAddress,
-            tokenId: order.tokenId,
+            address: order.collection,
+            tokenId: order.itemIds[0],
         }),
         maker: {
             address: order.signer,
@@ -143,14 +142,14 @@ function createNonFungibleTokenOrderFromOrder(
         expiredAt: fromUnixTime(order.endTime).getTime(),
         priceInToken: {
             amount: order.price,
-            token: paymentToken ?? createERC20Token(chainId, order.currencyAddress),
+            token: paymentToken ?? createERC20Token(chainId, order.currency),
         },
         source: SourceType.LooksRare,
     }
 }
 
 export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const response = await fetchFromLooksRare<{
             data: Token
@@ -166,14 +165,14 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getAssets(
         account: string,
-        options?: HubOptions<ChainId>,
+        options?: HubOptions_Base<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         if (!isValidChainId(chainId)) return
 
@@ -186,7 +185,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
@@ -216,7 +215,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getStats(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
         if (!isValidChainId(chainId)) return
         const response = await fetchFromLooksRare<{
@@ -241,29 +240,28 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
             data: Order[]
         }>(
             chainId,
-            urlcat('/api/v1/orders', {
-                // For ask (aka. listing) set true. For bid (aka. offer) set false.
-                isOrderAsk: side === OrderSide.Sell,
+            urlcat('/api/v2/orders', {
+                // For ask (aka. listing) set 1. For bid (aka. offer) set 0.
+                quoteType: side === OrderSide.Sell ? 1 : 0,
                 collection: address,
-                tokenId,
+                itemId: tokenId,
                 pagination: indicator
                     ? JSON.stringify({
                           first: indicator.index * LOOKSRARE_PAGE_SIZE,
                       })
                     : undefined,
-                sort: 'NEWEST',
+                sort: 'PRICE_DESC',
             }),
         )
 
         if (!response?.data.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
-
         const orders = response.data.map((x) => createNonFungibleTokenOrderFromOrder(chainId, x))
         return createPageable(
             orders,
@@ -272,11 +270,11 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
     }
 
-    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    async getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 }

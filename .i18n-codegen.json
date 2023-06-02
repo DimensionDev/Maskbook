@@ -432,6 +432,19 @@
             }
         },
         {
+            "input": "./packages/plugins/Claim/src/locales/en-US.json",
+            "output": "./packages/plugins/Claim/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.claim",
+                "trans": "Translate",
+                "emitTS": true,
+                "shouldUnescape": true
+            }
+        },
+        {
             "input": "./packages/plugins/VCent/src/locales/en-US.json",
             "output": "./packages/plugins/VCent/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -468,6 +481,18 @@
                 "trans": "Translate",
                 "emitTS": true,
                 "shouldUnescape": true
+            }
+        },
+        {
+            "input": "./packages/plugins/Claim/src/locales/en-US.json",
+            "output": "./packages/plugins/Claim/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.claim",
+                "trans": "Translate",
+                "emitTS": true
             }
         }
     ]

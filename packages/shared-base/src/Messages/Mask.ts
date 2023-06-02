@@ -2,8 +2,8 @@ import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
 import type { NetworkPluginID, PluginID } from '../Plugin/index.js'
-import type { PersonaInformation, RelationFavor } from '../Persona/type.js'
-import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
+import type { PersonaInformation, RelationFavor } from '../Persona/types.js'
+import type { EnhanceableSite, ExtensionSite } from '../Site/types.js'
 
 export type PersonaSelectPanelDialogEvent = {
     open: boolean
@@ -24,8 +24,9 @@ export interface MaskSNSEvents {
     autoPasteFailed: AutoPasteFailedEvent
     replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
-    profileTabUpdated: ProfileNFTsPageEvent
+    profileTabUpdated: ProfileTabEvent
     profileTabHidden: { hidden: boolean }
+    postReplacerHidden: postReplacerHiddenEvent
     profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
@@ -34,6 +35,7 @@ export interface MaskSNSEvents {
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
+    telemetryIDReset: string
     /** value is "bulkKey" */
     legacySettings_bulkDiscoverNS: string
     /** emit when the settings changed. */
@@ -127,8 +129,9 @@ export type ProfileCardEvent =
           open: true
           userId: string
           address?: string
-          badgeBounding: DOMRect
-          openFromTrendingCard?: boolean
+          anchorBounding: DOMRect
+          anchorEl: HTMLElement | null
+          external?: boolean
       }
 
 export type NonFungibleTokenDialogEvent =
@@ -183,8 +186,18 @@ export interface FollowLensDialogEvent {
     handle: string
 }
 
-export interface ProfileNFTsPageEvent {
+export enum ProfileTabs {
+    WEB3 = 'web3',
+    DAO = 'dao',
+}
+export interface ProfileTabEvent {
     show: boolean
+    type?: ProfileTabs
+}
+
+export interface postReplacerHiddenEvent {
+    hidden: boolean
+    postId: string
 }
 
 export interface OpenPageConfirmEvent {

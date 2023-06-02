@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
 import { createIndicator, createNextIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    type HubOptions,
     type NonFungibleToken,
     type NonFungibleTokenContract,
     ActivityType,
@@ -21,7 +20,7 @@ import type {
     WalletOffer,
 } from './types.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
@@ -87,7 +86,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
 }
 
 export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getToken(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getToken(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
             chainId,
@@ -102,7 +101,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTToken(chainId, token, collection)
     }
 
-    async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const [token, auction, nft] = await Promise.all([
             this.getToken(address, tokenMint, {
@@ -140,7 +139,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         }
     }
 
-    async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+    async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         if ((indicator?.index ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -192,7 +191,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createPageable(data ?? EMPTY_LIST, createIndicator(indicator))
     }
 
-    async getContract(tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getContract(tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
             chainId,
@@ -210,7 +209,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const activities = await fetchFromMagicEden<TokenActivity[]>(
@@ -249,7 +248,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const limit = size || 20
@@ -282,7 +281,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getCollectionsByOwner(
         symbol: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const collections = await fetchFromMagicEden<Collection[]>(

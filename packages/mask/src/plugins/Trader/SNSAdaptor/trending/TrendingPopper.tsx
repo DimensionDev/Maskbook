@@ -1,69 +1,52 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { useLocation, useWindowScroll } from 'react-use'
-import { ClickAwayListener, type PopperProps, Fade } from '@mui/material'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { SocialIdentity } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginTraderMessages } from '../../messages.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { PluginTransakMessages } from '@masknet/plugin-transak'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { ClickAwayListener, Fade } from '@mui/material'
+import { memo, useEffect, useState } from 'react'
+import { useLocation } from 'react-use'
+import { PluginTraderMessages } from '../../messages.js'
+import { AnchorProvider } from '@masknet/shared-base-ui'
 
-export interface TrendingPopperProps extends Omit<PopperProps, 'children' | 'open'> {
+export interface TrendingPopperProps {
     children?: (
         name?: string,
         type?: TrendingAPI.TagType,
         currentResult?: Web3Helper.TokenResultAll,
         setActive?: (x: boolean) => void,
-        badgeBounding?: DOMRect,
         identity?: SocialIdentity,
         address?: string,
         isCollectionProjectPopper?: boolean,
-        reposition?: () => void,
     ) => React.ReactNode
-    PopperProps?: Partial<PopperProps>
+    locked?: boolean
 }
 
-export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
-    const popperRef = useRef<{
-        update(): void
-    } | null>(null)
+export const TrendingPopper = memo(function TrendingPopper({ children, locked }: TrendingPopperProps) {
     const [active, setActive] = useState(false)
-    const [freezed, setFreezed] = useState(false) // disable any click
     const [name, setName] = useState('')
     const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [identity, setIdentity] = useState<SocialIdentity | undefined>()
     const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [address, setAddress] = useState('')
     const [currentResult, setCurrentResult] = useState<Web3Helper.TokenResultAll>()
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [initialOffsetY, setInitialOffsetY] = useState(0)
 
-    // #region select token and provider dialog could be opened by trending view
-    const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated, onFreezed)
-    useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
-    useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated, onFreezed)
-    // #endregion
-
     // open popper from message center
-    const position = useWindowScroll()
     useEffect(() => {
         return PluginTraderMessages.trendingAnchorObserved.on((ev) => {
-            setInitialOffsetY(position.y)
+            setInitialOffsetY(window.scrollY)
             setName(ev.name)
             setCurrentResult(ev.currentResult)
             setType(ev.type)
-            setBadgeBounding(ev.badgeBounding)
+            setBadgeBounding(ev.anchorBounding)
+            setAnchorEl(ev.anchorEl)
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
             setIsNFTProjectPopper(!!ev.isCollectionProjectPopper)
             setActive(true)
         })
-    }, [position.y])
+    }, [])
 
     useEffect(() => {
         const onResize = () => setActive(false)
@@ -89,7 +72,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     return (
         <ClickAwayListener
             onClickAway={() => {
-                if (!freezed) setActive(false)
+                if (!locked) setActive(false)
             }}>
             <Fade in={active} easing="linear" timeout={250}>
                 <div
@@ -100,19 +83,11 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
                             ? { top: badgeBoundingBottom + initialOffsetY + 10 }
                             : { bottom: window.innerHeight - badgeBoundingBottom + 10 - initialOffsetY }),
                     }}>
-                    {children?.(
-                        name,
-                        type,
-                        currentResult,
-                        setActive,
-                        badgeBounding,
-                        identity,
-                        address,
-                        isCollectionProjectPopper,
-                        () => setTimeout(() => popperRef.current?.update(), 100),
-                    )}
+                    <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
+                        {children?.(name, type, currentResult, setActive, identity, address, isCollectionProjectPopper)}
+                    </AnchorProvider>
                 </div>
             </Fade>
         </ClickAwayListener>
     )
-}
+})

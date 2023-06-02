@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
-import { type HubOptions, type Transaction } from '@masknet/web3-shared-base'
+import { type Transaction } from '@masknet/web3-shared-base'
 import { createIndicator, createNextIndicator, createPageable, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { Tx } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
-import type { HistoryAPI } from '../../entry-types.js'
+import type { HistoryAPI, HubOptions_Base } from '../../entry-types.js'
 
 export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     createTransactionFromTx(chainId: ChainId, tx: Tx): Transaction<ChainId, SchemaType> {
@@ -21,7 +21,7 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
 
     async getTransactions(
         address: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const txs = await fetchFromChainbase<Tx[]>(

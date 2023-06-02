@@ -1,6 +1,6 @@
 # Changelog
 
-## AirDrop
+## Airdrop
 
 > Feb-26-2021
 

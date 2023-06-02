@@ -101,22 +101,23 @@ export function PluginGuide({
     onNext,
 }: GuideStepProps) {
     const { classes, cx } = useStyles()
-    const childrenRef = useRef<HTMLElement>()
+    const childrenRef = useRef<HTMLElement>(null)
 
     const [clientRect, setClientRect] = useState<any>({})
-    const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
 
-    const stepVisible = !finished && currentStep === step && !!clientRect?.top && !!clientRect.left
+    const targetVisible = !!clientRect.top && !!clientRect.left && !!clientRect.height && clientRect.width
+    const stepVisible = !finished && currentStep === step && targetVisible
 
     useLayoutEffect(() => {
-        document.body.style.overflow = open ? 'hidden' : ''
-    }, [open])
+        document.documentElement.style.overflow = stepVisible ? 'hidden' : ''
+        document.documentElement.style.paddingLeft = 'calc(100vw - 100%)'
+    }, [stepVisible])
 
     useEffect(() => {
         if (finished) return
 
-        const onResize = () => {
+        const updateClientRect = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
 
             if (cr) {
@@ -130,14 +131,14 @@ export function PluginGuide({
             }
         }
 
-        onResize()
+        updateClientRect()
 
-        window.addEventListener('resize', onResize)
+        window.addEventListener('resize', updateClientRect)
 
         return () => {
-            window.removeEventListener('resize', onResize)
+            window.removeEventListener('resize', updateClientRect)
         }
-    }, [childrenRef, finished])
+    }, [childrenRef.current, finished])
 
     return (
         <>
@@ -150,7 +151,6 @@ export function PluginGuide({
                             className={classes.mask}
                             onClick={(e) => {
                                 e.stopPropagation()
-                                setOpen(false)
                             }}>
                             <div
                                 className={classes.container}

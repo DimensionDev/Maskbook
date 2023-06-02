@@ -1,23 +1,11 @@
 import { useCallback } from 'react'
-import type { AbiItem } from 'web3-utils'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useTelemetry } from '@masknet/web3-telemetry/hooks'
+import { useChainContext, useNetworkContext, useTelemetry } from '@masknet/web3-hooks-base'
+import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
-import {
-    type Web3,
-    ChainId,
-    ChainId as EVM_ChainId,
-    ProviderType as EVM_ProviderType,
-    createContract,
-} from '@masknet/web3-shared-evm'
-import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
-import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
-import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { Web3, Contract } from '@masknet/web3-providers'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -32,42 +20,34 @@ const useStyles = makeStyles()({
 export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
-    const { account, chainId } = useChainContext()
-    const web3 = useWeb3()
-    const connection = useWeb3Connection()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const telemetry = useTelemetry()
 
     const onCaptureEvent = useCallback(async () => {
-        telemetry.captureEvent(TelemetryAPI.EventType.Debug, TelemetryAPI.EventID.Debug)
+        telemetry.captureEvent(EventType.Debug, EventID.Debug)
     }, [telemetry])
 
     const onCaptureException = useCallback(async () => {
-        telemetry.captureException(
-            TelemetryAPI.ExceptionType.Error,
-            TelemetryAPI.ExceptionID.Debug,
-            new Error(`An error message ${Date.now()}.`),
-        )
+        telemetry.captureException(ExceptionType.Error, ExceptionID.Debug, new Error(`An error message ${Date.now()}.`))
     }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {
-        const contract = createContract<ERC20>(
-            web3 as Web3,
-            '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
-            ERC20ABI as AbiItem[],
-        )
-        const estimatedGas = await connection?.estimateTransaction?.(
+        const contract = Contract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {
+            chainId: ChainId.Mainnet,
+        })
+        const estimatedGas = await Web3.estimateTransaction?.(
             {
-                from: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
                 value: '1',
                 data: contract?.methods.approve('0x31f42841c2db5173425b5223809cf3a38fede360', '1').encodeABI(),
             },
             0,
             {
-                chainId: ChainId.Matic,
-                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
-                providerType: EVM_ProviderType.MaskWallet,
-                paymentToken: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                chainId: ChainId.Mainnet,
+                account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
+                providerType: ProviderType.MaskWallet,
+                paymentToken: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 overrides: {
                     gas: '88888',
                     maxFeePerGas: '88888',
@@ -75,12 +55,13 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 },
             },
         )
+
         // eslint-disable-next-line no-alert
         alert(estimatedGas)
-    }, [web3, connection])
+    }, [])
 
     const onTransferCallback = useCallback(() => {
-        return connection?.transferFungibleToken?.(
+        return Web3.transferFungibleToken(
             '0x0000000000000000000000000000000000000000',
             '0x96ec3286a049b42133c3ddd26777051612bdf61f',
             '100',
@@ -90,18 +71,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 account,
             },
         )
-    }, [connection])
+    }, [])
 
     const onDeployCallback = useCallback(() => {
-        return connection?.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
+        return Web3.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
             chainId: ChainId.Matic,
             account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-            providerType: EVM_ProviderType.MaskWallet,
+            providerType: ProviderType.MaskWallet,
         })
-    }, [connection])
+    }, [])
 
     const onFundCallback = useCallback(() => {
-        return connection?.fund?.(
+        return Web3.fund?.(
             {
                 publicKey: '',
                 type: ProofType.Persona,
@@ -114,33 +95,33 @@ export function ConnectionContent(props: ConnectionContentProps) {
             {
                 chainId: ChainId.Matic,
                 account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-                providerType: EVM_ProviderType.MaskWallet,
+                providerType: ProviderType.MaskWallet,
             },
         )
-    }, [connection])
+    }, [])
 
     const onChangeOwnerChange = useCallback(() => {
-        return connection?.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
+        return Web3.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
             chainId: ChainId.Matic,
             account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-            providerType: EVM_ProviderType.MaskWallet,
+            providerType: ProviderType.MaskWallet,
         })
-    }, [connection])
+    }, [])
 
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
-        return connection?.approveFungibleToken(
+        return Web3.approveFungibleToken(
             '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
             {
                 chainId: ChainId.Matic,
-                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
-                providerType: EVM_ProviderType.MaskWallet,
+                account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
+                providerType: ProviderType.MaskWallet,
                 paymentToken: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             },
         )
-    }, [pluginID, connection])
+    }, [pluginID])
 
     const onSign = useCallback(
         async (type: string) => {
@@ -203,11 +184,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
             const sign = async () => {
                 switch (type) {
                     case 'message':
-                        return connection?.signMessage('message', message)
+                        return Web3.signMessage('message', message)
                     case 'typedData':
-                        return connection?.signMessage('typedData', typedData)
+                        return Web3.signMessage('typedData', typedData)
                     case 'transaction':
-                        return connection?.signTransaction(transaction)
+                        return Web3.signTransaction(transaction)
                     default:
                         return ''
                 }
@@ -215,34 +196,25 @@ export function ConnectionContent(props: ConnectionContentProps) {
             // eslint-disable-next-line no-alert
             alert(`Signed: ${await sign()}`)
         },
-        [chainId, connection],
+        [chainId],
     )
 
-    const onSwitchChain = useCallback(
-        async (chainId: Web3Helper.ChainIdAll) => {
-            return connection?.switchChain?.(chainId)
-        },
-        [connection],
-    )
+    const onSwitchChain = useCallback(async (chainId: ChainId) => {
+        return Web3.switchChain?.(chainId)
+    }, [])
 
-    const onConnect = useCallback(
-        async (chainId: Web3Helper.ChainIdAll, providerType: Web3Helper.ProviderTypeAll) => {
-            await connection?.connect({
-                chainId,
-                providerType,
-            })
-        },
-        [connection],
-    )
+    const onConnect = useCallback(async (chainId: ChainId, providerType: ProviderType) => {
+        await Web3.connect({
+            chainId,
+            providerType,
+        })
+    }, [])
 
-    const onDisconnect = useCallback(
-        async (providerType: Web3Helper.ProviderTypeAll) => {
-            await connection?.disconnect({
-                providerType,
-            })
-        },
-        [connection],
-    )
+    const onDisconnect = useCallback(async (providerType: ProviderType) => {
+        await Web3.disconnect({
+            providerType,
+        })
+    }, [])
 
     return (
         <section className={classes.container}>
@@ -435,7 +407,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === EVM_ChainId.Mainnet ? EVM_ChainId.BSC : EVM_ChainId.Mainnet,
+                                                chainId === ChainId.Mainnet ? ChainId.BSC : ChainId.Mainnet,
                                             )
                                             break
                                         default:
@@ -458,13 +430,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={async () => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            await onConnect(EVM_ChainId.Mainnet, EVM_ProviderType.MetaMask)
-                                            break
-                                        case NetworkPluginID.PLUGIN_SOLANA:
-                                            await onConnect(SolanaChainId.Mainnet, SolanaProviderType.Phantom)
-                                            break
-                                        case NetworkPluginID.PLUGIN_FLOW:
-                                            await onConnect(FlowChainId.Mainnet, FlowProviderType.Blocto)
+                                            await onConnect(ChainId.Mainnet, ProviderType.MetaMask)
                                             break
                                         default:
                                             break
@@ -486,13 +452,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={async () => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            await onDisconnect(EVM_ProviderType.MetaMask)
-                                            break
-                                        case NetworkPluginID.PLUGIN_SOLANA:
-                                            await onDisconnect(SolanaProviderType.Phantom)
-                                            break
-                                        case NetworkPluginID.PLUGIN_FLOW:
-                                            await onDisconnect(FlowProviderType.Blocto)
+                                            await onDisconnect(ProviderType.MetaMask)
                                             break
                                         default:
                                             break

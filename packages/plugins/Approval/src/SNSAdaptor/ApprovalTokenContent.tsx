@@ -3,9 +3,20 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { useChainContext, useWeb3State, useNetworkDescriptor, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNetworkDescriptor,
+    useFungibleTokenSpenders,
+    useFungibleToken,
+} from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { type NetworkDescriptor, type FungibleTokenSpender, formatSpendingCap } from '@masknet/web3-shared-base'
+import {
+    type NetworkDescriptor,
+    type FungibleTokenSpender,
+    formatSpendingCap,
+    formatBalance,
+} from '@masknet/web3-shared-base'
 import { ChainBoundary, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
@@ -137,7 +148,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: spenders, loading, retry } = useFungibleTokenSpenders({ chainId, account })
+    const { data: spenders, isLoading, refetch } = useFungibleTokenSpenders({ chainId, account })
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
@@ -145,19 +156,19 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    if (loading) return <ApprovalLoadingContent />
+    if (isLoading) return <ApprovalLoadingContent />
 
     if (!spenders || spenders.length === 0) return <ApprovalEmptyContent />
 
     return (
         <List className={classes.approvalContentWrapper}>
-            {spenders.map((spender, i) => (
+            {spenders.map((spender) => (
                 <ApprovalTokenItem
-                    key={i}
+                    key={`${spender.address}.${spender.tokenInfo.address}`}
                     spender={spender}
                     networkDescriptor={networkDescriptor}
                     chainId={chainId}
-                    retry={retry}
+                    retry={refetch}
                 />
             ))}
         </List>
@@ -179,7 +190,6 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,
     })
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const [_, transactionState, approveCallback] = useERC20TokenApproveCallback(
         spender.tokenInfo.address,
@@ -188,28 +198,38 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         retry,
         chainId,
     )
+
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
+        chainId,
+    })
+    const amount = spender.amount ? spender.amount : formatBalance(spender.rawAmount, token?.decimals)
+
     return (
         <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
                         <TokenIcon address={spender.tokenInfo.address} className={classes.logoIcon} />
-                        <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
-                        <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
+                        <Typography className={classes.primaryText}>
+                            {spender.tokenInfo.symbol || token?.symbol}
+                        </Typography>
+                        <Typography className={classes.secondaryText}>
+                            {spender.tokenInfo.name || token?.name}
+                        </Typography>
                     </div>
                     <div className={classes.contractInfo}>
                         <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                        {typeof spender.logo === 'string' ? (
+                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
                             <img src={spender.logo} className={classes.spenderLogoIcon} />
                         ) : (
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name ?? Others?.formatAddress(spender.address, 4)}
+                            {spender.name || Others.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, spender.address) ?? ''}
+                            href={Others.explorerResolver.addressLink(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
@@ -217,7 +237,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                        <Typography className={classes.primaryText}>{formatSpendingCap(spender.amount)}</Typography>
+                        <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
                     </div>
                 </div>
                 <ChainBoundary

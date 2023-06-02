@@ -7,6 +7,7 @@ import {
     type ProviderDescriptor,
     SourceType,
 } from '../specs/index.js'
+import { memoize } from 'lodash-es'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -186,10 +187,12 @@ export function createProviderResolver<ChainId, ProviderType>(
 export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
     {
         [SocialAddressType.Address]: '',
+        [SocialAddressType.ARBID]: 'https://arb.id/',
         [SocialAddressType.ENS]: 'https://ens.domains/',
         [SocialAddressType.SPACE_ID]: 'https://space.id/',
         [SocialAddressType.RSS3]: 'https://rss3.bio/',
         [SocialAddressType.Crossbell]: 'https://crossbell.io/',
+        [SocialAddressType.Firefly]: '',
         [SocialAddressType.SOL]: 'https://naming.bonfida.org/',
         [SocialAddressType.NEXT_ID]: 'https://next.id/',
         [SocialAddressType.CyberConnect]: 'https://cyberconnect.me/',
@@ -198,6 +201,7 @@ export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressT
         [SocialAddressType.TwitterBlue]: '',
         [SocialAddressType.Mask]: '',
         [SocialAddressType.Lens]: '',
+        [SocialAddressType.OpenSea]: '',
     },
     () => '',
 )
@@ -238,6 +242,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.Etherscan]: 'Etherscan',
         [SourceType.CryptoPunks]: 'CryptoPunks',
         [SourceType.SimpleHash]: 'SimpleHash',
+        [SourceType.Approval]: 'Approval',
     },
     (providerType) => {
         throw new Error(`Unknown source type: ${providerType}.`)
@@ -257,14 +262,22 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
 
 export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginID, string>(
     {
-        [NetworkPluginID.PLUGIN_EVM]: 'Ethereum wallet',
-        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
-        [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+        [NetworkPluginID.PLUGIN_EVM]: 'Ethereum Wallet',
+        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana Wallet',
+        [NetworkPluginID.PLUGIN_FLOW]: 'Flow Wallet',
     },
     (network) => {
         throw new Error(`Unknown network plugin-id: ${network}`)
     },
 )
+
+export const resolveNextIDPlatformWalletName: (platform: NextIDPlatform) => string = memoize(function (
+    platform: NextIDPlatform,
+) {
+    const pluginId = resolveNextID_NetworkPluginID(platform)
+    if (!pluginId) return `${platform} wallet`
+    return resolveNetworkWalletName(pluginId)
+})
 
 export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
     {
@@ -344,6 +357,8 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return `https://warpcast.com/${identifier}`
         case NextIDPlatform.Bit:
             return `https://bit.cc/${name}`
+        case NextIDPlatform.Unstoppable:
+            return `https://ud.me/${name}`
         default:
             return ''
     }

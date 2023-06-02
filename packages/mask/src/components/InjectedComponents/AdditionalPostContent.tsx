@@ -24,8 +24,8 @@ export interface AdditionalContentProps {
 }
 const useStyles = makeStyles()((theme) => ({
     root: { boxSizing: 'border-box', width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' },
-    title: { display: 'flex', alignItems: 'center' },
-    icon: { marginRight: theme.spacing(1), display: 'flex', width: 24, height: 24 },
+    title: { display: 'flex', alignItems: 'center', fontSize: 'inherit' },
+    icon: { marginRight: theme.spacing(1), display: 'flex', width: 18, height: 18 },
     content: { margin: theme.spacing(1, 0), padding: 0, overflowWrap: 'break-word' },
     rightIcon: { paddingLeft: theme.spacing(0.75) },
 }))
@@ -51,7 +51,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
             className={classes.title}>
-            <span className={classes.icon}>{ProgressJSX || <Icons.MaskBlue />}</span>
+            <span className={classes.icon}>{ProgressJSX || <Icons.MaskBlue size={18} />}</span>
             <Box
                 sx={{
                     flex: 1,

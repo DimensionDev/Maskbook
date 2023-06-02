@@ -11,7 +11,7 @@ import {
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { GrantPermissions, InjectedDialog, useSharedI18N } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
@@ -119,7 +119,7 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
                     <DialogContent>
                         <GrantPermissions
                             classes={{ action: classes.action }}
-                            permissions={define.enableRequirement.host_permissions ?? []}
+                            permissions={define.enableRequirement.host_permissions ?? EMPTY_LIST}
                             onGrant={onGrant}
                         />
                     </DialogContent>

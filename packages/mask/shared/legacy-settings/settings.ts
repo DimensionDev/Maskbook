@@ -3,7 +3,7 @@ import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
 import { BooleanPreference } from '@masknet/plugin-infra'
-import { Sentry } from '@masknet/web3-providers'
+import { Sentry } from '@masknet/web3-telemetry'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)

@@ -167,8 +167,8 @@
     "wallets_assets_price": "价格",
     "wallets_assets_value": "价值",
     "wallets_assets_operation": "操作",
-    "wallets_assets_more_expand": "价值较小的代币未显示({{- direction}} $1) 。全部显示",
-    "wallets_assets_more_collapse": "价值较小的代币已显示({{- direction}} $1) 。全部隐藏",
+    "wallets_assets_more$collapsed": "值较小的 Token 不会显示({{- symbol }} $1) 。显示全部",
+    "wallets_assets_more$expanded": "值较小的 Token 会显示({{- symbol }} $1) 。隐藏全部",
     "wallets_assets_more_show_all": "全部显示",
     "wallets_address": "钱包地址",
     "wallets_receive_tips": "扫描二维码并发送{{chainName}} 资产到此钱包",
@@ -395,5 +395,6 @@
     "recovery_smart_pay_wallet_description_other": "本地检测到 {{count}} 个 SmartPay 钱包并且恢复成功。",
     "welcome_request_to_collect": "允许我们收集您的使用信息以帮助我们改进。",
     "wallet_history_no_data": "没有历史记录。",
-    "welcome_agreement_policy": "我已阅读并同意 <agreement>服务协议</agreement> 和 <policy>隐私政策</policy>。"
+    "welcome_agreement_policy": "我已阅读并同意 <agreement>服务协议</agreement> 和 <policy>隐私政策</policy>。",
+    "wallets_history_burn": "燃烧"
 }

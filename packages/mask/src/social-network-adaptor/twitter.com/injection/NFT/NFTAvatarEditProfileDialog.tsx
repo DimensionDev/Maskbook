@@ -14,21 +14,21 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import { Services } from '../../../../extension/service.js'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { ButtonStyle } from '../../constant.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <OpenNFTAvatarEditProfileButtonInTwitter />,
     )
 
     // clear cache
     const saveButtonWatcher = new MutationObserverWatcher(searchProfileSaveSelector()).useForeach(
         (node, key, proxy) => {
-            const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+            const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
             root.render(<NFTAvatarSave />)
             return () => root.destroy()
         },

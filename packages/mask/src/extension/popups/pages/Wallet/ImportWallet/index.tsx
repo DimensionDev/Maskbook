@@ -8,9 +8,9 @@ import { Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { PopupRoutes } from '@masknet/shared-base'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { JsonFileBox } from '../components/JsonFileBox/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -88,7 +88,6 @@ const useStyles = makeStyles()({
 const ImportWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const [mnemonic, setMnemonic] = useState('')
@@ -96,6 +95,7 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+
     const schema = useMemo(() => {
         return zod.object({
             name: zod.string().min(1).max(12),
@@ -148,8 +148,9 @@ const ImportWallet = memo(() => {
                             keyStoreContent,
                             keyStorePassword,
                         )
-                        await connection?.connect({
+                        await Web3.connect({
                             account: address,
+                            providerType: ProviderType.MaskWallet,
                         })
                         await WalletRPC.resolveMaskAccount([{ address }])
                         await Services.Helper.removePopupWindow()
@@ -157,9 +158,10 @@ const ImportWallet = memo(() => {
                         break
                     case tabs.privateKey:
                         const account = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
-                        await connection?.connect({
+                        await Web3.connect({
                             account,
                             chainId: ChainId.Mainnet,
+                            providerType: ProviderType.MaskWallet,
                         })
                         await WalletRPC.resolveMaskAccount([{ address: account }])
                         await Services.Helper.removePopupWindow()
@@ -174,7 +176,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs, connection],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)

@@ -30,10 +30,7 @@ const useStyles = makeStyles()(() => ({
     icon: {},
 }))
 
-interface NFTAvatarClipInTwitterProps {
-    signal: AbortSignal
-}
-export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
+export function NFTAvatarClipInTwitter() {
     const windowSize = useWindowSize()
     const location = useLocation()
     const borderElement = useRef<Element | null>()

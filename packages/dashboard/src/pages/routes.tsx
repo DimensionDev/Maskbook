@@ -2,8 +2,8 @@ import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
 import { DashboardRoutes, type RestoreSuccessEvent } from '@masknet/shared-base'
 import { Messages } from '../API.js'
 import { useDashboardI18N } from '../locales/index.js'
@@ -52,7 +52,7 @@ export function Pages() {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
 
-    useMountReport(TelemetryAPI.EventID.AccessDashboard)
+    useMountReport(EventID.AccessDashboard)
 
     return (
         <Suspense fallback={null}>

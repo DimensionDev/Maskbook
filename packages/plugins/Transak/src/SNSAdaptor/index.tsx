@@ -1,18 +1,16 @@
-import { Trans } from 'react-i18next'
-import type { Plugin } from '@masknet/plugin-infra'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra'
+import { ApplicationEntry } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Trans } from 'react-i18next'
 import { base } from '../base.js'
-import { BuyTokenDialog } from './BuyTokenDialog.js'
 import { PluginTransakMessages } from '../messages.js'
+import { BuyTokenGlobalInjection } from './BuyTokenGlobalInjection.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection() {
-        return <BuyTokenDialog />
-    },
+    GlobalInjection: BuyTokenGlobalInjection,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Transak size={36} />

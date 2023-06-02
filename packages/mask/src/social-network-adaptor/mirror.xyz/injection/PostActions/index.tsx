@@ -7,10 +7,10 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useWeb3Others, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
-import { createReactRootShadowed } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -18,7 +18,7 @@ const ActionsRenderer = createInjectHooksRenderer(
 )
 
 export function PostActions() {
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const identifier = usePostInfoDetails.author()
     const nickname = usePostInfoDetails.nickname()
@@ -32,16 +32,12 @@ export function PostActions() {
                 {
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: identifier.userId,
-                    label: nickname
-                        ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}`
-                        : identifier.userId,
+                    label: nickname ? `(${nickname}) ${Others.formatAddress(identifier.userId, 4)}` : identifier.userId,
                 },
                 ...(coAuthors?.map((x) => ({
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: x.author.userId,
-                    label: x.nickname
-                        ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}`
-                        : x.author.userId,
+                    label: x.nickname ? `(${x.nickname}) ${Others.formatAddress(x.author.userId, 4)}` : x.author.userId,
                 })) ?? []),
             ]}
             identity={identifier}
@@ -60,7 +56,7 @@ function createPostActionsInjector() {
             </Web3ContextProvider>
         )
         if (postInfo.actionsElement) {
-            const root = createReactRootShadowed(postInfo.actionsElement.afterShadow, {
+            const root = attachReactTreeWithContainer(postInfo.actionsElement.afterShadow, {
                 key: 'post-actions',
                 signal,
             })

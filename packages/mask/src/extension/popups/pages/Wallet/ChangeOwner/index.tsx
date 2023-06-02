@@ -8,14 +8,15 @@ import {
     DashboardRoutes,
     ECKeyIdentifier,
     formatPersonaFingerprint,
-    NetworkPluginID,
+    type NetworkPluginID,
     PopupRoutes,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
+import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
@@ -146,7 +147,6 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount | undefined>()
 
     const { smartPayChainId } = useContainer(PopupContext)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet()
     const wallets = useWallets()
 
@@ -162,8 +162,12 @@ export default function ChangeOwner() {
     const [, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !contractAccount) return
         if (!isSameAddress(wallet?.address, contractAccount.address))
-            await connection?.connect({ account: contractAccount?.address, chainId: smartPayChainId })
-        const hash = await connection?.changeOwner?.(manageAccount.address, {
+            await Web3.connect({
+                account: contractAccount?.address,
+                chainId: smartPayChainId,
+                providerType: ProviderType.MaskWallet,
+            })
+        const hash = await Web3.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
             account: contractAccount?.address,
             providerType: ProviderType.MaskWallet,
@@ -173,23 +177,28 @@ export default function ChangeOwner() {
 
         if (!hash) return
 
-        const result = await connection?.confirmTransaction(hash, {
+        const receipt = await Web3.confirmTransaction(hash, {
             signal: AbortSignal.timeout(5 * 60 * 1000),
         })
+        if (!receipt.status) return
 
-        if (!result?.status) return
-        await connection?.updateOrAddWallet?.({
-            name: 'Smart Pay',
-            owner: manageAccount.address,
-            identifier: manageAccount.identifier?.toText(),
-            address: contractAccount.address,
-            hasDerivationPath: false,
-            hasStoredKeyInfo: false,
-            id: contractAccount.address,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        })
-    }, [manageAccount?.address, smartPayChainId, contractAccount, wallet, connection])
+        await Web3.updateOrAddWallet?.(
+            {
+                name: 'Smart Pay',
+                owner: manageAccount.address,
+                identifier: manageAccount.identifier?.toText(),
+                address: contractAccount.address,
+                hasDerivationPath: false,
+                hasStoredKeyInfo: false,
+                id: contractAccount.address,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                providerType: ProviderType.MaskWallet,
+            },
+        )
+    }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
 
     useTitle(t('popups_wallet_change_owner'))
 

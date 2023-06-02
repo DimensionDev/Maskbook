@@ -91,7 +91,6 @@
       "@masknet/web3-telemetry": ["./packages/web3-telemetry/src"],
       "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
-      "@masknet/web3-state": ["./packages/web3-state/src"],
       "@masknet/web3-hooks-base": ["./packages/web3-hooks/base/src"],
       "@masknet/web3-hooks-evm": ["./packages/web3-hooks/evm/src"],
       "@masknet/web3-shared-base": ["./packages/web3-shared/base/src"],
@@ -133,6 +132,7 @@
       "@masknet/plugin-transak": ["./packages/plugins/Transak/src"],
       "@masknet/plugin-vcent": ["./packages/plugins/VCent/src"],
       "@masknet/plugin-collectible": ["./packages/plugins/Collectible/src"],
+      "@masknet/plugin-claim": ["./packages/plugins/Claim/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     }

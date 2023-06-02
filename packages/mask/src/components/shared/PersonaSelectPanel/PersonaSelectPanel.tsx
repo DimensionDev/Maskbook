@@ -14,7 +14,7 @@ import {
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
@@ -55,7 +55,9 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { finishTarget, enableVerify = true, onClose } = props
+
     const { t } = useI18N()
+
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
 
@@ -99,8 +101,8 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         CrossIsolationMessages.events.openPageConfirm,
     )
 
-    useEffect(() => {
-        if (personas.length || !finishTarget || loading || error) return
+    useLayoutEffect(() => {
+        if (personas.length || loading || error) return
 
         onClose?.()
         setCreatePersonaConfirmDialog({
@@ -111,7 +113,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [!personas.length, !finishTarget, loading, !error])
+    }, [!personas.length, loading, !error])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -233,6 +235,10 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
     if (error) {
         return <ErrorPanel onRetry={retry} />
+    }
+
+    if (!personas.length) {
+        return <Stack height="100%" justifyContent="space-between" />
     }
 
     return (

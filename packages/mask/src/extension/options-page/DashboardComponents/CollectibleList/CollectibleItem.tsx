@@ -1,5 +1,5 @@
 import { forwardRef, type HTMLProps, memo } from 'react'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography } from '@mui/material'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
@@ -85,9 +85,9 @@ export const CollectibleItem = memo(
             ...rest
         } = props
         const { classes, cx } = useStyles()
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
 
-        const uiTokenId = Others?.formatTokenId(asset.tokenId, 4)
+        const uiTokenId = Others.formatTokenId(asset.tokenId, 4)
 
         const SelectableButton = selectable && multiple ? Checkbox : Radio
 
@@ -116,10 +116,10 @@ export const CollectibleItem = memo(
                     showNetworkIcon={showNetworkIcon}
                     disableLink={disableLink || selectable}
                 />
-                {uiTokenId ? (
+                {asset.metadata?.name || uiTokenId ? (
                     <div className={classes.description}>
                         <Typography className={classes.name} color="textPrimary" variant="body2">
-                            {uiTokenId}
+                            {asset.metadata?.name || uiTokenId}
                         </Typography>
                     </div>
                 ) : null}

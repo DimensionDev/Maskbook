@@ -1,16 +1,18 @@
 import { Suspense, useMemo } from 'react'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
-import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
+import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
-import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
+import { compose, getSiteType, i18NextInstance, NetworkPluginID, queryClient } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
 import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
+import { createPortal } from 'react-dom'
 
 export function MaskUIRootSNS(children: React.ReactNode) {
     return compose(
@@ -33,11 +35,22 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <EnvironmentContextProvider value={context}>
-                <Web3ContextProvider value={context}>
-                    <TelemetryProvider>
-                        <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
-                    </TelemetryProvider>
-                </Web3ContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    {process.env.NODE_ENV === 'development'
+                        ? createPortal(
+                              <ReactQueryDevtools
+                                  position="bottom-right"
+                                  toggleButtonProps={{ style: { width: 24 } }}
+                              />,
+                              document.body,
+                          )
+                        : null}
+                    <Web3ContextProvider value={context}>
+                        <TelemetryProvider>
+                            <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
+                        </TelemetryProvider>
+                    </Web3ContextProvider>
+                </QueryClientProvider>
             </EnvironmentContextProvider>
         </DialogStackingProvider>
     )

@@ -5,9 +5,11 @@ import { first } from 'lodash-es'
 import { LoadingButton } from '@mui/lab'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { useNativeToken, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -52,6 +54,7 @@ const useStyles = makeStyles()({
 
 const AddDeriveWallet = memo(() => {
     const { t } = useI18N()
+
     const indexes = useRef(new Set<number>())
     const navigate = useNavigate()
     const location = useLocation()
@@ -65,8 +68,6 @@ const AddDeriveWallet = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const walletName = new URLSearchParams(location.search).get('name')
     const { mnemonic } = state || {}
-
-    const connection = useWeb3Connection()
 
     const [page, setPage] = useState(0)
 
@@ -125,10 +126,10 @@ const AddDeriveWallet = memo(() => {
                 ),
         )
 
-        await connection?.connect({ account: firstWallet })
+        await Web3.connect({ account: firstWallet, providerType: ProviderType.MaskWallet })
         await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [mnemonic, walletName, wallets.length, connection])
+    }, [mnemonic, walletName, wallets.length])
 
     useTitle(t('popups_add_derive'))
 

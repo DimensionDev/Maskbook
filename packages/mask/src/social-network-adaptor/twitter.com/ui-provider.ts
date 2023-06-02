@@ -24,13 +24,12 @@ import { injectProfileTabAtTwitter } from './injection/ProfileTab.js'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent.js'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
-import { injectSetupPromptAtTwitter } from './injection/SetupPrompt.js'
+import { injectBannerAtTwitter } from './injection/Banner.js'
 import { injectPostBoxComposed } from './injection/inject.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
 import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
-import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter.js'
 import { injectTips } from './injection/Tips/index.js'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar.js'
 import {
@@ -42,8 +41,8 @@ import { TwitterRenderFragments } from './customization/render-fragments.js'
 import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
-import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
 import { injectLens } from './injection/Lens/index.js'
+import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -140,7 +139,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionTwitter(() => false),
+            attachImage: pasteImageToCompositionTwitter,
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,
@@ -181,7 +180,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         postActions: injectPostActionsAtTwitter,
-        setupPrompt: injectSetupPromptAtTwitter,
+        banner: injectBannerAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
             supportedInputTypes: {
@@ -205,13 +204,13 @@ const twitterUI: SocialNetworkUI.Definition = {
         tips: injectTips,
         lens: injectLens,
         profileCard: injectProfileCardHolder,
-        PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
         themeSettings: {
             color: ThemeColor.Blue,
             size: FontSize.Normal,
             mode: ThemeMode.Light,
+            isDim: false,
         },
         nextIDConfig: {
             enable: true,
@@ -220,7 +219,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             getPostIdFromNewPostToast,
         },
         steganography: {
-            // ! Change this might be a breaking change !
+            // ! Change this is a breaking change !
             password() {
                 const id =
                     IdentityProviderTwitter.recognized.value.identifier?.userId ||

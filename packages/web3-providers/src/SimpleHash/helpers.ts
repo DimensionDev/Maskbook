@@ -1,13 +1,5 @@
 import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    WNATIVE,
-    chainResolver,
-    isValidChainId,
-    isValidDomain,
-    resolveImageURL,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { isEmpty } from 'lodash-es'
@@ -15,32 +7,37 @@ import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, queryClient } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TrendingAPI } from '../entry-types.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
-    return fetchJSON<T>(
-        `${SIMPLE_HASH_URL}${path}`,
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: { 'content-type': 'application/json' },
+    return queryClient.fetchQuery<T>({
+        queryKey: [path],
+        staleTime: 10_000,
+        queryFn: async () => {
+            return fetchJSON<T>(
+                `${SIMPLE_HASH_URL}${path}`,
+                {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'content-type': 'application/json' },
+                },
+                {
+                    enableSquash: true,
+                },
+            )
         },
-        {
-            enableSquash: true,
-        },
-    )
+    })
 }
 
 export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
-    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
-    const name = isValidDomain(asset.name)
-        ? asset.name
-        : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
+    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
+    const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
     return {
         id: address,
@@ -75,9 +72,15 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             imageURL: resolveImageURL(
                 asset.image_url || asset.previews.image_large_url,
                 asset.name,
+                asset.collection.name,
                 asset.contract_address,
             ),
-            previewImageURL: resolveImageURL(asset.previews.image_small_url, asset.name, asset.contract_address),
+            previewImageURL: resolveImageURL(
+                asset.previews.image_small_url,
+                asset.name,
+                asset.collection.name,
+                asset.contract_address,
+            ),
             blurhash: asset.previews.blurhash,
             mediaURL: asset.image_url || asset.previews.image_large_url,
         },
@@ -169,3 +172,17 @@ export const getAllChainNames = (pluginID: NetworkPluginID) => {
 export function resolveChain(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll): string | undefined {
     return ChainNameMap[pluginId][chainId]
 }
+
+export const SIMPLE_HASH_HISTORICAL_PRICE_START_TIME = 1669852800
+
+export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
+    {
+        [TrendingAPI.Days.ONE_DAY]: 60 * 60 * 24,
+        [TrendingAPI.Days.ONE_WEEK]: 60 * 60 * 24 * 7,
+        [TrendingAPI.Days.ONE_MONTH]: 60 * 60 * 24 * 30,
+        [TrendingAPI.Days.THREE_MONTHS]: 60 * 60 * 24 * 90,
+        [TrendingAPI.Days.ONE_YEAR]: 0,
+        [TrendingAPI.Days.MAX]: 0,
+    },
+    () => 0,
+)

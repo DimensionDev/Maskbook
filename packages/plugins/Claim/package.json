@@ -1,0 +1,34 @@
+{
+    "name": "@masknet/plugin-claim",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "mask-src": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "dependencies": {
+        "@masknet/icons": "workspace:^",
+        "@masknet/theme": "workspace:^",
+        "@masknet/web3-hooks-evm": "workspace:^",
+        "@masknet/web3-hooks-base": "workspace:^",
+        "@masknet/web3-shared-evm": "workspace:^",
+        "@masknet/shared-base-ui": "workspace:^",
+        "@masknet/plugin-infra": "workspace:^",
+        "@masknet/shared": "workspace:^",
+        "@masknet/shared-base": "workspace:^",
+        "@masknet/web3-contracts": "workspace:^",
+        "@masknet/web3-shared-base": "workspace:^",
+        "@masknet/web3-providers": "workspace:^",
+        "web3-utils": "1.8.0",
+        "bignumber.js": "9.1.1",
+        "urlcat": "^3.1.0",
+        "date-fns": "2.29.3",
+        "@ethersproject/abi": "^5.4.0",
+        "react-use": "^17.4.0",
+        "use-subscription": "^1.8.0",
+        "ethers": "^5.6.8",
+        "merkletreejs": "^0.3.10"
+    }
+}

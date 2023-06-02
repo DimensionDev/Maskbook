@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
@@ -9,7 +9,7 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { Link, Button, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
     AddressItem,
     ConnectPersonaBoundary,
@@ -20,12 +20,19 @@ import {
     TokenWithSocialGroupMenu,
     SocialAccountList,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    NetworkPluginID,
+    NextIDPlatform,
+    PluginID,
+    ProfileTabs,
+} from '@masknet/shared-base'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useReverseAddress, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -120,20 +127,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 }
 
-function handleOpenDialog() {
-    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
+function openWeb3ProfileSettingDialog() {
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
         open: true,
     })
 }
+
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
-    const theme = useTheme()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
+    const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
+    const closeMenu = useCallback(() => setMenuOpen(false), [])
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -164,7 +173,6 @@ function Content(props: ProfileTabContentProps) {
         retry: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
-
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
@@ -188,22 +196,9 @@ function Content(props: ProfileTabContentProps) {
                     x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 return x.pluginID !== PluginID.NextID && shouldDisplay
             })
-            .sort((a, z) => {
-                // order those tabs from next id first
-                if (a.pluginID === PluginID.NextID) return -1
-                if (z.pluginID === PluginID.NextID) return 1
-
-                // order those tabs from collectible first
-                if (a.pluginID === PluginID.Collectible) return -1
-                if (z.pluginID === PluginID.Collectible) return 1
-
-                // place those tabs from debugger last
-                if (a.pluginID === PluginID.Debugger) return 1
-                if (z.pluginID === PluginID.Debugger) return -1
-
-                return a.priority - z.priority
-            })
+            .sort((a, z) => a.priority - z.priority)
     })
+
     const tabs = displayPlugins.map((x) => ({
         id: x.ID,
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
@@ -270,6 +265,7 @@ function Content(props: ProfileTabContentProps) {
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
+            data.type && setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
 
@@ -291,20 +287,32 @@ function Content(props: ProfileTabContentProps) {
         setMenuOpen(false)
     }
 
-    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(
+        profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '',
+    )
+
+    const { value: spaceList = EMPTY_LIST } = useSnapshotSpacesByTwitterHandler(
+        profileTabType === ProfileTabs.DAO ? currentVisitingUserId ?? '' : '',
+    )
+
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
     const trendingResult = collectionList?.[currentTrendingIndex]
 
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, selectedSocialAccount?.address)
+
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
-        if (!currentVisitingUserId) return EMPTY_LIST
-        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
-    }, [currentVisitingUserId])
+        if (!selectedSocialAccount?.label && !domain) return EMPTY_LIST
+        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || domain)
+    }, [selectedSocialAccount, domain])
 
     if (hidden) return null
 
-    const keyword = trendingResult?.address || trendingResult?.name
+    const keyword =
+        profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
+
+    const searchResults = profileTabType === ProfileTabs.WEB3 ? collectionList : spaceList
 
     if (keyword && !isHideInspector)
         return (
@@ -312,8 +320,9 @@ function Content(props: ProfileTabContentProps) {
                 <SearchResultInspector
                     keyword={keyword}
                     isProfilePage
+                    profileTabType={profileTabType}
                     currentSearchResult={trendingResult}
-                    searchResults={collectionList}
+                    searchResults={searchResults}
                     identity={identity}
                 />
             </div>
@@ -325,7 +334,7 @@ function Content(props: ProfileTabContentProps) {
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <GrantPermissions
-                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? []}
+                            permissions={lackPluginDefine?.enableRequirement.host_permissions ?? EMPTY_LIST}
                             onGrant={onGrant}
                         />
                     </PluginCardFrameMini>
@@ -434,25 +443,25 @@ function Content(props: ProfileTabContentProps) {
                                     socialAccount={selectedSocialAccount}
                                 />
                             </Button>
-                            <ThemeProvider theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                <TokenWithSocialGroupMenu
-                                    walletMenuOpen={menuOpen}
-                                    setWalletMenuOpen={setMenuOpen}
-                                    containerRef={buttonRef}
-                                    onAddressChange={onSelect}
-                                    currentAddress={selectedAddress}
-                                    collectionList={collectionList}
-                                    socialAccounts={socialAccounts}
-                                    currentCollection={trendingResult}
-                                    onTokenChange={(currentResult, i) => {
-                                        setCurrentTrendingIndex(i)
-                                        hideInspector(false)
-                                        setMenuOpen(false)
-                                    }}
-                                    fromSocialCard
-                                />
-                            </ThemeProvider>
-                            <SocialAccountList nextIdBindings={nextIdBindings} />
+
+                            <TokenWithSocialGroupMenu
+                                open={menuOpen}
+                                onClose={closeMenu}
+                                anchorEl={buttonRef.current}
+                                onAddressChange={onSelect}
+                                currentAddress={selectedAddress}
+                                collectionList={collectionList}
+                                socialAccounts={socialAccounts}
+                                currentCollection={trendingResult}
+                                onTokenChange={(currentResult, i) => {
+                                    setCurrentTrendingIndex(i)
+                                    hideInspector(false)
+                                    setMenuOpen(false)
+                                }}
+                                fromSocialCard
+                            />
+
+                            <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography
@@ -482,7 +491,7 @@ function Content(props: ProfileTabContentProps) {
                                     directTo={PluginID.Web3Profile}>
                                     <Icons.Gear
                                         variant="light"
-                                        onClick={handleOpenDialog}
+                                        onClick={openWeb3ProfileSettingDialog}
                                         className={classes.gearIcon}
                                         sx={{ cursor: 'pointer' }}
                                     />

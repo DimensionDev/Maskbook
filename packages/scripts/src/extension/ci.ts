@@ -11,9 +11,9 @@ import { type BuildFlagsExtended, getPreset, Preset } from './flags.js'
 const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(
     codegen,
-    function buildSandboxedPlugin() {
-        return buildSandboxedPluginConfigurable(fileURLToPath(BUILD_PATH), true)
-    },
+    // function buildSandboxedPlugin() {
+    //     return buildSandboxedPluginConfigurable(fileURLToPath(BUILD_PATH), true)
+    // },
     // We need to build a version in serial to prepare the webpack cache.
     buildBaseExtension,
     parallel(

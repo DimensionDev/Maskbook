@@ -4,10 +4,10 @@ import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
@@ -112,7 +112,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
     return memo(({ data, index, style }: any) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
 
         const token = data.dataSet[index]
         const onSelect = data.onSelect
@@ -146,8 +146,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         )
 
         const explorerLink = useMemo(() => {
-            return Others?.explorerResolver.fungibleTokenLink(token.chainId, token.address)
-        }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
+            return Others.explorerResolver.fungibleTokenLink(token.chainId, token.address)
+        }, [token.address, token.chainId, Others.explorerResolver.fungibleTokenLink])
 
         const action = useMemo(() => {
             if (mode === TokenListMode.Manage) {

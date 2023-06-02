@@ -1,16 +1,13 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { useAsync, useTimeout } from 'react-use'
 import type { Constant } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { PluginPetMessages } from '../messages.js'
-import { useI18N } from '../locales/index.js'
+import { Web3Storage } from '@masknet/web3-providers'
+import { usePetConstants } from '@masknet/web3-shared-evm'
 import { PetShareDialog } from './PetShareDialog.js'
 import { PetSetDialog } from './PetSetDialog.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { usePetConstants } from '@masknet/web3-shared-evm'
+import { useI18N } from '../locales/index.js'
 import type { ConfigRSSNode } from '../types.js'
 
 enum PetFriendNFTStep {
@@ -18,17 +15,18 @@ enum PetFriendNFTStep {
     ShareFriendNFT = 'share',
 }
 
-export function PetDialog() {
+interface Props {
+    open: boolean
+    onClose(): void
+}
+export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
     const t = useI18N()
-    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [isReady, cancel] = useTimeout(500)
     const { NFTS_BLOCK_ADDRESS = '' } = usePetConstants()
     useAsync(async () => {
-        if (!Storage) return
-        const storage = Storage.createStringStorage('Pets', NFTS_BLOCK_ADDRESS)
+        const storage = Web3Storage.createFireflyStorage('Pets', NFTS_BLOCK_ADDRESS)
         const result = await storage.get<ConfigRSSNode>('_pet_nfts')
         setConfigNFTs(result?.essay)
     }, [Storage, NFTS_BLOCK_ADDRESS])
@@ -36,7 +34,7 @@ export function PetDialog() {
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)
 
     const handleClose = () => {
-        closeDialog()
+        onClose()
         isReady() ? setStep(PetFriendNFTStep.SetFriendNFT) : cancel()
     }
 
@@ -55,4 +53,4 @@ export function PetDialog() {
             </DialogContent>
         </InjectedDialog>
     )
-}
+})

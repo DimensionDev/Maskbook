@@ -2,11 +2,11 @@ import { Trans } from 'react-i18next'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Icons } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
-import { isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
-import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import { useProviderDescriptor, useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../../utils/index.js'
 
@@ -38,7 +38,7 @@ const useStyles = makeStyles<{
     },
     connectWith: {
         fontSize: '14px',
-        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor.dark,
+        color: Sniffings.is_dashboard_page ? '#07101B' : theme.palette.maskColor.dark,
         fontWeight: 700,
     },
     error: {
@@ -78,7 +78,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     const { t } = useI18N()
 
-    const { Others } = useWeb3State(pluginID)
+    const Others = useWeb3Others(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
     const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })

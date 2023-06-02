@@ -8,3 +8,11 @@ export function getProposalIdentifier(url: string): ProposalIdentifier {
         space,
     }
 }
+
+export function resolveSnapshotSpacePageUrl(spaceId: string) {
+    return `https://snapshot.org/#/${spaceId}`
+}
+
+export function resolveSnapshotProposalUrl(spaceId: string, proposalId: string) {
+    return `https://snapshot.org/#/${spaceId}/proposal/${proposalId}`
+}

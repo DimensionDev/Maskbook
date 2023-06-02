@@ -3,12 +3,14 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useMemo, useState } from 'react'
-import { attachReactTreeToGlobalContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
 const selector = () => {
-    return querySelectorAll<HTMLElement>('[data-testid=User-Name] div :has(a[role=link]:not([tabindex]))')
+    return querySelectorAll<HTMLElement>('[data-testid=User-Name] div').filter((node) => {
+        return node.firstElementChild?.matches('a[role=link]:not([tabindex])')
+    })
 }
 
 // structure: <user-name> <user-id> <timestamp>
@@ -23,7 +25,7 @@ export function injectLensOnPost(signal: AbortSignal) {
         const href = link?.getAttribute('href')
         const userId = href?.split('/')[1]
         if (!userId) return
-        attachReactTreeToGlobalContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
+        attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
             <PostLensSlot userId={userId} />,
         )
     })
@@ -75,9 +77,5 @@ function PostLensSlot({ userId }: Props) {
 
     if (!component) return null
 
-    return (
-        <span data-testid="post" className={cx(classes.slot, disabled ? classes.hide : null)}>
-            {component}
-        </span>
-    )
+    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
 }

@@ -1,6 +1,6 @@
 import { defer } from '@masknet/kit'
 import { isEqual } from 'lodash-es'
-import { EMPTY_LIST, EMPTY_OBJECT } from '../index.js'
+import { EMPTY_LIST, EMPTY_OBJECT } from '../Pure/index.js'
 import stringify from 'json-stable-stringify'
 
 export type ValueComparer<T> = (a: T, b: T) => boolean

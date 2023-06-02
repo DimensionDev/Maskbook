@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react'
-import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
+import { InputBase, Box, Typography, Stack, Checkbox, InputAdornment } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
-import { ProfileInList } from './ProfileInList.js'
+import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { ProfileInChip } from './ProfileInChip.js'
-import { FixedSizeList } from 'react-window'
+import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
+import { Icons } from '@masknet/icons'
+import { compact, uniqBy } from 'lodash-es'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -14,16 +15,50 @@ export interface SelectProfileUIProps extends withClasses<'root'> {
     onSetSelected(selected: Profile[]): void
     disabled?: boolean
 }
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     selectedArea: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         display: 'flex',
-        padding: '12px 6px 6px 12px',
+        padding: 0,
     },
-    input: { flex: 1, minWidth: '10em' },
-    buttons: { marginLeft: 8, padding: '2px 6px' },
-})
+    input: {
+        flex: 1,
+        marginBottom: theme.spacing(2),
+    },
+    empty: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: 12,
+        color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
+    },
+    listParent: {
+        height: 400,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    listBody: {
+        height: 400,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+        overflowY: 'auto',
+        flex: 1,
+    },
+    list: {
+        gridGap: '12px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        alignItems: 'flex-start',
+    },
+}))
+
 export function SelectProfileUI(props: SelectProfileUIProps) {
     const { t } = useI18N()
     const { classes } = useStyles(undefined, { props })
@@ -44,19 +79,33 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
             !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
         )
     })
-    const SelectAllButton = (
-        <Button className={classes.buttons} onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
-            {t('select_all')}
-        </Button>
-    )
-    const SelectNoneButton = (
-        <Button className={classes.buttons} onClick={() => onSetSelected([])}>
-            {t('select_none')}
-        </Button>
-    )
-    const showSelectAll = listAfterSearch.length > 0
-    const showSelectNone = selected.length > 0
+    const selectedPubkeyList = compact(selected.map((x) => x.linkedPersona?.publicKeyAsHex))
+    const frozenPubkeyList = compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex))
 
+    const onSelectedAllChange = useCallback(
+        (checked: boolean) => {
+            if (checked) {
+                onSetSelected([...items])
+            } else {
+                onSetSelected([])
+            }
+        },
+        [items],
+    )
+
+    const onSelectedProfiles = useCallback(
+        (item: Profile, checked: boolean) => {
+            if (checked) {
+                onSetSelected([...selected, item])
+            } else
+                onSetSelected(
+                    selected.filter((x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex),
+                )
+        },
+        [selected],
+    )
+
+    const isEmpty = listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search
     return (
         <div className={classes.root}>
             <Box
@@ -64,31 +113,6 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 sx={{
                     display: 'flex',
                 }}>
-                {frozenSelected.length === items.length || !listBeforeSearch.length ? (
-                    <Chip
-                        disabled={disabled}
-                        style={{ marginRight: 6, marginBottom: 6 }}
-                        color="primary"
-                        onDelete={frozenSelected.length !== items.length ? () => onSetSelected([]) : undefined}
-                        label={t('all_friends')}
-                    />
-                ) : (
-                    <>
-                        {frozenSelected.map((x) => FrozenChip(x))}
-                        {selected
-                            .filter((item) => !frozenSelected.includes(item))
-                            .map((item) => (
-                                <ProfileInChip
-                                    disabled={disabled}
-                                    key={item.identifier.toText()}
-                                    item={item}
-                                    onDelete={() =>
-                                        onSetSelected(selected.filter((x) => x.identifier !== item.identifier))
-                                    }
-                                />
-                            ))}
-                    </>
-                )}
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
@@ -100,55 +124,50 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                         if (search !== '' || event.key !== 'Backspace') return
                         onSetSelected(selected.slice(0, selected.length - 1))
                     }}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <Icons.Search />
+                        </InputAdornment>
+                    }
                     placeholder={disabled ? '' : t('search_box_placeholder')}
                     disabled={disabled}
                 />
             </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                }}>
-                {showSelectAll ? SelectAllButton : null}
-                {showSelectNone ? SelectNoneButton : null}
-            </Box>
-            <Box
-                sx={{
-                    flex: 1,
-                }}>
-                <List dense>
-                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search ? (
-                        <ListItem>
-                            <ListItemText primary={t('no_search_result')} />
-                        </ListItem>
-                    ) : null}
-                    <FixedSizeList
-                        itemSize={56}
-                        itemCount={listAfterSearch.length}
-                        overscanCount={5}
-                        width="100%"
-                        height={400}>
-                        {({ index, style }) =>
-                            listAfterSearch[index] ? profileListItem(listAfterSearch[index], style as any) : null
-                        }
-                    </FixedSizeList>
-                </List>
-            </Box>
+            <div className={classes.listParent}>
+                <div className={classes.listBody}>
+                    <Box className={classes.list}>
+                        {isEmpty ? (
+                            <div className={classes.empty}>
+                                <Icons.EmptySimple size={36} />
+                                <Typography>{t('no_search_result')}</Typography>
+                            </div>
+                        ) : (
+                            uniqBy([...frozenSelected, ...items], (x) => x.identifier).map((item) => {
+                                const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                const selected = selectedPubkeyList.includes(pubkey)
+                                const disabled = frozenPubkeyList.includes(pubkey)
+                                return (
+                                    <ProfileInList
+                                        key={item.identifier.toText()}
+                                        item={item as ProfileInformationFromNextID}
+                                        disabled={disabled}
+                                        selected={selected}
+                                        onChange={(_, checked: boolean) => onSelectedProfiles(item, checked)}
+                                    />
+                                )
+                            })
+                        )}
+                    </Box>
+                </div>
+                {!isEmpty ? (
+                    <Stack alignItems="center" flexDirection="row">
+                        <Checkbox onChange={(e) => onSelectedAllChange(e.currentTarget.checked)} />
+                        <Typography>{t('select_all')}</Typography>
+                    </Stack>
+                ) : null}
+            </div>
         </div>
     )
-    function profileListItem(item: Profile, style: React.CSSProperties) {
-        return (
-            <ProfileInList
-                key={item.identifier.toText()}
-                item={item}
-                disabled={disabled}
-                onClick={() => {
-                    onSetSelected(selected.concat(item))
-                    setSearch('')
-                }}
-                ListItemProps={{ style }}
-            />
-        )
-    }
 }
 function FrozenChip(item: Profile) {
     return <ProfileInChip disabled key={item.identifier.toText()} item={item} />

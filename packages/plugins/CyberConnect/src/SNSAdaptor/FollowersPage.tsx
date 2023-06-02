@@ -1,12 +1,13 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
-import { ElementAnchor, useIterator } from '@masknet/shared'
+import { ElementAnchor } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { useFollowers } from '../hooks/useFollowers.js'
 import type { ProfileTab } from '../constants.js'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 import { FollowRow } from './FollowTab.js'
 import { useEffect } from 'react'
+import { useIterator } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

@@ -2,31 +2,30 @@ import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first, noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
+import { Tune as TuneIcon } from '@mui/icons-material'
+import { Icons } from '@masknet/icons'
 import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
-import { Tune as TuneIcon } from '@mui/icons-material'
-import { TokenPanelType, type TradeInfo } from '../../types/index.js'
-import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils/index.js'
-import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
-import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage, isPopupPage, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { currentSlippageSettings } from '../../settings.js'
-import { PluginTraderMessages } from '../../messages.js'
+import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { InputTokenPanel } from './InputTokenPanel.js'
+import { useI18N } from '../../../../utils/index.js'
+import { TokenPanelType } from '../../types/index.js'
+import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
+import { MIN_GAS_LIMIT } from '../../constants/index.js'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
+import { currentSlippageSettings } from '../../settings.js'
+import { PluginTraderMessages } from '../../messages.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
-const useStyles = makeStyles<{
-    isDashboard: boolean
-    isPopup: boolean
-}>()((theme, { isDashboard, isPopup }) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
@@ -43,16 +42,20 @@ const useStyles = makeStyles<{
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
+            color: Sniffings.is_dashboard_page
+                ? `${theme.palette.text.primary}!important`
+                : theme.palette.maskColor?.main,
         },
         card: {
-            background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
-            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+            background: Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
+            border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
             borderRadius: 12,
             padding: 12,
         },
         reverse: {
-            backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
+            backgroundColor: Sniffings.is_dashboard_page
+                ? MaskColorVar.lightBackground
+                : theme.palette.background.default,
             width: 32,
             height: 32,
             borderRadius: 99,
@@ -68,7 +71,7 @@ const useStyles = makeStyles<{
             zIndex: 1,
         },
         chevron: {
-            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
         },
@@ -99,7 +102,7 @@ const useStyles = makeStyles<{
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
             paddingRight: 8,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
@@ -108,10 +111,12 @@ const useStyles = makeStyles<{
                 fontSize: 14,
                 marginRight: 12,
                 fontWeight: 700,
-                color: !isDashboard ? theme.palette.maskColor?.main : undefined,
+                color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.main : undefined,
             },
             ['&:hover']: {
-                backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+                backgroundColor: `${
+                    Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+                }!important`,
                 boxShadow: `0px 4px 30px ${alpha(
                     theme.palette.maskColor.shadowBottom,
                     theme.palette.mode === 'dark' ? 0.15 : 0.1,
@@ -125,18 +130,20 @@ const useStyles = makeStyles<{
         controller: {
             width: '100%',
             // Just for design
-            backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
+            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : theme.palette.background.paper,
             position: 'sticky',
-            bottom: isPopup ? -12 : -20,
+            bottom: Sniffings.is_popup_page ? -12 : -20,
         },
         noToken: {
             borderRadius: '18px !important',
             backgroundColor: `${
-                isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary
+                Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
-                    isDashboard ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
+                    Sniffings.is_dashboard_page
+                        ? theme.palette.primary.main
+                        : lighten(theme.palette.maskColor?.primary, 0.1)
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
@@ -147,7 +154,9 @@ const useStyles = makeStyles<{
         dropIcon: {
             width: 20,
             height: 24,
-            color: `${isDashboard ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
+            color: `${
+                Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.main
+            }!important`,
         },
         whiteDrop: {
             color: '#ffffff !important',
@@ -171,10 +180,10 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onInputAmountChange: (amount: string) => void
     onTokenChipClick?: (token: TokenPanelType) => void
     onRefreshClick?: () => void
-    trades: TradeInfo[]
-    focusedTrade?: TradeInfo
+    trades: Array<AsyncStateRetry<TraderAPI.TradeInfo>>
+    focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
     gasPrice?: string
-    onFocusedTradeChange: (trade: TradeInfo) => void
+    onFocusedTradeChange: (trade: AsyncStateRetry<TraderAPI.TradeInfo>) => void
     onSwitch: () => void
     settings?: boolean
     gasConfig?: GasConfig
@@ -199,15 +208,13 @@ export const TradeForm = memo<AllTradeFormProps>(
         gasConfig,
         ...props
     }) => {
-        const maxAmountTrade = useRef<TradeInfo | null>(null)
+        const maxAmountTrade = useRef<AsyncStateRetry<TraderAPI.TradeInfo> | null>(null)
         const userSelected = useRef(false)
-        const isDashboard = isDashboardPage()
-        const isPopup = isPopupPage()
         const { t } = useI18N()
-        const { classes, cx } = useStyles({ isDashboard, isPopup }, { props })
+        const { classes, cx } = useStyles(undefined, { props })
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
@@ -230,17 +237,17 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const maxAmount = useMemo(() => {
             const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
-            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
+            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.value?.gas ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = BigNumber.max(
                 0,
-                Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
+                Others.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
             )
 
             return isZero(amount_)
                 ? ZERO.toString()
                 : formatBalance(amount_.integerValue(), inputToken?.decimals, undefined, true)
-        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
+        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(
             (amount: string) => {
@@ -279,7 +286,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             onFocusedTradeChange(bestTrade)
                             setExpand(false)
                         }}
-                        isFocus={bestTrade.provider === focusedTrade?.provider}
+                        isFocus={bestTrade.value?.provider === focusedTrade?.value?.provider}
                         isBest
                     />
                 )
@@ -293,7 +300,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             setExpand(false)
                         }}
                         isFocus
-                        isBest={bestTrade.provider === focusedTrade.provider}
+                        isBest={bestTrade.value?.provider === focusedTrade?.value?.provider}
                     />
                 )
             return null
@@ -306,7 +313,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #region clear maxAmount trade cache
         useUpdateEffect(() => {
             if (!focusedTrade || !maxAmountTrade.current) return
-            if (focusedTrade.provider !== maxAmountTrade.current.provider) maxAmountTrade.current = null
+            if (focusedTrade.value?.provider !== maxAmountTrade.current.value?.provider) maxAmountTrade.current = null
         }, [focusedTrade])
 
         useUpdateEffect(() => {
@@ -326,7 +333,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 disableSlippageTolerance: false,
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
-                    gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                    gas: focusedTrade?.value?.gas ?? MIN_GAS_LIMIT,
                     ...gasConfig,
                 },
             })
@@ -337,7 +344,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 open: false,
                 gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
             })
-        }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings, gasConfig])
+        }, [chainId, focusedTrade?.value?.gas, selectAdvancedSettings, gasConfig])
         // #endregion
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(
@@ -410,14 +417,14 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 <Collapse in={isExpand}>
                                     {trades.slice(1).map((trade) => (
                                         <TraderInfo
-                                            key={trade.provider}
+                                            key={trade.value?.provider}
                                             trade={trade}
                                             onClick={() => {
                                                 if (!userSelected.current) userSelected.current = true
                                                 onFocusedTradeChange(trade)
                                                 setExpand(false)
                                             }}
-                                            isFocus={trade.provider === focusedTrade?.provider}
+                                            isFocus={trade.value?.provider === focusedTrade?.value?.provider}
                                             gasPrice={gasPrice}
                                         />
                                     ))}

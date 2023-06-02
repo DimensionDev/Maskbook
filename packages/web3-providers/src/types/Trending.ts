@@ -84,13 +84,14 @@ export namespace TrendingAPI {
     }
 
     export interface Market {
-        current_price: number
+        current_price: string
         circulating_supply?: number
         market_cap?: number
         max_supply?: number
         total_supply?: number
         total_volume?: number
         price_symbol?: string
+        price_token_address?: string
         price_change_percentage_1h?: number
         price_change_24h?: number
         price_change_percentage_1h_in_currency?: number
@@ -103,7 +104,7 @@ export namespace TrendingAPI {
         price_change_percentage_200d_in_currency?: number
         atl_change_percentage?: number
         /** NFT only */
-        floor_price?: number
+        floor_price?: string
         /** NFT only */
         highest_price?: number
         /** NFT only */
@@ -160,7 +161,7 @@ export namespace TrendingAPI {
     }
 
     // #region historical
-    export type Stat = [number | string, number]
+    export type Stat = [number, number]
 
     export interface HistoricalCoinInfo {
         id: number
@@ -182,7 +183,7 @@ export namespace TrendingAPI {
 
     export interface MarketInfo {
         id: string
-        price: string
+        price?: string
         market_cap: string
     }
 
@@ -194,10 +195,10 @@ export namespace TrendingAPI {
         /** Get coin info by address. */
         getCoinInfoByAddress: (address: string) => Promise<CoinInfo | undefined>
         /** Get coin trending information by id. */
-        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
+        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending | undefined>
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
         /** Get token info by symbol */
-        getCoinMarketInfo: (tokenSymbol: string) => Promise<MarketInfo>
+        getCoinMarketInfo: (tokenSymbol: string) => Promise<MarketInfo | undefined>
     }
 }

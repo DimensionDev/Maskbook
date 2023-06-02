@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import Color from 'color'
 import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
-import { makeStyles, MaskTabList, ShadowRootTooltip, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, ShadowRootTooltip, TextOverflowTooltip, useTabs } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { ProposalTab } from './ProposalTab.js'
@@ -103,7 +103,8 @@ export function Snapshot() {
                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                 <Box className={classes.title}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <ShadowRootTooltip
+                        <TextOverflowTooltip
+                            as={ShadowRootTooltip}
                             PopperProps={{
                                 disablePortal: true,
                             }}
@@ -121,7 +122,7 @@ export function Snapshot() {
                                 sx={{ width: 150, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                                 {proposal.space.name}
                             </Typography>
-                        </ShadowRootTooltip>
+                        </TextOverflowTooltip>
                         <Box sx={{ display: 'flex' }}>
                             <Typography
                                 fontSize={14}

@@ -1,7 +1,9 @@
 import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
 import { makeStyles, ActionButton } from '@masknet/theme'
+import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import {
     type FungibleToken,
     isGreaterThan,
@@ -11,8 +13,14 @@ import {
     formatBalance,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
+import {
+    type ChainId,
+    type GasConfig,
+    SchemaType,
+    useRedPacketConstants,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useSelectFungibleToken,
@@ -25,19 +33,17 @@ import {
 } from '@masknet/shared'
 import {
     useChainContext,
-    useWeb3,
     useWallet,
     useNativeToken,
     useNativeTokenPrice,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
+import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
-import { useAsync } from 'react-use'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
 
 // seconds of 1 day
@@ -139,7 +145,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
     const amount = rightShift(rawAmount || '0', token?.decimals)
-    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares])
+    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares, isRandom])
+    const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : shares ?? 0), [shares, isRandom])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
     useEffect(() => {
@@ -171,8 +178,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [creatingParams, onChange, onNext])
 
     // #region gas
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
+    const { account: publicKey } = useMemo(() => Web3.createAccount(), [])
     const contract_version = 4
     const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
     // #endregion
@@ -201,14 +207,22 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             chainId,
         },
     )
+
+    const { transactionValue, loading: loadingTransactionValue } = useTransactionValue(
+        origin?.total,
+        gasOption?.gas,
+        gasOption?.gasCurrency,
+    )
     // #endregion
 
     const validationMessage = useMemo(() => {
         if (!token) return t.select_a_token()
         if (!account) return tr('plugin_wallet_connect_a_wallet')
-        if (isZero(shares || '0')) return 'Enter shares'
-        if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
-        if (isZero(amount)) return 'Enter an amount'
+        if (isZero(shares || '0')) return t.enter_shares()
+        if (isGreaterThan(shares || '0', 255)) return t.max_shares()
+        if (isGreaterThan(minTotalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
+        if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address)))
+            return t.enter_amount()
 
         if (!isDivisible)
             return t.indivisible({
@@ -216,18 +230,30 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [account, amount, totalAmount, shares, token, balance, t, tr])
+    }, [
+        account,
+        amount,
+        totalAmount,
+        shares,
+        token,
+        balance,
+        t,
+        tr,
+        loadingTransactionValue,
+        gasOption?.gas,
+        minTotalAmount,
+    ])
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
-        if (isGreaterThan(totalAmount, balance))
-            return tr('plugin_gitcoin_insufficient_balance', { symbol: token?.symbol })
+        if (isGreaterThan(totalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
         if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
+        if (new BigNumber(transactionValue).isLessThanOrEqualTo(0)) return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, totalAmount, balance, token?.symbol])
+    }, [isAvailableBalance, totalAmount, balance, token?.symbol, transactionValue])
 
     const selectRef = useRef(null)
 
@@ -285,6 +311,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     onSelectToken={onSelectTokenChipClick}
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
+                    maxAmount={
+                        minTotalAmount.isGreaterThan(balance) && !isZero(balance)
+                            ? minTotalAmount.toString()
+                            : undefined
+                    }
                     isAvailableBalance={isAvailableBalance}
                     balance={balance}
                     maxAmountShares={isRandom || shares === '' ? 1 : shares}

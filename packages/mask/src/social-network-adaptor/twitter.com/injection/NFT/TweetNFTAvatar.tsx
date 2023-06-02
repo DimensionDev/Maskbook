@@ -1,10 +1,11 @@
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
 import { noop } from 'lodash-es'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { getUserId } from '../../utils/user.js'
 
 function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
@@ -13,20 +14,25 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
+                const userId = getUserId(ele)
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
-                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}>
                         <MiniAvatarBorder
                             avatarType={info.avatarType}
                             size={info.width}
                             screenName={
+                                userId ||
                                 activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier
-                                    ?.userId || ''
+                                    ?.userId ||
+                                ''
                             }
                         />
                     </div>,

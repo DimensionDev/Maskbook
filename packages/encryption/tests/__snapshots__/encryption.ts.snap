@@ -839,8 +839,8 @@ exports[`v37 public encryption > full v37 decrypted 1`] = `
           "version": 1,
         },
       ],
-      "meta": {
-        "io.plugin.something": {
+      "meta": Map {
+        "io.plugin.something" => {
           "dict": {
             "a": [
               1,

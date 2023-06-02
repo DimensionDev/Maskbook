@@ -2,10 +2,11 @@ import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { MAX_WALLET_LIMIT } from '@masknet/shared'
-import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, MAX_WALLET_LIMIT } from '@masknet/shared-base'
+import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
@@ -53,12 +54,11 @@ const useStyles = makeStyles()({
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
-    const connection = useWeb3Connection()
     const navigate = useNavigate()
     const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { setChainId, chainId } = useChainContext()
+    const { setChainId, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleClickCreate = useCallback(() => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             browser.tabs.create({
@@ -72,15 +72,16 @@ const SwitchWallet = memo(() => {
 
     const handleSelect = useCallback(
         async (address: string | undefined, options?: { owner?: string; identifier?: ECKeyIdentifier }) => {
-            await connection?.connect({
+            await Web3.connect({
                 account: address,
                 chainId: options?.owner && smartPayChainId ? smartPayChainId : chainId,
+                providerType: ProviderType.MaskWallet,
                 ...options,
             })
             if (options?.owner && smartPayChainId) setChainId(smartPayChainId)
             navigate(PopupRoutes.Wallet, { replace: true })
         },
-        [history, connection, smartPayChainId, chainId],
+        [history, smartPayChainId, chainId],
     )
     return (
         <>

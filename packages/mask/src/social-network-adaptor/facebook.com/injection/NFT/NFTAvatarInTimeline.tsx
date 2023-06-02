@@ -4,7 +4,7 @@ import {
     MutationObserverWatcher,
     type UnboundedRegistry,
 } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, type NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { MaskMessages, type NFTAvatarEvent, attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
@@ -88,10 +88,12 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: Abort
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
+                const proxy = DOMProxy({
+                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                })
                 proxy.realCurrent = info.element
 
-                const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
 
                 root.render(
                     <div

@@ -1,10 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { type PersonaInformation, formatPersonaFingerprint, type Wallet } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Stack, Typography, ListItem, List, Link } from '@mui/material'
 import { FormattedAddress } from '../../../index.js'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
     persona: {
@@ -97,7 +97,7 @@ interface WalletItemProps {
 }
 function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useWalletsStyles({ length: 1 })
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { chainId } = useChainContext()
     return (
         <ListItem className={classes.wallet}>
@@ -105,10 +105,10 @@ function WalletItem({ wallet }: WalletItemProps) {
             <Stack flexDirection="column">
                 <Typography className={classes.nickname}>{wallet.name}</Typography>
                 <Typography className={classes.finger}>
-                    <FormattedAddress address={wallet.address} size={4} formatter={Others?.formatAddress} />
+                    <FormattedAddress address={wallet.address} size={4} formatter={Others.formatAddress} />
                     <Link
                         className={classes.link}
-                        href={Others?.explorerResolver.addressLink(chainId, wallet.address)}
+                        href={Others.explorerResolver.addressLink(chainId, wallet.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Icons.LinkOut size={12} sx={{ transform: 'translate(0px, 2px)' }} />

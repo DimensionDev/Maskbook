@@ -49,13 +49,13 @@ export const NetworkSelector = memo(() => {
     ) as Array<NetworkDescriptor<ChainId, NetworkType>>
 
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection()
+    const Web3 = useWeb3Connection()
 
     const onChainChange = useCallback(
         async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
-            connection?.switchChain?.(chainId)
+            Web3.switchChain?.(chainId)
         },
-        [providerType, account],
+        [providerType, account, Web3],
     )
 
     return (

@@ -2,9 +2,9 @@ import { useCallback } from 'react'
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
-import { startWatch } from '../../../utils/watcher.js'
+import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha } from '@mui/material'
 import { twitterBase } from '../base.js'
@@ -30,20 +30,29 @@ const useStyles = makeStyles()((theme) => ({
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
-    renderPostDialogHintTo('timeline', searchReplyToolbarSelector(), signal)
+    renderPostDialogHintTo('timeline', searchReplyToolbarSelector(), {
+        signal,
+        missingReportRule: { name: 'PostDialog hint timeline', rule: 'https://twitter.com/home' },
+    })
 
     renderPostDialogHintTo(
         'popup',
         postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
-        signal,
+        {
+            signal,
+            missingReportRule: {
+                name: 'PostDialog hint popup',
+                rule: 'https://twitter.com/compose/tweet',
+            },
+        },
     )
 }
 
-function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, signal: AbortSignal) {
+function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, options: WatchOptions) {
     const watcher = new MutationObserverWatcher(ls)
-    startWatch(watcher, signal)
+    startWatch(watcher, options)
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal: options.signal }).render(
         <PostDialogHintAtTwitter reason={reason} />,
     )
 }

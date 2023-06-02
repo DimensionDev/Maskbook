@@ -1,5 +1,5 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { querySelector, sideBarProfileSelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/watcher.js'
@@ -19,15 +19,18 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
     const watcher = new MutationObserverWatcher(toolboxInSidebarSelector())
         .addListener('onAdd', updateStyle)
         .addListener('onChange', updateStyle)
-        .startWatch(
-            {
-                childList: true,
-                subtree: true,
-            },
-            signal,
-        )
 
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    startWatch(watcher, {
+        signal,
+        missingReportRule: {
+            name: 'Sidebar toolbox',
+            rule() {
+                // return false where the page should not match. maybe on mobile size?
+                return true
+            },
+        },
+    })
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxHintAtTwitter category={category} />,
     )
     injectProfile(signal)
@@ -59,5 +62,5 @@ export function useSideBarNativeItemStyleVariants() {
 function injectProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(sideBarProfileSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileLinkAtTwitter />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileLinkAtTwitter />)
 }

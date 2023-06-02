@@ -1,27 +1,25 @@
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { useCustomSnackbar } from '@masknet/theme'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
 
 export const useWalletSign = (message?: string, address?: string) => {
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const [state, fn] = useAsyncFn(
         async (changed: boolean) => {
-            if (changed || !address || !message || !connection) return
+            if (changed || !address || !message) return
             try {
                 showSnackbar(t.notify_wallet_sign(), { processing: true, message: t.notify_wallet_sign_confirm() })
-                const result = await connection.signMessage('message', message, { account: address })
+                const result = await Web3.signMessage('message', message, { account: address })
                 return result
             } catch {
                 showSnackbar(t.notify_wallet_sign(), { variant: 'error', message: t.notify_wallet_sign_cancel() })
                 return
             }
         },
-        [address, message, address, connection],
+        [address, message, address],
     )
 
     useUpdateEffect(() => {

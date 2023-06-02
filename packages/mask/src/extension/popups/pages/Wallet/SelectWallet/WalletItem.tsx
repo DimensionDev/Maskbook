@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
+import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
@@ -52,8 +53,7 @@ export interface WalletItemProps {
 
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
     return (
         <ListItem className={classes.item} onClick={onClick}>
@@ -63,12 +63,12 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                     <div>
                         <Typography className={classes.name}>
                             <Typography component="span"> {wallet.name}</Typography>
-                            {domain && Others?.formatDomainName ? (
+                            {domain ? (
                                 <Typography component="span">{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </Typography>
                         <Typography className={classes.address}>
-                            <FormattedAddress address={wallet.address} size={12} formatter={Others?.formatAddress} />
+                            <FormattedAddress address={wallet.address} size={12} formatter={Others.formatAddress} />
                             <CopyIconButton className={classes.copy} text={wallet.address} />
                         </Typography>
                     </div>

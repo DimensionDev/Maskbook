@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { Typography, Link } from '@mui/material'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import {
@@ -97,7 +97,7 @@ export function ActivityCard(props: ActivityCardProps) {
     const { type } = activity
     const t = useI18N()
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     return (
         <div className={classes.root}>
@@ -134,9 +134,9 @@ export function ActivityCard(props: ActivityCardProps) {
                         {t.plugin_collectible_from()}
                         <strong title={activity.send.address}>
                             {type === ActivityType.Mint
-                                ? Others?.formatAddress(ZERO_ADDRESS, 4)
+                                ? Others.formatAddress(ZERO_ADDRESS, 4)
                                 : activity.send.nickname ||
-                                  (activity.send.address ? Others?.formatAddress(activity.send.address, 4) : '-')}
+                                  (activity.send.address ? Others.formatAddress(activity.send.address, 4) : '-')}
                         </strong>
                     </Typography>
                 ) : null}
@@ -146,10 +146,10 @@ export function ActivityCard(props: ActivityCardProps) {
                             {t.plugin_collectible_to()}
                             <strong title={activity.receive.address}>
                                 {type === ActivityType.Mint
-                                    ? Others?.formatAddress(activity.from?.address, 4)
+                                    ? Others.formatAddress(activity.from?.address, 4)
                                     : activity.receive.nickname ||
                                       (activity.receive.address
-                                          ? Others?.formatAddress(activity.receive.address, 4)
+                                          ? Others.formatAddress(activity.receive.address, 4)
                                           : '-')}
                             </strong>
                         </>
@@ -161,7 +161,7 @@ export function ActivityCard(props: ActivityCardProps) {
                     {activity.hash ? (
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
+                            href={Others.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
                             <Icons.LinkOut className={classes.linkOut} size={16} />
                         </Link>

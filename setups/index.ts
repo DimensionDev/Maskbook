@@ -12,6 +12,7 @@ globalThis.Response = Response
 
 // @ts-ignore
 globalThis.location = {
+    href: '',
     pathname: 'nodejs',
     protocol: 'https',
 }

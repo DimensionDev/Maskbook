@@ -4,14 +4,14 @@ import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
 import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessResponse> | null, gasConfig?: GasConfig) {
     const notifyError = useSwapErrorCallback()
-    const connection = useWeb3Connection()
-    const { account, chainId } = useChainContext()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
     // compose transaction config
@@ -26,21 +26,22 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
     }, [account, tradeComputed, gasConfig])
 
     return useAsyncFn(async () => {
-        if (!account || !config || !connection) {
+        if (!account || !config) {
             return
         }
 
         try {
-            const gas = await connection.estimateTransaction?.(config)
+            const gas = await Web3.estimateTransaction?.(config, undefined, { chainId })
 
-            const hash = await connection.sendTransaction(
+            const hash = await Web3.sendTransaction(
                 {
                     ...config,
                     gas,
                 },
                 { chainId, overrides: { ...gasConfig } },
             )
-            const receipt = await connection.getTransactionReceipt(hash)
+            const receipt = await Web3.getTransactionReceipt(hash)
+            if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error) {
             if (error instanceof Error) {
@@ -48,5 +49,5 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
             }
             return
         }
-    }, [connection, account, chainId, stringify(config), pluginID, notifyError])
+    }, [account, chainId, stringify(config), pluginID, notifyError])
 }

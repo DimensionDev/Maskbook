@@ -1,17 +1,17 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useLocation as useRouteLocation, useNavigate } from 'react-router-dom'
-import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
+import { LoadingButton } from '@mui/lab'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
-import { useWeb3Connection, useWallets } from '@masknet/web3-hooks-base'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useTitle } from '../../../hook/useTitle.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()(() => ({
@@ -89,7 +89,6 @@ const SignRequest = memo(() => {
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const wallets = useWallets()
     const [transferError, setTransferError] = useState(false)
@@ -143,13 +142,13 @@ const SignRequest = memo(() => {
                 setTransferError(true)
             }
         }
-    }, [value, routeLocation.search, connection, wallet])
+    }, [value, routeLocation.search, wallet])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
         await WalletRPC.rejectRequest(value.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [value, connection])
+    }, [value])
 
     useTitle(t('popups_wallet_signature_request_title'))
 

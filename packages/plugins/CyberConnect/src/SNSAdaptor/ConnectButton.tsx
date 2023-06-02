@@ -2,8 +2,8 @@ import { useState, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
 import { useI18N } from '../locales/i18n_generated.js'
@@ -48,8 +48,6 @@ export default function ConnectButton({ address }: { address: string }) {
     const t = useI18N()
     const sharedI18N = useSharedI18N()
     const { classes, cx } = useStyles()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const wallet = useWallet()
     const [isFollowing, setFollowing] = useState(false)
@@ -62,13 +60,12 @@ export default function ConnectButton({ address }: { address: string }) {
     }, [address, account])
 
     const ccInstance = useMemo(() => {
-        if (!web3?.eth.currentProvider) return
         return new CyberConnect({
-            provider: web3.eth.currentProvider,
+            provider: Web3.getWeb3Provider(),
             namespace: 'Mask',
             env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
         })
-    }, [web3, account])
+    }, [account])
 
     const handleClick = useCallback(() => {
         if (!ccInstance) return

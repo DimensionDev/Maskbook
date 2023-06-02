@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
-import { Box, Button, Tooltip, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Button, Typography } from '@mui/material'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
 import { type ChangeEventOptions, CollectibleItem, type SelectableProps } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
@@ -86,7 +86,7 @@ export function CollectibleList(props: CollectibleListProps) {
     } = props
     const { t } = useI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const availableKeys = useMemo(() => collectibles.map(getCollectibleKey), [collectibles])
     const handleItemChange = useCallback(
@@ -122,20 +122,19 @@ export function CollectibleList(props: CollectibleListProps) {
                 ) : (
                     <Box className={classes.root}>
                         {collectibles.map((token, index) => {
-                            const name = token.collection?.name || token.contract?.name
-                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-                            const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+                            const name = token.metadata?.name
+                            const uiTokenId = Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+                            const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
                             const collectibleKey = getCollectibleKey(token)
                             const checked = selectable ? value?.includes(collectibleKey) : false
                             const inactive = value ? !!value?.length && !checked : false
                             return (
-                                <Tooltip
+                                <ShadowRootTooltip
                                     key={index}
                                     title={title}
                                     placement="top"
                                     disableInteractive
                                     PopperProps={{
-                                        disablePortal: true,
                                         placement: 'top',
                                         popperOptions: {
                                             strategy: 'absolute',
@@ -166,7 +165,7 @@ export function CollectibleList(props: CollectibleListProps) {
                                         value={collectibleKey}
                                         onChange={handleItemChange}
                                     />
-                                </Tooltip>
+                                </ShadowRootTooltip>
                             )
                         })}
                     </Box>

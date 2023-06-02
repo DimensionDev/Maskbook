@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type ReactNode } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
@@ -21,10 +21,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
     TrendingCardProps?: Partial<TrendingCardProps>
+    children?: ReactNode
 }
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
-    const { TrendingCardProps } = props
+    const { TrendingCardProps, children } = props
     const { isCollectionProjectPopper, isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
@@ -40,12 +41,14 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                     />
                 )}
                 <CardContent className={classes.content}>
-                    <Stack height="100%" alignItems="center" justifyContent="center">
-                        <LoadingBase />
-                        <Typography fontSize="14px" mt={1.5}>
-                            {t('loading')}
-                        </Typography>
-                    </Stack>
+                    {children ?? (
+                        <Stack height="100%" alignItems="center" justifyContent="center">
+                            <LoadingBase />
+                            <Typography fontSize="14px" mt={1.5}>
+                                {t('loading')}
+                            </Typography>
+                        </Stack>
+                    )}
                 </CardContent>
                 {isCollectionProjectPopper || isTokenTagPopper ? (
                     <PluginDescriptor

@@ -1,25 +1,26 @@
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../utils/index.js'
 import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import Services from '../../../../service.js'
-import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
+import { Controller } from 'react-hook-form'
+import type { z as zod } from 'zod'
+import { first } from 'lodash-es'
+import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { LoadingButton } from '@mui/lab'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
+import { useI18N } from '../../../../../utils/index.js'
+import { ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import Services from '../../../../service.js'
+import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { useHasPassword } from '../../../hook/useHasPassword.js'
-import type { z as zod } from 'zod'
-import { Controller } from 'react-hook-form'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
-import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { first } from 'lodash-es'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
@@ -81,7 +82,6 @@ const WalletRecovery = memo(() => {
     const location = useLocation()
 
     const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection()
     const currentPersona = useValueRef(currentPersonaIdentifier)
 
     const { loading, value } = useAsync(async () => {
@@ -116,28 +116,28 @@ const WalletRecovery = memo(() => {
     const onSubmit = handleSubmit(handleSetPassword)
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
-        const backupId = new URLSearchParams(location.search).get('backupId')
         // If the payment password does not exist, set it first
         if (!hasPassword) {
             await onSubmit()
         }
 
-        if (backupId) {
-            if (value) {
-                await Services.Backup.restoreUnconfirmedBackup({
-                    id: backupId,
-                    action: 'confirm',
-                    countOfSmartPay: value.wallets.filter((x) => x.isSmartPay).length,
-                })
-                const wallet = first(value.wallets)
+        const backupId = new URLSearchParams(location.search).get('backupId')
 
-                // Set default wallet
-                if (wallet) {
-                    await connection?.connect({
-                        account: wallet.address,
-                        chainId: ChainId.Mainnet,
-                    })
-                }
+        if (backupId && value) {
+            await Services.Backup.restoreUnconfirmedBackup({
+                id: backupId,
+                action: 'confirm',
+                countOfSmartPay: value.wallets.filter((x) => x.isSmartPay).length,
+            })
+            const wallet = first(value.wallets)
+
+            // Set default wallet
+            if (wallet) {
+                await Web3.connect({
+                    account: wallet.address,
+                    chainId: ChainId.Mainnet,
+                    providerType: ProviderType.MaskWallet,
+                })
             }
         }
         await Services.Helper.removePopupWindow()

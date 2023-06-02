@@ -1,22 +1,22 @@
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
-import { isDashboardPage } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 // TODO: remove isDashboard after remove Dashboard page
-const useStyles = makeStyles<{
-    isDashboard: boolean
-}>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: `${isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        background: `${
+            Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input
+        }!important`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         position: 'relative',
         minHeight: 115,
         outline: 'none!important',
@@ -28,12 +28,12 @@ const useStyles = makeStyles<{
     balance: {
         fontWeight: 700,
         lineHeight: '18px',
-        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.second,
         wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,
-        color: !isDashboard ? theme.palette.maskColor?.primary : undefined,
+        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
         fontWeight: 700,
     },
     input: {
@@ -48,9 +48,11 @@ const useStyles = makeStyles<{
         borderRadius: 6,
         marginLeft: 8,
         height: 20,
-        backgroundColor: !isDashboard ? theme.palette.maskColor?.primary : undefined,
+        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
         '&:hover': {
-            backgroundColor: !isDashboard ? `${lighten(theme.palette.maskColor?.primary, 0.1)}!important` : undefined,
+            backgroundColor: !Sniffings.is_dashboard_page
+                ? `${lighten(theme.palette.maskColor?.primary, 0.1)}!important`
+                : undefined,
         },
     },
     chipLabel: {
@@ -72,7 +74,7 @@ const useStyles = makeStyles<{
         position: 'absolute',
         bottom: 12,
         right: 12,
-        color: isDashboard ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor?.second,
     },
     action: {
         position: 'absolute',
@@ -87,7 +89,7 @@ const useStyles = makeStyles<{
         position: 'absolute',
         top: 52.5,
         left: 12,
-        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+        backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
         paddingRight: 8,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
@@ -96,10 +98,12 @@ const useStyles = makeStyles<{
             fontSize: 14,
             marginRight: 12,
             fontWeight: 700,
-            color: !isDashboard ? theme.palette.maskColor?.main : undefined,
+            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.main : undefined,
         },
         ['&:hover']: {
-            backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+            backgroundColor: `${
+                Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+            }!important`,
             boxShadow: `0px 4px 30px ${alpha(
                 theme.palette.maskColor.shadowBottom,
                 theme.palette.mode === 'dark' ? 0.15 : 0.1,
@@ -112,10 +116,14 @@ const useStyles = makeStyles<{
     },
     noToken: {
         borderRadius: '18px !important',
-        backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary} !important`,
+        backgroundColor: `${
+            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
+        } !important`,
         ['&:hover']: {
             backgroundColor: `${
-                isDashboard ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
+                Sniffings.is_dashboard_page
+                    ? theme.palette.primary.main
+                    : lighten(theme.palette.maskColor?.primary, 0.1)
             }!important`,
         },
         [`& .${chipClasses.label}`]: {
@@ -149,9 +157,8 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         tokenValueUSD,
         isAvailableBalance,
     }) => {
-        const isDashboard = isDashboardPage()
         const { t } = useI18N()
-        const { classes } = useStyles({ isDashboard })
+        const { classes } = useStyles()
 
         // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(

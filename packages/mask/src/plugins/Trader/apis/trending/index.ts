@@ -1,6 +1,12 @@
-import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
+import { SourceType, type NonFungibleCollectionOverview, attemptUntil } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
+import {
+    CoinGeckoTrending,
+    CoinMarketCap,
+    NFTScanTrending_EVM,
+    NFTScanTrending_Solana,
+    SimpleHashEVM,
+} from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
@@ -26,7 +32,13 @@ export async function getCoinTrending(
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
                 ? NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
-                : NFTScanTrending_EVM.getCoinTrending(chainId as ChainIdEVM, address, currency)
+                : attemptUntil(
+                      [SimpleHashEVM, NFTScanTrending_EVM].map(
+                          (x) => () => x.getCoinTrending(chainId as ChainIdEVM, address, currency),
+                      ),
+                      undefined,
+                  )
+
         default:
             return
     }
@@ -52,7 +64,13 @@ export async function getPriceStats(
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.NFTScan:
-            return NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
+            return attemptUntil(
+                [SimpleHashEVM, NFTScanTrending_EVM].map(
+                    (x) => () => x.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days),
+                ),
+                EMPTY_LIST,
+            )
+
         default:
             return EMPTY_LIST
     }
@@ -63,11 +81,26 @@ export async function getPriceStats(
 export async function getNFT_TrendingOverview(
     pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
-    result: Web3Helper.TokenResultAll,
+    id: string,
 ): Promise<NonFungibleCollectionOverview | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, result.name)
-        : NFTScanTrending_EVM.getCollectionOverview(chainId as ChainIdEVM, result.address ?? '')
+        ? NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, id)
+        : attemptUntil(
+              [SimpleHashEVM, NFTScanTrending_EVM].map((x) => () => x.getCollectionOverview(chainId as ChainIdEVM, id)),
+              undefined,
+          )
+}
+// #endregion
+
+// #region get hightest historical floor price
+export async function getHighestFloorPrice(id: string) {
+    return SimpleHashEVM.getHighestFloorPrice(id)
+}
+// #endregion
+
+// #region get 24h sale amounts
+export async function getOneDaySaleAmounts(id: string) {
+    return SimpleHashEVM.getOneDaySaleAmounts(id)
 }
 // #endregion
 

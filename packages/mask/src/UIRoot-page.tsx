@@ -1,11 +1,12 @@
 import { Suspense, useMemo } from 'react'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { StyledEngineProvider, type Theme } from '@mui/material'
-import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
+import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
-import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
+import { compose, getSiteType, i18NextInstance, NetworkPluginID, queryClient } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 
@@ -40,16 +41,21 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
                 <EnvironmentContextProvider value={context}>
-                    <Web3ContextProvider value={context}>
-                        <TelemetryProvider>
-                            <SharedContextProvider>
-                                <Suspense fallback={fallback}>
-                                    <CSSVariableInjector />
-                                    {children}
-                                </Suspense>
-                            </SharedContextProvider>
-                        </TelemetryProvider>
-                    </Web3ContextProvider>
+                    <QueryClientProvider client={queryClient}>
+                        {process.env.NODE_ENV === 'development' ? (
+                            <ReactQueryDevtools position="top-right" toggleButtonProps={{ style: { width: 24 } }} />
+                        ) : null}
+                        <Web3ContextProvider value={context}>
+                            <TelemetryProvider>
+                                <SharedContextProvider>
+                                    <Suspense fallback={fallback}>
+                                        <CSSVariableInjector />
+                                        {children}
+                                    </Suspense>
+                                </SharedContextProvider>
+                            </TelemetryProvider>
+                        </Web3ContextProvider>
+                    </QueryClientProvider>
                 </EnvironmentContextProvider>
             </MaskThemeProvider>
         </DialogStackingProvider>

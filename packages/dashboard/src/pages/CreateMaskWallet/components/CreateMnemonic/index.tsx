@@ -1,19 +1,17 @@
 import { memo, useCallback, useEffect, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Alert, Box, Button, lighten, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog/index.js'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices } from '../../../../API.js'
-import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle.js'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -85,7 +83,6 @@ const CreateMnemonic = memo(() => {
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { providerType: ProviderType.MaskWallet })
     useEffect(() => {
         WalletMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
@@ -121,7 +118,7 @@ const CreateMnemonic = memo(() => {
         ])
 
         return address
-    }, [location.search, words, resetCallback, hasPassword, searchParams, connection])
+    }, [location.search, words, resetCallback, hasPassword, searchParams])
 
     const onClose = useCallback(() => {
         refreshCallback()

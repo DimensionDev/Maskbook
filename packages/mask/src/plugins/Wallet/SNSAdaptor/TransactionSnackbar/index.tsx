@@ -5,7 +5,7 @@ import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { type NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
-import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
+import { useWeb3State, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     makeStyles,
@@ -45,7 +45,8 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         txHash: string
         transaction: Web3Helper.Definition[T]['Transaction']
     }>()
-    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
+    const Others = useWeb3Others(pluginID)
+    const { TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
 
     useEffect(() => {
         const off = TransactionWatcher?.emitter.on('error', (error, request) => {
@@ -133,7 +134,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                             sx={{ wordBreak: 'break-word' }}
                             className={classes.link}
                             color="inherit"
-                            href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
+                            href={Others.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
                             target="_blank"
                             rel="noopener noreferrer">
                             {progress.status === TransactionStatusType.SUCCEED
@@ -155,6 +156,14 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
         if (!title) return
 
+        if (
+            title === 'Claim your Airdrop' &&
+            (errorInfo?.error.message.includes('Transaction was rejected') ||
+                errorInfo?.error.message.includes('Signature canceled') ||
+                errorInfo?.error.message.includes('User rejected the request') ||
+                errorInfo?.error.message.includes('User rejected transaction'))
+        )
+            return
         const snackbarConfig = resolveSnackbarConfig(TransactionStatusType.FAILED)
 
         showSingletonSnackbar(title, {

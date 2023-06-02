@@ -1,9 +1,9 @@
+import urlcat from 'urlcat'
+import { isEmpty } from 'lodash-es'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import { create, type IPFSHTTPClient } from 'ipfs-http-client'
-import { isEmpty } from 'lodash-es'
 import { LANDING_PAGE, Provider } from '../constants.js'
-import urlcat from 'urlcat'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
 

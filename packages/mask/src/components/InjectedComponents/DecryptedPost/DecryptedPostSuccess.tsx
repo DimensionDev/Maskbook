@@ -1,20 +1,22 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { useI18N } from '../../../utils/index.js'
+import { MaskMessages, useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
-import { Link } from '@mui/material'
+import { Typography, useTheme } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
-import { EMPTY_LIST, type ProfileIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
-import { useAsyncRetry } from 'react-use'
+import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRecipientsList.js'
 import Services from '../../../extension/service.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { delay } from '@masknet/kit'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { RecipientsToolTip } from './RecipientsToolTip.js'
+import { Icons } from '@masknet/icons'
 
 export interface DecryptPostSuccessProps {
     message: TypedMessage
@@ -39,17 +41,18 @@ function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is Pr
     if (whoAmI !== postAuthor) return false
     return true
 }
-export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    const { whoAmI } = props
-    const canShare = useCanAppendShareTarget(whoAmI)
-    if (canShare) return <DecryptPostSuccessAppendShare {...props} whoAmI={whoAmI} />
-    return <DecryptPostSuccessBase {...props} />
-})
 const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     props: React.PropsWithChildren<DecryptPostSuccessProps>,
 ) {
     const { message, author, postedBy } = props
     const { t } = useI18N()
+    const iv = usePostInfoDetails.postIVIdentifier()
+
+    useEffect(() => {
+        if (message.meta || !iv?.toText()) return
+        MaskMessages.events.postReplacerHidden.sendToLocal({ hidden: true, postId: iv.toText() })
+    }, [message, iv?.toText()])
+
     return (
         <>
             <AdditionalContent
@@ -62,48 +65,95 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     )
 })
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canAppendShareTarget }) => {
     return {
-        addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
+        visibilityBox: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: theme.spacing(0.5, 1),
+            background: theme.palette.maskColor.bg,
+            borderRadius: '999px',
+            cursor: canAppendShareTarget ? 'pointer' : 'default',
+        },
+        iconAdd: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 8,
+            background: theme.palette.maskColor.primary,
+            borderRadius: '50%',
+            height: 16,
+            width: 16,
+        },
     }
 })
-const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShare(
-    props: DecryptPostSuccessProps & {
-        whoAmI: ProfileIdentifier
-    },
-) {
-    const { classes } = useStyles()
+export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
+    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
+    const { classes } = useStyles({ canAppendShareTarget })
     const { t } = useI18N()
     const [showDialog, setShowDialog] = useState(false)
+    const theme = useTheme()
     const recipients = useRecipientsList()
-    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
+    const { value: alreadySelectedPreviously = EMPTY_LIST, retry } = useSelectedRecipientsList()
 
-    const rightActions = canAppendShareTarget ? (
-        <>
-            <Link color="primary" onClick={() => setShowDialog(true)} className={classes.addRecipientsLink}>
-                {t('decrypted_postbox_add_recipients')}
-            </Link>
-            {showDialog ? (
-                <AppendShareDetail whoAmI={props.whoAmI} onClose={() => setShowDialog(false)} recipients={recipients} />
-            ) : null}
-        </>
-    ) : null
+    const rightActions =
+        props.author?.userId === props.whoAmI?.userId ? (
+            canAppendShareTarget && props.whoAmI ? (
+                <>
+                    {alreadySelectedPreviously?.length ? (
+                        <RecipientsToolTip
+                            recipients={alreadySelectedPreviously}
+                            openDialog={() => setShowDialog(true)}
+                        />
+                    ) : (
+                        <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
+                            <Typography color="textPrimary" fontSize={12} fontWeight={500}>
+                                {t('decrypted_postbox_only_visible_to_yourself')}
+                            </Typography>
+                            <div className={classes.iconAdd}>
+                                <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
+                            </div>
+                        </section>
+                    )}
+
+                    {showDialog ? (
+                        <AppendShareDetail
+                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            retry={retry}
+                            whoAmI={props.whoAmI}
+                            onClose={() => setShowDialog(false)}
+                            recipients={recipients}
+                        />
+                    ) : null}
+                </>
+            ) : (
+                <section className={classes.visibilityBox}>
+                    <Typography color="textPrimary" fontSize={12} fontWeight={500}>
+                        {t('decrypted_postbox_visible_to_all')}
+                    </Typography>
+                </section>
+            )
+        ) : null
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>
 })
 
-function AppendShareDetail(props: { onClose(): void; recipients: LazyRecipients; whoAmI: ProfileIdentifier }) {
+function AppendShareDetail(props: {
+    onClose(): void
+    recipients: LazyRecipients
+    whoAmI: ProfileIdentifier
+    alreadySelectedPreviously: ProfileInformation[]
+    retry(): void
+}) {
     const info = useContext(PostInfoContext)!
     const iv = usePostInfoDetails.postIVIdentifier()!
-    const { value: alreadySelectedPreviously = EMPTY_LIST, retry } = useAsyncRetry(
-        () => Services.Crypto.getIncompleteRecipientsOfPost(iv),
-        [iv],
-    )
+
     useEffect(props.recipients.request, [])
 
     return (
         <SelectProfileDialog
             open
-            alreadySelectedPreviously={alreadySelectedPreviously}
+            alreadySelectedPreviously={props.alreadySelectedPreviously}
             profiles={props.recipients.recipients || EMPTY_LIST}
             onClose={props.onClose}
             onSelect={async (profiles) => {
@@ -115,7 +165,7 @@ function AppendShareDetail(props: { onClose(): void; recipients: LazyRecipients;
                     activatedSocialNetworkUI.encryptionNetwork,
                 )
                 await delay(1500)
-                retry()
+                props.retry()
             }}
         />
     )

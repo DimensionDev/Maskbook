@@ -1,20 +1,19 @@
-import { useEffect } from 'react'
+import { uniqBy } from 'lodash-es'
+import { useEffect, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { type Plugin } from '@masknet/plugin-infra'
-import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
+import { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { base } from '../base.js'
-import { context, setupContext, setupStorage } from './context.js'
-import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
-import { FollowLensDialog } from './components/FollowLensDialog.js'
-import { useAsync } from 'react-use'
+import { ApplicationEntry } from '@masknet/shared'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { NextIdLensToFireflyLens } from './components/LensPopup.js'
+import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
+import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { base } from '../base.js'
 import { LensBadge } from './components/LensBadge.js'
-import { LensPopup } from './components/LensPopup.js'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
+import { setupContext, setupStorage } from './context.js'
+import { useQuery } from '@tanstack/react-query'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -23,17 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         await setupStorage(context)
     },
 
-    GlobalInjection: function Component() {
-        return (
-            <SNSAdaptorContext.Provider value={context}>
-                <Web3ProfileDialog />
-                <ChainContextProvider value={{ chainId: ChainId.Matic }}>
-                    <FollowLensDialog />
-                </ChainContextProvider>
-                <LensPopup />
-            </SNSAdaptorContext.Provider>
-        )
-    },
+    GlobalInjection: Web3ProfileGlobalInjection,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Web3Profile size={36} />
@@ -81,33 +70,36 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    SettingTabs: [
-        {
-            ID: PluginID.Web3Profile,
-            label: 'Web3Profile',
-            priority: 2,
-            UI: {
-                TabContent: PublicWalletSetting,
-            },
-        },
-    ],
     Lens: {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
-                const { value: accounts = EMPTY_LIST } = useAsync(async () => {
-                    if (!identity?.userId) return
-                    return NextIDProof.queryAllLens(identity?.userId)
-                }, [identity?.userId])
+                const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
+                const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
 
-                const hasLens = !accounts.length
+                const handle = accounts[0]?.handle
+                const { data: nextIdLens = EMPTY_LIST } = useQuery({
+                    queryKey: ['next-id', 'all-lens', identity?.userId],
+                    enabled: isProfile && !!handle,
+                    queryFn: async () => {
+                        const lensAccounts = await NextIDProof.queryAllLens(handle)
+                        return lensAccounts.map(NextIdLensToFireflyLens)
+                    },
+                })
+
+                const lensAccounts = useMemo(
+                    () => (isProfile ? uniqBy([...accounts, ...nextIdLens], (x) => x.handle) : accounts),
+                    [isProfile, accounts, nextIdLens],
+                )
+
+                const hasLens = !lensAccounts.length
                 useEffect(() => {
                     onStatusUpdate?.(hasLens)
                 }, [onStatusUpdate, hasLens])
 
-                if (!accounts.length) return null
+                if (!lensAccounts.length || !identity?.userId) return null
 
-                return <LensBadge slot={slot} accounts={accounts} />
+                return <LensBadge slot={slot} accounts={lensAccounts} userId={identity.userId} />
             },
         },
     },

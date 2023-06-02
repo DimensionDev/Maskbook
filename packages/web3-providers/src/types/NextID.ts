@@ -8,6 +8,12 @@ import type {
 } from '@masknet/shared-base'
 
 export namespace NextIDBaseAPI {
+    export interface LensAccount {
+        handle: string
+        displayName: string
+        address: string
+    }
+
     export interface Storage {
         set<T>(
             uuid: string,
@@ -34,6 +40,7 @@ export namespace NextIDBaseAPI {
             pluginID: string,
         ): Promise<Result<NextIDStoragePayload, null>>
     }
+
     export interface Proof {
         bindProof(
             uuid: string,

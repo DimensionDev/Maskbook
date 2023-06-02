@@ -7,7 +7,7 @@ import {
     useNetworkContext,
     useReverseAddress,
     useLookupAddress,
-    useWeb3State,
+    useWeb3Others,
     useChainContext,
 } from '@masknet/web3-hooks-base'
 import {
@@ -16,8 +16,9 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
-import { isDeviceOnWhitelist, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { joinsABTest } from '@masknet/web3-telemetry/helpers'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -32,24 +33,24 @@ const useStyles = makeStyles()({
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
     const { pluginID: currentPluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { account, chainId, networkType, providerType } = useChainContext()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
-    const { value: reversedName } = useReverseAddress(currentPluginID, account)
+    const { data: reversedName } = useReverseAddress(currentPluginID, account)
     const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
     const themeSettings = useThemeSettings()
 
-    const { setDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
+    useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
 
     const table: Array<{ name: string; content: JSX.Element }> = [
         {
             name: 'A/B Testing',
-            content: <Typography variant="body2">{isDeviceOnWhitelist() ? 'A' : 'B'}</Typography>,
+            content: <Typography variant="body2">{joinsABTest() ? 'A' : 'B'}</Typography>,
         },
         {
             name: 'Color',
@@ -69,7 +70,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
         },
         {
             name: 'Account',
-            content: <Typography variant="body2">{Others?.formatAddress(account, 4) || 'Not Connected'}</Typography>,
+            content: <Typography variant="body2">{Others.formatAddress(account, 4) || 'Not Connected'}</Typography>,
         },
         {
             name: 'ChainId',

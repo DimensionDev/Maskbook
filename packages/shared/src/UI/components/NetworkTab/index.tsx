@@ -1,6 +1,12 @@
 import { useMemo } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { useNetworkDescriptors, useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
+import {
+    useNetworkDescriptors,
+    useChainContext,
+    useNetworkContext,
+    useWallet,
+    useWeb3Others,
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -14,19 +20,21 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
     hideArrowButton?: boolean
     pluginID: NetworkPluginID
     onChange?(chainId: Web3Helper.ChainIdAll): void
+    requireChains?: boolean
 }
 
-export function NetworkTab({ chains, pluginID, hideArrowButton, onChange }: NetworkTabProps) {
+export function NetworkTab({ chains, pluginID, hideArrowButton, onChange, requireChains }: NetworkTabProps) {
     const { pluginID: networkPluginID } = useNetworkContext(pluginID)
-    const { chainId, setChainId } = useChainContext()
+    const { chainId, setChainId, setNetworkType } = useChainContext()
     const networks = useNetworkDescriptors(networkPluginID)
     const wallet = useWallet()
+    const Others = useWeb3Others()
     const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const supportedChains = useMemo(() => {
-        if (!wallet?.owner) return chains
+        if (!wallet?.owner || requireChains) return chains
         return chains.filter((x) => x === smartPaySupportChainId)
-    }, [smartPaySupportChainId, wallet, chains])
+    }, [smartPaySupportChainId, wallet, chains, requireChains])
 
     const usedNetworks = networks.filter((x) => supportedChains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
@@ -50,7 +58,9 @@ export function NetworkTab({ chains, pluginID, hideArrowButton, onChange }: Netw
                 variant="flexible"
                 onChange={(_, v) => {
                     const chainId = Number.parseInt(v, 10)
+                    const networkType = Others.chainResolver.networkType(chainId)
                     setChainId?.(chainId)
+                    if (networkType) setNetworkType?.(networkType)
                     onChange?.(chainId)
                     setTab(v)
                 }}

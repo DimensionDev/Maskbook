@@ -5,8 +5,10 @@ import { Controller } from 'react-hook-form'
 import { LoadingButton } from '@mui/lab'
 import type { z as zod } from 'zod'
 import { makeStyles } from '@masknet/theme'
-import { useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useWallet } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
@@ -38,7 +40,6 @@ const WalletRename = memo(() => {
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { selectedWallet } = WalletContext.useContainer()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallet = selectedWallet ?? currentWallet
 
@@ -51,11 +52,13 @@ const WalletRename = memo(() => {
 
     const [{ loading }, renameWallet] = useAsyncFn(
         async ({ name }: zod.infer<typeof schema>) => {
-            if (!wallet?.address || !name || !connection?.renameWallet) return
-            await connection.renameWallet?.(wallet.address, name)
+            if (!wallet?.address || !name) return
+            await Web3.renameWallet?.(wallet.address, name, {
+                providerType: ProviderType.MaskWallet,
+            })
             return navigate(-1)
         },
-        [wallet?.address, connection],
+        [wallet?.address],
     )
 
     const onSubmit = handleSubmit(renameWallet)

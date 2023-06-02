@@ -10,8 +10,8 @@ const useStyles = makeStyles()(() => {
             display: 'flex',
             scrollbarColor: 'transparent transparent',
             overflowX: 'scroll',
-            margin: '0 2px 5px',
-            padding: '8px 0px 0',
+            margin: '0 2px 8px',
+            padding: '8px 16px',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

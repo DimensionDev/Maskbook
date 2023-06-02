@@ -1,25 +1,25 @@
-import { useState, useContext, createContext, type PropsWithChildren, useMemo, useRef } from 'react'
+import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
-import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
+import Services from '../../extension/service.js'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { type Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
-import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
-import Services from '../../extension/service.js'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
+import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -28,8 +28,8 @@ const useStyles = makeStyles<{
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(1, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 1),
-            transform: props.isCarouselReady ? 'translate(-8px, -8px)' : 'translateX(-8px)',
+            padding: theme.spacing(0, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 3),
+            transform: props.isCarouselReady ? 'translateX(-8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -77,26 +77,21 @@ const useStyles = makeStyles<{
     }
 })
 
-interface Props {
-    closeDialog(): void
-}
-
-export function ApplicationBoard(props: Props) {
+export function ApplicationBoard() {
     return (
         <PersonaContext.Provider>
             <ApplicationEntryStatusProvider>
-                <ApplicationBoardContent {...props} />
+                <ApplicationBoardContent />
             </ApplicationEntryStatusProvider>
         </PersonaContext.Provider>
     )
 }
 
-function ApplicationBoardContent(props: Props) {
+function ApplicationBoardContent() {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
-    const popperBoundaryRef = useRef<HTMLElement | null>(null)
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const applicationList = useMemo(
         () =>
@@ -125,7 +120,10 @@ function ApplicationBoardContent(props: Props) {
         .filter((x) => x.entry.recommendFeature)
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
-    const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
+    const unlistedEntries = useUnlistedEntries()
+    const listedAppList = applicationList.filter(
+        (x) => !x.entry.recommendFeature && !unlistedEntries.includes(x.entry.ApplicationEntryID),
+    )
     // #region handle carousel ui
     const [isCarouselReady] = useTimeout(300)
     const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
@@ -135,7 +133,7 @@ function ApplicationBoardContent(props: Props) {
         isCarouselReady: !!isCarouselReady(),
     })
 
-    useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
+    useMountReport(EventID.AccessApplicationBoard)
 
     return (
         <>
@@ -148,22 +146,22 @@ function ApplicationBoardContent(props: Props) {
             />
 
             {listedAppList.length > 0 ? (
-                <section
-                    ref={popperBoundaryRef}
-                    className={cx(
-                        classes.applicationWrapper,
-                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
-                            ? classes.applicationWrapperWithCarousel
-                            : '',
-                    )}>
-                    {listedAppList.map((application) => (
-                        <RenderEntryComponent
-                            key={application.entry.ApplicationEntryID}
-                            application={application}
-                            popperBoundary={popperBoundaryRef.current}
-                        />
-                    ))}
-                </section>
+                <Boundary>
+                    <section
+                        className={cx(
+                            classes.applicationWrapper,
+                            recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                                ? classes.applicationWrapperWithCarousel
+                                : '',
+                        )}>
+                        {listedAppList.map((application) => (
+                            <RenderEntryComponent
+                                key={application.entry.ApplicationEntryID}
+                                application={application}
+                            />
+                        ))}
+                    </section>
+                </Boundary>
             ) : (
                 <div
                     className={cx(
@@ -181,13 +179,7 @@ function ApplicationBoardContent(props: Props) {
     )
 }
 
-function RenderEntryComponent({
-    application,
-    popperBoundary,
-}: {
-    application: Application
-    popperBoundary?: HTMLElement | null
-}) {
+function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -206,8 +198,8 @@ function RenderEntryComponent({
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
-            return (walletConnectedCallback?: () => void) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback })
+            return (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) =>
+                setSelectProviderDialog({ open: true, walletConnectedCallback, requiredSupportPluginID })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
@@ -232,9 +224,7 @@ function RenderEntryComponent({
     })()
     // #endregion
 
-    return (
-        <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} popperBoundary={popperBoundary} />
-    )
+    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
 }
 
 interface ApplicationEntryStatusContextProps {
@@ -264,7 +254,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
-function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
+function ApplicationEntryStatusProvider({ children }: PropsWithChildren<{}>) {
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -305,9 +295,5 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
             personaConnectStatus.verified,
         ],
     )
-    return (
-        <ApplicationEntryStatusContext.Provider value={Context}>
-            {props.children}
-        </ApplicationEntryStatusContext.Provider>
-    )
+    return <ApplicationEntryStatusContext.Provider value={Context}>{children}</ApplicationEntryStatusContext.Provider>
 }

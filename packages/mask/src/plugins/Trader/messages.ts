@@ -8,7 +8,8 @@ import type { TagType } from './types/index.js'
 interface TrendingAnchorEvent {
     name: string
     type: TagType
-    badgeBounding: DOMRect
+    anchorBounding: DOMRect
+    anchorEl: HTMLElement | null
     address?: string
     isCollectionProjectPopper?: boolean
     identity?: SocialIdentity

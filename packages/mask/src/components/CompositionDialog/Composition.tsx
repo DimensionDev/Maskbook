@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { DialogActions, DialogContent } from '@mui/material'
-import { Flags } from '@masknet/flags'
+import { DialogContent, alpha } from '@mui/material'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
@@ -17,8 +14,12 @@ import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus.js'
+import { EncryptionMethodType } from './EncryptionMethodSelector.js'
+import { InjectedDialog, PersonaAction, useCurrentPersonaConnectStatus } from '@masknet/shared'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
         minWidth: 400,
         width: 600,
@@ -30,9 +31,15 @@ const useStyles = makeStyles()({
         visibility: 'hidden',
     },
     dialogContent: {
-        padding: 16,
+        padding: 0,
     },
-})
+    persona: {
+        padding: 0,
+        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        width: 'auto',
+        boxShadow: 'none',
+    },
+}))
 export interface PostDialogProps {
     type?: CompositionType
     requireClipboardPermission?: boolean
@@ -59,7 +66,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
-    const [version, setVersion] = useState<-38 | -37>(Flags.v37PayloadDefaultEnabled ? -37 : -38)
     const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
     // #region Open
     const [open, setOpen] = useState(false)
@@ -120,17 +126,17 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
-    const isE2E_Disabled = (() => {
+    const isE2E_Disabled = (encode: EncryptionMethodType) => {
         if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
-        if (!hasLocalKey && version === -38) return E2EUnavailableReason.NoLocalKey
+        if (!hasLocalKey && encode === EncryptionMethodType.Image) return E2EUnavailableReason.NoLocalKey
         return
-    })()
+    }
+    const persona = useCurrentPersona()
 
     return (
         <InjectedDialog
             classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
-            keepMounted
             open={open}
             onClose={onClose}
             title={t('post_dialog__title')}
@@ -138,8 +144,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI
                     type={type}
-                    version={version}
-                    setVersion={setVersion}
                     ref={UI}
                     hasClipboardPermission={hasClipboardPermission}
                     onRequestClipboardPermission={onRequestClipboardPermission}
@@ -152,9 +156,13 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     e2eEncryptionDisabled={isE2E_Disabled}
                     isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     initialMetas={initialMetas}
+                    personaAction={
+                        persona ? (
+                            <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
+                        ) : null
+                    }
                 />
             </DialogContent>
-            <DialogActions sx={{ height: 68, padding: '0px !important' }} />
         </InjectedDialog>
     )
 }

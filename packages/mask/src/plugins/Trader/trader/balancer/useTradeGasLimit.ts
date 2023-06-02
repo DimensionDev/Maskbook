@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { SwapResponse, TradeComputed } from '../../types/index.js'
 import { TradeStrategy } from '../../types/index.js'
 import { type ChainId, ContractTransaction, useTraderConstants } from '@masknet/web3-shared-evm'
@@ -13,7 +13,7 @@ import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<string> {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const exchangeProxyContract = useExchangeProxyContract(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
     )
@@ -21,17 +21,14 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
     )
     const tradeAmount = useTradeAmount(trade, SLIPPAGE_DEFAULT)
-    const connection = useWeb3Connection(pluginID)
 
     return useAsync(async () => {
         if (
-            pluginID !== NetworkPluginID.PLUGIN_EVM ||
-            !trade ||
-            !trade.inputToken ||
-            !trade.outputToken ||
+            !trade?.inputToken ||
+            !trade?.outputToken ||
             !exchangeProxyContract ||
             !BALANCER_ETH_ADDRESS ||
-            !connection?.estimateTransaction
+            pluginID !== NetworkPluginID.PLUGIN_EVM
         )
             return '0'
 
@@ -54,21 +51,18 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             ),
         )
 
-        const inputTokenAddress = Others?.isNativeTokenSchemaType(trade.inputToken?.schema)
+        const inputTokenAddress = Others.isNativeTokenSchemaType(trade.inputToken?.schema)
             ? BALANCER_ETH_ADDRESS
             : trade.inputToken.address
-        const outputTokenAddress = Others?.isNativeTokenSchemaType(trade.outputToken?.schema)
+        const outputTokenAddress = Others.isNativeTokenSchemaType(trade.outputToken?.schema)
             ? BALANCER_ETH_ADDRESS
             : trade.outputToken.address
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken?.schema))
+        if (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken?.schema))
             transactionValue = trade.inputAmount.toFixed()
-        else if (
-            trade.strategy === TradeStrategy.ExactOut &&
-            Others?.isNativeTokenSchemaType(trade.outputToken?.schema)
-        )
+        else if (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken?.schema))
             transactionValue = trade.outputAmount.toFixed()
 
         const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
@@ -99,8 +93,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
         BALANCER_ETH_ADDRESS,
         tradeAmount,
         account,
-        connection,
         pluginID,
-        Others?.isNativeTokenSchemaType,
+        Others.isNativeTokenSchemaType,
     ])
 }

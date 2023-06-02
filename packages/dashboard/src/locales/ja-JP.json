@@ -167,8 +167,8 @@
     "wallets_assets_price": "価格",
     "wallets_assets_value": "価値",
     "wallets_assets_operation": "操作方法",
-    "wallets_assets_more_expand": "価値の小さいトークンは表示されません ({{direction}} 1ドル)。すべて表示します",
-    "wallets_assets_more_collapse": "価値の小さいトークンは表示されません ({{direction}} 1ドル)。すべて非表示します",
+    "wallets_assets_more$collapsed": "価値の小さいトークンは表示されません ({{direction}} 1ドル)。すべて表示します",
+    "wallets_assets_more$expanded": "価値の小さいトークンは表示されません ({{- symbol }} $1) 。すべて非表示します",
     "wallets_assets_more_show_all": "すべて表示します",
     "wallets_address": "ウォレットアドレス",
     "wallets_receive_tips": "QRコードをスキャンして {{chainName}} 資産を転送します",
@@ -395,5 +395,6 @@
     "recovery_smart_pay_wallet_description_other": "{{count}} ローカル SmartPay ウォレットが検出され、正常に復元されました。",
     "welcome_request_to_collect": "お客様の利用情報を収集し、改善に役立てます。",
     "wallet_history_no_data": "履歴記録はありません。",
-    "welcome_agreement_policy": "私は <agreement>サービス規約</agreement> と <policy>プライバシーポリシー</policy>を読み、これに同意します。"
+    "welcome_agreement_policy": "私は <agreement>サービス規約</agreement> と <policy>プライバシーポリシー</policy>を読み、これに同意します。",
+    "wallets_history_burn": "バーン"
 }

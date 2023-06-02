@@ -1,3 +1,5 @@
+import { memo, useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
@@ -14,9 +16,6 @@ import {
     ListItemButton,
     Typography,
 } from '@mui/material'
-import { ProviderIcon } from './ProviderIcon.js'
-import { useI18N } from '../../../../utils/index.js'
-import { useAsyncFn } from 'react-use'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
 import {
     NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
@@ -28,10 +27,13 @@ import {
 } from '@masknet/web3-shared-flow'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { useCallback, useState } from 'react'
-import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
 import { ImageIcon } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
+import { Web3All, OthersAll } from '@masknet/web3-providers'
+import { ProviderIcon } from './ProviderIcon.js'
+import { useI18N } from '../../../../utils/index.js'
+import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
+
 const descriptors: Record<
     NetworkPluginID,
     Array<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
@@ -78,6 +80,9 @@ const useStyles = makeStyles()((theme) => {
             '& > div': {
                 borderRadius: 8,
             },
+        },
+        disabledWalletItem: {
+            pointerEvents: 'none',
         },
         providerIcon: {
             height: '100%',
@@ -150,14 +155,18 @@ export interface PluginProviderRenderProps {
     ProviderIconClickBait?: React.ComponentType<
         ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
+    requiredSupportPluginID?: NetworkPluginID
+    requiredSupportChainIds?: Web3Helper.ChainIdAll[]
 }
 
-export function PluginProviderRender({
+export const PluginProviderRender = memo(function PluginProviderRender({
     providers,
     ProviderIconClickBait,
     onProviderIconClicked,
+    requiredSupportChainIds,
+    requiredSupportPluginID,
 }: PluginProviderRenderProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const snsPlugins = useActivatedPluginsSNSAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
@@ -177,20 +186,24 @@ export function PluginProviderRender({
             if (!target) return
 
             const isReady = target.Web3State?.Provider?.isReady(provider.type)
-            const downloadLink = target.Web3State?.Others?.providerResolver.providerDownloadLink(provider.type)
+            const downloadLink = OthersAll.use(provider.providerAdaptorPluginID)?.providerResolver.providerDownloadLink(
+                provider.type,
+            )
 
             if (!isReady) {
                 if (downloadLink) openWindow(downloadLink)
                 return
             }
 
-            const connection = target.Web3State?.Connection?.getConnection?.({ providerType: provider.type })
+            const Web3 = Web3All.use(provider.providerAdaptorPluginID, {
+                providerType: provider.type,
+            })
 
             const chainId =
                 fortmaticChainId ??
                 (provider.type === ProviderType.WalletConnect
                     ? ChainId.Mainnet
-                    : await connection?.getChainId({ providerType: provider.type }))
+                    : await Web3?.getChainId({ providerType: provider.type }))
 
             // use the currently connected network (if known to mask). otherwise, use the default mainnet
             const networkDescriptor =
@@ -216,6 +229,21 @@ export function PluginProviderRender({
         return t('plugin_wallet_support_chains_tips')
     }, [])
 
+    const getDisabled = useCallback(
+        (provider: Web3Helper.ProviderDescriptorAll) => {
+            if (requiredSupportPluginID) {
+                if (provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
+            }
+
+            if (requiredSupportChainIds) {
+                if (requiredSupportChainIds.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
+                    return true
+            }
+
+            return false
+        },
+        [requiredSupportChainIds, requiredSupportPluginID],
+    )
     return (
         <>
             <Box className={classes.root}>
@@ -232,12 +260,16 @@ export function PluginProviderRender({
                             })
                             .map((provider) => (
                                 <ShadowRootTooltip
-                                    title={getTips(provider.type)}
+                                    title={getDisabled(provider) ? '' : getTips(provider.type)}
                                     arrow
                                     placement="top"
                                     key={provider.ID}>
                                     <ListItem
-                                        className={classes.walletItem}
+                                        className={cx(
+                                            classes.walletItem,
+                                            getDisabled(provider) ? classes.disabledWalletItem : '',
+                                        )}
+                                        disabled={getDisabled(provider)}
                                         onClick={() => {
                                             handleClick(provider)
                                         }}>
@@ -307,4 +339,4 @@ export function PluginProviderRender({
             ))}
         </>
     )
-}
+})

@@ -5,6 +5,8 @@ on:
     branches: [master, develop, released, hotfix/*, release/*]
   pull_request:
     branches: [master, develop*, released]
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: read
@@ -30,7 +32,7 @@ jobs:
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "20"
           cache: 'pnpm'
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest

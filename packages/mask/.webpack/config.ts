@@ -3,10 +3,10 @@ import { Configuration, ProvidePlugin, DefinePlugin, EnvironmentPlugin } from 'w
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 import WebExtensionPlugin from 'webpack-target-webextension'
+import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import CopyPlugin = require('copy-webpack-plugin')
 import HTMLPlugin = require('html-webpack-plugin')
 import ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-import { ReadonlyCachePlugin } from './ReadonlyCachePlugin'
 import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin'
 import { emitManifestFile } from './manifest'
 import { emitGitInfo, getGitInfo } from './git-info'
@@ -36,9 +36,10 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true },
+        experiments: { backCompat: false, asyncWebAssembly: true, deferImport: { asyncModule: 'error' } },
         cache: {
             type: 'filesystem',
+            readonly: flags.readonlyCache,
             buildDependencies: {
                 config: [__filename],
                 patches: pnpmPatches,
@@ -107,6 +108,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                         sourceMaps: !!computedFlags.sourceMapKind,
                         // https://swc.rs/docs/configuring-swc/
                         jsc: {
+                            preserveAllComments: true,
                             parser: {
                                 syntax: 'typescript',
                                 dynamicImport: true,
@@ -156,6 +158,13 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             ],
         },
         plugins: [
+            flags.sourceMapHideFrameworks !== false &&
+                new DevtoolsIgnorePlugin({
+                    shouldIgnorePath: (path) => {
+                        if (path.includes('masknet') || path.includes('dimensiondev')) return false
+                        return path.includes('/node_modules/') || path.includes('/webpack/')
+                    },
+                }),
             new ProvidePlugin({
                 // Polyfill for Node global "Buffer" variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
@@ -164,12 +173,13 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             (() => {
                 // In development mode, it will be shared across different target to speedup.
                 // This is a valuable trade-off.
-                const runtimeValues = {
+                const runtimeValues: Record<string, string | boolean> = {
                     ...getGitInfo(flags.reproducibleBuild),
                     engine: flags.engine,
                     channel: flags.channel,
                     manifest: String(flags.manifest),
                 }
+                if (flags.mode === 'development') runtimeValues.REACT_DEVTOOLS_EDITOR_URL = flags.devtoolsEditorURI
                 if (flags.mode === 'development') return EnvironmentPluginCache(runtimeValues)
                 return EnvironmentPluginNoCache(runtimeValues)
             })(),
@@ -191,8 +201,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
-            // https://github.com/webpack/webpack/issues/13581
-            flags.readonlyCache && new ReadonlyCachePlugin(),
             new CopyPlugin({
                 patterns: [
                     { from: join(__dirname, '../public/'), to: flags.outputPath },

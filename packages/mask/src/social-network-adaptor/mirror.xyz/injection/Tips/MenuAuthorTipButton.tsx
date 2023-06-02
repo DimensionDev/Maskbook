@@ -9,15 +9,15 @@ import {
 import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Web3ContextProvider, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useWeb3Others, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <AuthorTipsButtonWrapper />
         </Web3ContextProvider>,
@@ -48,7 +48,7 @@ function AuthorTipsButtonWrapper() {
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
     const accounts = useMemo((): Array<SocialAccount<Web3Helper.ChainIdAll>> => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
@@ -57,11 +57,11 @@ function AuthorTipsButtonWrapper() {
                 pluginID,
                 address: visitingIdentity.identifier.userId,
                 label: visitingIdentity.nickname
-                    ? `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`
+                    ? `(${visitingIdentity.nickname}) ${Others.formatAddress(visitingIdentity.identifier.userId, 4)}`
                     : visitingIdentity.identifier.userId,
             },
         ]
-    }, [visitingIdentity, Others?.formatAddress])
+    }, [visitingIdentity, Others.formatAddress])
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(

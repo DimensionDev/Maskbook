@@ -3,7 +3,6 @@ import {
     startTransition,
     useCallback,
     useEffect,
-    useId,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -16,7 +15,7 @@ import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-b
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { LoadingButton } from '@mui/lab'
-import { Button, Checkbox, Typography } from '@mui/material'
+import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
@@ -35,27 +34,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 464,
         display: 'flex',
         flexDirection: 'column',
+        padding: theme.spacing(2),
     },
     flex: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-    },
-    actions: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        padding: 16,
-        boxSizing: 'border-box',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        background: theme.palette.background.paper,
-        boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
     },
     between: {
         justifyContent: 'space-between',
@@ -79,6 +64,20 @@ const useStyles = makeStyles()((theme) => ({
         height: 18,
         fill: theme.palette.text.buttonText,
     },
+    action: {
+        height: 68,
+        padding: '0 16px',
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        justifyContent: 'space-between',
+        display: 'flex',
+    },
+    personaAction: {
+        flex: 1,
+    },
 }))
 
 export interface LazyRecipients {
@@ -91,7 +90,7 @@ export interface CompositionProps {
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
     isOpenFromApplicationBoard: boolean
-    e2eEncryptionDisabled: E2EUnavailableReason | undefined
+    e2eEncryptionDisabled(encode: EncryptionMethodType): E2EUnavailableReason | undefined
     recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
@@ -101,15 +100,14 @@ export interface CompositionProps {
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
-    version: -38 | -37
-    setVersion(version: -38 | -37): void
     initialMetas?: Record<string, unknown>
+    personaAction?: React.ReactNode
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
     content: SerializableTypedMessages
     encode: 'text' | 'image'
-    version: -38 | -37
+    version: -37 | -38
 }
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
@@ -123,7 +121,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 ) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
-    const id = useId()
 
     const [currentPostSize, __updatePostSize] = useState(0)
 
@@ -137,8 +134,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         startTransition(() => __updatePostSize(size))
     }, [])
 
-    const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
+    const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props, encodingKind)
     const reset = useCallback(() => {
         startTransition(() => {
             Editor.current?.reset()
@@ -195,10 +192,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     encryptionKind === EncryptionTargetType.Public
                         ? { type: 'public' }
                         : { type: 'E2E', target: recipients.map((x) => x.identifier) },
-                version: props.version,
+                version: encodingKind === EncryptionMethodType.Text ? -37 : -38,
             })
             .finally(reset)
-    }, [encodingKind, encryptionKind, recipients, props.onSubmit, props.version])
+    }, [encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
@@ -228,7 +225,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionTargetSelector
                         target={encryptionKind}
-                        e2eDisabled={props.e2eEncryptionDisabled}
+                        e2eDisabled={props.e2eEncryptionDisabled(encodingKind)}
                         selectedRecipientLength={recipients.length}
                         onChange={(target) => {
                             setEncryptionKind(target)
@@ -253,41 +250,31 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         onChange={setEncoding}
                     />
                 </div>
-                {process.env.NODE_ENV === 'development' || process.env.channel !== 'stable' ? (
-                    <div className={cx(classes.flex, classes.between)}>
-                        <Typography component="label" htmlFor={id}>
-                            Next generation payload
-                        </Typography>
-                        <div style={{ flex: 1 }} />
-                        <Checkbox
-                            id={id}
-                            checked={props.version === -37}
-                            onChange={() => props.setVersion(props.version === -38 ? -37 : -38)}
-                        />
-                    </div>
-                ) : null}
             </div>
-            <div className={classes.actions}>
-                {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
-                {props.requireClipboardPermission && !props.hasClipboardPermission ? (
-                    <Button
+            <DialogActions className={classes.action}>
+                {props.personaAction ? <div className={classes.personaAction}>{props.personaAction}</div> : <div />}
+                <div>
+                    {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
+                    {props.requireClipboardPermission && !props.hasClipboardPermission ? (
+                        <Button
+                            variant="roundedContained"
+                            onClick={props.onRequestClipboardPermission}
+                            sx={{ marginRight: 1 }}>
+                            {t('post_dialog_enable_paste_auto')}
+                        </Button>
+                    ) : null}
+                    <LoadingButton
+                        style={{ opacity: 1 }}
+                        disabled={!submitAvailable}
+                        loading={sending}
+                        loadingPosition="start"
                         variant="roundedContained"
-                        onClick={props.onRequestClipboardPermission}
-                        sx={{ marginRight: 1 }}>
-                        {t('post_dialog_enable_paste_auto')}
-                    </Button>
-                ) : null}
-                <LoadingButton
-                    style={{ opacity: 1 }}
-                    disabled={!submitAvailable}
-                    loading={sending}
-                    loadingPosition="start"
-                    variant="roundedContained"
-                    onClick={onSubmit}
-                    startIcon={<Icons.Send className={classes.icon} />}>
-                    {t('post_dialog__button')}
-                </LoadingButton>
-            </div>
+                        onClick={onSubmit}
+                        startIcon={<Icons.Send className={classes.icon} />}>
+                        {t('post_dialog__button')}
+                    </LoadingButton>
+                </div>
+            </DialogActions>
         </CompositionContext.Provider>
     )
 })
@@ -298,7 +285,7 @@ export enum E2EUnavailableReason {
     NoLocalKey = 2,
     NoConnection = 3,
 }
-function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>) {
+function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>, encoding: EncryptionMethodType) {
     const [internal_encryptionKind, setEncryptionKind] = useState<EncryptionTargetType>(EncryptionTargetType.Public)
     // TODO: Change to ProfileIdentifier
     const [recipients, setRecipients] = useState<ProfileInformation[]>([])
@@ -306,7 +293,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabl
     let encryptionKind = internal_encryptionKind
     if (encryptionKind === EncryptionTargetType.E2E && recipients.length === 0)
         encryptionKind = EncryptionTargetType.Self
-    if (props.e2eEncryptionDisabled) encryptionKind = EncryptionTargetType.Public
+    if (props.e2eEncryptionDisabled(encoding)) encryptionKind = EncryptionTargetType.Public
 
     return {
         recipients,

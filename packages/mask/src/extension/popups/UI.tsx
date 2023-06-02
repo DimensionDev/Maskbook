@@ -1,12 +1,12 @@
 import { lazy, useEffect, useState, useMemo } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
+import { Web3ContextProvider, TelemetryProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { TelemetryProvider, useMountReport } from '@masknet/web3-telemetry/hooks'
+import { EventID } from '@masknet/web3-telemetry/types'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -16,7 +16,6 @@ import { PopupContext } from './hook/usePopupContext.js'
 import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { PageTitleContext } from './context.js'
 import Services from '../service.js'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -45,7 +44,7 @@ export default function Popups() {
     const titleContext = useMemo(() => ({ title, setTitle }), [title])
 
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    useMountReport(TelemetryAPI.EventID.AccessPopups)
+    useMountReport(EventID.AccessPopups)
 
     return MaskUIRootPage(
         usePopupTheme,

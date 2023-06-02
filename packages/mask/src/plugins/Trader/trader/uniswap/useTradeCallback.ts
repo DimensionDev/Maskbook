@@ -1,16 +1,16 @@
+import { identity, pickBy } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import type { GasConfig } from '@masknet/web3-shared-evm'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
-import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { ZERO } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
-import { identity, pickBy } from 'lodash-es'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -38,13 +38,12 @@ export function useTradeCallback(
     allowedSlippage?: number,
 ) {
     const notifyError = useSwapErrorCallback()
-    const { account, chainId } = useChainContext()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
-    const connection = useWeb3Connection(pluginID, { chainId })
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
 
     return useAsyncFn(async () => {
-        if (!tradeParameters.length || !connection || pluginID !== NetworkPluginID.PLUGIN_EVM) {
+        if (!tradeParameters.length || pluginID !== NetworkPluginID.PLUGIN_EVM) {
             return
         }
         // step 1: estimate each trade parameter
@@ -60,21 +59,14 @@ export function useTradeCallback(
                         : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
-                if (!connection.estimateTransaction) {
-                    return {
-                        call: x,
-                        gasEstimate: ZERO,
-                    }
-                }
                 try {
-                    const gas = await connection.estimateTransaction?.(config)
+                    const gas = await Web3.estimateTransaction?.(config, undefined, { chainId })
                     return {
                         call: x,
                         gasEstimate: new BigNumber(gas ?? 0),
                     }
                 } catch (error) {
-                    return connection
-                        .callTransaction(config)
+                    return Web3.callTransaction(config, { chainId })
                         .then(() => {
                             return {
                                 call: x,
@@ -119,7 +111,7 @@ export function useTradeCallback(
         } = bestCallOption
 
         try {
-            const hash = await connection.sendTransaction(
+            const hash = await Web3.sendTransaction(
                 {
                     from: account,
                     to: address,
@@ -133,8 +125,9 @@ export function useTradeCallback(
                     overrides: { ...gasConfig },
                 },
             )
-            const receipt = await connection.getTransactionReceipt(hash)
-            return receipt?.transactionHash
+            const receipt = await Web3.confirmTransaction(hash, { chainId })
+            if (!receipt.status) return
+            return receipt.transactionHash
         } catch (error: any) {
             if (!error?.code) {
                 throw error
@@ -145,5 +138,5 @@ export function useTradeCallback(
                     : 'Transaction rejected.',
             )
         }
-    }, [connection, account, tradeParameters, gasConfig, chainId, pluginID, notifyError])
+    }, [account, tradeParameters, gasConfig, chainId, pluginID, notifyError])
 }

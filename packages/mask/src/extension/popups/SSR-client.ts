@@ -26,7 +26,7 @@ if (location.hash === '#/personas') {
         // Push SSR code
         document.head.insertAdjacentHTML('beforeend', trustedHTML(css))
         // this is safe because it comes from SSR
-        // eslint-disable-next-line @dimensiondev/browser-no-set-html
+        // eslint-disable-next-line @masknet/browser-no-set-html
         document.body.innerHTML = trustedHTML('<div id="root-ssr">' + html + '</div>')
         console.timeEnd('[SSR] Request')
 

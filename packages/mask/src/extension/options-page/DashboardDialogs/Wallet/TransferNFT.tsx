@@ -1,14 +1,13 @@
+import { useCallback, useContext, useMemo, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useContext, useMemo, useState } from 'react'
-import { EthereumAddress } from 'wallet.ts'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../utils/index.js'
-import { CollectibleListContext } from '../../DashboardComponents/CollectibleList/index.js'
-import { DashboardDialogCore, DashboardDialogWrapper, type WrappedDialogProps } from '../Base.js'
+import { isValidAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { Image, MaskIconOutlined } from '@masknet/shared'
+import { useI18N } from '../../../../utils/index.js'
+import { CollectibleListContext } from '../../DashboardComponents/CollectibleList/index.js'
+import { DashboardDialogCore, DashboardDialogWrapper, type WrappedDialogProps } from '../Base.js'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
@@ -53,7 +52,7 @@ export function DashboardWalletTransferDialogNFT(
     // #region validation
     const validationMessage = useMemo(() => {
         if (!address) return t('wallet_transfer_error_address_absence')
-        if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
+        if (!isValidAddress(address)) return t('wallet_transfer_error_invalid_address')
         return ''
     }, [address, token])
     // #endregion

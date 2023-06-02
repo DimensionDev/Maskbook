@@ -45,9 +45,9 @@ export function getTokens() {
     return storage.storage.addedTokens.value
 }
 
-export function storeToken(token: NonFungibleToken<ChainId, SchemaType>) {
+export async function storeToken(token: NonFungibleToken<ChainId, SchemaType>) {
     const tokens = [token, ...getTokens()]
-    storage.storage.addedTokens.setValue(tokens)
+    await storage.storage.addedTokens.setValue(tokens)
 }
 
 export function deleteToken(address: string, tokenId: string) {
@@ -56,17 +56,17 @@ export function deleteToken(address: string, tokenId: string) {
     storage.storage.addedTokens.setValue(tokens)
 }
 
-export function finishUserGuide(site: EnhanceableSite) {
+export async function finishUserGuide(site: EnhanceableSite) {
     const settings = guideStorage.storage.userGuide.value
-    guideStorage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
+    await guideStorage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
 }
 
 export const useTipsUserGuide = (site: EnhanceableSite) => {
     const settings = useSubscription(guideStorage?.storage?.userGuide.subscription)
 
     const setStep = useCallback(
-        (to: number) => {
-            guideStorage.storage.userGuide.setValue({
+        async (to: number) => {
+            await guideStorage.storage.userGuide.setValue({
                 ...settings,
                 [site]: to,
             })
@@ -75,8 +75,8 @@ export const useTipsUserGuide = (site: EnhanceableSite) => {
     )
 
     const step = settings[site] ?? TIPS_GUIDE_INIT
-    const nextStep = useCallback(() => {
-        guideStorage.storage.userGuide.setValue({
+    const nextStep = useCallback(async () => {
+        await guideStorage.storage.userGuide.setValue({
             ...settings,
             [site]: step + 1,
         })

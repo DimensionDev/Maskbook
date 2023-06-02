@@ -1,4 +1,4 @@
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages, type SelectNftContractDialogEvent } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -96,16 +96,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectNftContractDialogProps {}
-
-export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-
-    const [keyword, setKeyword] = useState('')
+export function InjectSelectNftContractDialog() {
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
-    // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
@@ -113,26 +105,40 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             if (ev.chainId) setChainId(ev.chainId)
         },
     )
+    return open ? <SelectNftContractDialog chainId={chainId} open onSetDialog={setDialog} /> : null
+}
+
+export interface SelectNftContractDialogProps {
+    chainId: ChainId
+    open: boolean
+    onSetDialog: (event: SelectNftContractDialogEvent) => void
+}
+
+export function SelectNftContractDialog({ chainId, open, onSetDialog }: SelectNftContractDialogProps) {
+    const { t } = useI18N()
+    const { classes } = useStyles()
+
+    const [keyword, setKeyword] = useState('')
+
     const onSelect = useCallback(
         (collection: NonFungibleCollection<ChainId, SchemaType>) => {
             setKeyword('')
-            setDialog({
+            onSetDialog({
                 open: false,
                 balance: collection.balance,
                 collection,
             })
         },
-        [setDialog, setKeyword],
+        [onSetDialog, setKeyword],
     )
     const onClose = useCallback(() => {
         setKeyword('')
-        setDialog({
+        onSetDialog({
             open: false,
         })
-    }, [setDialog])
-    // #endregion
+    }, [onSetDialog])
 
-    const { value: collections = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+    const { data: collections = [], isLoading: loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
         // Todo: remove this line, after SimpleHash can recognize ERC721 Collections.
         sourceType: SourceType.NFTScan,

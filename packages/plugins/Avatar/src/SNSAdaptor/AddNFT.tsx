@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useI18N } from '../locales/i18n_generated.js'
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface AddNFTProps {
     expectedPluginID: NetworkPluginID
     account?: string
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
     open: boolean
     title?: string
     onClose: () => void
@@ -47,8 +47,8 @@ export function AddNFT(props: AddNFTProps) {
     const [checking, toggleChecking] = useState(false)
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { account: _account, chainId: _chainId } = useChainContext({ account, chainId })
-    const hub = useWeb3Hub(pluginID, { chainId: _chainId, account: _account })
-    const connection = useWeb3Connection(pluginID)
+    const Web3 = useWeb3Connection(pluginID)
+    const Hub = useWeb3Hub(pluginID)
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -59,18 +59,17 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t.nft_input_tokenid_label())
             return
         }
-        if (!hub?.getNonFungibleAsset) {
-            setMessage(t.plugin_avatar_web3_error())
-            return
-        }
 
         toggleChecking(true)
         let tokenDetailed
 
         try {
-            const asset = await hub.getNonFungibleAsset(address, tokenId, { chainId: _chainId })
+            const asset = await Hub.getNonFungibleAsset(address, tokenId, {
+                chainId: _chainId,
+                account: _account,
+            })
 
-            const token = await connection?.getNonFungibleToken(address ?? '', tokenId, undefined, {
+            const token = await Web3.getNonFungibleToken(address ?? '', tokenId, undefined, {
                 chainId: _chainId,
             })
 
@@ -88,7 +87,7 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, _account, undefined, {
+            const isOwner = await Web3.getNonFungibleTokenOwnership(address, tokenId, _account, undefined, {
                 chainId: _chainId,
             })
 
@@ -106,7 +105,7 @@ export function AddNFT(props: AddNFTProps) {
             toggleChecking(false)
             return
         }
-    }, [tokenId, address, onAddToken, onClose, _chainId, hub, _account, connection])
+    }, [tokenId, address, onAddToken, onClose, pluginID, _chainId, _account, Web3, Hub])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

@@ -32,11 +32,13 @@ const useStyles = makeStyles()((theme) => ({
     message: {
         margin: theme.spacing(1.5, 0),
         lineHeight: '20px',
+        fontSize: 14,
         color: theme.palette.maskColor.second,
         wordBreak: 'break-all',
     },
     desc: {
         flexGrow: 1,
+        fontSize: 14,
         textAlign: 'center',
         color: theme.palette.maskColor.second,
         marginBottom: theme.spacing(1),
@@ -65,11 +67,15 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = memo(
         return (
             <InjectedDialog classes={{ paper: classes.paper, ...rest.classes }} {...rest}>
                 <DialogContent className={classes.content}>
-                    <Typography variant="h1" className={classes.title}>
+                    <Typography variant="h1" className={classes.title} component="div">
                         {title}
                     </Typography>
-                    <Typography className={classes.message}>{message}</Typography>
-                    <Typography className={classes.desc}>{description}</Typography>
+                    <Typography className={classes.message} component="div">
+                        {message}
+                    </Typography>
+                    <Typography className={classes.desc} component="div">
+                        {description}
+                    </Typography>
                     <Button fullWidth color="error" onClick={() => onSubmit?.(true)}>
                         {confirmLabel}
                     </Button>

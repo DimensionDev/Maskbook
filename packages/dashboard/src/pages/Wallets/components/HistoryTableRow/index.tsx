@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import { Icons } from '@masknet/icons'
-import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { TokenType, type Transaction } from '@masknet/web3-shared-base'
@@ -61,7 +61,7 @@ export interface HistoryTableRowProps {
 }
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
-    const { value: domain } = useReverseAddress(undefined, transaction.to)
+    const { data: domain } = useReverseAddress(undefined, transaction.to)
     const transactionType = (transaction.type ?? '').replace(/_/g, ' ')
 
     return (
@@ -74,6 +74,8 @@ export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, select
     )
 })
 
+HistoryTableRow.displayName = 'HistoryTableRow'
+
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     selectedChainId: Web3Helper.ChainIdAll
     formattedType: string
@@ -83,7 +85,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes, cx } = useStyles()
-        const { Others } = useWeb3State()
+        const Others = useWeb3Others()
 
         return (
             <TableRow className={classes.hover}>
@@ -148,12 +150,12 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
-                        <Typography variant="body2">
-                            {domain ? Others?.formatDomainName?.(domain) : Others?.formatAddress?.(transaction.to, 4)}
+                        <Typography variant="body2" title={domain || transaction.to}>
+                            {domain ? Others.formatDomainName?.(domain) : Others.formatAddress(transaction.to, 4)}
                         </Typography>
                         <Link
                             sx={{ height: 21 }}
-                            href={Others?.explorerResolver.transactionLink(selectedChainId, transaction.id)}
+                            href={Others.explorerResolver.transactionLink(selectedChainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut size={16} className={classes.linkIcon} />

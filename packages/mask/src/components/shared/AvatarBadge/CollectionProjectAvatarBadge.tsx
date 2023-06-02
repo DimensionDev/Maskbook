@@ -34,7 +34,8 @@ export const CollectionProjectAvatarBadge: FC<Props> = ({ address, userId, class
                     name: userId,
                     identity,
                     address,
-                    badgeBounding: button.getBoundingClientRect(),
+                    anchorBounding: button.getBoundingClientRect(),
+                    anchorEl: buttonRef.current,
                     type: TrendingAPI.TagType.HASH,
                     isCollectionProjectPopper: true,
                 })

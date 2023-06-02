@@ -23,7 +23,7 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
         (ev) => ev.open && setURI(ev.uri),
     )
 
-    return <QRCodeDialog uri={uri} open={open} onClose={closeDialog} />
+    return open ? <QRCodeDialog uri={uri} open onClose={closeDialog} /> : null
 }
 
 export interface QRCodeDialogProps {

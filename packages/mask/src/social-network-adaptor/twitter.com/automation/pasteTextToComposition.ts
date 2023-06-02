@@ -6,6 +6,7 @@ import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postB
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
 import { MaskMessages } from '../../../utils/messages.js'
+import { selectElementContents } from '../../../utils/utils.js'
 
 /**
  * Wait for up to 5000 ms
@@ -20,7 +21,10 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
                 if (abort.aborted) throw new Error('Abort to paste text to the composition dialog at twitter.')
             }
 
-            if (!isCompose() && !hasEditor() && opt?.reason !== 'reply') {
+            if (
+                (!isCompose() && opt?.reason === 'verify') ||
+                (!isCompose() && !hasEditor() && opt?.reason !== 'reply')
+            ) {
                 // open tweet window
                 await untilElementAvailable(newPostButtonSelector())
                 newPostButtonSelector().evaluate()!.click()
@@ -36,6 +40,12 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
                 checkSignal()
                 await delay(interval)
             }
+
+            if (opt?.reason === 'verify') {
+                selectElementContents(i.evaluate()!)
+                await untilElementAvailable(i)
+            }
+
             // paste
             isMobileTwitter ? inputText(text) : pasteText(text)
             await delay(interval)
@@ -49,5 +59,5 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             throw e
         }
 
-        worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
+        return worker(AbortSignal.timeout(timeout)).then(undefined, (error) => fail(error))
     }

@@ -4,7 +4,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     menuItem: {
@@ -37,14 +37,14 @@ export interface AccountItemProps {
 
 export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account.address)
+    const Others = useWeb3Others()
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account.address)
 
     return (
         <MenuItem className={classes.menuItem} onClick={onClick}>
             <Typography display="flex">
                 {account.name}
-                {domain && Others?.formatDomainName ? (
+                {domain ? (
                     <Typography component="span" className={classes.domain}>
                         {Others.formatDomainName(domain)}
                     </Typography>

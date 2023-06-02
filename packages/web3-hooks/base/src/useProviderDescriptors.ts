@@ -7,6 +7,7 @@ export function useProviderDescriptors<S extends 'all' | void = void, T extends 
     expectedPluginID?: T,
 ) {
     const { pluginID } = useNetworkContext(expectedPluginID)
+
     return (getPluginDefine(pluginID)?.declareWeb3Providers ?? EMPTY_LIST) as Array<
         Web3Helper.ProviderDescriptorScope<S, T>
     >

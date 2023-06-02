@@ -8,7 +8,7 @@ import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
 /**
  * @param {string} name
- * @param {Array<RawIcon>} variants
+ * @param {Array<import('./internal.js').__RawIcon__>} variants
  * @param {[number, number]} intrinsicSize
  * @returns {React.ComponentType<import('./internal').GeneratedIconProps>}
  */
@@ -21,7 +21,9 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
 
         const defaultPalette = useDefaultPalette()
         const selected = selectVariant(variants, variant || defaultPalette)
-        const [, url, jsx, supportColor] = selected
+        const url = React.useMemo(selected.u, [selected])
+        const jsx = React.useMemo(selected.j || undefine_f, [selected])
+        const supportColor = selected.s
 
         const iconStyle = React.useMemo(() => {
             const bg = supportColor
@@ -36,7 +38,8 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 backgroundPosition: 'center',
                 flexShrink: 0,
                 aspectRatio: String(intrinsicSize[0] / intrinsicSize[1]),
-                color,
+                '--icon-color': color, // for dynamic color with var()
+                color: color ? `var(--icon-color, var(--default-color))` : undefined, // for dynamic color with `currentColor`
                 height: height ?? size,
                 width: width ?? size,
             }
@@ -46,7 +49,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 ...base,
                 ...bg,
             }
-        }, [selected, height, width, size, hasClickHandler])
+        }, [selected, height, width, size, hasClickHandler, color])
 
         const iconProps = {
             'aria-hidden': true,
@@ -82,19 +85,23 @@ function useDefaultPalette() {
 }
 
 /**
- * @param {Array<RawIcon>} variants
+ * @param {Array<import('./internal.js').__RawIcon__>} variants
  * @param {string} palette
  */
 function selectVariant(variants, palette) {
     if (variants.length === 1) return variants[0]
 
-    const light = variants.find((x) => x[0] === null || x[0].includes('light'))
-    // x.0 null means light
-    const dark = variants.find((x) => x?.[0]?.includes('dark'))
-    const dim = variants.find((x) => x?.[0]?.includes('dim'))
+    const light = variants.find((x) => !x.c || x.c.includes('light'))
+    // !x.c means light
+    const dark = variants.find((x) => x.c?.includes('dark'))
+    const dim = variants.find((x) => x.c?.includes('dim'))
 
     if (palette === 'light') return light || dark || dim || variants[0]
     if (palette === 'dark') return dark || dim || light || variants[0]
     if (palette === 'dim') return dim || dark || light || variants[0]
     return variants[0]
+}
+
+function undefine_f() {
+    return void 0
 }

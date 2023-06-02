@@ -6,24 +6,13 @@ import type {
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
-    NextIDPlatform,
     BindingProof,
-    Proof,
     Account,
-    Wallet,
     Color,
-    Pageable,
-    PageIndicator,
     SocialAddress,
     SocialIdentity,
     SocialAccount,
 } from '@masknet/shared-base'
-import type {
-    ReturnChainResolver,
-    ReturnExplorerResolver,
-    ReturnNetworkResolver,
-    ReturnProviderResolver,
-} from '../helpers/index.js'
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -89,6 +78,8 @@ export enum SourceType {
 
     // Token List
     R2D2 = 'R2D2',
+
+    Approval = 'Approval',
 }
 
 export enum SearchResultType {
@@ -104,6 +95,8 @@ export enum SearchResultType {
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., realMaskNetwork
     CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
+    // e.g., PancakeSwap
+    DAO = 'DAO',
 }
 
 export enum ActivityType {
@@ -135,16 +128,6 @@ export enum TransactionDescriptorType {
     RETRY = 'retry',
 }
 
-export enum StorageProviderType {
-    NextID = 'NextID',
-    // KV storage powered by CloudFlare
-    KV = 'kv',
-    // RSS3 File API
-    RSS3 = 'RSS3',
-
-    String = 'String',
-}
-
 export enum FontSize {
     X_Small = 'xSmall',
     Small = 'small',
@@ -166,6 +149,7 @@ export interface ThemeSettings {
     size: FontSize
     color: string
     mode: ThemeMode
+    isDim: boolean
 }
 
 export interface Identity {
@@ -365,20 +349,20 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
 export interface NonFungibleCollectionOverview {
     // collection name
     collection?: string
-    market_cap?: number
-    highest_price?: number
-    volume_24h?: number
-    average_price_24h?: number
-    average_price_change_1d: string
-    average_price_change: string
-    average_price_change_7d: string
+    market_cap?: string
+    highest_price?: string
+    volume_24h?: string
+    average_price_24h?: string
+    average_price_change_1d?: string
+    average_price_change?: string
+    average_price_change_7d?: string
     sales_24h?: number
     owners_total?: number
-    total_volume?: number
+    total_volume?: string
     items_total?: number
     sales?: number
     volume?: number
-    average_price?: number
+    average_price?: string
 }
 
 export interface NonFungibleTokenActivity<ChainId, SchemaType> {
@@ -566,7 +550,9 @@ export interface FungibleTokenSpender<ChainId, SchemaType> {
     /** spender logo */
     logo: React.ReactNode | undefined
     /** allowance token amount of this spender */
-    amount: number
+    amount?: number
+    /** allowance token amount(not formatted by token decimals) of this spender */
+    rawAmount?: number
 }
 
 /**
@@ -609,6 +595,22 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
     domain?: string
     bindingProofs?: BindingProof[]
     address: string
+}
+
+export interface DAOResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.DAO
+    keyword: string
+    spaceId: string
+    spaceName: string
+    twitterHandler: string
+    avatar: string
+    followersCount: number
+    strategyName?: string
+    isVerified: boolean
+    alias?: Array<{
+        value: string
+        isPin?: boolean
+    }>
 }
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
@@ -667,6 +669,7 @@ export type SearchResult<ChainId, SchemaType> =
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
     | NonFungibleCollectionResult<ChainId, SchemaType>
+    | DAOResult<ChainId>
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -681,12 +684,13 @@ export type Web3EnableRequirement = Partial<
     >
 >
 
-export interface TransactionDescriptor<ChainId, Transaction> {
+export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined> {
     chainId: ChainId
     /** The transaction type */
     type: TransactionDescriptorType
     /** a transaction title. */
     title: string
+    context?: TransactionContext<ChainId, Parameter>
     /** The original transaction object */
     _tx: Transaction
     /** The address of the token leveraged to swap other tokens */
@@ -831,457 +835,6 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
-export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
-    /** Designate the signer of the transaction. */
-    account?: string
-    /** Designate the sub-network id of the transaction. */
-    chainId?: ChainId
-    /** an abstract wallet has a owner */
-    owner?: string
-    /** persona identifier */
-    identifier?: ECKeyIdentifier
-    /** Designate the provider to handle the transaction. */
-    providerType?: ProviderType
-    /** Gas payment token. */
-    paymentToken?: string
-    /** Only Support Mask Wallet, silent switch wallet */
-    silent?: boolean
-    /** Fragments to merge into the transaction. */
-    overrides?: Partial<Transaction>
-    /** Termination signal */
-    signal?: AbortSignal
-}
-export interface Connection<
-    ChainId,
-    AddressType,
-    SchemaType,
-    ProviderType,
-    Signature,
-    Block,
-    Operation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    Web3,
-    Web3Provider,
-    Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
-> {
-    /** Get web3 instance */
-    getWeb3(initial?: Web3ConnectionOptions): Web3
-    /** Get web3 provider instance */
-    getWeb3Provider(initial?: Web3ConnectionOptions): Web3Provider
-    /** Get the latest balance of the account. */
-    getBalance(address: string, initial?: Web3ConnectionOptions): Promise<string>
-    /** Get native fungible token balance. */
-    getNativeTokenBalance(initial?: Web3ConnectionOptions): Promise<string>
-    /** Get fungible token balance. */
-    getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: Web3ConnectionOptions): Promise<string>
-    /** Get non-fungible token balance. */
-    getNonFungibleTokenBalance(
-        address: string,
-        tokenId?: string,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    /** Get fungible token balance. */
-    getFungibleTokensBalance(listOfAddress: string[], initial?: Web3ConnectionOptions): Promise<Record<string, string>>
-    /** Get non-fungible token balance. */
-    getNonFungibleTokensBalance(
-        listOfAddress: string[],
-        initial?: Web3ConnectionOptions,
-    ): Promise<Record<string, string>>
-    /** Get gas price */
-    getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
-    /** Get the source code of a on-chain program. */
-    getCode(address: string, initial?: Web3ConnectionOptions): Promise<string>
-    /** Get address type of given address. */
-    getAddressType(address: string, initial?: Web3ConnectionOptions): Promise<AddressType | undefined>
-    /** Get schema type of given token address. */
-    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
-    /** Get the latest block by number. */
-    getBlock(no: number, initial?: Web3ConnectionOptions): Promise<Block | null>
-    /** Get the latest block number. */
-    getBlockNumber(initial?: Web3ConnectionOptions): Promise<number>
-    /** Get the latest block unix timestamp. */
-    getBlockTimestamp(initial?: Web3ConnectionOptions): Promise<number>
-    /** Get the detailed of transaction by id. */
-    getTransaction(id: string, initial?: Web3ConnectionOptions): Promise<TransactionDetailed | null>
-    /** Get the transaction receipt. */
-    getTransactionReceipt(id: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt | null>
-    /** Get the latest transaction status. */
-    getTransactionStatus(id: string, initial?: Web3ConnectionOptions): Promise<TransactionStatusType>
-    /** Get the latest transaction nonce. */
-    getTransactionNonce(address: string, initial?: Web3ConnectionOptions): Promise<number>
-    /** Get a native fungible token. */
-    getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
-    /** Get a fungible token. */
-    getFungibleToken(address: string, initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
-    /** Get a non-fungible token. */
-    getNonFungibleToken(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleToken<ChainId, SchemaType>>
-    getNonFungibleTokenOwner(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    getNonFungibleTokenOwnership(
-        address: string,
-        tokenId: string | undefined,
-        owner: string,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<boolean>
-    getNonFungibleTokenMetadata(
-        address: string,
-        tokenId: string | undefined,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenMetadata<ChainId>>
-    /** Get a non-fungible token contract. */
-    getNonFungibleTokenContract(
-        address: string,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
-    /** Get a non-fungible token collection. */
-    getNonFungibleTokenCollection(
-        address: string,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleCollection<ChainId, SchemaType>>
-    /** Get the currently connected account. */
-    getAccount(initial?: Web3ConnectionOptions): Promise<string>
-    /** Get the currently chain id. */
-    getChainId(initial?: Web3ConnectionOptions): Promise<ChainId>
-    /** Switch to sub network */
-    switchChain?: (chainId: ChainId, initial?: Web3ConnectionOptions) => Promise<void>
-    /** Sign message */
-    signMessage(type: string, message: string, initial?: Web3ConnectionOptions): Promise<Signature>
-    /** Verify message */
-    verifyMessage(
-        type: string,
-        message: string,
-        signature: Signature,
-        initial?: Web3ConnectionOptions,
-    ): Promise<boolean>
-    /** Approve a recipient for using a fungible token. */
-    approveFungibleToken(
-        address: string,
-        recipient: string,
-        amount: string,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    /** Approve a recipient for using a non-fungible token. */
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    /** Approve a recipient for using all non-fungible tokens. */
-    approveAllNonFungibleTokens(
-        address: string,
-        recipient: string,
-        approved: boolean,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    /** Transfer fungible token to */
-    transferFungibleToken(
-        address: string,
-        recipient: string,
-        amount: string,
-        memo?: string,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    /** Transfer non-fungible token to */
-    transferNonFungibleToken(
-        address: string | undefined,
-        tokenId: string,
-        recipient: string,
-        amount: string,
-        schema?: SchemaType,
-        initial?: Web3ConnectionOptions,
-    ): Promise<string>
-    /** Get all supported entry points */
-    supportedEntryPoints?: () => Promise<string[]>
-    /** Call a operation */
-    callUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Send a operation */
-    sendUserOperation?: (
-        owner: string,
-        operation: Operation,
-        initial?: Web3ConnectionOptions,
-    ) => Promise<TransactionSignature>
-    /** Transfer some native tokens from contract wallet */
-    transfer?: (recipient: string, amount: string, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Change owner of contract wallet */
-    changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Fund contract wallet */
-    fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Deploy contract wallet */
-    deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Sign a transaction */
-    signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
-    /** Sign multiple transactions */
-    signTransactions(transactions: Transaction[], initial?: Web3ConnectionOptions): Promise<TransactionSignature[]>
-    /** Query a transaction */
-    callTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<string>
-    /** Send a transaction and wait for mining */
-    sendTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<string>
-    /** Estimate a transaction  */
-    estimateTransaction?: (
-        transaction: Transaction,
-        fallback?: number,
-        initial?: Web3ConnectionOptions,
-    ) => Promise<string>
-    /** Send a signed transaction */
-    sendSignedTransaction(signature: TransactionSignature, initial?: Web3ConnectionOptions): Promise<string>
-    /** Build connection */
-    connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
-    /** Break connection */
-    disconnect(initial?: Web3ConnectionOptions): Promise<void>
-    /** Get all wallets. */
-    getWallets?: (initial?: Web3ConnectionOptions) => Promise<Wallet[]>
-    /** Add a new wallet. */
-    addWallet?: (wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
-    /** Update a wallet. */
-    updateWallet?: (address: string, wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
-    /** Add or update a new wallet on demand. */
-    updateOrAddWallet?: (wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
-    /** Rename a wallet */
-    renameWallet?: (address: string, name: string, initial?: Web3ConnectionOptions) => Promise<void>
-    /** Remove a wallet */
-    removeWallet?: (address: string, password?: string | undefined, initial?: Web3ConnectionOptions) => Promise<void>
-    /** Update a bunch of wallets. */
-    updateWallets?: (wallets: Wallet[], initial?: Web3ConnectionOptions) => Promise<void>
-    /** Remove a bunch of wallets. */
-    removeWallets?: (wallets: Wallet[], initial?: Web3ConnectionOptions) => Promise<void>
-    /** Confirm transaction */
-    confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt>
-    /** Replace transaction */
-    replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
-    /** Cancel transaction */
-    cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
-}
-
-export interface HubOptions<ChainId, Indicator = PageIndicator> {
-    /** The user account as the API parameter */
-    account?: string
-    /** The chain id as the API parameter */
-    chainId?: ChainId
-    /** The networkPluginID as the API parameter */
-    networkPluginId?: NetworkPluginID
-    /** The id of data provider */
-    sourceType?: SourceType
-    /** The currency type of data */
-    currencyType?: CurrencyType
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    indicator?: Indicator
-    allChains?: boolean
-}
-
-export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
-    getFungibleToken?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
-    /** Get a fungible asset. */
-    getFungibleAsset?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
-    /** Get fungible assets owned by the given account. */
-    getFungibleAssets?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
-    /** Get fungible assets owned by the give trusted fungible token. */
-    getTrustedFungibleAssets?: (
-        account: string,
-        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
-    /** Get balance of a fungible token owned by the given account. */
-    getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
-    /** Get stats data of a fungible token */
-    getFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<FungibleTokenStats>
-    /** Get security diagnosis about a fungible token. */
-    getFungibleTokenSecurity?: (
-        chainId: ChainId,
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<FungibleTokenSecurity>
-    /** Get fungible tokens from built-in token list. */
-    getFungibleTokensFromTokenList?: (
-        chainId: ChainId,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
-    /** Get price of a fungible token. */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number | undefined>
-    /** Get token icon URLs that point to a fungible token. */
-    getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
-    /** Get spenders of a fungible token approved by the given account. */
-    getFungibleTokenSpenders?: (
-        chainId: ChainId,
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleTokenSpender<ChainId, SchemaType>>>
-}
-
-export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
-    /** Get non-fungible assets of the given collection. */
-    getNonFungibleAssetsByCollection?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get non-fungible assets of the given collection and owner. */
-    getNonFungibleAssetsByCollectionAndOwner?: (
-        collectionId: string,
-        owner: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get a non-fungible token owner address. */
-    getNonFungibleTokenOwner?: (address: string, tokenId: string, initial?: Web3HubOptions) => Promise<string>
-    /** Get a non-fungible token floor price. */
-    getNonFungibleTokenFloorPrice?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
-    /** Get a non-fungible contract. */
-    getNonFungibleTokenContract?: (
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-    /** Get balance of non-fungible tokens in a collection owned by the given account. */
-    getNonFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
-    /** Get stats data of a non-fungible token */
-    getNonFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<NonFungibleTokenStats>
-    /** Get security diagnosis about a non-fungible token. */
-    getNonFungibleTokenSecurity?: (
-        chainId: ChainId,
-        address: string,
-        initial?: Web3HubOptions,
-    ) => Promise<NonFungibleTokenSecurity>
-    /** Get non-fungible tokens from built-in token list. */
-    getNonFungibleTokensFromTokenList?: (
-        chainId: ChainId,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get price of a non-fungible token. */
-    getNonFungibleTokenPrice?: (
-        chainId: ChainId,
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<number>
-    /** Get token icon URLs that point to a non-fungible token. */
-    getNonFungibleTokenIconURLs?: (
-        chainId: ChainId,
-        address: string,
-        tokenId?: string,
-        initial?: Web3HubOptions,
-    ) => Promise<string[]>
-    /** Get contracts of a non-fungible token approved by the given account. */
-    getNonFungibleTokenSpenders?: (
-        chainId: ChainId,
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<NonFungibleContractSpender<ChainId, SchemaType>>>
-    /** Get a non-fungible asset. */
-    getNonFungibleAsset?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-    /** Get non-fungible assets owned by the given account. */
-    getNonFungibleAssets?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get events of a non-fungible token. */
-    getNonFungibleTokenEvents?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
-    /** Get listed orders of a non-fungible token. */
-    getNonFungibleTokenListings?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    /** Get offered orders of a non-fungible token. */
-    getNonFungibleTokenOffers?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    /** Get orders of a non-fungible token. */
-    getNonFungibleTokenOrders?: (
-        address: string,
-        tokenId: string,
-        side: OrderSide,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    /** Get non-fungible collections owned by the given account. */
-    getNonFungibleCollectionsByOwner?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
-    /** Get collection verified-by by provider-defined id. */
-    getNonFungibleCollectionVerifiedBy?: (id: string) => Promise<string[]>
-    getNonFungibleRarity?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
-
-    /** Place a bid on a token. */
-    createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
-    /** List a token for public sell. */
-    createSellOrder?: (/** TODO: add parameters */) => Promise<void>
-    /** Fulfill an order. */
-    fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
-    /** Cancel an order. */
-    cancelOrder?: (/** TODO: add parameters */) => Promise<void>
-}
-
-export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>>
-    extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>,
-        HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
-    /** Get recommended gas options. */
-    getGasOptions?: (
-        chainId: ChainId,
-        initial?: Web3HubOptions,
-    ) => Promise<Record<GasOptionType, GasOption> | undefined>
-    /** Get the most recent transactions of the given account. */
-    getTransactions: (
-        chainId: ChainId,
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
-}
-
-export interface Storage {
-    has(key: string): Promise<boolean>
-    get<T>(key: string): Promise<T | undefined>
-    getAll?<T>(key: string): Promise<T[] | undefined>
-    set<T>(key: string, value: T): Promise<void>
-    delete?(key: string): Promise<void>
-    clearAll?(): Promise<void>
-}
-
 export interface SettingsState {
     ready: boolean
     readyPromise: Promise<void>
@@ -1324,36 +877,6 @@ export interface RiskWarningState {
     /** Revoke statement of designate account */
     revoke?: (address: string, pluginID?: string) => Promise<void>
 }
-export interface HubState<
-    ChainId,
-    SchemaType,
-    GasOption,
-    Web3HubOptions = HubOptions<ChainId>,
-    Web3Hub = Hub<ChainId, SchemaType, GasOption>,
-> {
-    /** Get external data hub */
-    getHub?: (options: Web3HubOptions) => Web3Hub
-}
-
-export interface Web3StorageServiceState {
-    createStorage: (
-        providerType: StorageProviderType,
-        options: {
-            namespace: string
-            personaIdentifier?: ECKeyIdentifier
-            platform?: NextIDPlatform
-        },
-    ) => Storage
-    createKVStorage: (namespace: string) => Storage
-    createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (
-        proofIdentity: string,
-        platform: NextIDPlatform,
-        signerOrPublicKey: string | ECKeyIdentifier,
-    ) => Storage
-
-    createStringStorage: (namespace: string, address: string) => Storage
-}
 
 export interface IdentityServiceState<ChainId> {
     /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
@@ -1367,9 +890,9 @@ export interface NameServiceState<ChainId> {
     readyPromise: Promise<void>
 
     /** get address of domain name */
-    lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
+    lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
+    reverse?: (address: string) => Promise<string | undefined>
 }
 
 export interface TokenState<ChainId, SchemaType> {
@@ -1451,13 +974,13 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction>>
+    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
         txHash?: string,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction>>
+    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
     ready: boolean
@@ -1513,104 +1036,6 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
 }
-export interface ConnectionState<
-    ChainId,
-    AddressType,
-    SchemaType,
-    ProviderType,
-    Signature,
-    Block,
-    Operation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    Web3,
-    Web3Provider,
-    Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
-    Web3Connection = Connection<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        Signature,
-        Block,
-        Operation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        Web3,
-        Web3Provider
-    >,
-> {
-    /** Get web3 SDK */
-    getWeb3?: (initial?: Web3ConnectionOptions) => Web3
-    /** Get web3 provider instance */
-    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Web3Provider
-    /** Get connection */
-    getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
-}
-export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    // #region resolvers
-    chainResolver: ReturnChainResolver<ChainId, SchemaType, NetworkType>
-    explorerResolver: ReturnExplorerResolver<ChainId, SchemaType, NetworkType>
-    providerResolver: ReturnProviderResolver<ChainId, ProviderType>
-    networkResolver: ReturnNetworkResolver<ChainId, NetworkType>
-    // #endregion
-
-    // #region validators
-    isValidChain(chainId?: ChainId, testnet?: boolean): boolean
-    isValidChainId(chainId: ChainId): boolean
-    isValidDomain(domain?: string): boolean
-    isValidAddress(address?: string): boolean
-    isZeroAddress(address?: string): boolean
-    isNativeTokenAddress(address?: string): boolean
-    isNativeTokenSchemaType(schema?: SchemaType): boolean
-    isFungibleTokenSchemaType(schema?: SchemaType): boolean
-    isNonFungibleTokenSchemaType(schema?: SchemaType): boolean
-    // #endregion
-
-    // #region data formatting
-    formatAddress(address: string, size?: number): string
-    formatDomainName(domain?: string, size?: number): string
-    formatSchemaType(schema: SchemaType): string
-    formatTokenId(id?: string, size?: number): string
-    // #endregion
-
-    // #region customization
-    getDefaultChainId(): ChainId
-    getInvalidChainId(): ChainId
-    getDefaultNetworkType(): NetworkType
-    getDefaultProviderType(): ProviderType
-    getZeroAddress(): string | undefined
-    getNativeTokenAddress(chainId?: ChainId): string | undefined
-    getMaskTokenAddress(chainId?: ChainId): string | undefined
-    getAverageBlockDelay(chainId?: ChainId, scale?: number): number
-    getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
-
-    // #region Constructor
-    createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType>
-    createFungibleToken(
-        chainId: ChainId,
-        schema: SchemaType,
-        address: string,
-        name?: string,
-        symbol?: string,
-        decimals?: number,
-        logoURI?: string,
-    ): FungibleToken<ChainId, SchemaType>
-    createNonFungibleToken(
-        chainId: ChainId,
-        address: string,
-        schema: SchemaType,
-        tokenId: string,
-        ownerId?: string,
-        metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'],
-        contract?: NonFungibleToken<ChainId, SchemaType>['contract'],
-        collection?: NonFungibleToken<ChainId, SchemaType>['collection'],
-    ): NonFungibleToken<ChainId, SchemaType>
-}
 
 export interface BalanceNotifierState<ChainId> {
     emitter: Emitter<BalanceEvent<ChainId>>
@@ -1620,28 +1045,10 @@ export interface BlockNumberNotifierState<ChainId> {
     emitter: Emitter<BlockNumberEvent<ChainId>>
 }
 
-export interface Web3State<
-    ChainId,
-    AddressType,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    Signature,
-    GasOption,
-    Block,
-    Operation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    TransactionParameter,
-    Web3,
-    Web3Provider,
-> {
+export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
     AddressBook?: AddressBookState<ChainId>
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
-    Hub?: HubState<ChainId, SchemaType, GasOption>
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState<ChainId>
     RiskWarning?: RiskWarningState
@@ -1650,24 +1057,7 @@ export interface Web3State<
     Transaction?: TransactionState<ChainId, Transaction>
     TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
     TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
-    Connection?: ConnectionState<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        Signature,
-        Block,
-        Operation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        Web3,
-        Web3Provider
-    >
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-    Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
-    Storage?: Web3StorageServiceState
 }
 
 export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {

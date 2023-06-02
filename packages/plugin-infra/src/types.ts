@@ -2,7 +2,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
@@ -91,60 +91,19 @@ export declare namespace Plugin {
      */
     export interface DeferredDefinition<
         ChainId = unknown,
-        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
-        Signature = unknown,
-        GasOption = unknown,
-        Block = unknown,
         Transaction = unknown,
-        TransactionReceipt = unknown,
-        TransactionDetailed = unknown,
-        TransactionSignature = unknown,
         TransactionParameter = unknown,
-        Web3 = unknown,
-        Web3Provider = unknown,
     > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
         SNSAdaptor?: Loader<
-            SNSAdaptor.Definition<
-                ChainId,
-                AddressType,
-                SchemaType,
-                ProviderType,
-                NetworkType,
-                Signature,
-                GasOption,
-                Block,
-                Transaction,
-                TransactionReceipt,
-                TransactionDetailed,
-                TransactionSignature,
-                TransactionParameter,
-                Web3,
-                Web3Provider
-            >
+            SNSAdaptor.Definition<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
         >
         /** Load the Dashboard part of the plugin. */
         Dashboard?: Loader<
-            Dashboard.Definition<
-                ChainId,
-                AddressType,
-                SchemaType,
-                ProviderType,
-                NetworkType,
-                Signature,
-                GasOption,
-                Block,
-                Transaction,
-                TransactionReceipt,
-                TransactionDetailed,
-                TransactionSignature,
-                TransactionParameter,
-                Web3,
-                Web3Provider
-            >
+            Dashboard.Definition<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
         >
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
@@ -396,21 +355,11 @@ export namespace Plugin.SNSAdaptor {
 
     export interface Definition<
         ChainId = unknown,
-        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
-        Signature = unknown,
-        GasOption = unknown,
-        Block = unknown,
-        Operation = unknown,
         Transaction = unknown,
-        TransactionReceipt = unknown,
-        TransactionDetailed = unknown,
-        TransactionSignature = unknown,
         TransactionParameter = unknown,
-        Web3 = unknown,
-        Web3Provider = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
@@ -433,24 +382,7 @@ export namespace Plugin.SNSAdaptor {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            Signature,
-            GasOption,
-            Block,
-            Operation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            TransactionParameter,
-            Web3,
-            Web3Provider
-        >
+        Web3State?: Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         readonly CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -564,8 +496,7 @@ export namespace Plugin.SNSAdaptor {
         RenderEntryComponent?: (props: {
             disabled: boolean
             tooltipHint?: string
-            onClick?: (walletConnectedCallback?: () => void) => void
-            popperBoundary?: HTMLElement | null
+            onClick?: (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) => void
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
@@ -609,6 +540,8 @@ export namespace Plugin.SNSAdaptor {
             name: I18NFieldOrReactNode
             description: I18NFieldOrReactNode
         }>
+
+        hiddenInList?: boolean
     }
 
     export interface PluginWrapperProps {
@@ -912,46 +845,18 @@ export namespace Plugin.Dashboard {
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
-        AddressType = unknown,
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
-        Signature = unknown,
-        GasOption = unknown,
-        Block = unknown,
-        Operation = unknown,
         Transaction = unknown,
-        TransactionReceipt = unknown,
-        TransactionDetailed = unknown,
-        TransactionSignature = unknown,
         TransactionParameter = unknown,
-        Web3 = unknown,
-        Web3Provider = unknown,
-        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            Signature,
-            GasOption,
-            Block,
-            Operation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            TransactionParameter,
-            Web3,
-            Web3Provider
-        >
+        Web3State?: Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }
@@ -1268,7 +1173,6 @@ export namespace Plugin.__Host {
 
         signal?: AbortSignal
         permission: PermissionReporter
-        onInitialComplete?: () => void
     }
 
     export interface PermissionReporter {

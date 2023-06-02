@@ -12,15 +12,15 @@ import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
-export function useTrendingOverview(
+export function useNFT_TrendingOverview(
     pluginID: NetworkPluginID,
-    result: Web3Helper.TokenResultAll,
+    id: string, // For nftscan it's address, for simplehash it's collection id.
     expectedChainId?: Web3Helper.ChainIdAll,
 ) {
     return useAsync(async () => {
-        if (!result || !expectedChainId || !pluginID) return null
-        return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, result)
-    }, [JSON.stringify(result), expectedChainId, pluginID])
+        if (!id || !expectedChainId || !pluginID) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)
+    }, [id, expectedChainId, pluginID])
 }
 
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
@@ -86,9 +86,8 @@ export function useTrendingById(
         loading,
         error,
     } = useAsync(async () => {
-        if (!currency) return null
-        if (!result.source) return null
-        return PluginTraderRPC.getCoinTrending(result, currency).catch(() => null)
+        if (!currency || !result.source) return null
+        return PluginTraderRPC.getCoinTrending(result, currency)
     }, [chainId, JSON.stringify(result), currency?.id])
 
     const { value: detailedToken } = useFungibleToken(result.pluginID, trending?.coin.contract_address, undefined, {
@@ -115,15 +114,15 @@ export function useTrendingById(
                 ? {
                       ...trending,
                       coin: {
-                          ...trending?.coin,
-                          id: trending?.coin.id ?? '',
-                          name: trending?.coin.name ?? '',
-                          symbol: trending?.coin.symbol ?? '',
-                          type: trending?.coin.type ?? TokenType.Fungible,
-                          decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
+                          ...trending.coin,
+                          id: trending.coin.id ?? '',
+                          name: trending.coin.name ?? '',
+                          symbol: trending.coin.symbol ?? '',
+                          type: trending.coin.type ?? TokenType.Fungible,
+                          decimals: trending.coin.decimals || detailedToken?.decimals || 0,
                           contract_address:
-                              trending?.coin.contract_address ?? trending?.contracts?.[0]?.address ?? address,
-                          chainId: trending?.coin.chainId ?? trending?.contracts?.[0]?.chainId ?? chainId,
+                              trending.coin.contract_address ?? trending.contracts?.[0]?.address ?? address,
+                          chainId: trending.coin.chainId ?? trending.contracts?.[0]?.chainId ?? chainId,
                       },
                   }
                 : null,
@@ -138,4 +137,18 @@ export function useCoinInfoByAddress(address: string) {
         if (!address) return
         return PluginTraderRPC.getCoinInfoByAddress(address)
     }, [address])
+}
+
+export function useHighestFloorPrice(id: string) {
+    return useAsyncRetry(async () => {
+        if (!id) return
+        return PluginTraderRPC.getHighestFloorPrice(id)
+    }, [id])
+}
+
+export function useOneDaySaleAmounts(id: string) {
+    return useAsyncRetry(async () => {
+        if (!id) return
+        return PluginTraderRPC.getOneDaySaleAmounts(id)
+    }, [id])
 }

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostReplacer, type PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer.js'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
@@ -18,7 +18,7 @@ export function injectPostReplacer(config: injectPostReplacerConfig = {}) {
     const unzipPostF = unzipPost || noop
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
         signal.addEventListener('abort', unzipPostF)
-        createReactRootShadowed(current.rootElement.afterShadow, {
+        attachReactTreeWithContainer(current.rootElement.afterShadow, {
             key: 'post-replacer',
             untilVisible: true,
             signal,

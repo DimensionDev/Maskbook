@@ -8,11 +8,11 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useWallet,
-    useWeb3State,
     useReverseAddress,
     useRecentTransactions,
     useChainContext,
 } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -81,7 +81,7 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
     if (!account) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
@@ -125,7 +125,6 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
 
     if (!network || !provider) return null
 
@@ -169,19 +168,18 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                 <Box sx={{ userSelect: 'none' }}>
                     {provider.type !== ProviderType.MaskWallet ? (
                         <Box fontSize={16} display="flex" alignItems="center">
-                            {domain && Others?.formatDomainName ? Others.formatDomainName(domain) : provider.name}
+                            {domain ? Others.formatDomainName(domain) : provider.name}
                         </Box>
                     ) : (
                         <Box fontSize={16} display="flex" alignItems="center">
                             {name}
-                            {domain && Others?.formatDomainName ? (
+                            {domain ? (
                                 <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </Box>
                     )}
-
                     <Box fontSize={12}>
-                        <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
+                        <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
                     </Box>
                 </Box>
             </Stack>

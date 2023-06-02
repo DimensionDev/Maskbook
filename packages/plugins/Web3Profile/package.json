@@ -20,6 +20,7 @@
         "@masknet/web3-hooks-base": "workspace:^",
         "@masknet/web3-hooks-evm": "workspace:^",
         "@masknet/web3-providers": "workspace:^",
+        "@masknet/web3-telemetry": "workspace:^",
         "@masknet/web3-shared-base": "workspace:^",
         "@masknet/web3-shared-evm": "workspace:^",
         "@servie/events": "^3.0.0",

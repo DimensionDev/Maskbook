@@ -1,20 +1,20 @@
+import { memo, useCallback, useMemo } from 'react'
+import { Box, Button, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
 import {
     useChainContext,
     useNetworkContext,
     useProviderDescriptor,
     useReverseAddress,
     useWallet,
-    useWeb3Connection,
-    useWeb3State,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -61,10 +61,9 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
     const { account, providerType } = useChainContext()
-    const connection = useWeb3Connection()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
 
-    const { value: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
+    const { data: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
     const providerDescriptor = useProviderDescriptor()
 
     const walletName = useMemo(() => {
@@ -72,21 +71,13 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
         if (domain) return domain
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
         return providerDescriptor?.name
-    }, [
-        account,
-        domain,
-        providerType,
-        wallet?.name,
-        providerDescriptor?.name,
-        Others?.formatAddress,
-        props.profile?.handle,
-    ])
+    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, props.profile?.handle])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const handleDisconnect = useCallback(() => connection?.disconnect(), [connection])
+    const handleDisconnect = useCallback(() => Web3.disconnect(), [])
 
     const avatarUrl = useMemo(() => {
         if (!props.profile?.avatar) return
@@ -109,7 +100,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                 />
                 <Box>
                     <Typography className={classes.name}>{walletName}</Typography>
-                    <Typography className={classes.address}>{Others?.formatAddress(account, 4)}</Typography>
+                    <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
             <Button variant="text" onClick={props.profile ? handleDisconnect : openSelectProviderDialog}>

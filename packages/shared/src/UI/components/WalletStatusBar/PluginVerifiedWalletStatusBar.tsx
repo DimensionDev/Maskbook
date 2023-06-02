@@ -2,41 +2,41 @@ import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 're
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { Icons } from '@masknet/icons'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
-import { Action } from './Action.js'
-import { type BindingProof, type NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
+import { type BindingProof, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import {
     useChainContext,
     useNetworkContext,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useWeb3State,
     useDefaultChainId,
     useRecentTransactions,
     useWallets,
     useAccount,
     useChainId,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { Icons } from '@masknet/icons'
+import { useSharedI18N } from '../../../locales/index.js'
+import { Action } from './Action.js'
 import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
-import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useMenuConfig } from '../../../index.js'
-import { SmartPayBundler } from '@masknet/web3-providers'
-
-const isDashboard = isDashboardPage()
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: isDashboard ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: Sniffings.is_dashboard_page
+            ? MaskColorVar.mainBackground
+            : alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
@@ -118,7 +118,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             isNextIdWallet,
         )
 
-        const { Others } = useWeb3State(defaultPluginId)
+        const Others = useWeb3Others(defaultPluginId)
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
@@ -138,9 +138,9 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 networkIcon: networkDescriptor?.icon,
                 providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
                 iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
-                formattedAddress: walletIdentity ? Others?.formatAddress(walletIdentity, 4) : '',
+                formattedAddress: walletIdentity ? Others.formatAddress(walletIdentity, 4) : '',
                 addressLink: walletIdentity
-                    ? Others?.explorerResolver.addressLink?.(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
+                    ? Others.explorerResolver.addressLink(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
                     : '',
                 address: walletIdentity,
                 verified: !isNextIdWallet ? isVerifiedAccount : true,

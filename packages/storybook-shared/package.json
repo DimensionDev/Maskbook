@@ -21,7 +21,7 @@
     "@storybook/react": "^6.5.13",
     "stream-browserify": "3",
     "swc-loader": "^0.2.3",
-    "webpack": "^5.80.0"
+    "webpack": "Jack-Works/webpack#lazy-import"
   },
   "peerDependencies": {
     "@storybook/addons": "^6",

@@ -1,13 +1,13 @@
-import { Icons } from '@masknet/icons'
-import { SocialAccountList, useSnackbarCallback } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Link, Typography } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { SuffixToChainIconMap } from '../constants.js'
+import { Icons } from '@masknet/icons'
+import { Box, Link, Typography } from '@mui/material'
+import { SocialAccountList, useSnackbarCallback } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Others } from '@masknet/web3-providers'
+import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { PluginHeader } from './PluginHeader.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
@@ -59,7 +59,6 @@ const useStyles = makeStyles()((theme) => {
 export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
@@ -83,7 +82,11 @@ export function SearchResultInspectorContent() {
                 <section className={classes.ensInfo}>
                     {domain && ChainIcon ? <ChainIcon size={30} className={classes.ensIcon} /> : null}
                     <div>
-                        {domain ? <Typography className={classes.domain}>{domain}</Typography> : null}
+                        {domain ? (
+                            <Typography className={classes.domain}>
+                                {Others.formatDomainName(domain) || domain}
+                            </Typography>
+                        ) : null}
                         {reversedAddress ? (
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
@@ -97,7 +100,10 @@ export function SearchResultInspectorContent() {
                                     rel="noopener noreferrer"
                                     className={classes.link}
                                     href={
-                                        Others?.explorerResolver.addressLink?.(ChainId.Mainnet, reversedAddress) ?? ''
+                                        Others.explorerResolver.addressLink(
+                                            (suffix ? SuffixToChainIdMap[suffix] : ChainId.Mainnet) ?? ChainId.Mainnet,
+                                            reversedAddress,
+                                        ) ?? ''
                                     }>
                                     <Icons.LinkOut size={20} className={classes.reversedAddressIcon} />
                                 </Link>

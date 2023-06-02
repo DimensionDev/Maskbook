@@ -1,9 +1,6 @@
-import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
-import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
+import { useEffect, useMemo, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useState } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     NFTBadge,
@@ -17,26 +14,18 @@ import {
     AvatarType,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
-
 import { NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
-import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { Twitter } from '@masknet/web3-providers'
+import { Twitter, Hub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-import { getAvatarType, getInjectedDom } from '../../utils/AvatarType.js'
-
-export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(getInjectedDom()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-
-        root.render(<NFTAvatarInTwitter />)
-        return () => root.destroy()
-    })
-    startWatch(watcher, signal)
-}
+import { getAvatarType } from '../../utils/AvatarType.js'
+import { MaskMessages, useI18N } from '../../../../utils/index.js'
+import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -155,19 +144,19 @@ function useNFTCircleAvatar(size: number) {
         nftAvatar?.ownerAddress,
     )
 
-    const showAvatar = useMemo(
-        () => !!nftAvatar?.avatarId && Twitter.getAvatarId(identity.avatar) === nftAvatar.avatarId,
-        [nftAvatar?.avatarId, identity.avatar],
-    )
+    const showAvatar = useMemo(() => {
+        const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
+        return !!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId
+    }, [nftAvatar?.avatarId, identity.avatar])
+
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const openConfirmDialog = useShowConfirm()
     const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,
     // and must wait until the avatar of twitter gets updated
     useAsync(async () => {
-        if (!account || !nftAvatar || !hub?.getNonFungibleAsset || !identity.identifier) return
+        if (!account || !nftAvatar || !identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
             MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
@@ -198,7 +187,7 @@ function useNFTCircleAvatar(size: number) {
             return
         }
 
-        const NFTDetailed = await hub.getNonFungibleAsset(avatar.address ?? '', avatar.tokenId, {
+        const NFTDetailed = await Hub.getNonFungibleAsset(avatar.address ?? '', avatar.tokenId, {
             chainId: ChainId.Mainnet,
         })
 
@@ -231,7 +220,7 @@ function useNFTCircleAvatar(size: number) {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar, hub?.getNonFungibleAsset])
+    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
     useEffect(() => {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => setNFTEvent(data))
     }, [])

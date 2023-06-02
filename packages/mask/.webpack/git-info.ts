@@ -30,7 +30,7 @@ export function getGitInfo(reproducible: boolean): GitInfoReport {
         if (reproducible && !git.isRepository()) return report
         const DIRTY = git.isDirty()
         report.BUILD_DATE = new Date().toISOString()
-        report.COMMIT_HASH = git.commitHash(true)
+        report.COMMIT_HASH = git.commitHash()
         report.COMMIT_DATE = git.commitDate().toISOString()
         report.BRANCH_NAME = git.branchName()
         report.DIRTY = DIRTY

@@ -10,11 +10,9 @@ import {
     Typography,
     InputBase,
 } from '@mui/material'
-import { isDashboardPage } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
-
-const isDashboard = isDashboardPage()
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -50,12 +48,12 @@ const useStyles = makeStyles()((theme) => ({
             WebkitAppearance: 'none',
         },
         '& input::-webkit-input-placeholder': {
-            color: !isDashboard ? theme.palette.maskColor.second : undefined,
+            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : undefined,
         },
     },
     input: {
         padding: theme.spacing(1),
-        background: !isDashboard
+        background: !Sniffings.is_dashboard_page
             ? theme.palette.maskColor.input
             : theme.palette.mode === 'dark'
             ? '#2B2E4C'
@@ -73,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        backgroundColor: !isDashboard ? theme.palette.maskColor.input : MaskColorVar.primaryBackground,
+        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor.input : MaskColorVar.primaryBackground,
         boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))
@@ -99,7 +97,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 </Typography>
             ) : null}
             {label && typeof label !== 'string' ? label : null}
-            {isDashboard ? (
+            {Sniffings.is_dashboard_page ? (
                 <TextField
                     ref={ref}
                     {...rest}

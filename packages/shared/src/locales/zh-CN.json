@@ -1,4 +1,5 @@
 {
+    "send": "发送",
     "approve": "授权",
     "approve_mask": "授权MASK?",
     "approve_mask_description": "MATIC 代币用于支付与 Polygon Network 交互时支付的网络费用。 SmartPay 钱包允许用户在与 Polygon Network 网络交互时使用 MASK 代币。",
@@ -139,6 +140,8 @@
     "plugin_wallet_no_gas_fee": "Gas费用不足",
     "plugin_wallet_invalid_network": "网络无效",
     "plugin_wallet_wrong_network": "网络错误",
+    "plugin_wallet_unsupported_network": "不支持的网络",
+    "plugin_wallet_unsupported_chain": "当前钱包不支持该网络。",
     "plugin_wallet_switch_network": "切换到 {{network}}",
     "plugin_wallet_not_support_network": "此网络尚未支持。",
     "plugin_wallet_switch_network_under_going": "切换到 {{network}}",
@@ -154,6 +157,7 @@
     "plugin_wallet_nft_approving_all": "正在解锁 {{symbol}}...",
     "plugin_wallet_approve_all_nft_successfully": "解锁 {{symbol}} 成功",
     "plugin_wallet_fail_to_load_nft_contract": "点击重试",
+    "plugin_wallet_change_wallet": "更换钱包",
     "save": "保存",
     "cancel": "取消",
     "add_wallet": "添加钱包",
@@ -184,5 +188,10 @@
     "persona_boundary_verify_persona": "验证您的Twitter ID",
     "applications_create_persona_title": "身份",
     "applications_create_persona_hint": "使用此功能需要先创建一个身份并验证您的社交媒体账号。",
-    "applications_create_persona_action": "创建身份"
+    "applications_create_persona_action": "创建身份",
+    "lens_follow": "关注",
+    "lens_following": "已关注",
+    "view": "查看",
+    "verified_by": "由 {{ marketplace }} 验证",
+    "no_NFTs_found": "没有找到任何NFT。"
 }

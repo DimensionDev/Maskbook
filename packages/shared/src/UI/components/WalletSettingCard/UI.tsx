@@ -6,8 +6,6 @@ import { WalletIcon } from '../WalletIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        boxShadow:
-            theme.palette.mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0 0 20px rgba(0, 0, 0, 0.05)',
         backgroundColor: theme.palette.maskColor.bottom,
         borderRadius: 8,
         display: 'flex',

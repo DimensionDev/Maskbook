@@ -1,6 +1,7 @@
-import { EthereumAddress } from 'wallet.ts'
+import { memoize } from 'lodash-es'
+import { isAddress, toChecksumAddress } from 'web3-utils'
 import { getEnumAsArray } from '@masknet/kit'
-import { isPopupPage } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getArbConstants,
@@ -14,6 +15,10 @@ import {
 } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
+export function checksumAddress(address: string) {
+    return toChecksumAddress(address)
+}
+
 export function isEmptyHex(hex?: string): hex is undefined {
     return !hex || ['0x', '0x0'].includes(hex)
 }
@@ -24,12 +29,12 @@ export function isZeroString(str?: string): str is undefined {
 
 export function isValidAddress(address?: string): address is string {
     if (!address) return false
-    return EthereumAddress.isValid(address)
+    return isAddress(address)
 }
 
-export function isValidChainId(chainId?: ChainId): chainId is ChainId {
+export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
-}
+})
 
 export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
@@ -40,14 +45,13 @@ export function isNativeTokenAddress(address?: string): address is string {
     return !!(address && nativeTokenSet.has(address))
 }
 
+const {
+    HAPPY_RED_PACKET_ADDRESS_V1,
+    HAPPY_RED_PACKET_ADDRESS_V2,
+    HAPPY_RED_PACKET_ADDRESS_V3,
+    HAPPY_RED_PACKET_ADDRESS_V4,
+} = getRedPacketConstants()
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
-    const {
-        HAPPY_RED_PACKET_ADDRESS_V1,
-        HAPPY_RED_PACKET_ADDRESS_V2,
-        HAPPY_RED_PACKET_ADDRESS_V3,
-        HAPPY_RED_PACKET_ADDRESS_V4,
-    } = getRedPacketConstants()
-
     switch (version) {
         case 1:
             return isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address)
@@ -67,6 +71,10 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     }
 }
 
+export function getNetworkPluginID() {
+    return NetworkPluginID.PLUGIN_EVM
+}
+
 export function getDefaultChainId() {
     return ChainId.Mainnet
 }
@@ -80,24 +88,29 @@ export function getDefaultNetworkType() {
 }
 
 export function getDefaultProviderType() {
-    return isPopupPage() ? ProviderType.MaskWallet : ProviderType.None
+    return Sniffings.is_popup_page ? ProviderType.MaskWallet : ProviderType.None
 }
 
 export function getZeroAddress() {
     return ZERO_ADDRESS
 }
 
-export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+export const getNativeTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
     return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ''
-}
+})
 
-export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+export const getMaskTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
     return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
+})
+
+const { ENS_CONTRACT_ADDRESS } = getENSConstants()
+export function isENSContractAddress(contract_address: string) {
+    return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
 }
 
-export function isENSContractAddress(contract_address: string) {
-    const { ENS_CONTRACT_ADDRESS } = getENSConstants()
-    return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+const { ENS_NAME_WRAPPER_CONTRACT_ADDRESS } = getENSConstants()
+export function isENSNameWrapperContractAddress(contract_address: string) {
+    return isSameAddress(contract_address, ENS_NAME_WRAPPER_CONTRACT_ADDRESS)
 }
 
 export function isLensProfileAddress(address: string) {
@@ -105,13 +118,13 @@ export function isLensProfileAddress(address: string) {
     return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
 }
 
+const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
 export function isArbContractAddress(contract_address: string) {
-    const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
     return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
 }
 
+const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
 export function isSpaceIdContractAddress(contract_address: string) {
-    const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
     return isSameAddress(contract_address, SID_CONTRACT_ADDRESS)
 }
 

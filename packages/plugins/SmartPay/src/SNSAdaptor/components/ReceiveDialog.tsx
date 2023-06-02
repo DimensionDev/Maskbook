@@ -1,11 +1,12 @@
+import { memo, useState } from 'react'
 import { QRCode } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
-import { memo, useState } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 
@@ -48,22 +49,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ReceiveDialog = memo(() => {
-    const t = useI18N()
-    const { classes } = useStyles()
+export function InjectReceiveDialog() {
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent, (ev) => {
         if (!ev.open) return
         if (ev.address) setAddress(ev.address)
         if (ev.name) setName(ev.name)
     })
+    return open ? <ReceiveDialog open onClose={closeDialog} address={address} name={name} /> : null
+}
+
+interface Props {
+    address: string
+    name: string
+    open: boolean
+    onClose(): void
+}
+export const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
+    const t = useI18N()
+    const { classes } = useStyles()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return usePortalShadowRoot((container) => (
-        <Dialog container={container} open={open} onClose={closeDialog} classes={{ paper: classes.paper }}>
+        <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
             <DialogTitle
                 sx={{
                     py: 3,
@@ -72,14 +81,14 @@ export const ReceiveDialog = memo(() => {
                     gridTemplateColumns: '50px auto 50px',
                     whiteSpace: 'nowrap',
                 }}>
-                <IconButton size="large" disableRipple onClick={closeDialog} sx={{ padding: 0 }}>
+                <IconButton size="large" disableRipple onClick={onClose} sx={{ padding: 0 }}>
                     <Close color="inherit" style={{ width: 24, height: 24 }} />
                 </IconButton>
                 <Typography className={classes.title}>{name}</Typography>
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <QRCode
-                    text={`${Others?.chainResolver.chainPrefix(chainId)}:${address}`}
+                    text={`${Others.chainResolver.chainPrefix(chainId)}:${address}`}
                     options={{ width: 250 }}
                     canvasProps={{ width: 250, height: 250 }}
                 />

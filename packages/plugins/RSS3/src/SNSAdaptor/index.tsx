@@ -2,10 +2,10 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Box } from '@mui/material'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { RSS3BaseAPI, TelemetryAPI } from '@masknet/web3-providers/types'
+import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
+import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
@@ -27,11 +27,11 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
                 useMountReport(() => {
                     switch (props.tag) {
                         case RSS3BaseAPI.Tag.Donation:
-                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogDonationTab
+                            return EventID.AccessWeb3ProfileDialogDonationTab
                         case RSS3BaseAPI.Tag.Social:
-                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogSocialTab
+                            return EventID.AccessWeb3ProfileDialogSocialTab
                         default:
-                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogActivitiesTab
+                            return EventID.AccessWeb3ProfileDialogActivitiesTab
                     }
                 })
 
@@ -70,11 +70,11 @@ const createSearchTabConfig = (
                 useMountReport(() => {
                     switch (props.tag) {
                         case RSS3BaseAPI.Tag.Donation:
-                            return TelemetryAPI.EventID.AccessWeb3TabDonationTab
+                            return EventID.AccessWeb3TabDonationTab
                         case RSS3BaseAPI.Tag.Social:
-                            return TelemetryAPI.EventID.AccessWeb3TabSocialTab
+                            return EventID.AccessWeb3TabSocialTab
                         default:
-                            return TelemetryAPI.EventID.AccessWeb3TabActivitiesTab
+                            return EventID.AccessWeb3TabActivitiesTab
                     }
                 })
 
@@ -95,44 +95,52 @@ const createSearchTabConfig = (
     }
 }
 
-const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Activities', {})
+const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
 
-const DonationTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Donation', {
-    tag: RSS3BaseAPI.Tag.Donation,
-})
+const DonationTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
+    'Donation',
+    {
+        tag: RSS3BaseAPI.Tag.Donation,
+    },
+    3,
+)
 const DonationsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
     'Donation',
     {
         tag: RSS3BaseAPI.Tag.Donation,
     },
-    2,
+    3,
 )
 const DonationsTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createSearchTabConfig(
     'Donation',
     {
         tag: RSS3BaseAPI.Tag.Donation,
     },
-    2,
+    3,
 )
 
-const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig('Social', {
-    tag: RSS3BaseAPI.Tag.Social,
-})
+const SocialTabConfig: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
+    'Social',
+    {
+        tag: RSS3BaseAPI.Tag.Social,
+    },
+    1,
+)
 const SocialTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
         tag: RSS3BaseAPI.Tag.Social,
     },
-    2,
+    1,
 )
 const SocialTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createSearchTabConfig(
     'Social',
     {
         tag: RSS3BaseAPI.Tag.Social,
     },
-    2,
+    1,
 )
 
 const sns: Plugin.SNSAdaptor.Definition = {

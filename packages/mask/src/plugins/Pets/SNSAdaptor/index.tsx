@@ -1,24 +1,16 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
-import AnimatePic from './Animate.js'
-import { PetDialog } from './PetDialog.js'
 import { PluginPetMessages } from '../messages.js'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+import { PetsGlobalInjection } from './PetsGlobalInjection.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init() {},
-    GlobalInjection() {
-        return (
-            <>
-                <AnimatePic />
-                <PetDialog />
-            </>
-        )
-    },
+    GlobalInjection: PetsGlobalInjection,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Pets size={36} />

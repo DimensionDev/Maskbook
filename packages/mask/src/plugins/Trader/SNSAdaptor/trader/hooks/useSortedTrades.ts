@@ -5,16 +5,21 @@ import {
     useFungibleTokenPrice,
     useNativeTokenPrice,
     useNetworkContext,
-    useWeb3State,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { MINIMUM_AMOUNT } from '../../../constants/index.js'
-import type { TradeInfo } from '../../../types/index.js'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
-export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainIdAll, gasPrice?: string) {
+export function useSortedTrades(
+    traders: Array<AsyncStateRetry<TraderAPI.TradeInfo>>,
+    chainId: Web3Helper.ChainIdAll,
+    gasPrice?: string,
+) {
     const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State()
+    const Others = useWeb3Others()
     const { value: nativeToken } = useFungibleToken(pluginID, '', undefined, { chainId })
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
@@ -32,17 +37,17 @@ export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainI
                 .map((trade) => {
                     if (
                         gasPrice &&
-                        trade.value &&
-                        isGreaterThan(trade.value.outputAmount, MINIMUM_AMOUNT) &&
-                        trade.gas.value
+                        trade.value?.value &&
+                        isGreaterThan(trade.value.value.outputAmount, MINIMUM_AMOUNT) &&
+                        trade.value.gas
                     ) {
-                        const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
+                        const gasFee = multipliedBy(gasPrice, trade.value.gas).integerValue().toFixed()
 
                         const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
 
-                        const finalPrice = leftShift(trade.value.outputAmount, outputToken.decimals)
+                        const finalPrice = leftShift(trade.value.value.outputAmount, outputToken.decimals)
                             .times(
-                                !Others?.isNativeTokenSchemaType(outputToken.schema)
+                                !Others.isNativeTokenSchemaType(outputToken.schema)
                                     ? outputTokenPrice
                                     : nativeTokenPrice,
                             )
@@ -50,39 +55,40 @@ export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainI
 
                         return {
                             ...trade,
-                            finalPrice,
+                            value: {
+                                ...trade.value,
+                                finalPrice,
+                            },
                         }
                     }
                     return trade
                 })
-                .filter(({ value }) => !!value && !value.outputAmount.isZero())
-                .sort(
-                    (
-                        { finalPrice: finalPriceA, gas: { value: gasA }, value: valueA },
-                        { finalPrice: finalPriceB, gas: { value: gasB }, value: valueB },
-                    ) => {
-                        let a = finalPriceA
-                        let b = finalPriceB
+                .filter(({ value }) => !!value && !value.value?.outputAmount.isZero())
+                .sort((valueA, valueB) => {
+                    let a = valueA.value?.finalPrice
+                    let b = valueB.value?.finalPrice
 
-                        if (!gasA && gasB) {
-                            return 1 // B goes first
-                        } else if (gasA && !gasB) {
-                            return -1 // A goes first
-                        } else if (!gasA && !gasB) {
-                            a = valueA?.outputAmount
-                            b = valueB?.outputAmount
-                        }
-                        if (isGreaterThan(a ?? 0, b ?? 0)) return -1
-                        if (isLessThan(a ?? 0, b ?? 0)) return 1
-                        return 0
-                    },
-                )
+                    const gasA = valueA.value?.gas
+                    const gasB = valueB.value?.gas
+
+                    if (!gasA && gasB) {
+                        return 1 // B goes first
+                    } else if (gasA && !gasB) {
+                        return -1 // A goes first
+                    } else if (!gasA && !gasB) {
+                        a = valueA?.value?.value?.outputAmount
+                        b = valueB?.value?.value?.outputAmount
+                    }
+                    if (isGreaterThan(a ?? 0, b ?? 0)) return -1
+                    if (isLessThan(a ?? 0, b ?? 0)) return 1
+                    return 0
+                })
         }
         return traders
-            .filter(({ value }) => !!value && !value.outputAmount.isZero())
-            .sort(({ value: a }, { value: b }) => {
-                if (a?.outputAmount.isGreaterThan(b?.outputAmount ?? 0)) return -1
-                if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
+            .filter(({ value }) => !!value && !value.value?.outputAmount.isZero())
+            .sort((valueA, valueB) => {
+                if (valueA.value?.value?.outputAmount.isGreaterThan(valueB.value?.value?.outputAmount ?? 0)) return -1
+                if (valueA.value?.value?.outputAmount.isLessThan(valueB.value?.value?.outputAmount ?? 0)) return 1
                 return 0
             })
     }, [
@@ -92,6 +98,6 @@ export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainI
         outputTokenPrice,
         nativeTokenPrice,
         nativeToken,
-        Others?.isNativeTokenSchemaType,
+        Others.isNativeTokenSchemaType,
     ])
 }

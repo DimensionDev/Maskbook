@@ -3,14 +3,15 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '@masknet/flags'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { WalletHeaderUI } from './UI.js'
+import { ProviderType, type ChainId, type NetworkType } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
-import { useChainContext, useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { MenuItem, Typography } from '@mui/material'
-import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
-import { NormalHeader } from '../../../../components/NormalHeader/index.js'
+import { Web3 } from '@masknet/web3-providers'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
+import { WalletHeaderUI } from './UI.js'
+import { NormalHeader } from '../../../../components/NormalHeader/index.js'
 import Services from '../../../../../service.js'
 import { useConnected } from '../../hooks/useConnected.js'
 
@@ -26,8 +27,7 @@ const useStyles = makeStyles()({
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
 
     const networks = getRegisteredWeb3Networks().filter(
@@ -45,13 +45,12 @@ export const WalletHeader = memo(() => {
     const matchWalletRecovered = useMatch(PopupRoutes.WalletRecovered)
     const matchCreatePassword = useMatch(PopupRoutes.CreatePassword)
 
-    const onChainChange = useCallback(
-        async (chainId: ChainId) => {
-            setChainId(chainId)
-            return connection?.switchChain?.(chainId)
-        },
-        [connection],
-    )
+    const onChainChange = useCallback(async (chainId: ChainId) => {
+        setChainId(chainId)
+        await Web3.switchChain?.(chainId, {
+            providerType: ProviderType.MaskWallet,
+        })
+    }, [])
 
     const [menu, openMenu] = useMenuConfig(
         networks

@@ -1,24 +1,27 @@
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { Lens } from '@masknet/web3-providers'
-import { ChainId, ContractTransaction, createContract, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
+import { useCallback, useRef, type MouseEvent, useState } from 'react'
+import { cloneDeep } from 'lodash-es'
+import type { AbiItem } from 'web3-utils'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Contract, Lens, Web3 } from '@masknet/web3-providers'
+import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
+import { ChainId, ContractTransaction, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
 import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.js'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-import { type AbiItem } from 'web3-utils'
 import { BroadcastType } from '@masknet/web3-providers/types'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
-import { useCallback, useRef } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
-export function useUnfollow(profileId?: string, onSuccess?: () => void) {
+export function useUnfollow(
+    profileId?: string,
+    onSuccess?: (event: MouseEvent<HTMLElement>) => void,
+    onFailed?: () => void,
+) {
+    const [loading, setLoading] = useState(false)
     const t = useI18N()
-    const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { fetchJSON } = useSNSAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
@@ -35,75 +38,85 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
         [showSnackbar, closeSnackbar],
     )
 
-    return useAsyncFn(async () => {
-        try {
-            if (!profileId || !connection || chainId !== ChainId.Matic) return
-            const token = await handleQueryAuthenticate()
-            if (!token) return
-
-            const typedData = await Lens.createUnfollowTypedData(profileId, { token })
-
-            if (!typedData) return
-
-            const signature = await connection.signMessage(
-                'typedData',
-                JSON.stringify(
-                    encodeTypedData(typedData.typedData.domain, typedData.typedData.types, typedData.typedData.value),
-                ),
-            )
-
-            const { v, r, s } = splitSignature(signature)
-            const { tokenId, deadline } = typedData.typedData.value
-
-            let hash: string | undefined
+    const handleUnfollow = useCallback(
+        async (event: MouseEvent<HTMLElement>) => {
+            const cloneEvent = cloneDeep(event)
             try {
-                const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
-                if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
-                else hash = broadcast?.txHash
-            } catch {
-                const followNFTContract = createContract<LensFollowNFT>(
-                    web3,
-                    typedData.typedData.domain.verifyingContract,
-                    LensFollowNftABI as AbiItem[],
+                setLoading(true)
+                if (!profileId || chainId !== ChainId.Matic) return
+                const token = await handleQueryAuthenticate()
+                if (!token) return
+
+                const typedData = await Lens.createUnfollowTypedData(profileId, { token })
+
+                if (!typedData) return
+
+                const signature = await Web3.signMessage(
+                    'typedData',
+                    JSON.stringify(
+                        encodeTypedData(
+                            typedData.typedData.domain,
+                            typedData.typedData.types,
+                            typedData.typedData.value,
+                        ),
+                    ),
                 )
-                const tx = await new ContractTransaction(followNFTContract).fillAll(
-                    followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
-                    { from: account },
-                )
-                hash = await connection.sendTransaction(tx)
-            }
 
-            if (!hash) return
-            const result = await connection.confirmTransaction(hash, {
-                signal: AbortSignal.timeout(3 * 60 * 1000),
-            })
+                const { v, r, s } = splitSignature(signature)
+                const { tokenId, deadline } = typedData.typedData.value
 
-            if (!result.status) return
+                let hash: string | undefined
+                try {
+                    onSuccess?.(cloneEvent)
+                    setLoading?.(false)
+                    const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
+                    if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
+                    else hash = broadcast?.txHash
+                } catch {
+                    onFailed?.()
+                    setLoading(true)
 
-            onSuccess?.()
-        } catch (error) {
-            if (
-                error instanceof Error &&
-                !error.message.includes('Transaction was rejected') &&
-                !error.message.includes('Signature canceled') &&
-                !error.message.includes('User rejected the request') &&
-                !error.message.includes('User rejected transaction')
-            )
-                showSingletonSnackbar(t.unfollow_lens_handle(), {
-                    processing: false,
-                    variant: 'error',
-                    message: t.network_error(),
+                    const followNFTContract = Contract.getWeb3Contract<LensFollowNFT>(
+                        typedData.typedData.domain.verifyingContract,
+                        LensFollowNftABI as AbiItem[],
+                    )
+                    const tx = await new ContractTransaction(followNFTContract).fillAll(
+                        followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
+                        { from: account },
+                    )
+                    hash = await Web3.sendTransaction(tx)
+                    onSuccess?.(cloneEvent)
+                    setLoading(false)
+                }
+
+                if (!hash) return
+
+                const receipt = await Web3.confirmTransaction(hash, {
+                    signal: AbortSignal.timeout(3 * 60 * 1000),
                 })
-        }
-    }, [
-        handleQueryAuthenticate,
-        chainId,
-        profileId,
-        web3,
-        account,
-        onSuccess,
-        connection,
-        fetchJSON,
-        showSingletonSnackbar,
-    ])
+                if (!receipt.status) return
+            } catch (error) {
+                if (
+                    error instanceof Error &&
+                    !error.message.includes('Transaction was rejected') &&
+                    !error.message.includes('Signature canceled') &&
+                    !error.message.includes('User rejected the request') &&
+                    !error.message.includes('User rejected transaction') &&
+                    !error.message.includes('RPC Error')
+                ) {
+                    onFailed?.()
+                    showSingletonSnackbar(t.unfollow_lens_handle(), {
+                        processing: false,
+                        variant: 'error',
+                        message: t.network_error(),
+                    })
+                }
+            } finally {
+                setLoading(false)
+            }
+        },
+        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, fetchJSON, showSingletonSnackbar],
+    )
+
+    return { loading, handleUnfollow }
 }

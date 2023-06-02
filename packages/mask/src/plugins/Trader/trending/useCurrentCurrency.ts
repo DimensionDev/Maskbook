@@ -91,6 +91,7 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
     [SourceType.Gem]: undefined,
     [SourceType.GoPlus]: undefined,
     [SourceType.Rabby]: undefined,
+    [SourceType.Approval]: undefined,
     [SourceType.R2D2]: undefined,
     [SourceType.DeBank]: undefined,
     [SourceType.Flow]: undefined,

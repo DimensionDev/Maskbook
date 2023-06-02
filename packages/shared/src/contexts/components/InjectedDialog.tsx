@@ -1,7 +1,8 @@
-/* eslint-disable tss-unused-classes/unused-classes */
-import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
-import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
+import { Children, cloneElement, useCallback, useRef } from 'react'
 import { omit } from 'lodash-es'
+/* eslint-disable tss-unused-classes/unused-classes */
+import { EnhanceableSite, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
+import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { type Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {
     Dialog,
@@ -17,7 +18,6 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { Children, cloneElement, useCallback, useRef } from 'react'
 import { useSharedI18N } from '../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
@@ -156,7 +156,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
 
     const t = useSharedI18N()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
-    const isDashboard = isDashboardPage()
     const {
         children,
         open,
@@ -201,13 +200,12 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 scroll="paper"
                 fullWidth
                 maxWidth="sm"
-                disableAutoFocus
-                disableEnforceFocus
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
                     !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
                 BackdropProps={{
+                    transitionDuration: 0,
                     classes: {
                         root: dialogBackdropRoot,
                     },
@@ -220,18 +218,20 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             className={cx('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
                             style={{
-                                border: isDashboard || disableTitleBorder ? 'none' : undefined,
-                                fontSize: isDashboard ? 24 : undefined,
+                                border: Sniffings.is_dashboard_page || disableTitleBorder ? 'none' : undefined,
+                                fontSize: Sniffings.is_dashboard_page ? 24 : undefined,
                             }}>
                             <IconButton
                                 size="large"
-                                disableRipple
+                                disableTouchRipple
                                 classes={{ root: cx(dialogCloseButton, titleTabs ? dialogCloseButtonWithTabs : '') }}
                                 aria-label={t.dialog_dismiss()}
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
-                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
+                                        titleBarIconStyle !== 'close' &&
+                                        shouldReplaceExitWithBack &&
+                                        !Sniffings.is_dashboard_page
                                             ? 'back'
                                             : titleBarIconStyle
                                     }

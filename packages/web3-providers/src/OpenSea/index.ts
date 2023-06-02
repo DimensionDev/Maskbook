@@ -12,7 +12,6 @@ import {
     OrderSide,
     scale10,
     TokenType,
-    type HubOptions,
     createNonFungibleTokenContract,
     type NonFungibleAsset,
     type NonFungibleTokenStats,
@@ -41,7 +40,7 @@ import {
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
 import { fetchGlobal, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -296,7 +295,7 @@ function createOrder(
 }
 
 export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const response = await fetchFromOpenSea<OpenSeaAssetResponse>(
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
@@ -306,7 +305,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createNFTAsset(chainId, response)
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
+    async getAssets(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
+    ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromOpenSea<{
             assets?: OpenSeaAssetResponse[]
@@ -336,7 +338,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+    async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const contract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
@@ -353,7 +355,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const parameters = new URLSearchParams()
@@ -378,11 +380,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
+    async getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 
@@ -390,7 +392,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -420,7 +422,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getCollectionsByOwner(
         address: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -463,7 +465,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getStats(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
         if (!isValidChainId(chainId)) return
         const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(

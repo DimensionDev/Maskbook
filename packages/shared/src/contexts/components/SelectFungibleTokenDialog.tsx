@@ -7,11 +7,10 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-
 import { DialogContent, type Theme, useMediaQuery, Stack, Typography } from '@mui/material'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { useBaseUIRuntime } from '../base/index.js'
 import { InjectedDialog } from '../components/index.js'
 import { useRowSize } from '../../hooks/useRowSize.js'
@@ -19,10 +18,9 @@ import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
 interface StyleProps {
     compact: boolean
-    isDashboard: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(2),
@@ -36,7 +34,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
         },
     },
     search: {
-        backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
+        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
     },
     wrapper: {
@@ -66,7 +64,6 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     onClose?(): void
 }
 
-const isDashboard = isDashboardPage()
 export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     open,
     pluginID,
@@ -86,7 +83,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const { classes } = useStyles({ compact, isDashboard })
+    const { classes } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -98,7 +95,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         chainId,
     })
 
-    const { value: fungibleAssets = EMPTY_LIST, loading: loadingAssets } = useFungibleAssets(pluginID, undefined, {
+    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
         chainId,
     })
 
@@ -108,14 +105,14 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     )
     return (
         <InjectedDialog
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             open={open}
             onClose={() => {
                 mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                {(loadingTokens || loadingAssets) && mode !== TokenListMode.Manage ? (
+                {loadingTokens && mode !== TokenListMode.Manage ? (
                     <Stack
                         height={500}
                         width={'100%'}
@@ -135,7 +132,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                         fungibleTokens={fungibleTokens}
                         fungibleAssets={fungibleAssets}
                         chainId={chainId}
-                        tokens={tokens ?? []}
+                        tokens={tokens ?? EMPTY_LIST}
                         whitelist={whitelist}
                         enableManage={enableManage}
                         blacklist={

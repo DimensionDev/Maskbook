@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
@@ -20,7 +20,7 @@ import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 
-export function NextIdPage() {
+export const NextIdPage = memo(function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
@@ -34,12 +34,12 @@ export function NextIdPage() {
     )
 
     const [openBindDialog, toggleBindDialog] = useState(false)
-    const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
+    const isOwn = currentProfileIdentifier.identifier?.userId === visitingPersonaIdentifier.identifier?.userId
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
-    }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
+    }, [visitingPersonaIdentifier.identifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
     const proofs = usePersonaProofs(publicKeyAsHex, MaskMessages)
 
@@ -68,7 +68,7 @@ export function NextIdPage() {
         return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
     }, [isOwn, statusLoading, handleAddWallets, personaConnectStatus])
 
-    if (proofs.loading || loadingPersona) {
+    if ((!proofs.data && proofs.isFetching) || loadingPersona) {
         return <PluginCardFrameMini />
     }
 
@@ -84,10 +84,10 @@ export function NextIdPage() {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={proofs.value ?? EMPTY_LIST}
-                    onBound={proofs.retry}
+                    bounds={proofs.data ?? EMPTY_LIST}
+                    onBound={proofs.refetch}
                 />
             ) : null}
         </>
     )
-}
+})

@@ -1,8 +1,8 @@
-import { useContext, useRef, useEffect, useState, useMemo, unstable_useCacheRefresh } from 'react'
+import { useContext, useMemo, unstable_useCacheRefresh } from 'react'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
-import { millify } from 'millify'
+
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { useVotes } from './hooks/useVotes.js'
@@ -12,6 +12,7 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { LoadingCard } from './LoadingCard.js'
+import { formatCount } from '@masknet/web3-shared-base'
 
 const choiceMaxWidth = 240
 
@@ -87,17 +88,9 @@ function Content() {
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier)
-    const { results } = useResults(identifier)
+    const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
     const { t } = useI18N()
-    const listRef = useRef<HTMLSpanElement[]>([])
-    const [tooltipsVisible, setTooltipsVisible] = useState<readonly boolean[]>(
-        Array.from<boolean>({ length: results?.length ?? 0 }).fill(false),
-    )
-
-    useEffect(() => {
-        setTooltipsVisible(listRef.current.map((element) => element.offsetWidth === choiceMaxWidth))
-    }, [])
 
     const dataForCsv = useMemo(
         () =>
@@ -120,23 +113,19 @@ function Content() {
                     ? results.map((result, i) => (
                           <ListItem className={classes.listItem} key={i}>
                               <Box className={classes.listItemHeader}>
-                                  <ShadowRootTooltip
+                                  <TextOverflowTooltip
+                                      as={ShadowRootTooltip}
                                       PopperProps={{
                                           disablePortal: true,
                                       }}
                                       title={<Typography>{result.choice}</Typography>}
                                       placement="top"
-                                      disableHoverListener={!tooltipsVisible[i]}
                                       classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                       arrow>
-                                      <Typography
-                                          ref={(ref) => {
-                                              listRef.current[i] = ref!
-                                          }}
-                                          className={cx(classes.choice, classes.ellipsisText)}>
+                                      <Typography className={cx(classes.choice, classes.ellipsisText)}>
                                           {result.choice}
                                       </Typography>
-                                  </ShadowRootTooltip>
+                                  </TextOverflowTooltip>
                                   <ShadowRootTooltip
                                       PopperProps={{
                                           disablePortal: true,
@@ -145,11 +134,13 @@ function Content() {
                                       title={
                                           <Typography className={classes.ellipsisText}>
                                               {result.powerDetail
+                                                  .filter((x) => x.power)
                                                   .flatMap((detail, index) => {
-                                                      const name = millify(proposal.scores_by_strategy[i][index], {
-                                                          precision: 2,
-                                                          lowercase: true,
-                                                      })
+                                                      const name = formatCount(
+                                                          proposal.scores_by_strategy[i][index],
+                                                          2,
+                                                          true,
+                                                      )
                                                       return [index === 0 ? '' : '+', name, detail.name]
                                                   })
                                                   .join(' ')}
@@ -158,7 +149,7 @@ function Content() {
                                       placement="top"
                                       arrow>
                                       <Typography className={classes.power}>
-                                          {millify(proposal.scores[i], { precision: 2, lowercase: true })}
+                                          {formatCount(proposal.scores[i], 2, true)}
                                       </Typography>
                                   </ShadowRootTooltip>
                                   <Typography className={classes.ratio}>
