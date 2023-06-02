@@ -16,6 +16,7 @@ export function useSocialAccountListByAddressOrDomain(
         return attemptUntil(
             [
                 async () => (domain ? await NextIDProof.queryProfilesByDomain(domain) : EMPTY_LIST),
+                async () => (address ? await NextIDProof.queryProfilesByAddress(address) : EMPTY_LIST),
                 async () => (address ? await Web3Bio.queryProfilesByAddress(address) : EMPTY_LIST),
             ],
             undefined,

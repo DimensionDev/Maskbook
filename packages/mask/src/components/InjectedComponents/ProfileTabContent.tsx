@@ -20,19 +20,12 @@ import {
     TokenWithSocialGroupMenu,
     SocialAccountList,
 } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    NetworkPluginID,
-    NextIDPlatform,
-    PluginID,
-    ProfileTabs,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, ProfileTabs } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ScopedDomainsContainer, useReverseAddress, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -300,12 +293,10 @@ function Content(props: ProfileTabContentProps) {
 
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, selectedSocialAccount?.address)
-
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
-        if (!selectedSocialAccount?.label && !domain) return EMPTY_LIST
-        return NextIDProof.queryProfilesByDomain(selectedSocialAccount?.label || domain)
-    }, [selectedSocialAccount, domain])
+        if (!currentVisitingUserId) return EMPTY_LIST
+        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
+    }, [currentVisitingUserId])
 
     if (hidden) return null
 
