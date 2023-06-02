@@ -67,7 +67,7 @@ export async function createPersonaByMnemonicV2(
     })
 }
 
-export async function queryPersonaKeyByMneimonicV2(mnemonicWords: string) {
+export async function queryPersonaKeyByMnemonicV2(mnemonicWords: string) {
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWords, '')
     const identifier = await ECKeyIdentifierFromJsonWebKey(key.publicKey)
     const encodePrivateKey = encode(key.privateKey)

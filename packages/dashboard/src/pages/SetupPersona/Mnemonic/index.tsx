@@ -110,7 +110,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
     const { value } = useAsync(async () => {
         if (!words.length) return
 
-        const { privateKey, publicKey } = await Services.Identity.queryPersonaKeyByMneimonicV2(words.join(' '))
+        const { privateKey, publicKey } = await Services.Identity.queryPersonaKeyByMnemonicV2(words.join(' '))
 
         return {
             privateKey,

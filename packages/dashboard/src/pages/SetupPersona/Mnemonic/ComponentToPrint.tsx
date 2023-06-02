@@ -3,7 +3,7 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
-import { PrintBackround } from '../../../assets/index.js'
+import { PrintBackground } from '../../../assets/index.js'
 import { Words } from './Words.js'
 import { Icons } from '@masknet/icons'
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     card: {
         width: '100%',
-        background: `url(${PrintBackround}) no-repeat`,
+        background: `url(${PrintBackground}) no-repeat`,
         borderRadius: theme.spacing(1),
         padding: theme.spacing(2),
         color: theme.palette.maskColor.white,
