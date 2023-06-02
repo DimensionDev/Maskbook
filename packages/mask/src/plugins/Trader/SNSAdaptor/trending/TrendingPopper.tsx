@@ -71,6 +71,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
 
     return (
         <ClickAwayListener
+            useCapture
             onClickAway={() => {
                 if (!locked) setActive(false)
             }}>
