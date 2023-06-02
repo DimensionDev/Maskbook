@@ -37,10 +37,12 @@ export async function openShareLink(network: string, post: string) {
 }
 
 function getLeft(width: number) {
-    if (process.env.manifest === '2') return ((globalThis as any).screen.width - width) / 2
+    if (typeof screen === 'object') {
+        return (screen.width - width) / 2
+    }
     return 200
 }
 function getTop(height: number) {
-    if (process.env.manifest === '2') return ((globalThis as any).screen.height - height) / 2
+    if (typeof screen === 'object') return (screen.height - height) / 2
     return 200
 }

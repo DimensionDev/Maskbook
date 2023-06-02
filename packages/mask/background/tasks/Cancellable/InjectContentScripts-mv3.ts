@@ -7,39 +7,11 @@ import {
     injectedScriptURL,
     maskSDK_URL,
 } from './InjectContentScripts.js'
-import type { WebNavigation, Scripting } from 'webextension-polyfill'
+import type { Scripting } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (process.env.manifest === '3') {
-    if (Flags.use_register_content_script) NewImplementation(signal)
-    else OldImplementation(signal)
-}
-
-function OldImplementation(signal: AbortSignal) {
-    const injectContentScript = fetchInjectContentScriptList(contentScriptURL)
-
-    async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): Promise<void> {
-        if (arg.url === 'about:blank') return
-        if (!arg.url.startsWith('http')) return
-
-        const contains = await browser.permissions.contains({ origins: [arg.url] })
-        if (!contains) return
-
-        browser.scripting.executeScript({
-            files: [injectedScriptURL, maskSDK_URL],
-            target: { tabId: arg.tabId, frameIds: [arg.frameId] },
-            // @ts-expect-error Chrome only API
-            world: 'MAIN',
-        })
-
-        browser.scripting.executeScript({
-            files: await injectContentScript,
-            target: { tabId: arg.tabId, frameIds: [arg.frameId] },
-            world: 'ISOLATED',
-        })
-    }
-    browser.webNavigation.onCommitted.addListener(onCommittedListener)
-    signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
+if (browser.runtime.getManifest().manifest_version === 3) {
+    NewImplementation(signal)
 }
 
 async function NewImplementation(signal: AbortSignal) {

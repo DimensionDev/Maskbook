@@ -176,7 +176,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 const runtimeValues: Record<string, string | boolean> = {
                     ...getGitInfo(flags.reproducibleBuild),
                     channel: flags.channel,
-                    manifest: String(flags.manifest),
                 }
                 if (flags.mode === 'development') runtimeValues.REACT_DEVTOOLS_EDITOR_URL = flags.devtoolsEditorURI
                 if (flags.mode === 'development') return EnvironmentPluginCache(runtimeValues)

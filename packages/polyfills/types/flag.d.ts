@@ -3,7 +3,6 @@ declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production' | 'test'
         readonly channel: 'stable' | 'beta' | 'insider'
-        readonly manifest: '2' | '3'
         readonly shadowRootMode: 'open' | 'closed'
 
         /**

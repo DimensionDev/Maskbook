@@ -9,7 +9,7 @@ export const injectedScriptURL = '/injected-script.js'
 export const maskSDK_URL = '/mask-sdk.js'
 export const contentScriptURL = '/generated__content__script.html'
 
-if (process.env.manifest === '2') InjectContentScript(signal)
+if (browser.runtime.getManifest().manifest_version === 2) InjectContentScript(signal)
 
 function InjectContentScript(signal: AbortSignal) {
     const injectedScript = fetchUserScript(injectedScriptURL)

@@ -8,7 +8,6 @@ const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 export const flags = {
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
-    use_register_content_script: true,
     /** Firefox has a special API that can inject to the document with a higher permission. */
     has_firefox_xray_vision: !!globalThis.navigator?.userAgent.includes('Firefox'),
     support_testnet_switch: betaOrInsiderOnly,

@@ -2,7 +2,7 @@ import { cache, startListen } from './cache.js'
 import { hmr } from '../../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (process.env.manifest === '3') {
+if (browser.runtime.getManifest().manifest_version === 3) {
     browser.runtime.onMessage.addListener(f)
     signal.addEventListener('abort', () => browser.runtime.onMessage.removeListener(f), { once: true })
 

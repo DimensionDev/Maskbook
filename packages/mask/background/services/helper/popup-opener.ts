@@ -35,9 +35,9 @@ async function openWindow(url: string): Promise<void> {
             // opened from the background chrome process for the extension that
             // has no physical dimensions
 
-            if (process.env.manifest === '2') {
-                // @ts-expect-error the project is configured to run in a worker, but mv2 is actually a page env.
-                const { screenX, screenY, outerWidth } = window
+            if (typeof screenX === 'number' && typeof outerWidth === 'number') {
+                // Manifest V2: screenX and outerWidth are available
+                // @ts-expect-error only available in MV2
                 top = Math.max(screenY, 0)
                 left = Math.max(screenX + (outerWidth - 350), 0)
             } else {

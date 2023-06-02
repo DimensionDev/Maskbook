@@ -72,11 +72,10 @@ export async function requestPermission(baseURL: string, permissions: ThirdParty
 export async function grantPermission(baseURL: string, permissions: ThirdPartyPluginPermission[]) {
     for (const permission of permissions) {
         const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
-        if (process.env.manifest === '2') {
-            ;(globalThis as any).sessionStorage.setItem(key, '1')
+        if (!('session' in browser.storage)) {
+            sessionStorage.setItem(key, '1')
         } else {
-            // @ts-expect-error Chrome Only API
-            const session: Storage.StorageArea = browser.storage.session
+            const session = browser.storage.session as Storage.StorageArea
             await session.set({ [key]: true })
         }
     }
@@ -85,11 +84,10 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
 /** @internal Do not export */
 async function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
     const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
-    if (process.env.manifest === '2') {
+    if (!('session' in browser.storage)) {
         return !!(globalThis as any).sessionStorage.getItem(key)
     } else {
-        // @ts-expect-error Chrome Only API
-        const session: Storage.StorageArea = browser.storage.session
+        const session = browser.storage.session as Storage.StorageArea
         return !!(await session.get(key))[key]
     }
 }
