@@ -12,6 +12,7 @@ import { isMobileFacebook } from '../../utils/isMobile.js'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -89,7 +90,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: Abort
                 if (!info) return
 
                 const proxy = DOMProxy({
-                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                    afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = info.element
 

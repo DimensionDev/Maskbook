@@ -9,6 +9,7 @@ import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import { getUserIdentity } from '../../utils/user.js'
 import { noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
@@ -27,7 +28,7 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
                 const proxy = DOMProxy({
-                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                    afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele
                 const identity = await getUserIdentity(twitterId)

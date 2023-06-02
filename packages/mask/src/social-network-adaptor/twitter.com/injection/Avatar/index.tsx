@@ -4,6 +4,7 @@ import { noop } from 'lodash-es'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { querySelectorAll } from '../../utils/selector.js'
+import { Flags } from '@masknet/flags'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
@@ -36,7 +37,7 @@ export async function injectAvatar(signal: AbortSignal) {
                 if (!twitterId) return
 
                 const proxy = DOMProxy({
-                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                    afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 const isSuggestion = ele.closest('[data-testid=UserCell]')

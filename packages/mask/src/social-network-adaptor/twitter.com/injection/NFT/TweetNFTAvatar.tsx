@@ -6,6 +6,7 @@ import { noop } from 'lodash-es'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { getUserId } from '../../utils/user.js'
+import { Flags } from '@masknet/flags'
 
 function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
@@ -19,7 +20,7 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                 if (!info) return
 
                 const proxy = DOMProxy({
-                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                    afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })

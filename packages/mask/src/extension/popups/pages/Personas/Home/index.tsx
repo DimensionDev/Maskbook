@@ -26,7 +26,7 @@ const PersonaHome = memo(() => {
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignUp}`),
         })
-        if (process.env.engine === 'firefox') {
+        if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
         Services.Helper.removePopupWindow()
@@ -37,7 +37,7 @@ const PersonaHome = memo(() => {
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignIn}`),
         })
-        if (process.env.engine === 'firefox') {
+        if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
         Services.Helper.removePopupWindow()

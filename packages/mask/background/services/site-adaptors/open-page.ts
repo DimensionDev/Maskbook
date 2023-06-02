@@ -36,11 +36,12 @@ export async function openShareLink(network: string, post: string) {
     })
 }
 
+const screen = (globalThis as any).screen
 function getLeft(width: number) {
-    if (process.env.manifest === '2') return ((globalThis as any).screen.width - width) / 2
+    if (screen) return (screen.width - width) / 2
     return 200
 }
 function getTop(height: number) {
-    if (process.env.manifest === '2') return ((globalThis as any).screen.height - height) / 2
+    if (screen) return (screen.height - height) / 2
     return 200
 }

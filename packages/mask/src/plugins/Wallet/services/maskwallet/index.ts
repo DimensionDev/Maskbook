@@ -5,7 +5,7 @@ import { OnDemandWorker } from '@masknet/shared-base'
 type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
 
-const Worker = new OnDemandWorker(new URL('../../../../../web-workers/wallet.ts', import.meta.url), {
+const worker = new OnDemandWorker(new URL('../../../../../web-workers/wallet.ts', import.meta.url), {
     name: 'MaskWallet',
 })
 
@@ -42,7 +42,8 @@ const ErrorMessage = {
 }
 
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
-    if (typeof browser === 'object' && browser.runtime && process.env.manifest === '3') {
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=1219164
+    if (typeof Worker !== 'function') {
         return async (value: Request[I]): Promise<Response[O]> => {
             const { request } = await import('@dimensiondev/mask-wallet-core/bundle')
             const { api } = await import('@dimensiondev/mask-wallet-core/proto')
@@ -55,11 +56,11 @@ function send<I extends keyof Request, O extends keyof Response>(input: I, outpu
     return (value: Request[I]) => {
         return new Promise<Response[O]>((resolve, reject) => {
             const req: MaskBaseAPI.Input = { id: Math.random(), data: { [input]: value } }
-            Worker.postMessage(req)
-            Worker.addEventListener('message', function f(message) {
+            worker.postMessage(req)
+            worker.addEventListener('message', function f(message) {
                 if (message.data.id !== req.id) return
 
-                Worker.removeEventListener('message', f)
+                worker.removeEventListener('message', f)
                 const data: MaskBaseAPI.Output = message.data
                 if (data.response.error)
                     return reject(

@@ -1,10 +1,11 @@
+import { Flags } from '@masknet/flags'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/index.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
     if (map.has(node)) return map.get(node)!
-    const dom = node.attachShadow({ mode: process.env.shadowRootMode, delegatesFocus: true })
+    const dom = node.attachShadow(Flags.shadowRootInit)
     map.set(node, dom)
     return dom
 }

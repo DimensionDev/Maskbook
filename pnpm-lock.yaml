@@ -3049,6 +3049,9 @@ importers:
 
   packages/theme:
     dependencies:
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
