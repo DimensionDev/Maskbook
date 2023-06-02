@@ -70,8 +70,8 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
         },
         recommendFeatureAppListItemName: {
             textAlign: 'left',
-            fontSize: 14,
-            fontWeight: 500,
+            fontSize: 18,
+            fontWeight: 700,
             cursor: disabled ? 'default' : 'pointer',
             color: theme.palette.common.white,
         },
