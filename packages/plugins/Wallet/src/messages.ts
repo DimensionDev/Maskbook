@@ -113,11 +113,6 @@ export interface WalletMessage {
     gasSettingDialogUpdated: GasSettingDialogEvent
 
     /**
-     * Select nft contract dialog
-     */
-    selectNftContractDialogUpdated: SelectNftContractDialogEvent
-
-    /**
      * WalletConnect QR Code dialog
      */
     walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent

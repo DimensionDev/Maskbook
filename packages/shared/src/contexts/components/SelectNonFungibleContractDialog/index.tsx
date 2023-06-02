@@ -20,6 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         minHeight: 564,
+        boxSizing: 'border-box',
         padding: theme.spacing(2, 0, 0),
         backgroundColor: theme.palette.maskColor.bottom,
         flexDirection: 'column',

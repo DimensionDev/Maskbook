@@ -1,10 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { type NetworkPluginID } from '@masknet/shared-base'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { type NonFungibleToken } from '@masknet/web3-shared-base'
+import { NETWORK_DESCRIPTORS, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, type TooltipProps } from '@mui/material'
-import { isSameAddress, type NonFungibleToken } from '@masknet/web3-shared-base'
-import { type ChainId, NETWORK_DESCRIPTORS, type SchemaType } from '@masknet/web3-shared-evm'
+import { isSameNFT } from '../../../utils/index.js'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
     itemRoot: {
@@ -134,19 +135,6 @@ interface NFTImageProps {
     onChange?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     size?: number
     showNetwork?: boolean
-}
-
-function isSameNFT(
-    pluginID: NetworkPluginID,
-    a: NonFungibleToken<ChainId, SchemaType>,
-    b?: NonFungibleToken<ChainId, SchemaType>,
-) {
-    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
-        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
-              a.contract?.chainId &&
-              a.contract?.chainId === b?.contract?.chainId &&
-              a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId
 }
 
 export function NFTImage(props: NFTImageProps) {
