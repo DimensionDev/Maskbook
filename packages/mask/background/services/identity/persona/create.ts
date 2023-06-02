@@ -1,8 +1,13 @@
 import * as bip39 from 'bip39'
-import { decodeArrayBuffer } from '@masknet/kit'
-import { type EC_Public_JsonWebKey, type PersonaIdentifier, isEC_Private_JsonWebKey } from '@masknet/shared-base'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
+import {
+    type EC_Public_JsonWebKey,
+    type PersonaIdentifier,
+    isEC_Private_JsonWebKey,
+    ECKeyIdentifierFromJsonWebKey,
+} from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../database/persona/helper.js'
-import { decode } from '@msgpack/msgpack'
+import { decode, encode } from '@msgpack/msgpack'
 import { omit } from 'lodash-es'
 import { queryPersonasDB } from '../../../database/persona/db.js'
 import {
@@ -60,4 +65,15 @@ export async function createPersonaByMnemonicV2(
         nickname,
         uninitialized: false,
     })
+}
+
+export async function queryPersonaKeyByMneimonicV2(mnemonicWords: string) {
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWords, '')
+    const identifier = await ECKeyIdentifierFromJsonWebKey(key.publicKey)
+    const encodePrivateKey = encode(key.privateKey)
+    const privateKey = encodeArrayBuffer(encodePrivateKey)
+    return {
+        publicKey: identifier.toText(),
+        privateKey,
+    }
 }

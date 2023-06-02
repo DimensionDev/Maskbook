@@ -67,13 +67,10 @@ export const Welcome = memo(function Welcome() {
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
         }
 
-        // warm up, otherwise we can't access correct value from userGuideStatus
-        await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
-
         const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
 
-        navigate(DashboardRoutes.SignUpPersona)
+        navigate(DashboardRoutes.SignUpPersona, { replace: true })
     }, [params, allowedToCollect])
 
     const t = useDashboardI18N()
