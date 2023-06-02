@@ -1,9 +1,10 @@
-import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { Check as CheckIcon } from '@mui/icons-material'
 import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
+import { makeStyles, ActionButton, MaskTextField } from '@masknet/theme'
+import { Box, InputBase, Typography, useTheme } from '@mui/material'
 import {
     type FungibleToken,
     isGreaterThan,
@@ -19,6 +20,7 @@ import {
     SchemaType,
     useRedPacketConstants,
     isNativeTokenAddress,
+    createNativeToken,
 } from '@masknet/web3-shared-evm'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -30,14 +32,9 @@ import {
     EthereumERC20TokenApprovedBoundary,
     SelectGasSettingsToolbar,
     useAvailableBalance,
+    TokenValue,
 } from '@masknet/shared'
-import {
-    useChainContext,
-    useWallet,
-    useNativeToken,
-    useNativeTokenPrice,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
@@ -45,6 +42,7 @@ import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
+import { Icons } from '@masknet/icons'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -72,6 +70,35 @@ const useStyles = makeStyles()((theme) => ({
             padding: '0px !important',
         },
     },
+    option: {
+        display: 'flex',
+        width: '50%',
+        alignItems: 'center',
+    },
+    checkIcon: {
+        width: 15,
+        height: 15,
+        color: theme.palette.maskColor.bottom,
+    },
+    checkIconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        width: 17,
+        height: 17,
+        borderRadius: 999,
+        marginRight: 5,
+        border: `2px solid ${theme.palette.maskColor.secondaryLine}`,
+        backgroundColor: 'transparent',
+    },
+    checked: {
+        borderColor: `${theme.palette.maskColor.primary} !important`,
+        backgroundColor: `${theme.palette.maskColor.primary} !important`,
+    },
+    tokenValue: {
+        flexGrow: 1,
+    },
 }))
 
 export interface RedPacketFormProps {
@@ -87,7 +114,8 @@ export interface RedPacketFormProps {
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
+    const theme = useTheme()
     const { onChange, onNext, origin, gasOption, onGasOptionChange } = props
     // context
     const wallet = useWallet()
@@ -97,8 +125,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const nativeTokenDetailed = useMemo(() => createNativeToken(chainId), [chainId])
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )
@@ -145,6 +173,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
     const amount = rightShift(rawAmount || '0', token?.decimals)
+    const rawTotalAmount = useMemo(
+        () => (isRandom ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
+        [rawAmount, isRandom, shares],
+    )
     const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares, isRandom])
     const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : shares ?? 0), [shares, isRandom])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
@@ -255,59 +287,69 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         return ''
     }, [isAvailableBalance, totalAmount, balance, token?.symbol, transactionValue])
 
-    const selectRef = useRef(null)
-
     if (!token) return null
+
     return (
         <>
             <div className={classes.field}>
-                <Box className={classes.input}>
-                    <Typography>{t.split_mode()}</Typography>
-                    <Select
-                        fullWidth
-                        className={classes.input}
-                        ref={selectRef}
-                        value={isRandom ? 1 : 0}
-                        onChange={(e) => {
-                            // foolproof, reset amount since the meaning of amount changed:
-                            // 'total amount' <=> 'amount per share'
-                            setRawAmount('0')
-                            setRandom(e.target.value as number)
-                        }}
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            },
-                            disableScrollLock: true,
-                            container: selectRef.current,
-                            anchorEl: selectRef.current,
-                        }}>
-                        <MenuItem value={0}>{t.average()}</MenuItem>
-                        <MenuItem value={1}>{t.random()}</MenuItem>
-                    </Select>
-                </Box>
-                <Box className={classes.input}>
-                    <Typography>{t.shares()}</Typography>
-                    <InputBase
-                        fullWidth
-                        value={shares}
-                        onChange={onShareChange}
-                        inputProps={{
+                <div className={classes.option}>
+                    <div
+                        className={cx(classes.checkIconWrapper, isRandom ? classes.checked : '')}
+                        onClick={() => setRandom(1)}>
+                        <CheckIcon className={classes.checkIcon} />
+                    </div>
+                    <Typography
+                        color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                        fontSize={16}
+                        fontWeight={isRandom ? 700 : 400}>
+                        {t.random_amount()}
+                    </Typography>
+                </div>
+                <div className={classes.option}>
+                    <div
+                        className={cx(classes.checkIconWrapper, !isRandom ? classes.checked : '')}
+                        onClick={() => setRandom(0)}>
+                        <CheckIcon className={classes.checkIcon} />
+                    </div>
+                    <Typography
+                        color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                        fontSize={16}
+                        fontWeight={!isRandom ? 700 : 400}>
+                        {t.identical_amount()}
+                    </Typography>
+                </div>
+            </div>
+            <div className={classes.field}>
+                <MaskTextField
+                    wrapperProps={{ className: classes.input }}
+                    value={shares}
+                    fullWidth
+                    onChange={onShareChange}
+                    InputProps={{
+                        endAdornment: (
+                            <>
+                                <Typography color={theme.palette.maskColor.third} fontSize={14} marginRight={0.5}>
+                                    {t.quantity()}
+                                </Typography>
+                                <Icons.RedPacket size={18} />
+                            </>
+                        ),
+                        inputProps: {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
                             placeholder: '0',
                             pattern: '^[0-9]$',
                             spellCheck: false,
-                        }}
-                    />
-                </Box>
+                        },
+                    }}
+                />
             </div>
             <div className={classes.field}>
                 <FungibleTokenInput
-                    label={isRandom ? 'Total Amount' : t.amount_per_share()}
+                    label={t.token()}
                     token={token}
+                    placeholder={isRandom ? t.total() : t.amount_each()}
                     onSelectToken={onSelectTokenChipClick}
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
@@ -322,16 +364,15 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 />
             </div>
             <Box margin={2}>
-                <Typography>{t.attached_message()}</Typography>
                 <InputBase
                     fullWidth
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder={t.best_wishes()}
+                    placeholder={t.blessing_words()}
                     value={message}
                 />
             </Box>
 
-            {nativeTokenDetailed && nativeTokenPrice ? (
+            {pluginID === NetworkPluginID.PLUGIN_EVM ? (
                 <Box margin={2}>
                     <SelectGasSettingsToolbar
                         nativeToken={nativeTokenDetailed}
@@ -342,6 +383,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         onChange={onGasOptionChange}
                     />
                 </Box>
+            ) : null}
+
+            {!isZero(rawTotalAmount) ? (
+                <TokenValue className={classes.tokenValue} token={token} amount={rawTotalAmount} />
             ) : null}
 
             <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
