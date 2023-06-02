@@ -81,11 +81,14 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
     }
 }
 
+// Note: sessionStorage is only available in MV2 or MV3 page mode (Firefox/Safari).
+const sessionStorage: Storage = (globalThis as any).sessionStorage
+
 /** @internal Do not export */
 async function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
     const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
     if (!('session' in browser.storage)) {
-        return !!(globalThis as any).sessionStorage.getItem(key)
+        return !!sessionStorage.getItem(key)
     } else {
         const session = browser.storage.session as Storage.StorageArea
         return !!(await session.get(key))[key]
