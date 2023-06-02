@@ -180,44 +180,47 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                 if (!stepVisible) return null
                 return (
                     <Modal open hideBackdrop container={container} className={classes.mask} onClose={onSkip}>
-                        <div
-                            ref={box1Ref}
-                            className={cx(classes.container, step === 3 ? classes.noBoxShadowCover : null)}>
-                            <Box ref={box2Ref} className={classes.target}>
-                                <div
-                                    ref={box3Ref}
-                                    className={cx(
-                                        classes.card,
-                                        arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
-                                    )}>
-                                    <Box paddingBottom="16px">
-                                        <Typography fontSize={20}>
-                                            {step}/{total}
-                                        </Typography>
-                                    </Box>
-                                    <div>
-                                        <Typography fontSize={14} fontWeight={600}>
-                                            {tip}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.buttonContainer}>
-                                        {step === total ? (
-                                            <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
-                                                {t('try')}
-                                            </NextButton>
-                                        ) : (
-                                            <>
-                                                <ActionButton type="button" onClick={onSkip}>
-                                                    {t('skip')}
-                                                </ActionButton>
-                                                <NextButton type="button" onClick={onNext}>
-                                                    {t('next')}
+                        {/* this extra div is feed to <FocusTrap /> If we remove it, it will show a blue outline on the box1 */}
+                        <div>
+                            <div
+                                ref={box1Ref}
+                                className={cx(classes.container, step === 3 ? classes.noBoxShadowCover : null)}>
+                                <Box ref={box2Ref} className={classes.target}>
+                                    <div
+                                        ref={box3Ref}
+                                        className={cx(
+                                            classes.card,
+                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
+                                        )}>
+                                        <Box paddingBottom="16px">
+                                            <Typography fontSize={20}>
+                                                {step}/{total}
+                                            </Typography>
+                                        </Box>
+                                        <div>
+                                            <Typography fontSize={14} fontWeight={600}>
+                                                {tip}
+                                            </Typography>
+                                        </div>
+                                        <div className={classes.buttonContainer}>
+                                            {step === total ? (
+                                                <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
+                                                    {t('try')}
                                                 </NextButton>
-                                            </>
-                                        )}
+                                            ) : (
+                                                <>
+                                                    <ActionButton type="button" onClick={onSkip}>
+                                                        {t('skip')}
+                                                    </ActionButton>
+                                                    <NextButton type="button" onClick={onNext}>
+                                                        {t('next')}
+                                                    </NextButton>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            </Box>
+                                </Box>
+                            </div>
                         </div>
                     </Modal>
                 )

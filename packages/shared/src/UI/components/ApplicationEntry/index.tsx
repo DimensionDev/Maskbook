@@ -25,6 +25,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             },
         },
         title: {
+            whiteSpace: 'nowrap',
             fontSize: 14,
         },
         disabled: {
@@ -68,12 +69,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             },
         },
         recommendFeatureAppListItemName: {
-            fontSize: 14,
-            fontWeight: 500,
+            textAlign: 'left',
+            fontSize: 18,
+            fontWeight: 700,
             cursor: disabled ? 'default' : 'pointer',
             color: theme.palette.common.white,
         },
         recommendFeatureAppListItemDescription: {
+            textAlign: 'left',
             fontSize: 12,
             fontWeight: 500,
             cursor: disabled ? 'default' : 'pointer',
@@ -145,7 +148,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             ) : null}
         </Button>
     )
-    return tooltipHint ? (
+    return tooltipHint && !disabled ? (
         <ShadowRootTooltip
             PopperProps={{
                 ...popperProps,
@@ -157,8 +160,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             }}
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow
-            disableHoverListener={!tooltipHint}
-            title={disabled ? null : <Typography>{tooltipHint}</Typography>}>
+            title={<Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

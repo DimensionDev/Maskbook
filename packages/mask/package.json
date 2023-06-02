@@ -156,6 +156,7 @@
     "@types/color": "^3.0.3",
     "@types/react-devtools-inline": "^4.24.3",
     "copy-webpack-plugin": "^11.0.0",
+    "devtools-ignore-webpack-plugin": "^0.1.1",
     "html-webpack-plugin": "^5.5.1",
     "react-devtools-inline": "4.27.8",
     "react-refresh": "^0.14.0",
