@@ -15,8 +15,8 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
-import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {

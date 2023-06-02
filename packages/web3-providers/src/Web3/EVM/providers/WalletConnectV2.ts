@@ -1,4 +1,6 @@
+import { first } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
+import type { Emitter } from '@servie/events'
 import { getSdkError } from '@walletconnect/utils'
 import { SignClient } from '@walletconnect/sign-client'
 import { Flags } from '@masknet/flags'
@@ -14,20 +16,24 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
-import type { WalletAPI } from '../../../entry-types.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 class Client {
+    constructor(private emitter: Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>) {}
+
     client: UnboxPromise<ReturnType<typeof SignClient.init>> | undefined
 
     get session() {
-        if (!this.client?.session.length) return
-        return this.client.session.get(this.client.session.keys.at(-1)!)
+        const key = this.client?.session.keys.at(-1)
+        return key ? this.client?.session.get(key) : undefined
     }
 
     get account() {
-        const account = this.session?.namespaces.eip155.accounts[0]
-        return account ? EIP155Editor.from(account).account : undefined
+        const account = first(this.session?.namespaces.eip155.accounts)
+        const account_ = account ? EIP155Editor.from(account).account : undefined
+        if (isValidChainId(account_?.chainId) && isValidAddress(account_?.account)) return account_
+        return
     }
 
     async setup() {
@@ -63,37 +69,6 @@ class Client {
             console.log('[DEBUG EVENT]', 'session_delete')
             // reset()
         })
-
-        // // @ts-expect-error the client type mismatch
-        // this.client.on('display_uri', (uri: string) => {
-        //     this.web3Modal?.openModal({ uri })
-        // })
-
-        // // @ts-expect-error the client type mismatch
-        // this.client.on('connect', (session: SessionTypes.Struct) => {
-        //     const encodedAccount = first(session.namespaces.eip155.accounts)
-        //     if (!encodedAccount) return
-
-        //     const [, chainId, account] = encodedAccount.split(':')
-        //     const chainId_ = Number.parseInt(chainId, 10)
-
-        //     if (isValidAddress(account) && isValidChainId(chainId_)) {
-        //         this.emitter.emit('connect', {
-        //             chainId: chainId_,
-        //             account,
-        //         })
-        //     }
-        // })
-
-        // this.client.on('accountsChanged', (accounts) => {
-        //     if (!this.connected) return
-        //     this.emitter.emit('accounts', accounts)
-        // })
-
-        // this.client.on('chainChanged', (chainId) => {
-        //     if (!this.connected) return
-        //     this.emitter.emit('chainId', chainId)
-        // })
     }
 
     reset() {
@@ -109,7 +84,7 @@ export default class WalletConnectV2Provider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private signClient = new Client()
+    private signClient = new Client(this.emitter)
 
     constructor() {
         super(ProviderType.WalletConnectV2)
@@ -130,38 +105,25 @@ export default class WalletConnectV2Provider
                     eip155: EIP155Editor.fromChainId(chainId).eip155Namespace,
                 },
             })
-
-            console.log('DEBUG: connected')
-            console.log(connected)
-
             if (!connected) throw new Error('Failed to create connection.')
 
             const { uri, approval } = connected
-
-            console.log('DEBUG: uri')
-            console.log({ uri })
-
             if (uri) this.context?.openWalletConnectDialog(uri)
 
             await approval()
 
-            this.context?.closeWalletConnectDialog()
+            if (uri) this.context?.closeWalletConnectDialog()
         }
 
         return this.signClient.account
     }
 
     private async logout() {
-        try {
-            if (!this.signClient.session) return
-            await this.signClient.client?.disconnect({
-                topic: this.signClient.session.topic,
-                reason: getSdkError('USER_DISCONNECTED'),
-            })
-        } catch (error) {
-            // do nothing
-        } finally {
-        }
+        if (!this.signClient.session) return
+        await this.signClient.client?.disconnect({
+            topic: this.signClient.session.topic,
+            reason: getSdkError('USER_DISCONNECTED'),
+        })
     }
 
     override async connect(chainId: ChainId) {

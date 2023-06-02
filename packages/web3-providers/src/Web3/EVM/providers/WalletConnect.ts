@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { defer, delay } from '@masknet/kit'
+import { defer } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
 import type { Account } from '@masknet/shared-base'
 import {

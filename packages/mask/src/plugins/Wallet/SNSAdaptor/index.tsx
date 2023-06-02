@@ -11,7 +11,6 @@ import { GasSettingDialog } from './GasSettingDialog/index.js'
 import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
 import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
-  import { InjectSelectNftContractDialog } from './SelectNftContractDialog/index.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
