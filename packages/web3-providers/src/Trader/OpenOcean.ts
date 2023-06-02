@@ -49,6 +49,7 @@ export class OpenOcean implements TraderAPI.Provider {
                 disabledDexIds: '',
                 account: request.userAddr,
                 referrer: getOpenOceanConstants(request.chainId).REFERRER_ADDRESS?.toLowerCase(),
+                disableRfq: '1',
             }),
         )
 

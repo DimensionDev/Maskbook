@@ -36,10 +36,14 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         }
 
         try {
-            const gas = await Web3.estimateTransaction?.({
-                from: account,
-                ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
-            })
+            const gas = await Web3.estimateTransaction?.(
+                {
+                    from: account,
+                    ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+                },
+                undefined,
+                { chainId },
+            )
             const hash = await Web3.sendTransaction(
                 {
                     ...config,
@@ -48,7 +52,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 { chainId, overrides: { ...gasConfig } },
             )
             const receipt = await Web3.getTransactionReceipt(hash)
-
+            if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error: unknown) {
             if (error instanceof Error) {
