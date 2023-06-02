@@ -52,9 +52,9 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>) {
             hoverRef.current = false
             hidePopup()
         }
-        document.body.addEventListener('click', onClick)
+        document.body.addEventListener('click', onClick, true)
         return () => {
-            document.body.removeEventListener('click', onClick)
+            document.body.removeEventListener('click', onClick, true)
         }
     }, [hidePopup])
 

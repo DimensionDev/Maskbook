@@ -171,7 +171,9 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />
-                            <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
+                            <div style={{ height: 14, lineHeight: '14px' }}>
+                                <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
+                            </div>
                             <Link
                                 href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"
