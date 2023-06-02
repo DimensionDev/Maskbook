@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
+import { Modals } from '@masknet/web3-modals'
 import { ExtensionSite, getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { InjectSelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog/index.js'
 import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog/index.js'
@@ -24,6 +25,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 {getSiteType() !== ExtensionSite.Popup ? (
                     <TransactionSnackbar pluginID={NetworkPluginID.PLUGIN_EVM} />
                 ) : null}
+                <Modals />
             </>
         )
     },

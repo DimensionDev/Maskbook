@@ -1,4 +1,5 @@
 import { Suspense, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
@@ -10,16 +11,14 @@ import { compose, getSiteType, i18NextInstance, NetworkPluginID, queryClient } f
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
 import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
-import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
-import { createPortal } from 'react-dom'
+import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 
 export function MaskUIRootSNS(children: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,
         (children) => <BuildInfo.Provider value={buildInfoMarkdown} children={children} />,
-
         <MaskUIRoot children={children} />,
     )
 }

@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { defer } from '@masknet/kit'
+import { defer, delay } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
 import type { Account } from '@masknet/shared-base'
 import {
@@ -79,8 +79,9 @@ export default class WalletConnectProvider
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
             qrcodeModal: {
-                open: (uri: string, callback) => {
-                    this.context?.openWalletConnectDialog(uri, callback)
+                open: async (uri: string, callback) => {
+                    await this.context?.openWalletConnectDialog(uri)
+                    callback()
                 },
                 close: () => {
                     this.context?.closeWalletConnectDialog()
