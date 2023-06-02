@@ -93,12 +93,6 @@ patchedDependencies:
   urlcat@3.1.0:
     hash: 5r5xyq4zgcnqugwsrx4lxq2i4e
     path: patches/urlcat@3.1.0.patch
-  web3-core@1.8.0:
-    hash: ie6z5nhvcuo3lg2pk6xeacwpbi
-    path: patches/web3-core@1.8.0.patch
-  web3@1.8.0:
-    hash: dcxxuqxbti2wcxbar42oow5yze
-    path: patches/web3@1.8.0.patch
 
 importers:
 

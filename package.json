@@ -139,8 +139,6 @@
       "micromark@3.1.0": "patches/micromark@3.1.0.patch",
       "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
-      "web3@1.8.0": "patches/web3@1.8.0.patch",
-      "web3-core@1.8.0": "patches/web3-core@1.8.0.patch",
       "fuse.js@6.6.2": "patches/fuse.js@6.6.2.patch",
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
