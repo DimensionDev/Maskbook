@@ -158,6 +158,8 @@
     "plugin_wallet_approve_all_nft_successfully": "解锁 {{symbol}} 成功",
     "plugin_wallet_fail_to_load_nft_contract": "点击重试",
     "plugin_wallet_change_wallet": "更换钱包",
+    "wallet_connect_qr_code_dialog_title": "WalletConnect",
+    "wallet_connect_qr_code_dialog_content": "使用WalletConnect兼容的钱包扫描二维码",
     "save": "保存",
     "cancel": "取消",
     "add_wallet": "添加钱包",

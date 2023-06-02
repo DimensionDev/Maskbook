@@ -10,7 +10,6 @@ import { WalletRiskWarningDialog } from './RiskWarningDialog/index.js'
 import { GasSettingDialog } from './GasSettingDialog/index.js'
 import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
-import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog/index.js'
 import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -29,7 +28,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => (
                     <TransactionSnackbar key={key} pluginID={pluginID} />
                 ))}
-                <WalletConnectQRCodeDialog />
                 <LeavePageConfirmDialog />
             </>
         )

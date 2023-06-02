@@ -158,6 +158,8 @@
     "plugin_wallet_approve_all_nft_successfully": "{{symbol}} のロックを解除しました",
     "plugin_wallet_fail_to_load_nft_contract": "クリックして再試行",
     "plugin_wallet_change_wallet": "ウォレットを変更",
+    "wallet_connect_qr_code_dialog_title": "WalletConnect",
+    "wallet_connect_qr_code_dialog_content": "WalletConnect 対応の QR コードを読みこむ",
     "save": "保存",
     "cancel": "キャンセル",
     "add_wallet": "ウォレットを追加",

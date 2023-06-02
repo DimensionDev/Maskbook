@@ -8,6 +8,7 @@
   "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../shared-base" },
+    { "path": "../shared" },
     { "path": "../web3-shared/base" },
     { "path": "../web3-shared/evm" },
     { "path": "../web3-shared/solana" },
