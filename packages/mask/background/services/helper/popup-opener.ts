@@ -35,12 +35,11 @@ async function openWindow(url: string): Promise<void> {
             // opened from the background chrome process for the extension that
             // has no physical dimensions
 
-            // Manifest V2: screenX and outerWidth are available
-            // @ts-expect-error only available in MV2
+            // Note: DOM is only available in MV2 or MV3 page mode.
+            // @ts-expect-error DOM
+            const { screenX, outerWidth } = globalThis
             if (typeof screenX === 'number' && typeof outerWidth === 'number') {
-                // @ts-expect-error only available in MV2
                 top = Math.max(screenY, 0)
-                // @ts-expect-error only available in MV2
                 left = Math.max(screenX + (outerWidth - 350), 0)
             } else {
                 top = 100

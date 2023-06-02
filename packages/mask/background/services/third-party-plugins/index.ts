@@ -81,7 +81,7 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
     }
 }
 
-// Note: sessionStorage is only available in MV2 or MV3 page mode (Firefox/Safari).
+// Note: sessionStorage is only available in MV2 or MV3 page mode.
 const sessionStorage: Storage = (globalThis as any).sessionStorage
 
 /** @internal Do not export */

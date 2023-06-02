@@ -1,7 +1,7 @@
 import type { Storage } from 'webextension-polyfill'
 
 const key = 'openSNSAndActivatePlugin'
-// Note: sessionStorage is only available in MV2 or MV3 page mode (Firefox/Safari).
+// Note: sessionStorage is only available in MV2 or MV3 page mode.
 const sessionStorage: Storage = (globalThis as any).sessionStorage
 /**
  * This function will open a new web page, then open the composition dialog and activate the composition entry of the given plugin.
