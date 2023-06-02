@@ -148,7 +148,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             ) : null}
         </Button>
     )
-    return tooltipHint ? (
+    return tooltipHint && !disabled ? (
         <ShadowRootTooltip
             PopperProps={{
                 ...popperProps,
@@ -160,8 +160,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             }}
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow
-            disableHoverListener={!tooltipHint}
-            title={disabled ? null : <Typography>{tooltipHint}</Typography>}>
+            title={<Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (
