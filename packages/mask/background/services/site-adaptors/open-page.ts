@@ -36,7 +36,7 @@ export async function openShareLink(network: string, post: string) {
     })
 }
 
-const screen: Screen | undefined = (globalThis as any).screen
+const screen = (globalThis as any).screen
 function getLeft(width: number) {
     if (screen) return (screen.width - width) / 2
     return 200
