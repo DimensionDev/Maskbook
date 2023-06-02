@@ -9,6 +9,7 @@ const key = 'openSNSAndActivatePlugin'
 export async function openSNSAndActivatePlugin(url: string, pluginID: string): Promise<void> {
     await browser.tabs.create({ active: true, url })
     if (!('session' in browser.storage)) {
+        // @ts-expect-error Only available in MV2
         sessionStorage.setItem(key, pluginID)
     } else {
         const session = browser.storage.session as Storage.StorageArea
@@ -17,7 +18,9 @@ export async function openSNSAndActivatePlugin(url: string, pluginID: string): P
 }
 export async function getDesignatedAutoStartPluginID(): Promise<string | null> {
     if (!('session' in browser.storage)) {
+        // @ts-expect-error Only available in MV2
         const val = sessionStorage.getItem(key)
+        // @ts-expect-error Only available in MV2
         sessionStorage.removeItem(key)
         return val
     } else {

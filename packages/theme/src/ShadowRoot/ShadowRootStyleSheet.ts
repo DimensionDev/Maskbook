@@ -2,7 +2,6 @@
 /// <reference types="@masknet/global-types/flag" />
 
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
-const constructableStyleSheetEnabled = true
 
 // There are 2 rendering mode of this ShadowRootStyleSheet.
 // 1. If the host supports ConstructableStyleSheet proposal:
@@ -22,9 +21,7 @@ export class StyleSheet {
         this.key = options.key
         if (options.container instanceof ShadowRoot) {
             this.implementation =
-                constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
-                    ? new ConstructableStyleSheet()
-                    : new SynchronizeStyleSheet()
+                'adoptedStyleSheets' in Document.prototype ? new ConstructableStyleSheet() : new SynchronizeStyleSheet()
             this.addContainer(options.container)
             Reflect.set(this.container, 'sheet', this)
         } else {

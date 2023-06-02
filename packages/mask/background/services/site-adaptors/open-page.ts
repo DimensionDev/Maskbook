@@ -37,12 +37,13 @@ export async function openShareLink(network: string, post: string) {
 }
 
 function getLeft(width: number) {
-    if (typeof screen === 'object') {
-        return (screen.width - width) / 2
-    }
+    // @ts-expect-error only available in MV2
+    if (typeof screen === 'object') return (screen.width - width) / 2
+
     return 200
 }
 function getTop(height: number) {
+    // @ts-expect-error only available in MV2
     if (typeof screen === 'object') return (screen.height - height) / 2
     return 200
 }
