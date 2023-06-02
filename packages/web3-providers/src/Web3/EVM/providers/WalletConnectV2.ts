@@ -1,7 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import { getSdkError } from '@walletconnect/utils'
 import { SignClient } from '@walletconnect/sign-client'
-import type { SessionTypes } from '@walletconnect/types'
 import { Flags } from '@masknet/flags'
 import type { UnboxPromise } from '@masknet/shared-base'
 import {
@@ -11,28 +10,27 @@ import {
     type Web3Provider,
     chainResolver,
     EIP155Editor,
+    isValidAddress,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
-export default class WalletConnectV2Provider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
-    private session: SessionTypes.Struct | undefined
-    private client: UnboxPromise<ReturnType<typeof SignClient.init>> | undefined
+class Client {
+    client: UnboxPromise<ReturnType<typeof SignClient.init>> | undefined
 
-    constructor() {
-        super(ProviderType.WalletConnectV2)
+    get session() {
+        if (!this.client?.session.length) return
+        return this.client.session.get(this.client.session.keys.at(-1)!)
     }
 
-    override get connected() {
-        return !!this.session
+    get account() {
+        const account = this.session?.namespaces.eip155.accounts[0]
+        return account ? EIP155Editor.from(account).account : undefined
     }
 
-    private async setupClient() {
-        if (this.client) return
-
+    async setup() {
         this.client = await SignClient.init({
             projectId: Flags.wc_project_id,
             logger: Flags.wc_mode,
@@ -98,61 +96,81 @@ export default class WalletConnectV2Provider
         // })
     }
 
+    reset() {
+        if (!this.client) return
+        this.client.removeAllListeners('session_ping')
+        this.client.removeAllListeners('session_event')
+        this.client.removeAllListeners('session_update')
+        this.client.removeAllListeners('session_delete')
+    }
+}
+
+export default class WalletConnectV2Provider
+    extends BaseProvider
+    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
+{
+    private signClient = new Client()
+
+    constructor() {
+        super(ProviderType.WalletConnectV2)
+    }
+
+    get chainId() {
+        return Web3StateRef.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
+    }
+
+    override get connected() {
+        return !!this.signClient.session
+    }
+
     private async login(chainId: ChainId) {
-        await this.setupClient()
-
-        const connected = await this.client?.connect({
-            requiredNamespaces: {
-                eip155: {
-                    methods: [
-                        'eth_sendTransaction',
-                        'eth_signTransaction',
-                        'eth_sign',
-                        'personal_sign',
-                        'eth_signTypedData',
-                    ],
-                    chains: [`eip155:${chainId}`],
-                    events: ['chainChanged', 'accountsChanged'],
+        if (!this.signClient.account) {
+            const connected = await this.signClient.client?.connect({
+                requiredNamespaces: {
+                    eip155: EIP155Editor.fromChainId(chainId).eip155Namespace,
                 },
-            },
-        })
+            })
 
-        if (!connected) return
+            console.log('DEBUG: connected')
+            console.log(connected)
 
-        const { uri, approval } = connected
+            if (!connected) throw new Error('Failed to create connection.')
 
-        console.log('DEBUG: uri')
-        console.log({ uri })
+            const { uri, approval } = connected
 
-        const session = await approval()
+            console.log('DEBUG: uri')
+            console.log({ uri })
 
-        console.log('DEBUG: session')
-        console.log({ session })
+            if (uri) this.context?.openWalletConnectDialog(uri)
 
-        this.session = session
+            await approval()
 
-        const editor = EIP155Editor.from(this.session.namespaces.eip155.accounts[0])
-        return editor.account
+            this.context?.closeWalletConnectDialog()
+        }
+
+        return this.signClient.account
     }
 
     private async logout() {
         try {
-            if (!this.client || !this.session) throw new Error('WalletConnect is not initialized')
-
-            await this.client.disconnect({
-                topic: this.session.topic,
+            if (!this.signClient.session) return
+            await this.signClient.client?.disconnect({
+                topic: this.signClient.session.topic,
                 reason: getSdkError('USER_DISCONNECTED'),
             })
         } catch (error) {
             // do nothing
         } finally {
-            this.session = undefined
         }
     }
 
     override async connect(chainId: ChainId) {
+        this.signClient.reset()
+        await this.signClient.setup()
+
         const account = await this.login(chainId)
-        if (!account?.account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        if (!account || !isValidAddress(account.account) || !isValidChainId(account.chainId))
+            throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
         return account
     }
 
@@ -160,11 +178,14 @@ export default class WalletConnectV2Provider
         await this.logout()
     }
 
-    override request<T>(requestArguments: RequestArguments): Promise<T> {
-        if (!this.client || !this.session) throw new Error('WalletConnect is not initialized')
-        return this.client.request<T>({
-            topic: this.session.topic,
-            chainId: `eip155:${ChainId.Mainnet}`,
+    override async request<T>(requestArguments: RequestArguments): Promise<T> {
+        if (!this.signClient.client) await this.signClient.setup()
+        if (!this.signClient.session) await this.login(this.chainId)
+        if (!this.signClient.client || !this.signClient.session) throw new Error('The client is not initialized')
+
+        return this.signClient.client.request<T>({
+            topic: this.signClient.session.topic,
+            chainId: EIP155Editor.fromChainId(this.chainId).eip155ChainId,
             request: {
                 method: requestArguments.method,
                 params: requestArguments.params,

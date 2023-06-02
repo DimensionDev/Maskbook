@@ -21,6 +21,5 @@ export const WalletConnectQRCode = forwardRef<
     })
 
     if (!open) return null
-
-    return open ? <QRCodeDialog uri={uri} open onClose={() => dispatch?.close()} /> : null
+    return <QRCodeDialog uri={uri} open onClose={() => dispatch?.close()} />
 })

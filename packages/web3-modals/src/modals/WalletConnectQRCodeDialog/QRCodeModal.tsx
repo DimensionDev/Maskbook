@@ -18,8 +18,8 @@ export const QRCodeModal: React.FC<{
     uri: string
 }> = ({ uri }) => {
     const t = useSharedI18N()
-
     const { classes } = useStyles()
+
     const style: React.CSSProperties = {
         width: '80%',
         maxWidth: 361,
@@ -27,6 +27,7 @@ export const QRCodeModal: React.FC<{
         margin: 'auto',
         borderRadius: 16,
     }
+
     return (
         <Grid className={classes.container}>
             <QRCode text={uri} canvasProps={{ style }} />

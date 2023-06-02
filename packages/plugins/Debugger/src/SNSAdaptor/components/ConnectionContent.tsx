@@ -46,7 +46,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             {
                 chainId: ChainId.Mainnet,
                 account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
-                providerType: ProviderType.MaskWallet,
+
                 paymentToken: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 overrides: {
                     gas: '88888',
@@ -77,7 +77,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
         return Web3.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
             chainId: ChainId.Matic,
             account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-            providerType: ProviderType.MaskWallet,
         })
     }, [])
 
@@ -95,7 +94,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
             {
                 chainId: ChainId.Matic,
                 account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-                providerType: ProviderType.MaskWallet,
             },
         )
     }, [])
@@ -104,7 +102,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
         return Web3.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
             chainId: ChainId.Matic,
             account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
-            providerType: ProviderType.MaskWallet,
         })
     }, [])
 
@@ -117,7 +114,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
             {
                 chainId: ChainId.Matic,
                 account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
-                providerType: ProviderType.MaskWallet,
                 paymentToken: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             },
         )
