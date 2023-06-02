@@ -31,7 +31,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
         }
 
         try {
-            const gas = await Web3.estimateTransaction?.(config)
+            const gas = await Web3.estimateTransaction?.(config, undefined, { chainId })
 
             const hash = await Web3.sendTransaction(
                 {
@@ -41,6 +41,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
                 { chainId, overrides: { ...gasConfig } },
             )
             const receipt = await Web3.getTransactionReceipt(hash)
+            if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error) {
             if (error instanceof Error) {
