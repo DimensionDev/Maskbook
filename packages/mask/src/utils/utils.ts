@@ -60,8 +60,7 @@ export async function attachNextIDToProfile(nextID: ProfileInformationFromNextID
     const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
     if (!nextID?.fromNextID || !nextID.linkedPersona || !whoAmI) return
-    const rpc = notify(Services.Identity)
-    const [_, emit] = batch(Services.Identity)
+    const [rpc, emit] = batch(notify(Services.Identity))
     nextID.linkedTwitterNames?.forEach((x) => {
         const newItem = {
             ...nextID,
