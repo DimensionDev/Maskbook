@@ -5,19 +5,12 @@ import {
     fetchImageViaDOM,
     fetchImageViaHTTP,
     isLocaleResource,
-    isSameAddress,
     resolveCrossOriginURL,
     resolveResourceURL,
 } from '@masknet/web3-shared-base'
-import {
-    EnhanceableSite,
-    NetworkPluginID,
-    type NextIDPersonaBindings,
-    NextIDPlatform,
-    getSiteType,
-} from '@masknet/shared-base'
+import { EnhanceableSite, type NextIDPersonaBindings, NextIDPlatform, getSiteType } from '@masknet/shared-base'
 import { NextIDProof, NextIDStorageProvider } from '@masknet/web3-providers'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../types.js'
+import type { NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
 import { fetchBlob } from '@masknet/web3-providers/helpers'
 
@@ -148,16 +141,4 @@ export async function getNFTAvatarByUserId(
         if (avatar) return avatar
     }
     return
-}
-
-export function isSameNFT(
-    pluginID: NetworkPluginID,
-    a: AllChainsNonFungibleToken,
-    b?: AllChainsNonFungibleToken,
-): boolean {
-    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
-        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
-              a.contract?.chainId === b?.contract?.chainId &&
-              a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId && a.id === b.id
 }
