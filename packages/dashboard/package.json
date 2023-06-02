@@ -65,8 +65,8 @@
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "wallet.ts": "^1.0.1",
-    "web3-core-helpers": "1.8.0",
-    "web3-utils": "1.8.0",
+    "web3-core-helpers": "1.10.0",
+    "web3-utils": "1.10.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {

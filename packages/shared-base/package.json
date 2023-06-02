@@ -38,7 +38,7 @@
     "tiny-secp256k1": "^2.2.1",
     "typeson": "^8.0.1",
     "typeson-registry": "^5.0.0",
-    "web3-utils": "1.8.0"
+    "web3-utils": "1.10.0"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"
