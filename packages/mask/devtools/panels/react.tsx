@@ -110,11 +110,13 @@ export async function startReactDevTools(signal: AbortSignal) {
         bridge.send('setTraceUpdatesEnabled', !!getLocalStorage('React::DevTools::traceUpdatesEnabled', false))
     })
 
+    const isChromium = navigator.userAgent.includes('Chrome') || navigator.userAgent.includes('Chromium')
+
     store = createStore(bridge, {
         isProfiling,
-        supportsReloadAndProfile: process.env.engine === 'chromium',
+        supportsReloadAndProfile: isChromium,
         supportsProfiling: true,
-        supportsTimeline: process.env.engine === 'chromium',
+        supportsTimeline: isChromium,
         supportsTraceUpdates: true,
         supportsNativeInspection: true,
     })

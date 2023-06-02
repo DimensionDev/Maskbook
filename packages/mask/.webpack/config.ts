@@ -175,7 +175,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 // This is a valuable trade-off.
                 const runtimeValues: Record<string, string | boolean> = {
                     ...getGitInfo(flags.reproducibleBuild),
-                    engine: flags.engine,
                     channel: flags.channel,
                     manifest: String(flags.manifest),
                 }

@@ -82,7 +82,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     y="0"
                     width="300%"
                     height="100%"
-                    patternUnits={process.env.engine === 'firefox' ? '' : 'userSpaceOnUse'}>
+                    patternUnits={navigator.userAgent.includes('Firefox') ? '' : 'userSpaceOnUse'}>
                     <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
                         <animateTransform
                             attributeName="transform"

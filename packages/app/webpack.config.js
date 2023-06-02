@@ -76,8 +76,6 @@ function Configuration(env, argv) {
             new HtmlWebpackPlugin(),
             new webpack.DefinePlugin({
                 'process.env.NODE_DEBUG': 'undefined',
-                'process.env.engine': `(${(ua) =>
-                    ua.includes('Chrome') || ua.includes('Chromium') ? 'chromium' : 'firefox'})(navigator.userAgent)`,
                 'process.env.channel': JSON.stringify('stable'),
                 'process.env.shadowRootMode': JSON.stringify('open'),
                 'process.version': JSON.stringify('v19.0.0'),

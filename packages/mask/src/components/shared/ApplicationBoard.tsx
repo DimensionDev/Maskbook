@@ -28,7 +28,7 @@ const useStyles = makeStyles<{
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(0, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 3),
+            padding: theme.spacing(0, navigator.userAgent.includes('Firefox') ? 1.5 : 0.25, 1, 3),
             transform: props.isCarouselReady ? 'translateX(-8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -38,7 +38,7 @@ const useStyles = makeStyles<{
             gridGap: 10,
             justifyContent: 'space-between',
             height: 386,
-            width: props.shouldScroll && process.env.engine !== 'firefox' ? 583 : 570,
+            width: props.shouldScroll && !navigator.userAgent.includes('Firefox') ? 583 : 570,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {

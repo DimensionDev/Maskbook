@@ -10,7 +10,7 @@ export const flags = {
     mask_SDK_ready: betaOrInsiderOnly,
     use_register_content_script: true,
     /** Firefox has a special API that can inject to the document with a higher permission. */
-    has_firefox_xray_vision: process.env.engine === 'firefox',
+    has_firefox_xray_vision: !!globalThis.navigator?.userAgent.includes('Firefox'),
     support_testnet_switch: betaOrInsiderOnly,
 
     // #region Experimental features

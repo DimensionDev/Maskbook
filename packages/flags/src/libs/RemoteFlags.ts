@@ -106,9 +106,13 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
      * Fetch flags from the remote server.
      */
     async fetch() {
+        const isFirefox = navigator.userAgent.includes('Firefox')
+        const isChrome = navigator.userAgent.includes('Chrome') || navigator.userAgent.includes('Chromium')
+        const isSafari = !isChrome && navigator.userAgent.includes('Safari')
+        const engine = isFirefox ? 'firefox' : isChrome ? 'chromium' : isSafari ? 'safari' : 'unknown'
         const response = await fetch(
             urlcat(this.remoteFlagsURL, {
-                engine: process.env.engine,
+                engine,
                 channel: process.env.channel,
                 manifest: process.env.manifest,
                 NODE_ENV: process.env.NODE_ENV,

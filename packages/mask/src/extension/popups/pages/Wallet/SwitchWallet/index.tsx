@@ -120,7 +120,7 @@ const SwitchWallet = memo(() => {
                     disabled={wallets.length >= MAX_WALLET_LIMIT}
                     className={classes.button}
                     onClick={() => {
-                        if (process.env.engine === 'firefox') {
+                        if (navigator.userAgent.includes('Firefox')) {
                             Services.Helper.openPopupWindow(PopupRoutes.ImportWallet)
                             return
                         }

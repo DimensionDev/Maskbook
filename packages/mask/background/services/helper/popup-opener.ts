@@ -64,14 +64,6 @@ async function openWindow(url: string): Promise<void> {
                     currentPopupWindowId = 0
                 }
             })
-
-            // firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1271047
-            if (process.env.engine === 'firefox') {
-                browser.windows.update(id, {
-                    left,
-                    top,
-                })
-            }
         }
     }
 }
