@@ -24,6 +24,7 @@
     "unlock": "Unlock",
     "select_token": "Select",
     "select_a_token": "Select a token",
+    "select_collectibles": "Select Collectibles",
     "manage_token_list": "Manage Token List",
     "token_list_loading": "Loading",
     "erc20_token_list_placeholder": "Name or Contract address e.g., USDC or 0x234...",
@@ -59,6 +60,7 @@
     "load_failed": "Load failed",
     "load_retry": "Reload",
     "loading": "Loading",
+    "no_results": "No results",
     "powered_by": "Powered by",
     "copied": "Copied",
     "copy_wallet_address_success": "Copy wallet address successfully!",
@@ -196,5 +198,13 @@
     "lens_following": "Following",
     "view": "View",
     "verified_by": "Verified by {{ marketplace }}",
-    "no_NFTs_found": "No NFTs found."
+    "no_NFTs_found": "No NFTs found.",
+    "add_collectibles": "Add Collectibles",
+    "collectible_contract_require": "The collectible address is required",
+    "collectible_contract_invalid": "Incorrect contract address.",
+    "collectible_token_id_require": "The collectible token id is required",
+    "collection_not_belong_to_you": "The contract address is incorrect or the collection does not belong to you.",
+    "collectible_search_placeholder": "Name or Contract address eg.PUNK or 0x234...",
+    "add_collectibles_address_placeholder": "Input contract address",
+    "add_collectibles_token_id_placeholder": "Token ID separated by comma, e.g. 1223,1224,"
 }

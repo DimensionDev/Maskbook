@@ -324,7 +324,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
-    symbol?: string
+    symbol?: string | null
     description?: string
     /** some providers define id, while others don't. For those don't, we will fallback to contract address */
     id?: string
@@ -932,6 +932,20 @@ export interface TokenState<ChainId, SchemaType> {
         address: string,
         token?: NonFungibleToken<ChainId, SchemaType>,
     ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+    nonFungibleCollectionMap?: Subscription<
+        Record<
+            string,
+            Array<{
+                contract: NonFungibleTokenContract<ChainId, SchemaType>
+                tokenIds: string[]
+            }>
+        >
+    >
+    addNonFungibleCollection?(
+        owner: string,
+        contract: NonFungibleTokenContract<ChainId, SchemaType>,
+        tokenIds: string[],
+    ): Promise<void>
 }
 export interface TransactionState<ChainId, Transaction> {
     ready: boolean

@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
-import { isEqual, isEqualWith, range, sortBy, uniqBy } from 'lodash-es'
+import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PersonaGuard, usePersonaProofs } from '@masknet/shared'
@@ -107,8 +107,11 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     }, [migratedUnlistedAddressConfig])
     const isClean = useMemo(() => {
         return isEqualWith(migratedUnlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
-            for (const key of Object.keys(config1)) {
-                if (!isEqual(sortBy(config1[key]), sortBy(config2[key]))) return false
+            // Some identities might only in pendingUnlistedConfig but not in migratedUnlistedAddressConfig,
+            // so we merged all the identities
+            const keys = uniq([...Object.keys(config1), ...Object.keys(config2)])
+            for (const key of keys) {
+                if (!isEqual(sortBy(config1[key] || []), sortBy(config2[key] || []))) return false
             }
             return true
         })

@@ -164,7 +164,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     ) {
         if (!account || !isValidChainId(chainId)) return
         const response = await getNonFungibleAsset(account, address, tokenId)
-        if (!response.payload.nft.length) return
+        if (!response?.payload.nft.length) return
         const payload = first(response.payload.nft)
         if (!payload) return
         return this.createNonFungibleTokenAssetFromNFT(chainId, payload)
@@ -172,7 +172,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size)
-        if (!response.payload.nft.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!response?.payload.nft.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const assets = response.payload.nft.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
 
         return createPageable(
@@ -188,6 +188,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     ) {
         if (!account || !isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size, address)
+        if (!response) return
         const assets = response.payload.nft.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
 
         return createPageable(

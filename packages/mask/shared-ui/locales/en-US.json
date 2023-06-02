@@ -426,7 +426,7 @@
     "plugin_red_packet_claim": "Claim",
     "plugin_red_packet_claim_title": "Claim Lucky Drop",
     "plugin_red_packet_claim_notification": "Claim your Lucky Drop.",
-    "plugin_red_packet_claim_success": "Claim Lucky Drop {{- tokenAmountDescription}} successfully.",
+    "plugin_red_packet_claim_success": "Claim Lucky Drop with {{- tokenAmountDescription}} successfully.",
     "plugin_red_packet_claim_success_without_detail": "Claim Lucky Drop successfully.",
     "plugin_red_packet_claim_fail": "Failed to claim Lucky Drop.",
     "plugin_red_packet_create_with_token": "Create your Lucky Drop.",

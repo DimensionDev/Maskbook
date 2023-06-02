@@ -19,13 +19,12 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     const { account } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const Hub = useWeb3Hub(pluginID, options)
 
-    const enabled = !!account
     return useQuery<Array<NonFungibleCollection<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>>>({
-        queryKey: [pluginID, options],
+        queryKey: ['non-fungible-collections', pluginID, options],
         keepPreviousData: true,
-        enabled,
+        enabled: !!account,
         queryFn: async () => {
-            if (!enabled) return EMPTY_LIST
+            if (!account) return EMPTY_LIST
             return asyncIteratorToArray(
                 pageableToIterator(async (indicator?: PageIndicator) => {
                     return Hub.getNonFungibleCollectionsByOwner(account, {
