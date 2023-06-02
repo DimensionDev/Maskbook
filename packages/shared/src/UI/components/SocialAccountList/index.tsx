@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { Button, type MenuProps } from '@mui/material'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useRef, type HTMLProps } from 'react'
-import { useWindowScroll } from 'react-use'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
@@ -124,8 +123,10 @@ export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...re
         ref,
     )
 
-    const position = useWindowScroll()
-    useEffect(closeMenu, [position])
+    useEffect(() => {
+        window.addEventListener('scroll', closeMenu)
+        return () => window.removeEventListener('scroll', closeMenu)
+    }, [closeMenu])
 
     const platformIcons = useMemo(() => {
         return uniqBy(orderedBindings, (x) => x.platform)
