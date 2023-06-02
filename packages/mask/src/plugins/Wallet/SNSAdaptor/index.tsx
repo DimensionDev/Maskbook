@@ -2,7 +2,6 @@ import { getEnumAsArray } from '@masknet/kit'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { InjectSelectNftContractDialog } from './SelectNftContractDialog/index.js'
 import { SelectProviderDialog } from './SelectProviderDialog/index.js'
 import { WalletStatusDialog } from './WalletStatusDialog/index.js'
 import { ConnectWalletDialog } from './ConnectWalletDialog/index.js'
@@ -20,7 +19,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <>
                 <SelectProviderDialog />
-                <InjectSelectNftContractDialog />
                 <WalletStatusDialog />
                 <ApplicationBoardDialog />
                 <ConnectWalletDialog />

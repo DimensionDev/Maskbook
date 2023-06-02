@@ -63,6 +63,7 @@ export class HubNonFungibleAPI_Base<
         return attemptUntil(
             providers.map((x) => () => x.getAsset?.(address, tokenId, options)),
             undefined,
+            (v) => !v,
         )
     }
 
@@ -97,7 +98,7 @@ export class HubNonFungibleAPI_Base<
     async getNonFungibleAssetsByCollection(
         address: string,
         initial?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>> | undefined> {
         const options = this.HubOptions.fill(initial)
         const providers = this.getProviders(initial)
         return attemptUntil(

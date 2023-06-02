@@ -97,7 +97,7 @@ export namespace NonFungibleTokenAPI {
         getAssetsByCollection?: (
             address: string,
             options?: HubOptions_Base<ChainId>,
-        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>> | undefined>
         /** Get non-fungible assets of the given collection and owner. */
         getAssetsByCollectionAndOwner?: (
             collectionId: string,

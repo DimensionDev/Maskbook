@@ -2,12 +2,12 @@ import { useCallback } from 'react'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
-import { type SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
+import { useSelectNonFungibleContract } from '../../../index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface StyleProps {
     hasIcon: boolean
@@ -72,23 +72,14 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
     const Others = useWeb3Others()
 
-    const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectNftContractDialogUpdated,
-        useCallback(
-            (ev: SelectNftContractDialogEvent) => {
-                if (ev.open || !ev.collection) return
-                onContractChange(ev.collection)
-            },
-            [onContractChange],
-        ),
-    )
-
-    const openDialog = useCallback(() => {
-        setNftContractDialog({
-            open: true,
+    const selectNFTContract = useSelectNonFungibleContract<NetworkPluginID.PLUGIN_EVM>()
+    const openDialog = useCallback(async () => {
+        const contract = await selectNFTContract({
+            pluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
         })
-    }, [setNftContractDialog, chainId])
+        if (contract) onContractChange(contract)
+    }, [chainId, selectNFTContract])
     // #endregion
 
     return (
