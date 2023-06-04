@@ -3,7 +3,7 @@ export enum DashboardRoutes {
     Welcome = '/setup/welcome',
     SignUpPersona = '/setup/sign-up',
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
-    SignUpPersonaSuccessfully = '/setup/sign-up/success',
+    SignUpPersonaOnboarding = '/setup/sign-up/onboarding',
     SignUp = '/sign-up',
     SignIn = '/sign-in',
     PrivacyPolicy = '/privacy-policy',

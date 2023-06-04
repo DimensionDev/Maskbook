@@ -4,9 +4,11 @@ import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
 
-interface SetupFrameProps extends PropsWithChildren {}
+interface SetupFrameProps extends PropsWithChildren {
+    hiddenSpline?: boolean
+}
 
-export const SetupFrame = memo<SetupFrameProps>(({ children }) => {
+export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => {
     return (
         <Grid container sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
             <Grid item xs={8} paddingY={16} paddingLeft="20%" paddingRight={8}>
@@ -17,7 +19,7 @@ export const SetupFrame = memo<SetupFrameProps>(({ children }) => {
                 <main style={{ paddingTop: 36, height: '100%', position: 'relative' }}>{children}</main>
             </Grid>
             <Grid item xs={4}>
-                <Spline scene={Welcome.toString()} />
+                {!hiddenSpline ? <Spline scene={Welcome.toString()} /> : null}
             </Grid>
         </Grid>
     )

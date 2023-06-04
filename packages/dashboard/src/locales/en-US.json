@@ -407,6 +407,12 @@
     "persona_phrase_copy_description": "The mnemonic has been copied, please keep it in a safe place.",
     "persona_phrase_create_tips": "Never share recovery phrase with anyone, sotre it seurely!",
     "persona_phrase_create_check_tips": "I wrote down all the words in order",
+    "persona_onboarding_to_twitter": "Experience in Twiiter",
+    "persona_onboarding_pin_tips": "Pin Mask Network to the toolbar for easier access:",
+    "persona_onboarding_creating_identity": "Creating your <strong>identity</strong>",
+    "persona_onboarding_generating_accounts": "Generating your <strong>accounts</strong>",
+    "persona_onboarding_encrypting_data": "Encrypting your <strong>data</strong>",
+    "persona_onboarding_ready": "Your Persona is on <strong>ready🚀</strong>",
     "wallet_history_no_data": "No history records.",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "wallets_history_burn": "Burn"
