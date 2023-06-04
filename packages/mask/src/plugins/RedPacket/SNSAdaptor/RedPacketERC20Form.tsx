@@ -174,9 +174,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const rawTotalAmount = useMemo(
-        () => (isRandom ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
+        () => (isRandom || !rawAmount ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
         [rawAmount, isRandom, shares],
     )
+
     const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares, isRandom])
     const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : shares ?? 0), [shares, isRandom])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
@@ -253,8 +254,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isZero(shares || '0')) return t.enter_shares()
         if (isGreaterThan(shares || '0', 255)) return t.max_shares()
         if (isGreaterThan(minTotalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
-        if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address)))
-            return t.enter_amount()
+        if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address))) {
+            return isRandom ? t.enter_total_amount() : t.enter_each_amount()
+        }
 
         if (!isDivisible)
             return t.indivisible({
@@ -263,6 +265,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             })
         return ''
     }, [
+        isRandom,
         account,
         amount,
         totalAmount,
@@ -385,7 +388,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 </Box>
             ) : null}
 
-            {!isZero(rawTotalAmount) ? (
+            {rawTotalAmount && !isZero(rawTotalAmount) ? (
                 <TokenValue className={classes.tokenValue} token={token} amount={rawTotalAmount} />
             ) : null}
 
