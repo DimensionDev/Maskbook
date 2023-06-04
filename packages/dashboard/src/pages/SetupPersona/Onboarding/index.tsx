@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         color: theme.palette.maskColor.main,
     },
-    sketlon: {
+    skeleton: {
         background: 'linear-gradient(270deg, #F6F6F6 0%, rgba(217, 217, 217, 0) 94.74%)',
         width: 190,
         height: 36,
@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.highlight,
         },
     },
-    first: {
+    line: {
         width: '21em',
         borderRight: '1px solid transparent',
         animation: 'typing 3.5s steps(42, end)',
@@ -135,7 +135,7 @@ export const Onboarding = memo(function Onboarding() {
             <Box className={classes.card}>
                 <Typography className={classes.pin}>{t.persona_onboarding_pin_tips()}</Typography>
                 <Box mt={2.25} display="flex" alignItems="center">
-                    <Box className={classes.sketlon} />
+                    <Box className={classes.skeleton} />
                     <Box className={classes.plugins}>
                         <Icons.Plugins size={20} />
                     </Box>
@@ -158,7 +158,7 @@ export const Onboarding = memo(function Onboarding() {
                         <Typography
                             className={cx(
                                 classes.typed,
-                                classes.first,
+                                classes.line,
                                 current !== index ? classes.endTyping : undefined,
                             )}
                             key={index}>
