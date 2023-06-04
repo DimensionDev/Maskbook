@@ -31,8 +31,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionIcon: {
-        width: 14,
-        height: 14,
+        width: 16,
+        height: 16,
         cursor: 'pointer',
         marginLeft: theme.spacing(0.5),
     },
@@ -125,8 +125,16 @@ export function ProfileInList(props: ProfileInListProps) {
     return (
         <ListItem
             onClick={onClick}
-            disabled={props.disabled}
-            className={cx(classes.root, props.selected ? classes.highLightBg : null)}>
+            className={cx(classes.root, props.selected ? classes.highLightBg : null)}
+            secondaryAction={
+                <Checkbox
+                    disabled={props.disabled}
+                    checked={!!props.selected}
+                    color="primary"
+                    size="small"
+                    sx={{ width: 20, height: 20 }}
+                />
+            }>
             <ListItemAvatar classes={{ root: classes.avatarBox }}>
                 <Avatar classes={{ root: classes.avatar }} person={profile} />
             </ListItemAvatar>
@@ -165,13 +173,11 @@ export function ProfileInList(props: ProfileInListProps) {
                             textToHighlight={textToHighlight}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
+                        <Icons.LinkOut className={classes.actionIcon} />
                         {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }
             />
-            <ListItemText sx={{ paddingRight: 1, flex: 'none' }}>
-                <Checkbox checked={!!props.selected} color="primary" size="small" sx={{ width: 20, height: 20 }} />
-            </ListItemText>
         </ListItem>
     )
 }

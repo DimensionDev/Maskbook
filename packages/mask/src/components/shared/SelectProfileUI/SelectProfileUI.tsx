@@ -62,9 +62,7 @@ const useStyles = makeStyles()((theme) => ({
 export function SelectProfileUI(props: SelectProfileUIProps) {
     const { t } = useI18N()
     const { classes } = useStyles(undefined, { props })
-
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
-
     const [search, setSearch] = useState('')
     const listBeforeSearch = items.filter((x) => {
         if (selected.find((y) => x.identifier === y.identifier)) return false
@@ -129,7 +127,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={disabled ? '' : t('search_box_placeholder')}
+                    placeholder={t('post_dialog_share_with_input_placeholder')}
                     disabled={disabled}
                 />
             </Box>
@@ -146,12 +144,13 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                 const pubkey = item.linkedPersona?.publicKeyAsHex as string
                                 const selected = selectedPubkeyList.includes(pubkey)
                                 const disabled = frozenPubkeyList.includes(pubkey)
+
                                 return (
                                     <ProfileInList
                                         key={item.identifier.toText()}
                                         item={item as ProfileInformationFromNextID}
                                         disabled={disabled}
-                                        selected={selected}
+                                        selected={selected || disabled}
                                         onChange={(_, checked: boolean) => onSelectedProfiles(item, checked)}
                                     />
                                 )
@@ -160,9 +159,12 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     </Box>
                 </div>
                 {!isEmpty ? (
-                    <Stack alignItems="center" flexDirection="row">
-                        <Checkbox onChange={(e) => onSelectedAllChange(e.currentTarget.checked)} />
-                        <Typography>{t('select_all')}</Typography>
+                    <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0px' }}>
+                        <Checkbox
+                            sx={{ width: 20, height: 20 }}
+                            onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
+                        />
+                        <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
                     </Stack>
                 ) : null}
             </div>

@@ -81,7 +81,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
     const canCommit = committed || people.length === 0
 
     return (
-        <InjectedDialog onClose={onClose} open={props.open} title={t('share_to')}>
+        <InjectedDialog onClose={onClose} open={props.open} title={t('select_specific_friends_dialog__title')}>
             <DialogContent className={classes.body}>
                 <SelectProfileUI
                     frozenSelected={props.alreadySelectedPreviously}
