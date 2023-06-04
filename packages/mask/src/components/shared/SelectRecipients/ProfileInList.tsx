@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.maskColor.bg,
     },
     avatarBox: {
-        padding: '6px 10px 6px 8px',
+        padding: '6px 0px 6px 8px',
         minWidth: 46,
     },
     avatar: {

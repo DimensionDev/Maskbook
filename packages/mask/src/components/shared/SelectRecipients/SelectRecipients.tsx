@@ -19,7 +19,7 @@ export interface SelectRecipientsUIProps {
     onClose(): void
     onSetSelected(selected: Profile[]): void
 }
-const resolveNextIDPlatform = (value: string) => {
+export const resolveNextIDPlatform = (value: string) => {
     const address = value
     if (isValidAddress(address)) return NextIDPlatform.Ethereum
 
@@ -32,7 +32,7 @@ const resolveNextIDPlatform = (value: string) => {
     return
 }
 
-const resolveValueToSearch = (value: string) => {
+export const resolveValueToSearch = (value: string) => {
     if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
     return value.toLowerCase()
 }
