@@ -98,27 +98,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         content: {
             marginBottom: theme.spacing(2),
         },
-        tab: {
-            height: 36,
-            minHeight: 36,
-            fontWeight: 300,
-        },
-        tabs: {
-            height: 36,
-            minHeight: 36,
-            borderRadius: 4,
-            backgroundColor: theme.palette.background.default,
-            '& .Mui-selected': {
-                color: theme.palette.primary.contrastText,
-                backgroundColor: theme.palette.primary.main,
-            },
-        },
-        indicator: {
-            display: 'none',
-        },
-        tabPanel: {
-            marginTop: theme.spacing(3),
-        },
         contentWrapper: {
             display: 'flex',
             flexDirection: 'column',
@@ -234,16 +213,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            classes={{
-                                tab: classes.tab,
-                                tabs: classes.tabs,
-                                tabPanel: classes.tabPanel,
-                                indicator: classes.indicator,
-                            }}
-                            chains={chainIdList}
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                        />
+                        <NetworkTab chains={chainIdList} pluginID={NetworkPluginID.PLUGIN_EVM} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {loading || initLoading || !swappedTokens ? (

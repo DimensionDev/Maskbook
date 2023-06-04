@@ -35,9 +35,6 @@ const useStyles = makeStyles()((theme) => ({
               }
             : {},
     },
-    indicator: {
-        display: 'none',
-    },
     content: {
         padding: 0,
         minHeight: 564,
@@ -197,13 +194,7 @@ export function TraderDialog() {
             className={classes.dialog}>
             <DialogContent className={classes.content}>
                 <div className={classes.abstractTabWrapper}>
-                    <NetworkTab
-                        classes={{
-                            indicator: classes.indicator,
-                        }}
-                        chains={chainIdList}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                    />
+                    <NetworkTab chains={chainIdList} pluginID={NetworkPluginID.PLUGIN_EVM} />
                 </div>
                 <AllProviderTradeContext.Provider>
                     <Trader
