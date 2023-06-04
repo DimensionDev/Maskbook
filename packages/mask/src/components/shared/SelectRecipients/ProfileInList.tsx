@@ -14,6 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         borderRadius: 8,
         cursor: 'pointer',
+        padding: 0,
     },
     overflow: {
         textOverflow: 'ellipsis',
@@ -41,9 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
-        background: theme.palette.background.default,
+        background: theme.palette.maskColor.bg,
     },
     avatarBox: {
+        padding: '6px 10px 6px 8px',
         minWidth: 46,
     },
     avatar: {
@@ -52,9 +54,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     highLightBase: {
         lineHeight: '20px',
+        fontSize: 14,
     },
     highLightSecond: {
-        fontSize: 14,
+        fontSize: 16,
         lineHeight: '20px',
     },
     listItemRoot: {
@@ -156,7 +159,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     <div className={classes.flex}>
                         <Highlighter
                             className={classes.highLightSecond}
-                            highlightClassName={classes.highlighted}
+                            highlightClassName={classes.highLightSecond}
                             searchWords={[props.highlightText ?? '']}
                             autoEscape
                             textToHighlight={textToHighlight}
@@ -166,7 +169,9 @@ export function ProfileInList(props: ProfileInListProps) {
                     </div>
                 }
             />
-            <Checkbox checked={!!props.selected} color="primary" />
+            <ListItemText sx={{ paddingRight: 1, flex: 'none' }}>
+                <Checkbox checked={!!props.selected} color="primary" size="small" sx={{ width: 20, height: 20 }} />
+            </ListItemText>
         </ListItem>
     )
 }

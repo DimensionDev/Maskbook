@@ -74,6 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         overflowY: 'auto',
         flex: 1,
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     list: {
         gridGap: '12px',
@@ -233,7 +234,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <div className={classes.listBody}>
                                 <div className={classes.list}>
                                     {results.length === 0 ? (
-                                        <EmptyStatus>
+                                        <EmptyStatus className={classes.empty}>
                                             {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
                                         </EmptyStatus>
                                     ) : (
@@ -255,9 +256,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 </div>
                             </div>
                             {results.length > 0 ? (
-                                <Stack alignItems="center" flexDirection="row">
-                                    <Checkbox onChange={(e) => onSelectedAllChange(e.currentTarget.checked)} />
-                                    <Typography>{t('select_all')}</Typography>
+                                <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0' }}>
+                                    <Checkbox
+                                        size="small"
+                                        sx={{ width: 20, height: 20 }}
+                                        onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
+                                    />
+                                    <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
                                 </Stack>
                             ) : null}
                         </div>
