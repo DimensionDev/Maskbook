@@ -1,7 +1,7 @@
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, InjectedDialog } from '@masknet/shared'
+import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/shared'
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
@@ -279,14 +279,19 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         onClick={handleClose}>
                         {t('back')}
                     </Button>
-                    <Button
+                    <ActionButtonPromise
                         className={classes.done}
                         fullWidth
                         variant="roundedContained"
                         disabled={props.submitDisabled}
-                        onClick={handleSubmit}>
-                        {t('done')}
-                    </Button>
+                        executor={handleSubmit}
+                        completeIcon={null}
+                        failIcon={null}
+                        failedOnClick="use executor"
+                        complete={t('done')}
+                        init={t('done')}
+                        waiting={t('done')}
+                    />
                 </div>
             </DialogActions>
         </InjectedDialog>
