@@ -12,6 +12,7 @@ import {
     ProviderType,
     type Web3Provider,
     type Web3,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -194,7 +195,9 @@ export default class WalletConnectProvider
         }
     }
 
-    override async switchChain(chainId?: ChainId | undefined): Promise<void> {
+    override async switchChain(chainId: ChainId): Promise<void> {
+        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
+
         let clean: () => boolean | undefined
         return new Promise<void>((resolve, reject) => {
             super.switchChain(chainId).catch((error) => {

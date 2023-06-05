@@ -1,5 +1,5 @@
 import type { Account } from '@masknet/shared-base'
-import { type ChainId, formatEthereumAddress, EthereumMethodType } from '../index.js'
+import { type ChainId, formatEthereumAddress, EthereumMethodType, isValidAddress } from '../index.js'
 
 export class EIP155Editor {
     constructor(private chainId: ChainId, private address: string) {}
@@ -13,6 +13,7 @@ export class EIP155Editor {
 
     get eip155Namespace() {
         return {
+            accounts: isValidAddress(this.account.account) ? [this.account.account] : [],
             methods: [
                 EthereumMethodType.ETH_SIGN,
                 EthereumMethodType.ETH_SIGN_TYPED_DATA,

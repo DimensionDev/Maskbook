@@ -29,10 +29,14 @@ class Client {
         return key ? this.client?.session.get(key) : undefined
     }
 
-    get account() {
+    get editor() {
         const account = first(this.session?.namespaces.eip155.accounts)
-        const account_ = account ? EIP155Editor.from(account).account : undefined
-        if (isValidChainId(account_?.chainId) && isValidAddress(account_?.account)) return account_
+        return account ? EIP155Editor.from(account) : undefined
+    }
+
+    get account() {
+        const account = this.editor?.account
+        if (isValidChainId(account?.chainId) && isValidAddress(account?.account)) return account
         return
     }
 
@@ -59,15 +63,20 @@ class Client {
 
         this.client.on('session_update', ({ topic, params }) => {
             console.log('[DEBUG EVENT]', 'session_update', { topic, params })
+            console.log(this.account)
             // const { namespaces } = params
             // const _session = client.session.get(topic)
             // const updatedSession = { ..._session, namespaces }
             // onSessionConnected(updatedSession);
+
+            // this.emitter.emit('chainId', toHex(payload.params[0].chainId))
+            // this.emitter.emit('accounts', payload.params[0].accounts)
         })
 
         this.client.on('session_delete', () => {
             console.log('[DEBUG EVENT]', 'session_delete')
-            // reset()
+
+            // this.emitter.emit('disconnect', ProviderType.WalletConnectV2)
         })
     }
 
@@ -123,6 +132,19 @@ export default class WalletConnectV2Provider
         await this.signClient.client?.disconnect({
             topic: this.signClient.session.topic,
             reason: getSdkError('USER_DISCONNECTED'),
+        })
+    }
+
+    override async switchChain(chainId: ChainId): Promise<void> {
+        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
+        if (!this.signClient.client || !this.signClient.session || !this.signClient.editor)
+            throw new Error('The client is not initialized')
+
+        this.signClient.client.update({
+            topic: this.signClient.session.topic,
+            namespaces: {
+                eip155: this.signClient.editor.eip155Namespace,
+            },
         })
     }
 
