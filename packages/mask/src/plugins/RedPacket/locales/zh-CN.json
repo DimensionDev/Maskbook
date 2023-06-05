@@ -71,7 +71,7 @@
     "chain_not_supported": "尚未在 {{chain}} 上支持。",
     "nft_no_history": "您还没有创建任何NFT红包。尝试创建红包并与您的朋友分享。",
     "token_no_history": "您还没有创建任何代币红包。尝试创建红包并与您的朋友分享。",
-    "history_claimed": "已认领： <span>{{claimedShares}}/{{shares}}</span> 份额",
+    "history_claimed": "已认领： <strong>{{claimedShares}}/{{shares}}</strong> 份额",
     "send": "发送",
     "history_duration": "时间: {{- startTime}} ~ {{- endTime}} (UTC+8)",
     "best_wishes": "最好的祝福！",
