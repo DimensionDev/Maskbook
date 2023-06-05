@@ -159,16 +159,15 @@ export const NFTListDialog: FC = () => {
     const gridProps = {
         columns: 'repeat(auto-fill, minmax(20%, 1fr))',
     }
-
     return (
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount}>
+                    <UserAssetsProvider pluginID={selectedPluginId || pluginID} address={selectedAccount || account}>
                         <CollectionList
                             height={479}
-                            account={selectedAccount}
-                            pluginID={selectedPluginId}
+                            account={selectedAccount || account}
+                            pluginID={selectedPluginId || pluginID}
                             gridProps={gridProps}
                             disableWindowScroll
                             onItemClick={setSelectedToken}
@@ -176,7 +175,7 @@ export const NFTListDialog: FC = () => {
                         />
                     </UserAssetsProvider>
                 ) : (
-                    <Box className={classes.noWallet}>
+                    <Box className={classes.noWallet} height={479}>
                         <Icons.EmptySimple variant="light" size={36} />
                         <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
                             {t.no_wallet_message()}
