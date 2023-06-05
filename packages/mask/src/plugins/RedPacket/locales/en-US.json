@@ -52,7 +52,7 @@
     "erc721_tab_title": "Collectibles",
     "erc20_tab_title": "Tokens",
     "claimed": "Claimed {{- amount}}",
-    "details": "Lucky Drop Details",
+    "details": "Confirm the Lucky Drop",
     "enter_each_amount": "Enter Amount Each",
     "enter_total_amount": "Enter Total",
     "enter_shares": "Enter shares",

@@ -44,8 +44,8 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         color: theme.palette.text.primary,
         padding: 12,
-        marginTop: 108,
-        marginBottom: theme.spacing(1),
+        marginTop: 0,
+        marginBottom: 130,
         marginLeft: 'auto',
         marginRight: 'auto',
     },
@@ -55,6 +55,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     ellipsis: {
+        fontSize: 24,
+        fontWeight: 700,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
@@ -185,7 +187,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         <>
             <Grid container spacing={2} className={cx(classes.grid, classes.gridWrapper)}>
                 <Grid item xs={12}>
-                    <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
+                    <Typography
+                        variant="h4"
+                        color="textPrimary"
+                        align="center"
+                        className={classes.ellipsis}
+                        fontFamily="Helvetica">
                         {settings?.message}
                     </Typography>
                 </Grid>
