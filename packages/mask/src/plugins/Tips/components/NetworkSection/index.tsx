@@ -13,19 +13,6 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
         height: 62,
     },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-    },
 }))
 
 interface Props extends HTMLProps<HTMLDivElement> {}
@@ -42,16 +29,7 @@ export const NetworkSection: FC<Props> = () => {
 
     return (
         <div className={classes.abstractTabWrapper}>
-            <NetworkTab
-                classes={{
-                    tab: classes.tab,
-                    tabs: classes.tabs,
-                    tabPaper: classes.tabPaper,
-                }}
-                chains={chainIdList}
-                pluginID={pluginID}
-                onChange={setTargetChainId}
-            />
+            <NetworkTab chains={chainIdList} pluginID={pluginID} onChange={setTargetChainId} />
         </div>
     )
 }

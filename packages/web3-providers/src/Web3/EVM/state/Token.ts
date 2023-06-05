@@ -28,6 +28,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
             credibleNonFungibleTokenList: {},
             fungibleTokenBlockedBy: {},
             nonFungibleTokenBlockedBy: {},
+            nonFungibleCollectionMap: {},
         }
         super(context, defaultValue, subscriptions, {
             isValidAddress,

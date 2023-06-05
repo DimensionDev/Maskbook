@@ -82,7 +82,7 @@ export const WalletStartUp = memo(() => {
                 urlcat('/dashboard.html#/create-mask-wallet/form', { chainId: params.get('chainId') }),
             ),
         })
-        if (process.env.engine === 'firefox') {
+        if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
 
@@ -112,7 +112,7 @@ export const WalletStartUp = memo(() => {
                     <Link
                         to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
                         onClick={(event) => {
-                            if (process.env.engine !== 'firefox') return
+                            if (!navigator.userAgent.includes('Firefox')) return
                             const params = new URLSearchParams(location.search)
                             const toBeClose = params.get('toBeClose')
                             if (!toBeClose) {

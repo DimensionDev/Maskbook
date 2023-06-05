@@ -3,7 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { ClickAwayListener, Fade } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
-import { useLocation, useWindowScroll } from 'react-use'
+import { useLocation } from 'react-use'
 import { PluginTraderMessages } from '../../messages.js'
 import { AnchorProvider } from '@masknet/shared-base-ui'
 
@@ -33,10 +33,9 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
     const [initialOffsetY, setInitialOffsetY] = useState(0)
 
     // open popper from message center
-    const position = useWindowScroll()
     useEffect(() => {
         return PluginTraderMessages.trendingAnchorObserved.on((ev) => {
-            setInitialOffsetY(position.y)
+            setInitialOffsetY(window.scrollY)
             setName(ev.name)
             setCurrentResult(ev.currentResult)
             setType(ev.type)
@@ -47,7 +46,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
             setIsNFTProjectPopper(!!ev.isCollectionProjectPopper)
             setActive(true)
         })
-    }, [position.y])
+    }, [])
 
     useEffect(() => {
         const onResize = () => setActive(false)
@@ -72,6 +71,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
 
     return (
         <ClickAwayListener
+            useCapture
             onClickAway={() => {
                 if (!locked) setActive(false)
             }}>

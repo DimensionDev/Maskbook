@@ -4,6 +4,7 @@ import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { followUserAvatarSelector, postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
+import { Flags } from '@masknet/flags'
 
 function getUserId(ele: HTMLElement) {
     const attribute = ele.dataset.testid || ''
@@ -25,7 +26,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                 const info = getInjectNodeInfo(ele)
                 if (!info) return
                 const proxy = DOMProxy({
-                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                    afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
 

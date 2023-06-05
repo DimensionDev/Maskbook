@@ -3,6 +3,7 @@ enum SiteType {
     Facebook = 'facebook.com',
 }
 
+const isChromium = navigator.userAgent.includes('Chrome') || navigator.userAgent.includes('Chromium')
 export const Sniffings = {
     is_dashboard_page: location.protocol.includes('extension') && location.href.includes('dashboard.html'),
     is_popup_page: location.protocol.includes('extension') && location.href.includes('popups.html'),
@@ -12,6 +13,7 @@ export const Sniffings = {
 
     is_opera: navigator.userAgent.includes('OPR/'),
     is_edge: navigator.userAgent.includes('Edg'),
-    is_firefox: process.env.engine === 'firefox',
-    is_chromium: process.env.engine === 'chromium',
+    is_firefox: navigator.userAgent.includes('Firefox'),
+    is_chromium: isChromium,
+    is_safari: !isChromium && navigator.userAgent.includes('Safari'),
 }

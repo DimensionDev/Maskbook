@@ -175,9 +175,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 // This is a valuable trade-off.
                 const runtimeValues: Record<string, string | boolean> = {
                     ...getGitInfo(flags.reproducibleBuild),
-                    engine: flags.engine,
                     channel: flags.channel,
-                    manifest: String(flags.manifest),
                 }
                 if (flags.mode === 'development') runtimeValues.REACT_DEVTOOLS_EDITOR_URL = flags.devtoolsEditorURI
                 if (flags.mode === 'development') return EnvironmentPluginCache(runtimeValues)
@@ -185,7 +183,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             })(),
             new EnvironmentPlugin({
                 NODE_ENV: flags.mode,
-                shadowRootMode: flags.devtools || flags.channel === 'beta' ? 'open' : 'closed',
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',

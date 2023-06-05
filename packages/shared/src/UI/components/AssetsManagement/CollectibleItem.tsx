@@ -5,9 +5,7 @@ import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '../../../index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
     card: {
@@ -42,7 +40,6 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
     fadeIn: {
         '@keyframes fade-in': {
             '0%': { opacity: 0 },
-            '100%': { opacity: 1 },
         },
         animation: 'fade-in 500ms ease-in-out',
     },
@@ -98,27 +95,14 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
     },
 }))
 
-function isSameNFT(
-    pluginID: NetworkPluginID,
-    a: Web3Helper.NonFungibleAssetAll,
-    b?: Web3Helper.NonFungibleAssetAll,
-): boolean {
-    return pluginID !== NetworkPluginID.PLUGIN_SOLANA
-        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
-              a.contract?.chainId === b?.contract?.chainId &&
-              a.tokenId === b?.tokenId
-        : a.tokenId === b?.tokenId && a.id === b.id
-}
-
 export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {
     disableName?: boolean
     /** @default true */
     disableAction?: boolean
     actionLabel?: string
-    verifiedBy: string[]
+    verifiedBy?: string[]
     onActionClick?(asset: CollectibleCardProps['asset']): void
     onItemClick?(asset: CollectibleCardProps['asset']): void
-    selectedAsset?: Web3Helper.NonFungibleAssetAll
 }
 
 export const CollectibleItem = memo(
@@ -131,9 +115,11 @@ export const CollectibleItem = memo(
             disableName,
             disableAction = true,
             actionLabel,
-            verifiedBy,
+            verifiedBy = EMPTY_LIST,
             onActionClick,
             onItemClick,
+            indicatorIcon,
+            isSelected,
             ...rest
         } = props
         const t = useSharedI18N()
@@ -175,7 +161,8 @@ export const CollectibleItem = memo(
                         asset={asset}
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
-                        isSelected={isSameNFT(pluginID ?? NetworkPluginID.PLUGIN_EVM, asset, rest.selectedAsset)}
+                        indicatorIcon={indicatorIcon}
+                        isSelected={isSelected}
                     />
                     <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (

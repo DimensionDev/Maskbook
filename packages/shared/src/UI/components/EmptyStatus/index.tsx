@@ -1,13 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 300,
+        minHeight: 300,
         flexDirection: 'column',
     },
     text: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function EmptyStatus({ className, children, ...rest }: BoxProps) {
+export const EmptyStatus = memo(function EmptyStatus({ className, children, ...rest }: BoxProps) {
     const { classes, cx } = useStyles()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
@@ -28,4 +29,4 @@ export function EmptyStatus({ className, children, ...rest }: BoxProps) {
             </Typography>
         </Box>
     )
-}
+})

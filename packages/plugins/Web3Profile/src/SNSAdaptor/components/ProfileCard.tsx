@@ -16,7 +16,7 @@ import {
     alpha,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { memo, type FC, useState, useCallback, useMemo } from 'react'
+import { memo, type FC, useState, useCallback, useMemo, useRef } from 'react'
 import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -157,9 +157,10 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
             {t.add_wallet()}
         </Button>
     )
+    const cardRef = useRef<HTMLDivElement>(null)
 
     return (
-        <Card className={cx(classes.card, className)} {...rest}>
+        <Card className={cx(classes.card, className)} ref={cardRef} {...rest}>
             <CardHeader
                 className={walletProofs.length ? classes.cursor : undefined}
                 classes={{
@@ -198,7 +199,15 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
                 }}
             />
             {walletProofs.length ? (
-                <Collapse in={expanded} easing="ease-in-out">
+                <Collapse
+                    in={expanded}
+                    easing="ease-in-out"
+                    onEntered={() => {
+                        cardRef.current?.scrollIntoView({
+                            block: 'nearest',
+                            behavior: 'smooth',
+                        })
+                    }}>
                     <CardContent className={classes.content}>
                         <div className={classes.wallets}>
                             {walletProofs.map((proof, i) => {

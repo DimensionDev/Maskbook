@@ -1,11 +1,11 @@
 import { initialize, activate, createBridge, type Bridge } from 'react-devtools-inline/backend.js'
 import { DevtoolsMessage, GLOBAL_ID_KEY, createReactDevToolsWall } from '../shared.js'
 
-initialize(window)
+initialize(globalThis as typeof window)
 if (process.env.NODE_ENV === 'development') {
     // @ts-expect-error conditionally import
     const { injectIntoGlobalHook } = require('react-refresh/runtime')
-    injectIntoGlobalHook(window)
+    injectIntoGlobalHook(globalThis)
 }
 
 let bridge: Bridge<any, any> | undefined = undefined
@@ -13,8 +13,8 @@ DevtoolsMessage.activateBackend.on((id) => {
     if (bridge) return
     const localID = String(Reflect.get(globalThis, GLOBAL_ID_KEY))
     if (localID !== id) return
-    bridge = createBridge(window, createReactDevToolsWall(localID, new AbortController().signal))
-    activate(window, { bridge })
+    bridge = createBridge(globalThis as typeof window, createReactDevToolsWall(localID, new AbortController().signal))
+    activate(globalThis as typeof window, { bridge })
     bridge.send('extensionBackendInitialized')
 })
 DevtoolsMessage.helloFromBackend.sendByBroadcast()

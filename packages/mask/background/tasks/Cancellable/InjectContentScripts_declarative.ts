@@ -6,43 +6,11 @@ import {
     contentScriptURL,
     injectedScriptURL,
     maskSDK_URL,
-} from './InjectContentScripts.js'
-import type { WebNavigation, Scripting } from 'webextension-polyfill'
+} from './InjectContentScripts_imperative.js'
+import type { Scripting } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (process.env.manifest === '3') {
-    if (Flags.use_register_content_script) NewImplementation(signal)
-    else OldImplementation(signal)
-}
-
-function OldImplementation(signal: AbortSignal) {
-    const injectContentScript = fetchInjectContentScriptList(contentScriptURL)
-
-    async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): Promise<void> {
-        if (arg.url === 'about:blank') return
-        if (!arg.url.startsWith('http')) return
-
-        const contains = await browser.permissions.contains({ origins: [arg.url] })
-        if (!contains) return
-
-        browser.scripting.executeScript({
-            files: [injectedScriptURL, maskSDK_URL],
-            target: { tabId: arg.tabId, frameIds: [arg.frameId] },
-            // @ts-expect-error Chrome only API
-            world: 'MAIN',
-        })
-
-        browser.scripting.executeScript({
-            files: await injectContentScript,
-            target: { tabId: arg.tabId, frameIds: [arg.frameId] },
-            world: 'ISOLATED',
-        })
-    }
-    browser.webNavigation.onCommitted.addListener(onCommittedListener)
-    signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
-}
-
-async function NewImplementation(signal: AbortSignal) {
+if (typeof browser.scripting?.registerContentScripts === 'function') {
     await unregisterExistingScripts()
     await browser.scripting.registerContentScripts([
         ...prepareMainWorldScript(['<all_urls>']),
@@ -51,12 +19,9 @@ async function NewImplementation(signal: AbortSignal) {
 
     signal.addEventListener('abort', unregisterExistingScripts)
 }
+
 async function unregisterExistingScripts() {
-    await browser.scripting
-        .unregisterContentScripts({
-            ids: (await browser.scripting.getRegisteredContentScripts()).map((x) => x.id),
-        })
-        .catch(noop)
+    await browser.scripting.unregisterContentScripts().catch(noop)
 }
 
 function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {

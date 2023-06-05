@@ -355,7 +355,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         return ''
     }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH, tr])
 
-    setIsNFTRedPacketLoaded?.(balance > 0)
+    useEffect(() => {
+        setIsNFTRedPacketLoaded?.(balance > 0)
+    }, [balance > 0])
 
     if (openSelectNFTDialog) {
         return (
@@ -395,7 +397,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     />
                 </Box>
                 {collection && balance ? (
-                    // TODO: replace to radio
                     <Box className={classes.selectWrapper}>
                         <div
                             className={cx(

@@ -41,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     content: {
-        height: 450,
         padding: 0,
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         '::-webkit-scrollbar': {

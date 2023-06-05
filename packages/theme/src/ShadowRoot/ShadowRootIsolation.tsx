@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { type DetailedHTMLProps, type HTMLAttributes, useContext, useLayoutEffect, useRef, useState } from 'react'
+import { Flags } from '@masknet/flags'
 import { createPortal } from 'react-dom'
 import { DisableShadowRootContext } from './Contexts.js'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
@@ -29,8 +30,8 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
         if (!dom) return
         if (dom.shadowRoot) return
 
-        // Note: do not use process.env.shadowRootMode here because ShadowRootIsolation is expected to use inside other closed ShadowRoot
-        const shadow = dom.attachShadow({ mode: 'open', delegatesFocus: true })
+        // Note: ShadowRootIsolation is expected to use inside other closed ShadowRoot
+        const shadow = dom.attachShadow({ ...Flags.shadowRootInit, mode: 'open' })
         shadow.appendChild(container.current!)
     }, [dom])
 

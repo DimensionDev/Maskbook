@@ -4,8 +4,7 @@ import { NextIDPlatform, type BindingProof, EMPTY_LIST } from '@masknet/shared-b
 import { makeStyles } from '@masknet/theme'
 import { Button, type MenuProps } from '@mui/material'
 import { uniqBy } from 'lodash-es'
-import { useEffect, useMemo, useRef, type HTMLProps } from 'react'
-import { useWindowScroll } from 'react-use'
+import { useEffect, useMemo, useRef, type HTMLProps, memo } from 'react'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
@@ -58,7 +57,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
+interface SocialAccountListProps
+    extends HTMLProps<HTMLDivElement>,
+        Pick<MenuProps, 'disablePortal' | 'anchorPosition' | 'anchorReference'> {
     nextIdBindings: BindingProof[]
     userId?: string
 }
@@ -74,7 +75,14 @@ const FireflyLensToNextIdLens = (account: FireflyBaseAPI.LensAccount): BindingPr
     }
 }
 
-export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...rest }: SocialAccountListProps) {
+export const SocialAccountList = memo(function SocialAccountList({
+    nextIdBindings,
+    disablePortal,
+    anchorPosition,
+    anchorReference,
+    userId,
+    ...rest
+}: SocialAccountListProps) {
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
 
@@ -109,6 +117,8 @@ export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...re
                 vertical: 'top',
                 horizontal: 'right',
             },
+            anchorPosition,
+            anchorReference,
             PaperProps: {
                 className: classes.menu,
             },
@@ -124,8 +134,10 @@ export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...re
         ref,
     )
 
-    const position = useWindowScroll()
-    useEffect(closeMenu, [position])
+    useEffect(() => {
+        window.addEventListener('scroll', closeMenu)
+        return () => window.removeEventListener('scroll', closeMenu)
+    }, [closeMenu])
 
     const platformIcons = useMemo(() => {
         return uniqBy(orderedBindings, (x) => x.platform)
@@ -140,10 +152,10 @@ export function SocialAccountList({ nextIdBindings, disablePortal, userId, ...re
         <div {...rest}>
             <Button variant="text" onClick={openMenu} className={classes.iconStack} disableRipple>
                 {platformIcons.map((Icon, index) => (
-                    <Icon key={index} className={classes.icon} size={20} />
+                    <Icon key={Icon.displayName || index} className={classes.icon} size={20} />
                 ))}
             </Button>
             {menu}
         </div>
     )
-}
+})

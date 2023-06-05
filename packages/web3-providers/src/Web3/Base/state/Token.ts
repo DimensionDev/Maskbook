@@ -7,8 +7,11 @@ import {
     type Token,
     TokenType,
     type TokenState as Web3TokenState,
+    type NonFungibleTokenContract,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
+import { produce, type Draft } from 'immer'
 
 export interface TokenStorage<ChainId extends number, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
@@ -17,6 +20,14 @@ export interface TokenStorage<ChainId extends number, SchemaType> {
     nonFungibleTokenBlockedBy: Record<string, string[]>
     credibleFungibleTokenList: Partial<Record<ChainId, Array<FungibleToken<ChainId, SchemaType>>>>
     credibleNonFungibleTokenList: Partial<Record<ChainId, Array<NonFungibleToken<ChainId, SchemaType>>>>
+    /** account as key */
+    nonFungibleCollectionMap: Record<
+        string,
+        Array<{
+            contract: NonFungibleTokenContract<ChainId, SchemaType>
+            tokenIds: string[]
+        }>
+    >
 }
 
 export class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
@@ -27,26 +38,39 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
     public blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
     public credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
+    public nonFungibleCollectionMap?: Subscription<
+        Record<
+            string,
+            Array<{
+                contract: NonFungibleTokenContract<ChainId, SchemaType>
+                tokenIds: string[]
+            }>
+        >
+    >
 
     get ready() {
+        const { storage } = this
         return (
-            this.storage.fungibleTokenList.initialized &&
-            this.storage.nonFungibleTokenList.initialized &&
-            this.storage.fungibleTokenBlockedBy.initialized &&
-            this.storage.nonFungibleTokenBlockedBy.initialized &&
-            this.storage.credibleFungibleTokenList.initialized &&
-            this.storage.credibleNonFungibleTokenList.initialized
+            storage.fungibleTokenList.initialized &&
+            storage.nonFungibleTokenList.initialized &&
+            storage.fungibleTokenBlockedBy.initialized &&
+            storage.nonFungibleTokenBlockedBy.initialized &&
+            storage.credibleFungibleTokenList.initialized &&
+            storage.credibleNonFungibleTokenList.initialized &&
+            storage.nonFungibleCollectionMap.initialized
         )
     }
 
     get readyPromise() {
+        const { storage } = this
         return Promise.all([
-            this.storage.fungibleTokenList.initializedPromise,
-            this.storage.nonFungibleTokenList.initializedPromise,
-            this.storage.fungibleTokenBlockedBy.initializedPromise,
-            this.storage.nonFungibleTokenBlockedBy.initializedPromise,
-            this.storage.credibleFungibleTokenList.initializedPromise,
-            this.storage.credibleNonFungibleTokenList.initializedPromise,
+            storage.fungibleTokenList.initializedPromise,
+            storage.nonFungibleTokenList.initializedPromise,
+            storage.fungibleTokenBlockedBy.initializedPromise,
+            storage.nonFungibleTokenBlockedBy.initializedPromise,
+            storage.credibleFungibleTokenList.initializedPromise,
+            storage.credibleNonFungibleTokenList.initializedPromise,
+            storage.nonFungibleCollectionMap.initialized,
         ]).then(() => {})
     }
 
@@ -70,8 +94,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             this.trustedFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.fungibleTokenList.subscription,
-                    this.storage.fungibleTokenBlockedBy.subscription,
+                    storage.fungibleTokenList.subscription,
+                    storage.fungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
@@ -83,8 +107,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             this.trustedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.nonFungibleTokenList.subscription,
-                    this.storage.nonFungibleTokenBlockedBy.subscription,
+                    storage.nonFungibleTokenList.subscription,
+                    storage.nonFungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
@@ -96,8 +120,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             this.blockedFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.fungibleTokenList.subscription,
-                    this.storage.fungibleTokenBlockedBy.subscription,
+                    storage.fungibleTokenList.subscription,
+                    storage.fungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
@@ -109,8 +133,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             this.blockedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.nonFungibleTokenList.subscription,
-                    this.storage.nonFungibleTokenBlockedBy.subscription,
+                    storage.nonFungibleTokenList.subscription,
+                    storage.nonFungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
@@ -121,19 +145,17 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             )
             if (this.subscriptions.chainId) {
                 this.credibleFungibleTokens = mapSubscription(
-                    mergeSubscription(this.subscriptions.chainId, this.storage.credibleFungibleTokenList.subscription),
+                    mergeSubscription(this.subscriptions.chainId, storage.credibleFungibleTokenList.subscription),
                     ([chainId, tokens]) => safeEmptyList(tokens[chainId]),
                 )
 
                 this.credibleNonFungibleTokens = mapSubscription(
-                    mergeSubscription(
-                        this.subscriptions.chainId,
-                        this.storage.credibleNonFungibleTokenList.subscription,
-                    ),
+                    mergeSubscription(this.subscriptions.chainId, storage.credibleNonFungibleTokenList.subscription),
                     ([chainId, tokens]) => safeEmptyList(tokens[chainId]),
                 )
             }
         }
+        this.nonFungibleCollectionMap = storage.nonFungibleCollectionMap.subscription
     }
 
     // add or remove by contract address from user
@@ -214,5 +236,37 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
     async blockToken(address: string, token: Token<ChainId, SchemaType>) {
         this.blockOrUnblockToken(address, token, 'block')
         this.addOrRemoveToken(address, token, 'add')
+    }
+    async addNonFungibleCollection(
+        owner: string,
+        contract: NonFungibleTokenContract<ChainId, SchemaType>,
+        tokenIds: string[],
+    ) {
+        type StorageCollection = {
+            contract: NonFungibleTokenContract<ChainId, SchemaType>
+            tokenIds: string[]
+        }
+        const key = owner.toLowerCase()
+        const collectionMap = this.storage.nonFungibleCollectionMap
+        const list: StorageCollection[] = collectionMap.value[key] || []
+        const newList = produce(list, (draft) => {
+            const index = draft.findIndex(
+                (x) => x.contract.chainId === contract.chainId && isSameAddress(x.contract.address, contract.address),
+            )
+            const newRecord = {
+                contract,
+                tokenIds,
+            }
+            if (index > -1) {
+                // Just override the original record
+                Object.assign(draft[index], newRecord)
+            } else {
+                draft.push(newRecord as Draft<StorageCollection>)
+            }
+        })
+        collectionMap.setValue({
+            ...collectionMap.value,
+            [key]: newList,
+        })
     }
 }

@@ -18,21 +18,19 @@ export function startListen(
     }>,
     signal: AbortSignal,
 ) {
-    // @ts-expect-error Chrome Only API
-    const session: Storage.StorageArea = browser.storage.session
     async function task() {
         cache = await prepareData().then(render)
-        if (process.env.manifest === '3') {
-            session.set({ [CACHE_KEY]: cache })
+        if ('session' in browser.storage) {
+            ;(browser.storage.session as Storage.StorageArea).set({ [CACHE_KEY]: cache })
         }
         console.log('[Popup SSR] Page ready.')
     }
     const throttledTask = throttle(task, 2000, { leading: true })
 
-    if (process.env.manifest === '2') {
+    if (!('session' in browser.storage)) {
         throttledTask()
     } else {
-        session.get(CACHE_KEY).then((result) => {
+        ;(browser.storage.session as Storage.StorageArea).get(CACHE_KEY).then((result) => {
             if (result[CACHE_KEY]) cache = result[CACHE_KEY]
             else throttledTask()
         })

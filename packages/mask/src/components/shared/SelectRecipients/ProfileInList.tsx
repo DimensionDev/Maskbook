@@ -83,6 +83,7 @@ export interface ProfileInListProps {
     disabled?: boolean
     onChange: (ev: React.MouseEvent<HTMLElement>, checked: boolean) => void
 }
+
 export function ProfileInList(props: ProfileInListProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()

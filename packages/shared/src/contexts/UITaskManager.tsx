@@ -3,8 +3,8 @@ import { defer, type DeferTuple } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { InjectedDialogProps } from './components/index.js'
 
-export interface ContextOptions<T, R> {
-    show(options?: Omit<T, 'open'>, signal?: AbortSignal): Promise<R>
+export interface ContextOptions<Options, Result> {
+    show(options?: Omit<Options, 'open'>, signal?: AbortSignal): Promise<Result>
 }
 
 export interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {

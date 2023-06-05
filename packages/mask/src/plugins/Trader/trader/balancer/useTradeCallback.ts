@@ -94,6 +94,8 @@ export function useTradeCallback(
             // send transaction and wait for hash
             const hash = await Web3.sendTransaction(tx, { chainId, overrides: { ...gasConfig } })
             const receipt = await Web3.getTransactionReceipt(hash)
+
+            if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error) {
             if (error instanceof Error) {
