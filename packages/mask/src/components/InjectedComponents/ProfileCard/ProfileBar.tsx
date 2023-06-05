@@ -62,6 +62,9 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        '& :focus:not(:focus-visible)': {
+            outline: 0,
+        },
     },
     nickname: {
         color: theme.palette.text.primary,
@@ -174,9 +177,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />
-                            <div style={{ height: 14, lineHeight: '14px' }}>
-                                <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
-                            </div>
+                            <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
                                 href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"
@@ -185,6 +186,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 onClick={(event) => {
                                     event.stopPropagation()
                                 }}
+                                sx={{ outline: 0 }}
                                 className={classes.linkIcon}>
                                 <Icons.LinkOut size={14} />
                             </Link>
