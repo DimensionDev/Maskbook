@@ -149,7 +149,6 @@ function AppendShareDetail(props: {
     const iv = usePostInfoDetails.postIVIdentifier()!
 
     useEffect(props.recipients.request, [])
-
     return (
         <SelectProfileDialog
             open

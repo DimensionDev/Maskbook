@@ -1,13 +1,13 @@
 import { useState, useCallback, startTransition, useMemo, useDeferredValue } from 'react'
 import { InputBase, Box, Typography, Stack, Checkbox, InputAdornment } from '@mui/material'
-import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
+import { Boundary, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { ProfileInChip } from './ProfileInChip.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { Icons } from '@masknet/icons'
-import { compact } from 'lodash-es'
-import { EmptyStatus } from '@masknet/shared'
+import { compact, uniqBy } from 'lodash-es'
+import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { Fuse } from '@masknet/web3-providers'
 
@@ -91,7 +91,10 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     })
 
     const selectedPubkeyList = compact(selected.map((x) => x.linkedPersona?.publicKeyAsHex))
-    const frozenPubkeyList = compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex))
+    const frozenPubkeyList = useMemo(
+        () => compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex)),
+        [frozenSelected],
+    )
 
     const onSelectedAllChange = useCallback(
         (checked: boolean) => {
@@ -116,9 +119,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         [selected],
     )
 
-    const results = useMemo(() => {
-        if (!keyword) return items
-
+    const fuse = useMemo(() => {
         return Fuse.create(items, {
             keys: [
                 'identifier.userId',
@@ -132,10 +133,14 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
             ignoreLocation: true,
             threshold: 0,
         })
+    }, [items])
+
+    const results = useMemo(() => {
+        return fuse
             .search(keyword)
             .map((item) => item.item)
             .filter((x) => !frozenPubkeyList.includes(x.linkedPersona?.publicKeyAsHex!))
-    }, [keyword, items, frozenPubkeyList])
+    }, [keyword, frozenPubkeyList, fuse])
 
     const isEmpty = frozenSelected.length === 0 && results.length === 0 && items.length === 0
 
@@ -155,8 +160,6 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     )}
                     onKeyDown={(e) => {
                         if (e.code !== 'Enter') return
-
-                        // onSetSelected(selected.slice(0, selected.length - 1))
                         startTransition(() => props.onSearch(search))
                     }}
                     startAdornment={
@@ -170,8 +173,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
             </Box>
             {props.loading ? (
                 <div className={cx(classes.empty, classes.mainText)}>
-                    <LoadingBase />
-                    <Typography>{t('loading')}</Typography>
+                    <LoadingStatus />
                 </div>
             ) : (
                 <Boundary>
@@ -183,7 +185,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                         {t('compose_encrypt_share_dialog_empty')}
                                     </EmptyStatus>
                                 ) : (
-                                    [...frozenSelected, ...results].map((item) => {
+                                    uniqBy([...frozenSelected, ...results], (x) => x.identifier).map((item) => {
                                         const pubkey = item.linkedPersona?.publicKeyAsHex as string
                                         const selected = selectedPubkeyList.includes(pubkey)
                                         const disabled = frozenPubkeyList.includes(pubkey)
