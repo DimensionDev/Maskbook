@@ -178,7 +178,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         onSearch('')
     }, [selectedAllProfiles])
 
-    const onSelectedProfiles = useCallback((item: Profile, checked: boolean) => {
+    const onSelectedProfile = useCallback((item: Profile, checked: boolean) => {
         if (checked) {
             setSelectedAllProfiles((profiles) => [...profiles, item])
         } else setSelectedAllProfiles((profiles) => profiles.filter((x) => x !== item))
@@ -244,11 +244,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                             return (
                                                 <ProfileInList
                                                     key={pubkey}
-                                                    item={item as ProfileInformationFromNextID}
+                                                    profile={item as ProfileInformationFromNextID}
                                                     highlightText={keyword}
                                                     selected={selected}
                                                     disabled={props.disabled}
-                                                    onChange={(_, checked) => onSelectedProfiles(item, checked)}
+                                                    onChange={onSelectedProfile}
                                                 />
                                             )
                                         })

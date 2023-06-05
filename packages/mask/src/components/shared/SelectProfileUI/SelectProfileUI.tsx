@@ -92,7 +92,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         [items],
     )
 
-    const onSelectedProfiles = useCallback(
+    const onSelectedProfile = useCallback(
         (item: Profile, checked: boolean) => {
             if (checked) {
                 onSetSelected([...selected, item])
@@ -177,10 +177,10 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                         return (
                                             <ProfileInList
                                                 key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
-                                                item={item as ProfileInformationFromNextID}
+                                                profile={item as ProfileInformationFromNextID}
                                                 disabled={disabled}
                                                 selected={selected || disabled}
-                                                onChange={(_, checked: boolean) => onSelectedProfiles(item, checked)}
+                                                onChange={onSelectedProfile}
                                             />
                                         )
                                     })
