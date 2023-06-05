@@ -30,13 +30,8 @@ class Client {
         return key ? this.client?.session.get(key) : undefined
     }
 
-    get editor() {
-        const account = first(this.session?.namespaces.eip155.accounts)
-        return account ? EIP155Editor.from(account) : undefined
-    }
-
     get account() {
-        const account = this.editor?.account
+        const account = EIP155Editor.from(first(this.session?.namespaces.eip155.accounts) ?? '')?.account
         if (isValidChainId(account?.chainId) && isValidAddress(account?.account)) return account
         return
     }
@@ -87,10 +82,6 @@ export default class WalletConnectV2Provider
         this.resume()
     }
 
-    get chainId() {
-        return Web3StateRef.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
-    }
-
     override get connected() {
         return !!this.signClient.session
     }
@@ -101,21 +92,24 @@ export default class WalletConnectV2Provider
     }
 
     private async login(chainId: ChainId) {
-        if (!this.signClient.account) {
-            const connected = await this.signClient.client?.connect({
-                requiredNamespaces: {
-                    eip155: EIP155Editor.fromChainId(chainId).eip155Namespace,
-                },
-            })
-            if (!connected) throw new Error('Failed to create connection.')
+        const editor = EIP155Editor.fromChainId(chainId)
+        if (!editor) throw new Error('Invalid chain id.')
 
-            const { uri, approval } = connected
-            if (uri) this.context?.openWalletConnectDialog(uri)
+        if (this.signClient.account) return this.signClient.account
 
-            await approval()
+        const connected = await this.signClient.client?.connect({
+            requiredNamespaces: {
+                eip155: editor.eip155Namespace,
+            },
+        })
+        if (!connected) throw new Error('Failed to create connection.')
 
-            if (uri) this.context?.closeWalletConnectDialog()
-        }
+        const { uri, approval } = connected
+        if (uri) this.context?.openWalletConnectDialog(uri)
+
+        await approval()
+
+        if (uri) this.context?.closeWalletConnectDialog()
 
         return this.signClient.account
     }
@@ -133,8 +127,7 @@ export default class WalletConnectV2Provider
         await this.signClient.setup()
 
         const account = await this.login(chainId)
-        if (!account || !isValidAddress(account.account) || !isValidChainId(account.chainId))
-            throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
         return account
     }
 
@@ -143,13 +136,18 @@ export default class WalletConnectV2Provider
     }
 
     override async request<T>(requestArguments: RequestArguments): Promise<T> {
+        const chainId = Web3StateRef.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
+
+        const editor = EIP155Editor.fromChainId(chainId)
+        if (!editor) throw new Error('Invalid chain id.')
+
         if (!this.signClient.client) await this.signClient.setup()
-        if (!this.signClient.session) await this.login(this.chainId)
+        if (!this.signClient.session) await this.login(chainId)
         if (!this.signClient.client || !this.signClient.session) throw new Error('The client is not initialized')
 
         return this.signClient.client.request<T>({
             topic: this.signClient.session.topic,
-            chainId: EIP155Editor.fromChainId(this.chainId).eip155ChainId,
+            chainId: editor.eip155ChainId,
             request: {
                 method: requestArguments.method,
                 params: requestArguments.params,

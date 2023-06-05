@@ -1,5 +1,5 @@
 import type { Account } from '@masknet/shared-base'
-import { type ChainId, formatEthereumAddress, EthereumMethodType, isValidAddress } from '../index.js'
+import { type ChainId, formatEthereumAddress, EthereumMethodType, isValidAddress, isValidChainId } from '../index.js'
 
 export class EIP155Editor {
     constructor(private chainId: ChainId, private address: string) {}
@@ -36,10 +36,13 @@ export class EIP155Editor {
 
     static from(text: string) {
         const [, chainId, address] = text.split(':')
-        return new EIP155Editor(Number.parseInt(chainId, 10), address)
+        const chainId_ = Number.parseInt(chainId, 10)
+        if (!isValidChainId(chainId_) || !isValidAddress(address)) return
+        return new EIP155Editor(chainId_, address)
     }
 
     static fromChainId(chainId: ChainId) {
+        if (!isValidChainId(chainId)) return
         return new EIP155Editor(chainId, '')
     }
 }
