@@ -342,7 +342,6 @@
     "plugin_wallet_on_create": "ウォレットを作成",
     "plugin_wallet_on_connect": "ウォレットに接続しています",
     "plugin_wallet_select_provider_dialog_title": "ウォレットを接続",
-    "plugin_wallet_qr_code_with_wallet_connect": "WalletConnect 対応の QR コードを読みこむ",
     "plugin_wallet_token_unlock": "確かにアンロックする",
     "plugin_wallet_token_infinite_unlock": "永遠にアンロックする",
     "plugin_wallet_connect_safari_metamask": "MetaMask に接続する",

@@ -27,7 +27,6 @@ export async function appendShareTarget(
     const postBy = postRec?.encryptBy || postRec?.postBy || whoAmI
 
     if (!key) throw new Error('No post key found')
-
     const e2e = await appendEncryptionTarget(
         {
             target,
@@ -53,7 +52,6 @@ export async function appendShareTarget(
     } else {
         publishPostAESKey_version37(post.toIV(), network, e2e)
     }
-
     updatePostDB(
         {
             identifier: post,

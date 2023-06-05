@@ -1,7 +1,7 @@
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, InjectedDialog } from '@masknet/shared'
+import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/shared'
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
@@ -74,6 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         overflowY: 'auto',
         flex: 1,
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     list: {
         gridGap: '12px',
@@ -177,7 +178,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         onSearch('')
     }, [selectedAllProfiles])
 
-    const onSelectedProfiles = useCallback((item: Profile, checked: boolean) => {
+    const onSelectedProfile = useCallback((item: Profile, checked: boolean) => {
         if (checked) {
             setSelectedAllProfiles((profiles) => [...profiles, item])
         } else setSelectedAllProfiles((profiles) => profiles.filter((x) => x !== item))
@@ -233,7 +234,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <div className={classes.listBody}>
                                 <div className={classes.list}>
                                     {results.length === 0 ? (
-                                        <EmptyStatus>
+                                        <EmptyStatus className={classes.empty}>
                                             {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
                                         </EmptyStatus>
                                     ) : (
@@ -243,11 +244,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                             return (
                                                 <ProfileInList
                                                     key={pubkey}
-                                                    item={item as ProfileInformationFromNextID}
+                                                    profile={item as ProfileInformationFromNextID}
                                                     highlightText={keyword}
                                                     selected={selected}
                                                     disabled={props.disabled}
-                                                    onChange={(_, checked) => onSelectedProfiles(item, checked)}
+                                                    onChange={onSelectedProfile}
                                                 />
                                             )
                                         })
@@ -255,9 +256,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 </div>
                             </div>
                             {results.length > 0 ? (
-                                <Stack alignItems="center" flexDirection="row">
-                                    <Checkbox onChange={(e) => onSelectedAllChange(e.currentTarget.checked)} />
-                                    <Typography>{t('select_all')}</Typography>
+                                <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0' }}>
+                                    <Checkbox
+                                        size="small"
+                                        sx={{ width: 20, height: 20 }}
+                                        onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
+                                    />
+                                    <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
                                 </Stack>
                             ) : null}
                         </div>
@@ -274,14 +279,19 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         onClick={handleClose}>
                         {t('back')}
                     </Button>
-                    <Button
+                    <ActionButtonPromise
                         className={classes.done}
                         fullWidth
                         variant="roundedContained"
                         disabled={props.submitDisabled}
-                        onClick={handleSubmit}>
-                        {t('done')}
-                    </Button>
+                        executor={handleSubmit}
+                        completeIcon={null}
+                        failIcon={null}
+                        failedOnClick="use executor"
+                        complete={t('done')}
+                        init={t('done')}
+                        waiting={t('done')}
+                    />
                 </div>
             </DialogActions>
         </InjectedDialog>

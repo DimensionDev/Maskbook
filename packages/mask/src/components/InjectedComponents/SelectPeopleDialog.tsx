@@ -1,16 +1,20 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, alpha } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../utils/index.js'
-import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import { InjectedDialog, usePersonasFromNextID } from '@masknet/shared'
+import { MaskMessages, useI18N } from '../../utils/index.js'
+import { EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
+import { resolveNextIDPlatform, resolveValueToSearch } from '../shared/SelectRecipients/SelectRecipients.js'
+import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
+import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
+import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 
 export interface SelectProfileDialogProps {
     open: boolean
     profiles: Profile[]
-    alreadySelectedPreviously: Profile[]
+    selectedProfiles: Profile[]
     onClose: () => void
     onSelect: (people: Profile[]) => Promise<void>
 }
@@ -21,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
         padding: theme.spacing(2),
+        height: 450,
     },
     action: {
         display: 'flex',
@@ -60,35 +65,63 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function SelectProfileDialog(props: SelectProfileDialogProps) {
+export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose, onSelect }: SelectProfileDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
-    const onClose = useCallback(() => {
-        props.onClose()
+    const handleClose = useCallback(() => {
+        onClose()
         setCommitted(false)
         select([])
-    }, [props])
+    }, [onClose])
+
+    const recipientsList = useRecipientsList()
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        props
-            .onSelect(uniqBy([...people, ...props.alreadySelectedPreviously], (x) => x.identifier))
-            .then(onClose, onReject)
-    }, [onClose, people, props.onSelect])
+        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, onReject)
+    }, [handleClose, people, selectedProfiles, onSelect])
+
+    const [valueToSearch, setValueToSearch] = useState('')
+    const currentIdentity = useCurrentIdentity()
+    const type = resolveNextIDPlatform(valueToSearch)
+    const value = resolveValueToSearch(valueToSearch)
+    const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
+        value,
+        type ?? NextIDPlatform.NextID,
+        MaskMessages.events.ownProofChanged,
+        false,
+    )
+
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
+    const myUserId = currentIdentity?.identifier.userId
+    const searchedList = useMemo(() => {
+        if (!recipientsList?.recipients) return EMPTY_LIST
+        const profileItems = recipientsList.recipients.filter((x) => x.identifier.userId !== myUserId)
+        // Selected might contain profiles that fetched asynchronously from
+        // Next.ID, which are not stored locally
+        return uniqBy(profileItems.concat(NextIDItems, profiles), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
+    }, [NextIDItems, profiles, recipientsList.recipients, myUserId])
+
+    useEffect(() => {
+        if (!open) return
+        recipientsList.request()
+    }, [open, recipientsList.request])
 
     const canCommit = committed || people.length === 0
 
     return (
-        <InjectedDialog onClose={onClose} open={props.open} title={t('share_to')}>
+        <InjectedDialog onClose={handleClose} open={open} title={t('select_specific_friends_dialog__title')}>
             <DialogContent className={classes.body}>
                 <SelectProfileUI
-                    frozenSelected={props.alreadySelectedPreviously}
+                    frozenSelected={selectedProfiles}
                     disabled={committed}
-                    items={props.profiles}
+                    items={searchedList}
                     selected={people}
                     onSetSelected={select}
+                    onSearch={setValueToSearch}
+                    loading={searchLoading}
                 />
             </DialogContent>
             {rejection ? (
@@ -99,7 +132,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                 </DialogContent>
             ) : null}
             <DialogActions className={classes.action}>
-                <Button className={classes.cancel} fullWidth onClick={onClose} variant="roundedContained">
+                <Button className={classes.cancel} fullWidth onClick={handleClose} variant="roundedContained">
                     {t('cancel')}
                 </Button>
                 <ActionButton
@@ -109,7 +142,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                     className={classes.share}
                     disabled={canCommit}
                     onClick={share}>
-                    {t(committed ? 'sharing' : 'share')}
+                    {t('done')}
                 </ActionButton>
             </DialogActions>
         </InjectedDialog>
