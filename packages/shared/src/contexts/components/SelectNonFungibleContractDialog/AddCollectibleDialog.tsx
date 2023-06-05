@@ -62,6 +62,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     error: {
         backgroundColor: theme.palette.maskColor.bottom,
+        fontSize: 14,
+        color: MaskColorVar.redMain,
     },
     toolbar: {
         position: 'absolute',
@@ -126,7 +128,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
         defaultValues: { address: '', tokenIds: '' },
     })
     const watchedTokenIds = watch('tokenIds')
-    const tokenIds = useMemo(() => uniq(compact(watch('tokenIds').trim().split(','))), [watchedTokenIds])
+    const tokenIds = useMemo(() => uniq(compact(watchedTokenIds.split(',').map((id) => id.trim()))), [watchedTokenIds])
     const address = watch('address')
     const hub = useWeb3Hub(pluginID)
     const connection = useWeb3Connection(pluginID)
@@ -134,7 +136,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
             enabled: isValid,
-            queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
+            queryKey: ['nft-asset', pluginID, chainId, address, tokenId, isValid],
             queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
         })),
     })
@@ -200,7 +202,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                                     }}
                                 />
                                 {errors.address ? (
-                                    <Typography color={MaskColorVar.redMain} mt={0.5}>
+                                    <Typography className={classes.error} mt={0.5}>
                                         {errors.address?.message}
                                     </Typography>
                                 ) : null}
@@ -225,7 +227,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                                     />
 
                                     {errors.tokenIds ? (
-                                        <Typography color={MaskColorVar.redMain} mt={0.5}>
+                                        <Typography className={classes.error} mt={0.5}>
                                             {errors.tokenIds?.message}
                                         </Typography>
                                     ) : null}
@@ -234,7 +236,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                         />
                     </Box>
                     {someNotMine ? (
-                        <Typography color={MaskColorVar.redMain} className={classes.error} mt={1}>
+                        <Typography className={classes.error} mt={1}>
                             {t.collection_not_belong_to_you()}
                         </Typography>
                     ) : null}
@@ -243,7 +245,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                             <LoadingStatus flexGrow={1} />
                         ) : isError ? (
                             <ReloadStatus flexGrow={1} onRetry={refetch} />
-                        ) : noResults ? (
+                        ) : noResults || !isValid ? (
                             <EmptyStatus>{t.no_results()}</EmptyStatus>
                         ) : (
                             <Box className={classes.grid}>
