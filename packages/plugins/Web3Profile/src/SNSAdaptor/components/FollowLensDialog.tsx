@@ -93,6 +93,11 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
         top: 0,
         left: 0,
     },
+    linkButton: {
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.thirdMain,
+        },
+    },
 }))
 
 interface Props {
@@ -367,6 +372,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                         </ChainBoundary>
                                     </EthereumERC20TokenApprovedBoundary>
                                     <Button
+                                        className={classes.linkButton}
                                         variant="roundedOutlined"
                                         href={profile?.handle ? getLensterLink(profile.handle) : '#'}
                                         target="_blank"

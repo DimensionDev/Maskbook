@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         tabs: {
             overflow: 'visible',
+            backgroundColor: theme.palette.maskColor.input,
         },
         additions: {
             fontWeight: 700,

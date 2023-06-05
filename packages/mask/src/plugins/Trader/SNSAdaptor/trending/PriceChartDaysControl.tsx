@@ -5,7 +5,7 @@ import { resolveDaysName } from '../../pipes.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        background: theme.palette.background.input,
+        background: theme.palette.maskColor.input,
         borderRadius: 28,
         padding: theme.spacing(0.5),
     },
