@@ -2,7 +2,6 @@
     "promote": "🧧🧧🧧 尝试给你的好友发送代币或 NFT 红包，分享此时的喜悦吧！ 安装 Mask.io 发送你的第一个红包。",
     "promote_short": "🧧🧧🧧试着用Mask.io发送红包给你的朋友。",
     "nft_shift_select_tip": "您也可以长按 <text>{{text}}</text> 来选择多个NFT。",
-    "badge": "来自{{sender}} 的一个 {{- balance}} {{tokenName}} 红包",
     "collections": "NFT 系列",
     "select_a_token": "选择代币",
     "search": "搜索",

@@ -2,7 +2,6 @@
     "promote": "🧧🧧🧧 Mask.io 설치하여 행운 드랍으로 친구에게 토큰이나 NFT를 보내세요!",
     "promote_short": "🧧🧧🧧 Mask.io로 친구에게 행운 드랍을 보내세요.",
     "nft_shift_select_tip": "<text>{{text}}</text> 이용하여 다양한 NFT를 선택할 수 있습니다.",
-    "badge": "{{sender}} 님이 보낸 {{- balance}} {{tokenName}} 행운 드랍입니다.",
     "collections": "수집품",
     "select_a_token": "토큰 선택",
     "search": "검색",

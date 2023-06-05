@@ -2,7 +2,6 @@
     "promote": "crwdns16732:0crwdne16732:0",
     "promote_short": "crwdns16734:0crwdne16734:0",
     "nft_shift_select_tip": "crwdns16736:0{{text}}crwdne16736:0",
-    "badge": "crwdns18174:0{{- balance}}crwdnd18174:0{{tokenName}}crwdnd18174:0{{sender}}crwdne18174:0",
     "collections": "crwdns16738:0crwdne16738:0",
     "select_a_token": "crwdns16740:0crwdne16740:0",
     "search": "crwdns16742:0crwdne16742:0",
