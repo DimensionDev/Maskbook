@@ -28,7 +28,7 @@ import { RoutePaths } from './Routes.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
+        backgroundColor: theme.palette.maskColor.bottom,
         position: 'absolute',
         left: 0,
         bottom: 0,
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: 0,
-        backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
+        backgroundColor: theme.palette.maskColor.bottom,
         '::-webkit-scrollbar': {
             display: 'none',
         },

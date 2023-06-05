@@ -30,12 +30,12 @@ const useStyles = makeStyles()((theme) => ({
         padding: '4px 10px',
         borderRadius: 8,
         width: '100%',
-        background: theme.palette.background.input,
+        background: theme.palette.maskColor.input,
         fontSize: 14,
         marginBottom: 16,
     },
     inputFocused: {
-        background: 'none',
+        background: theme.palette.maskColor.bottom,
         borderColor: theme.palette.text.third,
     },
     paper: {
