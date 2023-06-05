@@ -13,7 +13,7 @@ export class EIP155Editor {
 
     get eip155Namespace() {
         return {
-            accounts: isValidAddress(this.account.account) ? [this.account.account] : [],
+            accounts: isValidAddress(this.account.account) ? [this.eip155Address] : [],
             methods: [
                 EthereumMethodType.ETH_SIGN,
                 EthereumMethodType.ETH_SIGN_TYPED_DATA,
@@ -31,7 +31,7 @@ export class EIP155Editor {
     }
 
     get eip155Address() {
-        return ['eip155', this.chainId.toFixed(), formatEthereumAddress(this.address)]
+        return ['eip155', this.chainId.toFixed(), formatEthereumAddress(this.address)].join(':')
     }
 
     static from(text: string) {
@@ -44,5 +44,10 @@ export class EIP155Editor {
     static fromChainId(chainId: ChainId) {
         if (!isValidChainId(chainId)) return
         return new EIP155Editor(chainId, '')
+    }
+
+    static fromAccount({ chainId, account }: Account<ChainId>) {
+        if (!isValidChainId(chainId) || !isValidAddress(account)) return
+        return new EIP155Editor(chainId, account)
     }
 }

@@ -50,10 +50,9 @@ class Client {
         })
 
         this.client.on('session_update', () => {
-            if (this.account) {
-                this.emitter.emit('chainId', toHex(this.account.chainId))
-                this.emitter.emit('accounts', [this.account.account])
-            }
+            if (!this.account) return
+            this.emitter.emit('chainId', toHex(this.account.chainId))
+            this.emitter.emit('accounts', [this.account.account])
         })
 
         this.client.on('session_delete', () => {
@@ -61,10 +60,8 @@ class Client {
         })
     }
 
-    reset() {
+    async destroy() {
         if (!this.client) return
-        this.client.removeAllListeners('session_ping')
-        this.client.removeAllListeners('session_event')
         this.client.removeAllListeners('session_update')
         this.client.removeAllListeners('session_delete')
     }
@@ -80,6 +77,10 @@ export default class WalletConnectV2Provider
         super(ProviderType.WalletConnectV2)
 
         this.resume()
+    }
+
+    private get currentChainId() {
+        return Web3StateRef.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
     }
 
     override get connected() {
@@ -122,12 +123,28 @@ export default class WalletConnectV2Provider
         })
     }
 
+    override async switchChain(chainId: ChainId): Promise<void> {
+        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
+
+        let clean: () => boolean | undefined
+        return new Promise<void>((resolve, reject) => {
+            super.switchChain(chainId).catch((error) => {
+                reject(error)
+            })
+            clean = this.emitter.on('chainId', () => {
+                resolve()
+            })
+        }).finally(() => {
+            clean?.()
+        })
+    }
     override async connect(chainId: ChainId) {
-        this.signClient.reset()
+        await this.signClient.destroy()
         await this.signClient.setup()
 
         const account = await this.login(chainId)
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+
         return account
     }
 
@@ -136,13 +153,11 @@ export default class WalletConnectV2Provider
     }
 
     override async request<T>(requestArguments: RequestArguments): Promise<T> {
-        const chainId = Web3StateRef.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
-
-        const editor = EIP155Editor.fromChainId(chainId)
+        const editor = EIP155Editor.fromChainId(this.currentChainId)
         if (!editor) throw new Error('Invalid chain id.')
 
         if (!this.signClient.client) await this.signClient.setup()
-        if (!this.signClient.session) await this.login(chainId)
+        if (!this.signClient.session) await this.login(this.currentChainId)
         if (!this.signClient.client || !this.signClient.session) throw new Error('The client is not initialized')
 
         return this.signClient.client.request<T>({
