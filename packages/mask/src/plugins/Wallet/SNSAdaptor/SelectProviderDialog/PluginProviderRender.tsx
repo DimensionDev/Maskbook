@@ -201,7 +201,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
             const chainId =
                 fortmaticChainId ??
-                (provider.type === ProviderType.WalletConnect
+                (provider.type === ProviderType.WalletConnect || provider.type === ProviderType.WalletConnectV2
                     ? ChainId.Mainnet
                     : await Web3?.getChainId({ providerType: provider.type }))
 

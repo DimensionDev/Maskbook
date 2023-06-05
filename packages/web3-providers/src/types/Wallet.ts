@@ -54,7 +54,7 @@ export namespace WalletAPI {
         /** Switch to the designate account. */
         switchAccount(account?: string): Promise<void>
         /** Switch to the designate chain. */
-        switchChain(chainId?: ChainId): Promise<void>
+        switchChain(chainId: ChainId): Promise<void>
         /** Create an instance from the network SDK. */
         createWeb3(options?: ProviderOptions<ChainId>): Web3
         /** Create an instance that implement the wallet protocol. */

@@ -11,6 +11,10 @@ const features = {
     responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
     responsive_web_graphql_timeline_navigation_enabled: true,
     blue_business_profile_image_shape_enabled: false,
+    subscriptions_verification_info_verified_since_enabled: false,
+    creator_subscriptions_tweet_preview_api_enabled: false,
+    highlights_tweets_tab_ui_enabled: false,
+    hidden_profile_likes_enabled: false,
 }
 async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')

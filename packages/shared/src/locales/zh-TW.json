@@ -4,5 +4,7 @@
     "balance": "餘額",
     "select_token": "選擇一種代幣",
     "erc20_token_list_placeholder": "代幣名稱或合約地址",
-    "erc20_search_token_loading": "讀取代幣中..."
+    "erc20_search_token_loading": "讀取代幣中...",
+    "wallet_connect_qr_code_dialog_title": "WalletConnect",
+    "wallet_connect_qr_code_dialog_content": "使用一個與 WalletConnect 相容的錢包掃描 QR code"
 }

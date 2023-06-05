@@ -14,9 +14,10 @@ import {
     EthereumMethodType,
     type Web3Provider,
     type Web3,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -84,8 +85,8 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     }
 
     // Switch chain with RPC calls by default
-    async switchChain(chainId?: ChainId): Promise<void> {
-        if (!chainId) throw new Error('Unknown chain id.')
+    async switchChain(chainId: ChainId): Promise<void> {
+        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
 
         try {
             await this.request({

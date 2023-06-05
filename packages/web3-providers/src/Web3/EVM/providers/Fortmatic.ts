@@ -114,12 +114,9 @@ export default class FortmaticProvider
         return fm.user.logout()
     }
 
-    override async switchChain(chainId?: ChainId): Promise<void> {
-        if (chainId) {
-            await this.connect(chainId)
-            return
-        }
-        throw new Error(`Failed to switch to ${chainResolver.chainFullName(chainId)}.`)
+    override async switchChain(chainId: ChainId): Promise<void> {
+        if (!isFortmaticSupported(chainId)) throw new Error('Invalid chain id.')
+        await this.connect(chainId)
     }
 
     override async connect(chainId: ChainId) {
