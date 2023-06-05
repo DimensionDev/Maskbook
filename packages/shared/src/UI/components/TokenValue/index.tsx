@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { useTip } from '../../contexts/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
     container: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
         display: 'flex',
         alignItems: 'center',
         [`& .${ref.tokenIcon}`]: {
-            marginLeft: theme.spacing(1),
+            marginLeft: theme.spacing(0.5),
         },
     },
     tokenIcon: {},
@@ -35,15 +35,16 @@ const useStyles = makeStyles<void, 'tokenIcon'>()((theme, _, ref) => ({
         fontFamily: 'Helvetica',
         fontWeight: 400,
         lineHeight: '18px',
-        marginTop: theme.spacing(0.5),
     },
 }))
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+interface Props extends HTMLProps<HTMLDivElement> {
+    amount?: string
+    token?: Web3Helper.FungibleTokenAll | null
+}
 
-export const TokenValue: FC<Props> = ({ className, ...rest }) => {
+export const TokenValue: FC<Props> = ({ className, token, amount, ...rest }) => {
     const { classes, cx } = useStyles()
-    const { token, amount } = useTip()
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
@@ -65,6 +66,7 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
                     {amount}
                 </Typography>
                 <TokenIcon
+                    size={24}
                     className={classes.tokenIcon}
                     pluginID={pluginID}
                     chainId={chainId}

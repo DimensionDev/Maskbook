@@ -249,7 +249,9 @@ export function SelectGasSettingsToolbarUI({
         () => setApproveDialogOpen(true),
     )
 
-    const { value: currencyToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, { chainId })
+    const { value: currencyToken = nativeToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, {
+        chainId,
+    })
     const { value: currencyTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, currentGasCurrency)
 
     const gasFee = useMemo(() => {

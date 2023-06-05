@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
+import { Box } from '@mui/material'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -11,6 +12,8 @@ import type { RedPacketJSONPayload, NftRedPacketJSONPayload } from '../types.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { openComposition } from './openComposition.js'
+import { PluginWalletStatusBar } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
@@ -57,13 +60,18 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     )
 
     return (
-        <div className={classes.tabWrapper}>
-            <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
-                <RedPacketHistoryList onSelect={onSelect} />
-            </TabPanel>
-            <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
-                <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />
-            </TabPanel>
-        </div>
+        <>
+            <div className={classes.tabWrapper}>
+                <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
+                    <RedPacketHistoryList onSelect={onSelect} />
+                </TabPanel>
+                <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
+                    <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />
+                </TabPanel>
+            </div>
+            <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
+                <PluginWalletStatusBar requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM} />
+            </Box>
+        </>
     )
 }

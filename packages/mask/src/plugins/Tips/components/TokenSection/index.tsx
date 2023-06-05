@@ -1,11 +1,10 @@
 import { type FC, type HTMLProps, useCallback } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput, TokenValue } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useTip } from '../../contexts/index.js'
 import { GasSettingsBar } from './GasSettingsBar.js'
-import { TokenValue } from './TokenValue.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -50,7 +49,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
                 onSelectToken={onSelectTokenChipClick}
             />
             {pluginID === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
-            <TokenValue className={classes.tokenValue} />
+            <TokenValue className={classes.tokenValue} token={token} amount={amount} />
         </div>
     )
 }
