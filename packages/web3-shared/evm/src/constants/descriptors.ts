@@ -1,4 +1,5 @@
 import { getEnumAsArray } from '@masknet/kit'
+import { Flags } from '@masknet/flags'
 import {
     type ChainDescriptor,
     type NetworkDescriptor,
@@ -315,7 +316,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
             supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedExtensionSites: Flags.wc_v1_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
         },
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
@@ -333,7 +334,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
             supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedExtensionSites: Flags.wc_v2_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
         },
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
