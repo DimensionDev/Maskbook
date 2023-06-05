@@ -142,7 +142,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
                     className={classes.share}
                     disabled={canCommit}
                     onClick={share}>
-                    {t(committed ? 'sharing' : 'share')}
+                    {t('done')}
                 </ActionButton>
             </DialogActions>
         </InjectedDialog>
