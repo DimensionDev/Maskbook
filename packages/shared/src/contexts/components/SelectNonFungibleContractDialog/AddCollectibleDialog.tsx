@@ -62,6 +62,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     error: {
         backgroundColor: theme.palette.maskColor.bottom,
+        fontSize: 14,
+        color: MaskColorVar.redMain,
     },
     toolbar: {
         position: 'absolute',
@@ -200,7 +202,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                                     }}
                                 />
                                 {errors.address ? (
-                                    <Typography color={MaskColorVar.redMain} mt={0.5}>
+                                    <Typography className={classes.error} mt={0.5}>
                                         {errors.address?.message}
                                     </Typography>
                                 ) : null}
@@ -225,7 +227,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                                     />
 
                                     {errors.tokenIds ? (
-                                        <Typography color={MaskColorVar.redMain} mt={0.5}>
+                                        <Typography className={classes.error} mt={0.5}>
                                             {errors.tokenIds?.message}
                                         </Typography>
                                     ) : null}
@@ -234,7 +236,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                         />
                     </Box>
                     {someNotMine ? (
-                        <Typography color={MaskColorVar.redMain} className={classes.error} mt={1}>
+                        <Typography className={classes.error} mt={1}>
                             {t.collection_not_belong_to_you()}
                         </Typography>
                     ) : null}
