@@ -403,7 +403,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === ChainId.Mainnet ? ChainId.BSC : ChainId.Mainnet,
+                                                chainId === ChainId.Mainnet ? ChainId.Matic : ChainId.Mainnet,
                                             )
                                             break
                                         default:

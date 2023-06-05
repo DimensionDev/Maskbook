@@ -1,4 +1,5 @@
 import { first } from 'lodash-es'
+import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import type { Emitter } from '@servie/events'
 import { getSdkError } from '@walletconnect/utils'
@@ -53,30 +54,15 @@ class Client {
             },
         })
 
-        this.client.on('session_ping', (args) => {
-            console.log('[DEBUG EVENT]', 'session_ping', args)
-        })
-
-        this.client.on('session_event', (args) => {
-            console.log('[DEBUG EVENT]', 'session_event', args)
-        })
-
-        this.client.on('session_update', ({ topic, params }) => {
-            console.log('[DEBUG EVENT]', 'session_update', { topic, params })
-            console.log(this.account)
-            // const { namespaces } = params
-            // const _session = client.session.get(topic)
-            // const updatedSession = { ..._session, namespaces }
-            // onSessionConnected(updatedSession);
-
-            // this.emitter.emit('chainId', toHex(payload.params[0].chainId))
-            // this.emitter.emit('accounts', payload.params[0].accounts)
+        this.client.on('session_update', () => {
+            if (this.account) {
+                this.emitter.emit('chainId', toHex(this.account.chainId))
+                this.emitter.emit('accounts', [this.account.account])
+            }
         })
 
         this.client.on('session_delete', () => {
-            console.log('[DEBUG EVENT]', 'session_delete')
-
-            // this.emitter.emit('disconnect', ProviderType.WalletConnectV2)
+            this.emitter.emit('disconnect', ProviderType.WalletConnectV2)
         })
     }
 
@@ -97,6 +83,8 @@ export default class WalletConnectV2Provider
 
     constructor() {
         super(ProviderType.WalletConnectV2)
+
+        this.resume()
     }
 
     get chainId() {
@@ -105,6 +93,11 @@ export default class WalletConnectV2Provider
 
     override get connected() {
         return !!this.signClient.session
+    }
+
+    private async resume() {
+        if (!this.signClient.client) await this.signClient.setup()
+        if (this.signClient.account) await this.login(this.signClient.account.chainId)
     }
 
     private async login(chainId: ChainId) {
@@ -132,19 +125,6 @@ export default class WalletConnectV2Provider
         await this.signClient.client?.disconnect({
             topic: this.signClient.session.topic,
             reason: getSdkError('USER_DISCONNECTED'),
-        })
-    }
-
-    override async switchChain(chainId: ChainId): Promise<void> {
-        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
-        if (!this.signClient.client || !this.signClient.session || !this.signClient.editor)
-            throw new Error('The client is not initialized')
-
-        this.signClient.client.update({
-            topic: this.signClient.session.topic,
-            namespaces: {
-                eip155: this.signClient.editor.eip155Namespace,
-            },
         })
     }
 
