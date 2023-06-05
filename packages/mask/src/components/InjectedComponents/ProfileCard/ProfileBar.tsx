@@ -59,6 +59,9 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         marginLeft: 10,
         overflow: 'auto',
         flexGrow: 1,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     nickname: {
         color: theme.palette.text.primary,
