@@ -128,7 +128,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
         defaultValues: { address: '', tokenIds: '' },
     })
     const watchedTokenIds = watch('tokenIds')
-    const tokenIds = useMemo(() => uniq(compact(watch('tokenIds').trim().split(','))), [watchedTokenIds])
+    const tokenIds = useMemo(() => uniq(compact(watchedTokenIds.split(',').map((id) => id.trim()))), [watchedTokenIds])
     const address = watch('address')
     const hub = useWeb3Hub(pluginID)
     const connection = useWeb3Connection(pluginID)
@@ -136,7 +136,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
             enabled: isValid,
-            queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
+            queryKey: ['nft-asset', pluginID, chainId, address, tokenId, isValid],
             queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
         })),
     })
@@ -245,7 +245,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                             <LoadingStatus flexGrow={1} />
                         ) : isError ? (
                             <ReloadStatus flexGrow={1} onRetry={refetch} />
-                        ) : noResults ? (
+                        ) : noResults || !isValid ? (
                             <EmptyStatus>{t.no_results()}</EmptyStatus>
                         ) : (
                             <Box className={classes.grid}>
