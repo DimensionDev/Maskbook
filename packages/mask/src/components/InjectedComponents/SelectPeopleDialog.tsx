@@ -14,7 +14,7 @@ import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 export interface SelectProfileDialogProps {
     open: boolean
     profiles: Profile[]
-    alreadySelectedPreviously: Profile[]
+    selectedProfiles: Profile[]
     onClose: () => void
     onSelect: (people: Profile[]) => Promise<void>
 }
@@ -65,25 +65,23 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function SelectProfileDialog(props: SelectProfileDialogProps) {
+export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose, onSelect }: SelectProfileDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
-    const onClose = useCallback(() => {
-        props.onClose()
+    const handleClose = useCallback(() => {
+        onClose()
         setCommitted(false)
         select([])
-    }, [props])
+    }, [onClose])
 
     const recipientsList = useRecipientsList()
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        props
-            .onSelect(uniqBy([...people, ...props.alreadySelectedPreviously], (x) => x.identifier))
-            .then(onClose, onReject)
-    }, [onClose, people, props.onSelect])
+        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, onReject)
+    }, [handleClose, people, selectedProfiles, onSelect])
 
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
@@ -103,24 +101,21 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
         const profileItems = recipientsList.recipients.filter((x) => x.identifier.userId !== myUserId)
         // Selected might contain profiles that fetched asynchronously from
         // Next.ID, which are not stored locally
-        return uniqBy(
-            profileItems.concat(NextIDItems, props.profiles),
-            ({ linkedPersona }) => linkedPersona?.rawPublicKey,
-        )
-    }, [NextIDItems, props.profiles, recipientsList.recipients, myUserId])
+        return uniqBy(profileItems.concat(NextIDItems, profiles), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
+    }, [NextIDItems, profiles, recipientsList.recipients, myUserId])
 
     useEffect(() => {
-        if (!props.open) return
+        if (!open) return
         recipientsList.request()
-    }, [props.open, recipientsList.request])
+    }, [open, recipientsList.request])
 
     const canCommit = committed || people.length === 0
 
     return (
-        <InjectedDialog onClose={onClose} open={props.open} title={t('select_specific_friends_dialog__title')}>
+        <InjectedDialog onClose={handleClose} open={open} title={t('select_specific_friends_dialog__title')}>
             <DialogContent className={classes.body}>
                 <SelectProfileUI
-                    frozenSelected={props.alreadySelectedPreviously}
+                    frozenSelected={selectedProfiles}
                     disabled={committed}
                     items={searchedList}
                     selected={people}
@@ -137,7 +132,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                 </DialogContent>
             ) : null}
             <DialogActions className={classes.action}>
-                <Button className={classes.cancel} fullWidth onClick={onClose} variant="roundedContained">
+                <Button className={classes.cancel} fullWidth onClick={handleClose} variant="roundedContained">
                     {t('cancel')}
                 </Button>
                 <ActionButton

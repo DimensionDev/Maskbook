@@ -1,15 +1,14 @@
-import { useState, useCallback, startTransition, useMemo, useDeferredValue } from 'react'
-import { InputBase, Box, Typography, Stack, Checkbox, InputAdornment } from '@mui/material'
-import { Boundary, makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/index.js'
-import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
-import { ProfileInChip } from './ProfileInChip.js'
-import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { Icons } from '@masknet/icons'
-import { compact, uniqBy } from 'lodash-es'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { Boundary, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { Fuse } from '@masknet/web3-providers'
+import { Box, Checkbox, InputAdornment, InputBase, Stack, Typography } from '@mui/material'
+import { compact, uniqBy } from 'lodash-es'
+import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
+import { useI18N } from '../../../utils/index.js'
+import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -73,22 +72,8 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
     const [search, setSearch] = useState('')
 
-    const listBeforeSearch = items.filter((x) => {
-        if (selected.find((y) => x.identifier === y.identifier)) return false
-        return true
-    })
     const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(search))
     const keyword = registeredAddress || search
-
-    const listAfterSearch = listBeforeSearch.filter((x) => {
-        if (frozenSelected.find((y) => x.identifier === y.identifier)) return false
-        if (search === '') return true
-        return (
-            !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-            !!x.linkedPersona?.rawPublicKey?.toLowerCase().match(search.toLowerCase()) ||
-            !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
-        )
-    })
 
     const selectedPubkeyList = compact(selected.map((x) => x.linkedPersona?.publicKeyAsHex))
     const frozenPubkeyList = useMemo(
@@ -216,7 +201,4 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
             )}
         </div>
     )
-}
-function FrozenChip(item: Profile) {
-    return <ProfileInChip disabled key={item.identifier.toText()} item={item} />
 }
