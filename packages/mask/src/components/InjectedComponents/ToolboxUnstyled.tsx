@@ -34,6 +34,7 @@ import { makeStyles } from '@masknet/theme'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
+import { SelectProviderDialog } from '@masknet/web3-modals'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -205,8 +206,8 @@ function useToolbox() {
     }
 
     const openWallet = useCallback(() => {
-        return account ? openWalletStatusDialog() : openSelectProviderDialog()
-    }, [openWalletStatusDialog, openSelectProviderDialog, account])
+        return account ? openWalletStatusDialog() : SelectProviderDialog.open()
+    }, [openWalletStatusDialog, SelectProviderDialog, account])
 
     const walletTitle = renderButtonText()
 

@@ -3,7 +3,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { Modals } from '@masknet/web3-modals'
-import { SelectProviderDialog } from './SelectProviderDialog/index.js'
 import { WalletStatusDialog } from './WalletStatusDialog/index.js'
 import { ConnectWalletDialog } from './ConnectWalletDialog/index.js'
 import { WalletRiskWarningDialog } from './RiskWarningDialog/index.js'
@@ -18,7 +17,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <SelectProviderDialog />
                 <WalletStatusDialog />
                 <ApplicationBoardDialog />
                 <ConnectWalletDialog />

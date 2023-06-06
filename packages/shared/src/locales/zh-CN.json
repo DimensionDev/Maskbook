@@ -193,5 +193,12 @@
     "lens_following": "已关注",
     "view": "查看",
     "verified_by": "由 {{ marketplace }} 验证",
-    "no_NFTs_found": "没有找到任何NFT。"
+    "no_NFTs_found": "没有找到任何NFT。",
+    "plugin_wallet_solana_tips": "Phantom 只支持Solana 链。",
+    "plugin_wallet_blocto_tips": "Blocto 只支持 Flow 链。",
+    "plugin_wallet_fortmatic_tips": "Formatic 仅支持 ETH 和 BNB 链。",
+    "plugin_wallet_support_chains_tips": "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。",
+    "plugin_wallet_connect_fortmatic": "连接 Fortmatic",
+    "plugin_wallet_choose_network": "选择网络",
+    "plugin_wallet_select_provider_dialog_title": "连接钱包"
 }

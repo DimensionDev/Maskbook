@@ -4,5 +4,6 @@
     "balance": "餘額",
     "select_token": "選擇一種代幣",
     "erc20_token_list_placeholder": "代幣名稱或合約地址",
-    "erc20_search_token_loading": "讀取代幣中..."
+    "erc20_search_token_loading": "讀取代幣中...",
+    "plugin_wallet_select_provider_dialog_title": "連接錢包"
 }
