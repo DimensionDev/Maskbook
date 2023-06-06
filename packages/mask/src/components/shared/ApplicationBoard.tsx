@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo, useState, type PropsWithChildren } 
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentPersonaConnectStatus , SelectProviderDialog } from '@masknet/shared'
+import { useCurrentPersonaConnectStatus, SelectProviderDialog } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'

@@ -5,7 +5,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, WalletConnectedBoundary , SelectProviderDialog } from '@masknet/shared'
+import { ChainBoundary, WalletConnectedBoundary, SelectProviderDialog } from '@masknet/shared'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 

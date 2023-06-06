@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletIcon , SelectProviderDialog } from '@masknet/shared'
+import { WalletIcon, SelectProviderDialog } from '@masknet/shared'
 import {
     useChainContext,
     useNetworkContext,

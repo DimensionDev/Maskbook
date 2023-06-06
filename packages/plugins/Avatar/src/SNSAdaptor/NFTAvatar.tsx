@@ -1,4 +1,4 @@
-import { ChainBoundary, ElementAnchor, ReversedAddress, isSameNFT , SelectProviderDialog } from '@masknet/shared'
+import { ChainBoundary, ElementAnchor, ReversedAddress, isSameNFT, SelectProviderDialog } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'

@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, useSelectFungibleToken, useShowConfirm , SelectProviderDialog } from '@masknet/shared'
+import { ImageIcon, useSelectFungibleToken, useShowConfirm, SelectProviderDialog } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,

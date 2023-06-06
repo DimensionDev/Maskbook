@@ -14,7 +14,7 @@ import {
     useChainIdValid,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { FormattedAddress, useSnackbarCallback, WalletIcon , SelectProviderDialog } from '@masknet/shared'
+import { FormattedAddress, useSnackbarCallback, WalletIcon, SelectProviderDialog } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

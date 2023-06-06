@@ -2,7 +2,7 @@ import React, { type FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { FormattedAddress, WalletIcon , SelectProviderDialog } from '@masknet/shared'
+import { FormattedAddress, WalletIcon, SelectProviderDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useNetworkDescriptor,
