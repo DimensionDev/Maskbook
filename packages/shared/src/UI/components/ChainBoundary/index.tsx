@@ -118,16 +118,22 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
             return 'complete'
         } catch (error) {
-            if (
-                error instanceof Error &&
-                (error.message === 'Chain currently not supported' || error.message === 'Invalid Request')
-            ) {
-                showSnackbar(t.plugin_wallet_switch_network_title(), {
-                    processing: false,
-                    variant: 'error',
-                    message: t.plugin_wallet_unsupported_chain({ network: expectedChainName ?? '' }),
-                    autoHideDuration: 5000,
-                })
+            if (error instanceof Error) {
+                if (error.message === 'Chain currently not supported' || error.message === 'Invalid Request') {
+                    showSnackbar(t.plugin_wallet_switch_network_title(), {
+                        processing: false,
+                        variant: 'error',
+                        message: t.plugin_wallet_unsupported_chain({ network: expectedChainName ?? '' }),
+                        autoHideDuration: 5000,
+                    })
+                } else {
+                    showSnackbar(t.plugin_wallet_switch_network_title(), {
+                        processing: false,
+                        variant: 'error',
+                        message: t.plugin_wallet_switch_chain_failed(),
+                        autoHideDuration: 5000,
+                    })
+                }
             }
             return 'failed'
         }

@@ -145,6 +145,7 @@
     "plugin_wallet_unsupported_network": "Unsupported Network",
     "plugin_wallet_switch_network_title": "Switch Network",
     "plugin_wallet_unsupported_chain": "{{network}} network is not added in the wallet. Please add and try it again.",
+    "plugin_wallet_switch_chain_failed": "Network error or user cancels the process.",
     "plugin_wallet_switch_network": "Switch to {{network}}",
     "plugin_wallet_not_support_network": "This network is not supported yet.",
     "plugin_wallet_switch_network_under_going": "Switching to {{network}}",
