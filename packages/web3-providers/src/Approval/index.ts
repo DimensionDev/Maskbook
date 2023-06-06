@@ -1,10 +1,8 @@
 import { BigNumber } from 'bignumber.js'
-import type Web3 from 'web3'
 import type { Log } from 'web3-core'
 import { maxBy, mapKeys } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { isZeroAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { TOKEN_APPROVAL_TOPIC, NFT_APPROVAL_TOPIC } from './constants.js'
+import { isZeroAddress, type ChainId, type SchemaType, type Web3 } from '@masknet/web3-shared-evm'
 import {
     isSameAddress,
     type FungibleTokenSpender,
@@ -16,6 +14,7 @@ import {
     type TokenApprovalInfoAccountMap,
     type NFTApprovalInfoAccountMap,
 } from './approvalListState.js'
+import { TOKEN_APPROVAL_TOPIC, NFT_APPROVAL_TOPIC } from './constants.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import type { AuthorizationAPI } from '../entry-types.js'

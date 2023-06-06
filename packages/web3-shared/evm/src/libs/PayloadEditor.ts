@@ -93,7 +93,7 @@ export class PayloadEditor {
                     from: owner,
                     to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId: this.options?.chainId,
-                    data: new Web3().eth.abi.encodeFunctionCall(
+                    data: new Web3.default().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toHex(0)],
                     ),
@@ -110,7 +110,7 @@ export class PayloadEditor {
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
                     chainId: this.options?.chainId,
-                    data: new Web3().eth.abi.encodeFunctionCall(
+                    data: new Web3.default().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toHex(nonce)],
                     ),

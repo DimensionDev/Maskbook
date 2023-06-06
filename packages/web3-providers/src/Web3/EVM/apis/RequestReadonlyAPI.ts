@@ -6,7 +6,7 @@ import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
 const createWeb3SDK = memoize(
-    (url: string) => new Web3(url),
+    (url: string) => new Web3.default(url),
     (url) => url.toLowerCase(),
 )
 

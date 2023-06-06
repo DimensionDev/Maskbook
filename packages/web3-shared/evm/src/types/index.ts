@@ -223,7 +223,7 @@ export enum ProviderType {
     CustomNetwork = 'CustomNetwork',
 }
 
-export type Web3 = EVM_Web3
+export type Web3 = EVM_Web3.default
 
 /**
  * EIP-1193 compatible provider

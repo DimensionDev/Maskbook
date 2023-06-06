@@ -4,7 +4,7 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { Web3Provider } from '../types/index.js'
 
 export function createWeb3(provider: Provider) {
-    const web3 = new Web3(provider)
+    const web3 = new Web3.default(provider)
     web3.eth.transactionBlockTimeout = 10 * 1000
     web3.eth.transactionPollingTimeout = 10 * 1000
     // @ts-expect-error private or untyped API?

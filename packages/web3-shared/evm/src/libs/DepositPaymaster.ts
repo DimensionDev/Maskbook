@@ -18,7 +18,7 @@ export class DepositPaymaster {
     private get contract() {
         const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
         if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return
-        const web3 = new Web3(ProviderURL.from(this.chainId))
+        const web3 = new Web3.default(ProviderURL.from(this.chainId))
         return createContract<DepositPaymasterType>(
             web3,
             PAYMASTER_MASK_CONTRACT_ADDRESS,

@@ -68,7 +68,7 @@ export class UniSwapV3Like extends UniSwapV2Like {
         )
 
         const poolAddresses = this.getPoolAddresses(transformed, context)
-        const poolContracts = compact(poolAddresses.map((x) => this.Contract.getPoolStateV3(x, { chainId })))
+        const poolContracts = compact(poolAddresses.map((x) => this.Contract.getPoolStateV3Contract(x, { chainId })))
 
         const slot0sCalls = this.Multicall.createMultipleContractSingleData(
             poolContracts,

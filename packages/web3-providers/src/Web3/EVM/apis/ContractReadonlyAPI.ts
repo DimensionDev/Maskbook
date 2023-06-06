@@ -21,7 +21,13 @@ import type { Pair } from '@masknet/web3-contracts/types/Pair.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import type { Quoter } from '@masknet/web3-contracts/types/Quoter.js'
 import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
+import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
+import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 
+import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
+import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
+import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
@@ -119,6 +125,10 @@ export class ContractReadonlyAPI {
         return this.getWeb3Contract<WETH>(address, WETH_ABI as AbiItem[], initial)
     }
 
+    getEntryPointContract(address: string | undefined, initial?: ConnectionOptions) {
+        return this.getWeb3Contract<EntryPoint>(address, EntryPointABI as AbiItem[], initial)
+    }
+
     getExchangeProxyContract(address: string | undefined, initial?: ConnectionOptions) {
         return this.getWeb3Contract<ExchangeProxy>(address, ExchangeProxyABI as AbiItem[], initial)
     }
@@ -127,7 +137,19 @@ export class ContractReadonlyAPI {
         return this.getWeb3Contract<Quoter>(address, QuoterABI as AbiItem[], initial)
     }
 
-    getPoolStateV3(address: string | undefined, initial?: ConnectionOptions) {
+    getPoolStateV3Contract(address: string | undefined, initial?: ConnectionOptions) {
         return this.getWeb3Contract<PoolStateV3>(address, PoolStateV3ABI as AbiItem[], initial)
+    }
+
+    getAAVELendingPoolContract(address: string | undefined, initial?: ConnectionOptions) {
+        return this.getWeb3Contract<AaveLendingPool>(address, AaveLendingPoolABI as AbiItem[], initial)
+    }
+
+    getAAVELendingPoolAddressProviderContract(address: string | undefined, initial?: ConnectionOptions) {
+        return this.getWeb3Contract<AaveLendingPoolAddressProvider>(
+            address,
+            AaveLendingPoolAddressProviderABI as AbiItem[],
+            initial,
+        )
     }
 }

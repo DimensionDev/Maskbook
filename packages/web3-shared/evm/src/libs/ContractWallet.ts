@@ -10,7 +10,7 @@ import { getSmartPayConstants, ZERO_ADDRESS } from '../constants/index.js'
 import type { ChainId } from '../types/index.js'
 
 export class ContractWallet {
-    private web3 = new Web3()
+    private web3 = new Web3.default()
     private coder = ABICoder as unknown as ABICoder.AbiCoder
 
     /**
