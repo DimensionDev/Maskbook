@@ -94,9 +94,7 @@ function resolveLastRecognizedIdentityMobileInner(
 ) {
     const onLocationChange = async () => {
         const settings = await Twitter.getSettings()
-        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings.screen_name).unwrapOr(
-            undefined,
-        )
+        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings.screen_name).unwrapOr(undefined)
 
         if (identifier && !ref.value.identifier) {
             ref.value = {

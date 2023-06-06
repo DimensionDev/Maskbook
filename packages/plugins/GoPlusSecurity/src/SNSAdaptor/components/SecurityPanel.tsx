@@ -104,9 +104,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         <Icons.DefaultToken size={48} />
                     )}
                     <Stack>
-                        <Typography className={classes.tokenName}>
-                            {tokenSecurity.token_name || t.unnamed()}
-                        </Typography>
+                        <Typography className={classes.tokenName}>{tokenSecurity.token_name || t.unnamed()}</Typography>
                         <Typography className={classes.tokenPrice}>
                             {tokenPrice ? formatCurrency(tokenPrice) : '--'}
                         </Typography>

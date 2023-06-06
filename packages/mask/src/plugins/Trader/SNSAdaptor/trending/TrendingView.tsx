@@ -356,9 +356,7 @@ export function TrendingView(props: TrendingViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={
-                                currentPriceChange ?? trending.market?.price_change_percentage_24h_in_currency ?? 0
-                            }
+                            amount={currentPriceChange ?? trending.market?.price_change_percentage_24h_in_currency ?? 0}
                             currency={trending.currency}
                             stats={stats}
                             retry={retryStats}

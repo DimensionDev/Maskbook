@@ -112,9 +112,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                             {domain ? Others.formatDomainName(domain) : providerDescriptor.name}
                         </Typography>
                     ) : (
-                        <Typography className={classes.accountName}>
-                            {walletName ?? providerDescriptor.name}
-                        </Typography>
+                        <Typography className={classes.accountName}>{walletName ?? providerDescriptor.name}</Typography>
                     )}
                 </div>
                 <div className={classes.infoRow}>

@@ -352,12 +352,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         values={{
                                             claimedShares: String(claimerNumber),
                                             shares: String(patchedHistory.shares),
-                                            amount: formatBalance(
-                                                patchedHistory.total,
-                                                historyToken.decimals,
-                                                6,
-                                                true,
-                                            ),
+                                            amount: formatBalance(patchedHistory.total, historyToken.decimals, 6, true),
                                             claimedAmount: formatBalance(
                                                 minus(patchedHistory.total, total_remaining ?? 0),
                                                 historyToken.decimals,

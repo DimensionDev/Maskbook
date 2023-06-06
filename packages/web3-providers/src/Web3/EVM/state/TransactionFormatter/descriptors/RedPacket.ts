@@ -59,9 +59,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
     async getNonFungibleContractSymbol(chainId: ChainId, address: string) {
         const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
-        return contract.symbol && contract.symbol.length > 15
-            ? `${contract.symbol.slice(0, 12)}...`
-            : contract.symbol
+        return contract.symbol && contract.symbol.length > 15 ? `${contract.symbol.slice(0, 12)}...` : contract.symbol
     }
 
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.

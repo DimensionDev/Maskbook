@@ -60,9 +60,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                                 ? revokeSuccessDescription
                                 : i18NextInstance.t('plugin_infra_descriptor_token_revoke_but_set_positive_cap', {
                                       tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
-                                      spender: spender?.address
-                                          ? formatEthereumAddress(spender.address, 4)
-                                          : 'spender',
+                                      spender: spender?.address ? formatEthereumAddress(spender.address, 4) : 'spender',
                                   })
                             : isZero(spendingCap)
                             ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {

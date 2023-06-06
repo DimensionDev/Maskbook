@@ -36,10 +36,7 @@ export function useGasSchema(
                     .refine(isPositive, t.gas_settings_error_gas_price_positive())
                     .refine(
                         (value) =>
-                            isGreaterThanOrEqualTo(
-                                formatGweiToWei(value),
-                                gasOptions?.slow.suggestedMaxFeePerGas ?? 0,
-                            ),
+                            isGreaterThanOrEqualTo(formatGweiToWei(value), gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
                         t.gas_settings_error_gas_price_too_low(),
                     )
                     .refine(
@@ -78,10 +75,7 @@ export function useGasSchema(
                     .min(1, t.gas_settings_error_max_fee_absence())
                     .refine(
                         (value) =>
-                            isGreaterThanOrEqualTo(
-                                formatGweiToWei(value),
-                                gasOptions?.slow.suggestedMaxFeePerGas ?? 0,
-                            ),
+                            isGreaterThanOrEqualTo(formatGweiToWei(value), gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
                         t.gas_settings_error_max_fee_too_low(),
                     )
                     .refine(

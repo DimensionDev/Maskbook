@@ -24,7 +24,7 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     let formatted = formatter(valueInt, decimals, significant)
     if (minimumBalance && !isZero(formatted) && isLessThan(valueInt, minimumBalance)) {
         // it's a BigNumber so it's ok
-         
+
         formatted = '<' + formatter(minimumBalance, decimals, significant).toString()
     }
     const { classes } = useStyles(undefined, { props })

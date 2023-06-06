@@ -279,14 +279,7 @@ export function SelectGasSettingsToolbarUI({
             'USD',
             { onlyRemainTwoDecimal: true },
         )
-    }, [
-        gasFee,
-        nativeTokenPrice,
-        currencyTokenPrice,
-        nativeToken.address,
-        currentGasCurrency,
-        currencyToken.decimals,
-    ])
+    }, [gasFee, nativeTokenPrice, currencyTokenPrice, nativeToken.address, currentGasCurrency, currencyToken.decimals])
 
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>

@@ -33,8 +33,7 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_EVM): NonFun
     const tokenId = formatAlchemyTokenId(asset.id.tokenId)
     const imageURL =
         asset.metadata.image || asset.metadata.image_url || asset.media[0].gateway || asset.metadata.animation_url
-    const mediaURL =
-        asset.media[0].gateway || asset.media[0].raw || asset.metadata.image_url || asset.metadata.image
+    const mediaURL = asset.media[0].gateway || asset.media[0].raw || asset.metadata.image_url || asset.metadata.image
     const name = getAssetFullName(
         asset.contract.address,
         asset.metadata.name || asset.title,

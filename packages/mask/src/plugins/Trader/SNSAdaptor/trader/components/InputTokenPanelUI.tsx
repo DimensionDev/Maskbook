@@ -121,9 +121,7 @@ const useStyles = makeStyles()((theme) => ({
         } !important`,
         ['&:hover']: {
             backgroundColor: `${
-                Sniffings.is_dashboard_page
-                    ? theme.palette.primary.main
-                    : lighten(theme.palette.maskColor.primary, 0.1)
+                Sniffings.is_dashboard_page ? theme.palette.primary.main : lighten(theme.palette.maskColor.primary, 0.1)
             }!important`,
         },
         [`& .${chipClasses.label}`]: {
