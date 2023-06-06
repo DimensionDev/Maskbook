@@ -164,10 +164,10 @@ export const NFTListDialog: FC = () => {
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount}>
+                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount || account}>
                         <CollectionList
                             height={479}
-                            account={selectedAccount}
+                            account={selectedAccount || account}
                             pluginID={selectedPluginId}
                             gridProps={gridProps}
                             disableWindowScroll
@@ -176,7 +176,7 @@ export const NFTListDialog: FC = () => {
                         />
                     </UserAssetsProvider>
                 ) : (
-                    <Box className={classes.noWallet}>
+                    <Box className={classes.noWallet} height={479}>
                         <Icons.EmptySimple variant="light" size={36} />
                         <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
                             {t.no_wallet_message()}
