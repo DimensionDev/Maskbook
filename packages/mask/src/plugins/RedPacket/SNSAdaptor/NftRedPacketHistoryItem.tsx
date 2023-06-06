@@ -84,6 +84,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 width: 18,
                 height: 18,
                 marginLeft: 6,
+                zIndex: -1,
             },
             title: {
                 whiteSpace: 'break-spaces',
@@ -257,7 +258,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                             disabled={!isPasswordValid}
                                             className={classes.actionButton}
                                             size="large">
-                                            {t.send()}
+                                            {t.share()}
                                         </ActionButton>
                                     ) : null}
                                 </section>

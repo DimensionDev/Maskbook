@@ -176,7 +176,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = openSelectNFTDialog
+    const title = showHistory
+        ? t.history()
+        : openSelectNFTDialog
         ? t.nft_select_collection()
         : openNFTConfirmDialog
         ? i18n('confirm')

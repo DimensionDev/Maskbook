@@ -146,7 +146,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
             popper: {
                 overflow: 'visible',
                 backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
-                transform: 'translate(134px, 66px)',
+                transform: 'translate(196px, 47px)',
                 borderRadius: 8,
                 width: 328,
                 padding: 10,
@@ -186,6 +186,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 width: 18,
                 height: 18,
                 marginLeft: 6,
+                zIndex: -1,
             },
         }
     },
@@ -318,7 +319,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                             )}
                                             size="large">
                                             {canSend
-                                                ? t.send()
+                                                ? t.share()
                                                 : refunded
                                                 ? t.refund()
                                                 : isRefunding

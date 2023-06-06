@@ -33,7 +33,6 @@
     "refund": "Refund",
     "empty": "Empty",
     "refunding": "Refunding",
-    "history_send": "Send",
     "history_total_amount": "Total Amount: {{- amount}} {{symbol}}",
     "history_split_mode": "Split Mode: {{mode}}",
     "attached_message": "Attached Message",
@@ -109,5 +108,6 @@
     "lucky_drop": "Lucky Drop",
     "share": "Share",
     "ok": "OK",
-    "got_nft": "You got 1 {{name}}"
+    "got_nft": "You got 1 {{name}}",
+    "history": "History"
 }
