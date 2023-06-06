@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface EncryptionTargetSelectorProps {
     target: EncryptionTargetType
     e2eDisabled: E2EUnavailableReason | undefined
-    onChange(v: EncryptionTargetType): void
+    onClick(v: EncryptionTargetType): void
     selectedRecipientLength: number
 }
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
@@ -118,7 +118,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={(v) => {
-                    props.onChange(v as EncryptionTargetType)
+                    props.onClick(v as EncryptionTargetType)
                     if (v === EncryptionTargetType.E2E) setAnchorEl(null)
                 }}>
                 <PopoverListItem
@@ -143,7 +143,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     title={t('compose_encrypt_visible_to_share')}
                     subTitle={t('compose_encrypt_visible_to_share_sub')}
                     onClick={(v: string) => {
-                        props.onChange(v as EncryptionTargetType)
+                        props.onClick(v as EncryptionTargetType)
                         if (v === EncryptionTargetType.E2E) setAnchorEl(null)
                     }}
                 />

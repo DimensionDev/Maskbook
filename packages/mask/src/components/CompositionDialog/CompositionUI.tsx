@@ -227,7 +227,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         target={encryptionKind}
                         e2eDisabled={props.e2eEncryptionDisabled(encodingKind)}
                         selectedRecipientLength={recipients.length}
-                        onChange={(target) => {
+                        onClick={(target) => {
                             setEncryptionKind(target)
                             if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
                         }}
