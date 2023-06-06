@@ -178,12 +178,16 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             type: resolveActivityType(event.eventType),
             chainId,
             quantity: '1',
-            from: {
-                address: pair.from,
-            },
-            to: {
-                address: pair.to,
-            },
+            from: pair
+                ? {
+                      address: pair.from,
+                  }
+                : undefined,
+            to: pair
+                ? {
+                      address: pair.to,
+                  }
+                : undefined,
             timestamp: new Date(event.transactionInfo.blockTimestamp).getTime(),
             hash: event.transactionInfo.transactionHash,
             ...price,

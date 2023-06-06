@@ -79,7 +79,7 @@ export class BaseContractWalletProvider
         if (!owner || !isValidAddress(owner.account)) {
             await this.ownerStorage?.setValue({
                 account: this.options.getDefaultAccount(),
-                identifier: owner.identifier?.toText() ?? '',
+                identifier: owner?.identifier?.toText() ?? '',
             })
         } else {
             // delay for syncing storage

@@ -47,9 +47,9 @@ export class ConnectionContext {
         pid += 1
         this.id = pid
 
-        this._account = this._init.getDefaultAccount(this.providerType) ?? ''
-        this._chainId = this._init.getDefaultChainId(this.providerType) ?? ChainId.Mainnet
-        this._providerType = this._init.getDefaultProviderType() ?? ProviderType.MaskWallet
+        this._account = this._init?.getDefaultAccount?.(this.providerType) ?? ''
+        this._chainId = this._init?.getDefaultChainId?.(this.providerType) ?? ChainId.Mainnet
+        this._providerType = this._init?.getDefaultProviderType() ?? ProviderType.MaskWallet
     }
 
     private get errorEditor() {
@@ -136,8 +136,8 @@ export class ConnectionContext {
 
     get bridge() {
         return {
-            send: this._init.mask_send,
-            signWithPersona: this._init.mask_signWithPersona,
+            send: this._init?.mask_send,
+            signWithPersona: this._init?.mask_signWithPersona,
         }
     }
 
@@ -149,7 +149,7 @@ export class ConnectionContext {
      * Abstract account owner address
      */
     get owner() {
-        return this.payloadEditor.owner || this._options?.owner || this._init.getDefaultOwner(this.providerType)
+        return this.payloadEditor.owner || this._options?.owner || this._init?.getDefaultOwner?.(this.providerType)
     }
 
     /**
@@ -159,7 +159,7 @@ export class ConnectionContext {
         return (
             this.payloadEditor.identifier ||
             this._options?.identifier ||
-            this._init.getDefaultIdentifier(this.providerType)
+            this._init?.getDefaultIdentifier?.(this.providerType)
         )
     }
 

@@ -181,7 +181,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                       }
                     | undefined
                 if (
-                    !_parameters[1].srcToken ||
+                    !_parameters?.[1]?.srcToken ||
                     !_parameters[1].dstToken ||
                     !_parameters[1].amount ||
                     !_parameters[1].minReturnAmount

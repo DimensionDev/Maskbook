@@ -455,7 +455,7 @@ export class LensAPI implements LensBaseAPI.Provider {
             fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
         },
     ) {
-        if (!id || !options.token || !signature) return
+        if (!id || !options?.token || !signature) return
         const { data } = await options.fetcher<{ data: { broadcast: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
@@ -494,7 +494,7 @@ export class LensAPI implements LensBaseAPI.Provider {
             token: string
         },
     ) {
-        if (!options.token) return
+        if (!options?.token) return
         const { data } = await fetchJSON<{
             data: { approvedModuleAllowanceAmount: LensBaseAPI.ApprovedModuleAllowanceAmount[] }
         }>(LENS_ROOT_API, {

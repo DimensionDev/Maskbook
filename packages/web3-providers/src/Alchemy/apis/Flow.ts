@@ -91,7 +91,7 @@ function createNonFungibleAsset(
                 type: x.name,
                 value: x.value,
             }))
-            .filter((trait) => FILTER_WORDS.indexOf(trait.type) === -1),
+            .filter((trait) => !FILTER_WORDS.includes(trait.type)),
         source: SourceType.Alchemy_FLOW,
     }
 }
