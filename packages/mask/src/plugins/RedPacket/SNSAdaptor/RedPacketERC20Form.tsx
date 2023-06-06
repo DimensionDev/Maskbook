@@ -175,7 +175,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
-    const amount = rightShift(rawAmount || '', token?.decimals)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const rawTotalAmount = useMemo(
         () => (isRandom || !rawAmount ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
         [rawAmount, isRandom, shares],
@@ -401,7 +401,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     expectedChainId={chainId}
                     actualPluginID={pluginID}>
                     <EthereumERC20TokenApprovedBoundary
-                        onlyInfiniteUnlock
                         amount={totalAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}
                         ActionButtonProps={{

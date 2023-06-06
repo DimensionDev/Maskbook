@@ -39,7 +39,7 @@
     "indivisible": "The minimum amount for each share is {{- amount}} {{symbol}}",
     "name": "Lucky Drop",
     "description": "Gift crypto or NFTs to any users, first come, first served.",
-    "next": "Next",
+    "next": "Create the Lucky Drop",
     "nft_approve_all_tip": "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards.",
     "nft_select_partially_option": "Select partially",
     "nft_select_all_option": "ALL ({{total}} NFT)",
