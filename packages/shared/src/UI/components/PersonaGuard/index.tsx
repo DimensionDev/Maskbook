@@ -1,4 +1,4 @@
-import { memo, useEffect, type PropsWithChildren, useCallback } from 'react'
+import { memo, type PropsWithChildren, useCallback, useLayoutEffect } from 'react'
 import { useCurrentPersonaConnectStatus } from '../../../hooks/useCurrentPersonaConnectStatus.js'
 import {
     CrossIsolationMessages,
@@ -13,13 +13,20 @@ interface Props {
     currentPersonaIdentifier?: string
     identity?: IdentityResolved
     onDiscard?: () => void
+    /** The target that will be opened after connected */
+    forwardTarget?: string
 }
 
+/**
+ * TODO
+ * Unused, but could be used to refactor as guardian of persona requirement
+ */
 export const PersonaGuard = memo(function PersonaGuard({
     children,
     personas,
     currentPersonaIdentifier,
     identity,
+    forwardTarget,
     onDiscard,
 }: PropsWithChildren<Props>) {
     const { value: status, loading } = useCurrentPersonaConnectStatus(
@@ -38,23 +45,24 @@ export const PersonaGuard = memo(function PersonaGuard({
         },
         [connectedAndVerified, onDiscard],
     )
-    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
+    const { setDialog: setPersonaSelectPanelDialog, closeDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
         handleEvent,
     )
 
-    useEffect(() => {
-        if (loading) return
-        if (!connectedAndVerified) {
-            setPersonaSelectPanelDialog({
-                open: true,
-                enableVerify: true,
-            })
+    useLayoutEffect(() => {
+        if (connectedAndVerified || loading) {
+            closeDialog()
+            return
         }
-    }, [loading, connectedAndVerified])
+        setPersonaSelectPanelDialog({
+            open: true,
+            enableVerify: true,
+            target: forwardTarget,
+        })
+    }, [loading, connectedAndVerified, forwardTarget])
 
     if (loading || !connectedAndVerified) return null
-    if (!status.connected) return null
 
     return <>{children}</>
 })

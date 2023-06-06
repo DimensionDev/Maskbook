@@ -193,7 +193,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (!application.enabled) return true
 
         return !!application.entry.nextIdRequired && ApplicationEntryStatus.isLoading
-    }, [application, ApplicationEntryStatus])
+    }, [application, ApplicationEntryStatus.isLoading])
     // #endregion
 
     const clickHandler = useMemo(() => {

@@ -1,9 +1,9 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PersonaGuard, usePersonaProofs } from '@masknet/shared'
+import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
@@ -90,7 +90,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         })
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
-    useUpdateEffect(() => {
+    useEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)
     }, [unlistedAddressConfig])
     const isClean = useMemo(() => {
@@ -205,20 +205,5 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                 </DialogActions>
             ) : null}
         </InjectedDialog>
-    )
-})
-
-export const Web3ProfileDialogWrapper = memo(function Web3ProfileDialogWrapper(props: Props) {
-    const personas = useAllPersonas()
-    const persona = useCurrentPersona()
-    const identity = useLastRecognizedProfile()
-    return (
-        <PersonaGuard
-            personas={personas}
-            currentPersonaIdentifier={persona?.toText()}
-            identity={identity}
-            onDiscard={props.onClose}>
-            <Web3ProfileDialog {...props} />
-        </PersonaGuard>
     )
 })

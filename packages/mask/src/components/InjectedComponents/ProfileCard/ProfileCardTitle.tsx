@@ -1,6 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { SocialAccountList } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { SocialAccountList, useCurrentPersonaConnectStatus } from '@masknet/shared'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    PluginID,
+    type SocialAccount,
+    type SocialIdentity,
+} from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -8,7 +15,9 @@ import { useQuery } from '@tanstack/react-query'
 import type { FC, HTMLProps } from 'react'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
+import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { ProfileBar } from './ProfileBar.js'
+import { usePersonasFromDB } from '../../DataSource/usePersonasFromDB.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -44,6 +53,43 @@ function openWeb3ProfileSettingDialog() {
     CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
         open: true,
     })
+}
+
+function Web3ProfileSettingButton() {
+    const { classes } = useStyles()
+
+    const personas = usePersonasFromDB()
+    const persona = useCurrentPersona()
+    const identity = useLastRecognizedIdentity()
+    const { value: status, loading } = useCurrentPersonaConnectStatus(
+        personas,
+        persona?.identifier.toText(),
+        undefined,
+        identity,
+    )
+
+    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
+    )
+
+    if (loading) return null
+
+    return (
+        <Icons.Gear
+            className={classes.gearIcon}
+            onClick={() => {
+                if (status.connected && status.verified) {
+                    openWeb3ProfileSettingDialog()
+                } else {
+                    setPersonaSelectPanelDialog({
+                        open: true,
+                        enableVerify: !status.verified,
+                        target: PluginID.Web3Profile,
+                    })
+                }
+            }}
+        />
+    )
 }
 
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
@@ -96,7 +142,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
                         />
                     ) : null}
                     {itsMe ? (
-                        <Icons.Gear className={classes.gearIcon} onClick={openWeb3ProfileSettingDialog} />
+                        <Web3ProfileSettingButton />
                     ) : (
                         <TipButton className={classes.tipButton} receiver={identity.identifier} />
                     )}
