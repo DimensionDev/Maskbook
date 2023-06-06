@@ -3,7 +3,7 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
 import { WalletConnect } from '../interceptors/WalletConnect.js'
-import { MetaMask } from '../interceptors/MetaMask.js'
+import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
@@ -21,14 +21,14 @@ export class Interceptor implements Middleware<ConnectionContext> {
             new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
             new MaskWallet(),
         ),
-        [ProviderType.MetaMask]: Composer.from(new MetaMask()),
+        [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
         [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
-        [ProviderType.Coin98]: Composer.from(new MetaMask()),
-        [ProviderType.WalletLink]: Composer.from(new MetaMask()),
-        [ProviderType.MathWallet]: Composer.from(new MetaMask()),
+        [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
+        [ProviderType.WalletLink]: Composer.from(new MetaMaskLike(ProviderType.WalletLink)),
+        [ProviderType.MathWallet]: Composer.from(new MetaMaskLike(ProviderType.MathWallet)),
         [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
-        [ProviderType.Opera]: Composer.from(new MetaMask()),
-        [ProviderType.Clover]: Composer.from(new MetaMask()),
+        [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
+        [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {

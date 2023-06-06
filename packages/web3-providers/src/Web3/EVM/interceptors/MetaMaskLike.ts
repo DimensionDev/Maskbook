@@ -1,10 +1,12 @@
-import { EthereumMethodType, PayloadEditor, type Middleware, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, type Middleware, type ProviderType } from '@masknet/web3-shared-evm'
 import { ConnectionAPI } from '../apis/ConnectionAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
-export class MetaMask implements Middleware<ConnectionContext> {
+export class MetaMaskLike implements Middleware<ConnectionContext> {
+    constructor(private providerType: ProviderType) {}
+
     private Web3 = new ConnectionAPI({
-        providerType: ProviderType.MetaMask,
+        providerType: this.providerType,
     })
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
