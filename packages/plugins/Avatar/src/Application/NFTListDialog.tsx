@@ -12,7 +12,6 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
-    useAccount,
     useChainContext,
     useNetworkContext,
     useWallets,
@@ -80,7 +79,6 @@ export const NFTListDialog: FC = () => {
         useAvatarManagement()
 
     const navigate = useNavigate()
-    const globalAccount = useAccount()
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId, setAccount } = useChainContext()
@@ -99,11 +97,6 @@ export const NFTListDialog: FC = () => {
     }, [pfpType])
 
     useEffect(() => setSelectedToken(undefined), [chainId])
-
-    useEffect(() => {
-        setAccount(globalAccount)
-        setSelectedAccount(globalAccount)
-    }, [globalAccount])
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
