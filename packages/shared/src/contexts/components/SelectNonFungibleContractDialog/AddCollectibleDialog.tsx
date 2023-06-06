@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'grid',
         overflow: 'auto',
-        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(20%, 1fr))',
         gridGap: theme.spacing(2),
         padding: theme.spacing(2, 0),
         paddingRight: theme.spacing(1),

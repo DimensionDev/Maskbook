@@ -47,18 +47,14 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'NFTs',
     priority: 4,
     UI: {
-        TabContent({ socialAccount, identity }) {
+        TabContent({ socialAccount }) {
             useMountReport(EventID.AccessWeb3TabNFTsTab)
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
                 <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                     <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                        <UserAssetsProvider
-                            pluginID={socialAccount.pluginID}
-                            address={socialAccount.address}
-                            userId={identity?.identifier?.userId!}
-                            persona={identity?.publicKey!}>
+                        <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
                             <CollectionList
                                 account={socialAccount.address}
                                 pluginID={socialAccount.pluginID}
@@ -119,7 +115,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ...TabConfig,
             priority: 4,
             UI: {
-                TabContent({ socialAccount, identity }) {
+                TabContent({ socialAccount }) {
                     useMountReport(EventID.AccessWeb3ProfileDialogNFTsTab)
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
@@ -128,11 +124,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                             <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                                <UserAssetsProvider
-                                    pluginID={socialAccount.pluginID}
-                                    address={socialAccount.address}
-                                    userId={identity?.identifier?.userId!}
-                                    persona={identity?.publicKey!}>
+                                <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
                                     <CollectionList
                                         height={392}
                                         account={socialAccount.address}
