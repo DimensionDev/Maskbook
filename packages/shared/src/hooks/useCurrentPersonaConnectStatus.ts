@@ -128,14 +128,7 @@ export function useCurrentPersonaConnectStatus(
                 hasPersona: true,
             }
         }
-    }, [
-        currentPersonaIdentifier,
-        personas,
-        identity?.identifier?.toText(),
-        create,
-        openPersonListDialog,
-        openDashboard,
-    ])
+    }, [currentPersonaIdentifier, personas, identity?.identifier, create, openPersonListDialog])
 
     useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message?.events.ownPersonaChanged])
 
