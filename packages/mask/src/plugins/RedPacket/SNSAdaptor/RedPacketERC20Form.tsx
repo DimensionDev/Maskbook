@@ -33,6 +33,7 @@ import {
     SelectGasSettingsToolbar,
     useAvailableBalance,
     TokenValue,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
 import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
@@ -414,14 +415,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
-                            <ActionButton
-                                size="medium"
-                                className={classes.button}
-                                fullWidth
-                                disabled={!!validationMessage || !!gasValidationMessage}
-                                onClick={onClick}>
-                                {validationMessage || gasValidationMessage || t.next()}
-                            </ActionButton>
+                            <WalletConnectedBoundary expectedChainId={chainId}>
+                                <ActionButton
+                                    size="medium"
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={!!validationMessage || !!gasValidationMessage}
+                                    onClick={onClick}>
+                                    {validationMessage || gasValidationMessage || t.next()}
+                                </ActionButton>
+                            </WalletConnectedBoundary>
                         </ChainBoundary>
                     </EthereumERC20TokenApprovedBoundary>
                 </PluginWalletStatusBar>
