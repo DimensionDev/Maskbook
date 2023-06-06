@@ -16,9 +16,9 @@ export default function PasswordSetting() {
     const [openSettingDialog, setOpenSettingDialog] = useState(false)
 
     useEffect(() => {
-        if (!state?.open || state?.open !== 'password') return
+        if (!state.open || state.open !== 'password') return
         setOpenSettingDialog(true)
-    }, [state?.open])
+    }, [state.open])
 
     return (
         <>

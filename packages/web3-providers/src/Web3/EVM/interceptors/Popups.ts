@@ -48,7 +48,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             const maskAddress = getMaskTokenAddress(context.chainId)
 
-            const gas = await this.Web3.estimateTransaction?.(signableConfig, undefined, {
+            const gas = await this.Web3.estimateTransaction(signableConfig, undefined, {
                 chainId: context.chainId,
                 account: context.account,
                 paymentToken: maskAddress,

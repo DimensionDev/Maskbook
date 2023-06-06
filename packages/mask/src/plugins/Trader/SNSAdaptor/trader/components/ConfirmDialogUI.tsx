@@ -29,18 +29,18 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     title: {
-        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.second,
     },
     description: {
-        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.main,
     },
     card: {
         borderRadius: 12,
         padding: 12,
         background: `${
-            Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input
+            Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor.input
         }!important`,
-        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor.line}`,
         display: 'flex',
         flexDirection: 'column',
         rowGap: 10,
@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor?.second,
+        color: theme.palette.maskColor.second,
     },
     symbol: {
         display: 'flex',
@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 30,
         lineHeight: 1.2,
         fontWeight: 700,
-        color: theme.palette.maskColor?.main,
+        color: theme.palette.maskColor.main,
     },
     tokenIcon: {
         width: 30,
@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     reverse: {
         marginTop: -8,
-        border: `2px solid ${theme.palette.maskColor?.bottom}`,
+        border: `2px solid ${theme.palette.maskColor.bottom}`,
         backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.lightBackground : theme.palette.background.default,
         width: 32,
         height: 32,
@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     reverseIcon: {
-        stroke: Sniffings.is_dashboard_page ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
+        stroke: Sniffings.is_dashboard_page ? `${theme.palette.text.primary}!important` : theme.palette.maskColor.main,
     },
     alert: {
         marginTop: 12,
@@ -102,18 +102,18 @@ const useStyles = makeStyles()((theme) => ({
     warning: {
         backgroundColor: Sniffings.is_dashboard_page
             ? theme.palette.warning.main
-            : parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
-        color: Sniffings.is_dashboard_page ? theme.palette.warning.main : theme.palette.maskColor?.warn,
+            : parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+        color: Sniffings.is_dashboard_page ? theme.palette.warning.main : theme.palette.maskColor.warn,
     },
     info: {
-        backgroundColor: Sniffings.is_dashboard_page ? theme.palette.background.default : theme.palette.maskColor?.bg,
-        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        backgroundColor: Sniffings.is_dashboard_page ? theme.palette.background.default : theme.palette.maskColor.bg,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.main,
     },
     error: {
         backgroundColor: Sniffings.is_dashboard_page
             ? MaskColorVar.redMain
-            : parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
-        color: Sniffings.is_dashboard_page ? theme.palette.common.white : theme.palette.maskColor?.danger,
+            : parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
+        color: Sniffings.is_dashboard_page ? theme.palette.common.white : theme.palette.maskColor.danger,
     },
     action: {
         marginRight: 0,
@@ -121,7 +121,7 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 88,
     },
     infoIcon: {
-        color: Sniffings.is_dashboard_page ? MaskColorVar.twitterInfo : theme.palette.maskColor?.main,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.twitterInfo : theme.palette.maskColor.main,
     },
     content: {
         padding: 16,
@@ -140,11 +140,11 @@ const useStyles = makeStyles()((theme) => ({
         )}`,
     },
     danger: {
-        color: `${Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger}!important`,
+        color: `${Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor.danger}!important`,
     },
     edit: {
         lineHeight: '18px',
-        color: Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary,
+        color: Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor.primary,
         marginRight: 4,
         fontWeight: 700,
         cursor: 'pointer',
@@ -247,7 +247,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         icon={<Icons.CircleWarning className={classes.danger} />}
                         severity="error">
                         {t('plugin_trader_price_impact_too_high_tips', {
-                            impact: formatPercentage(cacheTrade?.priceImpact),
+                            impact: formatPercentage(cacheTrade.priceImpact),
                         })}
                     </Alert>
                 )
@@ -421,7 +421,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                     <Box className={classes.section}>
                         <Typography className={classes.title}>{t('plugin_trader_price_impact')}</Typography>
                         <Typography className={isGreatThanSlippageSetting ? classes.danger : classes.description}>
-                            {cacheTrade?.priceImpact?.isLessThan(ONE_BIPS)
+                            {cacheTrade.priceImpact.isLessThan(ONE_BIPS)
                                 ? '<0.01%'
                                 : formatPercentage(cacheTrade.priceImpact)}
                         </Typography>

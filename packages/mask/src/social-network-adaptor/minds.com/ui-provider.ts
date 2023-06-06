@@ -187,7 +187,7 @@ const mindsUI: SocialNetworkUI.Definition = {
             password() {
                 const id =
                     IdentityProviderMinds.recognized.value.identifier?.userId ||
-                    globalUIState.profiles.value?.[0].identifier.userId
+                    globalUIState.profiles.value[0].identifier.userId
                 if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Minds, id)
                     .expect(`${id} should be a valid user id`)

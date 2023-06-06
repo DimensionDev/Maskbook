@@ -21,7 +21,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
         for (const { name, parameters } of context.methods) {
             switch (name) {
                 case 'approve':
-                    if (parameters?.spender === undefined || parameters?.value === undefined) break
+                    if (parameters?.spender === undefined || parameters.value === undefined) break
                     const token = await this.Hub.getFungibleToken(context.to ?? '', { chainId: context.chainId })
 
                     const revokeTitle = i18NextInstance.t('plugin_infra_descriptor_token_revoke_title')
@@ -30,13 +30,13 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                         symbol: token?.symbol ?? 'token',
                     })
                     const approveDescription = i18NextInstance.t('plugin_infra_descriptor_token_approve', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        tokenAmountDescription: getTokenAmountDescription(parameters.value, token),
                     })
                     const revokeSuccessDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_success')
                     const approveSuccessDescription = i18NextInstance.t(
                         'plugin_infra_descriptor_token_approve_success',
                         {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                            tokenAmountDescription: getTokenAmountDescription(parameters.value, token),
                         },
                     )
                     const revokeFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail')
@@ -47,9 +47,9 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             chainId: context.chainId,
                         })
 
-                        const spender = spenders?.find(
+                        const spender = spenders.find(
                             (x) =>
-                                isSameAddress(x.address, parameters?.spender) &&
+                                isSameAddress(x.address, parameters.spender) &&
                                 isSameAddress(x.tokenInfo.address, context.to),
                         )
 
@@ -61,7 +61,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                                 : i18NextInstance.t('plugin_infra_descriptor_token_revoke_but_set_positive_cap', {
                                       tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
                                       spender: spender?.address
-                                          ? formatEthereumAddress(spender?.address, 4)
+                                          ? formatEthereumAddress(spender.address, 4)
                                           : 'spender',
                                   })
                             : isZero(spendingCap)
@@ -108,10 +108,10 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                         chainId: context.chainId,
                         title: approveTitle,
                         tokenInAddress: token?.address,
-                        tokenInAmount: parameters?.value,
+                        tokenInAmount: parameters.value,
                         description: approveDescription,
                         popup: {
-                            tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
+                            tokenDescription: leftShift(parameters.value, token?.decimals).gt(pow10(9))
                                 ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
                                 : undefined,
                         },
@@ -134,14 +134,14 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: parameters?.value,
+                    tokenInAmount: parameters.value,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_transfer_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        tokenAmountDescription: getTokenAmountDescription(parameters.value, token),
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                            tokenAmountDescription: getTokenAmountDescription(parameters.value, token),
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
                     },

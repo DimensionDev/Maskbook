@@ -79,7 +79,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         }
 
         // Should connected persona
-        const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
+        const personaConnectedProfile = persona.linkedProfiles.find((x) =>
             isSameProfile(
                 x.identifier,
                 ProfileIdentifier.of(activatedSocialNetworkUI.networkIdentifier, username).expect(
@@ -99,7 +99,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
             (x) =>
                 isSameProfile(
                     resolveNextIDIdentityToProfile(x.identity, x.platform),
-                    personaConnectedProfile?.identifier,
+                    personaConnectedProfile.identifier,
                 ) && x.is_valid,
         )
         if (!verifiedProfile) return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')

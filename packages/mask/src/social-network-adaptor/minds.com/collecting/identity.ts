@@ -25,7 +25,7 @@ async function resolveLastRecognizedIdentityInner(
             ref.value = {
                 identifier: ProfileIdentifier.of(mindsBase.networkIdentifier, user.username).unwrapOr(undefined),
                 nickname: user.name,
-                avatar: user.avatar_url?.medium,
+                avatar: user.avatar_url.medium,
             }
         }
     }

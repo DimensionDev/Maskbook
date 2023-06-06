@@ -57,9 +57,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const disableVerify = useMemo(
         () =>
-            !currentIdentityResolved?.identifier || !userId
+            !currentIdentityResolved.identifier || !userId
                 ? false
-                : currentIdentityResolved?.identifier.userId !== userId,
+                : currentIdentityResolved.identifier.userId !== userId,
         [currentIdentityResolved, userId],
     )
 
@@ -73,7 +73,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
         // auto-finish the setup process
         if (!destinedPersonaInfo) throw new Error('invalid persona')
-        await Services.Identity.setupPersona(destinedPersonaInfo?.identifier)
+        await Services.Identity.setupPersona(destinedPersonaInfo.identifier)
 
         setOperation(true)
         if (step !== SetupGuideStep.FindUsername) return
@@ -141,7 +141,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 <FindUsername
                     personaName={destinedPersonaInfo?.nickname}
                     username={userId}
-                    avatar={currentIdentityResolved?.avatar}
+                    avatar={currentIdentityResolved.avatar}
                     onConnect={onConnect}
                     onClose={onClose}
                     enableNextID={enableNextID}
@@ -154,7 +154,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     personaName={destinedPersonaInfo?.nickname}
                     username={userId}
                     network={activatedSocialNetworkUI.networkIdentifier}
-                    avatar={currentIdentityResolved?.avatar}
+                    avatar={currentIdentityResolved.avatar}
                     onVerify={onVerify}
                     onDone={onVerifyDone}
                     onClose={onClose}

@@ -92,9 +92,9 @@ export class BaseHostedProvider
     override get subscription() {
         if (!this.walletStorage) return super.subscription
         return {
-            account: this.walletStorage?.account.subscription,
-            chainId: this.walletStorage?.chainId.subscription,
-            wallets: this.walletStorage?.wallets.subscription,
+            account: this.walletStorage.account.subscription,
+            chainId: this.walletStorage.chainId.subscription,
+            wallets: this.walletStorage.wallets.subscription,
         }
     }
 
@@ -118,12 +118,12 @@ export class BaseHostedProvider
         if (this.walletStorage?.wallets.value.some((x) => isSameAddress(x.address, address))) return
 
         await this.walletStorage?.wallets.setValue([
-            ...(this.walletStorage?.wallets.value ?? []),
+            ...(this.walletStorage.wallets.value ?? []),
             {
                 ...wallet,
                 id: address,
                 address,
-                name: wallet.name.trim() || `Account ${this.walletStorage?.wallets.value.length + 1}`,
+                name: wallet.name.trim() || `Account ${this.walletStorage.wallets.value.length + 1}`,
                 createdAt: now,
                 updatedAt: now,
             },
@@ -139,7 +139,7 @@ export class BaseHostedProvider
 
         const now = new Date()
         await this.walletStorage?.wallets.setValue(
-            this.walletStorage?.wallets.value.map((x) =>
+            this.walletStorage.wallets.value.map((x) =>
                 isSameAddress(x.address, address)
                     ? {
                           ...x,
@@ -171,7 +171,7 @@ export class BaseHostedProvider
 
     override async removeWallet(address: string, password?: string | undefined) {
         await this.walletStorage?.wallets.setValue(
-            this.walletStorage?.wallets.value?.filter((x) => !isSameAddress(x.address, address)),
+            this.walletStorage.wallets.value.filter((x) => !isSameAddress(x.address, address)),
         )
     }
 
@@ -184,7 +184,7 @@ export class BaseHostedProvider
                 ),
         )
         await this.walletStorage?.wallets.setValue(
-            uniqWith([...(this.walletStorage?.wallets.value ?? []), ...result], (a, b) =>
+            uniqWith([...(this.walletStorage.wallets.value ?? []), ...result], (a, b) =>
                 isSameAddress(a.address, b.address),
             ),
         )
@@ -193,7 +193,7 @@ export class BaseHostedProvider
     override async removeWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         await this.walletStorage?.wallets.setValue(
-            this.walletStorage?.wallets.value?.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
+            this.walletStorage.wallets.value.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
         )
     }
 

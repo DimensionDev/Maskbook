@@ -149,13 +149,13 @@ export function NFTImage(props: NFTImageProps) {
         showNetwork = false,
     } = props
     const { classes, cx } = useStyles({ networkPluginID: pluginID })
-    const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
+    const iconURL = NETWORK_DESCRIPTORS.find((network) => network.chainId === token.chainId)?.icon
 
     return (
         <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
             <Box className={classes.itemRoot}>
                 <img
-                    onClick={() => onChange?.(token)}
+                    onClick={() => onChange(token)}
                     src={token.metadata?.imageURL}
                     style={{ width: size, height: size }}
                     className={cx(

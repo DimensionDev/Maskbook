@@ -153,7 +153,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
         const getTokenValue = (address: string) => {
-            const value = fungibleAssetsTable[address]?.value?.[CurrencyType.USD]
+            const value = fungibleAssetsTable[address].value?.[CurrencyType.USD]
             return value ? toZero(value) : ZERO
         }
         return filteredFungibleTokens
@@ -304,7 +304,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
 
     const handleSelect = useCallback(
         (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null) =>
-            startTransition(() => onSelect?.(token)),
+            startTransition(() => onSelect(token)),
         [onSelect],
     )
 
@@ -335,7 +335,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             />
             {mode === TokenListMode.List && enableManage ? (
                 <Box className={classes.bar}>
-                    <ManageTokenListBar onClick={() => setMode?.(TokenListMode.Manage)} />
+                    <ManageTokenListBar onClick={() => setMode(TokenListMode.Manage)} />
                 </Box>
             ) : null}
         </Stack>

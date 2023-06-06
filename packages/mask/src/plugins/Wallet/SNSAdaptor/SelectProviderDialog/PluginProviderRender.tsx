@@ -186,7 +186,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             if (!target) return
 
             const isReady = target.Web3State?.Provider?.isReady(provider.type)
-            const downloadLink = OthersAll.use(provider.providerAdaptorPluginID)?.providerResolver.providerDownloadLink(
+            const downloadLink = OthersAll.use(provider.providerAdaptorPluginID).providerResolver.providerDownloadLink(
                 provider.type,
             )
 

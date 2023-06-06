@@ -29,7 +29,7 @@ export function useTradeApproveComputed(
                 if (context?.TYPE === TradeProvider.ZRX)
                     return trade?.trade_ ? (trade.trade_ as SwapQuoteResponse).allowanceTarget : ''
                 if (context?.TYPE === TradeProvider.OPENOCEAN)
-                    return trade?.trade_ ? (trade?.trade_ as SwapQuoteResponse).to : context?.SPENDER_CONTRACT_ADDRESS
+                    return trade?.trade_ ? (trade.trade_ as SwapQuoteResponse).to : context.SPENDER_CONTRACT_ADDRESS
                 return context?.SPENDER_CONTRACT_ADDRESS ?? ''
             })(),
         }

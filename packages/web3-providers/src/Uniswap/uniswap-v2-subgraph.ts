@@ -149,7 +149,7 @@ export async function fetchEtherPricesByBlockNumbers(
     if (!data) return result
 
     Object.keys(data).map((key) => {
-        result[key] = data[key]?.ethPrice
+        result[key] = data[key].ethPrice
     })
     return result
 }
@@ -257,7 +257,7 @@ export async function fetchTokenData(chainId: Web3Helper.ChainIdAll, address: st
 
     return {
         token: first(data?.tokens),
-        allPairs: data?.pairs0?.concat(data.pairs1) ?? [],
+        allPairs: data?.pairs0.concat(data.pairs1) ?? [],
     }
 }
 
@@ -387,7 +387,7 @@ export async function fetchPricesByBlocks(
                     return {
                         timestamp: Number(timestamp) * 1000,
                         derivedETH: result[x].derivedETH,
-                        ethPrice: result[`b${timestamp}`]?.ethPrice,
+                        ethPrice: result[`b${timestamp}`].ethPrice,
                     }
                 })
             }

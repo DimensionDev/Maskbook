@@ -47,7 +47,7 @@ export function BannerUI(props: BannerUIProps) {
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            {ICON_MAP?.[props?.iconType ?? 'default']}
+            {ICON_MAP[props.iconType ?? 'default']}
         </IconButton>
     )
 }

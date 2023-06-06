@@ -38,7 +38,7 @@ export function useGasSchema(
                         (value) =>
                             isGreaterThanOrEqualTo(
                                 formatGweiToWei(value),
-                                gasOptions?.slow?.suggestedMaxFeePerGas ?? 0,
+                                gasOptions?.slow.suggestedMaxFeePerGas ?? 0,
                             ),
                         t.gas_settings_error_gas_price_too_low(),
                     )
@@ -46,7 +46,7 @@ export function useGasSchema(
                         (value) =>
                             isLessThan(
                                 formatGweiToWei(value),
-                                multipliedBy(gasOptions?.fast?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                                multipliedBy(gasOptions?.fast.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
                             ),
                         t.gas_settings_error_gas_price_too_high(),
                     ),
@@ -58,7 +58,7 @@ export function useGasSchema(
                         (value) =>
                             isGreaterThanOrEqualTo(
                                 formatGweiToWei(value),
-                                gasOptions?.slow?.suggestedMaxPriorityFeePerGas ?? 0,
+                                gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0,
                             ),
                         t.gas_settings_error_max_priority_gas_fee_too_low(),
                     )
@@ -67,7 +67,7 @@ export function useGasSchema(
                             isLessThan(
                                 formatGweiToWei(value),
                                 multipliedBy(
-                                    gasOptions?.fast?.suggestedMaxPriorityFeePerGas ?? 0,
+                                    gasOptions?.fast.suggestedMaxPriorityFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -80,7 +80,7 @@ export function useGasSchema(
                         (value) =>
                             isGreaterThanOrEqualTo(
                                 formatGweiToWei(value),
-                                gasOptions?.slow?.suggestedMaxFeePerGas ?? 0,
+                                gasOptions?.slow.suggestedMaxFeePerGas ?? 0,
                             ),
                         t.gas_settings_error_max_fee_too_low(),
                     )
@@ -88,7 +88,7 @@ export function useGasSchema(
                         (value) =>
                             isLessThan(
                                 formatGweiToWei(value),
-                                multipliedBy(gasOptions?.fast?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                                multipliedBy(gasOptions?.fast.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
                             ),
                         t.gas_settings_error_max_fee_too_high(),
                     ),

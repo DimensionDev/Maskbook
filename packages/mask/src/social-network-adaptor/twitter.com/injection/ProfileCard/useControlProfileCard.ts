@@ -78,7 +78,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
     useEffect(() => {
         const onClick = (event: MouseEvent) => {
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
-            if (event.composedPath()?.includes(holderRef.current!)) return
+            if (event.composedPath().includes(holderRef.current!)) return
             hoverRef.current = false
             hideProfileCard(true)
         }

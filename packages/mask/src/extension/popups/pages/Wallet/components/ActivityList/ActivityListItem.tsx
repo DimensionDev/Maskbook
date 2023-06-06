@@ -65,7 +65,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                     return <Icons.Loader color="#FFB915" />
                 case TransactionStatusType.SUCCEED:
                     if (
-                        formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                        formatterTransaction.type === TransactionDescriptorType.TRANSFER ||
                         formatterTransaction.title === 'Transfer Token'
                     )
                         return <Icons.TxOut color="#FFB915" />

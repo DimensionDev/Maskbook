@@ -35,7 +35,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 info.version,
                 content,
                 target,
-                lastRecognizedIdentity?.identifier ?? fallbackProfile,
+                lastRecognizedIdentity.identifier ?? fallbackProfile,
                 activatedSocialNetworkUI.encryptionNetwork,
             )
             // Since we cannot directly send binary on the SNS, we need to encode it into a string.

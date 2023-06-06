@@ -354,25 +354,25 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                             shares: String(patchedHistory.shares),
                                             amount: formatBalance(
                                                 patchedHistory.total,
-                                                historyToken?.decimals,
+                                                historyToken.decimals,
                                                 6,
                                                 true,
                                             ),
                                             claimedAmount: formatBalance(
                                                 minus(patchedHistory.total, total_remaining ?? 0),
-                                                historyToken?.decimals,
+                                                historyToken.decimals,
                                                 6,
                                                 true,
                                             ),
-                                            symbol: historyToken?.symbol,
+                                            symbol: historyToken.symbol,
                                         }}
                                     />
                                 </Typography>
                                 <TokenIcon
                                     className={classes.icon}
-                                    address={historyToken?.address ?? ''}
-                                    name={historyToken?.name}
-                                    logoURL={historyToken?.logoURL}
+                                    address={historyToken.address ?? ''}
+                                    name={historyToken.name}
+                                    logoURL={historyToken.logoURL}
                                 />
                             </section>
                         </Box>

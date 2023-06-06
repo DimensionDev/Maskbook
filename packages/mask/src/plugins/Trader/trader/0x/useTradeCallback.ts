@@ -53,7 +53,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             )
             const receipt = await Web3.getTransactionReceipt(hash)
             if (!receipt?.status) return
-            return receipt?.transactionHash
+            return receipt.transactionHash
         } catch (error: unknown) {
             if (error instanceof Error) {
                 notifyError(error.message)

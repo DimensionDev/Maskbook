@@ -210,7 +210,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         const bindingProofs = await this.NextIDProof.queryProfilesByAddress(address)
 
-        if (bindingProofs?.length > 0) {
+        if (bindingProofs.length > 0) {
             return [
                 {
                     type: SearchResultType.EOA,
@@ -344,7 +344,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 (t) =>
                     t.symbol?.toLowerCase() === name.toLowerCase() ||
                     (name.length > 3 &&
-                        t.name?.toLowerCase().startsWith(name.toLowerCase()) &&
+                        t.name.toLowerCase().startsWith(name.toLowerCase()) &&
                         t.rank &&
                         t.rank <= 20) ||
                     t.alias?.map((x) => x.value.toLowerCase()).includes(name.toLowerCase()),
@@ -368,8 +368,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                                 | NonFungibleTokenResult<ChainId, SchemaType>
                                 | NonFungibleCollectionResult<ChainId, SchemaType>
                             >(name, filtered)
-                            ?.map((x) => ({ ...x, keyword: name }))
-                        if (items?.length) result = [...result, ...items]
+                            .map((x) => ({ ...x, keyword: name }))
+                        if (items.length) result = [...result, ...items]
                     }
                 }
             }
@@ -492,7 +492,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
 
         // 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
-        if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
+        if (isValidAddress(keyword) && !isZeroAddress(keyword)) {
             const tokenList = await this.searchTokenByAddress(keyword)
             if (tokenList.length) return tokenList as T[]
 

@@ -147,7 +147,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         }
         if (!user) return
         setLoading(true)
-        const chosenToken = collection.tokens.find((item) => item?.metadata?.imageURL === metaData.image)
+        const chosenToken = collection.tokens.find((item) => item.metadata?.imageURL === metaData.image)
         const meta = {
             ...metaData,
             userId: user.userId,
@@ -274,7 +274,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 options={collection.tokens}
                 inputValue={inputTokenName}
                 onChange={(_event, newValue) => onImageChange(newValue)}
-                getOptionLabel={(option) => option?.metadata?.name ?? ''}
+                getOptionLabel={(option) => option.metadata?.name ?? ''}
                 PaperComponent={({ children }) => paperComponent(children)}
                 PopperComponent={ShadowRootPopper}
                 renderOption={(props, option) => (
@@ -282,7 +282,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {!option.glbSupport ? (
                             <img className={classes.thumbnail} src={option.metadata?.imageURL} />
                         ) : null}
-                        <Typography>{option?.metadata?.name}</Typography>
+                        <Typography>{option.metadata?.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                     </Box>
                 )}

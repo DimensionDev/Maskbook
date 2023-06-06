@@ -9,7 +9,7 @@ import { Flags } from '@masknet/flags'
 function getUserId(ele: HTMLElement) {
     const attribute = ele.dataset.testid || ''
     if (attribute.endsWith('unknown')) {
-        return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
+        return ele.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
     }
     return attribute.split('-').pop()
 }
@@ -59,7 +59,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
             return {
                 onNodeMutation: run,
                 onTargetChanged: run,
-                onRemove: () => remover?.(),
+                onRemove: () => remover(),
             }
         }),
         signal,

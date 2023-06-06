@@ -10,11 +10,11 @@ import { getAssetFullName, fetchJSON } from '../../entry-helpers.js'
 
 function createNonFungibleTokenImageURL(asset: AlchemyNFT_Flow | AlchemyResponse_Flow_Metadata) {
     return (
-        asset?.metadata?.metadata?.find((data) => data?.name === 'img')?.value ||
-        asset?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
-        asset?.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
-        asset?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
-        resolveArweaveURL(asset?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || '')
+        asset.metadata.metadata.find((data) => data.name === 'img')?.value ||
+        asset.metadata.metadata.find((data) => data.name === 'eventImage')?.value ||
+        asset.metadata.metadata.find((data) => data.name === 'ipfsLink')?.value ||
+        asset.media.find((data) => data.mimeType === 'image/png | image')?.uri ||
+        resolveArweaveURL(asset.metadata.metadata.find((data) => data.name === 'arLink')?.value || '')
     )
 }
 
@@ -30,17 +30,17 @@ function createNonFungibleToken(chainId: ChainId, asset: AlchemyNFT_Flow): NonFu
         address,
         metadata: {
             chainId,
-            name: getAssetFullName(address, asset?.contract?.name ?? '', asset?.contract?.name, tokenId),
+            name: getAssetFullName(address, asset.contract.name ?? '', asset.contract.name, tokenId),
             symbol: '',
             description: asset.description,
             imageURL: createNonFungibleTokenImageURL(asset),
-            mediaURL: asset?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri,
+            mediaURL: asset.media.find((data) => data.mimeType === 'image/png | image')?.uri,
         },
         contract: {
             chainId,
             schema: SchemaType.NonFungible,
             address,
-            name: asset?.contract?.name ?? '',
+            name: asset.contract.name ?? '',
             symbol: '',
         },
         source: SourceType.Alchemy_FLOW,
@@ -63,17 +63,17 @@ function createNonFungibleAsset(
         address,
         metadata: {
             chainId,
-            name: getAssetFullName(address, metadata.contract?.name ?? '', metadata.contract?.name, tokenId),
+            name: getAssetFullName(address, metadata.contract.name ?? '', metadata.contract.name, tokenId),
             symbol: '',
             description: metadata.description,
             imageURL: createNonFungibleTokenImageURL(metadata),
-            mediaURL: metadata.media?.find((data) => data?.mimeType === 'image/png | image')?.uri,
+            mediaURL: metadata.media.find((data) => data.mimeType === 'image/png | image')?.uri,
         },
         contract: {
             chainId,
             schema: SchemaType.NonFungible,
             address,
-            name: metadata.contract?.name,
+            name: metadata.contract.name,
             symbol: '',
         },
         collection: {
@@ -86,12 +86,12 @@ function createNonFungibleAsset(
         owner: {
             address: ownerAddress,
         },
-        traits: metadata.metadata?.metadata
+        traits: metadata.metadata.metadata
             .map((x) => ({
                 type: x.name,
                 value: x.value,
             }))
-            ?.filter((trait) => FILTER_WORDS?.findIndex((name) => name === trait.type) === -1),
+            .filter((trait) => FILTER_WORDS.indexOf(trait.type) === -1),
         source: SourceType.Alchemy_FLOW,
     }
 }
@@ -104,7 +104,7 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
     ) {
         const { address: contractAddress, identifier: contractName } = getContractAddress(address) ?? {}
         if (!account || !contractAddress || !contractName || !isValidChainId(chainId)) return
-        const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
+        const chainInfo = Alchemy_FLOW_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         const metadata = await fetchJSON<AlchemyResponse_Flow_Metadata>(
             urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
                 owner: account,
@@ -120,14 +120,14 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
 
     async getAssets(from: string, { chainId, indicator }: HubOptions_Base<ChainId> = {}) {
         if (!from || !isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
-        const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
+        const chainInfo = Alchemy_FLOW_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         const res = await fetchJSON<AlchemyResponse_Flow>(
             urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
         )
-        const assets = res?.nfts?.map((nft) => createNonFungibleToken(chainId ?? ChainId.Mainnet, nft))
+        const assets = res.nfts.map((nft) => createNonFungibleToken(chainId ?? ChainId.Mainnet, nft))
         return createPageable(assets, createIndicator(indicator))
     }
 }

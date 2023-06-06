@@ -154,7 +154,7 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
         [action.platform, action.related_urls?.[0]],
     )
 
-    const media = metadata?.media?.[0]
+    const media = metadata?.media[0]
 
     return (
         <CardFrame

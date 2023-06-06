@@ -62,7 +62,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', { onlyRemainTwoDecimal: true })
     }, [gasFee, nativeTokenPrice])
 
-    const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)
+    const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.priceImpact)
 
     // #region remote controlled swap settings dialog
     const selectAdvancedSettings = useSelectAdvancedSettings()
@@ -85,7 +85,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const handlePriceImpactDialogConfirm = useCallback(() => {
         if (!trade.priceImpact) return
-        setTemporarySlippage(new BigNumber(trade?.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber())
+        setTemporarySlippage(new BigNumber(trade.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber())
         onConfirm()
         setPriceImpactDialogOpen(false)
     }, [trade])

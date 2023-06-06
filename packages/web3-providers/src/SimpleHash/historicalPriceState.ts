@@ -31,7 +31,7 @@ export class HistoricalPriceState {
     public isLoaded(id: string, fromTimeStamp?: number) {
         return (
             !!this._allLoadedIdListState.find((x) => x === id) ||
-            (fromTimeStamp && !!this._priceState[id]?.find((x) => x[0] < fromTimeStamp))
+            (fromTimeStamp && !!this._priceState[id].find((x) => x[0] < fromTimeStamp))
         )
     }
 

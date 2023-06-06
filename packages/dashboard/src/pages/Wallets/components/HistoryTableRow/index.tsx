@@ -151,7 +151,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
                         <Typography variant="body2" title={domain || transaction.to}>
-                            {domain ? Others.formatDomainName?.(domain) : Others.formatAddress(transaction.to, 4)}
+                            {domain ? Others.formatDomainName(domain) : Others.formatAddress(transaction.to, 4)}
                         </Typography>
                         <Link
                             sx={{ height: 21 }}

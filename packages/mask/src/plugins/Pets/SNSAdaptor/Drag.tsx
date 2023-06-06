@@ -45,7 +45,7 @@ class Draggable extends React.PureComponent<React.PropsWithChildren<DraggablePro
 
     onMouseDown(e: React.MouseEvent) {
         if (e.button !== 0) return
-        if (!this.ref?.current) return
+        if (!this.ref.current) return
         const divDom = this.ref.current
         const left = divDom.offsetLeft
         const top = divDom.offsetTop

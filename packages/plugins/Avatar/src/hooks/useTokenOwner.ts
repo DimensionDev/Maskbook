@@ -22,7 +22,7 @@ export function useCheckTokenOwner(
     const getAddress = useGetAddress()
 
     return useAsyncRetry(async () => {
-        if (!socialIdentity?.identifier?.userId || socialIdentity?.identifier.userId === '$unknown') return
+        if (!socialIdentity?.identifier?.userId || socialIdentity.identifier.userId === '$unknown') return
         if (!address || !tokenId) return
 
         const token = await Web3.getNonFungibleToken(address, tokenId)
@@ -32,15 +32,15 @@ export function useCheckTokenOwner(
                 (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
             ) ?? EMPTY_LIST
 
-        const storage = await getAddress(getSiteType() as EnhanceableSite, socialIdentity.identifier?.userId ?? '')
+        const storage = await getAddress(getSiteType() as EnhanceableSite, socialIdentity.identifier.userId ?? '')
         if (storage?.address) {
             const isOwner = await Web3.getNonFungibleTokenOwnership(address, tokenId, storage.address, schemaType)
             if (isOwner)
                 return {
                     isOwner,
-                    name: token?.contract?.name ?? token?.metadata?.name ?? '',
-                    symbol: token?.contract?.symbol ?? 'ETH',
-                    schema: token?.schema,
+                    name: token.contract?.name ?? token.metadata?.name ?? '',
+                    symbol: token.contract?.symbol ?? 'ETH',
+                    schema: token.schema,
                 }
         }
 
@@ -49,16 +49,16 @@ export function useCheckTokenOwner(
             if (isOwner)
                 return {
                     isOwner,
-                    name: token?.contract?.name ?? token?.metadata?.name ?? '',
-                    symbol: token?.contract?.symbol ?? 'ETH',
-                    schema: token?.schema,
+                    name: token.contract?.name ?? token.metadata?.name ?? '',
+                    symbol: token.contract?.symbol ?? 'ETH',
+                    schema: token.schema,
                 }
         }
         return {
             isOwner: false,
-            name: token?.contract?.name ?? token?.metadata?.name ?? '',
-            symbol: token?.contract?.symbol ?? 'ETH',
-            schema: token?.schema,
+            name: token.contract?.name ?? token.metadata?.name ?? '',
+            symbol: token.contract?.symbol ?? 'ETH',
+            schema: token.schema,
         }
     }, [address, tokenId, schemaType, socialIdentity, Web3])
 }

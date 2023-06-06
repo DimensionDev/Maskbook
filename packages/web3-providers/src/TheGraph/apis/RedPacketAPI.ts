@@ -70,7 +70,7 @@ export class TheGraphRedPacketAPI {
             }),
         })
 
-        if (!response?.data?.redPackets?.length) return
+        if (!response.data.redPackets.length) return
         return response.data.redPackets.map((x) => ({
             contract_address: contractAddress,
             txid: x.txid,
@@ -128,7 +128,7 @@ export class TheGraphRedPacketAPI {
             }),
         })
 
-        if (!response?.data?.nftredPackets?.length) return
+        if (!response.data.nftredPackets.length) return
         return response.data.nftredPackets.map((x) => ({
             id: x.id,
             chainId,

@@ -16,7 +16,7 @@ export function getBackupPreviewInfo(json: NormalizedBackup.Data): BackupPreview
     let files = 0
 
     try {
-        files = Number((json.plugins?.['com.maskbook.fileservice'] as any)?.length || 0)
+        files = Number((json.plugins['com.maskbook.fileservice'] as any)?.length || 0)
     } catch {}
 
     const ownerPersonas = [...json.personas.values()].filter((persona) => !persona.privateKey.none)

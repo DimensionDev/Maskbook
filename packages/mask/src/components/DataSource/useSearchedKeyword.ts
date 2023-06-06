@@ -6,7 +6,7 @@ export function useSearchedKeyword() {
 
     useEffect(() => {
         const onLocationChange = () => {
-            if (!activatedSocialNetworkUI?.collecting?.getSearchedKeyword) return
+            if (!activatedSocialNetworkUI.collecting.getSearchedKeyword) return
             const kw = activatedSocialNetworkUI.collecting.getSearchedKeyword()
             setKeyword(kw)
         }

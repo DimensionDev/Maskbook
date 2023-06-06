@@ -42,7 +42,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
             )
             const receipt = await Web3.getTransactionReceipt(hash)
             if (!receipt?.status) return
-            return receipt?.transactionHash
+            return receipt.transactionHash
         } catch (error) {
             if (error instanceof Error) {
                 notifyError(error.message)

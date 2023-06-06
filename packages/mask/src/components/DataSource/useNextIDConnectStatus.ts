@@ -71,7 +71,7 @@ export function useNextIDConnectStatus(disableInitialVerify = false) {
             return NextIDVerificationStatus.HideVerifyDialog
 
         // Whether verified in next id server
-        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+        const platform = ui.configuration.nextIDConfig.platform as NextIDPlatform | undefined
         if (!platform) return NextIDVerificationStatus.Other
 
         const isBound = await NextIDProof.queryIsBound(currentPersona.identifier.publicKeyAsHex, platform, username)

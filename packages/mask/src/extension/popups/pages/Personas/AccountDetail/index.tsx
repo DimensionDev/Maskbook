@@ -51,7 +51,7 @@ const AccountDetail = memo(() => {
 
     const [confirmState, onConfirmReleaseBind] = useAsyncFn(async () => {
         try {
-            if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
+            if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount.platform)
                 return
 
             const result = await NextIDProof.createPersonaPayload(

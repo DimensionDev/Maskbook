@@ -43,7 +43,7 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
             }>
         >(chainId, path)
 
-        if (!response?.data?.content) return
+        if (!response?.data.content) return
 
         return {
             cursor: response.data.next,
@@ -165,7 +165,7 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
                 highest_price: undefined,
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'SOL',
-                royalty: collection.royalty?.toString(),
+                royalty: collection.royalty.toString(),
                 total_24h: undefined,
                 volume_24h: undefined,
                 average_volume_24h: undefined,

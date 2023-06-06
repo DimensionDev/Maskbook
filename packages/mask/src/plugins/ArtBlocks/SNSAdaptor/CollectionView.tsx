@@ -145,7 +145,7 @@ export function CollectionView(props: CollectionProps) {
                 <Link href={tokenLink} target="_blank">
                     <img
                         className={isImageLoaded ? classes.image : classes.hidden}
-                        src={resolveImageLinkOnArtBlocks(chainId, `${currentSelectedToken?.tokenId}.png`)}
+                        src={resolveImageLinkOnArtBlocks(chainId, `${currentSelectedToken.tokenId}.png`)}
                         alt="collection collectible"
                         onLoad={handleImageLoad}
                     />

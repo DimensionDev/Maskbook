@@ -105,7 +105,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
         const pluginIdByDefaultVerifiedWallet = defaultVerifiedWallet
-            ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
+            ? resolveNextID_NetworkPluginID(defaultVerifiedWallet.platform)
             : undefined
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
@@ -136,8 +136,8 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             () => ({
                 name: defaultWalletName,
                 networkIcon: networkDescriptor?.icon,
-                providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
-                iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
+                providerIcon: !isNextIdWallet ? providerDescriptor.icon : undefined,
+                iconFilterColor: !isNextIdWallet ? providerDescriptor.iconFilterColor : '',
                 formattedAddress: walletIdentity ? Others.formatAddress(walletIdentity, 4) : '',
                 addressLink: walletIdentity
                     ? Others.explorerResolver.addressLink(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)

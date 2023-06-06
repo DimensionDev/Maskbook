@@ -8,7 +8,7 @@ export function useCompactDetection() {
 
     useLayoutEffect(() => {
         if (!containerRef.current) return
-        setCompact(containerRef.current?.offsetWidth < 100)
+        setCompact(containerRef.current.offsetWidth < 100)
     }, [])
 
     return { compact, containerRef }

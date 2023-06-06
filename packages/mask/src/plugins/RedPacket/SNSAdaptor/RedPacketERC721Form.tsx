@@ -279,7 +279,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         collection?.assets?.length
             ? ''
             : collection?.source === SourceType.SimpleHash
-            ? collection?.id
+            ? collection.id
             : collection?.address,
         account,
         NetworkPluginID.PLUGIN_EVM,
@@ -292,7 +292,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         next()
     }, [assets_.length])
 
-    const assets = collection?.assets?.length ? collection?.assets : assets_
+    const assets = collection?.assets?.length ? collection.assets : assets_
 
     const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index } as OrderedERC721Token))
 
@@ -356,7 +356,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH, tr])
 
     useEffect(() => {
-        setIsNFTRedPacketLoaded?.(balance > 0)
+        setIsNFTRedPacketLoaded(balance > 0)
     }, [balance > 0])
 
     if (openSelectNFTDialog) {

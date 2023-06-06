@@ -11,11 +11,11 @@ export function setupStorage(_: ScopedStorage<StorageOptions>) {
 }
 
 export function useTermsConfirmed(): [value: boolean | undefined, callback: (newValue: boolean) => void] {
-    const value = useSubscription(so?.storage?.termsConfirmed?.subscription)
+    const value = useSubscription(so.storage.termsConfirmed.subscription)
     return [
         value,
         function setConfirmed(newValue: boolean) {
-            so?.storage.termsConfirmed.setValue(newValue)
+            so.storage.termsConfirmed.setValue(newValue)
         },
     ]
 }

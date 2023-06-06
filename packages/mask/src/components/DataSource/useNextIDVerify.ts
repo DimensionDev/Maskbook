@@ -10,7 +10,7 @@ import { activatedSocialNetworkUI } from '../../social-network/index.js'
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const getPostIdFromNewPostToast = activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast
-    const postMessage = activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText
+    const postMessage = activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform
 
     return useAsyncFn(
@@ -68,7 +68,7 @@ export function useNextIDVerify() {
             if (!isBound) throw new Error('Failed to verify.')
 
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
-            await verifiedCallback?.()
+            await verifiedCallback()
         },
         [postMessage, platform],
     )

@@ -19,7 +19,7 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
 
                 return {
                     chainId: context.chainId,
-                    tokenInAddress: token?.address,
+                    tokenInAddress: token.address,
                     tokenInAmount: context.value,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_deposit_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_deposit', {
@@ -30,27 +30,27 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
                             tokenAmountDescription: getTokenAmountDescription(context.value, token),
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_deposit_fail', {
-                            symbol: token?.symbol ?? 'token',
+                            symbol: token.symbol ?? 'token',
                         }),
                     },
                 }
             }
 
             // Aave
-            if (name === 'deposit' && parameters?.amount && parameters?.asset) {
-                const token = await this.Hub.getFungibleToken(parameters?.asset ?? '', { chainId: context.chainId })
+            if (name === 'deposit' && parameters?.amount && parameters.asset) {
+                const token = await this.Hub.getFungibleToken(parameters.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: parameters?.amount,
+                    tokenInAmount: parameters.amount,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_deposit_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_deposit', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.amount, token),
+                        tokenAmountDescription: getTokenAmountDescription(parameters.amount, token),
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_deposit_success', {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.amount, token),
+                            tokenAmountDescription: getTokenAmountDescription(parameters.amount, token),
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_deposit_fail', {
                             symbol: token?.symbol ?? 'token',
@@ -59,20 +59,20 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
                 }
             }
 
-            if (name === 'withdraw' && parameters?.amount && parameters?.asset) {
-                const token = await this.Hub.getFungibleToken(parameters?.asset ?? '', { chainId: context.chainId })
+            if (name === 'withdraw' && parameters?.amount && parameters.asset) {
+                const token = await this.Hub.getFungibleToken(parameters.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: parameters?.amount,
+                    tokenInAmount: parameters.amount,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_withdraw_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_withdraw', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.amount, token),
+                        tokenAmountDescription: getTokenAmountDescription(parameters.amount, token),
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_withdraw_success', {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.amount, token),
+                            tokenAmountDescription: getTokenAmountDescription(parameters.amount, token),
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_withdraw_fail', {
                             symbol: token?.symbol ?? 'token',

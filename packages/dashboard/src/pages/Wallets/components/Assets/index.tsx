@@ -100,7 +100,7 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                                         await selectFungibleToken({
                                             whitelist: [],
                                             title: t.wallets_add_token(),
-                                            chainId: network?.chainId,
+                                            chainId: network.chainId,
                                             enableManage: false,
                                         })
                                     } else {

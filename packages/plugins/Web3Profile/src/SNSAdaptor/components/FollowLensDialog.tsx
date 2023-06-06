@@ -284,7 +284,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const avatar = useMemo(() => {
         if (!profile?.picture?.original) return
-        return resolveIPFS_URL(profile?.picture?.original.url)
+        return resolveIPFS_URL(profile.picture.original.url)
     }, [profile?.picture?.original])
 
     return (
@@ -309,11 +309,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                         <Typography className={classes.followers}>
                             <Translate.followers
                                 components={{ strong: <strong /> }}
-                                values={{ followers: String(profile?.stats?.totalFollowers ?? '0') }}
+                                values={{ followers: String(profile?.stats.totalFollowers ?? '0') }}
                             />
                             <Translate.following
                                 components={{ strong: <strong /> }}
-                                values={{ following: String(profile?.stats?.totalFollowing ?? '0') }}
+                                values={{ following: String(profile?.stats.totalFollowing ?? '0') }}
                             />
                         </Typography>
                         <Box className={classes.actions}>

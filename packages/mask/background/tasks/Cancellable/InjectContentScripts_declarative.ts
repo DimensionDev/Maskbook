@@ -10,7 +10,7 @@ import {
 import type { Scripting } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (typeof browser.scripting?.registerContentScripts === 'function') {
+if (typeof browser.scripting.registerContentScripts === 'function') {
     await unregisterExistingScripts()
     await browser.scripting.registerContentScripts([
         ...prepareMainWorldScript(['<all_urls>']),

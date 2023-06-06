@@ -92,7 +92,7 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
         <>
             {actions.map((action) => {
                 const metadata = action.metadata
-                const isUp = !!metadata?.action && ['supply', 'add', 'repay', 'collect'].includes(metadata?.action)
+                const isUp = !!metadata?.action && ['supply', 'add', 'repay', 'collect'].includes(metadata.action)
 
                 return (
                     <CardFrame

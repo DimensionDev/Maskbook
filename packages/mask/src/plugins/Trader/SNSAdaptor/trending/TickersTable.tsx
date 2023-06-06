@@ -116,7 +116,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
                         arrow>
                         <Box className={classes.pair}>
                             <Link
-                                color={(theme) => theme.palette.maskColor?.primary}
+                                color={(theme) => theme.palette.maskColor.primary}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href={ticker.trade_url}>

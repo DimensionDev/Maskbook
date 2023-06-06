@@ -142,7 +142,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
     }
 
     const tickerRows: JSX.Element[] =
-        activities?.map((x, index) => {
+        activities.map((x, index) => {
             const cellMap: Record<Cells, React.ReactNode> = {
                 nft: (
                     <div className={classes.nftCell}>

@@ -53,16 +53,16 @@ export function UnlockDialog(props: UnlockDialogProps) {
         const picked = await selectFungibleToken({
             disableNativeToken: true,
             disableSearchBar: true,
-            selectedTokens: token?.address ? [token.address] : [],
+            selectedTokens: token.address ? [token.address] : [],
             whitelist: tokens.map((x) => x.address),
         })
         if (picked) setToken(picked as FungibleToken<ChainId, SchemaType.ERC20>)
-    }, [tokens, token?.address])
+    }, [tokens, token.address])
     // #endregion
     // #region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = rightShift(rawAmount || '0', token?.decimals)
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
+    const amount = rightShift(rawAmount || '0', token.decimals)
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token.address ?? '')
     // #endregion
     if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (

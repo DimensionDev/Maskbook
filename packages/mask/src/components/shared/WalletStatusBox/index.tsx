@@ -94,7 +94,7 @@ const useStyles = makeStyles<{
         color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor?.dark,
+        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
     },
     statusBox: {
         position: 'relative',
@@ -112,11 +112,11 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
+        contentBackground: providerDescriptor.backgroundGradient ?? theme.palette.maskColor.publicBg,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor:
-            providerDescriptor?.type === ProviderType.MaskWallet
+            providerDescriptor.type === ProviderType.MaskWallet
                 ? theme.palette.maskColor.dark
                 : theme.palette.text.primary,
     })
@@ -185,11 +185,11 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 <WalletIcon
                     size={30}
                     badgeSize={12}
-                    mainIcon={providerDescriptor?.icon}
+                    mainIcon={providerDescriptor.icon}
                     badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
                 />
                 <div className={classes.accountInfo}>
-                    {ProviderType.MaskWallet === providerDescriptor?.type ? (
+                    {ProviderType.MaskWallet === providerDescriptor.type ? (
                         <Typography className={classes.accountName}>{wallet?.name}</Typography>
                     ) : null}
                     <div className={classes.infoRow}>
@@ -238,7 +238,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={async () => {
-                                props.closeDialog?.()
+                                props.closeDialog()
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
                                 closeWalletStatusDialog()
@@ -252,7 +252,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             size="small"
                             onClick={() => {
                                 openSelectProviderDialog()
-                                props.closeDialog?.()
+                                props.closeDialog()
                             }}>
                             {t('wallet_status_button_change')}
                         </Button>

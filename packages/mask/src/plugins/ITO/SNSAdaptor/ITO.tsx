@@ -309,7 +309,7 @@ export function ITO(props: ITO_Props) {
         return new BigNumber(buyInfo.amount).minus(buyInfo.amount_sold)
     }, [tradeInfo])
     // out of stock
-    const refundAllAmount = tradeInfo?.buyInfo && isZero(tradeInfo?.buyInfo.amount_sold)
+    const refundAllAmount = tradeInfo?.buyInfo && isZero(tradeInfo.buyInfo.amount_sold)
 
     const onShareSuccess = useCallback(async () => {
         activatedSocialNetworkUI.utils.share?.(successShareText)

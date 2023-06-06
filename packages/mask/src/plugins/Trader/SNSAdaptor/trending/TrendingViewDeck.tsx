@@ -84,7 +84,7 @@ const useStyles = makeStyles<{
             overflow: 'hidden',
             fontSize: 18,
             fontWeight: 700,
-            color: theme.palette.maskColor?.dark,
+            color: theme.palette.maskColor.dark,
         },
         symbol: {
             fontWeight: 700,
@@ -107,10 +107,10 @@ const useStyles = makeStyles<{
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
-            color: theme.palette.maskColor?.white,
+            color: theme.palette.maskColor.white,
             fontWeight: 400,
             fontSize: 10,
-            background: theme.palette.maskColor?.dark,
+            background: theme.palette.maskColor.dark,
             borderRadius: theme.spacing(0.5),
         },
         avatar: {
@@ -231,14 +231,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
             CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                 open: true,
-                userId: identity?.identifier?.userId,
+                userId: identity.identifier.userId,
                 anchorBounding,
                 anchorEl,
                 address,
                 external: true,
             })
 
-            setActive?.(false)
+            setActive(false)
         },
         [JSON.stringify(identity), isCollectionProjectPopper, anchorBounding, anchorEl],
     )

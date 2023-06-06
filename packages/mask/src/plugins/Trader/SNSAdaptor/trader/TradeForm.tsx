@@ -44,11 +44,11 @@ const useStyles = makeStyles()((theme) => {
             cursor: 'pointer',
             color: Sniffings.is_dashboard_page
                 ? `${theme.palette.text.primary}!important`
-                : theme.palette.maskColor?.main,
+                : theme.palette.maskColor.main,
         },
         card: {
-            background: Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
-            border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+            background: Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor.input,
+            border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor.line}`,
             borderRadius: 12,
             padding: 12,
         },
@@ -102,7 +102,7 @@ const useStyles = makeStyles()((theme) => {
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor.bottom,
             paddingRight: 8,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
@@ -111,11 +111,11 @@ const useStyles = makeStyles()((theme) => {
                 fontSize: 14,
                 marginRight: 12,
                 fontWeight: 700,
-                color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.main : undefined,
+                color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.main : undefined,
             },
             ['&:hover']: {
                 backgroundColor: `${
-                    Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+                    Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor.bottom
                 }!important`,
                 boxShadow: `0px 4px 30px ${alpha(
                     theme.palette.maskColor.shadowBottom,
@@ -137,13 +137,13 @@ const useStyles = makeStyles()((theme) => {
         noToken: {
             borderRadius: '18px !important',
             backgroundColor: `${
-                Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
+                Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor.primary
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
                     Sniffings.is_dashboard_page
                         ? theme.palette.primary.main
-                        : lighten(theme.palette.maskColor?.primary, 0.1)
+                        : lighten(theme.palette.maskColor.primary, 0.1)
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
@@ -166,7 +166,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             fontWeight: 700,
             lineHeight: '18px',
-            color: theme.palette.maskColor?.second,
+            color: theme.palette.maskColor.second,
             marginBottom: 12,
         },
     }
@@ -219,7 +219,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const [isExpand, setExpand] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+        const isSNSClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
         const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
         const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
 
@@ -300,7 +300,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             setExpand(false)
                         }}
                         isFocus
-                        isBest={bestTrade.value?.provider === focusedTrade?.value?.provider}
+                        isBest={bestTrade.value?.provider === focusedTrade.value?.provider}
                     />
                 )
             return null

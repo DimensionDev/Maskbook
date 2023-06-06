@@ -11,7 +11,7 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
         const idx = listOfTopic0.indexOf(log.topics[0])
         if (idx === -1) return
         const abi = abis[idx]
-        const inputs = abi?.inputs ?? []
+        const inputs = abi.inputs ?? []
         return {
             // more: https://web3js.readthedocs.io/en/v1.2.11/web3-eth-abi.html?highlight=decodeLog#decodelog
             returnValues: web3.eth.abi.decodeLog(inputs, log.data, abi.anonymous ? log.topics : log.topics.slice(1)),

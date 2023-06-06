@@ -49,20 +49,20 @@ const getPostId = (node: HTMLElement | HTMLLinkElement) => {
     }
 
     const ele = node.querySelector<HTMLLinkElement>('div > a')
-    const href = ele?.href || (node as HTMLLinkElement)?.href
+    const href = ele?.href || (node as HTMLLinkElement).href
 
-    if (href?.startsWith('https')) {
+    if (href.startsWith('https')) {
         return href.replace(MIRROR_LINK_PREFIX, '')
     }
 
-    if (href) return href?.replace('/', '')
+    if (href) return href.replace('/', '')
 
     return ''
 }
 
 async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
     if (!node) return
-    if (cancel?.aborted) return
+    if (cancel.aborted) return
     const postId = getPostId(node)
     if (!postId) return
     const publisher = await Mirror.getPostPublisher(postId)
@@ -71,7 +71,7 @@ async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
         postId,
         writers: {
             author: formatWriter(publisher.author, false),
-            coAuthors: publisher?.coAuthors.map((x) => formatWriter(x, false)),
+            coAuthors: publisher.coAuthors.map((x) => formatWriter(x, false)),
         },
     }
 }
@@ -101,11 +101,11 @@ async function registerPostCollectorInner(
                     if (!result) return
 
                     refs.postID.value = result.postId
-                    refs.postBy.value = result.writers?.author.identifier || null
-                    refs.nickname.value = result.writers?.author.nickname || null
-                    refs.avatarURL.value = result.writers?.author.avatar || null
+                    refs.postBy.value = result.writers.author.identifier || null
+                    refs.nickname.value = result.writers.author.nickname || null
+                    refs.avatarURL.value = result.writers.author.avatar || null
                     refs.postCoAuthors.value =
-                        (result?.writers?.coAuthors
+                        (result.writers.coAuthors
                             .map((x) => ({
                                 nickname: x.nickname,
                                 avatarURL: x.avatar ? new URL(x.avatar) : undefined,

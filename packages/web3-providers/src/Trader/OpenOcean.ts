@@ -39,10 +39,10 @@ export class OpenOcean implements TraderAPI.Provider {
             estimatedGas: string
         }>(
             urlcat(OPENOCEAN_BASE_URL, `/${request.chainId}/swap`, {
-                inTokenSymbol: request.toToken?.symbol,
-                inTokenAddress: request.fromToken?.address,
-                outTokenSymbol: request.toToken?.symbol,
-                outTokenAddress: request.toToken?.address,
+                inTokenSymbol: request.toToken.symbol,
+                inTokenAddress: request.fromToken.address,
+                outTokenSymbol: request.toToken.symbol,
+                outTokenAddress: request.toToken.address,
                 amount: request.fromAmount,
                 gasPrice: 5000000000,
                 slippage: request.slippage,

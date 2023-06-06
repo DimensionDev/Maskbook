@@ -28,7 +28,7 @@ export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
         const response = await fetchJSON<{ items: TrendingAPI.MarketInfo[] } | undefined>(
             `${TOKEN_VIEW_ROOT_URL}&symbols=${symbol}&interval=${INTERVAL}`,
         )
-        const marketInfo = response?.items?.[0]
+        const marketInfo = response?.items[0]
         if (!marketInfo) throw new Error('Failed to fetch market info.')
         return marketInfo
     }

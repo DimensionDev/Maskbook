@@ -57,8 +57,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 async () => {
                     const { bearerToken, queryToken, csrfToken } = await getTokens()
                     const response = await getUserNFTContainer(screenName, queryToken, bearerToken, csrfToken)
-                    const result = response?.data.user?.result
-                    if (!result?.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
+                    const result = response.data.user.result
+                    if (!result.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
 
                     return {
                         address: result.nft_avatar_metadata.smart_contract.address,

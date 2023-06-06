@@ -38,7 +38,7 @@ export function useGasLimit(
                 return Contract.getERC20Contract(contractAddress, {
                     chainId,
                 })
-                    ?.methods?.transfer(recipient, amount ?? 0)
+                    ?.methods.transfer(recipient, amount ?? 0)
                     .estimateGas({
                         from: account,
                     })

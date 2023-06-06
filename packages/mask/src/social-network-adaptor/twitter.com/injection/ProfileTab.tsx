@@ -183,13 +183,13 @@ export function ProfileTabForTokenAndPersona() {
     const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
-    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
+    const currentVisitingUserId = currentVisitingSocialIdentity.identifier?.userId
     const { value: collectionList, loading } = useCollectionByTwitterHandler(currentVisitingUserId)
     const collectionResult = collectionList?.[0]
     const twitterHandler =
-        (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.collection
+        (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).collection
             ?.socialLinks?.twitter ||
-        (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
+        (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).socialLinks?.twitter
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
@@ -220,7 +220,7 @@ export function ProfileTabForTokenAndPersona() {
 export function ProfileTabForDAO() {
     const { classes } = useStyles()
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
-    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
+    const currentVisitingUserId = currentVisitingSocialIdentity.identifier?.userId ?? ''
     const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
 
     const { value: snapshotDisabled } = useAsync(() => {

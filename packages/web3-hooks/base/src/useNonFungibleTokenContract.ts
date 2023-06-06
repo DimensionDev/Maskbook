@@ -17,6 +17,6 @@ export function useNonFungibleTokenContract<S extends 'all' | void = void, T ext
         NonFungibleTokenContract<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>> | undefined
     >(async () => {
         if (!address) return
-        return Web3.getNonFungibleTokenContract?.(address, schemaType)
+        return Web3.getNonFungibleTokenContract(address, schemaType)
     }, [address, schemaType, Web3])
 }

@@ -53,7 +53,7 @@ export function useNonFungibleTokenActivities(
         )
 
         setNonFungibleTokenActivities((currentActivities) => {
-            if (!result || currentActivities[result.cursor] || !result?.content) return currentActivities
+            if (!result || currentActivities[result.cursor] || !result.content) return currentActivities
             cursorRef.current = result.cursor
 
             return { ...currentActivities, [cursorRef.current]: result.content }

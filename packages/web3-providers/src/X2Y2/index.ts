@@ -146,7 +146,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return this.getOrders(address, tokenId, OrderSide.Sell)
     }
     async getEvents(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
-        const cursors = options?.indicator?.id?.split('_')
+        const cursors = options?.indicator?.id.split('_')
         const listCursor = first(cursors)
         const saleCursor = last(cursors)
 

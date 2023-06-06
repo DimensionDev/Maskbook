@@ -139,7 +139,7 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
             </Typography>
             {metadata ? (
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
-                    <Image classes={{ container: classes.tokenIcon }} src={metadata?.image} height={40} width={40} />
+                    <Image classes={{ container: classes.tokenIcon }} src={metadata.image} height={40} width={40} />
                     <Typography className={classes.value}>
                         {t.token_value({
                             value: formatValue(metadata),

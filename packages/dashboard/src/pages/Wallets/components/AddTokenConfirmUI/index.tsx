@@ -57,11 +57,11 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             {token?.address ? (
                                 <TokenIcon
-                                    chainId={token?.chainId}
-                                    address={token?.address ?? ''}
+                                    chainId={token.chainId}
+                                    address={token.address ?? ''}
                                     name={token.name}
                                     symbol={token.symbol}
-                                    logoURL={token?.logoURL}
+                                    logoURL={token.logoURL}
                                     AvatarProps={{ sx: { width: 48, height: 48 } }}
                                 />
                             ) : null}

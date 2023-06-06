@@ -62,7 +62,7 @@ export async function finishUserGuide(site: EnhanceableSite) {
 }
 
 export const useTipsUserGuide = (site: EnhanceableSite) => {
-    const settings = useSubscription(guideStorage?.storage?.userGuide.subscription)
+    const settings = useSubscription(guideStorage.storage.userGuide.subscription)
 
     const setStep = useCallback(
         async (to: number) => {

@@ -111,7 +111,7 @@ export function usePriceLineChart(
                         .text((d) => d),
                 )
 
-            const textBBox = (text.node() as SVGTextElement)?.getBBox()
+            const textBBox = (text.node() as SVGTextElement).getBBox()
             if (textBBox) {
                 const { x, y, width: w, height: h } = textBBox
                 text.attr('transform', `translate(${x},${15 - y})`)

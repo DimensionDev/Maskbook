@@ -69,7 +69,7 @@ function TagsDialog(props: TagsDialogProps) {
             {tags ? (
                 <InjectedDialog open={open} title="Tags" onClose={onClose}>
                     <DialogContent>
-                        {tags?.map((x, i) => (
+                        {tags.map((x, i) => (
                             <Linking key={i} href={x}>
                                 <Chip label={x.replace(/-/g, ' ')} className={classes.chip} />
                             </Linking>

@@ -192,7 +192,7 @@ export function Deploy({ open }: { open: boolean }) {
 
     useEffect(() => {
         if (manager) return
-        if (personaManagers?.length) {
+        if (personaManagers.length) {
             const firstPersona = first(personaManagers)
 
             setManager({
@@ -276,7 +276,7 @@ export function Deploy({ open }: { open: boolean }) {
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
                                 {manager?.type === 'Persona'
-                                    ? formatPersonaFingerprint(manager?.identifier?.rawPublicKey ?? '', 4)
+                                    ? formatPersonaFingerprint(manager.identifier?.rawPublicKey ?? '', 4)
                                     : formatEthereumAddress(manager?.address ?? '', 4)}
                             </Typography>
                         </Box>
@@ -321,16 +321,16 @@ export function Deploy({ open }: { open: boolean }) {
                     <Box className={classes.walletStatus}>
                         <WalletDescription
                             pending={false}
-                            providerIcon={maskProviderDescriptor?.icon}
+                            providerIcon={maskProviderDescriptor.icon}
                             networkIcon={polygonDescriptor?.icon}
-                            iconFilterColor={maskProviderDescriptor?.iconFilterColor}
+                            iconFilterColor={maskProviderDescriptor.iconFilterColor}
                             name={signWallet?.name}
                             formattedAddress={
                                 signWallet?.address ? formatEthereumAddress(signWallet.address, 4) : undefined
                             }
                             addressLink={
                                 signWallet?.address && chainId
-                                    ? explorerResolver.addressLink(chainId, signWallet?.address)
+                                    ? explorerResolver.addressLink(chainId, signWallet.address)
                                     : undefined
                             }
                         />
@@ -352,11 +352,11 @@ export function Deploy({ open }: { open: boolean }) {
                         {
                             name: 'Smart pay',
                             owner: manager?.address,
-                            address: contractAccount?.address,
+                            address: contractAccount.address,
                             identifier: manager?.identifier?.toText(),
                             hasDerivationPath: false,
                             hasStoredKeyInfo: false,
-                            id: contractAccount?.address,
+                            id: contractAccount.address,
                             createdAt: new Date(),
                             updatedAt: new Date(),
                         },

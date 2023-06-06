@@ -40,7 +40,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         retry()
     }, [approveState.loading])
     const validationMessage = useMemo(() => {
-        if (!collection?.address || !Others.isValidAddress(collection?.address))
+        if (!collection?.address || !Others.isValidAddress(collection.address))
             return t.plugin_wallet_select_a_nft_contract()
         if (!owner || !Others.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
         if (!operator || !Others.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
@@ -61,7 +61,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                     symbol: collection?.symbol
                         ? collection.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : collection?.symbol
+                            : collection.symbol
                         : 'All',
                 })}
             </ActionButton>
@@ -98,9 +98,9 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 {...props.ActionButtonProps}>
                 {t.plugin_wallet_approve_all_nft({
                     symbol: collection?.symbol
-                        ? collection?.symbol.toLowerCase() === 'unknown'
+                        ? collection.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : collection?.symbol
+                            : collection.symbol
                         : 'All',
                 })}
             </ActionButton>

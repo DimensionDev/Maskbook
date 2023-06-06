@@ -33,7 +33,7 @@ import { difference, noop } from 'lodash-es'
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: Array<() => void> = []
-        opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
+        opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn()))
 
         // #region Mentioned links
         const linksSubscribe: Subscription<string[]> = (() => {

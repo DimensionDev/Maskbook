@@ -67,13 +67,13 @@ export function useUnfollow(
 
                 let hash: string | undefined
                 try {
-                    onSuccess?.(cloneEvent)
-                    setLoading?.(false)
+                    onSuccess(cloneEvent)
+                    setLoading(false)
                     const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
                     if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
                     else hash = broadcast?.txHash
                 } catch {
-                    onFailed?.()
+                    onFailed()
                     setLoading(true)
 
                     const followNFTContract = Contract.getWeb3Contract<LensFollowNFT>(
@@ -85,7 +85,7 @@ export function useUnfollow(
                         { from: account },
                     )
                     hash = await Web3.sendTransaction(tx)
-                    onSuccess?.(cloneEvent)
+                    onSuccess(cloneEvent)
                     setLoading(false)
                 }
 
@@ -104,7 +104,7 @@ export function useUnfollow(
                     !error.message.includes('User rejected transaction') &&
                     !error.message.includes('RPC Error')
                 ) {
-                    onFailed?.()
+                    onFailed()
                     showSingletonSnackbar(t.unfollow_lens_handle(), {
                         processing: false,
                         variant: 'error',

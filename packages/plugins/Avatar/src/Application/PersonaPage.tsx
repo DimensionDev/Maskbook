@@ -33,7 +33,7 @@ export function PersonaPage() {
     const { ownProofChanged } = useSNSAdaptorContext()
     const myPersonas = useAllPersonas()
     const _persona = useSubscription(context.currentPersona)
-    const currentPersona = myPersonas?.find(
+    const currentPersona = myPersonas.find(
         (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )
 

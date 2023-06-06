@@ -174,7 +174,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                 payment_token: PaymentToken
             }>(path)
 
-            const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
+            const firstFloorPriceTimeStamp = response.floor_prices[0]?.timestamp
             cursor =
                 !firstFloorPriceTimeStamp ||
                 isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
@@ -235,7 +235,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                 next_cursor: string
             }>(path)
 
-            const firstFloorPriceTimeStamp = response.transfers?.[0]?.timestamp
+            const firstFloorPriceTimeStamp = response.transfers[0]?.timestamp
 
             cursor =
                 !firstFloorPriceTimeStamp ||
@@ -268,7 +268,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
         const collections = response.collections
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
+            .filter((x) => x.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
             .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
@@ -343,7 +343,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                       market_name: NonFungibleMarketplace.OpenSea,
                       volume_24h: openseaStats.volume24h,
                       floor_price: openseaStats.floorPrice,
-                      price_symbol: paymentToken?.symbol,
+                      price_symbol: paymentToken.symbol,
                       sales_24: openseaStats.count24h,
                   }
                 : null,
@@ -354,7 +354,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,
                       floor_price: looksrareStats.floorPrice,
-                      price_symbol: paymentToken?.symbol,
+                      price_symbol: paymentToken.symbol,
                       sales_24: looksrareStats.count24h,
                   }
                 : null,
@@ -365,9 +365,9 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             dataProvider: SourceType.SimpleHash,
             contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
             currency: {
-                id: paymentToken?.payment_token_id,
-                symbol: paymentToken?.symbol,
-                name: paymentToken?.symbol,
+                id: paymentToken.payment_token_id,
+                symbol: paymentToken.symbol,
+                name: paymentToken.symbol,
                 chainId,
             },
             coin: {
@@ -424,13 +424,13 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             },
             market: {
                 total_supply: collection.total_quantity,
-                current_price: leftShift(collection.floor_prices[0]?.value, paymentToken?.decimals).toString(),
-                floor_price: leftShift(collection.floor_prices[0]?.value, paymentToken?.decimals).toString(),
+                current_price: leftShift(collection.floor_prices[0]?.value, paymentToken.decimals).toString(),
+                floor_price: leftShift(collection.floor_prices[0]?.value, paymentToken.decimals).toString(),
                 owners_count: collection.distinct_owner_count,
-                volume_24h: tickers?.[0]?.volume_24h,
-                total_24h: tickers?.[0]?.sales_24,
-                price_symbol: paymentToken?.symbol || 'ETH',
-                price_token_address: paymentToken?.address || '',
+                volume_24h: tickers[0]?.volume_24h,
+                total_24h: tickers[0]?.sales_24,
+                price_symbol: paymentToken.symbol || 'ETH',
+                price_token_address: paymentToken.address || '',
             },
             tickers,
         }

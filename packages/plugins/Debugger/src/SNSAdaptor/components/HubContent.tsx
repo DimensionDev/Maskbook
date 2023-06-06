@@ -169,7 +169,7 @@ export function HubContent(props: HubContentProps) {
                                                 console.log(`Query ${key}:`)
                                                 console.log(
                                                     // @ts-expect-error the ...parameters call is unsafe
-                                                    await HubAll.use(pluginID)[key]?.(...parameters, {
+                                                    await HubAll.use(pluginID)[key](...parameters, {
                                                         chainId,
                                                         account,
                                                         sourceType,

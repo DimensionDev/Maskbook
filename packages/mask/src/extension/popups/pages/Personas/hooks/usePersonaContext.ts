@@ -44,7 +44,7 @@ function usePersonaContext() {
 
     const { personas } = useSSRPersonaInformation()
 
-    const currentPersona = personas?.find(
+    const currentPersona = personas.find(
         (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
     )
     const avatar = currentPersona?.avatar

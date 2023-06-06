@@ -59,7 +59,7 @@ export function regexMatch(input: string, pattern: RegExp, index: number | null 
 export async function attachNextIDToProfile(nextID: ProfileInformationFromNextID) {
     const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
-    if (!nextID?.fromNextID || !nextID.linkedPersona || !whoAmI) return
+    if (!nextID.fromNextID || !nextID.linkedPersona || !whoAmI) return
     const [rpc, emit] = batch(notify(Services.Identity))
     nextID.linkedTwitterNames?.forEach((x) => {
         const newItem = {

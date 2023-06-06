@@ -19,7 +19,7 @@ export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptP
         <AdditionalContent
             title={t('service_decryption_failed')}
             titleIcon="error"
-            message={error?.message}
+            message={error.message}
             headerActions={wrapAuthorDifferentMessage(author, postedBy, void 0)}
         />
     )

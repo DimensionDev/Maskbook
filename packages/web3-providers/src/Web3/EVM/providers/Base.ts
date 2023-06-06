@@ -98,13 +98,13 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
                 ],
             })
         } catch (error) {
-            const errorMessage = (error as { message?: string } | undefined)?.message
+            const errorMessage = (error as { message?: string } | undefined).message
 
             // error message if the chain doesn't exist from metamask
             // Unrecognized chain ID "xxx". Try adding the chain using wallet_addEthereumChain first.
             if (
                 typeof errorMessage === 'string' &&
-                errorMessage?.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN)
+                errorMessage.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN)
             ) {
                 await this.request<void>({
                     method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,

@@ -21,7 +21,7 @@ export class FireflyGetterSetter {
                 address,
             }),
         )
-        if (!response.metaData?.value) return
+        if (!response.metaData.value) return
         return parseJSON<T>(response.metaData.value)
     }
 

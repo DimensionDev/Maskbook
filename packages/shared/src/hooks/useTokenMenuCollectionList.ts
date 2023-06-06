@@ -8,7 +8,7 @@ export function useTokenMenuCollectionList(
 ) {
     const collectionList = uniqBy(
         collectionList_,
-        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
+        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name.toLowerCase()}_${x.source}`,
     )
 
     const SourceTypeList = collectionList.map((x) => x.source)

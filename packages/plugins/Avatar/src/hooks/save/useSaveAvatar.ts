@@ -13,7 +13,7 @@ export function useSaveAvatar(pluginID?: NetworkPluginID) {
             if (avatar.userId === '$unknown') return
             await saveAddress(avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, network)
             const avatarStorage = Web3Storage.createKVStorage(`${NFT_AVATAR_METADATA_STORAGE}_${network}`)
-            avatarStorage?.set<AvatarMeta>(avatar.userId, {
+            avatarStorage.set<AvatarMeta>(avatar.userId, {
                 ...avatar,
                 sign,
             })

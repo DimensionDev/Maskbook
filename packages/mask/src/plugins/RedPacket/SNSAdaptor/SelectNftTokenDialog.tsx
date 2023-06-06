@@ -293,18 +293,18 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     let nextToken: OrderedERC721Token | undefined = findToken
                     while (nextToken) {
                         unselectedTokenIdList.push(nextToken.tokenId)
-                        const nextTokenIndex: number = (nextToken?.index ?? 0) + 1
+                        const nextTokenIndex: number = (nextToken.index ?? 0) + 1
                         nextToken = tokenDetailedSelectedListSorted.find((v) => (v.index ?? 0) === nextTokenIndex)
                     }
                     setTokenDetailedSelectedList(
                         tokenDetailedSelectedList.filter((v) => !unselectedTokenIdList.includes(v.tokenId)),
                     )
                 } else {
-                    const lastSelectedToken = tokenDetailedSelectedListSorted.filter((v) => (v?.index ?? 0) < index)[0]
+                    const lastSelectedToken = tokenDetailedSelectedListSorted.filter((v) => (v.index ?? 0) < index)[0]
 
                     const lastSelectedTokenIndex = findLastIndex(
                         tokenDetailedOwnerList,
-                        (v, i) => v.tokenId === lastSelectedToken?.tokenId && i < index,
+                        (v, i) => v.tokenId === lastSelectedToken.tokenId && i < index,
                     )
                     setTokenDetailedSelectedList(
                         tokenDetailedSelectedList.concat(

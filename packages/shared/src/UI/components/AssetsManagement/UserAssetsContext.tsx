@@ -72,7 +72,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
 
             // Fetch less in collection list, and more every time in expanded collection.
             // Also expand size if for id chunk, since there might be more assets than chunk size
-            const size = assetsState?.assets.length || collectionId ? 20 : 4
+            const size = assetsState.assets.length || collectionId ? 20 : 4
             const indicator = (!collectionId && indicatorMapRef.current.get(id)) || createIndicator()
             dispatch({ type: 'SET_LOADING_STATUS', id, loading: true })
             const pageable = await Hub.getNonFungibleAssetsByCollectionAndOwner(realId, address, {
@@ -105,7 +105,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
 
             const { id } = collection
             const assetsState = assetsMapRef.current[id]
-            if (assetsState?.finished || assetsState?.loading) return
+            if (assetsState.finished || assetsState.loading) return
             const allIds = id.split(',')
 
             if (allIds.length <= CHUNK_SIZE) return loadAssetsViaHub(collection)
@@ -129,11 +129,11 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
     const loadVerifiedBy = useCallback(
         async (id: string) => {
             const verifiedState = verifiedMapRef.current[id]
-            if (!Hub?.getNonFungibleCollectionVerifiedBy || verifiedState || !id) return
+            if (!Hub.getNonFungibleCollectionVerifiedBy || verifiedState || !id) return
             const verifiedBy = await Hub.getNonFungibleCollectionVerifiedBy(id.split(',')[0])
             dispatch({ type: 'SET_VERIFIED', id, verifiedBy })
         },
-        [Hub?.getNonFungibleCollectionVerifiedBy],
+        [Hub.getNonFungibleCollectionVerifiedBy],
     )
 
     const getAssets = useCallback((id: string) => assetsMap[id] ?? createAssetsState(), [assetsMap])

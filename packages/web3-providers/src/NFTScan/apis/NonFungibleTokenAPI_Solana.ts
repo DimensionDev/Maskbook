@@ -46,7 +46,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         return createPageable(
             assets,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response?.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 
@@ -62,11 +62,11 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
             limit: size,
         })
         const response = await fetchFromNFTScanV2<PageableResponse<Solana.Asset>>(chainId, path)
-        const assets = response?.data?.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
+        const assets = response?.data.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             assets,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response?.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 
@@ -111,7 +111,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         return createPageable(
             events,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response?.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 }

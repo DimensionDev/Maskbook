@@ -26,7 +26,7 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
 
     useEffect(() => {
         // TODO: Only camera related APi need to check navigator?.permissions?.query
-        if (!needRequest || permission !== 'prompt' || !globalThis?.navigator?.permissions?.query) return
+        if (!needRequest || permission !== 'prompt' || !globalThis.navigator.permissions.query) return
         let permissionStatus: PermissionStatus
 
         const handleChange = function (this: PermissionStatus) {
@@ -60,7 +60,7 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
         } else {
             updatePermission('granted')
         }
-        return () => permissionStatus?.removeEventListener('change', handleChange)
+        return () => permissionStatus.removeEventListener('change', handleChange)
     }, [name, needRequest, permission])
     return permission
 }

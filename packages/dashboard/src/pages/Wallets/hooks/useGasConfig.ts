@@ -48,10 +48,10 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (is1559Supported) {
             const gasLevel = gasOptions.normal
             setMaxFee((oldVal) => {
-                return !oldVal ? gasLevel?.suggestedMaxFeePerGas ?? '0' : oldVal
+                return !oldVal ? gasLevel.suggestedMaxFeePerGas ?? '0' : oldVal
             })
             setPriorityFee((oldVal) => {
-                return !oldVal ? gasLevel?.suggestedMaxPriorityFeePerGas ?? '0' : oldVal
+                return !oldVal ? gasLevel.suggestedMaxPriorityFeePerGas ?? '0' : oldVal
             })
         } else {
             setCustomGasPrice((oldVal) => (!oldVal ? gasOptions.normal.suggestedMaxFeePerGas : oldVal))
@@ -62,8 +62,8 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (!gasOptions) return
         if (is1559Supported) {
             const gasLevel = gasOptions.normal
-            setMaxFee(gasLevel?.suggestedMaxFeePerGas ?? 0)
-            setPriorityFee(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0)
+            setMaxFee(gasLevel.suggestedMaxFeePerGas ?? 0)
+            setPriorityFee(gasLevel.suggestedMaxPriorityFeePerGas ?? 0)
         } else {
             setCustomGasPrice(gasOptions.normal.suggestedMaxFeePerGas)
         }

@@ -15,9 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 8,
         padding: 10,
         backgroundColor: `${
-            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+            Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor.bottom
         }!important`,
-        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor.line}`,
         borderRadius: 8,
         alignItems: 'flex-start',
         cursor: 'pointer',
@@ -29,20 +29,20 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 10,
         right: 10,
-        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor.danger,
         display: 'flex',
         alignItems: 'center',
         gap: 4,
     },
     provider: {
-        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.main,
         fontSize: 18,
         lineHeight: '36px',
         fontWeight: 700,
         wordBreak: 'keep-all',
     },
     cost: {
-        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor.second,
         lineHeight: '18px',
         marginTop: 8,
         display: 'flex',
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     focus: {
         border: `2px solid ${
-            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
+            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor.primary
         }!important`,
     },
     best: {

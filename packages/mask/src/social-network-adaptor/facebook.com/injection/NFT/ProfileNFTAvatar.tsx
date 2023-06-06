@@ -157,7 +157,7 @@ function NFTAvatarListInFaceBookMobile() {
 
             identity.identifier &&
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract.address)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginID.setValue(
                 info.pluginID ?? NetworkPluginID.PLUGIN_EVM,

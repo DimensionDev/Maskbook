@@ -80,7 +80,7 @@ function useCircleAvatarFromTwitter(size: number) {
 
     return {
         showAvatar: Boolean(
-            size && value && !loading && !loadingNFT && avatarMetadata?.address && avatarMetadata?.token_id,
+            size && value && !loading && !loadingNFT && avatarMetadata?.address && avatarMetadata.token_id,
         ),
         nftInfo: value,
         nftAvatar: undefined,

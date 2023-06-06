@@ -69,9 +69,9 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const walletName = useMemo(() => {
         if (props.profile?.handle) return props.profile.handle
         if (domain) return domain
-        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
-        return providerDescriptor?.name
-    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, props.profile?.handle])
+        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet.name
+        return providerDescriptor.name
+    }, [account, domain, providerType, wallet?.name, providerDescriptor.name, props.profile?.handle])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -81,7 +81,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
 
     const avatarUrl = useMemo(() => {
         if (!props.profile?.avatar) return
-        return resolveIPFS_URL(props.profile?.avatar)
+        return resolveIPFS_URL(props.profile.avatar)
     }, [props.profile?.avatar])
 
     return (
@@ -95,7 +95,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                             ? avatarUrl
                                 ? new URL(avatarUrl)
                                 : new URL('../assets/Lens.png', import.meta.url)
-                            : providerDescriptor?.icon
+                            : providerDescriptor.icon
                     }
                 />
                 <Box>

@@ -45,7 +45,7 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
             <div className={classes.user}>
                 <Typography className={classes.userName} component="div">
                     {identity.ens || (
-                        <FormattedAddress address={identity?.address} formatter={formatEthereumAddress} size={4} />
+                        <FormattedAddress address={identity.address} formatter={formatEthereumAddress} size={4} />
                     )}
                 </Typography>
                 <Stack className={classes.address}>
@@ -55,7 +55,7 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
                     <Link
                         onClick={(event) => event.stopPropagation()}
                         style={{ width: 12, height: 12 }}
-                        href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '') ?? ''}
+                        href={explorerResolver.addressLink(ChainId.Mainnet, identity.address ?? '') ?? ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Icons.PopupLink className={classes.PopupLink} />

@@ -145,7 +145,7 @@ export const NFTListDialog: FC = () => {
     }, [chainId])
 
     const onAddToken = (token: AllChainsNonFungibleToken) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address?.toLowerCase() + x.tokenId))
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
     }
 
     const walletItems = proofs.sort((a, z) => {

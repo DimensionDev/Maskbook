@@ -40,7 +40,7 @@ export interface AboutTabProps {
 export function AboutTab(props: AboutTabProps) {
     const { asset } = props
     const { orders, sourceType } = Context.useContainer()
-    const topListing = resolveTopListing(orders?.value)
+    const topListing = resolveTopListing(orders.value)
     const hidePriceCard = !topListing && Boolean(orders.error) && !sourceType
     const { classes } = useStyles({ hidePriceCard })
 

@@ -24,7 +24,7 @@ export function RequestPermission(props: RequestPermissionProps) {
             <DialogContent>
                 {origins?.length ? (
                     <List dense subheader={<ListSubheader>{t('popups_sites')}</ListSubheader>}>
-                        {origins?.map((origin, key) => (
+                        {origins.map((origin, key) => (
                             <ListItem key={key}>
                                 <ListItemText primary={origin} />
                             </ListItem>
@@ -33,7 +33,7 @@ export function RequestPermission(props: RequestPermissionProps) {
                 ) : null}
                 {permissions?.length ? (
                     <List dense subheader={<ListSubheader>{t('popups_permissions')}</ListSubheader>}>
-                        {permissions?.map((permission, key) => (
+                        {permissions.map((permission, key) => (
                             <ListItem key={key}>
                                 <ListItemText primary={permission} />
                             </ListItem>

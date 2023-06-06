@@ -100,7 +100,7 @@ export function TraderStateBar({
     // #endregion
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const isSNSClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
     const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
 
     const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
@@ -143,7 +143,7 @@ export function TraderStateBar({
                 formatWeiToEther(inputTokenTradeAmount).isGreaterThan(maxAmount))
         )
             return t('plugin_trader_error_insufficient_balance', {
-                symbol: inputToken?.symbol,
+                symbol: inputToken.symbol,
             })
 
         if (focusedTrade?.value && !focusedTrade.value.value?.outputAmount)
@@ -188,7 +188,7 @@ export function TraderStateBar({
                         amount={approveAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}
                         contractName={
-                            focusedTrade?.value?.provider ? resolveTradeProviderName(focusedTrade.value?.provider) : ''
+                            focusedTrade?.value?.provider ? resolveTradeProviderName(focusedTrade.value.provider) : ''
                         }
                         infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                             symbol: approveToken?.symbol,

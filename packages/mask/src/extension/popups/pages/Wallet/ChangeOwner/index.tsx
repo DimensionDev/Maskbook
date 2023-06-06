@@ -163,16 +163,16 @@ export default function ChangeOwner() {
         if (!manageAccount?.address || !contractAccount) return
         if (!isSameAddress(wallet?.address, contractAccount.address))
             await Web3.connect({
-                account: contractAccount?.address,
+                account: contractAccount.address,
                 chainId: smartPayChainId,
                 providerType: ProviderType.MaskWallet,
             })
         const hash = await Web3.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
-            account: contractAccount?.address,
+            account: contractAccount.address,
             providerType: ProviderType.MaskWallet,
-            owner: contractAccount?.owner,
-            identifier: ECKeyIdentifier.from(contractAccount?.identifier).unwrapOr(undefined),
+            owner: contractAccount.owner,
+            identifier: ECKeyIdentifier.from(contractAccount.identifier).unwrapOr(undefined),
         })
 
         if (!hash) return
@@ -329,9 +329,9 @@ export default function ChangeOwner() {
                             {t('add')}
                         </Typography>
                     </Typography>
-                    {walletManagers?.length ? (
+                    {walletManagers.length ? (
                         <Box className={classes.list}>
-                            {walletManagers?.map((wallet, index) => (
+                            {walletManagers.map((wallet, index) => (
                                 <Box
                                     key={index}
                                     className={cx(

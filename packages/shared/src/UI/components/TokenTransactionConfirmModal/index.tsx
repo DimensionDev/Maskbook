@@ -145,7 +145,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                                 </div>
                                 <div className={classes.nftName}>
                                     <Typography fontWeight={700} fontSize={20} lineHeight="24px">
-                                        {nonFungibleToken?.metadata?.name}
+                                        {nonFungibleToken.metadata?.name}
                                     </Typography>
                                     {nonFungibleToken.collection?.verified ? <Icons.Verification size={21.43} /> : null}
                                 </div>

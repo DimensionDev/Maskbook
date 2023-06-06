@@ -160,8 +160,8 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                         {token && !loadingBalance ? (
                                             <FormattedBalance
                                                 value={balance}
-                                                decimals={token?.decimals}
-                                                significant={token?.decimals}
+                                                decimals={token.decimals}
+                                                significant={token.decimals}
                                                 formatter={formatBalance}
                                             />
                                         ) : (

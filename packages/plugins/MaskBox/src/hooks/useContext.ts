@@ -46,8 +46,8 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
 
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
-    const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
-    const rootHash = initialState?.hashRoot || ''
+    const [boxId, setBoxId] = useState(initialState.boxId ?? '')
+    const rootHash = initialState.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
@@ -68,7 +68,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         useMaskBoxCreationSuccessEvent(maskBoxInfo?.creator ?? '', maskBoxInfo?.nft_address ?? '', boxId)
     const { value: paymentTokens = EMPTY_LIST } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
-        maskBoxStatus?.payment?.map(([address]) => address) ?? [],
+        maskBoxStatus?.payment.map(([address]) => address) ?? [],
     )
     const { value: allTokens = EMPTY_LIST, retry: retryMaskBoxTokensForSale } = useMaskBoxTokensForSale(boxId)
     const { value: purchasedTokens = EMPTY_LIST, retry: retryMaskBoxPurchasedTokens } = useMaskBoxPurchasedTokens(
@@ -82,7 +82,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || !maskBoxInfo?.creator || isZeroAddress(maskBoxInfo?.creator)) return null
+        if (!maskBoxInfo || !maskBoxStatus || !maskBoxInfo.creator || isZeroAddress(maskBoxInfo.creator)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
@@ -128,7 +128,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #region qualification
     const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
     const proofBytes = value?.proof
-        ? coder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
+        ? coder.encodeParameters(['bytes32[]'], [value.proof.map((p) => `0x${p}`) ?? []])
         : undefined
     const qualification = useQualification(
         boxInfo?.qualificationAddress,
@@ -167,7 +167,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
         if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
         if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
-        if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
+        if (boxInfo.endAt < now || maskBoxStatus.expired) return BoxState.EXPIRED
         return BoxState.READY
     }, [
         boxInfo,

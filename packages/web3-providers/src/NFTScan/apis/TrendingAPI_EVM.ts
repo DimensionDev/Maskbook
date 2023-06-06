@@ -29,7 +29,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             contract_address: id,
         })
         const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
-        return response?.data
+        return response.data
     }
 
     private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<NonFungibleTokenAPI.Collection[]> {
@@ -45,7 +45,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 name_fuzzy_search: true,
             }),
         })
-        return response?.data ?? EMPTY_LIST
+        return response.data ?? EMPTY_LIST
     }
 
     async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
@@ -53,7 +53,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             address: id,
         })
         const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(chainId, path)
-        if (!response?.data) return
+        if (!response.data) return
         return response.data
     }
 
@@ -65,7 +65,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 contract_address_with_token_id_list: list,
             }),
         })
-        if (!response?.data) return
+        if (!response.data) return
         return response.data.map((x) => createNonFungibleAsset(chainId, x))
     }
 
@@ -86,9 +86,9 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             }>
         >(chainId, path)
 
-        if (!response?.data?.content) return
+        if (!response.data.content) return
 
-        const batchQueryList = response?.data?.content.map((x) => ({
+        const batchQueryList = response.data.content.map((x) => ({
             contract_address: x.contract_address,
             token_id: x.token_id ?? '',
         }))
@@ -119,7 +119,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             time: range,
         })
         const response = await fetchFromNFTScanV2<Response<EVM.CollectionTrendingRecord[]>>(chainId, path)
-        return response?.data ?? EMPTY_LIST
+        return response.data ?? EMPTY_LIST
     }
 
     getAllCoins(): Promise<TrendingAPI.Coin[]> {
@@ -275,10 +275,10 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 current_price: collection.floor_price
                     ? collection.floor_price.toString()
                     : openseaStats?.floorPrice.toString() ?? '',
-                floor_price: collection.floor_price?.toString(),
+                floor_price: collection.floor_price.toString(),
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'ETH',
-                royalty: collection.royalty?.toString(),
+                royalty: collection.royalty.toString(),
             },
             tickers,
         }

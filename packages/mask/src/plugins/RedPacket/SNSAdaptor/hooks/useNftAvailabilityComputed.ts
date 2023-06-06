@@ -13,7 +13,7 @@ import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket.js'
  */
 export function useNftAvailabilityComputed(account: string, payload: NftRedPacketJSONPayload) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const asyncResult = useAvailabilityNftRedPacket(payload?.rpid, account, chainId)
+    const asyncResult = useAvailabilityNftRedPacket(payload.rpid, account, chainId)
 
     const result = asyncResult
     const availability = result.value
@@ -33,7 +33,7 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
         const isEmpty = availability.remaining === 0
         const isExpired = availability.expired
         const isClaimed = availability.isClaimed
-        const isCreator = isSameAddress(payload?.sender.address ?? '', account)
+        const isCreator = isSameAddress(payload.sender.address ?? '', account)
         const parsedChainId = chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
 
         const isPasswordValid = !!payload.password && payload.password !== 'PASSWORD INVALID'

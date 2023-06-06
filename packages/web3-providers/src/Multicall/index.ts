@@ -41,7 +41,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
 
     private getCallResult(call: MulticallBaseAPI.Call, chainId: ChainId, blockNumber: number) {
         const cache = this.results[chainId]
-        const blockNumber_ = cache?.blockNumber ?? 0
+        const blockNumber_ = cache.blockNumber ?? 0
         if (blockNumber_ < blockNumber) return
         return cache.results[this.toCallKey(call)]
     }

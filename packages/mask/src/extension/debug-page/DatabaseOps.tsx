@@ -34,7 +34,7 @@ async function onRestore() {
     await restoreAll(parsed)
 }
 async function onClear() {
-    const databases = await indexedDB.databases?.()
+    const databases = await indexedDB.databases()
     if (databases === undefined) {
         return
     }
@@ -121,7 +121,7 @@ async function restoreAll(parsed: BackupFormat) {
 }
 
 async function backupAll() {
-    const databases = await indexedDB.databases?.()
+    const databases = await indexedDB.databases()
     if (databases === undefined) {
         return
     }

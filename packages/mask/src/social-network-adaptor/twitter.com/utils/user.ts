@@ -73,7 +73,7 @@ export async function getUserIdentity(twitterId: string): Promise<SocialIdentity
     const handle = user.legacy.screen_name
     const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
     const bio = user.legacy.description
-    const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
+    const homepage = user.legacy.entities.url.urls[0]?.expanded_url ?? ''
 
     return {
         identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
@@ -85,5 +85,5 @@ export async function getUserIdentity(twitterId: string): Promise<SocialIdentity
 }
 
 export function getUserId(ele: HTMLElement) {
-    return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
+    return ele.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
 }

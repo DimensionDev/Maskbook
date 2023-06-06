@@ -14,7 +14,7 @@ export async function attemptUntil<T>(
     for (const func of funcs) {
         try {
             const result = await func()
-            if (predicator?.(result)) {
+            if (predicator(result)) {
                 continue
             }
             return result ?? fallback

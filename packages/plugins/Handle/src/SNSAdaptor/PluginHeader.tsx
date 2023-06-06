@@ -56,7 +56,7 @@ export const PluginHeader = () => {
                     ) : undefined}
                 </Typography>
                 {base.publisher?.link ? (
-                    <Link href={base.publisher?.link} underline="none" target="_blank" rel="noopener">
+                    <Link href={base.publisher.link} underline="none" target="_blank" rel="noopener">
                         <Icons.Provider size={18} style={{ marginLeft: 4 }} />
                     </Link>
                 ) : null}

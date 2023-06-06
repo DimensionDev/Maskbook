@@ -165,9 +165,9 @@ const ContractInteraction = memo(() => {
     const { value: request, loading: requestLoading, error } = useUnconfirmedRequest()
     const { value: transactionDescription } = useAsync(async () => {
         if (!request?.transactionContext?.chainId) return
-        return TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId, {
-            ...request?.transactionContext,
-            data: request?.computedPayload?.data,
+        return TransactionFormatter?.formatTransaction(request.transactionContext.chainId, {
+            ...request.transactionContext,
+            data: request.computedPayload.data,
         })
     }, [TransactionFormatter, request])
 
@@ -194,29 +194,29 @@ const ContractInteraction = memo(() => {
 
                 return {
                     isNativeTokenInteraction: transactionDescription?.tokenInAddress
-                        ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
+                        ? isNativeTokenAddress(transactionDescription.tokenInAddress)
                         : true,
                     typeName: transactionDescription?.title ?? t('popups_wallet_contract_interaction'),
                     tokenAddress: transactionDescription?.tokenInAddress,
                     tokenDescription: transactionDescription?.popup?.tokenDescription,
-                    to: to && isString(to) ? to : request.computedPayload?.to,
-                    gas: request.computedPayload?.gas,
-                    gasPrice: request.computedPayload?.gasPrice,
-                    maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                    maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                    amount: transactionDescription?.tokenInAmount ?? request.computedPayload?.value,
+                    to: to && isString(to) ? to : request.computedPayload.to,
+                    gas: request.computedPayload.gas,
+                    gasPrice: request.computedPayload.gasPrice,
+                    maxFeePerGas: request.computedPayload.maxFeePerGas,
+                    maxPriorityFeePerGas: request.computedPayload.maxPriorityFeePerGas,
+                    amount: transactionDescription?.tokenInAmount ?? request.computedPayload.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
                     isNativeTokenInteraction: true,
                     typeName: t('wallet_transfer_send'),
-                    tokenAddress: request.computedPayload?.to,
-                    to: request.computedPayload?.to,
-                    gas: request.computedPayload?.gas,
-                    gasPrice: request.computedPayload?.gasPrice,
-                    maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                    maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                    amount: request.computedPayload?.value,
+                    tokenAddress: request.computedPayload.to,
+                    to: request.computedPayload.to,
+                    gas: request.computedPayload.gas,
+                    gasPrice: request.computedPayload.gasPrice,
+                    maxFeePerGas: request.computedPayload.maxFeePerGas,
+                    maxPriorityFeePerGas: request.computedPayload.maxPriorityFeePerGas,
+                    amount: request.computedPayload.value,
                 }
             case TransactionDescriptorType.DEPLOYMENT:
             case TransactionDescriptorType.RETRY:
@@ -276,7 +276,7 @@ const ContractInteraction = memo(() => {
     const handleChangeGasCurrency = useCallback(
         async (address: string) => {
             if (!request) return
-            const { signableConfig } = PayloadEditor.fromPayload(request?.payload, {
+            const { signableConfig } = PayloadEditor.fromPayload(request.payload, {
                 chainId: request.owner ? smartPayChainId : chainId,
             })
 
@@ -409,7 +409,7 @@ const ContractInteraction = memo(() => {
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                         {request?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
-                        request?.transactionContext?.methods?.some((x) => x.name === 'approve') &&
+                        request.transactionContext?.methods?.some((x) => x.name === 'approve') &&
                         to ? (
                             <CopyIconButton text={to} className={classes.copy} />
                         ) : null}
@@ -454,13 +454,13 @@ const ContractInteraction = memo(() => {
                             <FormattedBalance
                                 value={gasFee}
                                 decimals={
-                                    request?.paymentToken && !Others.isNativeTokenAddress(request?.paymentToken)
+                                    request?.paymentToken && !Others.isNativeTokenAddress(request.paymentToken)
                                         ? maskToken?.decimals
                                         : nativeToken?.decimals
                                 }
                                 significant={4}
                                 symbol={
-                                    request?.paymentToken && !Others.isNativeTokenAddress(request?.paymentToken)
+                                    request?.paymentToken && !Others.isNativeTokenAddress(request.paymentToken)
                                         ? maskToken?.symbol
                                         : nativeToken?.symbol
                                 }

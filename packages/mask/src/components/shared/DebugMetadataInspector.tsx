@@ -85,7 +85,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                     onClick={() => onNewMeta(field, JSON.parse(content))}
                     size="small"
                     variant="contained"
-                    disabled={isInvalid || field?.length <= 3}>
+                    disabled={isInvalid || field.length <= 3}>
                     {t('debug_metadata_put_metadata')}
                 </Button>
                 <Button

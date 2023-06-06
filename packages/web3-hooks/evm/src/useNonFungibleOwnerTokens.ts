@@ -23,7 +23,7 @@ export function useNonFungibleOwnerTokens(
     )
 
     const collectibles = collectibles_
-        ?.filter((x) => isSameAddress(contractAddress, x.address))
+        .filter((x) => isSameAddress(contractAddress, x.address))
         .map((x) => ({ ...x, ownerId: x.owner?.address })) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
 
     return useAsyncRetry(async () => {
@@ -57,7 +57,7 @@ export function useNonFungibleOwnerTokens(
         if (!listOfPairs.length) return
 
         return Promise.all(
-            listOfPairs?.map((x) =>
+            listOfPairs.map((x) =>
                 Web3.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
                     chainId,
                     account: ownerAccount,

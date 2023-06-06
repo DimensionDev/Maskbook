@@ -81,7 +81,7 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            if (tokenDetailed?.contract?.chainId && tokenDetailed?.contract?.chainId !== _chainId) {
+            if (tokenDetailed.contract?.chainId && tokenDetailed.contract.chainId !== _chainId) {
                 setMessage(t.plugin_avatar_chain_error())
                 toggleChecking(false)
                 return
@@ -97,7 +97,7 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            onAddToken?.(tokenDetailed as AllChainsNonFungibleToken)
+            onAddToken(tokenDetailed as AllChainsNonFungibleToken)
             toggleChecking(false)
             handleClose()
         } catch {

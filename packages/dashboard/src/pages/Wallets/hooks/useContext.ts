@@ -12,18 +12,18 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 
 function useContext(initialState?: { account?: string; chainId?: Web3Helper.ChainIdAll; pluginID?: NetworkPluginID }) {
-    const { account, chainId } = useChainContext({ account: initialState?.account, chainId: initialState?.chainId })
-    const Others = useWeb3Others(initialState?.pluginID)
-    const fungibleAssets = useFungibleAssets<'all'>(initialState?.pluginID, undefined, {
+    const { account, chainId } = useChainContext({ account: initialState.account, chainId: initialState.chainId })
+    const Others = useWeb3Others(initialState.pluginID)
+    const fungibleAssets = useFungibleAssets<'all'>(initialState.pluginID, undefined, {
         account,
         chainId,
     })
-    const { value: fungibleTokens = EMPTY_LIST, loading } = useFungibleTokensFromTokenList(initialState?.pluginID, {
+    const { value: fungibleTokens = EMPTY_LIST, loading } = useFungibleTokensFromTokenList(initialState.pluginID, {
         chainId,
     })
 
     const assets = useMemo(() => {
-        if (!fungibleAssets?.value) return EMPTY_LIST
+        if (!fungibleAssets.value) return EMPTY_LIST
         return fungibleAssets.value.map((x) => {
             if (isNativeTokenAddress(x.address))
                 return { ...x, logoURL: Others.chainResolver.nativeCurrency(x.chainId)?.logoURL || x.logoURL }

@@ -15,7 +15,7 @@ export function useSaveStringStorage(pluginID: NetworkPluginID) {
                 address,
             )
             try {
-                await stringStorage.set?.(userId, nft)
+                await stringStorage.set(userId, nft)
                 await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
                 return nft
             } catch {

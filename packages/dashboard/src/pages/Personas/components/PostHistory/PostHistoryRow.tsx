@@ -93,7 +93,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
     const rowClickHandler = useCallback((event: React.MouseEvent<HTMLElement>) => {
         if ((event.target as HTMLElement).tagName !== 'A') {
-            openWindow(post?.url, '_blank')
+            openWindow(post.url, '_blank')
         }
     }, [])
 
@@ -101,7 +101,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
 
-        return SUPPORT_PLUGIN[plugin]?.icon ?? <Icons.Message />
+        return SUPPORT_PLUGIN[plugin].icon ?? <Icons.Message />
     }, [post.interestedMeta])
 
     const postMessage = useMemo(() => {
@@ -109,7 +109,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
         const meta = Array.from(interestedMeta ?? [])
         if (!meta.length) return null
         const [pluginName, pluginInfo] = meta[0]
-        return SUPPORT_PLUGIN[pluginName]?.messageParse(pluginInfo) ?? ''
+        return SUPPORT_PLUGIN[pluginName].messageParse(pluginInfo) ?? ''
     }, [post.interestedMeta])
 
     const postOperation = useMemo(() => {
@@ -118,7 +118,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
         if (!meta.length) return null
         const pluginName = meta[0][0]
-        const pluginID = SUPPORT_PLUGIN[pluginName]?.pluginID
+        const pluginID = SUPPORT_PLUGIN[pluginName].pluginID
 
         if (!pluginID) return null
         const handler = () => Services.SocialNetwork.openSNSAndActivatePlugin(`https://${identifier.network}`, pluginID)

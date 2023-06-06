@@ -66,7 +66,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))
     let remover = noop
     function add() {
-        if (signal?.aborted) return
+        if (signal.aborted) return
         const node = ls.evaluate()
         if (!node) return
         const proxy = DOMProxy({ afterShadowRootInit: Flags.shadowRootInit })

@@ -63,7 +63,7 @@ export async function updateUnconfirmedRequest(payload: RequestPayload) {
     if (!chunk_?.requests.length) throw new Error('No request to update.')
 
     const requests =
-        chunk_?.requests?.map((item) => {
+        chunk_.requests.map((item) => {
             if (item.id !== payload.id) return item
             return payload
         }) ?? []

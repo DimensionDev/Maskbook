@@ -63,7 +63,7 @@ export function FollowersPage(props: FollowersPageProps) {
     return (
         <Box className={classes.root}>
             {value?.length ? value.map((x: IFollowIdentity) => <FollowRow key={x.address} identity={x} />) : props.hint}
-            <ElementAnchor callback={() => next?.()}>{!done && value?.length ? <LoadingBase /> : null}</ElementAnchor>
+            <ElementAnchor callback={() => next()}>{!done && value?.length ? <LoadingBase /> : null}</ElementAnchor>
         </Box>
     )
 }

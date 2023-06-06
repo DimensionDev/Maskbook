@@ -81,7 +81,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
     for (const persona of backup.personas.values()) {
         const toRemove: ProfileIdentifier[] = []
         for (const profile of persona.linkedProfiles.keys()) {
-            if (backup.profiles.get(profile)?.linkedPersona?.unwrapOr(undefined) === persona.identifier) {
+            if (backup.profiles.get(profile)?.linkedPersona.unwrapOr(undefined) === persona.identifier) {
                 // do nothing
             } else toRemove.push(profile)
         }

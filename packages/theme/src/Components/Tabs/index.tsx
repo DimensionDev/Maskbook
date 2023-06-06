@@ -168,15 +168,15 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const { onChange, variant = 'base', hideArrowButton, ...rest } = props
 
-    useImperativeHandle(ref, () => innerRef?.current!)
+    useImperativeHandle(ref, () => innerRef.current!)
 
     // #region hide tab should up to first when chick
     useEffect(() => {
-        if (!innerRef?.current) return
+        if (!innerRef.current) return
 
         const current = innerRef.current
-        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth + defaultTabSize)
-    }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
+        setIsTabsOverflow(current.scrollWidth >= current.clientWidth + defaultTabSize)
+    }, [innerRef.current?.scrollWidth, innerRef.current?.clientWidth, width])
     // #endregion
 
     const children = Children.map(props.children, (child) => {

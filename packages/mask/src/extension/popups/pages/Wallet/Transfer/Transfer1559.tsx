@@ -260,14 +260,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
                     .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
                     .refine((value) => {
-                        return isGreaterThanOrEqualTo(value, estimateGasFees?.slow?.suggestedMaxPriorityFeePerGas ?? 0)
+                        return isGreaterThanOrEqualTo(value, estimateGasFees.slow.suggestedMaxPriorityFeePerGas ?? 0)
                     }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
                     .refine(
                         (value) =>
                             isLessThan(
                                 value,
                                 multipliedBy(
-                                    estimateGasFees?.fast?.suggestedMaxPriorityFeePerGas ?? 0,
+                                    estimateGasFees.fast.suggestedMaxPriorityFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -277,7 +277,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_max_fee_absence'))
                     .refine(
-                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.slow?.suggestedMaxFeePerGas ?? 0),
+                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees.slow.suggestedMaxFeePerGas ?? 0),
                         t('wallet_transfer_error_max_fee_too_low'),
                     )
                     .refine(
@@ -285,7 +285,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                             isLessThan(
                                 value,
                                 multipliedBy(
-                                    estimateGasFees?.fast?.suggestedMaxFeePerGas ?? 0,
+                                    estimateGasFees.fast.suggestedMaxFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -399,7 +399,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     BigNumber.max(
                         0,
                         minus(
-                            selectedAsset?.balance,
+                            selectedAsset.balance,
                             new BigNumber(formatGweiToWei(maxFeePerGas)).multipliedBy('210000').integerValue(),
                         ),
                     ),
@@ -410,7 +410,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         if (
             !wallet?.owner ||
             chainId !== smartPayChainId ||
-            !isSameAddress(selectedAsset?.address, maskTokenAddress) ||
+            !isSameAddress(selectedAsset.address, maskTokenAddress) ||
             !ratio
         )
             return selectedAsset
@@ -419,7 +419,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             ...selectedAsset,
             balance: toFixed(
                 minus(
-                    selectedAsset?.balance,
+                    selectedAsset.balance,
                     new BigNumber(formatGweiToWei(maxFeePerGas))
                         .multipliedBy(!isZero(gasLimit) ? addGasMargin(gasLimit) : '200000')
                         .integerValue()
@@ -450,8 +450,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     useUpdateEffect(() => {
         if (!estimateGasFees) return
         const { normal } = estimateGasFees
-        methods.setValue('maxFeePerGas', new BigNumber(normal?.suggestedMaxFeePerGas ?? 0).toString())
-        methods.setValue('maxPriorityFeePerGas', new BigNumber(normal?.suggestedMaxPriorityFeePerGas ?? 0).toString())
+        methods.setValue('maxFeePerGas', new BigNumber(normal.suggestedMaxFeePerGas ?? 0).toString())
+        methods.setValue('maxPriorityFeePerGas', new BigNumber(normal.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
     // #endregion
 

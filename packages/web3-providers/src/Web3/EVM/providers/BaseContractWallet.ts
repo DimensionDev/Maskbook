@@ -40,9 +40,9 @@ export class BaseContractWalletProvider
 
         await this.ownerStorage?.initializedPromise
 
-        this.subscription.wallets?.subscribe(async () => {
+        this.subscription.wallets.subscribe(async () => {
             if (!this.hostedAccount) return
-            const target = this.wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
+            const target = this.wallets.find((x) => isSameAddress(x.address, this.hostedAccount))
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (target?.owner) {
                 await this.ownerStorage?.setValue({
@@ -79,7 +79,7 @@ export class BaseContractWalletProvider
         if (!owner || !isValidAddress(owner.account)) {
             await this.ownerStorage?.setValue({
                 account: this.options.getDefaultAccount(),
-                identifier: owner?.identifier?.toText() ?? '',
+                identifier: owner.identifier?.toText() ?? '',
             })
         } else {
             // delay for syncing storage

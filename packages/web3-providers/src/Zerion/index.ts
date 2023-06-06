@@ -230,7 +230,7 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
         if (!keyword) return EMPTY_LIST
         const response = await getCoinsByKeyword(keyword)
 
-        if (!response?.payload?.info?.length) return EMPTY_LIST
+        if (!response.payload.info.length) return EMPTY_LIST
 
         return response.payload.info.filter((x) => !x.asset.type).map(this.createCoinFromData)
     }

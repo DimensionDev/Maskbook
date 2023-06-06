@@ -53,9 +53,9 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
 
         const descriptionProps = {
             name,
-            providerIcon: !platform ? providerDescriptor?.icon : undefined,
+            providerIcon: !platform ? providerDescriptor.icon : undefined,
             networkIcon: networkDescriptor?.icon,
-            iconFilterColor: !platform ? providerDescriptor?.iconFilterColor : undefined,
+            iconFilterColor: !platform ? providerDescriptor.iconFilterColor : undefined,
             formattedAddress,
             addressLink,
             address,

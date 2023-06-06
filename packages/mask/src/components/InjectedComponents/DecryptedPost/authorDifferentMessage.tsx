@@ -10,7 +10,7 @@ export function wrapAuthorDifferentMessage(
     if (author === postBy) return jsx
     return (
         <>
-            {i18n.t('decrypted_postbox_author_mismatch', { name: author?.userId })}
+            {i18n.t('decrypted_postbox_author_mismatch', { name: author.userId })}
             {jsx}
         </>
     )

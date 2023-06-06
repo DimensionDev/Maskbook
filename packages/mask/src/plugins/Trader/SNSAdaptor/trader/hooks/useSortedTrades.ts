@@ -43,7 +43,7 @@ export function useSortedTrades(
                     ) {
                         const gasFee = multipliedBy(gasPrice, trade.value.gas).integerValue().toFixed()
 
-                        const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
+                        const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken.decimals).times(nativeTokenPrice)
 
                         const finalPrice = leftShift(trade.value.value.outputAmount, outputToken.decimals)
                             .times(
@@ -76,8 +76,8 @@ export function useSortedTrades(
                     } else if (gasA && !gasB) {
                         return -1 // A goes first
                     } else if (!gasA && !gasB) {
-                        a = valueA?.value?.value?.outputAmount
-                        b = valueB?.value?.value?.outputAmount
+                        a = valueA.value?.value?.outputAmount
+                        b = valueB.value?.value?.outputAmount
                     }
                     if (isGreaterThan(a ?? 0, b ?? 0)) return -1
                     if (isLessThan(a ?? 0, b ?? 0)) return 1

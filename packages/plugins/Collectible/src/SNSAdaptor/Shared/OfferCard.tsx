@@ -59,7 +59,7 @@ export function OfferCard(props: OfferCardProps) {
 
     const renderTokenIcon = () => {
         if (offer.priceInToken?.token.logoURL)
-            return <img width={20} height={20} src={offer.priceInToken?.token.logoURL} alt="" />
+            return <img width={20} height={20} src={offer.priceInToken.token.logoURL} alt="" />
 
         if (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
 

@@ -44,7 +44,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
 
         // get the base fee per gas from the latest block
         const block = await web3.eth.getBlock('latest')
-        const baseFeePerGas = block?.baseFeePerGas ?? 0
+        const baseFeePerGas = block.baseFeePerGas ?? 0
 
         return {
             [GasOptionType.FAST]: {

@@ -21,7 +21,7 @@ export function useTokenTip<T extends NetworkPluginID>(
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         if (!token?.address) return
         const totalAmount = rightShift(amount, token.decimals).toFixed()
-        return Web3.transferFungibleToken(token?.address, recipient, totalAmount, '')
+        return Web3.transferFungibleToken(token.address, recipient, totalAmount, '')
     }, [account, token?.address, token?.decimals, amount, Web3])
 
     return [isTransferring, sendTip]

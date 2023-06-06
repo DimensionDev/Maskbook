@@ -29,7 +29,7 @@ export function useSingleBlockBeatRetry<T extends NetworkPluginID, R>(
 ): AsyncStateRetry<R> {
     const { chainId } = useChainContext()
     const Others = useWeb3Others(pluginID)
-    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
+    return useBeatRetry(fn, Others.getAverageBlockDelay(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
 }
 
 export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
@@ -39,7 +39,7 @@ export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
 ): AsyncStateRetry<R> {
     const { chainId } = useChainContext()
     const Others = useWeb3Others(pluginID)
-    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
+    return useBeatRetry(fn, Others.getAverageBlockDelay(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
 }
 
 export function useCustomBlockBeatRetry<T extends NetworkPluginID, R>(
@@ -50,5 +50,5 @@ export function useCustomBlockBeatRetry<T extends NetworkPluginID, R>(
 ): AsyncStateRetry<R> {
     const { chainId } = useChainContext()
     const Others = useWeb3Others(pluginID)
-    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId, scale) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
+    return useBeatRetry(fn, Others.getAverageBlockDelay(chainId, scale) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
 }

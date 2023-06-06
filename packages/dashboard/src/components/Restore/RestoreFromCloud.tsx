@@ -110,7 +110,7 @@ export const RestoreFromCloud = memo(() => {
     const onRestore = useCallback(
         async (backupInfo: { info: BackupPreview; id: string }) => {
             try {
-                if (backupInfo.info?.wallets) {
+                if (backupInfo.info.wallets) {
                     await Services.Backup.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'wallet' })
                     return
                 } else {

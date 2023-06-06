@@ -160,7 +160,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
                             <Stack direction="row" mt={1.25}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
-                                    {x.entry.features?.map((f, i) => (
+                                    {x.entry.features.map((f, i) => (
                                         <Stack key={i}>
                                             <Typography className={classes.name} fontSize={14}>
                                                 <PluginI18NFieldRender field={f.name} pluginID={x.pluginID} />

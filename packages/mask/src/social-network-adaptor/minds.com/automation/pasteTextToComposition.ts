@@ -33,7 +33,7 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             await untilElementAvailable(i)
             checkSignal()
             while (!hasFocus(i)) {
-                textarea?.focus()
+                textarea.focus()
                 checkSignal()
                 await delay(interval)
             }

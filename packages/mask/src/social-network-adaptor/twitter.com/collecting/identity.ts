@@ -94,7 +94,7 @@ function resolveLastRecognizedIdentityMobileInner(
 ) {
     const onLocationChange = async () => {
         const settings = await Twitter.getSettings()
-        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings?.screen_name).unwrapOr(
+        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings.screen_name).unwrapOr(
             undefined,
         )
 
@@ -134,7 +134,7 @@ function resolveCurrentVisitingIdentityInner(
         const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
         const bio = user.legacy.description
-        const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
+        const homepage = user.legacy.entities.url.urls[0]?.expanded_url ?? ''
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),

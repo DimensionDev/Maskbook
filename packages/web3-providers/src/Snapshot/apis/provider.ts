@@ -72,7 +72,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
 
             return {
                 ...proposal,
-                strategyName: validStrategy?.params.symbol ?? strategyName ?? proposal.space?.name,
+                strategyName: validStrategy?.params.symbol ?? strategyName ?? proposal.space.name,
                 choicesWithScore,
             }
         })

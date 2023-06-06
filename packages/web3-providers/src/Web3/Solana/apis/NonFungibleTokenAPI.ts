@@ -80,7 +80,7 @@ async function getNonFungibleAssets(
                 symbol: metadata.data.data.symbol,
                 description: externalMeta?.description,
                 mediaURL: externalMeta?.animation ?? externalMeta?.image ?? '',
-                mediaType: externalMeta?.properties?.category || 'Unknown',
+                mediaType: externalMeta?.properties.category || 'Unknown',
             },
         }
     })

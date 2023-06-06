@@ -11,14 +11,14 @@ export function useNFTs() {
     })
     const nfts = useMemo(() => {
         const map: Record<string, NonFungibleContract> = {}
-        if (assets?.length) {
+        if (assets.length) {
             for (const NFT of assets) {
                 const glbSupport = NFT.metadata?.imageURL?.endsWith('.glb') ?? false
                 if (NFT.metadata?.imageURL) {
                     NFT.metadata.imageURL = resolveIPFS_URL(NFT.metadata.imageURL)
                 }
                 const tokens: Record<string, OwnerERC721TokenInfo> = {
-                    ...map[NFT.address]?.tokens,
+                    ...map[NFT.address].tokens,
                     [NFT.tokenId]: { ...NFT, tokenId: NFT.tokenId, glbSupport },
                 }
                 map[NFT.address] = {

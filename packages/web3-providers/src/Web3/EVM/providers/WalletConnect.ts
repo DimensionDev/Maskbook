@@ -207,7 +207,7 @@ export default class WalletConnectProvider
                 resolve()
             })
         }).finally(() => {
-            clean?.()
+            clean()
         })
     }
 

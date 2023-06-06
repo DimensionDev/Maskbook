@@ -82,7 +82,7 @@ export function TabContent({ identity, socialAccount }: TabContentProps) {
             )
         return (
             <List dense>
-                {socialAccounts?.map((x) => (
+                {socialAccounts.map((x) => (
                     <ListItem key={`${x.pluginID}_${x.address}`}>
                         <ListItemText
                             primary={

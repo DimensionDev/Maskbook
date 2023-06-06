@@ -174,7 +174,7 @@ export function SwapDialog(props: SwapDialogProps) {
             }
             openTransactionConfirmDialog({
                 shareText: successShareText ?? '',
-                amount: formatBalance(to_value, payload.token?.decimals, 2),
+                amount: formatBalance(to_value, payload.token.decimals, 2),
                 token: payload.token,
                 tokenType: TokenType.Fungible,
             })

@@ -61,7 +61,7 @@ function verify(request: SocketRequestBody, response: any) {
             return JSON.stringify(requestValue) === JSON.stringify(responseMetaValue)
         }
         if (typeof requestValue === 'string') {
-            return responseMetaValue?.toLowerCase() === requestValue?.toLowerCase()
+            return responseMetaValue?.toLowerCase() === requestValue.toLowerCase()
         }
         return responseMetaValue === requestValue
     })
@@ -220,5 +220,5 @@ export async function getGasOptions(chainId: ChainId) {
 
     const gasOptionsCollection = mapKeys(response.payload['chain-prices'], (_, key) => zerionChainIdResolver(key))
 
-    return gasOptionsCollection[chainId]?.info.classic
+    return gasOptionsCollection[chainId].info.classic
 }

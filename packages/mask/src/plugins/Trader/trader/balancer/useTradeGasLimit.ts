@@ -25,7 +25,7 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
     return useAsync(async () => {
         if (
             !trade?.inputToken ||
-            !trade?.outputToken ||
+            !trade.outputToken ||
             !exchangeProxyContract ||
             !BALANCER_ETH_ADDRESS ||
             pluginID !== NetworkPluginID.PLUGIN_EVM
@@ -51,18 +51,18 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             ),
         )
 
-        const inputTokenAddress = Others.isNativeTokenSchemaType(trade.inputToken?.schema)
+        const inputTokenAddress = Others.isNativeTokenSchemaType(trade.inputToken.schema)
             ? BALANCER_ETH_ADDRESS
             : trade.inputToken.address
-        const outputTokenAddress = Others.isNativeTokenSchemaType(trade.outputToken?.schema)
+        const outputTokenAddress = Others.isNativeTokenSchemaType(trade.outputToken.schema)
             ? BALANCER_ETH_ADDRESS
             : trade.outputToken.address
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken?.schema))
+        if (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken.schema))
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken?.schema))
+        else if (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken.schema))
             transactionValue = trade.outputAmount.toFixed()
 
         const tx = await new ContractTransaction(exchangeProxyContract).fillAll(

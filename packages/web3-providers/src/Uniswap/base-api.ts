@@ -271,7 +271,7 @@ export async function getCoinInfo(chainId: Web3Helper.ChainIdAll, id: string) {
     // #region get pairs data
     const pairsData = await getBulkPairData(
         chainId,
-        allPairs?.map(({ id }) => id),
+        allPairs.map(({ id }) => id),
     )
     // #endregion
 
@@ -323,7 +323,7 @@ export async function getBulkPairData(chainId: Web3Helper.ChainIdAll, pairList: 
     const oneDayData = Object.fromEntries(oneDayResult.map((pair): [string, Data] => [pair.id, pair]))
 
     const pairsData = await Promise.all(
-        current?.map(async (pair) => {
+        current.map(async (pair) => {
             let oneDayHistory = oneDayData[pair.id]
             if (!oneDayHistory) {
                 oneDayHistory = await fetchPairData(chainId, pair.id, oneDayBlock)
@@ -397,7 +397,7 @@ export async function getPriceStats(
     }
 
     if (latestBlock) {
-        blocks = blocks.filter((block) => block.blockNumber && isLessThanOrEqualTo(block?.blockNumber, latestBlock))
+        blocks = blocks.filter((block) => block.blockNumber && isLessThanOrEqualTo(block.blockNumber, latestBlock))
     }
 
     const prices = await fetchPricesByBlocks(chainId, id, blocks)

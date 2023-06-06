@@ -16,7 +16,7 @@ export function useGetNFTAvatar() {
             if (!userId || !network || !snsKey) return
             const addressStorage = await getAddress(network, userId)
             if (!addressStorage?.address) return
-            if (addressStorage?.networkPluginID && addressStorage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {
+            if (addressStorage.networkPluginID && addressStorage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {
                 return Web3Storage.createKVStorage(`${NFT_AVATAR_METADATA_STORAGE}_${network}`).get<NextIDAvatarMeta>(
                     userId,
                 )

@@ -27,7 +27,7 @@ export function createPostActionsInjector() {
                 untilVisible: true,
                 signal,
             })
-            if (postInfo.actionsElement?.realCurrent?.parentNode) {
+            if (postInfo.actionsElement.realCurrent?.parentNode) {
                 const actionsContainer = postInfo.actionsElement.realCurrent.parentNode as HTMLDivElement
                 actionsContainer.style.maxWidth = '100%'
             }

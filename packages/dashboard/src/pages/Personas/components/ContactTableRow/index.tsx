@@ -145,7 +145,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                         // To support emoji
                                         label={String.fromCodePoint(
                                             first.codePointAt(0) ?? SPACE_POINT,
-                                            last?.codePointAt(0) ?? SPACE_POINT,
+                                            last.codePointAt(0) ?? SPACE_POINT,
                                         )}
                                     />
                                 }

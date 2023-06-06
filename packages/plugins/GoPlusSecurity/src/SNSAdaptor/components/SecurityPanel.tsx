@@ -92,7 +92,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 padding="16px"
                 borderRadius="16px">
                 <Stack direction="row" spacing={0.8}>
-                    {tokenSecurity?.token_name ? (
+                    {tokenSecurity.token_name ? (
                         <TokenIcon
                             className={classes.icon}
                             address={tokenSecurity.contract ?? ''}
@@ -105,7 +105,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     )}
                     <Stack>
                         <Typography className={classes.tokenName}>
-                            {tokenSecurity?.token_name || t.unnamed()}
+                            {tokenSecurity.token_name || t.unnamed()}
                         </Typography>
                         <Typography className={classes.tokenPrice}>
                             {tokenPrice ? formatCurrency(tokenPrice) : '--'}

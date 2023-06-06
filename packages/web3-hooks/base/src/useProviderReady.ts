@@ -11,6 +11,6 @@ export function useProviderReady<T extends NetworkPluginID>(
 
     return useMemo(async () => {
         if (!providerType || !Provider) return false
-        return Provider.isReady?.(providerType) ?? false
+        return Provider.isReady(providerType) ?? false
     }, [providerType, Provider])
 }

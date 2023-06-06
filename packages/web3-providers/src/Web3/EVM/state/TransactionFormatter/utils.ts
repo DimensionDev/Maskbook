@@ -9,7 +9,7 @@ export function getTokenAmountDescription(amount = '0', token?: FungibleToken<Ch
         ? formatBalance(amount, token?.decimals)
         : 'infinite'
 
-    return `${value} ${token?.symbol?.trim()}`
+    return `${value} ${token?.symbol.trim()}`
 }
 
 export class DescriptorWithTransactionDecodedReceipt extends BaseDescriptor {

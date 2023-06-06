@@ -267,7 +267,7 @@ export class Balancer implements TraderAPI.Provider {
             chainId,
         })
 
-        if (!trade?.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS)
+        if (!trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS)
             return ZERO.toString()
         const {
             swaps: [swaps],
@@ -288,10 +288,10 @@ export class Balancer implements TraderAPI.Provider {
             ),
         )
 
-        const inputTokenAddress = isNativeTokenSchemaType(trade.inputToken?.schema as SchemaType | undefined)
+        const inputTokenAddress = isNativeTokenSchemaType(trade.inputToken.schema as SchemaType | undefined)
             ? BALANCER_ETH_ADDRESS
             : trade.inputToken.address
-        const outputTokenAddress = isNativeTokenSchemaType(trade.outputToken?.schema as SchemaType | undefined)
+        const outputTokenAddress = isNativeTokenSchemaType(trade.outputToken.schema as SchemaType | undefined)
             ? BALANCER_ETH_ADDRESS
             : trade.outputToken.address
 
@@ -299,12 +299,12 @@ export class Balancer implements TraderAPI.Provider {
         let transactionValue = '0'
         if (
             trade.strategy === TradeStrategy.ExactIn &&
-            isNativeTokenSchemaType(trade.inputToken?.schema as SchemaType | undefined)
+            isNativeTokenSchemaType(trade.inputToken.schema as SchemaType | undefined)
         )
             transactionValue = trade.inputAmount.toFixed()
         else if (
             trade.strategy === TradeStrategy.ExactOut &&
-            isNativeTokenSchemaType(trade.outputToken?.schema as SchemaType | undefined)
+            isNativeTokenSchemaType(trade.outputToken.schema as SchemaType | undefined)
         )
             transactionValue = trade.outputAmount.toFixed()
 

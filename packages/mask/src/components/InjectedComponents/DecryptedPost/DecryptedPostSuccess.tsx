@@ -101,7 +101,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         props.author?.userId === props.whoAmI?.userId ? (
             canAppendShareTarget && props.whoAmI ? (
                 <>
-                    {selectedRecipients?.length ? (
+                    {selectedRecipients.length ? (
                         <RecipientsToolTip recipients={selectedRecipients} openDialog={() => setShowDialog(true)} />
                     ) : (
                         <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>

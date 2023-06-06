@@ -135,7 +135,7 @@ export default class WalletConnectV2Provider
                 resolve()
             })
         }).finally(() => {
-            clean?.()
+            clean()
         })
     }
     override async connect(chainId: ChainId) {

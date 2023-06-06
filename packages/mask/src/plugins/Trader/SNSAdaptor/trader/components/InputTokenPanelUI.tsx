@@ -14,9 +14,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 12,
         padding: 12,
         background: `${
-            Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input
+            Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor.input
         }!important`,
-        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        border: `1px solid ${Sniffings.is_dashboard_page ? MaskColorVar.lineLight : theme.palette.maskColor.line}`,
         position: 'relative',
         minHeight: 115,
         outline: 'none!important',
@@ -28,12 +28,12 @@ const useStyles = makeStyles()((theme) => ({
     balance: {
         fontWeight: 700,
         lineHeight: '18px',
-        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor.second,
         wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
+        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.primary : undefined,
         fontWeight: 700,
     },
     input: {
@@ -48,10 +48,10 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 6,
         marginLeft: 8,
         height: 20,
-        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
+        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor.primary : undefined,
         '&:hover': {
             backgroundColor: !Sniffings.is_dashboard_page
-                ? `${lighten(theme.palette.maskColor?.primary, 0.1)}!important`
+                ? `${lighten(theme.palette.maskColor.primary, 0.1)}!important`
                 : undefined,
         },
     },
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontWeight: 700,
         lineHeight: '18px',
-        color: theme.palette.maskColor?.second,
+        color: theme.palette.maskColor.second,
         position: 'absolute',
         top: 12,
         left: 12,
@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 12,
         right: 12,
-        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.normalText : theme.palette.maskColor.second,
     },
     action: {
         position: 'absolute',
@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 52.5,
         left: 12,
-        backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+        backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor.bottom,
         paddingRight: 8,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
@@ -98,11 +98,11 @@ const useStyles = makeStyles()((theme) => ({
             fontSize: 14,
             marginRight: 12,
             fontWeight: 700,
-            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.main : undefined,
+            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.main : undefined,
         },
         ['&:hover']: {
             backgroundColor: `${
-                Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom
+                Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor.bottom
             }!important`,
             boxShadow: `0px 4px 30px ${alpha(
                 theme.palette.maskColor.shadowBottom,
@@ -117,13 +117,13 @@ const useStyles = makeStyles()((theme) => ({
     noToken: {
         borderRadius: '18px !important',
         backgroundColor: `${
-            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor?.primary
+            Sniffings.is_dashboard_page ? theme.palette.primary.main : theme.palette.maskColor.primary
         } !important`,
         ['&:hover']: {
             backgroundColor: `${
                 Sniffings.is_dashboard_page
                     ? theme.palette.primary.main
-                    : lighten(theme.palette.maskColor?.primary, 0.1)
+                    : lighten(theme.palette.maskColor.primary, 0.1)
             }!important`,
         },
         [`& .${chipClasses.label}`]: {

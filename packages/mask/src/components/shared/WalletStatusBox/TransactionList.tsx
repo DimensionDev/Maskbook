@@ -143,7 +143,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Typography>
                 <Link
                     className={classes.link}
-                    href={Others.explorerResolver.transactionLink?.(chainId, tx.id)}
+                    href={Others.explorerResolver.transactionLink(chainId, tx.id)}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut className={classes.linkIcon} />

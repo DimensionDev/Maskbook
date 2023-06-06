@@ -10,5 +10,5 @@ export function useChainIdValid<T extends NetworkPluginID>(
     const { account, chainId } = useChainContext({ chainId: expectedChainId })
     const Others = useWeb3Others(pluginID)
 
-    return (!account || Others.chainResolver.isValid?.(chainId, process.env.NODE_ENV === 'development')) ?? false
+    return (!account || Others.chainResolver.isValid(chainId, process.env.NODE_ENV === 'development')) ?? false
 }

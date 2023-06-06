@@ -170,7 +170,7 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
     const [isViewed, setIsViewed] = useState(false)
 
     useEffect(() => {
-        if (entry?.isIntersecting && entry?.intersectionRatio > 0) setIsViewed(true)
+        if (entry?.isIntersecting && entry.intersectionRatio > 0) setIsViewed(true)
     }, [entry?.isIntersecting])
 
     return (

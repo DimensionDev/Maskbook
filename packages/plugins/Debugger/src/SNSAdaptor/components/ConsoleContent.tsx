@@ -128,7 +128,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             name: 'Visiting Public Key',
             content: (
                 <Typography variant="body2" style={{ width: 280, wordBreak: 'break-all' }}>
-                    {currentVisitingSocialIdentity?.value?.publicKey}
+                    {currentVisitingSocialIdentity.value?.publicKey}
                 </Typography>
             ),
         },

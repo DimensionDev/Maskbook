@@ -21,8 +21,8 @@ export function useTradeCallback(
 
         let result: string | undefined
         if (
-            (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken?.schema)) ||
-            (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken?.schema))
+            (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken.schema)) ||
+            (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken.schema))
         ) {
             result = await wrapCallback(tradeAmount, gasConfig)
         } else {

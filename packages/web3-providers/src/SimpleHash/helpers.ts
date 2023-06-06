@@ -51,7 +51,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             address: asset.contract.deployed_by,
         },
         owner: {
-            address: asset.owners?.[0].owner_address,
+            address: asset.owners[0].owner_address,
         },
         priceInToken: asset.last_sale
             ? {
@@ -119,7 +119,7 @@ export function createNonFungibleCollection(collection: Collection): NonFungible
         iconURL: collection.image_url,
         ownersTotal: collection.total_quantity,
         source: SourceType.SimpleHash,
-        address: collection.top_contracts?.[0]?.split('.')?.[1] ?? '',
+        address: collection.top_contracts[0]?.split('.')?.[1] ?? '',
         verified: verifiedMarketplaces.length > 0,
         verifiedBy: verifiedMarketplaces.map((x) => x.marketplace_name),
     }

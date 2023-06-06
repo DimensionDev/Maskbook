@@ -10,5 +10,5 @@ export function useChainColor<T extends NetworkPluginID>(
     const { chainId } = useChainContext({ chainId: expectedChainId })
     const Others = useWeb3Others(pluginID)
 
-    return Others?.chainResolver.chainColor?.(chainId) ?? 'transparent'
+    return Others.chainResolver.chainColor(chainId) ?? 'transparent'
 }

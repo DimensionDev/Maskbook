@@ -36,7 +36,7 @@ export function PostReplacer(props: PostReplacerProps) {
     const [postMessage, setPostMessage] = useState(usePostInfoDetails.rawMessage())
     const iv = usePostInfoDetails.postIVIdentifier()
     useEffect(() => {
-        if (postMessage?.meta || !iv?.toText()) return
+        if (postMessage.meta || !iv?.toText()) return
         return MaskMessages.events.postReplacerHidden.on(() => {
             setPostMessage(
                 produce((draft) => {
@@ -44,7 +44,7 @@ export function PostReplacer(props: PostReplacerProps) {
                 }),
             )
         })
-    }, [postMessage?.meta, iv?.toText])
+    }, [postMessage.meta, iv?.toText])
 
     const author = usePostInfoDetails.author()
     const currentProfile = useCurrentIdentity()?.identifier
@@ -62,7 +62,7 @@ export function PostReplacer(props: PostReplacerProps) {
         <span className={classes.root}>
             <TypedMessageRenderContext
                 textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
-                renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
+                renderFragments={activatedSocialNetworkUI.customization.componentOverwrite?.RenderFragments}
                 context={initialTransformationContext}>
                 <Transformer {...props} message={postMessage} />
             </TypedMessageRenderContext>
@@ -88,10 +88,10 @@ function Transformer({
     }, [message, after])
 
     useEffect(() => {
-        if (shouldReplace) zip?.()
-        else unzip?.()
+        if (shouldReplace) zip()
+        else unzip()
 
-        return () => unzip?.()
+        return () => unzip()
     }, [])
 
     if (shouldReplace) return <TypedMessageRender message={after} />

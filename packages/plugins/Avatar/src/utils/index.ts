@@ -102,7 +102,7 @@ async function getAvatarFromNextIDStorage(
     )
 
     if (!avatarId && response.ok) return response.val
-    if (response.ok && response.val?.avatarId === avatarId) return response.val
+    if (response.ok && response.val.avatarId === avatarId) return response.val
     return
 }
 
@@ -131,7 +131,7 @@ export async function getNFTAvatarByUserId(
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, true)
 
     if (persona) {
-        const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())?.[0]
+        const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())[0]
         if (binding) {
             return getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
         }

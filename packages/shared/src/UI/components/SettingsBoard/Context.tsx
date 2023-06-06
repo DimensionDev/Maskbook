@@ -36,22 +36,22 @@ export function useSettingsContext(initial?: {
     disableSlippageTolerance?: boolean
 }) {
     const t = useSharedI18N()
-    const { pluginID } = useNetworkContext(initial?.pluginID)
+    const { pluginID } = useNetworkContext(initial.pluginID)
     const { chainId } = useChainContext({
-        chainId: initial?.chainId,
+        chainId: initial.chainId,
     })
     const Others = useWeb3Others(pluginID)
     const [transactionOptions, setTransactionOptions] = useState<
         Web3Helper.Definition[typeof pluginID]['Transaction'] | undefined
-    >(initial?.transaction)
-    const [slippageTolerance, setSlippageTolerance] = useState(initial?.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
+    >(initial.transaction)
+    const [slippageTolerance, setSlippageTolerance] = useState(initial.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
 
     const networkSignature = `${pluginID}_${chainId}`
     const transactionSignature = Others.getTransactionSignature(chainId, transactionOptions) ?? ''
     const needToResetByNetwork =
-        !!IN_MEMORY_CACHE?.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
+        !!IN_MEMORY_CACHE.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
     const needToResetByTransaction =
-        !!IN_MEMORY_CACHE?.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignature
+        !!IN_MEMORY_CACHE.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignature
     const [gasSettingsType, setGasSettingsType] = useState<GasSettingsType>(
         needToResetByNetwork || needToResetByTransaction
             ? GasSettingsType.Basic
@@ -88,7 +88,7 @@ export function useSettingsContext(initial?: {
     }, [gasOptionRetry, onClearInMemoryCache])
 
     useSingleBlockBeatRetry(pluginID, async () => {
-        if (initial?.disableGasPrice) return
+        if (initial.disableGasPrice) return
         gasOptionRetry()
     })
 
@@ -111,7 +111,7 @@ export function useSettingsContext(initial?: {
 
         pluginID,
         chainId,
-        transaction: initial?.transaction,
+        transaction: initial.transaction,
 
         transactionOptions,
         setTransactionOptions,

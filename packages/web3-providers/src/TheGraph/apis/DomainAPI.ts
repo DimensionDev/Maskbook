@@ -31,7 +31,7 @@ export class TheGraphDomainAPI implements DomainAPI.Provider<ChainId> {
             }),
         })
 
-        return first(response.data.domains)?.resolvedAddress?.id
+        return first(response.data.domains)?.resolvedAddress.id
     }
     async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         const response = await fetchJSON<{

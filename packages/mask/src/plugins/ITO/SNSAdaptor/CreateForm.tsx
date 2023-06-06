@@ -146,17 +146,17 @@ export function CreateForm(props: CreateFormProps) {
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
-    if (origin?.token && origin?.total) {
+    if (origin?.token && origin.total) {
         TAS.push({
-            token: origin?.token,
-            amount: leftShift(origin?.total ?? '0', origin?.token.decimals).toFixed(),
+            token: origin.token,
+            amount: leftShift(origin.total ?? '0', origin.token.decimals).toFixed(),
             key: uuid(),
         })
     }
-    if (origin?.exchangeTokens && origin?.exchangeAmounts) {
-        origin?.exchangeTokens.map((i, x) =>
+    if (origin?.exchangeTokens && origin.exchangeAmounts) {
+        origin.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: leftShift(origin?.exchangeAmounts[x] || '0', i?.decimals).toFixed(),
+                amount: leftShift(origin.exchangeAmounts[x] || '0', i.decimals).toFixed(),
                 token: i,
                 key: uuid(),
             }),
@@ -240,10 +240,10 @@ export function CreateForm(props: CreateFormProps) {
             password: Web3Utils.sha3(message) ?? '',
             name: senderName,
             title: message,
-            limit: formatAmount(totalOfPerWallet || '0', first?.token?.decimals),
-            token: first?.token as FungibleToken<ChainId, SchemaType.ERC20>,
-            total: formatAmount(first?.amount || '0', first?.token?.decimals),
-            exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
+            limit: formatAmount(totalOfPerWallet || '0', first.token?.decimals),
+            token: first.token as FungibleToken<ChainId, SchemaType.ERC20>,
+            total: formatAmount(first.amount || '0', first.token?.decimals),
+            exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!) as Array<
                 FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
             >,
@@ -403,7 +403,7 @@ export function CreateForm(props: CreateFormProps) {
                         tokenAndAmount?.token ? (
                             <Box className={classes.tokenAdornment}>
                                 <TokenIcon className={classes.tokenIcon} {...tokenAndAmount.token} />
-                                <Typography>{tokenAndAmount.token?.symbol}</Typography>
+                                <Typography>{tokenAndAmount.token.symbol}</Typography>
                             </Box>
                         ) : null
                     }

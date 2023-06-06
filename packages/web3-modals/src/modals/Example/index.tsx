@@ -26,7 +26,7 @@ export const Example = forwardRef<SingletonModalRefCreator<ExampleOpenProps>, Ex
                 as="div"
                 className="relative z-10"
                 onClose={() => {
-                    dispatch?.close?.()
+                    dispatch?.close()
                 }}>
                 <Transition.Child
                     as={Fragment}
@@ -71,7 +71,7 @@ export const Example = forwardRef<SingletonModalRefCreator<ExampleOpenProps>, Ex
                                     <button
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                        onClick={() => dispatch?.close?.()}>
+                                        onClick={() => dispatch?.close()}>
                                         Confirm
                                     </button>
                                 </div>

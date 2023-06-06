@@ -141,7 +141,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         const handleClick = async () => {
             if (!isConnected) {
-                await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
+                await connect(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
             }
             if (!isVerified && enableVerify) {
                 onClose?.()

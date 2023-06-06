@@ -253,19 +253,19 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #endregion
 
     useEffect(() => {
-        if (!isClaimed || !availability || availability?.claimed_id === '0' || !availability?.token_address) return
+        if (!isClaimed || !availability || availability.claimed_id === '0' || !availability.token_address) return
 
         openTransactionConfirmDialog({
             shareText,
             amount: '1',
-            nonFungibleTokenId: availability?.claimed_id,
-            nonFungibleTokenAddress: availability?.token_address,
+            nonFungibleTokenId: availability.claimed_id,
+            nonFungibleTokenAddress: availability.token_address,
             tokenType: TokenType.NonFungible,
         })
     }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
 
     const openNFTDialog = useCallback(() => {
-        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
+        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability.token_address) return
         CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
             open: true,
             chainId: payload.chainId,

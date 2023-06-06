@@ -107,14 +107,14 @@ export function PriceCard(props: PriceCardProps) {
                         </Typography>
                         {topListing?.price?.usd ? (
                             <Typography className={classes.textBase}>
-                                ({priceUSD.includes('<') || isZero(topListing?.price?.usd) ? '' : '\u2248'}
+                                ({priceUSD.includes('<') || isZero(topListing.price.usd) ? '' : '\u2248'}
                                 {priceUSD})
                             </Typography>
                         ) : null}
                     </div>
                 )}
                 {topListing?.source ? (
-                    <SourceProviderSwitcher selected={topListing?.source} onSelect={setSourceType} />
+                    <SourceProviderSwitcher selected={topListing.source} onSelect={setSourceType} />
                 ) : null}
             </div>
         </div>

@@ -203,7 +203,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                                 />
                                 {errors.address ? (
                                     <Typography className={classes.error} mt={0.5}>
-                                        {errors.address?.message}
+                                        {errors.address.message}
                                     </Typography>
                                 ) : null}
                             </>
@@ -228,7 +228,7 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
 
                                     {errors.tokenIds ? (
                                         <Typography className={classes.error} mt={0.5}>
-                                            {errors.tokenIds?.message}
+                                            {errors.tokenIds.message}
                                         </Typography>
                                     ) : null}
                                 </>

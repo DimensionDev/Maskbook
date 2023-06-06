@@ -44,7 +44,7 @@ export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId
             result: GoPlusNFTInfo[]
         }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft1155_approval_security/:chainId', { chainId, addresses }))
 
-        if (!response.result?.length && !nft1155Response.result?.length) return EMPTY_LIST
+        if (!response.result.length && !nft1155Response.result.length) return EMPTY_LIST
 
         return [...response.result, ...nft1155Response.result]
             .reduce<NFTSpenderInfo[]>((acc, cur) => {
@@ -101,7 +101,7 @@ export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId
             result: GoPlusTokenInfo[]
         }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/token_approval_security/:chainId', { chainId, addresses }))
 
-        if (!response?.result?.length) return EMPTY_LIST
+        if (!response.result.length) return EMPTY_LIST
 
         return response.result
             .reduce<GoPlusTokenSpender[]>((acc, cur) => {

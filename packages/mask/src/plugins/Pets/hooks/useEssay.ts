@@ -11,7 +11,7 @@ export function useEssay(user: User, refresh?: number) {
         if (!user.address) return null
         const stringStorage = Web3Storage.createFireflyStorage('Pets', user.address)
         let result: EssayRSSNode | undefined = await stringStorage.get<EssayRSSNode>('pet')
-        if (!result?.essay || result.essay.userId !== user.userId) {
+        if (!result.essay || result.essay.userId !== user.userId) {
             const rss3Storage = Web3Storage.createRSS3Storage(user.address)
             result = await rss3Storage.get<EssayRSSNode>('_pet')
         }
@@ -25,7 +25,7 @@ export function useDefaultEssay(user: User) {
     const [essayMeta, setEssayMeta] = useState<ShowMeta | undefined>(undefined)
     const profileUser = useUser()
     useEffect(() => {
-        if (user?.userId || user?.userId !== '$unknown') {
+        if (user.userId || user.userId !== '$unknown') {
             const isProfile = user.userId === profileUser?.userId
             const isMASK = user.userId === MASK_TWITTER
             setEssayMeta({

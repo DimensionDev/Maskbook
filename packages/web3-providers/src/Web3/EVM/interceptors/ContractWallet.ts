@@ -131,7 +131,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider?.hostedChainId ? toHex(provider?.hostedChainId) : undefined)
+                context.write(provider?.hostedChainId ? toHex(provider.hostedChainId) : undefined)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 if (isValidAddress(provider?.hostedAccount)) {

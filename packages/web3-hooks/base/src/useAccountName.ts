@@ -16,6 +16,6 @@ export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expected
         if (wallet?.name) return wallet.name
 
         // else use the provider name as the account name
-        return Others.providerResolver.providerName?.(providerType)
+        return Others.providerResolver.providerName(providerType)
     }, [Others, account, providerType, wallets.map((x) => x.address.toLowerCase())])
 }

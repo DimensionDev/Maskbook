@@ -66,7 +66,7 @@ export function DetailsTab(props: DetailsTabProps) {
 
     return (
         <Box className={classes.main}>
-            {definitions?.map((x, i) => (
+            {definitions.map((x, i) => (
                 <section className={classes.section} key={i}>
                     <Typography className={classes.title} color={theme.palette.maskColor.publicMain} variant="h3">
                         {x.title}

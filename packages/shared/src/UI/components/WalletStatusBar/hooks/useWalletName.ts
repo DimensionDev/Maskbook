@@ -26,15 +26,15 @@ export const useWalletName = (
         if (domain) return domain
         if (isNextIdWallet && expectedPluginId) return resolveNetworkWalletName(expectedPluginId)
         const wallet = wallets.find((x) => isSameAddress(x.address, expectedAccount ?? account))
-        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
+        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet.name
 
-        return providerDescriptor?.name || Others.formatAddress(account, 4)
+        return providerDescriptor.name || Others.formatAddress(account, 4)
     }, [
         wallets,
         expectedAccount,
         providerType,
         domain,
-        providerDescriptor?.name,
+        providerDescriptor.name,
         Others.formatAddress,
         account,
         isNextIdWallet,

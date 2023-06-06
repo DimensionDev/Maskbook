@@ -21,7 +21,7 @@ export const usePostHistory = (network: string, page: number, size = 20) => {
                   currentPersona.identifier,
                   {
                       network,
-                      userIds: currentPersona?.linkedProfiles.map((profile) => profile.identifier.userId) ?? [],
+                      userIds: currentPersona.linkedProfiles.map((profile) => profile.identifier.userId) ?? [],
                       after: lastValue?.identifier,
                       pageOffset: page,
                   },

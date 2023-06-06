@@ -176,7 +176,7 @@ export function createNonFungibleTokenEvent(
         priceInToken:
             paymentToken && transaction.trade_price
                 ? {
-                      amount: scale10(transaction.trade_price ?? 0, paymentToken?.decimals).toFixed(),
+                      amount: scale10(transaction.trade_price ?? 0, paymentToken.decimals).toFixed(),
                       token: paymentToken,
                   }
                 : undefined,

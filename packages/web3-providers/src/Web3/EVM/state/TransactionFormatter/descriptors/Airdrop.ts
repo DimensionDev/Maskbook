@@ -23,7 +23,7 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
                     description: 'Transaction submitted.',
                     snackbar: {
                         successfulDescription: `${getTokenAmountDescription(
-                            parameters?._amount,
+                            parameters._amount,
                             token,
                         )} were successfully claimed`,
                         failedDescription: 'Transaction was Rejected!',

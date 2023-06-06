@@ -230,7 +230,7 @@ export async function startReactDevTools(signal: AbortSignal) {
 
         const root = createRoot(container)
         document.body.appendChild(container)
-        uninstallLast?.()
+        uninstallLast()
         componentsWindow && removeDisabled(componentsWindow)
         profilerWindow && removeDisabled(profilerWindow)
         root.render(<Host />)

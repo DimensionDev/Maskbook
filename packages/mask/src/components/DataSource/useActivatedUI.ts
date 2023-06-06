@@ -21,7 +21,7 @@ async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
     if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
-        activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
+        activatedSocialNetworkUI.configuration.nextIDConfig.platform,
         identityResolved.identifier.userId,
     )
 }

@@ -81,7 +81,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const Others = useWeb3Others(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
-    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
+    const { classes } = useStyles({ contentBackground: providerDescriptor.backgroundGradient })
     if (!Others) return null
 
     return (
@@ -92,7 +92,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         <WalletIcon
                             size={30}
                             badgeSize={12}
-                            mainIcon={providerDescriptor?.icon}
+                            mainIcon={providerDescriptor.icon}
                             badgeIcon={networkDescriptor?.icon}
                         />
                         <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
@@ -112,8 +112,8 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             ) : null}
                             {!loading && error ? (
                                 <Typography className={classes.error} color="red" variant="body2">
-                                    {error.message?.includes('Already processing eth_requestAccounts') ||
-                                    error.message?.includes(
+                                    {error.message.includes('Already processing eth_requestAccounts') ||
+                                    error.message.includes(
                                         "Request of type 'wallet_requestPermissions' already pending for origin",
                                     )
                                         ? t('plugin_wallet_metamask_error_already_request')
@@ -134,7 +134,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     </Box>
                 </Card>
             </Paper>
-            {providerDescriptor?.type === ProviderType.WalletConnect ? null : (
+            {providerDescriptor.type === ProviderType.WalletConnect ? null : (
                 <Card className={classes.tipContent} elevation={0}>
                     <Icons.WarningTriangle className={classes.warningTriangleIcon} />
                     <Typography className={classes.tipContentText} variant="body2">

@@ -64,7 +64,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
         const { personaManagers, walletManagers } = useManagers()
         const { openPopupWindow } = useSNSAdaptorContext()
         const ownerInfo = useMemo(() => {
-            const persona = personaManagers?.find((x) => isSameAddress(x.address, owner))
+            const persona = personaManagers.find((x) => isSameAddress(x.address, owner))
 
             if (persona)
                 return {
@@ -72,7 +72,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                     publicKey: formatPersonaFingerprint(persona.identifier.rawPublicKey, 4),
                 }
 
-            const wallet = walletManagers?.find((x) => isSameAddress(x.address, owner))
+            const wallet = walletManagers.find((x) => isSameAddress(x.address, owner))
             if (!wallet) return
             return {
                 name: wallet.name,

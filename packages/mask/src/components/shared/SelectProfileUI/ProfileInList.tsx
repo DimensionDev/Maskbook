@@ -52,7 +52,7 @@ export const ProfileInList = memo<ProfileInListProps>((props) => {
                     secondary: classes.overflow,
                 }}
                 primary={name}
-                secondary={props.item.linkedPersona?.rawPublicKey?.toLowerCase()}
+                secondary={props.item.linkedPersona?.rawPublicKey.toLowerCase()}
             />
         </ListItemButton>
     )

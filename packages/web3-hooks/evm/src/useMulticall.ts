@@ -42,7 +42,7 @@ function toCallKey(call: Call) {
 
 function getCallResult(call: Call, chainId: ChainId, blockNumber: number) {
     const cache = cachedResults[chainId]
-    const blockNumber_ = cache?.blockNumber ?? 0
+    const blockNumber_ = cache.blockNumber ?? 0
     if (blockNumber_ < blockNumber) return
     return cache.results[toCallKey(call)]
 }

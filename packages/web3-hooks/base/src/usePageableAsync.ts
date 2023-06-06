@@ -21,7 +21,7 @@ export const usePageableAsync = <T>(
 
     const state = useAsyncRetry(() => fn(indicator), [...deps, indicator])
 
-    const stateValue = state?.value
+    const stateValue = state.value
     const stateNextIndicator = state.value?.nextIndicator
 
     useEffect(() => push(...(stateValue?.data ?? [])), [stateValue])

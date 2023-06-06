@@ -74,7 +74,7 @@ export function NFTAvatarInTwitter() {
     const handlerWatcher = () => {
         const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
         if (!avatar || !nftAvatar?.avatarId) return
-        setUpdatedAvatar(!!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
+        setUpdatedAvatar(!!nftAvatar.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
     }
     useEffect(() => {
         const abortController = new AbortController()
@@ -158,7 +158,7 @@ function useNFTCircleAvatar(size: number) {
     useAsync(async () => {
         if (!account || !nftAvatar || !identity.identifier) return
 
-        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
+        if (!NFTEvent?.address || !NFTEvent.tokenId) {
             MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
                 userId: identity.identifier.userId,
                 avatarId: Twitter.getAvatarId(identity.avatar ?? ''),

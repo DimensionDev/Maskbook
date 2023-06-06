@@ -102,7 +102,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
                 ) : null}
             </div>
             <div className={classes.content}>
-                {asset.traits?.map((x, i) => (
+                {asset.traits.map((x, i) => (
                     <div key={i} className={classes.traitsItem}>
                         <Typography className={classes.traitTitle}>{x.type}</Typography>
                         <Typography className={classes.traitValue} title={x.value}>

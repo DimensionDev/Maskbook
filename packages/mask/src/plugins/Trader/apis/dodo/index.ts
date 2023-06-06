@@ -16,9 +16,9 @@ export async function swapRoute(request: SwapRouteRequest) {
         urlcat(DODO_BASE_URL, '/dodoapi/getdodoroute', {
             chainId: request.chainId,
             slippage: request.slippage,
-            fromTokenAddress: request.fromToken?.address,
+            fromTokenAddress: request.fromToken.address,
             fromTokenDecimals: request.fromToken.decimals,
-            toTokenAddress: request.toToken?.address,
+            toTokenAddress: request.toToken.address,
             toTokenDecimals: request.toToken.decimals,
             fromAmount: request.fromAmount,
             userAddr: request.userAddr,

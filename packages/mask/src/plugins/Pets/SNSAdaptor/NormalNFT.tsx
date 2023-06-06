@@ -76,7 +76,7 @@ export function NormalNFT(props: NormalNFTProps) {
                             },
                             classes.wordBox,
                         )}>
-                        {showMeta?.word}
+                        {showMeta.word}
                     </Box>
                 </Box>
             ) : null}

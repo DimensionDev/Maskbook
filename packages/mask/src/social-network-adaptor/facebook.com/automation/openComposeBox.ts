@@ -71,6 +71,6 @@ export async function taskOpenComposeBoxFacebook(
 export async function taskCloseNativeComposeBoxFacebook() {
     await waitDocumentReadyState('interactive')
     await delay(200)
-    const closeDialogButton = nativeComposeDialogCloseButtonSelector().evaluate()?.[0]
-    closeDialogButton?.click()
+    const closeDialogButton = nativeComposeDialogCloseButtonSelector().evaluate()[0]
+    closeDialogButton.click()
 }

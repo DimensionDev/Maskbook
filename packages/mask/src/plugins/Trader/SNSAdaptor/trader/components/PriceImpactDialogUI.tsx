@@ -38,12 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     icon: {
-        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor.danger,
         width: 90,
         height: 90,
     },
     title: {
-        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+        color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor.danger,
         fontSize: 24,
         lineHeight: 1.2,
         fontWeight: 700,
@@ -51,11 +51,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     description: {
         marginTop: 56,
-        color: theme.palette.maskColor?.second,
+        color: theme.palette.maskColor.second,
         fontSize: 16,
         lineHeight: '20px',
         '& > span': {
-            color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
+            color: Sniffings.is_dashboard_page ? MaskColorVar.redMain : theme.palette.maskColor.danger,
         },
     },
     actions: {

@@ -64,7 +64,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         isLoading: loadingBinding,
         isFetched,
     } = usePersonaProofs(personaPublicKey, {
-        events: { ownProofChanged: context?.ownProofChanged },
+        events: { ownProofChanged: context.ownProofChanged },
     } as WebExtensionMessage<MaskEvents>)
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST

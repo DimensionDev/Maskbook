@@ -80,7 +80,7 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
     const onShare = useCallback(() => {
         if (!amount || !tokenDetail.value) return
 
-        share?.(t.share_text({ amount, symbol: tokenDetail.value?.symbol }))
+        share?.(t.share_text({ amount, symbol: tokenDetail.value.symbol }))
     }, [share, amount, tokenDetail.value?.symbol])
 
     return usePortalShadowRoot((container) => (

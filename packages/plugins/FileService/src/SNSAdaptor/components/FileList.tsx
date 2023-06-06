@@ -126,7 +126,7 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
                                 <UploadingFile
                                     className={classes.file}
                                     file={file}
-                                    progress={uploadStateMap[file.id]?.progress ?? 0}
+                                    progress={uploadStateMap[file.id].progress ?? 0}
                                 />
                             ) : (
                                 <ManageableFile

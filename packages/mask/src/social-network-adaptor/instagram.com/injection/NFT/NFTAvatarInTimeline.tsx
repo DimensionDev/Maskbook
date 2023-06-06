@@ -64,7 +64,7 @@ function _(selector: () => LiveSelector<HTMLImageElement>, signal: AbortSignal) 
             let remove = noop
 
             const run = async () => {
-                const href = (element.parentNode as HTMLAnchorElement)?.href
+                const href = (element.parentNode as HTMLAnchorElement).href
 
                 if (!href) return
 

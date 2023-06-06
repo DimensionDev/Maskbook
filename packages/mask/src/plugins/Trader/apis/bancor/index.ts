@@ -22,9 +22,9 @@ const getTargetAmount = async (
     const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/pricing/target-amount', {
         source_dlt_type: 'ethereum',
-        source_dlt_id: request.fromToken?.address,
+        source_dlt_id: request.fromToken.address,
         target_dlt_type: 'ethereum',
-        target_dlt_id: request.toToken?.address,
+        target_dlt_id: request.toToken.address,
         amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
     })
     return fetchJSON(url)
@@ -36,9 +36,9 @@ const getSourceAmount = async (
     const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/pricing/source-amount', {
         source_dlt_type: 'ethereum',
-        source_dlt_id: checksumAddress(request.fromToken?.address),
+        source_dlt_id: checksumAddress(request.fromToken.address),
         target_dlt_type: 'ethereum',
-        target_dlt_id: request.toToken?.address,
+        target_dlt_id: request.toToken.address,
         amount: roundDecimal(request.toAmount, request.toToken.decimals),
     })
     return fetchJSON(url)
@@ -74,7 +74,7 @@ export async function swapBancor(request: SwapBancorRequest): Promise<SwapBancor
     const validationErrorResponse = response as BancorApiErrorResponse
 
     if (validationErrorResponse.error) {
-        throw new Error(validationErrorResponse.error?.messages?.[0] || 'Unknown Error')
+        throw new Error(validationErrorResponse.error.messages?.[0] || 'Unknown Error')
     }
 
     const { amount } = response as ExpectedTargetAmountResponse
@@ -86,7 +86,7 @@ export async function swapBancor(request: SwapBancorRequest): Promise<SwapBancor
         toAmount,
         fromAmount,
         minimumReceived: calculateMinimumReturn({ toToken, toAmount, slippage }),
-        fromTokenSymbol: fromToken?.symbol,
-        toTokenSymbol: toToken?.symbol,
+        fromTokenSymbol: fromToken.symbol,
+        toTokenSymbol: toToken.symbol,
     }
 }

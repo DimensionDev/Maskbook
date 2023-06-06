@@ -110,7 +110,7 @@ export function RemindDialog(props: RemindDialogProps) {
                     address={token.address}
                     name={token.name}
                     symbol={token.symbol}
-                    logoURL={token?.logoURL}
+                    logoURL={token.logoURL}
                 />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>

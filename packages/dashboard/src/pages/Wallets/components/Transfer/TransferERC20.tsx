@@ -86,7 +86,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
-        selectedToken?.address ?? '',
+        selectedToken.address ?? '',
     )
     const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
@@ -143,7 +143,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (
             !wallet?.owner ||
             chainId !== smartPayConfig?.smartPayChainId ||
-            !isSameAddress(selectedToken?.address, maskTokenAddress)
+            !isSameAddress(selectedToken.address, maskTokenAddress)
         )
             return tokenBalance
 
@@ -154,11 +154,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                 new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
                     .multipliedBy(!isZero(gasLimit) ? addGasMargin(gasLimit) : '200000')
                     .integerValue()
-                    .multipliedBy(smartPayConfig?.ratio ?? 1),
+                    .multipliedBy(smartPayConfig.ratio ?? 1),
             ),
             0,
         )
-    }, [gasConfig, wallet, selectedToken?.address, maskTokenAddress, smartPayConfig, chainId, tokenBalance, gasLimit])
+    }, [gasConfig, wallet, selectedToken.address, maskTokenAddress, smartPayConfig, chainId, tokenBalance, gasLimit])
     // #endregion
 
     const maxAmount = useMemo(() => {
@@ -168,7 +168,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         let amount_ = new BigNumber(actualBalance || '0')
         amount_ = selectedToken.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return BigNumber.max(0, amount_).toFixed()
-    }, [actualBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
+    }, [actualBalance, gasPrice, selectedToken.type, amount, gasLimit, maxFee, is1559Supported])
 
     const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
 

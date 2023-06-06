@@ -74,7 +74,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         address,
         schema: SchemaType.ERC721,
         creator: createAccount(first(asset.creators)?.account),
-        traits: asset?.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
+        traits: asset.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
         metadata: {
             chainId,
             name,
@@ -134,7 +134,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
                 : undefined,
         priceInToken: paymentToken
             ? {
-                  amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
+                  amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken.decimals).toFixed(),
                   token: paymentToken,
               }
             : undefined,
@@ -157,7 +157,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
         to: createAccount(history.buyer),
         type: resolveActivityType(history['@type']),
         assetPermalink:
-            history.nft?.type.contract && history.nft?.type.tokenId
+            history.nft?.type.contract && history.nft.type.tokenId
                 ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)
                 : undefined,
         quantity: history.nft?.value ?? history.value ?? '0',

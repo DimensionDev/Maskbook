@@ -63,7 +63,7 @@ export function useDeploy(
             if (
                 !chainId ||
                 !lastRecognizedIdentity?.isOwner ||
-                !lastRecognizedIdentity?.identifier?.userId ||
+                !lastRecognizedIdentity.identifier?.userId ||
                 !signAccount?.address ||
                 !contractAccount ||
                 (!signPersona && !signWallet)
@@ -80,11 +80,11 @@ export function useDeploy(
 
                 const result = await Web3.confirmTransaction(hash, options)
 
-                if (!result?.status) return
+                if (!result.status) return
 
-                onSuccess?.()
+                onSuccess()
 
-                return result?.transactionHash
+                return result.transactionHash
             }
             const payload = JSON.stringify({
                 twitterHandle: lastRecognizedIdentity.identifier.userId,
@@ -123,15 +123,15 @@ export function useDeploy(
             if (!hash) throw new Error('Deploy Failed')
 
             const result = await Web3.confirmTransaction(hash, options)
-            if (!result?.status) return
+            if (!result.status) return
 
             const deployHash = await Web3.deploy?.(signAccount.address, signAccount.identifier, options)
             if (!deployHash) return
 
             const deployResult = await Web3.confirmTransaction(deployHash, options)
-            if (!deployResult?.status) return
+            if (!deployResult.status) return
 
-            onSuccess?.()
+            onSuccess()
 
             return deployResult.transactionHash
         } catch (error) {

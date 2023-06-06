@@ -59,7 +59,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         const trustedOwnNonFungibleTokens = trustedNonFungibleTokens.filter((x) => isSameAddress(x.ownerId, account))
         return uniqBy(
             [...trustedOwnNonFungibleTokens, ...value],
-            (x) => x?.contract?.address.toLowerCase() + x?.tokenId,
+            (x) => x.contract?.address.toLowerCase() + x.tokenId,
         ).filter((x) => (selectedChain ? x.chainId === selectedChain.chainId : true))
     }, [value.length, trustedNonFungibleTokens, selectedChain?.chainId])
 

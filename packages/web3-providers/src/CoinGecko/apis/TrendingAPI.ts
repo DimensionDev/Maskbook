@@ -46,7 +46,7 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
             const thumbCoins = await getThumbCoins(keyword)
             return compact(
                 thumbCoins
-                    .filter((x) => x?.market_cap_rank && x.market_cap_rank < VALID_TOP_RANK)
+                    .filter((x) => x.market_cap_rank && x.market_cap_rank < VALID_TOP_RANK)
                     .map((y) => this.coins.get(y.id)),
             ).slice(0, COIN_RECOMMENDATION_SIZE)
         } catch {

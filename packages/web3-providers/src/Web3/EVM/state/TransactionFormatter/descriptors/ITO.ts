@@ -36,7 +36,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
             return {
                 chainId: context.chainId,
                 tokenInAddress: token?.address,
-                tokenInAmount: method?.parameters?._total_tokens,
+                tokenInAmount: method.parameters?._total_tokens,
                 title: i18NextInstance.t('plugin_infra_descriptor_ito_create_title'),
                 description: i18NextInstance.t('plugin_infra_descriptor_ito_create'),
                 snackbar: {

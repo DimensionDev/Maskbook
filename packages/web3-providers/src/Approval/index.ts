@@ -53,7 +53,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                     )
                 }),
             )
-            const spenderList = approvalListState.tokenState[account.toLowerCase()]?.get(chainId)?.spenderList
+            const spenderList = approvalListState.tokenState[account.toLowerCase()].get(chainId)?.spenderList
 
             if (!spenderList) return EMPTY_LIST
 
@@ -116,7 +116,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
                 }),
             )
 
-            const spenderList = approvalListState.nftState[account.toLowerCase()]?.get(chainId)?.spenderList
+            const spenderList = approvalListState.nftState[account.toLowerCase()].get(chainId)?.spenderList
 
             if (!spenderList) return EMPTY_LIST
 
@@ -157,7 +157,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
         const web3 = this.Web3.getWeb3({ chainId })
-        const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
+        const fromBlock = state[account].get(chainId)?.fromBlock ?? 0
         const toBlock = await web3.eth.getBlockNumber()
         const logs = await web3.eth.getPastLogs({
             topics: [topic, web3.eth.abi.encodeParameter('address', account)],

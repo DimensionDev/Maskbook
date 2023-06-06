@@ -38,7 +38,7 @@ export const ContractSection = ({
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
             {chain ? (
-                <WalletIcon mainIcon={chain?.icon} size={14} />
+                <WalletIcon mainIcon={chain.icon} size={14} />
             ) : iconURL ? (
                 <TokenIcon
                     logoURL={iconURL}
@@ -62,7 +62,7 @@ export const ContractSection = ({
                 <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
             </Typography>
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
-                <Icons.PopupCopy size={16} color={theme.palette.maskColor?.second} />
+                <Icons.PopupCopy size={16} color={theme.palette.maskColor.second} />
             </IconButton>
         </Stack>
     )

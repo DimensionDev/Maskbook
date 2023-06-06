@@ -29,7 +29,7 @@ export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<Cha
             address: asset.contract.deployed_by,
         },
         owner: {
-            address: asset.owners?.[0].owner_address,
+            address: asset.owners[0].owner_address,
         },
         // TODO
         priceInToken: undefined,
@@ -80,7 +80,7 @@ export function createSolanaNonFungibleCollection(collection: Collection): NonFu
         iconURL: collection.image_url,
         ownersTotal: collection.total_quantity,
         source: SourceType.SimpleHash,
-        address: collection.top_contracts?.[0]?.split('.')?.[1] ?? '',
+        address: collection.top_contracts[0]?.split('.')?.[1] ?? '',
         verified: verifiedMarketplaces.length > 0,
         verifiedBy: verifiedMarketplaces.map((x) => x.marketplace_name),
     }

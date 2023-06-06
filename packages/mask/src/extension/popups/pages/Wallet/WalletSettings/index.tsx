@@ -61,7 +61,7 @@ const WalletSettings = memo(() => {
                             <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                         </ListItem>
                     ) : null}
-                    {wallet?.configurable && !wallet.owner ? (
+                    {wallet.configurable && !wallet.owner ? (
                         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
                             <Icons.PopupTrash size={20} />
                             <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
@@ -78,7 +78,7 @@ const WalletSettings = memo(() => {
                         </ListItem>
                     ) : null}
                     <Link
-                        href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
+                        href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <ListItem className={classes.item}>

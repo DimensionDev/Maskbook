@@ -137,10 +137,10 @@ export const Prior1559GasSetting = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
-                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
+            (value.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
-            return new BigNumber(value?.formatterTransaction?._tx.gas ?? 0).toNumber()
+            return new BigNumber(value.formatterTransaction._tx.gas ?? 0).toNumber()
         }
         return 0
     }, [value])
@@ -148,8 +148,8 @@ export const Prior1559GasSetting = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
-                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
+            (value.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
                 return Web3.estimateTransaction?.(value.formatterTransaction._tx) ?? 0
@@ -198,7 +198,7 @@ export const Prior1559GasSetting = memo(() => {
             value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
         ) {
             // if rpc payload contain gas price, set it to default values
-            if (value?.formatterTransaction._tx.gasPrice) {
+            if (value.formatterTransaction._tx.gasPrice) {
                 const minGasPrice = minGasPriceOfChain[chainId]
                 // if the gas price in payload is lower than minimum value
                 if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice, minGasPrice)) {

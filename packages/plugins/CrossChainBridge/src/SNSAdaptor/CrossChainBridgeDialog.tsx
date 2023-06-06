@@ -60,17 +60,17 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
         <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
-                    {bridges?.map((bridge) => (
-                        <div className={classes.bridgeItem} key={bridge?.ID} onClick={() => openWindow(bridge?.link)}>
-                            {bridge?.icon}
+                    {bridges.map((bridge) => (
+                        <div className={classes.bridgeItem} key={bridge.ID} onClick={() => openWindow(bridge.link)}>
+                            {bridge.icon}
                             <div className={classes.bridgeInfo}>
                                 <Typography className={classes.bridgeName}>
-                                    {bridge?.name}
-                                    {bridge?.isOfficial ? (
+                                    {bridge.name}
+                                    {bridge.isOfficial ? (
                                         <Typography className={classes.officialTag}>{t.official()}</Typography>
                                     ) : null}
                                 </Typography>
-                                {bridge?.intro ? (
+                                {bridge.intro ? (
                                     <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography>
                                 ) : null}
                             </div>

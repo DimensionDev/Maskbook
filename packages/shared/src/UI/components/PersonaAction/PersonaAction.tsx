@@ -52,14 +52,14 @@ export function PersonaAction(props: PersonaActionProps) {
         (e: React.MouseEvent) => {
             e.preventDefault()
             e.stopPropagation()
-            copyToClipboard(currentPersona?.identifier?.rawPublicKey ?? '')
+            copyToClipboard(currentPersona?.identifier.rawPublicKey ?? '')
             setOpen(true)
             // Close tooltip after five seconds of copying
             setTimeout(() => {
                 setOpen(false)
             }, 5000)
         },
-        [currentPersona?.identifier?.rawPublicKey, copyToClipboard],
+        [currentPersona?.identifier.rawPublicKey, copyToClipboard],
     )
 
     return (

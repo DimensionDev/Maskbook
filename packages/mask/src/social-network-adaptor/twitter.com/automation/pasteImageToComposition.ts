@@ -11,7 +11,7 @@ export async function pasteImageToCompositionTwitter(
 ) {
     const interval = 500
 
-    if (!isCompose() && !hasEditor() && options?.reason !== 'reply') {
+    if (!isCompose() && !hasEditor() && options.reason !== 'reply') {
         // open tweet window
         await untilElementAvailable(newPostButtonSelector())
         newPostButtonSelector().evaluate()!.click()

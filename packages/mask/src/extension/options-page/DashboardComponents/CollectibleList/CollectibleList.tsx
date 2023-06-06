@@ -93,11 +93,11 @@ export function CollectibleList(props: CollectibleListProps) {
         (event: ChangeEventOptions) => {
             if (multiple) {
                 const newValue = availableKeys.filter((x) => {
-                    return x === event.value ? event.checked : value?.includes(x)
+                    return x === event.value ? event.checked : value.includes(x)
                 })
-                onChange?.(newValue)
+                onChange(newValue)
             } else {
-                onChange?.(event.checked ? event.value : null)
+                onChange(event.checked ? event.value : null)
             }
         },
         [multiple, availableKeys, value],
@@ -126,8 +126,8 @@ export function CollectibleList(props: CollectibleListProps) {
                             const uiTokenId = Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
                             const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
                             const collectibleKey = getCollectibleKey(token)
-                            const checked = selectable ? value?.includes(collectibleKey) : false
-                            const inactive = value ? !!value?.length && !checked : false
+                            const checked = selectable ? value.includes(collectibleKey) : false
+                            const inactive = value ? !!value.length && !checked : false
                             return (
                                 <ShadowRootTooltip
                                     key={index}

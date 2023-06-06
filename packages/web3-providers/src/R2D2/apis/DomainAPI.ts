@@ -11,6 +11,6 @@ export class R2D2DomainAPI implements DomainAPI.Provider<ChainId> {
 
     async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         const response = await fetchJSON<{ reverseRecord: string; domains: string[] }>(urlcat(ENS_ROOT_URL, address))
-        return response?.reverseRecord
+        return response.reverseRecord
     }
 }

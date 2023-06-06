@@ -36,7 +36,7 @@ export class PayloadEditor {
                 return first(params)
             default:
                 const config = this.config
-                return config?.from
+                return config.from
         }
     }
 
@@ -67,7 +67,7 @@ export class PayloadEditor {
     }
 
     get chainId() {
-        if (typeof this.config?.chainId === 'string') {
+        if (typeof this.config.chainId === 'string') {
             return (Number.parseInt(this.config.chainId, 16) as ChainId) || this.options?.chainId
         }
         return this.options?.chainId
@@ -91,8 +91,8 @@ export class PayloadEditor {
                 // compose a fake transaction to be accepted by Transaction Watcher
                 return {
                     from: owner,
-                    to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
-                    chainId: this.options?.chainId,
+                    to: getSmartPayConstant(this.options.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
+                    chainId: this.options.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toHex(0)],
@@ -109,7 +109,7 @@ export class PayloadEditor {
                     from: ownerAddress,
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
-                    chainId: this.options?.chainId,
+                    chainId: this.options.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toHex(nonce)],

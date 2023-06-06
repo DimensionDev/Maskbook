@@ -65,7 +65,7 @@ const createSearchTabConfig = (
                     label: result.type === SearchResultType.Domain ? result.keyword : '',
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
-                const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+                const key = [socialAccount.address ?? '-', props.tag ?? '-'].join('_')
 
                 useMountReport(() => {
                     switch (props.tag) {
@@ -81,7 +81,7 @@ const createSearchTabConfig = (
                 return (
                     <Box style={{ minHeight: 300 }}>
                         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                            <FeedsPage key={key} address={socialAccount?.address} {...props} />
+                            <FeedsPage key={key} address={socialAccount.address} {...props} />
                         </Web3ContextProvider>
                     </Box>
                 )

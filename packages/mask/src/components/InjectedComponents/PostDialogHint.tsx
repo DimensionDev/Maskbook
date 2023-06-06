@@ -50,8 +50,8 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const getEntry = () => (
         <ShadowRootTooltip
             title={t('mask_network')}
-            placement={tooltip?.placement}
-            disableHoverListener={tooltip?.disabled}
+            placement={tooltip.placement}
+            disableHoverListener={tooltip.disabled}
             PopperProps={{
                 disablePortal: false,
             }}
@@ -60,7 +60,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
                 size="large"
                 className={cx(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
-                {ICON_MAP?.[props?.iconType ?? 'default']}
+                {ICON_MAP[props.iconType ?? 'default']}
             </IconButton>
         </ShadowRootTooltip>
     )

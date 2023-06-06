@@ -122,7 +122,7 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
     })()
 
     const handleClick = useCallback(() => onChange(profile, !selected), [onChange, selected])
-    const secondaryText = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
+    const secondaryText = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey.toUpperCase() ?? '', 3)
     return (
         <ListItem
             onClick={handleClick}

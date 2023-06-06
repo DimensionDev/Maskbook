@@ -40,14 +40,14 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll) => {
             if (!chainId) throw new Error('Failed to connect to provider.')
-            await Web3.switchChain?.(chainId, { providerType: providerDescriptor?.type })
+            await Web3.switchChain?.(chainId, { providerType: providerDescriptor.type })
         },
         [Web3, providerDescriptor],
     )
 
     return useMenu(
         ...(networkDescriptors
-            ?.filter((x) => x.isMainnet)
+            .filter((x) => x.isMainnet)
             .map((network) => {
                 const menuItem = (
                     <MenuItem

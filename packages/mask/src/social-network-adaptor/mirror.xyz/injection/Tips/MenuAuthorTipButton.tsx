@@ -51,7 +51,7 @@ function AuthorTipsButtonWrapper() {
     const Others = useWeb3Others()
 
     const accounts = useMemo((): Array<SocialAccount<Web3Helper.ChainIdAll>> => {
-        if (!visitingIdentity?.identifier) return EMPTY_LIST
+        if (!visitingIdentity.identifier) return EMPTY_LIST
         return [
             {
                 pluginID,

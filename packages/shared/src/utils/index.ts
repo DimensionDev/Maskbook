@@ -43,7 +43,7 @@ export function createFungibleAsset<ChainId, SchemaType>(
         balance: leftShift(balance, token.decimals ?? 0).toFixed(),
         price,
         value: {
-            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, token.decimals ?? 0)).toFixed(),
+            [CurrencyType.USD]: multipliedBy(price.usd ?? 0, leftShift(balance, token.decimals ?? 0)).toFixed(),
         },
     }
 }
@@ -84,7 +84,7 @@ export function isSameNFT(
     if (!a.contract) return false
     return (
         isSameAddress(a.contract.address, b?.contract?.address) &&
-        a.contract?.chainId === b?.contract?.chainId &&
-        a.tokenId === b?.tokenId
+        a.contract.chainId === b?.contract?.chainId &&
+        a.tokenId === b.tokenId
     )
 }

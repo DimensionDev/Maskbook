@@ -86,7 +86,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
 
     const dataSource = useMemo(() => {
         const results =
-            fungibleAssets.value?.filter((x) => !selectedChainId || x.chainId === selectedChainId) ?? EMPTY_LIST
+            fungibleAssets.value.filter((x) => !selectedChainId || x.chainId === selectedChainId) ?? EMPTY_LIST
 
         if (!selectedChainId) {
             return results.sort((a, z) => {
@@ -140,7 +140,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
         <>
             <TokenTableUI
                 isLoading={fungibleAssets.loading}
-                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
+                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value.length)}
                 isExpand={isExpand}
                 data={visibleData}
                 onSwap={onSwap}
@@ -148,7 +148,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
             />
             <MoreBarUI
                 isLoading={fungibleAssets.loading}
-                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
+                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value.length)}
                 isExpand={isExpand}
                 hasLowValueToken={hasLowValueToken}
                 onSwitch={handleSwitch}

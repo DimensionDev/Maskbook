@@ -171,7 +171,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                                         setNonFungibleTokenId(tokenId)
                                     }}
                                 />
-                                <ElementAnchor key={fetchedTokens.length} callback={() => next?.()}>
+                                <ElementAnchor key={fetchedTokens.length} callback={() => next()}>
                                     {!done && <LoadingBase size={36} />}
                                 </ElementAnchor>
                             </div>

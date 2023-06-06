@@ -64,7 +64,7 @@ export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, plug
     const plugins = useActivatedPluginsSNSAdaptor('any')
     const entries = plugins.map((plugin): [string, boolean] => {
         if (!plugin.enableRequirement.web3) return [plugin.ID, true]
-        const supportedChainIds = plugin.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
+        const supportedChainIds = plugin.enableRequirement.web3[pluginID as NetworkPluginID]?.supportedChainIds
         return [plugin.ID, supportedChainIds?.includes(chainId) ?? false]
     })
     return Object.fromEntries(entries) as Record<string, boolean>

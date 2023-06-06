@@ -68,7 +68,7 @@ export class NameServiceState<
         if (!name) return
         const callbacks = this.createResolvers().map((resolver) => {
             return async () => {
-                const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
+                const address = this.storage.value[resolver.id][name] || (await resolver.lookup(name))
                 if (address && this.options.isValidAddress(address)) {
                     const formattedAddress = this.options.formatAddress(address)
                     await this.addAddress(resolver.id, name, formattedAddress)
@@ -86,7 +86,7 @@ export class NameServiceState<
             return async () => {
                 const name =
                     this.storage.value[resolver.id][this.options.formatAddress(address)] ||
-                    (await resolver.reverse?.(address))
+                    (await resolver.reverse(address))
                 if (name) {
                     await this.addName(resolver.id, address, name)
                     return name

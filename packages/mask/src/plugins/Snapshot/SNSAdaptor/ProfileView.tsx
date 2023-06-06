@@ -103,7 +103,7 @@ export function ProfileView(props: ProfileViewProps) {
     const filteredProposalList = useMemo(() => {
         if (!proposalList?.length || !space?.members) return
         if (currentTab === ContentTabs.All) return proposalList
-        if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space?.members?.includes(x.author))
+        if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space.members.includes(x.author))
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
     }, [currentTab, JSON.stringify(proposalList), JSON.stringify(space?.members)])
 

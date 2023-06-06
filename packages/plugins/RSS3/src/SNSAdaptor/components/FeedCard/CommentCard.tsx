@@ -121,7 +121,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
             </Typography>
             <article className={cx(classes.target, verbose ? classes.verbose : null)}>
                 {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
-                {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
+                {commentTarget?.media[0].mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
                         src={resolveResourceURL(commentTarget.media[0].address)}
@@ -132,7 +132,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 <div>
                     {commentTarget?.title ? (
                         <Typography variant="h1" className={classes.title}>
-                            {commentTarget?.title}
+                            {commentTarget.title}
                         </Typography>
                     ) : null}
                     {verbose && commentTarget?.body ? (

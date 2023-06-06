@@ -121,7 +121,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         if (!ITO2_CONTRACT_ADDRESS) return
 
         // the settings is not available
-        if (!settings?.token) return
+        if (!settings.token) return
 
         const FillSuccess = (receipt.events?.FillSuccess?.returnValues ?? {}) as {
             total: string

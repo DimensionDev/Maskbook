@@ -34,7 +34,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             show_attribute: true,
         })
         const response = await fetchFromNFTScanV2<Response<EVM.Asset>>(chainId, path)
-        if (!response?.data) return
+        if (!response.data) return
 
         const collection = await this.getCollectionRaw(response.data.contract_address, { chainId })
         return createNonFungibleAsset(chainId, response.data, collection)
@@ -50,7 +50,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             show_attribute: true,
         })
         const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
-        const assets = response?.data?.flatMap((x) => x.assets.map((y) => createNonFungibleAsset(chainId, y, x)))
+        const assets = response.data.flatMap((x) => x.assets.map((y) => createNonFungibleAsset(chainId, y, x)))
         return createPageable(assets ?? EMPTY_LIST, createIndicator(indicator))
     }
 
@@ -67,11 +67,11 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             cursor: indicator?.id,
         })
         const response = await fetchFromNFTScanV2<PageableResponse<EVM.Asset>>(chainId, path)
-        const assets = response?.data?.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
+        const assets = response.data.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             assets,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 
@@ -86,7 +86,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             show_attribute: true,
         })
         const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
-        const collections = response?.data.map((x) => createNonFungibleCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
+        const collections = response.data.map((x) => createNonFungibleCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
         return createPageable(collections, createIndicator(indicator))
     }
 
@@ -99,7 +99,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             address,
         })
         const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
-        return response?.data
+        return response.data
     }
 
     async getCollection(
@@ -119,7 +119,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             address,
         })
         const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
-        if (!response?.data) return
+        if (!response.data) return
         return createNonFungibleTokenContract(chainId, response.data)
     }
 
@@ -136,11 +136,11 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             cursor: indicator?.id,
         })
         const response = await fetchFromNFTScanV2<PageableResponse<EVM.Transaction>>(chainId, path)
-        const events = response?.data.content.map((x) => createNonFungibleTokenEvent(chainId, x)) ?? EMPTY_LIST
+        const events = response.data.content.map((x) => createNonFungibleTokenEvent(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             events,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 }

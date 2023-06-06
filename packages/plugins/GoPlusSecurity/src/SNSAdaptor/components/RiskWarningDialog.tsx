@@ -78,7 +78,7 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
-            copyToClipboard(token?.contract ?? '')
+            copyToClipboard(token.contract ?? '')
         },
         [],
         undefined,
@@ -115,9 +115,9 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                     </Typography>
                 </Stack>
                 <Stack className={classes.tokenInfo}>
-                    <Typography>{token?.name ?? '--'}</Typography>
+                    <Typography>{token.name ?? '--'}</Typography>
                     <Stack direction="row">
-                        <Typography>{token?.contract ? formatEthereumAddress(token?.contract, 4) : '--'}</Typography>
+                        <Typography>{token.contract ? formatEthereumAddress(token.contract, 4) : '--'}</Typography>
                         <Link
                             className={classes.link}
                             underline="none"
@@ -129,9 +129,9 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                         <Link
                             className={classes.link}
                             href={
-                                explorerResolver.fungibleTokenLink?.(
-                                    token?.chainId ?? ChainId.Mainnet,
-                                    token?.contract ?? ZERO_ADDRESS,
+                                explorerResolver.fungibleTokenLink(
+                                    token.chainId ?? ChainId.Mainnet,
+                                    token.contract ?? ZERO_ADDRESS,
                                 ) ?? ''
                             }
                             target="_blank"

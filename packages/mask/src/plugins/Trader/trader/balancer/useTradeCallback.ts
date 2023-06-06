@@ -26,7 +26,7 @@ export function useTradeCallback(
     return useAsyncFn(async () => {
         if (
             !trade?.inputToken ||
-            !trade?.outputToken ||
+            !trade.outputToken ||
             !exchangeProxyContract ||
             !BALANCER_ETH_ADDRESS ||
             pluginID !== NetworkPluginID.PLUGIN_EVM
@@ -96,7 +96,7 @@ export function useTradeCallback(
             const receipt = await Web3.getTransactionReceipt(hash)
 
             if (!receipt?.status) return
-            return receipt?.transactionHash
+            return receipt.transactionHash
         } catch (error) {
             if (error instanceof Error) {
                 notifyError(error.message)

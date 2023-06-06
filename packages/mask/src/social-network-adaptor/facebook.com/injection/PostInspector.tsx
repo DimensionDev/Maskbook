@@ -12,7 +12,7 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
-    clickSeeMore(current.rootElement.current?.parentElement)
+    clickSeeMore(current.rootElement.current.parentElement)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)

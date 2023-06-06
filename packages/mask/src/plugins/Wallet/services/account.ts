@@ -21,7 +21,7 @@ let deferred: DeferTuple<MaskAccount[], Error> | null
 
 export async function selectMaskAccount(): Promise<MaskAccount[]> {
     deferred = defer()
-    return deferred?.[0] ?? []
+    return deferred[0] ?? []
 }
 
 export async function resolveMaskAccount(accounts: MaskAccount[]) {

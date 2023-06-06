@@ -30,7 +30,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
     }) => {
         const { pluginID } = useNetworkContext()
         const Others = useWeb3Others()
-        const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address?.toLowerCase())
+        const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address.toLowerCase())
 
         const tokenValueUSD = useMemo(
             () => (amount ? new BigNumber(amount).times(tokenPrice).toString() : '0'),

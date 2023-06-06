@@ -146,7 +146,7 @@ export function ActivityCard(props: ActivityCardProps) {
                             {t.plugin_collectible_to()}
                             <strong title={activity.receive.address}>
                                 {type === ActivityType.Mint
-                                    ? Others.formatAddress(activity.from?.address, 4)
+                                    ? Others.formatAddress(activity.from.address, 4)
                                     : activity.receive.nickname ||
                                       (activity.receive.address
                                           ? Others.formatAddress(activity.receive.address, 4)
@@ -161,7 +161,7 @@ export function ActivityCard(props: ActivityCardProps) {
                     {activity.hash ? (
                         <Link
                             className={classes.link}
-                            href={Others.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
+                            href={Others.explorerResolver.transactionLink(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
                             <Icons.LinkOut className={classes.linkOut} size={16} />
                         </Link>

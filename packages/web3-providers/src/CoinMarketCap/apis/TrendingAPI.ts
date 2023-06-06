@@ -175,7 +175,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contracts,
             coin: {
                 id,
-                chainId: currentContract?.chainId,
+                chainId: currentContract.chainId,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,
@@ -203,7 +203,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
-                contract_address: currentContract?.address ?? coinInfo.platform?.token_address,
+                contract_address: currentContract.address ?? coinInfo.platform?.token_address,
             },
             currency,
             dataProvider: SourceType.CoinMarketCap,

@@ -75,7 +75,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
                 <main className={classes.content}>
                     <TypedMessageRenderContext
                         textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
-                        renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}>
+                        renderFragments={activatedSocialNetworkUI.customization.componentOverwrite?.RenderFragments}>
                         <TypedMessageRender message={TypedMessage} />
                     </TypedMessageRenderContext>
                 </main>

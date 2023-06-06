@@ -156,7 +156,7 @@ export const ProfileCard: FC<Props> = memo(({ identity, currentAddress, ...rest 
     const component = useMemo(() => {
         const Component = getProfileCardTabContent(currentTab)
         return <Component identity={identity} socialAccount={selectedSocialAccount} />
-    }, [currentTab, identity?.publicKey, selectedSocialAccount])
+    }, [currentTab, identity.publicKey, selectedSocialAccount])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)

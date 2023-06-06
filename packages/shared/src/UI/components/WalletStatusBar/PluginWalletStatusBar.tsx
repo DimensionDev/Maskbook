@@ -103,9 +103,9 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
 
         const walletName = useMemo(() => {
             if (domain) return domain
-            if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
-            return providerDescriptor?.name || Others.formatAddress(account, 4)
-        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others.formatAddress])
+            if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet.name
+            return providerDescriptor.name || Others.formatAddress(account, 4)
+        }, [account, domain, providerType, wallet?.name, providerDescriptor.name, Others.formatAddress])
 
         if (!account) {
             return (
@@ -121,9 +121,9 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
             <Box className={cx(classes.root, className)}>
                 <WalletDescription
                     pending={!!pendingTransactions.length}
-                    providerIcon={providerDescriptor?.icon}
+                    providerIcon={providerDescriptor.icon}
                     networkIcon={networkDescriptor?.icon}
-                    iconFilterColor={providerDescriptor?.iconFilterColor}
+                    iconFilterColor={providerDescriptor.iconFilterColor}
                     name={walletName}
                     formattedAddress={Others.formatAddress(account, 4)}
                     addressLink={Others.explorerResolver.addressLink(chainId, account)}

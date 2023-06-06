@@ -65,7 +65,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
         const handleLogout = useCallback(async () => {
             if (address && manageWallets.length) {
                 const maskProvider = Providers[ProviderType.MaskWallet]
-                await maskProvider?.removeWallets(manageWallets)
+                await maskProvider.removeWallets(manageWallets)
             }
             await Services.Identity.logoutPersona(identifier)
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()

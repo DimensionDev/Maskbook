@@ -48,7 +48,7 @@ if (typeof location === 'object' && location.protocol.includes('extension')) {
         'This package is not expected to be imported in background script or the extension script. Please check your code.',
     )
 }
-globalThis.document?.addEventListener?.(CustomEventId, (e) => {
+globalThis.document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent((e as CustomEvent).detail)
     if (r[1].length < 1) return
 

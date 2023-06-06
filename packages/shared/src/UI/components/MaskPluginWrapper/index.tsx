@@ -33,13 +33,13 @@ const useStyles = makeStyles<{
     return {
         card: {
             background:
-                props?.backgroundGradient ??
+                props.backgroundGradient ??
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
-            margin: props?.margin ?? theme.spacing(2, 0),
+            margin: props.margin ?? theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
             cursor: 'default',
-            borderRadius: props?.borderRadius ?? 15,
+            borderRadius: props.borderRadius ?? 15,
             overflow: 'hidden',
         },
         header: {

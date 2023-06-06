@@ -63,9 +63,9 @@ export class Base implements Translator<ConnectionContext> {
             console.error(err)
         }
 
-        const overrideMaxFeePerGas = context.requestOptions?.overrides?.maxFeePerGas
-        const overrideMaxPriorityFeePerGas = context.requestOptions?.overrides?.maxPriorityFeePerGas
-        const overrideGasPrice = context.requestOptions?.overrides?.gasPrice
+        const overrideMaxFeePerGas = context.requestOptions.overrides?.maxFeePerGas
+        const overrideMaxPriorityFeePerGas = context.requestOptions.overrides?.maxPriorityFeePerGas
+        const overrideGasPrice = context.requestOptions.overrides?.gasPrice
 
         context.config = {
             ...config,

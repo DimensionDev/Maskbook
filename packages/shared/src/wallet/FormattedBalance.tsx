@@ -24,7 +24,7 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     let formatted = formatter(valueInt, decimals, significant)
     if (minimumBalance && !isZero(formatted) && isLessThan(valueInt, minimumBalance)) {
         // it's a BigNumber so it's ok
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+         
         formatted = '<' + formatter(minimumBalance, decimals, significant).toString()
     }
     const { classes } = useStyles(undefined, { props })
@@ -33,7 +33,7 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
         return (
             <Fragment>
                 <span className={classes.balance}>{String(formatted)}</span>
-                <span className={classes?.symbol}>{symbol}</span>
+                <span className={classes.symbol}>{symbol}</span>
             </Fragment>
         )
     return <Fragment>{String(formatted)}</Fragment>

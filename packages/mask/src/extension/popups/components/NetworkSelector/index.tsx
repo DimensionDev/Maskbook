@@ -78,7 +78,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
 
     const [menu, openMenu] = useMenuConfig(
         networks
-            ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+            .filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
             .filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet))
             .map((network) => {
                 const chainId = network.chainId

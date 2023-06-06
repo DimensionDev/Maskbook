@@ -97,7 +97,7 @@ const Logout = memo(() => {
 
             if (manageWallets.length) {
                 const maskProvider = Providers[ProviderType.MaskWallet]
-                await maskProvider?.removeWallets(manageWallets)
+                await maskProvider.removeWallets(manageWallets)
             }
         }
         await Services.Identity.logoutPersona(selectedPersona.identifier)

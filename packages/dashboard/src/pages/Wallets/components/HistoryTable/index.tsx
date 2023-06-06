@@ -131,7 +131,7 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, isL
                 </Box>
             ) : null}
             <ElementAnchor callback={() => next?.()}>
-                {!done && dataSource?.length ? <LoadingBase /> : null}
+                {!done && dataSource.length ? <LoadingBase /> : null}
             </ElementAnchor>
         </>
     )

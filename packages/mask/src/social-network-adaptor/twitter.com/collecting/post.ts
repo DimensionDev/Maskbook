@@ -168,7 +168,7 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
 
 export function getPostIdFromNewPostToast() {
     const toastLinkNode = toastLinkSelector().evaluate()
-    return toastLinkNode?.href ? parseId(toastLinkNode?.href) : ''
+    return toastLinkNode?.href ? parseId(toastLinkNode.href) : ''
 }
 
 export function collectVerificationPost(keyword: string) {
@@ -207,7 +207,7 @@ function collectPostInfo(
     cancel: AbortSignal,
 ) {
     if (!tweetNode) return
-    if (cancel?.aborted) return
+    if (cancel.aborted) return
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
@@ -237,7 +237,7 @@ function collectLinks(
     cancel: AbortSignal,
 ) {
     if (!tweetNode) return
-    if (cancel?.aborted) return
+    if (cancel.aborted) return
     const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
     const seen = new Set<string>(['https://help.twitter.com/using-twitter/how-to-tweet#source-labels'])
     for (const x of links) {
@@ -246,7 +246,7 @@ function collectLinks(
         info.postMetadataMentionedLinks.set(x, x.href)
         Services.Helper.resolveTCOLink(x.href)
             .then((val) => {
-                if (cancel?.aborted) return
+                if (cancel.aborted) return
                 if (!val) return
                 info.postMetadataMentionedLinks.set(x, val)
             })

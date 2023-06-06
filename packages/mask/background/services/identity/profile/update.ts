@@ -53,7 +53,7 @@ export async function detachProfileWithNextID(
     },
 ): Promise<void> {
     await NextIDProof.bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
-        signature: options?.signature,
+        signature: options.signature,
     })
     MaskMessages.events.ownProofChanged.sendToAll(undefined)
 }
@@ -112,7 +112,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         identifier: item.linkedPersona,
         linkedProfiles: new Map(),
         publicKey: await decompressK256Key(item.linkedPersona.rawPublicKey),
-        publicHexKey: item.linkedPersona?.publicKeyAsHex,
+        publicHexKey: item.linkedPersona.publicKeyAsHex,
         nickname: item.nickname,
         hasLogout: false,
         uninitialized: false,

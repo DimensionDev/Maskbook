@@ -253,10 +253,10 @@ export async function queryPersonasDB(
     for await (const each of t.objectStore('personas')) {
         const out = personaRecordOutDB(each.value)
         if (
-            (query?.hasPrivateKey && !out.privateKey) ||
-            (query?.nameContains && out.nickname !== query.nameContains) ||
-            (query?.identifiers && !query.identifiers.some((x) => x === out.identifier)) ||
-            (query?.initialized && out.uninitialized)
+            (query.hasPrivateKey && !out.privateKey) ||
+            (query.nameContains && out.nickname !== query.nameContains) ||
+            (query.identifiers && !query.identifiers.some((x) => x === out.identifier)) ||
+            (query.initialized && out.uninitialized)
         )
             continue
 
@@ -420,7 +420,7 @@ export async function queryProfilesDB(
             if (query.hasLinkedPersona && !out.linkedPersona) return
             result.push(out)
         })
-    } else if (query.identifiers?.length) {
+    } else if (query.identifiers.length) {
         for await (const each of t.objectStore('profiles').iterate()) {
             const out = profileOutDB(each.value)
             if (query.hasLinkedPersona && !out.linkedPersona) continue
@@ -595,7 +595,7 @@ export async function queryRelationsPagedDB(
         if (cursor.value.linked !== linked.toText()) continue
         if (cursor.value.network !== options.network) continue
 
-        if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
+        if (firstRecord && options.after && options.after.profile.toText() !== cursor.value.profile) {
             cursor.continue([options.after.favor, options.after.profile.toText(), options.after.linked.toText()])
             firstRecord = false
             continue
@@ -605,8 +605,8 @@ export async function queryRelationsPagedDB(
 
         // after this record
         if (
-            options.after?.linked.toText() === cursor?.value.linked &&
-            options.after?.profile.toText() === cursor?.value.profile
+            options.after?.linked.toText() === cursor.value.linked &&
+            options.after.profile.toText() === cursor.value.profile
         )
             continue
 

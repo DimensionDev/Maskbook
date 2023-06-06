@@ -33,7 +33,7 @@ class MutexStorage<T> {
                         5000,
                         `Get ${key} timeout in mutex storage.`,
                     )
-                    callback(null, stored?.[key] as T)
+                    callback(null, stored[key] as T)
                 } catch (error) {
                     callback(error)
                 }

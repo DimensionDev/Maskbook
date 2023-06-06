@@ -258,7 +258,7 @@ export function createNonFungibleTokenEvent(
         assetPermalink: createPermalink(chainId, transaction.contract_address, transaction.token_id),
         priceInToken: paymentToken
             ? {
-                  amount: scale10(transaction.trade_price, paymentToken?.decimals).toFixed(),
+                  amount: scale10(transaction.trade_price, paymentToken.decimals).toFixed(),
                   token: paymentToken,
               }
             : undefined,

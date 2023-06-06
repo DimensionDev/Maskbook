@@ -143,10 +143,10 @@ export const GasSetting1559 = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
-                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
+            (value.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
-            return new BigNumber(value?.formatterTransaction?._tx.gas ?? 0).toNumber()
+            return new BigNumber(value.formatterTransaction._tx.gas ?? 0).toNumber()
         }
         return 0
     }, [value])
@@ -156,8 +156,8 @@ export const GasSetting1559 = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
-                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
+            (value.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
                 return Web3.estimateTransaction?.({
@@ -227,7 +227,7 @@ export const GasSetting1559 = memo(() => {
             value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
             value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
         ) {
-            if (value?.formatterTransaction._tx.maxFeePerGas && value?.formatterTransaction._tx.maxPriorityFeePerGas) {
+            if (value.formatterTransaction._tx.maxFeePerGas && value.formatterTransaction._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
                     fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),

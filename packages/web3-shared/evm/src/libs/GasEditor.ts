@@ -47,7 +47,7 @@ export class GasEditor {
                 maxPriorityFeePerGas:
                     toHex(this.EIP1559GasOptionConfig.maxPriorityFeePerGas) ||
                     toHex(config?.maxPriorityFeePerGas || '1'),
-                gasCurrency: this.EIP1559GasOptionConfig?.gasCurrency || fallback?.gasCurrency,
+                gasCurrency: this.EIP1559GasOptionConfig.gasCurrency || fallback?.gasCurrency,
                 gas:
                     this.EIP1559GasOptionConfig.gas && !isZero(this.EIP1559GasOptionConfig.gas)
                         ? toHex(this.EIP1559GasOptionConfig.gas)
@@ -99,9 +99,9 @@ export class GasEditor {
         gasOptionType = GasOptionType.NORMAL,
     ) {
         return new GasEditor(chainId, {
-            gasPrice: toFixed(gasOptions?.[gasOptionType]?.suggestedMaxFeePerGas ?? 0, 0),
-            maxFeePerGas: toFixed(gasOptions?.[gasOptionType]?.suggestedMaxFeePerGas ?? 0, 0),
-            maxPriorityFeePerGas: toFixed(gasOptions?.[gasOptionType]?.suggestedMaxPriorityFeePerGas ?? 0, 0),
+            gasPrice: toFixed(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0, 0),
+            maxFeePerGas: toFixed(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0, 0),
+            maxPriorityFeePerGas: toFixed(gasOptions?.[gasOptionType].suggestedMaxPriorityFeePerGas ?? 0, 0),
         })
     }
 }

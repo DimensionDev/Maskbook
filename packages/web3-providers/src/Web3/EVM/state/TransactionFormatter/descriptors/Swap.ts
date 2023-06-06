@@ -34,7 +34,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
-                    tokenInAddress: nativeToken?.address,
+                    tokenInAddress: nativeToken.address,
                     tokenInAmount: context.value,
                     description: `Swap ${getTokenAmountDescription(context.value, nativeToken)} for ${
                         outputToken?.symbol ?? ''
@@ -52,8 +52,8 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'swapExactTokensForETH' &&
                 parameters?.path &&
-                parameters?.amountOutMin &&
-                parameters?.amountIn
+                parameters.amountOutMin &&
+                parameters.amountIn
             ) {
                 const outputToken = await this.Hub.getFungibleToken(first(parameters.path) ?? '', {
                     chainId: context.chainId,
@@ -62,16 +62,16 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                     chainId: context.chainId,
                     title: 'Swap Token',
                     tokenInAddress: outputToken?.address,
-                    tokenInAmount: parameters?.amountIn,
+                    tokenInAmount: parameters.amountIn,
                     description: `Swap ${getTokenAmountDescription(parameters.amountIn, outputToken)} for ${
-                        nativeToken?.symbol ?? ''
+                        nativeToken.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             parameters.amountIn,
                             outputToken,
                         )} for ${getTokenAmountDescription(parameters.amountOutMin, nativeToken)} successfully.`,
-                        failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
+                        failedDescription: `Failed to swap ${nativeToken.symbol ?? ''}.`,
                     },
                 }
             }
@@ -79,8 +79,8 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'swapExactTokensForTokens' &&
                 parameters?.path &&
-                parameters?.amountIn &&
-                parameters?.amountOutMin
+                parameters.amountIn &&
+                parameters.amountOutMin
             ) {
                 const tokenIn = await this.Hub.getFungibleToken(first(parameters.path) ?? '', {
                     chainId: context.chainId,
@@ -112,9 +112,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'mixSwap' &&
                 parameters?.fromToken &&
-                parameters?.toToken &&
-                parameters?.fromTokenAmount &&
-                parameters?.minReturnAmount
+                parameters.toToken &&
+                parameters.fromTokenAmount &&
+                parameters.minReturnAmount
             ) {
                 const tokenIn = isSameAddress(parameters.fromToken, DODO_ETH_ADDRESS)
                     ? nativeToken
@@ -144,8 +144,8 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'dodoSwapV2TokenToETH' &&
                 parameters?.fromToken &&
-                parameters?.fromTokenAmount &&
-                parameters?.minReturnAmount
+                parameters.fromTokenAmount &&
+                parameters.minReturnAmount
             ) {
                 const tokenIn = await this.Hub.getFungibleToken(parameters.fromToken ?? '', {
                     chainId: context.chainId,
@@ -157,14 +157,14 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                     tokenInAddress: tokenIn?.address,
                     tokenInAmount: parameters.fromTokenAmount,
                     description: `Swap ${getTokenAmountDescription(parameters.fromTokenAmount, tokenIn)} for ${
-                        tokenOut?.symbol ?? ''
+                        tokenOut.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             parameters.fromTokenAmount,
                             tokenIn,
                         )} for ${getTokenAmountDescription(parameters.minReturnAmount, tokenOut)} successfully.`,
-                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                        failedDescription: `Failed to swap ${tokenOut.symbol ?? ''}.`,
                     },
                 }
             }
@@ -181,10 +181,10 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                       }
                     | undefined
                 if (
-                    !_parameters?.[1]?.srcToken ||
-                    !_parameters?.[1]?.dstToken ||
-                    !_parameters?.[1]?.amount ||
-                    !_parameters?.[1]?.minReturnAmount
+                    !_parameters[1].srcToken ||
+                    !_parameters[1].dstToken ||
+                    !_parameters[1].amount ||
+                    !_parameters[1].minReturnAmount
                 )
                     return
                 const tokenIn = isSameAddress(_parameters[1].srcToken, OPENOCEAN_ETH_ADDRESS)
@@ -205,7 +205,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             _parameters[1].amount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(_parameters?.[1]?.minReturnAmount, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(_parameters[1].minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -214,9 +214,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'transformERC20' &&
                 parameters?.inputToken &&
-                parameters?.inputTokenAmount &&
-                parameters?.minOutputTokenAmount &&
-                parameters?.outputToken
+                parameters.inputTokenAmount &&
+                parameters.minOutputTokenAmount &&
+                parameters.outputToken
             ) {
                 const tokenIn = isSameAddress(parameters.inputToken, ZERO_X_ETH_ADDRESS)
                     ? nativeToken
@@ -245,9 +245,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'convertByPath' &&
                 parameters?._amount &&
-                parameters?._beneficiary &&
-                parameters?._minReturn &&
-                parameters?._path
+                parameters._beneficiary &&
+                parameters._minReturn &&
+                parameters._path
             ) {
                 const tokenInAddress = first(parameters._path)
                 const tokenOutAddress = last(parameters._path)
@@ -300,7 +300,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             results['0']
 
                         if (isSameAddress(WETH_ADDRESS, tokenOutAddress) && isNativeTokenAddress(recipient)) {
-                            tokenOutAddress = nativeToken?.address ?? ''
+                            tokenOutAddress = nativeToken.address ?? ''
                         }
                     } else {
                         ;[path, tokenOutAddress, fee, amountIn, amountOutMinimum] = results['0']
@@ -341,8 +341,8 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 ['sellToUniswap', 'sellToPancakeSwap'].includes(method.name ?? '') &&
                 parameters?.minBuyAmount &&
-                parameters?.sellAmount &&
-                parameters?.tokens
+                parameters.sellAmount &&
+                parameters.tokens
             ) {
                 const tokenInAddress = first(parameters.tokens)
                 const tokenOutAddress = last(parameters.tokens)
@@ -401,8 +401,8 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             if (
                 method.name === 'swapExactTokensForAVAX' &&
                 parameters?.amountIn &&
-                parameters?.amountOutMin &&
-                parameters?.path
+                parameters.amountOutMin &&
+                parameters.path
             ) {
                 const tokenIn = await this.Hub.getFungibleToken(first(parameters.path) ?? '', {
                     chainId: context.chainId,
@@ -415,14 +415,14 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                     tokenInAddress: tokenIn?.address,
                     tokenInAmount: parameters.amountIn,
                     description: `Swap ${getTokenAmountDescription(parameters.amountIn, tokenIn)} for ${
-                        tokenOut?.symbol ?? ''
+                        tokenOut.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             parameters.amountIn,
                             tokenIn,
                         )} for ${getTokenAmountDescription(parameters.amountOutMin, tokenOut)} successfully.`,
-                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                        failedDescription: `Failed to swap ${tokenOut.symbol ?? ''}.`,
                     },
                 }
             }

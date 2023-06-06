@@ -16,8 +16,8 @@ function computeAllRoutes(
     startCurrencyIn: Currency = currencyIn,
     maxHops = 2,
 ): Array<Route<Currency, Currency>> {
-    const tokenIn = currencyIn?.wrapped
-    const tokenOut = currencyOut?.wrapped
+    const tokenIn = currencyIn.wrapped
+    const tokenOut = currencyOut.wrapped
     if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut')
 
     try {

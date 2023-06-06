@@ -49,7 +49,7 @@ const VerifyWallet = memo(() => {
     const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
 
     const { value: isBound } = useAsync(async () => {
         if (!wallet.account || !currentPersona?.identifier.publicKeyAsHex) return false

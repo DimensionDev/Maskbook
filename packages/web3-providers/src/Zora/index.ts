@@ -88,12 +88,12 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     })) ?? EMPTY_LIST,
             price: token.mintInfo?.price.usdcPrice?.raw
                 ? {
-                      [CurrencyType.USD]: token.mintInfo?.price.usdcPrice?.raw,
+                      [CurrencyType.USD]: token.mintInfo.price.usdcPrice.raw,
                   }
                 : undefined,
             priceInToken: token.mintInfo?.price.nativePrice.raw
                 ? {
-                      amount: token.mintInfo?.price.nativePrice.raw,
+                      amount: token.mintInfo.price.nativePrice.raw,
                       token: createNativeToken(chainId),
                   }
                 : undefined,
@@ -158,9 +158,9 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             const price = mintEventProperty.price || saleEventProperty.price
             if (price.usdcPrice)
                 return {
-                    price: price.usdcPrice?.raw
+                    price: price.usdcPrice.raw
                         ? {
-                              [CurrencyType.USD]: price.usdcPrice?.raw,
+                              [CurrencyType.USD]: price.usdcPrice.raw,
                           }
                         : undefined,
                     priceInToken: price.nativePrice.raw
@@ -179,10 +179,10 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             chainId,
             quantity: '1',
             from: {
-                address: pair?.from,
+                address: pair.from,
             },
             to: {
-                address: pair?.to,
+                address: pair.to,
             },
             timestamp: new Date(event.transactionInfo.blockTimestamp).getTime(),
             hash: event.transactionInfo.transactionHash,

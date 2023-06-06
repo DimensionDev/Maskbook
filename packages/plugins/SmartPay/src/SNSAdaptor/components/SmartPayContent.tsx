@@ -244,7 +244,7 @@ export const SmartPayContent = memo(() => {
     }, [currentProfile])
 
     const [menu, openMenu] = useMenuConfig(
-        contractAccounts?.map((contractAccount, index) => {
+        contractAccounts.map((contractAccount, index) => {
             return (
                 <Box
                     key={index}
@@ -262,7 +262,7 @@ export const SmartPayContent = memo(() => {
                             {contractAccount.name}
                         </Typography>
                         <Typography className={classes.address}>
-                            {formatEthereumAddress(contractAccount?.address ?? '', 4)}
+                            {formatEthereumAddress(contractAccount.address ?? '', 4)}
                             <Icons.PopupCopy
                                 onClick={(e) => {
                                     e.stopPropagation()

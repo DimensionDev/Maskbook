@@ -7,7 +7,7 @@ export function useGetNFTAvatarFromStorage() {
     return useCallback(
         async (userId: string, address: string) => {
             const stringStorage = Web3Storage.createFireflyStorage(StorageKey, address)
-            return stringStorage.get?.<NextIDAvatarMeta>(userId)
+            return stringStorage.get<NextIDAvatarMeta>(userId)
         },
         [Storage],
     )

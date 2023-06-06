@@ -79,30 +79,30 @@ export function formatTransactions(
                 ...transaction.sends.map(({ amount, token_id }) => ({
                     id: token_id,
                     chainId,
-                    type: token_dict[token_id]?.decimals ? TokenType.Fungible : TokenType.NonFungible,
+                    type: token_dict[token_id].decimals ? TokenType.Fungible : TokenType.NonFungible,
                     schema: SchemaType.ERC20,
-                    name: token_dict[token_id]?.name ?? 'Unknown Token',
-                    symbol: token_dict[token_id]?.optimized_symbol,
+                    name: token_dict[token_id].name ?? 'Unknown Token',
+                    symbol: token_dict[token_id].optimized_symbol,
                     address: token_id,
                     direction: DebankTransactionDirection.SEND,
-                    amount: amount?.toString(),
-                    logoURI: token_dict[token_id]?.logo_url,
+                    amount: amount.toString(),
+                    logoURI: token_dict[token_id].logo_url,
                 })),
                 ...transaction.receives.map(({ amount, token_id }) => ({
                     id: token_id,
                     chainId,
-                    type: token_dict[token_id]?.decimals ? TokenType.Fungible : TokenType.NonFungible,
+                    type: token_dict[token_id].decimals ? TokenType.Fungible : TokenType.NonFungible,
                     schema: SchemaType.ERC20,
-                    name: token_dict[token_id]?.name ?? 'Unknown Token',
-                    symbol: token_dict[token_id]?.optimized_symbol,
+                    name: token_dict[token_id].name ?? 'Unknown Token',
+                    symbol: token_dict[token_id].optimized_symbol,
                     address: token_id,
                     direction: DebankTransactionDirection.RECEIVE,
-                    amount: amount?.toString(),
-                    logoURI: token_dict[token_id]?.logo_url,
+                    amount: amount.toString(),
+                    logoURI: token_dict[token_id].logo_url,
                 })),
             ],
             fee: transaction.tx
-                ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
+                ? { eth: transaction.tx.eth_gas_fee.toString(), usd: transaction.tx.usd_gas_fee.toString() }
                 : undefined,
         }
     })

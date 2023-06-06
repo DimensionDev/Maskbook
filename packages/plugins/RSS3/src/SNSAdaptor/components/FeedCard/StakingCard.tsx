@@ -77,7 +77,7 @@ export const StakingCard: FC<StakingFeedCardProps> = ({ feed, ...rest }) => {
                 <Translate.token_staking
                     values={{
                         user,
-                        symbol: metadata?.token?.symbol!,
+                        symbol: metadata?.token.symbol!,
                         context: metadata?.action!,
                     }}
                     components={{
@@ -89,14 +89,14 @@ export const StakingCard: FC<StakingFeedCardProps> = ({ feed, ...rest }) => {
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Image
                         classes={{ container: classes.tokenIcon }}
-                        src={resolveResourceURL(metadata?.token.image)}
+                        src={resolveResourceURL(metadata.token.image)}
                         height={40}
                         width={40}
                     />
                     <Typography className={classes.value}>
                         {t.token_value({
                             value: formatValue(metadata.token),
-                            symbol: metadata.token?.symbol,
+                            symbol: metadata.token.symbol,
                         })}
                     </Typography>
                 </div>

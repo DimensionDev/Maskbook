@@ -40,7 +40,7 @@ function Wallets() {
         networkDescriptor ?? null,
     )
 
-    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
+    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
 
     const openSwapDialog = useCallback(() => {
         CrossIsolationMessages.events.swapDialogEvent.sendToLocal({

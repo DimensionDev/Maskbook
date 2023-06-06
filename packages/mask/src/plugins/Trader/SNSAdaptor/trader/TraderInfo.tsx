@@ -38,7 +38,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const { value: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
-        return trade.value?.gas && gasPrice ? multipliedBy(gasPrice, trade.value?.gas).integerValue().toFixed() : '0'
+        return trade.value?.gas && gasPrice ? multipliedBy(gasPrice, trade.value.gas).integerValue().toFixed() : '0'
     }, [trade.value?.gas, gasPrice])
 
     const gasFeeValueUSD = useMemo(() => {
@@ -55,14 +55,14 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
             loading={trade.loading}
             providerName={resolveTradeProviderName(trade.value.provider)}
             onClick={onClick}
-            balance={formatBalance(trade.value?.value?.outputAmount ?? 0, trade?.value.value?.outputToken?.decimals, 2)}
+            balance={formatBalance(trade.value.value?.outputAmount ?? 0, trade.value.value?.outputToken?.decimals, 2)}
             gasFee={gasFee}
             gasFeeValueUSD={gasFeeValueUSD}
             nativeToken={nativeToken}
             isBest={isBest}
             isFocus={isFocus}
             isGreatThanSlippageSetting={isGreatThanSlippageSetting}
-            priceImpact={formatPercentage(trade.value?.value?.priceImpact ?? 0)}
+            priceImpact={formatPercentage(trade.value.value?.priceImpact ?? 0)}
         />
     )
 })

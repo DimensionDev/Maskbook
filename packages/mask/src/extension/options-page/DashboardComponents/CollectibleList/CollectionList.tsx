@@ -112,7 +112,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
 
     const renderCollectibles = useMemo(() => {
         if (!selectedCollection) return allCollectibles
-        const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
+        const uniqCollectibles = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase() + x.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
         return uniqCollectibles.filter(
             (x) =>
@@ -122,9 +122,9 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
     }, [selectedCollection, allCollectibles.length])
 
     const collectionsWithName = useMemo(() => {
-        const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
-            .map((x) => x?.collection)
-            .filter((x) => x?.name?.length)
+        const collections = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase())
+            .map((x) => x.collection)
+            .filter((x) => x?.name.length)
         return collections as Web3Helper.NonFungibleCollectionAll[]
     }, [allCollectibles.length])
 
@@ -165,7 +165,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                                     color="textPrimary"
                                     variant="body2"
                                     sx={{ fontSize: '16px' }}>
-                                    {selectedCollection?.name}
+                                    {selectedCollection.name}
                                     {renderCollectibles.length ? `(${renderCollectibles.length})` : null}
                                 </Typography>
                             </Box>

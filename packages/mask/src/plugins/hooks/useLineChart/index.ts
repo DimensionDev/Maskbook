@@ -170,7 +170,7 @@ export function useLineChart(
                         .text((d) => d),
                 )
 
-            const textNodeBox = (text.node() as SVGTextElement)?.getBBox()
+            const textNodeBox = (text.node() as SVGTextElement).getBBox()
 
             if (textNodeBox) {
                 const { x, y: yValue, width: w, height: h } = textNodeBox

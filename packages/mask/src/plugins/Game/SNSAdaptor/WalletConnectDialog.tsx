@@ -51,7 +51,7 @@ const WalletConnectDialog = () => {
     const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
-        if (ev?.tokenProps) setTokenProps(ev.tokenProps)
+        if (ev.tokenProps) setTokenProps(ev.tokenProps)
     })
 
     const { closeDialog: _closeDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)

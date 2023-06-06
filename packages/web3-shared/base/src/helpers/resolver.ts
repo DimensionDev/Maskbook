@@ -63,7 +63,7 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
                       [x.name, x.type as string, x.fullName, x.shortName]
                           .map((x) => x?.toLowerCase())
                           .filter(Boolean)
-                          .includes(name?.toLowerCase()),
+                          .includes(name.toLowerCase()),
                   )?.chainId
                 : undefined,
         coinMarketCapChainId: (chainId?: ChainId) => getChainDescriptor(chainId)?.coinMarketCapChainId,
@@ -111,7 +111,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
             if (!explorerURL.url) return ''
             return urlcat(explorerURL.url, addressPathname, {
                 address,
-                ...explorerURL?.parameters,
+                ...explorerURL.parameters,
             })
         },
         blockLink: (chainId: ChainId, blockNumber: number) => {
@@ -120,7 +120,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
 
             return urlcat(explorerURL.url, blockPathname, {
                 blockNumber,
-                ...explorerURL?.parameters,
+                ...explorerURL.parameters,
             })
         },
         transactionLink: (chainId: ChainId, id: string) => {
@@ -129,7 +129,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
 
             return urlcat(explorerURL.url, transactionPathname, {
                 id,
-                ...explorerURL?.parameters,
+                ...explorerURL.parameters,
             })
         },
         domainLink: (chainId: ChainId, domain: string) => {
@@ -137,7 +137,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
             if (!explorerURL.url) return ''
             return urlcat(explorerURL.url, domainPathname, {
                 domain,
-                ...explorerURL?.parameters,
+                ...explorerURL.parameters,
             })
         },
         fungibleTokenLink: (chainId: ChainId, address: string) => {
@@ -145,7 +145,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
             if (!address || !explorerURL.url) return ''
             return urlcat(explorerURL.url, fungibleTokenPathname, {
                 address,
-                ...explorerURL?.parameters,
+                ...explorerURL.parameters,
             })
         },
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
@@ -154,7 +154,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
             return urlcat(explorerURL.url, nonFungibleTokenPathname, {
                 address,
                 tokenId,
-                ...explorerURL?.parameters,
+                ...explorerURL.parameters,
             })
         },
     }

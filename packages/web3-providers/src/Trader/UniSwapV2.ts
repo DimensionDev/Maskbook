@@ -72,9 +72,9 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         const bases: Token[] = !chainIdValid
             ? []
             : [
-                  ...(context?.AGAINST_TOKENS?.[chainId] ?? []),
-                  ...(tokenA ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenA.address] ?? [] : []),
-                  ...(tokenB ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenB.address] ?? [] : []),
+                  ...(context.AGAINST_TOKENS?.[chainId] ?? []),
+                  ...(tokenA ? context.ADDITIONAL_TOKENS?.[chainId]?.[tokenA.address] ?? [] : []),
+                  ...(tokenB ? context.ADDITIONAL_TOKENS?.[chainId]?.[tokenB.address] ?? [] : []),
               ].map((x) => toUniswapToken(chainId, x))
 
         const basePairs: Array<[Token, Token]> = flatMap(
@@ -96,7 +96,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
             .filter(([t0, t1]) => t0.address !== t1.address)
             .filter(([tokenA, tokenB]) => {
                 if (!chainIdValid) return true
-                const customBases = context?.CUSTOM_TOKENS?.[chainId as ChainId]
+                const customBases = context.CUSTOM_TOKENS?.[chainId as ChainId]
 
                 const customBasesA: Token[] | undefined = customBases?.[tokenA.address]?.map((x) =>
                     toUniswapToken(chainId as ChainId, x),
@@ -282,7 +282,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         currencyAmountIn: CurrencyAmount<Currency>,
         currencyOut: Currency,
     ): Promise<Trade | null> {
-        const currencyA = currencyAmountIn?.currency
+        const currencyA = currencyAmountIn.currency
         const currencyB = currencyOut
 
         const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyA, currencyB)

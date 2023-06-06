@@ -30,7 +30,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                             switch (context.method) {
                                 case EthereumMethodType.MASK_LOGIN:
                                     context.write(
-                                        await this.Provider?.connect(
+                                        await this.Provider.connect(
                                             options.providerType,
                                             options.chainId,
                                             options.account,
@@ -45,7 +45,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                                     )
                                     break
                                 case EthereumMethodType.MASK_LOGOUT:
-                                    context.write(await this.Provider?.disconnect(options.providerType))
+                                    context.write(await this.Provider.disconnect(options.providerType))
                                     break
                                 default: {
                                     if (PayloadEditor.fromPayload(context.request).readonly) {

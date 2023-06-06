@@ -171,9 +171,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 </Box>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                     <Box className={classes.galleryItem}>
-                        {!loadFinish && !loadError && !collectibles?.length ? (
+                        {!loadFinish && !loadError && !collectibles.length ? (
                             LoadStatus
-                        ) : loadError || (!collectibles?.length && !collectibles_.length) ? (
+                        ) : loadError || (!collectibles.length && !collectibles_.length) ? (
                             Retry
                         ) : (
                             <List className={classes.list}>
@@ -192,7 +192,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 ))}
                                 <ElementAnchor
                                     callback={() => {
-                                        nextPage?.()
+                                        nextPage()
                                     }}>
                                     {!loadFinish && <LoadingBase />}
                                 </ElementAnchor>

@@ -53,7 +53,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         const result = await fetchFromDSearch<{
             [owner: string]: Array<NonFungibleCollection<ChainId, SchemaType>>
         }>(urlcat(DSEARCH_BASE_URL, '/nft-lucky-drop/specific-list.json'))
-        const list = mapKeys(result, (_v, k) => k.toLowerCase())?.[account.toLowerCase()].filter(
+        const list = mapKeys(result, (_v, k) => k.toLowerCase())[account.toLowerCase()].filter(
             (x) => x.chainId === chainId,
         )
         return createPageable(list, createIndicator(indicator))

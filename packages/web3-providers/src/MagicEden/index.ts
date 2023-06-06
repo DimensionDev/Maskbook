@@ -95,7 +95,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
             chainId,
-            urlcat('/collections/:symbol', { symbol: token?.collection }),
+            urlcat('/collections/:symbol', { symbol: token.collection }),
         )
         if (!collection) return
         return createNFTToken(chainId, token, collection)
@@ -123,7 +123,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             link: urlcat('https://magiceden.io/item-details/:mint_address', {
                 mint_address: tokenMint,
             }),
-            creator: nft?.creators?.length
+            creator: nft?.creators.length
                 ? {
                       address: nft.creators[0].address,
                   }
@@ -164,7 +164,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 address: token.mintAddress,
                 metadata: {
                     chainId,
-                    name: getAssetFullName(token.mintAddress, token.collectionName, token?.title, ''),
+                    name: getAssetFullName(token.mintAddress, token.collectionName, token.title, ''),
                     symbol: '',
                     imageURL: resolveIPFS_URL(token.img),
                     mediaURL: resolveIPFS_URL(token.img),
@@ -179,7 +179,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 },
                 collection: {
                     chainId,
-                    name: token.collectionName ?? token?.collectionTitle,
+                    name: token.collectionName ?? token.collectionTitle,
                     slug: '',
                     description: '',
                     iconURL: '',
@@ -200,7 +200,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
             chainId,
-            urlcat('/collections/:symbol', { symbol: token?.collection }),
+            urlcat('/collections/:symbol', { symbol: token.collection }),
         )
         if (!collection) return
         return createNFTCollection(collection)

@@ -68,7 +68,7 @@ function ProfileCardHolder() {
             nickname: user.legacy.name,
             avatar: user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
             bio: user.legacy.description,
-            homepage: user.legacy.entities.url?.urls[0]?.expanded_url ?? '',
+            homepage: user.legacy.entities.url.urls[0]?.expanded_url ?? '',
         }
     }, [twitterId])
 

@@ -17,7 +17,7 @@ export interface PriceChangedProps {
 export function PriceChanged(props: PriceChangedProps) {
     const { classes } = useStyles()
     const colors = useTheme().palette.maskColor
-    const color = props.amount > 0 ? colors?.success : colors?.danger
+    const color = props.amount > 0 ? colors.success : colors.danger
     if (props.amount === 0) return null
     return (
         <Stack alignItems="center" direction="row">

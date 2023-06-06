@@ -60,7 +60,7 @@ export function ContractItem(props: ContractItemProps) {
     return (
         <>
             <MenuItem className={classes.root}>
-                <ImageIcon icon={networkDescriptor?.icon} size={20} />
+                <ImageIcon icon={networkDescriptor.icon} size={20} />
                 <Stack className={classes.item}>
                     <Typography fontWeight="700">{networkDescriptor.name}</Typography>
                     <Typography

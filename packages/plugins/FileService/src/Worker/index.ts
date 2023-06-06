@@ -13,7 +13,7 @@ const worker: Plugin.Worker.Definition = {
     backup: {
         onBackup: async () => {
             const files = await getAllFiles()
-            const result = files?.length ? new Some(files) : None
+            const result = files.length ? new Some(files) : None
 
             return result
         },

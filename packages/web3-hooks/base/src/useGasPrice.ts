@@ -16,7 +16,7 @@ export function useGasPrice<T extends NetworkPluginID = NetworkPluginID>(pluginI
     return useMemo(() => {
         return {
             ...gasPrice,
-            value: gasOption?.value?.suggestedMaxFeePerGas ?? gasPrice.value,
+            value: gasOption.value?.suggestedMaxFeePerGas ?? gasPrice.value,
         }
     }, [gasPrice, gasOption])
 }

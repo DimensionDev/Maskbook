@@ -92,7 +92,7 @@ export const Balance = memo<BalanceCardProps>(
         const { fungibleAssets } = useContainer(Context)
 
         const balance = useMemo(() => {
-            if (!fungibleAssets.value?.length) return 0
+            if (!fungibleAssets.value.length) return 0
 
             const values = fungibleAssets.value
                 .filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))

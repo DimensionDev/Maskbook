@@ -481,7 +481,7 @@ export class ConnectionReadonlyAPI
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
             const contract = this.Contract.getERC1155Contract(address, options)
-            return contract?.methods?.balanceOf(options.account, tokenId ?? '').call() ?? '0'
+            return contract?.methods.balanceOf(options.account, tokenId ?? '').call() ?? '0'
         }
 
         // ERC721

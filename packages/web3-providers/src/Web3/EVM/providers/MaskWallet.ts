@@ -97,7 +97,7 @@ export class MaskWalletProvider
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        this.subscription?.wallets?.subscribe(async () => {
+        this.subscription.wallets.subscribe(async () => {
             const primaryWallet = first(this.wallets)
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
@@ -168,7 +168,7 @@ export class MaskWalletProvider
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account
-        if (!isSameAddress(this.hostedAccount, account?.address)) {
+        if (!isSameAddress(this.hostedAccount, account.address)) {
             await this.switchAccount(
                 account.address,
                 account.owner

@@ -15,6 +15,6 @@ export function useNonFungibleTokenOwner<S extends 'all' | void = void, T extend
 
     return useAsyncRetry(async () => {
         if (!address) return
-        return Web3.getNonFungibleTokenOwner?.(address, tokenId, schemaType)
+        return Web3.getNonFungibleTokenOwner(address, tokenId, schemaType)
     }, [address, schemaType, Web3])
 }

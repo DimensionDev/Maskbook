@@ -180,7 +180,7 @@ export function swapErrorToUserReadableMessage(error: any): string {
         error = error.error ?? error.data?.originalError
     }
 
-    if (reason?.startsWith('execution reverted: ')) reason = reason.slice('execution reverted: '.length)
+    if (reason.startsWith('execution reverted: ')) reason = reason.slice('execution reverted: '.length)
 
     switch (reason) {
         case 'UniswapV2Router: EXPIRED':
@@ -201,7 +201,7 @@ export function swapErrorToUserReadableMessage(error: any): string {
         case 'TF':
             return 'The output token cannot be transferred. There may be an issue with the output token.'
         default:
-            if (reason?.includes('undefined is not an object')) {
+            if (reason.includes('undefined is not an object')) {
                 console.error(error, reason)
                 return 'An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading.'
             }
@@ -219,8 +219,8 @@ export function computeAllRoutes(
     startCurrencyIn: Currency = currencyIn,
     maxHops = 2,
 ): Array<Route<Currency, Currency>> {
-    const tokenIn = currencyIn?.wrapped
-    const tokenOut = currencyOut?.wrapped
+    const tokenIn = currencyIn.wrapped
+    const tokenOut = currencyOut.wrapped
     if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut')
 
     try {

@@ -137,7 +137,7 @@ const DeleteWallet = memo(() => {
                             <Trans
                                 i18nKey="popups_smart_pay_delete_tip"
                                 values={{
-                                    management: formatEthereumAddress(wallet?.address, 4),
+                                    management: formatEthereumAddress(wallet.address, 4),
                                     addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
                                 }}
                                 components={{

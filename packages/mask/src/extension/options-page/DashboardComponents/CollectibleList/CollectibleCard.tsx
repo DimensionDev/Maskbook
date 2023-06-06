@@ -82,7 +82,7 @@ export const CollectibleCard = memo(function CollectibleCard({
         // None is better than incorrect.
         if (!pluginID) return
         if (pluginID === NetworkPluginID.PLUGIN_EVM) {
-            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === asset.chainId)?.icon
+            return NETWORK_DESCRIPTORS.find((network) => network.chainId === asset.chainId)?.icon
         }
         return networkDescriptor?.icon
     }, [asset.chainId, pluginID, networkDescriptor?.icon])

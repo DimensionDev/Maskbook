@@ -114,8 +114,8 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         }
 
         setSigner({
-            signPersona: qualifications?.signPersona,
-            signWallet: qualifications?.signWallet,
+            signPersona: qualifications.signPersona,
+            signWallet: qualifications.signWallet,
         })
         navigate(RoutePaths.Deploy, {
             state: {

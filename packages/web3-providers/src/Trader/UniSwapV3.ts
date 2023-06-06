@@ -20,8 +20,8 @@ export class UniSwapV3Like extends UniSwapV2Like {
     private getPoolAddresses(transformed: Array<[Token, Token, FeeAmount] | null>, context: TradeContext) {
         try {
             return transformed.map((value) => {
-                if (!context?.IS_UNISWAP_V3_LIKE) return ''
-                if (!context?.FACTORY_CONTRACT_ADDRESS || !value) return ''
+                if (!context.IS_UNISWAP_V3_LIKE) return ''
+                if (!context.FACTORY_CONTRACT_ADDRESS || !value) return ''
                 return computePoolAddress({
                     factoryAddress: context.FACTORY_CONTRACT_ADDRESS,
                     tokenA: value[0],
@@ -59,8 +59,8 @@ export class UniSwapV3Like extends UniSwapV2Like {
             ([currencyA, currencyB, feeAmount]) => {
                 if (!chainId || !currencyA || !currencyB || !feeAmount) return null
 
-                const tokenA = currencyA?.wrapped
-                const tokenB = currencyB?.wrapped
+                const tokenA = currencyA.wrapped
+                const tokenB = currencyB.wrapped
                 if (!tokenA || !tokenB || tokenA.equals(tokenB)) return null
                 const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
                 return [token0, token1, feeAmount]
@@ -129,7 +129,7 @@ export class UniSwapV3Like extends UniSwapV2Like {
 
         const quoterContract = this.Contract.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
 
-        const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyAmountIn?.currency, currencyOut)
+        const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyAmountIn.currency, currencyOut)
 
         const allCurrencyCombinationsWithAllFees = allCurrencyCombinations.flatMap<[Token, Token, FeeAmount]>(
             ([tokenA, tokenB]) => [
@@ -153,7 +153,7 @@ export class UniSwapV3Like extends UniSwapV2Like {
             chainId,
             [],
             [],
-            currencyAmountIn?.currency,
+            currencyAmountIn.currency,
             2,
         )
 

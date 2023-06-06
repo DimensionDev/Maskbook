@@ -9,5 +9,5 @@ export function useMaskTokenAddress<T extends NetworkPluginID = NetworkPluginID>
 ) {
     const { chainId } = useChainContext()
     const Others = useWeb3Others(pluginID)
-    return Others?.getMaskTokenAddress?.(options?.chainId ?? chainId)
+    return Others.getMaskTokenAddress(options?.chainId ?? chainId)
 }

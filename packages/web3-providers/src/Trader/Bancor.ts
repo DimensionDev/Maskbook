@@ -70,16 +70,16 @@ export class Bancor implements TraderAPI.Provider {
         const { fromToken, toToken, slippage } = request
         const url = urlcat(baseUrl, '/pricing/target-amount', {
             source_dlt_type: 'ethereum',
-            source_dlt_id: request.fromToken?.address,
+            source_dlt_id: request.fromToken.address,
             target_dlt_type: 'ethereum',
-            target_dlt_id: request.toToken?.address,
+            target_dlt_id: request.toToken.address,
             amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
         })
         const response = await fetchJSON(url)
         const validationErrorResponse = response as BancorApiErrorResponse
 
         if (validationErrorResponse.error) {
-            throw new Error(validationErrorResponse.error?.messages?.[0] || 'Unknown Error')
+            throw new Error(validationErrorResponse.error.messages?.[0] || 'Unknown Error')
         }
 
         const { amount } = response as ExpectedTargetAmountResponse
@@ -233,7 +233,7 @@ export class Bancor implements TraderAPI.Provider {
     }
 
     public async getTradeGasLimit(account: string, chainId: ChainId, tradeComputed: TradeComputed<SwapBancorRequest>) {
-        if (!account || !tradeComputed?.trade_) return '0'
+        if (!account || !tradeComputed.trade_) return '0'
         const trade = tradeComputed.trade_
         const data = await this.swapTransactionBancor(trade)
 

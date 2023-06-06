@@ -306,7 +306,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                    'x-access-token': options.token ? `Bearer ${options.token}` : '',
                 },
                 body: JSON.stringify({
                     query: `mutation CreateFollowTypedData {
@@ -353,7 +353,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                    'x-access-token': options.token ? `Bearer ${options.token}` : '',
                 },
                 body: JSON.stringify({
                     query: `mutation CreateUnfollowTypedData {
@@ -397,7 +397,7 @@ export class LensAPI implements LensBaseAPI.Provider {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                'x-access-token': options.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
                 query: `mutation ProxyAction {
@@ -418,7 +418,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                    'x-access-token': options.token ? `Bearer ${options.token}` : '',
                 },
                 body: JSON.stringify({
                     query: `query ProxyStatus {
@@ -455,12 +455,12 @@ export class LensAPI implements LensBaseAPI.Provider {
             fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
         },
     ) {
-        if (!id || !options?.token || !signature) return
+        if (!id || !options.token || !signature) return
         const { data } = await options.fetcher<{ data: { broadcast: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                'x-access-token': options.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
                 query: `mutation Broadcast {
@@ -494,14 +494,14 @@ export class LensAPI implements LensBaseAPI.Provider {
             token: string
         },
     ) {
-        if (!options?.token) return
+        if (!options.token) return
         const { data } = await fetchJSON<{
             data: { approvedModuleAllowanceAmount: LensBaseAPI.ApprovedModuleAllowanceAmount[] }
         }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                'x-access-token': options.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
                 query: `query ApprovedModuleAllowanceAmount {

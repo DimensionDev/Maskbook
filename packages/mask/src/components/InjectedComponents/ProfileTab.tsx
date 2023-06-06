@@ -40,7 +40,7 @@ export function ProfileTab(props: ProfileTabProps) {
     })
 
     useLocationChange(() => {
-        const testId = (document.activeElement as HTMLElement | null)?.dataset?.testid
+        const testId = (document.activeElement as HTMLElement | null)?.dataset.testid
         if (testId === 'SearchBox_Search_Input') return
 
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })

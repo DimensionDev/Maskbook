@@ -59,9 +59,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
     async getNonFungibleContractSymbol(chainId: ChainId, address: string) {
         const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
-        return contract?.symbol && contract?.symbol.length > 15
-            ? `${contract?.symbol.slice(0, 12)}...`
-            : contract?.symbol
+        return contract.symbol && contract.symbol.length > 15
+            ? `${contract.symbol.slice(0, 12)}...`
+            : contract.symbol
     }
 
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
@@ -87,17 +87,17 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
         ) {
             if (
                 method?.name === 'create_red_packet' &&
-                method?.parameters?._token_addr &&
-                method?.parameters?._total_tokens
+                method.parameters?._token_addr &&
+                method.parameters._total_tokens
             ) {
-                const token = await this.Hub.getFungibleToken(method?.parameters?._token_addr ?? '', {
+                const token = await this.Hub.getFungibleToken(method.parameters._token_addr ?? '', {
                     chainId: context.chainId,
                 })
-                const tokenAmountDescription = getTokenAmountDescription(method.parameters?._total_tokens, token)
+                const tokenAmountDescription = getTokenAmountDescription(method.parameters._total_tokens, token)
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
-                    tokenInAmount: method?.parameters?._total_tokens,
+                    tokenInAmount: method.parameters._total_tokens,
                     title: i18NextInstance.t('plugin_red_packet_create_with_token_title'),
                     description: i18NextInstance.t('plugin_red_packet_create_with_token'),
                     snackbar: {

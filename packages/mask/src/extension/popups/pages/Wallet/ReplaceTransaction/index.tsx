@@ -74,7 +74,7 @@ const ReplaceTransaction = memo(() => {
 
     const { value: transactionContext } = useAsync(async () => {
         if (!transaction) return
-        return TransactionFormatter?.createContext?.(chainId, transaction)
+        return TransactionFormatter?.createContext(chainId, transaction)
     }, [transaction, TransactionFormatter, chainId])
 
     const defaultGas = transaction?._tx.gas ?? 0
@@ -164,11 +164,11 @@ const ReplaceTransaction = memo(() => {
                 if (!transaction || !formatterTransaction) return
 
                 if (type === ReplaceType.CANCEL) {
-                    await Web3.cancelTransaction(transaction?.id, config, {
+                    await Web3.cancelTransaction(transaction.id, config, {
                         providerType: ProviderType.MaskWallet,
                     })
                 } else {
-                    await Web3.replaceTransaction(transaction?.id, config, {
+                    await Web3.replaceTransaction(transaction.id, config, {
                         providerType: ProviderType.MaskWallet,
                     })
                 }

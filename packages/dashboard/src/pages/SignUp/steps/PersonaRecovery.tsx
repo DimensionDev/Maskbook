@@ -45,7 +45,7 @@ export const PersonaRecovery = () => {
                       }
                     | undefined
                 if (state.mnemonic) {
-                    result = await Services.Identity.queryPersonaEOAByMnemonic(state?.mnemonic.join(' '), '')
+                    result = await Services.Identity.queryPersonaEOAByMnemonic(state.mnemonic.join(' '), '')
                 } else if (state.privateKey) {
                     result = await Services.Identity.queryPersonaEOAByPrivateKey(state.privateKey)
                 } else {
@@ -54,18 +54,18 @@ export const PersonaRecovery = () => {
                 }
 
                 const chainId = await SmartPayBundler.getSupportedChainId()
-                if (result?.address) {
+                if (result.address) {
                     const smartPayAccounts = await SmartPayOwner.getAccountsByOwners(chainId, [result.address])
                     const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
                     if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
                         await Services.Backup.addUnconfirmedPersonaRestore({
-                            mnemonic: state?.mnemonic?.join(' '),
+                            mnemonic: state.mnemonic.join(' '),
                             privateKeyString: state.privateKey,
                             personaName,
                         })
                         Messages.events.restoreSuccess.on(() => {
                             navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
-                            changeCurrentPersona(result?.identifier)
+                            changeCurrentPersona(result.identifier)
                         })
                         return
                     }
@@ -73,7 +73,7 @@ export const PersonaRecovery = () => {
 
                 let identifier: ECKeyIdentifier
                 if (state.mnemonic) {
-                    identifier = await createPersona(state?.mnemonic.join(' '), personaName)
+                    identifier = await createPersona(state.mnemonic.join(' '), personaName)
                 } else if (state.privateKey) {
                     identifier = await createPersonaByPrivateKey(state.privateKey, personaName)
                 } else {
@@ -94,7 +94,7 @@ export const PersonaRecovery = () => {
                 setError((error as Error).message)
             }
         },
-        [state?.mnemonic, state?.privateKey],
+        [state.mnemonic, state.privateKey],
     )
 
     return <PersonaNameUI onNext={onNext} loading={submitLoading} error={error} />

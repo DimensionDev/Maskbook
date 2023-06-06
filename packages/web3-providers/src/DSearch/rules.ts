@@ -23,7 +23,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         return true
 
                     const symbol = data.symbol
-                    if (symbol === keyword || symbol?.replace(/\s/g, '') === keyword) return true
+                    if (symbol === keyword || symbol.replace(/\s/g, '') === keyword) return true
 
                     const name = data.name
                     if (name === keyword) return true
@@ -77,8 +77,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                             if (x.type !== SearchResultType.FungibleToken) return
                             return {
                                 ...x,
-                                __symbol: x.symbol?.replace(/\s/g, ''),
-                                __name: x.name?.replace(/\s/g, ''),
+                                __symbol: x.symbol.replace(/\s/g, ''),
+                                __name: x.name.replace(/\s/g, ''),
                             }
                         }),
                     )
@@ -147,7 +147,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                                     .map((y) => {
                                         return {
                                             ...x,
-                                            __name: x.name?.replace(/\s/g, ''),
+                                            __name: x.name.replace(/\s/g, ''),
                                             __alias: y.value,
                                         }
                                     })
@@ -186,7 +186,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                                 return
                             return {
                                 ...x,
-                                __name: x.name?.replace(/\s/g, ''),
+                                __name: x.name.replace(/\s/g, ''),
                             }
                         }),
                     )

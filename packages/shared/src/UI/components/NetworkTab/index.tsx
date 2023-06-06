@@ -47,13 +47,13 @@ export const NetworkTab = memo(function NetworkTab({
 
     const isValidChainId = useMemo(() => chains.includes(chainId), [chains, chainId])
     const [tab, , , setTab] = useTabs(
-        !isValidChainId ? networkIds[0] : chainId?.toString() ?? networkIds[0],
+        !isValidChainId ? networkIds[0] : chainId.toString() ?? networkIds[0],
         ...networkIds,
     )
 
     useUpdateEffect(() => {
         setTab((prev) => {
-            if (isValidChainId && chainId && prev !== chainId?.toString()) return chainId.toString()
+            if (isValidChainId && chainId && prev !== chainId.toString()) return chainId.toString()
             return prev
         })
     }, [chainId, isValidChainId])
@@ -65,9 +65,9 @@ export const NetworkTab = memo(function NetworkTab({
                 onChange={(_, v) => {
                     const chainId = Number.parseInt(v, 10)
                     const networkType = Others.chainResolver.networkType(chainId)
-                    setChainId?.(chainId)
-                    if (networkType) setNetworkType?.(networkType)
-                    onChange?.(chainId)
+                    setChainId(chainId)
+                    if (networkType) setNetworkType(networkType)
+                    onChange(chainId)
                     setTab(v)
                 }}
                 hideArrowButton={hideArrowButton}

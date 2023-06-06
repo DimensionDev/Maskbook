@@ -24,7 +24,7 @@ export function NFTSquareAvatarInTwitter() {
 
     return (
         <NFTAvatarClipOrSquareInTwitter
-            screenName={identity.identifier?.userId}
+            screenName={identity.identifier.userId}
             size={size}
             avatarType={AvatarType.Square}
         />

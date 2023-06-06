@@ -223,7 +223,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 Current Wallet:
                             </Typography>
                             <Box className={classes.content} display="flex" alignItems="center">
-                                <ImageIcon size={16} icon={providerDescriptor?.icon} />
+                                <ImageIcon size={16} icon={providerDescriptor.icon} />
                                 <Typography color="textPrimary" sx={{ marginLeft: 1 }}>
                                     <FormattedAddress address={account} size={6} formatter={formatEthereumAddress} />
                                 </Typography>

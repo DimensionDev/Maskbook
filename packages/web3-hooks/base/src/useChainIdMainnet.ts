@@ -9,5 +9,5 @@ export function useChainIdMainnet<T extends NetworkPluginID>(
 ) {
     const { chainId } = useChainContext({ chainId: expectedChainId })
     const Others = useWeb3Others(pluginID)
-    return Others.chainResolver.isMainnet?.(chainId) ?? false
+    return Others.chainResolver.isMainnet(chainId) ?? false
 }

@@ -78,7 +78,7 @@ function LegacyWalletRecordToJSONFormat(wallet: LegacyWalletRecord): NormalizedB
     try {
         const wallet_ = wallet
         backup.passphrase = Some(wallet_.passphrase)
-        if (wallet_.mnemonic?.length)
+        if (wallet_.mnemonic.length)
             backup.mnemonic = Some<NormalizedBackup.Mnemonic>({
                 words: wallet_.mnemonic.join(' '),
                 path: "m/44'/60'/0'/0/0",

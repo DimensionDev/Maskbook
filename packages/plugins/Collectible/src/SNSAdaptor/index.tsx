@@ -172,7 +172,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 : '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
-                    const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
+                    const inspectCollectible = useInspectCollectible(socialAccount.pluginID)
 
                     return (
                         <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>

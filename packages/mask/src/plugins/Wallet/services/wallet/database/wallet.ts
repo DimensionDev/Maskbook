@@ -41,7 +41,7 @@ export async function hasWalletRequired(address: string) {
 export async function hasStoredKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
     const wallets = await getWallets()
     if (!storedKeyInfo) return false
-    return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo?.hash)
+    return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo.hash)
 }
 
 export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInfo) {
@@ -81,7 +81,7 @@ export async function addWallet(
         id: address_,
         type: 'wallet',
         address: address_,
-        name: name?.trim() || `Account ${(await getWallets()).length + 1}`,
+        name: name.trim() || `Account ${(await getWallets()).length + 1}`,
         derivationPath,
         storedKeyInfo,
         createdAt: now,

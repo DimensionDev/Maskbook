@@ -171,7 +171,7 @@ export const CollectibleItem = memo(
                                     {name || identity}
                                 </Typography>
 
-                                {verifiedBy?.length ? (
+                                {verifiedBy.length ? (
                                     <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                         <Icons.Verification size={16} />
                                     </ShadowRootTooltip>

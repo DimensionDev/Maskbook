@@ -32,7 +32,7 @@ function sendNotification(result: boolean) {
 }
 export async function requestHostPermission(origins: readonly string[]) {
     const currentOrigins = (await browser.permissions.getAll()).origins || []
-    const extra = origins.filter((i) => !currentOrigins?.includes(i))
+    const extra = origins.filter((i) => !currentOrigins.includes(i))
     if (!extra.length) return true
     return requestExtensionPermission({ origins: extra })
 }

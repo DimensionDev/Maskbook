@@ -156,8 +156,8 @@ function Content(props: ProfileTabContentProps) {
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
 
-    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
-    const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
+    const currentVisitingUserId = currentVisitingSocialIdentity.identifier?.userId
+    const isOwnerIdentity = currentVisitingSocialIdentity.isOwner
 
     const {
         value: socialAccounts = EMPTY_LIST,
@@ -169,7 +169,7 @@ function Content(props: ProfileTabContentProps) {
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
-        if (selectedSocialAccount?.address && selectedSocialAccount?.label) {
+        if (selectedSocialAccount?.address && selectedSocialAccount.label) {
             setPair(selectedSocialAccount.address, selectedSocialAccount.label)
         }
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
@@ -289,7 +289,7 @@ function Content(props: ProfileTabContentProps) {
     )
 
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
-    const trendingResult = collectionList?.[currentTrendingIndex]
+    const trendingResult = collectionList[currentTrendingIndex]
 
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
@@ -301,7 +301,7 @@ function Content(props: ProfileTabContentProps) {
     if (hidden) return null
 
     const keyword =
-        profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
+        profileTabType === ProfileTabs.WEB3 ? trendingResult.address || trendingResult.name : currentVisitingUserId
 
     const searchResults = profileTabType === ProfileTabs.WEB3 ? collectionList : spaceList
 

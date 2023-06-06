@@ -43,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
                                 onClick={() =>
-                                    EntryComponentProps?.onClick
+                                    EntryComponentProps.onClick
                                         ? EntryComponentProps.onClick()
                                         : CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
                                               open: true,

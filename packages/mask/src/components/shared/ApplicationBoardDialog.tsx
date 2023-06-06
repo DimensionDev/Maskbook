@@ -51,7 +51,7 @@ export function ApplicationBoardDialog() {
             setOpenSettings(true)
             setQuickMode(evt.settings.quickMode ?? false)
             setTab(ApplicationSettingTabs.pluginSwitch)
-            setFocusPluginID(evt.settings?.switchTab?.focusPluginID)
+            setFocusPluginID(evt.settings.switchTab.focusPluginID)
         },
     )
 

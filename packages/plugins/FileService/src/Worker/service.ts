@@ -8,7 +8,7 @@ const allProviders: Record<Provider, ProviderAgent> = {
 }
 
 export async function makeAttachment(provider: Provider, options: AttachmentOptions) {
-    return allProviders[provider]?.makeAttachment(options)
+    return allProviders[provider].makeAttachment(options)
 }
 
 export async function* upload(provider: Provider, id: string) {
@@ -18,7 +18,7 @@ export async function* upload(provider: Provider, id: string) {
 }
 
 export async function uploadLandingPage(provider: Provider, metadata: LandingPageMetadata) {
-    return allProviders[provider]?.uploadLandingPage(metadata)
+    return allProviders[provider].uploadLandingPage(metadata)
 }
 
 export * from './database.js'

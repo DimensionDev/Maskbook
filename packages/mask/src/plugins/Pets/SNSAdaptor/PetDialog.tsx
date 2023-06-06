@@ -28,7 +28,7 @@ export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
     useAsync(async () => {
         const storage = Web3Storage.createFireflyStorage('Pets', NFTS_BLOCK_ADDRESS)
         const result = await storage.get<ConfigRSSNode>('_pet_nfts')
-        setConfigNFTs(result?.essay)
+        setConfigNFTs(result.essay)
     }, [Storage, NFTS_BLOCK_ADDRESS])
 
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)

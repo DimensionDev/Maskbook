@@ -187,7 +187,7 @@ export const Collection: FC<CollectionProps> = memo(
                             ) : null}
                         </div>
                         <Typography className={classes.tokenId} variant="body2" component="div">
-                            {collection?.symbol || ''}
+                            {collection.symbol || ''}
                         </Typography>
                     </div>
                 </div>

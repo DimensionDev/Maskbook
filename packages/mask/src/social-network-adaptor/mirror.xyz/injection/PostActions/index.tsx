@@ -61,8 +61,8 @@ function createPostActionsInjector() {
                 signal,
             })
 
-            const parentNode = postInfo.actionsElement?.realCurrent?.parentNode as HTMLDivElement
-            if (parentNode?.lastElementChild) {
+            const parentNode = postInfo.actionsElement.realCurrent?.parentNode as HTMLDivElement
+            if (parentNode.lastElementChild) {
                 ;(parentNode.lastElementChild as HTMLDivElement).style.flex = '1'
                 parentNode.style.flex = '1 1 auto'
             }

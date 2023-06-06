@@ -97,7 +97,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
     const myUserId = currentIdentity?.identifier.userId
     const searchedList = useMemo(() => {
-        if (!recipientsList?.recipients) return EMPTY_LIST
+        if (!recipientsList.recipients) return EMPTY_LIST
         const profileItems = recipientsList.recipients.filter((x) => x.identifier.userId !== myUserId)
         // Selected might contain profiles that fetched asynchronously from
         // Next.ID, which are not stored locally

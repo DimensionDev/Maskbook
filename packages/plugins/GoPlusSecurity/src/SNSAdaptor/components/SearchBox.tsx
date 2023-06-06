@@ -81,7 +81,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                             justifyContent="flex-start"
                             gap={1}
                             width="100%">
-                            <WalletIcon mainIcon={chain?.icon} size={18} />
+                            <WalletIcon mainIcon={chain.icon} size={18} />
                             <Typography>{getChainName(chain)}</Typography>
                         </Stack>
                     </MenuItem>

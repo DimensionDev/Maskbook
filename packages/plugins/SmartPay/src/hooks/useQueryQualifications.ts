@@ -33,7 +33,7 @@ export function useQueryQualifications(): AsyncState<{
             const isVerifiedPersona = await NextIDProof.queryIsBound(
                 currentPersona.identifier.publicKeyAsHex.toLowerCase(),
                 NextIDPlatform.Twitter,
-                currentIdentity?.identifier?.userId,
+                currentIdentity.identifier.userId,
             )
 
             if (isVerifiedPersona)

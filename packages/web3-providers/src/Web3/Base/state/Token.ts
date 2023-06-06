@@ -99,8 +99,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter(
-                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
+                        tokens[account.toLowerCase()].filter(
+                            (x) => !blockedBy[account.toLowerCase()].includes(x.address),
                         ),
                     ),
             )
@@ -112,8 +112,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter(
-                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
+                        tokens[account.toLowerCase()].filter(
+                            (x) => !blockedBy[account.toLowerCase()].includes(x.address),
                         ),
                     ),
             )
@@ -125,8 +125,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter((x) =>
-                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        tokens[account.toLowerCase()].filter((x) =>
+                            blockedBy[account.toLowerCase()].includes(x.address),
                         ),
                     ),
             )
@@ -138,8 +138,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter((x) =>
-                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        tokens[account.toLowerCase()].filter((x) =>
+                            blockedBy[account.toLowerCase()].includes(x.address),
                         ),
                     ),
             )
@@ -210,7 +210,7 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             ...blocked,
             [address_]:
                 strategy === 'trust'
-                    ? blocked[address_]?.filter((x) => !this.options.isSameAddress(x, token.address))
+                    ? blocked[address_].filter((x) => !this.options.isSameAddress(x, token.address))
                     : uniqBy([this.options.formatAddress(token.address), ...(blocked[address_] ?? [])], (x) =>
                           x.toLowerCase(),
                       ),

@@ -156,7 +156,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { classes, cx } = useStyles()
     const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
     const PaymentIcon = trending.market?.price_token_address ? (
-        <TokenIcon address={trending.market?.price_token_address} chainId={chainId} size={14} />
+        <TokenIcon address={trending.market.price_token_address} chainId={chainId} size={14} />
     ) : (
         <WalletIcon mainIcon={chain?.icon} size={14} />
     )

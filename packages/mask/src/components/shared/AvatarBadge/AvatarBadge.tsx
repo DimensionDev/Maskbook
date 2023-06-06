@@ -19,7 +19,7 @@ export const AvatarBadge: FC<Props> = ({ userId, identity, socialAccounts }) => 
                 <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
                     <CollectionProjectAvatarBadge
                         userId={userId}
-                        address={collectionList?.[0].address ?? ''}
+                        address={collectionList[0].address ?? ''}
                         identity={identity}
                     />
                 </div>

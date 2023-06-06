@@ -64,7 +64,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     const { classes, cx } = useStyles()
 
     const userId = identity.identifier?.userId
-    const itsMe = identity.identifier?.userId === me?.identifier?.userId
+    const itsMe = identity.identifier?.userId === me.identifier?.userId
     const { data: nextIdBindings = EMPTY_LIST } = useQuery({
         queryKey: ['next-id', 'profiles-by-twitter-id', userId],
         enabled: !!userId,

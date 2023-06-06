@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function firstProfileNetwork(x: PersonaInformation | undefined) {
-    return x?.linkedProfiles[0]?.identifier?.network
+    return x?.linkedProfiles[0]?.identifier.network
 }
 function Personas() {
     const { classes } = useStyles()
@@ -45,7 +45,7 @@ function Personas() {
         PersonaContext.useContainer()
 
     useEffect(() => {
-        if (personas?.length !== 0) return
+        if (personas.length !== 0) return
         showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
         navigate(DashboardRoutes.Setup)
     }, [personas])

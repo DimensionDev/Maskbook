@@ -11,7 +11,7 @@ export function useUser() {
     const whoAmI = useLastRecognizedIdentity()
 
     return useMemo(() => {
-        if (!account || !whoAmI || !whoAmI.identifier || whoAmI.identifier?.userId === '$unknown') return
+        if (!account || !whoAmI || !whoAmI.identifier || whoAmI.identifier.userId === '$unknown') return
         return {
             userId: whoAmI.identifier.userId,
             address: account,
@@ -24,7 +24,7 @@ const DEFAULT_USER = { userId: '', address: '' }
 export function useCurrentVisitingUser(flag?: number) {
     const identity = useCurrentVisitingIdentity()
     const { value: user = DEFAULT_USER } = useAsync(async () => {
-        const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
+        const userId = location.href.endsWith(identity.identifier?.userId ?? '')
             ? identity.identifier?.userId ?? ''
             : ''
         try {

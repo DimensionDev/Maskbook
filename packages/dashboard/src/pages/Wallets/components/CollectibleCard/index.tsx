@@ -106,7 +106,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) =>
     }, [currentPluginId, asset.chainId, asset.address, asset.tokenId])
 
     // NFTScan can't recognize address uppercase
-    const link = (asset.link ?? nftLink)?.toLowerCase()
+    const link = (asset.link ?? nftLink).toLowerCase()
 
     return (
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>

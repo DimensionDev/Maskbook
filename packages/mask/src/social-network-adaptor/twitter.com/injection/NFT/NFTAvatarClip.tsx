@@ -47,13 +47,13 @@ export function NFTAvatarClipInTwitter() {
     useEffect(() => {
         const timer = setTimeout(() => {
             linkDom.current = searchTwitterAvatarNFTLinkSelector().evaluate()
-            if (linkDom.current?.firstElementChild && linkDom.current?.childNodes.length === 4) {
+            if (linkDom.current?.firstElementChild && linkDom.current.childNodes.length === 4) {
                 borderElement.current = linkDom.current.firstElementChild
                 // remove useless border
-                linkDom.current.removeChild(linkDom.current?.firstElementChild)
+                linkDom.current.removeChild(linkDom.current.firstElementChild)
             }
             const link = linkDom.current as HTMLElement
-            if (link?.style) {
+            if (link.style) {
                 link.style.backgroundColor = 'transparent'
                 link.style.boxShadow = 'none'
             }
@@ -111,7 +111,7 @@ export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }:
         return formatPrice(value.amount, value.symbol)
     }, [JSON.stringify(value), loading, loadingNFT])
 
-    if (!avatarMetadata?.address || !avatarMetadata?.token_id) return null
+    if (!avatarMetadata?.address || !avatarMetadata.token_id) return null
 
     return avatarType === AvatarType.Square ? (
         <NFTAvatarSquare stroke="black" strokeWidth={20} fontSize={9} name={name} price={price} size={size} />

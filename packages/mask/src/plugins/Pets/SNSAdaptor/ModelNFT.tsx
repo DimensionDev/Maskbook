@@ -84,7 +84,7 @@ export function ModelNFT(props: ModelNFTProps) {
                 </div>
                 {start && showMeta?.word ? (
                     <Box className={classes.wordContent}>
-                        <Box className={cx(classes.word, boxClasses.msgBox, boxClasses.wordShow)}>{showMeta?.word}</Box>
+                        <Box className={cx(classes.word, boxClasses.msgBox, boxClasses.wordShow)}>{showMeta.word}</Box>
                     </Box>
                 ) : null}
             </Drag>

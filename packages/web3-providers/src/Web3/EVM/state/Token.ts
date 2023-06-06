@@ -45,7 +45,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         if (!isValidChainId(chainId) || !address) return
 
         const fungibleTokenListFromStorage = this.storage.credibleFungibleTokenList.value
-        const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage?.[chainId]
+        const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage[chainId]
 
         if (!fungibleTokenListByChainFromStorage) {
             const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId, {
@@ -56,7 +56,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
                 [chainId]: fungibleTokenList,
             })
 
-            const credibleToken = fungibleTokenList?.find((x) => isSameAddress(x.address, address))
+            const credibleToken = fungibleTokenList.find((x) => isSameAddress(x.address, address))
             return credibleToken ?? token
         }
 
@@ -72,7 +72,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         if (!isValidChainId(chainId) || !address) return
 
         const nonFungibleTokenListFromStorage = this.storage.credibleNonFungibleTokenList.value
-        const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
+        const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage[chainId]
 
         if (!nonFungibleTokenListByChainFromStorage) {
             const nonFungibleTokenList = await this.Hub.getNonFungibleTokensFromTokenList(chainId, { chainId })
@@ -81,7 +81,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
                 [chainId]: nonFungibleTokenList,
             })
 
-            const credibleToken = nonFungibleTokenList?.find((x) => isSameAddress(x.address, address))
+            const credibleToken = nonFungibleTokenList.find((x) => isSameAddress(x.address, address))
             return credibleToken ?? token
         }
 

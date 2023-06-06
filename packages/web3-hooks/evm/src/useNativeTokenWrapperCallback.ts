@@ -31,7 +31,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             const receipt = await Web3.getTransactionReceipt(hash)
 
             if (!receipt?.status) return
-            return receipt?.transactionHash
+            return receipt.transactionHash
         },
         [account, wrapperContract],
     )

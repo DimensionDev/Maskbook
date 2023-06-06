@@ -37,7 +37,7 @@ export const NextIdPage = memo(function NextIdPage() {
     const isOwn = currentProfileIdentifier.identifier?.userId === visitingPersonaIdentifier.identifier?.userId
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!visitingPersonaIdentifier?.identifier) return
+        if (!visitingPersonaIdentifier.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier.identifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex

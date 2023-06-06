@@ -102,18 +102,18 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             <WalletIcon
                 size={30}
                 badgeSize={12}
-                mainIcon={providerDescriptor?.icon}
+                mainIcon={providerDescriptor.icon}
                 badgeIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     {providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
-                            {domain ? Others.formatDomainName(domain) : providerDescriptor?.name}
+                            {domain ? Others.formatDomainName(domain) : providerDescriptor.name}
                         </Typography>
                     ) : (
                         <Typography className={classes.accountName}>
-                            {walletName ?? providerDescriptor?.name}
+                            {walletName ?? providerDescriptor.name}
                         </Typography>
                     )}
                 </div>

@@ -242,7 +242,7 @@ export class __Event extends $unsafe.NewObject implements Event {
                 else {
                     try {
                         const __unsafe__callbackObject = $unsafe.unwrapXRayVision(listener.callback!)
-                        __unsafe__X = __unsafe__callbackObject?.handleEvent!
+                        __unsafe__X = __unsafe__callbackObject.handleEvent!
                         // TODO: message, stack
                         if (typeof __unsafe__X !== 'function')
                             throw new $unsafe.TypeError('handleEvent is not a function')

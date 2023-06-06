@@ -126,11 +126,11 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
-                        {!!account && providerDescriptor?.type !== ProviderType.MaskWallet ? (
+                        {!!account && providerDescriptor.type !== ProviderType.MaskWallet ? (
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
-                                mainIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                mainIcon={providerDescriptor.icon} // switch the icon to meet design
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
@@ -191,7 +191,7 @@ function useToolbox() {
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')
         if (pendingTransactions.length <= 0)
-            return Others.formatDomainName?.(domain) || Others.formatAddress(account, 4) || account
+            return Others.formatDomainName(domain) || Others.formatAddress(account, 4) || account
         return (
             <>
                 <span style={{ marginRight: 12 }}>

@@ -133,7 +133,7 @@ export function isProfilePageLike() {
     return !!location.pathname.match(/^\/[\dA-Za-z]+\/?$/)
 }
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
-    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
+    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''))
 
 export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(

@@ -152,7 +152,7 @@ export function SelectGasSettingsToolbarUI({
     const isSupportEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
-            onChange?.(
+            onChange(
                 isSupportEIP1559
                     ? {
                           maxFeePerGas,
@@ -257,7 +257,7 @@ export function SelectGasSettingsToolbarUI({
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return ZERO
         const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
-        if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
+        if (!currentGasCurrency || isSameAddress(nativeToken.address, currentGasCurrency)) {
             return result
         }
         if (!currencyRatio) return ZERO
@@ -266,7 +266,7 @@ export function SelectGasSettingsToolbarUI({
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee || gasFee.isZero()) return '$0'
-        if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
+        if (!currentGasCurrency || isSameAddress(nativeToken.address, currentGasCurrency)) {
             return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
                 onlyRemainTwoDecimal: true,
             })
@@ -275,7 +275,7 @@ export function SelectGasSettingsToolbarUI({
         if (!currencyToken || !currencyTokenPrice) return '$0'
 
         return formatCurrency(
-            new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice),
+            new BigNumber(formatBalance(gasFee, currencyToken.decimals)).times(currencyTokenPrice),
             'USD',
             { onlyRemainTwoDecimal: true },
         )
@@ -283,9 +283,9 @@ export function SelectGasSettingsToolbarUI({
         gasFee,
         nativeTokenPrice,
         currencyTokenPrice,
-        nativeToken?.address,
+        nativeToken.address,
         currentGasCurrency,
-        currencyToken?.decimals,
+        currencyToken.decimals,
     ])
 
     return gasOptions && !isZero(gasFee) ? (
@@ -294,9 +294,9 @@ export function SelectGasSettingsToolbarUI({
             <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
-                    decimals={currencyToken?.decimals ?? 0}
+                    decimals={currencyToken.decimals ?? 0}
                     significant={4}
-                    symbol={currencyToken?.symbol}
+                    symbol={currencyToken.symbol}
                     formatter={formatBalance}
                 />
                 <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>

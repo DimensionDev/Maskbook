@@ -55,7 +55,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
 
             return operations.filter((_, i) => {
                 const receipt = allSettled[i] as PromiseFulfilledResult<TransactionReceipt | null>
-                return receipt.status === 'fulfilled' && receipt?.value?.status === true
+                return receipt.status === 'fulfilled' && receipt.value?.status === true
             })
         } catch {
             return EMPTY_LIST
