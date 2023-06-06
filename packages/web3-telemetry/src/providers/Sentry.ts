@@ -120,7 +120,6 @@ export class SentryAPI implements Provider<Event, Event> {
         Sentry.setTag('device_ab', joinsABTest())
         Sentry.setTag('device_seed', getABTestSeed())
         Sentry.setTag('device_id', TelemetryID.value)
-        Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
         TelemetryID.addListener((trackID) => {
             Sentry.setTag('device_ab', joinsABTest())

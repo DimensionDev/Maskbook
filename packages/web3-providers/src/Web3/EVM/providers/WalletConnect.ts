@@ -3,7 +3,6 @@ import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { defer } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
-import type { ITxData } from '@walletconnect/types'
 import type { Account } from '@masknet/shared-base'
 import {
     type ChainId,
@@ -13,6 +12,7 @@ import {
     ProviderType,
     type Web3Provider,
     type Web3,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -80,8 +80,9 @@ export default class WalletConnectProvider
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
             qrcodeModal: {
-                open: (uri: string, callback) => {
-                    this.context?.openWalletConnectDialog(uri, callback)
+                open: async (uri: string, callback) => {
+                    await this.context?.openWalletConnectDialog(uri)
+                    callback()
                 },
                 close: () => {
                     this.context?.closeWalletConnectDialog()
@@ -194,30 +195,9 @@ export default class WalletConnectProvider
         }
     }
 
-    override request<T>(requestArguments: RequestArguments): Promise<T> {
-        switch (requestArguments.method) {
-            case EthereumMethodType.ETH_CHAIN_ID:
-                return Promise.resolve(this.connector.chainId) as Promise<T>
-            case EthereumMethodType.ETH_SEND_TRANSACTION: {
-                const [config] = requestArguments.params as [ITxData]
-                return this.connector.sendTransaction(config) as Promise<T>
-            }
-            case EthereumMethodType.ETH_SIGN_TRANSACTION: {
-                const [config] = requestArguments.params as [ITxData]
-                return this.connector.signTransaction(config) as Promise<T>
-            }
-            case EthereumMethodType.PERSONAL_SIGN:
-                return this.connector.signPersonalMessage(requestArguments.params) as Promise<T>
-            case EthereumMethodType.ETH_SIGN:
-                return this.connector.signMessage(requestArguments.params) as Promise<T>
-            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                return this.connector.signTypedData(requestArguments.params) as Promise<T>
-            default:
-                return this.connector.sendCustomRequest(requestArguments)
-        }
-    }
+    override async switchChain(chainId: ChainId): Promise<void> {
+        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
 
-    override async switchChain(chainId?: ChainId | undefined): Promise<void> {
         let clean: () => boolean | undefined
         return new Promise<void>((resolve, reject) => {
             super.switchChain(chainId).catch((error) => {
@@ -239,5 +219,28 @@ export default class WalletConnectProvider
 
     override async disconnect() {
         await this.logout()
+    }
+
+    override request<T>(requestArguments: RequestArguments): Promise<T> {
+        switch (requestArguments.method) {
+            case EthereumMethodType.ETH_CHAIN_ID:
+                return Promise.resolve(this.connector.chainId) as Promise<T>
+            case EthereumMethodType.ETH_SEND_TRANSACTION: {
+                const [config] = requestArguments.params
+                return this.connector.sendTransaction(config) as Promise<T>
+            }
+            case EthereumMethodType.ETH_SIGN_TRANSACTION: {
+                const [config] = requestArguments.params
+                return this.connector.signTransaction(config) as Promise<T>
+            }
+            case EthereumMethodType.PERSONAL_SIGN:
+                return this.connector.signPersonalMessage(requestArguments.params) as Promise<T>
+            case EthereumMethodType.ETH_SIGN:
+                return this.connector.signMessage(requestArguments.params) as Promise<T>
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                return this.connector.signTypedData(requestArguments.params) as Promise<T>
+            default:
+                return this.connector.sendCustomRequest(requestArguments)
+        }
     }
 }

@@ -148,7 +148,11 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { data: spenders, isLoading, refetch } = useFungibleTokenSpenders({ chainId, account })
+    const {
+        data: spenders,
+        isLoading,
+        refetch,
+    } = useFungibleTokenSpenders(NetworkPluginID.PLUGIN_EVM, { chainId, account })
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({

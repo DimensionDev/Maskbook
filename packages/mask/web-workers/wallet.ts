@@ -11,14 +11,7 @@ export type Output = {
 }
 
 async function load() {
-    if (process.env.manifest === '3') {
-        return import('@dimensiondev/mask-wallet-core/bundle')
-    } else {
-        const { default: init, ...rest } = await import('@dimensiondev/mask-wallet-core/web')
-        // @ts-expect-error typing error
-        await init()
-        return rest
-    }
+    return import('@dimensiondev/mask-wallet-core/bundle')
 }
 const promise = (async () => {
     const { request } = await load()

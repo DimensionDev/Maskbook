@@ -16,7 +16,6 @@
     "history_send": "發送",
     "history_total_amount": "總額: {{amount}} {{symbol}}",
     "history_split_mode": "分割模式: {{mode}}",
-    "history_total_claimed_amount": "總共: <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",
     "attached_message": "附加的訊息",
     "next": "下一步",
     "erc721_insufficient_balance": "餘額不足",

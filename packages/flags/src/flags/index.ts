@@ -8,10 +8,14 @@ const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 export const flags = {
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
-    use_register_content_script: true,
     /** Firefox has a special API that can inject to the document with a higher permission. */
-    has_firefox_xray_vision: process.env.engine === 'firefox',
+    has_firefox_xray_vision: !!globalThis.navigator?.userAgent.includes('Firefox'),
     support_testnet_switch: betaOrInsiderOnly,
+
+    shadowRootInit: {
+        mode: '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly ? 'open' : 'closed',
+        delegatesFocus: true,
+    } as const satisfies ShadowRootInit,
 
     // #region Experimental features
     trader_all_api_cached_enabled: devOnly,
@@ -49,8 +53,16 @@ export const flags = {
     sentry_exception_enabled: prodOnly,
     sentry_fetch_transaction_enabled: prodOnly,
     sentry_async_transaction_enabled: devOnly,
+
+    // wallet connect
+    wc_mode: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
+    wc_relay_url: 'wss://relay.walletconnect.com',
+    wc_project_id: '8f1769933420afe8873860925fcca14f',
+    wc_v1_enabled: true,
+    wc_v2_enabled: true,
 } as const
 
+Object.freeze(flags.shadowRootInit)
 if (process.env.NODE_ENV === 'development') {
     console.log('Mask Network starts with flags:', flags)
 }

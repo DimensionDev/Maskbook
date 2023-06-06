@@ -2,6 +2,7 @@ import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@maskn
 import { NoneProvider } from './None.js'
 import { MetaMaskProvider } from './MetaMask.js'
 import WalletConnectProvider from './WalletConnect.js'
+import WalletConnectV2Provider from './WalletConnectV2.js'
 import { EVM_Coin98Provider } from './Coin98.js'
 import { WalletLinkProvider } from './WalletLink.js'
 import { MathWalletProvider } from './MathWallet.js'
@@ -19,6 +20,7 @@ export const Providers: Record<ProviderType, EVM_Provider> = {
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
     [ProviderType.WalletConnect]: new WalletConnectProvider(),
+    [ProviderType.WalletConnectV2]: new WalletConnectV2Provider(),
     [ProviderType.Coin98]: new EVM_Coin98Provider(),
     [ProviderType.WalletLink]: new WalletLinkProvider(),
     [ProviderType.MathWallet]: new MathWalletProvider(),

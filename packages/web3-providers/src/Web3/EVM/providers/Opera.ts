@@ -3,11 +3,11 @@ import { Sniffings } from '@masknet/shared-base'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import {
     type ChainId,
-    chainResolver,
     EthereumMethodType,
     ProviderType,
     type Web3Provider,
     type Web3,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseInjectedProvider } from './BaseInjected.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -30,8 +30,9 @@ export class OperaProvider
         return super.readyPromise
     }
 
-    override async switchChain(chainId?: ChainId): Promise<void> {
-        if (!chainId) throw new Error(`Failed to switch to ${chainResolver.chainFullName(chainId)}.`)
+    override async switchChain(chainId: ChainId): Promise<void> {
+        if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
+
         await this.request({
             method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
             params: [

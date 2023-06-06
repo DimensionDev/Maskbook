@@ -1,5 +1,6 @@
 import { Typography, List, Box } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
+import { useSharedI18N } from '@masknet/shared'
 import type { RedPacketJSONPayload } from '../types.js'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
@@ -41,6 +42,10 @@ const useStyles = makeStyles()((theme) => {
             height: 36,
             marginBottom: 13,
         },
+        loading: {
+            fontSize: 14,
+            marginTop: 13,
+        },
     }
 })
 
@@ -51,14 +56,23 @@ interface RedPacketHistoryListProps {
 export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
     const t = useI18N()
+    const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: histories, loading } = useRedPacketHistory(account, chainId)
 
     if (loading) {
         return (
-            <Box style={{ height: 474, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                <LoadingBase />
+            <Box
+                style={{
+                    height: 474,
+                    alignItems: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                }}>
+                <LoadingBase size={30} />
+                <Typography className={classes.loading}>{sharedI18N.loading()}</Typography>
             </Box>
         )
     }
@@ -67,7 +81,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
                 <Icons.EmptySimple className={classes.emptyIcon} />
-                {t.token_no_history()}
+                {t.search_no_result()}
             </Typography>
         )
     }

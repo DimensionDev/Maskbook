@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { createSubscriptionFromAsync, EMPTY_LIST } from '@masknet/shared-base'
-import { type WalletConnectQRCodeDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletConnectQRCodeDialog } from '@masknet/web3-modals'
 import Services from '../extension/service.js'
 import { WalletRPC } from '../plugins/Wallet/messages.js'
 import { MaskMessages } from './messages.js'
@@ -40,22 +41,14 @@ export const RestPartOfPluginUIContextShared: Omit<
     closePopupWindow: Services.Helper.removePopupWindow,
     openPopupConnectWindow: Services.Helper.openPopupConnectWindow,
     fetchJSON: Services.Helper.fetchJSON,
-    openWalletConnectDialog: (uri: string, callback: () => void) => {
-        const onClose = (ev: WalletConnectQRCodeDialogEvent) => {
-            if (ev.open) return
-            callback()
-            WalletMessages.events.walletConnectQRCodeDialogUpdated.off(onClose)
-        }
-        WalletMessages.events.walletConnectQRCodeDialogUpdated.on(onClose)
-        WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToLocal({
-            open: true,
+
+    openWalletConnectDialog: async (uri: string) => {
+        await WalletConnectQRCodeDialog.openAndWaitForClose({
             uri,
         })
     },
     closeWalletConnectDialog: () => {
-        WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToLocal({
-            open: false,
-        })
+        WalletConnectQRCodeDialog.close()
     },
 
     wallets: createSubscriptionFromAsync(

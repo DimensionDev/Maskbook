@@ -142,7 +142,7 @@ export namespace Plugin.Shared {
         openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
-        openWalletConnectDialog(uri: string, callback: () => void): void
+        openWalletConnectDialog(uri: string): Promise<void>
 
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void

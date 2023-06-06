@@ -1,18 +1,8 @@
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import {
-    ChainId,
-    SchemaType,
-    chainResolver,
-    networkResolver,
-    type NetworkType,
-    isNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
-import { useFungibleToken } from '@masknet/web3-hooks-base'
-import { formatBalance } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import {
@@ -21,13 +11,13 @@ import {
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers.js'
-import { useI18N } from '../locales/index.js'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types.js'
 import { RedPacketInjection } from './RedPacketInjection.js'
 import RedPacketDialog from './RedPacketDialog.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { openDialog } from './emitter.js'
+import { Typography } from '@mui/material'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -69,19 +59,25 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [
             RedPacketMetaKey,
             (_payload) => {
-                return { text: <ERC20RedpacketBadge payload={_payload as RedPacketJSONPayload} /> }
+                return {
+                    text: (
+                        <ERC20RedpacketBadge
+                            message={(_payload as RedPacketJSONPayload).sender.message}
+                            fallback={'A Token Lucky Drop'}
+                        />
+                    ),
+                }
             },
         ],
         [
             RedPacketNftMetaKey,
             (_payload) => {
-                const payload = _payload as RedPacketNftJSONPayload
                 return {
                     text: (
-                        <div style={containerStyle}>
-                            <Icons.NFTRedPacket size={16} />
-                            {payload.message ? payload.message : 'An NFT Lucky Drop'}
-                        </div>
+                        <ERC20RedpacketBadge
+                            message={(_payload as RedPacketNftJSONPayload).message}
+                            fallback={'An NFT Lucky Drop'}
+                        />
                     ),
                 }
             },
@@ -141,31 +137,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
 }
 interface ERC20RedpacketBadgeProps {
-    payload: RedPacketJSONPayload
+    message: string
+    fallback: string
 }
 
 function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
-    const { payload } = props
-    const t = useI18N()
-    const { value: fetchedToken } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        payload.token?.address ?? payload.token?.address,
-    )
-    const chainId = networkResolver.networkChainId((payload.network ?? '') as NetworkType) ?? ChainId.Mainnet
-    const nativeCurrency = chainResolver.nativeCurrency(chainId)
-    const tokenDetailed = payload.token?.schema === SchemaType.Native ? nativeCurrency : payload.token ?? fetchedToken
+    const { message, fallback } = props
+
     return (
         <div style={containerStyle}>
-            <Icons.RedPacket size={16} />
-            {t.badge({
-                balance: formatBalance(
-                    payload.total,
-                    tokenDetailed?.decimals ?? 0,
-                    isNativeTokenAddress(payload.token?.address) ? 6 : 0,
-                ),
-                tokenName: tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token',
-                sender: payload.sender.name,
-            })}
+            <Icons.RedPacket size={20} />
+            <Typography fontSize="12px" lineHeight="16px" fontFamily="Helvetica" marginLeft="8px">
+                {message || fallback}
+            </Typography>
         </div>
     )
 }

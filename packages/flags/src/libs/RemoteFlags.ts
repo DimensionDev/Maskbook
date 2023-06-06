@@ -108,9 +108,7 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
     async fetch() {
         const response = await fetch(
             urlcat(this.remoteFlagsURL, {
-                engine: process.env.engine,
                 channel: process.env.channel,
-                manifest: process.env.manifest,
                 NODE_ENV: process.env.NODE_ENV,
             }),
         )

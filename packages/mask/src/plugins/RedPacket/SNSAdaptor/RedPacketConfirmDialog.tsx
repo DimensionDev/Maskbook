@@ -20,6 +20,7 @@ import { type RedPacketSettings, useCreateCallback, useCreateParams } from './ho
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -31,17 +32,22 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: theme.spacing(2),
     },
     gridWrapper: {
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
     },
     hit: {
+        display: 'flex',
+        alignItems: 'center',
+        maxWidth: 568,
         fontWeight: 300,
         borderRadius: 8,
         backgroundColor: theme.palette.background.default,
         color: theme.palette.text.primary,
-        padding: theme.spacing(1.2),
-        marginTop: 108,
-        marginBottom: theme.spacing(1),
+        padding: 12,
+        marginTop: 0,
+        marginBottom: 130,
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     token: {
         display: 'flex',
@@ -49,6 +55,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     ellipsis: {
+        fontSize: 24,
+        fontWeight: 700,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
@@ -179,7 +187,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         <>
             <Grid container spacing={2} className={cx(classes.grid, classes.gridWrapper)}>
                 <Grid item xs={12}>
-                    <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
+                    <Typography
+                        variant="h4"
+                        color="textPrimary"
+                        align="center"
+                        className={classes.ellipsis}
+                        fontFamily="Helvetica">
                         {settings?.message}
                     </Typography>
                 </Grid>
@@ -275,7 +288,15 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
-                        <Typography variant="body1" align="left" style={{ lineHeight: '20px' }}>
+                        <Icons.SettingInfo size={20} />
+                        <Typography
+                            variant="body1"
+                            align="left"
+                            marginTop="1px"
+                            marginLeft="8.5px"
+                            style={{ lineHeight: '18px' }}
+                            fontSize="14px"
+                            fontFamily="Helvetica">
                             {t.hint()}
                         </Typography>
                     </Paper>

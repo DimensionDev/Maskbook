@@ -1,6 +1,8 @@
 import type { Storage } from 'webextension-polyfill'
 
 const key = 'openSNSAndActivatePlugin'
+// Note: sessionStorage is only available in MV2 or MV3 page mode.
+const sessionStorage = (globalThis as any).sessionStorage
 /**
  * This function will open a new web page, then open the composition dialog and activate the composition entry of the given plugin.
  * @param url URL to open
@@ -8,22 +10,20 @@ const key = 'openSNSAndActivatePlugin'
  */
 export async function openSNSAndActivatePlugin(url: string, pluginID: string): Promise<void> {
     await browser.tabs.create({ active: true, url })
-    if (process.env.manifest === '2') {
-        ;(globalThis as any).sessionStorage.setItem(key, pluginID)
+    if (!('session' in browser.storage)) {
+        sessionStorage.setItem(key, pluginID)
     } else {
-        // @ts-expect-error Chrome Only API
-        const session: Storage.StorageArea = browser.storage.session
+        const session = browser.storage.session as Storage.StorageArea
         await session.set({ [key]: pluginID })
     }
 }
 export async function getDesignatedAutoStartPluginID(): Promise<string | null> {
-    if (process.env.manifest === '2') {
-        const val = (globalThis as any).sessionStorage.getItem(key)
-        ;(globalThis as any).sessionStorage.removeItem(key)
+    if (!('session' in browser.storage)) {
+        const val = sessionStorage.getItem(key)
+        sessionStorage.removeItem(key)
         return val
     } else {
-        // @ts-expect-error Chrome Only API
-        const session: Storage.StorageArea = browser.storage.session
+        const session = browser.storage.session as Storage.StorageArea
         const val = await session.get(key)
         await session.remove(key)
         return (val[key] as string) ?? null

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { makeStyles, LoadingBase } from '@masknet/theme'
+import { useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -79,6 +80,10 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
             color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
             fontSize: 12,
         },
+        loading: {
+            fontSize: 14,
+            marginTop: 13,
+        },
     }
 })
 
@@ -89,6 +94,7 @@ interface Props {
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const sharedI18N = useSharedI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: histories, loading } = useNftRedPacketHistory(account, chainId)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -108,8 +114,16 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
 
     if (loading) {
         return (
-            <Box style={{ height: 474, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                <LoadingBase />
+            <Box
+                style={{
+                    height: 474,
+                    alignItems: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                }}>
+                <LoadingBase size={30} />
+                <Typography className={classes.loading}>{sharedI18N.loading()}</Typography>
             </Box>
         )
     }

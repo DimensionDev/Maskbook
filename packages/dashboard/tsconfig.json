@@ -13,6 +13,7 @@
     { "path": "../mask/background" },
     { "path": "../web3-hooks/base/" },
     { "path": "../web3-hooks/evm/" },
+    { "path": "../web3-modals" },
     { "path": "../web3-telemetry" },
     { "path": "../web3-shared/base/" },
     { "path": "../web3-shared/evm/" },

@@ -59,6 +59,12 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         marginLeft: 10,
         overflow: 'auto',
         flexGrow: 1,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+        '& :focus:not(:focus-visible)': {
+            outline: 0,
+        },
     },
     nickname: {
         color: theme.palette.text.primary,
@@ -180,6 +186,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 onClick={(event) => {
                                     event.stopPropagation()
                                 }}
+                                sx={{ outline: 0 }}
                                 className={classes.linkIcon}>
                                 <Icons.LinkOut size={14} />
                             </Link>

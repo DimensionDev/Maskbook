@@ -16,6 +16,7 @@ import {
     type ZerionNonFungibleTokenInfoBody,
     type ZerionGasResponseBody,
 } from './types.js'
+import { delay } from '@masknet/kit'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line
@@ -136,36 +137,42 @@ export async function getTransactionList(address: string, scope: string, page?: 
 }
 
 export async function getNonFungibleAsset(account: string, address: string, tokenId: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Address,
-            socket: createSocket(),
-        },
-        {
-            scope: ['nft'],
-            payload: {
-                address: account,
-                nft_asset_code: `${address}:${tokenId}`,
+    return Promise.race([
+        subscribeFromZerion(
+            {
+                namespace: SocketRequestNameSpace.Address,
+                socket: createSocket(),
             },
-        },
-    )) as ZerionNonFungibleTokenResponseBody
+            {
+                scope: ['nft'],
+                payload: {
+                    address: account,
+                    nft_asset_code: `${address}:${tokenId}`,
+                },
+            },
+        ) as Promise<ZerionNonFungibleTokenResponseBody>,
+        delay(10_000),
+    ])
 }
 
 export async function getNonFungibleAssets(address: string, page?: number, size = 20, contract_address?: string) {
-    return (await subscribeFromZerion(
-        { namespace: SocketRequestNameSpace.Address, socket: createSocket() },
-        {
-            scope: ['nft'],
-            payload: {
-                address,
-                contract_addresses: contract_address ? [contract_address] : [],
-                mode: 'nft',
-                nft_limit: size,
-                nft_offset: (page ?? 0) * size,
+    return Promise.race([
+        subscribeFromZerion(
+            { namespace: SocketRequestNameSpace.Address, socket: createSocket() },
+            {
+                scope: ['nft'],
+                payload: {
+                    address,
+                    contract_addresses: contract_address ? [contract_address] : [],
+                    mode: 'nft',
+                    nft_limit: size,
+                    nft_offset: (page ?? 0) * size,
+                },
             },
-        },
-        SocketRequestType.GET,
-    )) as ZerionNonFungibleTokenResponseBody
+            SocketRequestType.GET,
+        ) as Promise<ZerionNonFungibleTokenResponseBody>,
+        delay(10_000),
+    ])
 }
 
 export async function getNonFungibleCollection(slug: string) {

@@ -22,11 +22,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
 export interface WalletStatusDialogProps {}
+
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
-
     const { classes } = useStyles()
+
     const [isHidden, setIsHidden] = useState(false)
 
     // #region remote controlled dialog logic

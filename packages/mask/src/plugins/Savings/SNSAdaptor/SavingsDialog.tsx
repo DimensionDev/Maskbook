@@ -13,8 +13,8 @@ import {
     useNetworkContext,
     ChainContextProvider,
 } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
 import { Contract } from '@masknet/web3-providers'
@@ -39,31 +39,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     tableTabWrapper: {
         padding: theme.spacing(1, 2),
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-        backgroundColor: Sniffings.is_dashboard_page ? `${MaskColorVar.primaryBackground2}!important` : undefined,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        width: 535,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
     },
     content: {
         padding: 0,
@@ -177,13 +152,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             <DialogContent className={classes.content}>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab
-                                        classes={{
-                                            tab: classes.tab,
-                                            tabs: classes.tabs,
-                                            tabPaper: classes.tabPaper,
-                                            tabPanel: classes.tabPanel,
-                                            indicator: classes.indicator,
-                                        }}
                                         requireChains
                                         chains={chains.filter(Boolean)}
                                         pluginID={NetworkPluginID.PLUGIN_EVM}

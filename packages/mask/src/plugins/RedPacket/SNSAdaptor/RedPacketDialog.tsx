@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -51,19 +51,6 @@ const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistor
             width: '100%',
             paddingBottom: theme.spacing(2),
         },
-        tab: {
-            height: 36,
-            minHeight: 36,
-        },
-        tabPaper: {
-            backgroundColor: 'inherit',
-        },
-        indicator: {
-            display: 'none',
-        },
-        tabPanel: {
-            marginTop: 12,
-        },
     }),
 )
 
@@ -95,11 +82,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const { classes } = useStyles({ currentTab, showHistory })
-    const chainIdList = compact<ChainId>(
-        currentTab === tabs.tokens
-            ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
-            : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
-    )
+    const chainIdList = useMemo(() => {
+        return compact<ChainId>(
+            currentTab === tabs.tokens
+                ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+                : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+        )
+    }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
     const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
 
     // #region token lucky drop
@@ -239,12 +228,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         !openSelectNFTDialog ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
-                                    classes={{
-                                        tab: classes.tab,
-                                        tabPanel: classes.tabPanel,
-                                        indicator: classes.indicator,
-                                        tabPaper: classes.tabPaper,
-                                    }}
                                     chains={chainIdList}
                                     hideArrowButton={currentTab === tabs.collectibles}
                                     pluginID={NetworkPluginID.PLUGIN_EVM}

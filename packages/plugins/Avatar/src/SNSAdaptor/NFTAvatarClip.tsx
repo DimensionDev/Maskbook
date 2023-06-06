@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         strokeLinecap: 'round',
     },
     text: {
-        transform: process.env.engine === 'firefox' ? 'translate(1px, -1px)' : 'translate(1px, -5px) ',
+        transform: navigator.userAgent.includes('Firefox') ? 'translate(1px, -1px)' : 'translate(1px, -5px) ',
     },
     price: {
         transform: 'translate(0, -5px) ',
@@ -200,7 +200,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     <Text
                         xlinkHref={`#${id}-name-path`}
                         fill={`url(#${id}-pattern)`}
-                        dominantBaseline={process.env.engine === 'firefox' ? 'text-before-edge' : 'mathematical'}
+                        dominantBaseline={navigator.userAgent.includes('Firefox') ? 'text-before-edge' : 'mathematical'}
                         text={name}
                     />
                 </g>
@@ -208,7 +208,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     <Text
                         fill={`url(#${id}-pattern)`}
                         xlinkHref={`#${id}-price-path`}
-                        dominantBaseline={process.env.engine === 'firefox' ? 'central' : 'mathematical'}
+                        dominantBaseline={navigator.userAgent.includes('Firefox') ? 'central' : 'mathematical'}
                         text={price}
                     />
                 </g>

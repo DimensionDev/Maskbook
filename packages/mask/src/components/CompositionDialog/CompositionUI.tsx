@@ -15,7 +15,7 @@ import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-b
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { LoadingButton } from '@mui/lab'
-import { Button, Typography } from '@mui/material'
+import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
@@ -34,27 +34,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 464,
         display: 'flex',
         flexDirection: 'column',
+        padding: theme.spacing(2),
     },
     flex: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-    },
-    actions: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        padding: 16,
-        boxSizing: 'border-box',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        background: theme.palette.background.paper,
-        boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
     },
     between: {
         justifyContent: 'space-between',
@@ -67,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     editorWrapper: {
         flex: 1,
         width: 568,
-        background: theme.palette.background.input,
+        background: theme.palette.maskColor.bottom,
         padding: 0,
         boxSizing: 'border-box',
         borderRadius: 8,
@@ -77,6 +63,20 @@ const useStyles = makeStyles()((theme) => ({
         width: 18,
         height: 18,
         fill: theme.palette.text.buttonText,
+    },
+    action: {
+        height: 68,
+        padding: '0 16px',
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        justifyContent: 'space-between',
+        display: 'flex',
+    },
+    personaAction: {
+        flex: 1,
     },
 }))
 
@@ -101,6 +101,7 @@ export interface CompositionProps {
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
     initialMetas?: Record<string, unknown>
+    personaAction?: React.ReactNode
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
@@ -250,27 +251,30 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
             </div>
-            <div className={classes.actions}>
-                {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
-                {props.requireClipboardPermission && !props.hasClipboardPermission ? (
-                    <Button
+            <DialogActions className={classes.action}>
+                {props.personaAction ? <div className={classes.personaAction}>{props.personaAction}</div> : <div />}
+                <div>
+                    {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
+                    {props.requireClipboardPermission && !props.hasClipboardPermission ? (
+                        <Button
+                            variant="roundedContained"
+                            onClick={props.onRequestClipboardPermission}
+                            sx={{ marginRight: 1 }}>
+                            {t('post_dialog_enable_paste_auto')}
+                        </Button>
+                    ) : null}
+                    <LoadingButton
+                        style={{ opacity: 1 }}
+                        disabled={!submitAvailable}
+                        loading={sending}
+                        loadingPosition="start"
                         variant="roundedContained"
-                        onClick={props.onRequestClipboardPermission}
-                        sx={{ marginRight: 1 }}>
-                        {t('post_dialog_enable_paste_auto')}
-                    </Button>
-                ) : null}
-                <LoadingButton
-                    style={{ opacity: 1 }}
-                    disabled={!submitAvailable}
-                    loading={sending}
-                    loadingPosition="start"
-                    variant="roundedContained"
-                    onClick={onSubmit}
-                    startIcon={<Icons.Send className={classes.icon} />}>
-                    {t('post_dialog__button')}
-                </LoadingButton>
-            </div>
+                        onClick={onSubmit}
+                        startIcon={<Icons.Send className={classes.icon} />}>
+                        {t('post_dialog__button')}
+                    </LoadingButton>
+                </div>
+            </DialogActions>
         </CompositionContext.Provider>
     )
 })

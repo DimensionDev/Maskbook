@@ -37,8 +37,8 @@ const ErrorMessage = {
 const worker = new OnDemandWorker('./worker.ts')
 
 function send<I extends keyof MaskBaseAPI.Request, O extends keyof MaskBaseAPI.Response>(input: I, output: O) {
-    // @ts-expect-error this package should not access browser global. It makes this package non-portable.
-    if (typeof browser === 'object' && browser.runtime && process.env.manifest === '3') {
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=1219164
+    if (typeof Worker !== 'function') {
         return async (value: MaskBaseAPI.Request[I]): Promise<MaskBaseAPI.Response[O]> => {
             const { request } = await import('@dimensiondev/mask-wallet-core/bundle')
             const { api } = await import('@dimensiondev/mask-wallet-core/proto')

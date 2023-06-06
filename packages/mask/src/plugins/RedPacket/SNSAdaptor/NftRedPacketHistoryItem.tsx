@@ -1,124 +1,159 @@
 import { type FC, memo, type MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { fill } from 'lodash-es'
-import { TokenIcon } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
 import type { NftRedPacketJSONPayload } from '../types.js'
+import { Translate, useI18N } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
-import { NftList } from './NftList.js'
-import { Translate, useI18N } from '../locales/index.js'
+import { TokenIcon } from '@masknet/shared'
 
-const useStyles = makeStyles()((theme) => {
-    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
-    return {
-        root: {
-            borderRadius: 10,
-            border: `solid 1px ${theme.palette.divider}`,
-            marginBottom: theme.spacing(1.5),
-            position: 'static !important' as any,
-            height: 'auto !important',
-            padding: theme.spacing(2),
-            backgroundColor: theme.palette.background.default,
-            [smallQuery]: {
-                padding: theme.spacing(2, 1.5),
+const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; listItemBackgroundIcon?: string }>()(
+    (theme, { isViewed, listItemBackground, listItemBackgroundIcon }) => {
+        const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+        return {
+            root: {
+                width: '100%',
+                padding: 0,
+                background: isViewed ? theme.palette.common.white : 'unset',
+                marginBottom: theme.spacing(1.5),
+                borderRadius: 8,
             },
-        },
-        message: {
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            [smallQuery]: {
-                whiteSpace: 'normal',
+            contentItem: {
+                width: '100%',
+                borderRadius: 8,
+                position: 'static !important' as any,
+                height: 'auto !important',
+                padding: theme.spacing(1.5),
+                background: isViewed ? listItemBackground ?? theme.palette.background.default : 'unset',
+                [smallQuery]: {
+                    padding: theme.spacing(2, 1.5),
+                },
+                '&:before': isViewed
+                    ? {
+                          position: 'absolute',
+                          content: '""',
+                          top: 45,
+                          left: 400,
+                          zIndex: 0,
+                          width: 114,
+                          opacity: 0.2,
+                          height: 61,
+                          filter: 'blur(1.5px)',
+                          background: listItemBackgroundIcon,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundSize: '114px 114px',
+                      }
+                    : {},
             },
-        },
-        box: {
-            display: 'flex',
-            width: '100%',
-        },
-        content: {
-            transform: 'translateY(-4px)',
-            width: '100%',
-            paddingLeft: theme.spacing(1),
-        },
-        section: {
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: theme.spacing(2),
-            [smallQuery]: {
-                marginBottom: 0,
+            message: {
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                [smallQuery]: {
+                    whiteSpace: 'normal',
+                },
             },
-        },
-        icon: {
-            width: 27,
-            height: 27,
-        },
-        title: {
-            whiteSpace: 'break-spaces',
-            fontWeight: 500,
-            fontSize: 16,
-        },
-        info: {
-            color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
-            [smallQuery]: {
-                fontSize: 13,
-            },
-        },
-        nftList: {
-            width: 390,
-            [smallQuery]: {
+            box: {
+                display: 'flex',
                 width: '100%',
             },
-        },
-        actionButton: {
-            height: 26,
-            minHeight: 'auto',
-            position: 'relative',
-        },
-        footer: {
-            width: '100%',
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            marginTop: theme.spacing(2),
-            [smallQuery]: {
-                marginTop: theme.spacing(1),
+            content: {
+                transform: 'translateY(-4px)',
+                width: '100%',
+                paddingLeft: theme.spacing(1),
             },
-        },
-        footerInfo: {
-            fontSize: 15,
-            color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
-            '& strong': {
-                color: theme.palette.text.primary,
+            section: {
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: theme.spacing(2),
+                [smallQuery]: {
+                    marginBottom: 0,
+                },
             },
-        },
-        disabledButton: {
-            color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
-            boxShadow: 'none',
-            backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-            cursor: 'default',
-            '&:hover': {
-                backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-                color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
+            icon: {
+                width: 18,
+                height: 18,
+                marginLeft: 6,
             },
-        },
-        ellipsis: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            maxWidth: 360,
-        },
-    }
-})
+            title: {
+                whiteSpace: 'break-spaces',
+                fontWeight: 500,
+                fontSize: 16,
+            },
+            info: {
+                color: theme.palette.maskColor.dark,
+                [smallQuery]: {
+                    fontSize: 13,
+                },
+                fontSize: 14,
+            },
+            infoTitle: {
+                color: theme.palette.maskColor.secondaryDark,
+                marginRight: 4,
+                fontSize: 14,
+                [smallQuery]: {
+                    fontSize: 13,
+                },
+            },
+            actionButton: {
+                fontSize: 12,
+                width: 88,
+                height: 32,
+                background: theme.palette.maskColor.dark,
+                color: theme.palette.maskColor.white,
+                borderRadius: '999px',
+                minHeight: 'auto',
+                [smallQuery]: {
+                    marginTop: theme.spacing(1),
+                },
+                '&:disabled': {
+                    background: theme.palette.maskColor.dark,
+                    color: theme.palette.common.white,
+                },
+                '&:hover': {
+                    background: theme.palette.maskColor.dark,
+                    color: theme.palette.maskColor.white,
+                    opacity: 0.8,
+                },
+            },
+            footer: {
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'nowrap',
+                marginTop: 15,
+            },
+            footerInfo: {
+                fontSize: 14,
+                color: theme.palette.maskColor.secondaryDark,
+                '& span': {
+                    color: theme.palette.maskColor.dark,
+                    marginRight: 2,
+                },
+            },
+            fullWidthBox: {
+                width: '100%',
+                display: 'flex',
+            },
+            ellipsis: {
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: 360,
+            },
+        }
+    },
+)
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketJSONPayload
@@ -129,12 +164,12 @@ export interface NftRedPacketHistoryItemProps {
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover, collections }) => {
-        const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+        const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [isViewed, setIsViewed] = useState(false)
         const ref = useRef<HTMLLIElement | null>(null)
         const entry = useIntersectionObserver(ref, {})
         const t = useI18N()
-        const { classes, cx } = useStyles()
+
         const { value: receipt } = useCreateNftRedPacketReceipt(history.txid)
         const rpid = receipt?.rpid ?? ''
         const creation_time = receipt?.creation_time ?? 0
@@ -142,6 +177,13 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             () => ({ ...history, rpid, creation_time }),
             [history, rpid, creation_time],
         )
+        const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+
+        const { classes, cx } = useStyles({
+            isViewed: isViewed && !!rpid,
+            listItemBackground: networkDescriptor?.backgroundGradient,
+            listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
+        })
 
         useEffect(() => {
             if (entry?.isIntersecting && rpid) setIsViewed(true)
@@ -177,77 +219,76 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         }
 
         return (
-            <ListItem className={classes.root} ref={ref}>
-                {!rpid ? null : (
-                    <Box className={classes.box}>
-                        <TokenIcon
-                            className={classes.icon}
-                            address={collection?.address ?? ''}
-                            name={collection?.name ?? '-'}
-                            logoURL={
-                                collection?.iconURL ??
-                                new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
-                            }
-                        />
-                        <Box className={classes.content}>
-                            <section className={classes.section}>
-                                <div>
-                                    <Typography
-                                        variant="body1"
-                                        className={cx(classes.title, classes.message, classes.ellipsis)}>
-                                        {patchedHistory.sender.message === ''
-                                            ? t.best_wishes()
-                                            : patchedHistory.sender.message}
+            <ListItem className={classes.root}>
+                <section className={classes.contentItem} ref={ref}>
+                    {!rpid ? null : (
+                        <Box className={classes.box}>
+                            <Box className={classes.content}>
+                                <section className={classes.section}>
+                                    <div>
+                                        <div className={classes.fullWidthBox}>
+                                            <Typography
+                                                variant="body1"
+                                                className={cx(classes.title, classes.message, classes.ellipsis)}>
+                                                {patchedHistory.sender.message === ''
+                                                    ? t.best_wishes()
+                                                    : patchedHistory.sender.message}
+                                            </Typography>
+                                        </div>
+                                        <div className={classes.fullWidthBox}>
+                                            <Typography
+                                                variant="body1"
+                                                className={cx(classes.infoTitle, classes.message)}>
+                                                {t.create_time()}
+                                            </Typography>
+                                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                                {t.history_duration({
+                                                    time: dateTimeFormat(new Date(patchedHistory.creation_time)),
+                                                })}
+                                            </Typography>
+                                        </div>
+                                    </div>
+
+                                    {canSend ? (
+                                        <ActionButton
+                                            onMouseEnter={handleMouseEnter}
+                                            onMouseLeave={onHidePopover}
+                                            onClick={handleSend}
+                                            disabled={!isPasswordValid}
+                                            className={classes.actionButton}
+                                            size="large">
+                                            {t.send()}
+                                        </ActionButton>
+                                    ) : null}
+                                </section>
+
+                                <section className={classes.footer}>
+                                    <Typography variant="body1" className={classes.footerInfo}>
+                                        <Translate.history_nft_claimed
+                                            components={{
+                                                span: <span />,
+                                            }}
+                                            values={{
+                                                claimedShares: bitStatusList.filter(Boolean).length.toString(),
+                                                shares: patchedHistory.shares.toString(),
+                                                symbol: collection?.name ?? '',
+                                            }}
+                                        />
                                     </Typography>
-                                    <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                        {t.history_duration({
-                                            startTime: dateTimeFormat(new Date(patchedHistory.creation_time)),
-                                            endTime: dateTimeFormat(
-                                                new Date(patchedHistory.creation_time + patchedHistory.duration),
-                                                false,
-                                            ),
-                                        })}
-                                    </Typography>
-                                </div>
-                                {canSend ? (
-                                    <ActionButton
-                                        onMouseEnter={handleMouseEnter}
-                                        onMouseLeave={onHidePopover}
-                                        onClick={handleSend}
-                                        className={cx(
-                                            classes.actionButton,
-                                            isPasswordValid ? '' : classes.disabledButton,
-                                        )}
-                                        size="large">
-                                        {t.send()}
-                                    </ActionButton>
-                                ) : null}
-                            </section>
-                            <section className={classes.nftList}>
-                                {isViewed ? (
-                                    <NftList
-                                        collection={collection}
-                                        statusList={bitStatusList}
-                                        tokenIds={patchedHistory.token_ids}
+                                    <TokenIcon
+                                        className={classes.icon}
+                                        address={collection?.address ?? ''}
+                                        name={collection?.name ?? '-'}
+                                        logoURL={
+                                            collection?.iconURL ??
+                                            new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                                        }
                                     />
-                                ) : null}
-                            </section>
-                            <section className={classes.footer}>
-                                <Typography variant="body1" className={classes.footerInfo}>
-                                    <Translate.history_claimed
-                                        components={{
-                                            strong: <strong />,
-                                        }}
-                                        values={{
-                                            claimedShares: bitStatusList.filter(Boolean).length.toString(),
-                                            shares: patchedHistory.shares.toString(),
-                                        }}
-                                    />
-                                </Typography>
-                            </section>
+                                </section>
+                            </Box>
                         </Box>
-                    </Box>
-                )}
+                    )}
+                </section>
             </ListItem>
         )
     },
