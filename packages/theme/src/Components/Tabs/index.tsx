@@ -83,7 +83,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     ...(maskVariant === 'round'
         ? {
               padding: theme.spacing(0.5),
-              background: theme.palette.background.input,
+              background: theme.palette.maskColor.input,
               borderRadius: 18,
           }
         : maskVariant === 'flexible'
