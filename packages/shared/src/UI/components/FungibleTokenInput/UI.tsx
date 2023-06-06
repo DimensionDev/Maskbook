@@ -14,7 +14,6 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { noop } from 'lodash-es'
 import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -193,7 +192,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                                 />
                                             }
                                             deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
-                                            onDelete={noop}
+                                            onDelete={onSelectToken}
                                             label={token.symbol}
                                         />
                                     </>
