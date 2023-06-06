@@ -174,6 +174,9 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         },
         texts: {
             marginLeft: theme.spacing(1.5),
+            '& :focus:not(:focus-visible)': {
+                outline: 0,
+            },
         },
         title,
         message,

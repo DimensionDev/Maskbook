@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     editorWrapper: {
         flex: 1,
         width: 568,
-        background: theme.palette.background.input,
+        background: theme.palette.maskColor.bottom,
         padding: 0,
         boxSizing: 'border-box',
         borderRadius: 8,
