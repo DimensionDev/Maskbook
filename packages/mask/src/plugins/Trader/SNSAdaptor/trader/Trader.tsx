@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, useSelectFungibleToken, useShowConfirm } from '@masknet/shared'
+import { ImageIcon, useSelectFungibleToken, useShowConfirm , SelectProviderDialog } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -14,7 +14,6 @@ import {
     type GasConfig,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useChainContext,
     useChainIdValid,
@@ -26,7 +25,6 @@ import {
     useMountReport,
     useTelemetry,
 } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -78,10 +76,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const showConfirm = useShowConfirm()
     const Others = useWeb3Others()
-
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     // #region trade state
     const {
@@ -192,7 +186,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
             if (!account) {
-                openConnectWalletDialog()
+                SelectProviderDialog.open()
                 return
             }
             const picked = await selectFungibleToken({

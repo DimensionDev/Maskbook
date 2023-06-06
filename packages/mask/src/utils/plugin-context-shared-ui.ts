@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { createSubscriptionFromAsync, EMPTY_LIST } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletConnectQRCodeDialog } from '@masknet/web3-modals'
+import { WalletConnectQRCodeDialog } from '@masknet/shared'
 import Services from '../extension/service.js'
 import { WalletRPC } from '../plugins/Wallet/messages.js'
 import { MaskMessages } from './messages.js'

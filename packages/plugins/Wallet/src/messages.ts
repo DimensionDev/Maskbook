@@ -18,19 +18,6 @@ export type ApplicationDialogEvent = {
     }
 }
 
-export type SelectProviderDialogEvent =
-    | {
-          open: true
-          walletConnectedCallback?: () => void
-          network?: Web3Helper.NetworkDescriptorAll
-          requiredSupportPluginID?: NetworkPluginID
-          requiredSupportChainIds?: Web3Helper.ChainIdAll[]
-      }
-    | {
-          open: false
-          address?: string
-      }
-
 export type ConnectWalletDialogEvent =
     | {
           open: true
@@ -78,11 +65,6 @@ export type SelectNftContractDialogEvent = {
 }
 
 export interface WalletMessage {
-    /**
-     * Select provider dialog
-     */
-    selectProviderDialogUpdated: SelectProviderDialogEvent
-
     /**
      * Connect wallet dialog
      */

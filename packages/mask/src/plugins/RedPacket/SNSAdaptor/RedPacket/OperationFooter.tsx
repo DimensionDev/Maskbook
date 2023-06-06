@@ -1,13 +1,11 @@
 import type { MouseEventHandler } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+import { ChainBoundary, WalletConnectedBoundary , SelectProviderDialog } from '@masknet/shared'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -53,17 +51,12 @@ export function OperationFooter({
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
 
-    // #region remote controlled select provider dialog
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    // #endregion
     function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {
         if (!canClaim && !canRefund) return null
 
         if (!account) {
             return (
-                <ActionButton fullWidth onClick={openSelectProviderDialog} variant="roundedDark">
+                <ActionButton fullWidth onClick={() => SelectProviderDialog.open()} variant="roundedDark">
                     {tr('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             )

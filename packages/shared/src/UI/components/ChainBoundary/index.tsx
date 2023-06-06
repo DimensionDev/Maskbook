@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { delay } from '@masknet/kit'
 import { Box } from '@mui/material'
@@ -14,14 +14,13 @@ import {
     useWeb3Others,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
+import { SelectProviderDialog } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -99,17 +98,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
 
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-
-    const openSelectProviderDialog = useCallback(() => {
-        setSelectProviderDialog({
-            open: true,
-            network: expectedNetworkDescriptor,
-        })
-    }, [expectedNetworkDescriptor])
-
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
         try {
             if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
@@ -156,7 +144,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     <ActionButton
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
-                        onClick={openSelectProviderDialog}
+                        onClick={() => SelectProviderDialog.open()}
                         {...props.ActionButtonPromiseProps}>
                         {t.plugin_wallet_wrong_network()}
                     </ActionButton>
@@ -173,7 +161,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                         className={classes.connectWallet}
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
-                        onClick={openSelectProviderDialog}
+                        onClick={() => SelectProviderDialog.open()}
                         {...props.ActionButtonPromiseProps}>
                         {t.plugin_wallet_connect_a_wallet()}
                     </ActionButton>
@@ -195,7 +183,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     />
                 }
                 sx={props.ActionButtonPromiseProps?.sx}
-                onClick={openSelectProviderDialog}
+                onClick={() => SelectProviderDialog.open()}
                 {...props.ActionButtonPromiseProps}>
                 {t.plugin_wallet_change_wallet()}
             </ActionButton>,
@@ -228,8 +216,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     return <>{props.children}</>
 }
-
-ChainBoundaryWithoutContext.displayName = 'ChainBoundaryWithoutContext'
 
 export const ChainBoundary = memo(function <T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
     return (

@@ -14,7 +14,7 @@ import {
     useChainIdValid,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, useSnackbarCallback, WalletIcon , SelectProviderDialog } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -148,10 +148,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     // #endregion
 
     // #region change provider
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
@@ -167,7 +163,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     color="primary"
                     variant="contained"
                     size="small"
-                    onClick={openSelectProviderDialog}>
+                    onClick={() => SelectProviderDialog.open()}>
                     {t('plugin_wallet_on_connect')}
                 </Button>
             </section>
@@ -251,7 +247,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={() => {
-                                openSelectProviderDialog()
+                                SelectProviderDialog.open()
                                 props.closeDialog?.()
                             }}>
                             {t('wallet_status_button_change')}

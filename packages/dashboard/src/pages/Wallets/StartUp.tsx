@@ -3,8 +3,7 @@ import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
 import { Paper, Stack, Box } from '@mui/material'
 import { ActionCard } from '../../components/ActionCard/index.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginMessages } from '../../API.js'
+import { SelectProviderDialog } from '@masknet/shared'
 
 const Container = styled('div')`
     display: flex;
@@ -16,9 +15,6 @@ const Container = styled('div')`
 
 export function StartUp() {
     const t = useDashboardI18N()
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.selectProviderDialogUpdated,
-    )
 
     return (
         <Container>
@@ -32,7 +28,7 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_connect_action(),
-                                handler: openConnectWalletDialog,
+                                handler: SelectProviderDialog.open,
                             }}
                         />
                     </Box>

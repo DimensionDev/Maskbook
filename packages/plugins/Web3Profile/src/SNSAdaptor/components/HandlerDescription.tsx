@@ -1,9 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletIcon } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletIcon , SelectProviderDialog } from '@masknet/shared'
 import {
     useChainContext,
     useNetworkContext,
@@ -73,10 +71,6 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
         return providerDescriptor?.name
     }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, props.profile?.handle])
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-
     const handleDisconnect = useCallback(() => Web3.disconnect(), [])
 
     const avatarUrl = useMemo(() => {
@@ -103,7 +97,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                     <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
-            <Button variant="text" onClick={props.profile ? handleDisconnect : openSelectProviderDialog}>
+            <Button variant="text" onClick={props.profile ? handleDisconnect : () => SelectProviderDialog.open()}>
                 {props.profile ? t.plugin_wallet_disconnect() : t.wallet_status_button_change()}
             </Button>
         </Box>

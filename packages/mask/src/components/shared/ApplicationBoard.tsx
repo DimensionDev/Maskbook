@@ -2,9 +2,8 @@ import { createContext, useContext, useMemo, useState, type PropsWithChildren } 
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useCurrentPersonaConnectStatus } from '@masknet/shared'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { useCurrentPersonaConnectStatus , SelectProviderDialog } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
@@ -182,9 +181,6 @@ function ApplicationBoardContent() {
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
@@ -199,14 +195,14 @@ function RenderEntryComponent({ application }: { application: Application }) {
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
             return (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback, requiredSupportPluginID })
+                SelectProviderDialog.open({ walletConnectedCallback, requiredSupportPluginID })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
         if (ApplicationEntryStatus.shouldVerifyNextId)
             return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
         return
-    }, [setSelectProviderDialog, ApplicationEntryStatus, application])
+    }, [ApplicationEntryStatus, application])
 
     // #endregion
 

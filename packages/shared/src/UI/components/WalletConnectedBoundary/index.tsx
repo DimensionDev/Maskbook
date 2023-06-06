@@ -14,6 +14,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { SelectProviderDialog } from '../../../index.js'
 
 const useStyles = makeStyles()({
     button: {
@@ -49,9 +50,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
     )
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     const buttonClass = cx(classes.button, classes.connectWallet)
 
@@ -61,7 +59,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 startIcon={props.startIcon}
                 className={buttonClass}
                 fullWidth
-                onClick={openSelectProviderDialog}
+                onClick={() => SelectProviderDialog.open()}
                 {...props.ActionButtonProps}>
                 {t.plugin_wallet_connect_a_wallet()}
             </ActionButton>

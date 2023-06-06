@@ -2,7 +2,7 @@ import React, { type FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { FormattedAddress, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, WalletIcon , SelectProviderDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useNetworkDescriptor,
@@ -75,16 +75,12 @@ export const WalletStateBar = memo(() => {
         PluginMessages.Wallet.walletStatusDialogUpdated,
     )
 
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.selectProviderDialogUpdated,
-    )
-
     const [menu, openMenu] = useNetworkSelector()
 
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
     if (!account) {
-        return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
+        return <Button onClick={() => SelectProviderDialog.open()}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI

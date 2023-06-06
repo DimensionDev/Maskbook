@@ -28,7 +28,7 @@ export interface PluginServices {
     }
 }
 export interface PluginMessages {
-    Wallet: Pick<(typeof WalletMessages)['events'], 'selectProviderDialogUpdated' | 'walletStatusDialogUpdated'>
+    Wallet: Pick<(typeof WalletMessages)['events'], 'walletStatusDialogUpdated'>
     Transak: {
         buyTokenDialogUpdated: UnboundedRegistry<
             | {
