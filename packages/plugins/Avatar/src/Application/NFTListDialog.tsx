@@ -11,7 +11,14 @@ import {
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNetworkContext, useWallets, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useChainContext,
+    useNetworkContext,
+    useWallets,
+    useWeb3Connection,
+    useWeb3Hub,
+} from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
@@ -73,6 +80,7 @@ export const NFTListDialog: FC = () => {
         useAvatarManagement()
 
     const navigate = useNavigate()
+    const globalAccount = useAccount()
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId, setAccount } = useChainContext()
@@ -91,6 +99,11 @@ export const NFTListDialog: FC = () => {
     }, [pfpType])
 
     useEffect(() => setSelectedToken(undefined), [chainId])
+
+    useEffect(() => {
+        setAccount(globalAccount)
+        setSelectedAccount(globalAccount)
+    }, [globalAccount])
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
@@ -189,10 +202,10 @@ export const NFTListDialog: FC = () => {
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount || account}>
+                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount}>
                         <CollectionList
                             height={479}
-                            account={selectedAccount || account}
+                            account={selectedAccount}
                             pluginID={selectedPluginId}
                             gridProps={gridProps}
                             disableWindowScroll
