@@ -8,10 +8,6 @@ export class MetaMask implements Middleware<ConnectionContext> {
     })
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        if (context.providerType !== ProviderType.MetaMask) {
-            await next()
-            return
-        }
         // Evoke the unlock popup when metamask-like is locked before send transaction or sign message.
         if (PayloadEditor.fromPayload(context.request).risky) {
             await this.Web3.connect(context.requestOptions)
