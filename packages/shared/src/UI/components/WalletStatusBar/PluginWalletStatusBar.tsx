@@ -85,7 +85,6 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
 
         const openSelectProviderDialog = useCallback(() => {
             SelectProviderDialog.open({
-                network: expectedNetworkDescriptor,
                 requiredSupportChainIds,
                 requiredSupportPluginID,
             })
