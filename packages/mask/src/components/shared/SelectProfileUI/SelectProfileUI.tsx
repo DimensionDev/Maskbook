@@ -126,7 +126,6 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
             .map((item) => item.item)
             .filter((x) => !frozenPubkeyList.includes(x.linkedPersona?.publicKeyAsHex!))
     }, [keyword, frozenPubkeyList, fuse])
-
     const isEmpty = frozenSelected.length === 0 && results.length === 0 && items.length === 0
 
     return (
@@ -170,20 +169,22 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                         {t('compose_encrypt_share_dialog_empty')}
                                     </EmptyStatus>
                                 ) : (
-                                    uniqBy([...frozenSelected, ...results], (x) => x.identifier).map((item) => {
-                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
-                                        const selected = selectedPubkeyList.includes(pubkey)
-                                        const disabled = frozenPubkeyList.includes(pubkey)
-                                        return (
-                                            <ProfileInList
-                                                key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
-                                                profile={item as ProfileInformationFromNextID}
-                                                disabled={disabled}
-                                                selected={selected || disabled}
-                                                onChange={onSelectedProfile}
-                                            />
-                                        )
-                                    })
+                                    uniqBy([...frozenSelected, ...items, ...results], (x) => x.identifier).map(
+                                        (item) => {
+                                            const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                            const selected = selectedPubkeyList.includes(pubkey)
+                                            const disabled = frozenPubkeyList.includes(pubkey)
+                                            return (
+                                                <ProfileInList
+                                                    key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
+                                                    profile={item as ProfileInformationFromNextID}
+                                                    disabled={disabled}
+                                                    selected={selected || disabled}
+                                                    onChange={onSelectedProfile}
+                                                />
+                                            )
+                                        },
+                                    )
                                 )}
                             </Box>
                         </div>
