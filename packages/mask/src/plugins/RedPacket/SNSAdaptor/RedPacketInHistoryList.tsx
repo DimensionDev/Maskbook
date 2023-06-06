@@ -168,15 +168,9 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 fontSize: 12,
             },
             disabledButton: {
-                color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
-                boxShadow: 'none',
-                backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-                cursor: 'default',
-                '&:hover': {
-                    backgroundColor:
-                        theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-                    color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
-                },
+                background: theme.palette.maskColor.dark,
+                color: theme.palette.common.white,
+                opacity: 0.6,
             },
             fullWidthBox: {
                 width: '100%',
@@ -320,11 +314,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                             size="large">
                                             {canSend
                                                 ? t.share()
-                                                : refunded
-                                                ? t.refund()
                                                 : isRefunding
                                                 ? t.refunding()
-                                                : listOfStatus.includes(RedPacketStatus.empty)
+                                                : listOfStatus.includes(RedPacketStatus.empty) || refunded
                                                 ? t.empty()
                                                 : t.refund()}
                                         </ActionButton>
