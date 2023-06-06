@@ -141,7 +141,7 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         },
         content: {
             alignItems: 'center',
-            padding: theme.spacing(1.5, 2),
+            padding: theme.spacing(2),
             borderRadius: 12,
             width: 380,
             flexWrap: 'nowrap !important' as 'nowrap',
