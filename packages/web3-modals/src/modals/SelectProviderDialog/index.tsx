@@ -3,7 +3,7 @@ import type { SingletonModalRefCreator } from '../../libs/SingletonModal.js'
 import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SelectProviderDomal } from './SelectProvider.js'
+import { SelectProvider } from './SelectProvider.js'
 
 export interface SelectProviderDialogOpenProps {
     requiredSupportPluginID?: NetworkPluginID
@@ -35,7 +35,7 @@ export const SelectProviderModal = forwardRef<
 
     if (!open) return null
     return (
-        <SelectProviderDomal
+        <SelectProvider
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}
             walletConnectedCallback={walletConnectedCallback}

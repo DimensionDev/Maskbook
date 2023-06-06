@@ -29,14 +29,14 @@ function getProviders() {
         : providers
 }
 
-interface SelectProviderDomalProps {
+interface SelectProviderProps {
     onClose: () => void
     open: boolean
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     walletConnectedCallback?: () => void
 }
-export const SelectProviderDomal = memo(function SelectProviderDomal(props: SelectProviderDomalProps) {
+export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
     const { requiredSupportPluginID, requiredSupportChainIds, walletConnectedCallback, open, onClose } = props
