@@ -243,7 +243,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             <>
                                 <div
                                     style={{
-                                        visibility: showHistory ? 'hidden' : 'visible',
                                         ...(showHistory ? { display: 'none' } : {}),
                                         height: showHistory
                                             ? 0
