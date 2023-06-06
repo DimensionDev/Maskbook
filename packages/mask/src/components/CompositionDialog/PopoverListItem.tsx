@@ -27,6 +27,7 @@ interface PopoverListItemProps {
     title: string
     subTitle?: string
     disabled?: boolean
+    onClick?: (v: string) => void
 }
 export function PopoverListItem(props: PopoverListItemProps) {
     const { title, subTitle, value, itemTail, disabled } = props
@@ -40,6 +41,7 @@ export function PopoverListItem(props: PopoverListItemProps) {
             disabled={disabled}
             value={value}
             control={<Radio />}
+            onClick={() => props.onClick?.(value)}
             label={
                 <>
                     <Box>

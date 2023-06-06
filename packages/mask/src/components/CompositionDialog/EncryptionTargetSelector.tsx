@@ -142,6 +142,10 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.E2E}
                     title={t('compose_encrypt_visible_to_share')}
                     subTitle={t('compose_encrypt_visible_to_share_sub')}
+                    onClick={(v: string) => {
+                        props.onChange(v as EncryptionTargetType)
+                        if (v === EncryptionTargetType.E2E) setAnchorEl(null)
+                    }}
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
