@@ -144,8 +144,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #endregion
 
     // #region packet settings
-    const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
-    const [message, setMessage] = useState(origin?.message || t.best_wishes())
+    const [isRandom, setRandom] = useState(!origin ? 1 : origin?.isRandom ? 1 : 0)
+    const [message, setMessage] = useState(origin?.message || '')
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -169,11 +169,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // amount
     const [rawAmount, setRawAmount] = useState(
-        origin?.isRandom
+        !origin
+            ? ''
+            : origin?.isRandom
             ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
-    const amount = rightShift(rawAmount || '0', token?.decimals)
+    const amount = rightShift(rawAmount || '', token?.decimals)
     const rawTotalAmount = useMemo(
         () => (isRandom || !rawAmount ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
         [rawAmount, isRandom, shares],
@@ -188,7 +190,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [chainId, nativeTokenDetailed])
 
     useEffect(() => {
-        setRawAmount('0')
+        setRawAmount('')
     }, [token])
 
     const creatingParams = useMemo(
@@ -196,7 +198,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message: message || t.best_wishes(),
+            message,
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -223,7 +225,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message: message || t.best_wishes(),
+            message,
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
