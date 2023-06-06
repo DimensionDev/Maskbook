@@ -11,10 +11,10 @@ import { Box } from '@mui/system'
 import { memo, useCallback, useMemo, type FC, type FormEvent, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { InjectedDialog } from '../InjectedDialog.js'
+import { InjectedDialog } from './InjectedDialog.js'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, uniq } from 'lodash-es'
-import { CollectibleItem, CollectibleItemSkeleton } from '../../../UI/components/AssetsManagement/CollectibleItem.js'
+import { CollectibleItem, CollectibleItemSkeleton } from '../../UI/components/AssetsManagement/CollectibleItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -82,24 +82,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AddCollectibleDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
-    title?: string
     onClose?(): void
-    onAdd?(
-        contract: NonFungibleTokenContract<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        tokenIds: string[],
+    onSubmit?(
+        result: [
+            contract: NonFungibleTokenContract<
+                Web3Helper.Definition[T]['ChainId'],
+                Web3Helper.Definition[T]['SchemaType']
+            >,
+            tokenIds: string[],
+        ],
     ): void
 }
 
-export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function AddCollectibleDialog({
+export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(function AddCollectiblesDialog({
     open,
     pluginID,
     chainId,
     onClose,
-    onAdd,
+    onSubmit,
 }) {
     const t = useSharedI18N()
     const account = useAccount()
@@ -179,8 +183,8 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
 
     const handleAdd = useCallback(() => {
         if (!contract) return
-        onAdd?.(contract, selectedTokenIds)
-    }, [contract, selectedTokenIds, onAdd])
+        onSubmit?.([contract, selectedTokenIds])
+    }, [contract, selectedTokenIds, onSubmit])
 
     return (
         <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={onClose} title={t.add_collectibles()}>

@@ -1,20 +1,19 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, ReloadStatus, useSharedI18N } from '@masknet/shared'
-import { Sniffings, NetworkPluginID, EMPTY_ENTRY, EMPTY_LIST } from '@masknet/shared-base'
+import { EmptyStatus, LoadingStatus, ReloadStatus, useAddCollectibles, useSharedI18N } from '@masknet/shared'
+import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
+import { FuseNonFungibleCollection } from '@masknet/web3-providers'
 import { SourceType, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useState, type FC, useCallback, useMemo } from 'react'
+import { compact } from 'lodash-es'
+import { memo, useCallback, useMemo, useState, type FC } from 'react'
+import { useSubscription } from 'use-subscription'
 import { InjectedDialog } from '../InjectedDialog.js'
 import { ContractItem } from './ContractItem.js'
-import { AddCollectibleDialog, type AddCollectibleDialogProps } from './AddCollectibleDialog.js'
-import { useSubscription } from 'use-subscription'
-import { compact } from 'lodash-es'
-import { FuseNonFungibleCollection } from '@masknet/web3-providers'
-import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -73,7 +72,6 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
-        const [addVisible, setAddVisible] = useState(false)
 
         const handleClear = () => {
             setKeyword('')
@@ -135,26 +133,16 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
             return fuse.search(keyword).map((x) => x.item)
         }, [fuse, keyword, filteredCollections])
 
-        const closeAddDialog = useCallback(() => setAddVisible(false), [])
-        const handleAdd: NonNullable<AddCollectibleDialogProps['onAdd']> = useCallback(
-            (contract, tokenIds) => {
-                Token?.addNonFungibleCollection?.(account, contract, tokenIds)
-                closeAddDialog()
-            },
-            [Token?.addNonFungibleCollection, account],
-        )
-
-        if (addVisible) {
-            return (
-                <AddCollectibleDialog
-                    open={addVisible}
-                    pluginID={pluginID}
-                    chainId={chainId}
-                    onClose={closeAddDialog}
-                    onAdd={handleAdd}
-                />
-            )
-        }
+        const pickCollectibles = useAddCollectibles()
+        const handleAddCollectibles = useCallback(async () => {
+            const result = await pickCollectibles({
+                pluginID,
+                chainId,
+            })
+            if (!result) return
+            const [contract, tokenIds] = result
+            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+        }, [pickCollectibles, account, pluginID, chainId])
 
         return (
             <InjectedDialog
@@ -202,7 +190,7 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
                         className={classes.toolbar}
                         direction="row"
                         justifyContent="center"
-                        onClick={() => setAddVisible(true)}>
+                        onClick={handleAddCollectibles}>
                         <Icons.Avatar size={24} />
                         <Typography ml={2} fontWeight={700}>
                             {t.add_collectibles()}
