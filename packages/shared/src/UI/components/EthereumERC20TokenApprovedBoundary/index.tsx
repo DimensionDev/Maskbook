@@ -72,10 +72,10 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         (x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender),
     )
 
-    const [{ type: approveStateType, allowance }, _transactionState, approveCallback, _resetApproveCallback] =
+    const [{ type: approveStateType, allowance }, transactionState, approveCallback, _resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, token?.chainId)
 
-    const loading = spendersLoading || approveStateType === ApproveStateType.UPDATING
+    const loading = spendersLoading || approveStateType === ApproveStateType.UPDATING || transactionState.loadingApprove
 
     const onApprove = useCallback(async () => {
         if (approved || loading) return
