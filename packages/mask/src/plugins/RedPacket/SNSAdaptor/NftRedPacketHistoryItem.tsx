@@ -25,6 +25,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 background: theme.palette.common.white,
                 marginBottom: theme.spacing(1.5),
                 borderRadius: 8,
+                '&:last-child': {
+                    marginBottom: '80px',
+                },
             },
             contentItem: {
                 width: '100%',
