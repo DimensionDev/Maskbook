@@ -151,7 +151,7 @@ export async function getNonFungibleAsset(account: string, address: string, toke
                 },
             },
         ) as Promise<ZerionNonFungibleTokenResponseBody>,
-        delay(10_000),
+        delay(5_000),
     ])
 }
 
@@ -171,7 +171,7 @@ export async function getNonFungibleAssets(address: string, page?: number, size 
             },
             SocketRequestType.GET,
         ) as Promise<ZerionNonFungibleTokenResponseBody>,
-        delay(10_000),
+        delay(5_000),
     ])
 }
 

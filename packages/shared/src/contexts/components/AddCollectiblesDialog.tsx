@@ -13,7 +13,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { InjectedDialog } from './InjectedDialog.js'
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { compact, uniq } from 'lodash-es'
+import { compact, isNaN, uniq } from 'lodash-es'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../UI/components/AssetsManagement/CollectibleItem.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -115,7 +115,18 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
                 .string()
                 .min(1, t.collectible_contract_require())
                 .refine((address) => Others.isValidAddress(address), t.collectible_contract_invalid()),
-            tokenIds: z.string().min(1, t.collectible_token_id_require()),
+            tokenIds: z
+                .string()
+                .min(1, t.collectible_token_id_require())
+                .refine((tokenIds) => {
+                    const containsInvalidId = tokenIds.split(',').some((v) => {
+                        const trimmed = v.trim()
+                        if (!trimmed) return false
+                        const id = Number.parseInt(trimmed, 10)
+                        return isNaN(id) || id <= 0
+                    })
+                    return !containsInvalidId
+                }, t.collectible_token_id_invalid()),
         })
     }, [t, Others.isValidAddress])
     type FormInputs = z.infer<typeof schema>
