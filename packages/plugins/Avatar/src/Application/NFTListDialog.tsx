@@ -87,6 +87,7 @@ export const NFTListDialog: FC = () => {
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSNSAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
+    const [hiddenAddCollectible, setHiddenAddCollectible] = useState(true)
 
     useEffect(() => {
         setChainId(ChainId.Mainnet)
@@ -179,6 +180,11 @@ export const NFTListDialog: FC = () => {
         setTargetAccount(account)
     }, [account])
 
+    const onChangeChainId = useCallback((chainId?: Web3Helper.ChainIdAll) => {
+        setHiddenAddCollectible(!chainId)
+        if (chainId) setChainId(chainId)
+    }, [])
+
     return (
         <>
             <DialogContent className={classes.content}>
@@ -192,6 +198,8 @@ export const NFTListDialog: FC = () => {
                             disableWindowScroll
                             onItemClick={setSelectedToken}
                             selectedAsset={selectedToken}
+                            onChangeChainId={onChangeChainId}
+                            assets={tokens}
                         />
                     </UserAssetsProvider>
                 ) : (
@@ -214,7 +222,7 @@ export const NFTListDialog: FC = () => {
                         padding: '8px 16px',
                         justifyContent: 'space-between',
                     }}>
-                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM && !hiddenAddCollectible ? (
                         <Button
                             variant="text"
                             size="small"

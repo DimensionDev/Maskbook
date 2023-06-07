@@ -9,7 +9,7 @@ import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { range, sortBy } from 'lodash-es'
+import { range, sortBy, uniqBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
@@ -152,6 +152,8 @@ export interface CollectionListProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
     selectedAsset?: Web3Helper.NonFungibleAssetAll
+    assets?: Web3Helper.NonFungibleAssetAll[]
+    onChangeChainId?: (chainId?: Web3Helper.ChainIdAll) => void
 }
 
 export function CollectionList({
@@ -166,6 +168,8 @@ export function CollectionList({
     onActionClick,
     onItemClick,
     selectedAsset,
+    onChangeChainId,
+    assets = [],
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
@@ -207,6 +211,7 @@ export function CollectionList({
                     onClick={() => {
                         setChainId(undefined)
                         setCurrentCollectionId(undefined)
+                        onChangeChainId?.(undefined)
                     }}>
                     All
                     {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
@@ -221,6 +226,7 @@ export function CollectionList({
                     onClick={() => {
                         setChainId(x.chainId)
                         setCurrentCollectionId(undefined)
+                        onChangeChainId?.(x.chainId)
                     }}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
                     {currentChainId === x.chainId ? (
@@ -314,7 +320,13 @@ export function CollectionList({
                             pluginID={pluginID}
                             collection={currentCollection}
                             key={currentCollection.id}
-                            assets={getAssets(currentCollection).assets}
+                            assets={uniqBy(
+                                [
+                                    ...getAssets(currentCollection).assets,
+                                    ...assets.filter((x) => x.chainId === chainId),
+                                ],
+                                (x) => `${x.contract?.address}.${x.tokenId}`,
+                            )}
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection).loading}
                             expanded
@@ -333,7 +345,10 @@ export function CollectionList({
                                         pluginID={pluginID}
                                         collection={collection}
                                         key={`${collection.chainId}.${collection.id}`}
-                                        assets={assetsState.assets}
+                                        assets={uniqBy(
+                                            [...assetsState.assets, ...assets.filter((x) => x.chainId === chainId)],
+                                            (x) => `${x.contract?.address}.${x.tokenId}`,
+                                        )}
                                         verifiedBy={getVerifiedBy(collection.id!)}
                                         loading={assetsState.loading}
                                         onExpand={setCurrentCollectionId}
