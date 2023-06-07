@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         padding: '12px',
         ':hover': {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.maskColor.bg,
             cursor: 'pointer',
         },
     },

@@ -9,6 +9,7 @@ import {
     type InputProps,
     Typography,
     InputBase,
+    inputBaseClasses,
 } from '@mui/material'
 import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
@@ -49,6 +50,9 @@ const useStyles = makeStyles()((theme) => ({
         },
         '& input::-webkit-input-placeholder': {
             color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : undefined,
+        },
+        [`&.${inputBaseClasses.focused}`]: {
+            background: theme.palette.maskColor.bottom,
         },
     },
     input: {
