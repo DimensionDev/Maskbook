@@ -313,11 +313,13 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         type: ProviderType.WalletConnect,
         name: 'WalletConnect',
         icon: new URL('../assets/walletconnect.png', import.meta.url),
-        enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: Flags.wc_v1_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
-        },
+        enableRequirements: Flags.wc_v1_enabled
+            ? {
+                  supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+                  supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+                  supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+              }
+            : undefined,
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
         downloadLink: 'https://walletconnect.com',
@@ -331,11 +333,13 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         type: ProviderType.WalletConnectV2,
         name: 'WalletConnect V2',
         icon: new URL('../assets/walletconnect.png', import.meta.url),
-        enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: Flags.wc_v2_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
-        },
+        enableRequirements: Flags.wc_v2_enabled
+            ? {
+                  supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+                  supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+                  supportedExtensionSites: Flags.wc_v2_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
+              }
+            : undefined,
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
         downloadLink: 'https://walletconnect.com',
