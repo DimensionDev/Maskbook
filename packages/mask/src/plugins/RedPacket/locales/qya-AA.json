@@ -86,6 +86,7 @@
     "send": "crwdns16862:0crwdne16862:0",
     "history_duration": "crwdns16864:0{{- time}}crwdne16864:0",
     "best_wishes": "crwdns16866:0crwdne16866:0",
+    "enter_quantity": "crwdns20275:0crwdne20275:0",
     "create_time": "crwdns20257:0crwdne20257:0",
     "blessing_words": "crwdns20259:0crwdne20259:0",
     "nft_data_broken": "crwdns16868:0crwdne16868:0",

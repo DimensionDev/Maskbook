@@ -205,6 +205,7 @@
     "collectible_contract_require": "crwdns20227:0crwdne20227:0",
     "collectible_contract_invalid": "crwdns20229:0crwdne20229:0",
     "collectible_token_id_require": "crwdns20231:0crwdne20231:0",
+    "collectible_token_id_invalid": "crwdns20273:0crwdne20273:0",
     "collection_not_belong_to_you": "crwdns20233:0crwdne20233:0",
     "collectible_search_placeholder": "crwdns20235:0crwdne20235:0",
     "add_collectibles_address_placeholder": "crwdns20237:0crwdne20237:0",
