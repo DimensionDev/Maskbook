@@ -5,7 +5,6 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
-import { noop } from 'lodash-es'
 import React, { useCallback } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 import { useChainContext, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
@@ -73,7 +72,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     )
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, _resetApproveCallback] =
-        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, token?.chainId)
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', refetch, token?.chainId)
 
     const loading = spendersLoading || approveStateType === ApproveStateType.UPDATING || transactionState.loadingApprove
 
