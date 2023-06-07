@@ -95,6 +95,7 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta):
             ? t('additional_post_box__encrypted_post_pre_red_packet_sns_official_account', {
                   encrypted,
                   account: officialAccount,
+                  token: meta?.has(`${PluginID.RedPacket}:1`) ? 'a token' : 'an NFT',
               })
             : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
     } else if (meta?.has(`${PluginID.ITO}:2`)) {

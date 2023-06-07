@@ -1,6 +1,6 @@
 {
     "promote": "🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet.",
-    "promote_red_packet": "🧧🧧🧧 Try sending Lucky Drop to your friends with tokens or NFTs to share the joy now! Install Mask.io to send your first Lucky Drop.",
+    "promote_red_packet": "Hi friends, I just created {{token}} Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share.",
     "promote_ito": "Launch decentralized assets freely and participate in token launch directly on {{sns}}! Install Mask.io to participate in your first token launch activity.",
     "promote_ito_short": "Install Mask.io to launch decentralized assets freely on {{sns}}!",
     "promote_file_service": "📃📃📃 Try to permanently use decentralized file storage on {{sns}}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions.",
@@ -81,8 +81,8 @@
     "check_security_close_warning": "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses.",
     "check_security_close_advice": "We recommend new Web3 users to keep [Check Security] open. ",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #mask_io! $t(promote) {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet_sns_official_account": "Hi, claim this lucky drop with #mask_io @{{account}} \n\n$t(promote_red_packet)\n {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet": "Hi, claim this lucky drop with #mask_io\n$t(promote_red_packet) {{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet_sns_official_account": "$t(promote_red_packet) Follow @{{account}} for Web3 updates and insights. \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n{{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet": "$t(promote_red_packet) \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n{{encrypted}}",
     "additional_post_box__encrypted_post_pre_ito_sns_official_account": "$t(promote_ito)\n {{encrypted}}",
     "additional_post_box__encrypted_post_pre_ito": "$t(promote_ito) {{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service_sns_official_account": "$t(promote_file_service)\n {{encrypted}}",
