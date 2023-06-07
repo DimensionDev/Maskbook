@@ -1,4 +1,4 @@
-import { memo, type PropsWithChildren, useCallback, useMemo, useState, useEffect } from 'react'
+import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -91,10 +91,6 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
             WalletMessages.events.walletStatusDialogUpdated,
         )
-
-        useEffect(() => {
-            onChange?.(account, currentPluginID, globalChainId)
-        }, [onChange, account, currentPluginID, globalChainId])
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
