@@ -193,5 +193,12 @@
     "lens_following": "フォロー中",
     "view": "表示",
     "verified_by": "{{ marketplace }} によって検証されました",
-    "no_NFTs_found": "NFTが見つかりません。"
+    "no_NFTs_found": "NFTが見つかりません。",
+    "plugin_wallet_solana_tips": "Phantom は Solana チェーンのみを対応します。",
+    "plugin_wallet_blocto_tips": "Phantom は Solana チェーンのみを対応します。",
+    "plugin_wallet_fortmatic_tips": "FortmaticはETHとBNBチェーンのみを対応しています。",
+    "plugin_wallet_support_chains_tips": "EVMチェーン、ETH、BNBチェーン、Polygon、Arb、Opなどをサポートしています。",
+    "plugin_wallet_connect_fortmatic": "Fortmaticと接続します",
+    "plugin_wallet_choose_network": "ネットワークを選択します",
+    "plugin_wallet_select_provider_dialog_title": "ウォレットを接続"
 }

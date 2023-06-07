@@ -19,11 +19,9 @@ module.exports = {
     content: [
         './src/**/*.js',
         './src/**/*.jsx',
-        './src/**/*.ts',
-        './src/**/*.tsx',
-        '../web3-modals/src/modals/**/*.js',
-        '../web3-modals/src/modals/**/*.jsx',
-        '../web3-modals/src/modals/**/*.ts',
-        '../web3-modals/src/modals/**/*.tsx',
+        '../shared/src/Modals/modals/**/*.js',
+        '../shared/src/Modals/modals/**/*.jsx',
+        '../shared/src/Modals/modals/**/*.ts',
+        '../sahred/src/Modals/modals/**/*.tsx',
     ],
 }

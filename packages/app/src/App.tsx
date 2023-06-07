@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ExampleDialog, Modals } from '@masknet/web3-modals'
+import { ExampleDialog, Modals } from '@masknet/shared'
 
 export function App() {
     const [email, setEmail] = useState('')

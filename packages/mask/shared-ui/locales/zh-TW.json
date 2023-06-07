@@ -168,7 +168,6 @@
     "plugin_wallet_on_create": "建立錢包",
     "plugin_wallet_on_connect": "連接錢包",
     "plugin_wallet_import_wallet": "匯入錢包",
-    "plugin_wallet_select_provider_dialog_title": "連接錢包",
     "plugin_wallet_token_unlock": "特定數量解鎖",
     "plugin_wallet_token_infinite_unlock": "無限解鎖",
     "plugin_wallet_connect_safari_metamask": "連接到 MetaMask",

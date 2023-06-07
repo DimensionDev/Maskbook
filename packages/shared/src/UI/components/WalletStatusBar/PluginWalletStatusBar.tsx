@@ -23,6 +23,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
+import { SelectProviderDialog } from '../../../index.js'
 
 export const useStyles = makeStyles()((theme) => ({
     root: {
@@ -82,14 +83,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const { data: domain } = useReverseAddress(pluginID, account)
         const Others = useWeb3Others()
 
-        const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-            WalletMessages.events.selectProviderDialogUpdated,
-        )
-
         const openSelectProviderDialog = useCallback(() => {
-            setSelectProviderDialog({
-                open: true,
-                network: expectedNetworkDescriptor,
+            SelectProviderDialog.open({
                 requiredSupportChainIds,
                 requiredSupportPluginID,
             })

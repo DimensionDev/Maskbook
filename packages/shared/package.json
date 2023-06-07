@@ -11,6 +11,8 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
     "@hookform/resolvers": "^3.1.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
@@ -29,6 +31,7 @@
     "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@react-hookz/web": "^23.0.0",
+    "@servie/events": "^3.0.0",
     "@solana/web3.js": "^1.75.0",
     "@types/qrcode": "^1.5.0",
     "anchorme": "^2.1.2",
