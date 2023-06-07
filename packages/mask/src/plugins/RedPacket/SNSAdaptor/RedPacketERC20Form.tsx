@@ -160,8 +160,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             if (shares_ === '') setShares('')
             else if (/^[1-9]+\d*$/.test(shares_)) {
                 const parsed = Number.parseInt(shares_, 10)
-                if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES)
+                if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES) {
                     setShares(Number.parseInt(shares_, 10))
+                } else if (parsed > RED_PACKET_MAX_SHARES) {
+                    setShares(RED_PACKET_MAX_SHARES)
+                }
             }
         },
         [RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES],
