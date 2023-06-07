@@ -167,10 +167,6 @@ export const NFTListDialog: FC = () => {
         setSelectedPluginId(pluginID)
     }, [pluginID])
 
-    useEffect(() => {
-        setChainId(chainId as ChainId)
-    }, [chainId])
-
     const walletItems = proofs.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
