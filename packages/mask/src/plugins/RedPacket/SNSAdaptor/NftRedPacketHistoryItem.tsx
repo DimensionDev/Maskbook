@@ -85,6 +85,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 zIndex: -1,
             },
             title: {
+                color: theme.palette.maskColor.dark,
                 whiteSpace: 'break-spaces',
                 fontWeight: 500,
                 fontSize: 16,
