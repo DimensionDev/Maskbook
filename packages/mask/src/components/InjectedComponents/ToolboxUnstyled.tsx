@@ -26,11 +26,11 @@ import {
     useRecentTransactions,
     useMountReport,
 } from '@masknet/web3-hooks-base'
+import { makeStyles } from '@masknet/theme'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
@@ -47,6 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 18,
     },
 }))
+
 export interface ToolboxHintProps {
     Container?: React.ComponentType<React.PropsWithChildren<{}>>
     ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
@@ -58,6 +59,7 @@ export interface ToolboxHintProps {
     mini?: boolean
     category: 'wallet' | 'application'
 }
+
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     return props.category === 'wallet' ? <ToolboxHintForWallet {...props} /> : <ToolboxHintForApplication {...props} />
 }
@@ -72,10 +74,12 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         mini,
         ListItemText = MuiListItemText,
     } = props
+
     const { classes } = useStyles()
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
     useMountReport(EventID.AccessToolbox)
+
     return (
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
@@ -130,7 +134,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
-                                mainIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                mainIcon={providerDescriptor.icon} // switch the icon to meet design
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
@@ -190,8 +194,10 @@ function useToolbox() {
 
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')
+
         if (pendingTransactions.length <= 0)
             return Others.formatDomainName?.(domain) || Others.formatAddress(account, 4) || account
+
         return (
             <>
                 <span style={{ marginRight: 12 }}>
@@ -211,6 +217,7 @@ function useToolbox() {
     const walletTitle = renderButtonText()
 
     const shouldDisplayChainIndicator = account && chainIdValid && !chainIdMainnet
+
     return {
         openWallet,
         walletTitle,

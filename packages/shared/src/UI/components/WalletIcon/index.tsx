@@ -25,7 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-interface WalletIconProps extends withClasses<'root' | 'mainIcon'> {
+export interface WalletIconProps extends withClasses<'root' | 'mainIcon'> {
     size?: number
     badgeSize?: number
     mainIcon?: URL
@@ -34,7 +34,7 @@ interface WalletIconProps extends withClasses<'root' | 'mainIcon'> {
     iconFilterColor?: string
 }
 
-export const WalletIcon = (props: WalletIconProps) => {
+export function WalletIcon(props: WalletIconProps) {
     const { size = 24, badgeSize = 14, mainIcon, badgeIcon, badgeIconBorderColor, iconFilterColor } = props
     const { classes } = useStyles(
         {
