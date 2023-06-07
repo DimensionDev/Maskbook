@@ -210,10 +210,11 @@
     "collectible_search_placeholder": "crwdns20235:0crwdne20235:0",
     "add_collectibles_address_placeholder": "crwdns20237:0crwdne20237:0",
     "add_collectibles_token_id_placeholder": "crwdns20239:0crwdne20239:0",
-    "plugin_wallet_solana_tips": "crwdns19971:0crwdne19971:0",
-    "plugin_wallet_fortmatic_tips": "crwdns19969:0crwdne19969:0",
-    "plugin_wallet_support_chains_tips": "crwdns19961:0crwdne19961:0",
-    "plugin_wallet_connect_fortmatic": "crwdns19963:0crwdne19963:0",
-    "plugin_wallet_choose_network": "crwdns17250:0crwdne17250:0",
-    "plugin_wallet_select_provider_dialog_title": "crwdns4663:0crwdne4663:0"
+    "plugin_wallet_solana_tips": "crwdns20277:0crwdne20277:0",
+    "plugin_wallet_blocto_tips": "crwdns20279:0crwdne20279:0",
+    "plugin_wallet_fortmatic_tips": "crwdns20281:0crwdne20281:0",
+    "plugin_wallet_support_chains_tips": "crwdns20283:0crwdne20283:0",
+    "plugin_wallet_connect_fortmatic": "crwdns20285:0crwdne20285:0",
+    "plugin_wallet_choose_network": "crwdns20287:0crwdne20287:0",
+    "plugin_wallet_select_provider_dialog_title": "crwdns20289:0crwdne20289:0"
 }
