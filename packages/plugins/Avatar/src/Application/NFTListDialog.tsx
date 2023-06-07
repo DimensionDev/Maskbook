@@ -134,14 +134,12 @@ export const NFTListDialog: FC = () => {
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
     const addCollectibles = useAddCollectibles()
-    // Pass to Add Collectibles dialog
-    const fromChainId = assetChainId || chainId
     const handleAddCollectibles = useCallback(async () => {
         const result = await addCollectibles({
             pluginID,
-            chainId: fromChainId,
+            chainId: assetChainId,
         })
-        if (!result || !fromChainId) return
+        if (!result || !assetChainId) return
         const [contract, tokenIds] = result
         const address = contract.address
         setPendingTokenCount((count) => count + tokenIds.length)
@@ -149,18 +147,18 @@ export const NFTListDialog: FC = () => {
             tokenIds.map(async (tokenId) => {
                 const [asset, token, isOwner] = await Promise.all([
                     Hub.getNonFungibleAsset(address, tokenId, {
-                        chainId: fromChainId,
+                        chainId: assetChainId,
                         account,
                     }),
                     Web3.getNonFungibleToken(address, tokenId, undefined, {
-                        chainId: fromChainId,
+                        chainId: assetChainId,
                     }),
                     Web3.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
-                        chainId: fromChainId,
+                        chainId: assetChainId,
                     }),
                 ])
 
-                if (!asset?.contract?.chainId || !token.chainId || token.contract?.chainId !== fromChainId) return
+                if (!asset?.contract?.chainId || !token.chainId || token.contract?.chainId !== assetChainId) return
                 if (!isOwner) return
                 return { ...token, ...asset } as AllChainsNonFungibleToken
             }),
@@ -171,7 +169,7 @@ export const NFTListDialog: FC = () => {
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [addCollectibles, pluginID, fromChainId, account])
+    }, [addCollectibles, pluginID, assetChainId, account])
 
     useEffect(() => {
         setSelectedPluginId(pluginID)
@@ -223,7 +221,7 @@ export const NFTListDialog: FC = () => {
                         padding: '8px 16px',
                         justifyContent: 'space-between',
                     }}>
-                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM && assetChainId ? (
                         <Button
                             variant="text"
                             size="small"
