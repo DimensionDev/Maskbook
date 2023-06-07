@@ -33,7 +33,6 @@
     "refund": "crwdns16788:0crwdne16788:0",
     "empty": "crwdns16790:0crwdne16790:0",
     "refunding": "crwdns16792:0crwdne16792:0",
-    "history_send": "crwdns16794:0crwdne16794:0",
     "history_total_amount": "crwdns16796:0{{- amount}}crwdnd16796:0{{symbol}}crwdne16796:0",
     "history_split_mode": "crwdns16798:0{{mode}}crwdne16798:0",
     "attached_message": "crwdns16802:0crwdne16802:0",
@@ -109,5 +108,6 @@
     "lucky_drop": "crwdns19843:0crwdne19843:0",
     "share": "crwdns19845:0crwdne19845:0",
     "ok": "crwdns19847:0crwdne19847:0",
-    "got_nft": "crwdns19849:0{{name}}crwdne19849:0"
+    "got_nft": "crwdns19849:0{{name}}crwdne19849:0",
+    "history": "crwdns20269:0crwdne20269:0"
 }
