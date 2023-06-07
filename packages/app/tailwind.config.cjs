@@ -10,18 +10,6 @@ module.exports = {
         },
     },
     variants: {},
-    plugins: [
-        require('@tailwindcss/typography'),
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/line-clamp'),
-        require('@tailwindcss/aspect-ratio'),
-    ],
-    content: [
-        './src/**/*.js',
-        './src/**/*.jsx',
-        '../shared/src/Modals/modals/**/*.js',
-        '../shared/src/Modals/modals/**/*.jsx',
-        '../shared/src/Modals/modals/**/*.ts',
-        '../sahred/src/Modals/modals/**/*.tsx',
-    ],
+    plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms'), require('@tailwindcss/aspect-ratio')],
+    content: ['./src/**/*.ts', './src/**/*.tsx'],
 }

@@ -1,8 +1,7 @@
 import { forwardRef, useState } from 'react'
-import type { SingletonModalRefCreator } from '../../libs/SingletonModal.js'
-import { useSingletonModal } from '../../hooks/useSingletonModal.js'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 import { SelectProvider } from './SelectProvider.js'
 
 export interface SelectProviderDialogOpenProps {

@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
+import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { QRCodeDialog } from './QRCodeDialog.js'
-import type { SingletonModalRefCreator } from '../../libs/SingletonModal.js'
 import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
 export interface WalletConnectQRCodeOpenProps {
