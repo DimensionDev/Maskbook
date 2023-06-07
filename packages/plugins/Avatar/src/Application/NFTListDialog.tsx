@@ -5,23 +5,23 @@ import {
     CollectionList,
     PluginVerifiedWalletStatusBar,
     UserAssetsProvider,
+    useAddCollectibles,
     useSharedI18N,
 } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWallets, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { uniqBy } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import { type FC, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
-import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         backgroundColor: theme.palette.maskColor.bottom,
         position: 'absolute',
+        zIndex: 3,
         left: 0,
         bottom: 0,
         width: '100%',
@@ -65,6 +66,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const gridProps = {
+    columns: 'repeat(auto-fill, minmax(20%, 1fr))',
+}
 export const NFTListDialog: FC = () => {
     const t = useI18N()
     const sharedI18N = useSharedI18N()
@@ -78,12 +82,10 @@ export const NFTListDialog: FC = () => {
     const { account, chainId, setChainId, setAccount } = useChainContext()
     const wallets = useWallets(pluginID)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
-    const [addDialogOpen, setAddDialogOpen] = useState(false)
     const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSNSAdaptorContext()
-    const [selectedAccount, setSelectedAccount] = useState(targetAccount)
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => {
@@ -97,7 +99,6 @@ export const NFTListDialog: FC = () => {
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
         setAccount(address)
         setTargetAccount(address)
-        setSelectedAccount(address)
         setSelectedPluginId(pluginID)
         setChainId(chainId as ChainId)
         setSelectedToken(undefined)
@@ -128,25 +129,47 @@ export const NFTListDialog: FC = () => {
         }
     }, [selectedToken, targetAccount, selectedPluginId, navigate, proof, proofs])
 
-    const openAddDialog = useCallback(() => {
-        if (!account && !proofs.length) {
-            showSnackbar(t.connect_wallet(), { variant: 'error' })
-            return
-        }
-        setAddDialogOpen(true)
-    }, [account, !proofs.length, showSnackbar])
+    const Web3 = useWeb3Connection(pluginID)
+    const Hub = useWeb3Hub(pluginID)
+    const addCollectibles = useAddCollectibles()
+    const handleAddCollectibles = useCallback(async () => {
+        const result = await addCollectibles({
+            pluginID,
+            chainId,
+        })
+        if (!result || !chainId) return
+        const [contract, tokenIds] = result
+        const address = contract.address
+        const results = await Promise.allSettled(
+            tokenIds.map(async (tokenId) => {
+                const [asset, token, isOwner] = await Promise.all([
+                    Hub.getNonFungibleAsset(address, tokenId, {
+                        chainId,
+                        account,
+                    }),
+                    Web3.getNonFungibleToken(address, tokenId, undefined, {
+                        chainId,
+                    }),
+                    Web3.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
+                        chainId,
+                    }),
+                ])
+
+                if (!asset?.contract?.chainId || !token.chainId || token.contract?.chainId !== chainId) return
+                if (!isOwner) return
+                return { ...token, ...asset } as AllChainsNonFungibleToken
+            }),
+        )
+        const tokens = compact(results.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        if (!tokens.length) return
+        setTokens((originalTokens) => {
+            return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
+        })
+    }, [addCollectibles, pluginID, chainId, account])
 
     useEffect(() => {
         setSelectedPluginId(pluginID)
     }, [pluginID])
-
-    useEffect(() => {
-        setChainId(chainId as ChainId)
-    }, [chainId])
-
-    const onAddToken = (token: AllChainsNonFungibleToken) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address?.toLowerCase() + x.tokenId))
-    }
 
     const walletItems = proofs.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
@@ -156,18 +179,14 @@ export const NFTListDialog: FC = () => {
         setTargetAccount(account)
     }, [account])
 
-    const gridProps = {
-        columns: 'repeat(auto-fill, minmax(20%, 1fr))',
-    }
-
     return (
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount}>
+                    <UserAssetsProvider pluginID={selectedPluginId} address={targetAccount}>
                         <CollectionList
                             height={479}
-                            account={selectedAccount}
+                            account={targetAccount}
                             pluginID={selectedPluginId}
                             gridProps={gridProps}
                             disableWindowScroll
@@ -176,7 +195,7 @@ export const NFTListDialog: FC = () => {
                         />
                     </UserAssetsProvider>
                 ) : (
-                    <Box className={classes.noWallet}>
+                    <Box className={classes.noWallet} height={479}>
                         <Icons.EmptySimple variant="light" size={36} />
                         <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
                             {t.no_wallet_message()}
@@ -201,7 +220,7 @@ export const NFTListDialog: FC = () => {
                             size="small"
                             className={classes.addButton}
                             disableRipple
-                            onClick={openAddDialog}>
+                            onClick={handleAddCollectibles}>
                             {t.add_collectible()}
                         </Button>
                     ) : (
@@ -237,11 +256,11 @@ export const NFTListDialog: FC = () => {
                     }
                     verifiedWallets={walletItems}
                     onChange={onChangeWallet}
-                    expectedAddress={selectedAccount}>
+                    expectedAddress={targetAccount}>
                     <ChainBoundary
                         expectedChainId={chainId}
                         predicate={supportPluginIds.includes(selectedPluginId) ? () => true : undefined}
-                        expectedAccount={selectedAccount}
+                        expectedAccount={targetAccount}
                         expectedPluginID={
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
@@ -256,15 +275,6 @@ export const NFTListDialog: FC = () => {
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>
             </DialogActions>
-            <AddNFT
-                account={targetAccount}
-                chainId={chainId}
-                title={t.add_collectible()}
-                open={addDialogOpen}
-                onClose={() => setAddDialogOpen(false)}
-                onAddToken={onAddToken}
-                expectedPluginID={selectedPluginId}
-            />
         </>
     )
 }

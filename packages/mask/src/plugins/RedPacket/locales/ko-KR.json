@@ -32,7 +32,6 @@
     "refund": "리펀",
     "empty": "비어 있음",
     "refunding": "환급 중",
-    "history_send": "발송",
     "history_total_amount": "총액: {{- amount}} {{symbol}}",
     "history_split_mode": "Split Mode: {{mode}}",
     "attached_message": "첨부 메시지",

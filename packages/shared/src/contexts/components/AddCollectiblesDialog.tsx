@@ -11,10 +11,10 @@ import { Box } from '@mui/system'
 import { memo, useCallback, useMemo, type FC, type FormEvent, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { InjectedDialog } from '../InjectedDialog.js'
+import { InjectedDialog } from './InjectedDialog.js'
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { compact, uniq } from 'lodash-es'
-import { CollectibleItem, CollectibleItemSkeleton } from '../../../UI/components/AssetsManagement/CollectibleItem.js'
+import { compact, isNaN, uniq } from 'lodash-es'
+import { CollectibleItem, CollectibleItemSkeleton } from '../../UI/components/AssetsManagement/CollectibleItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'grid',
         overflow: 'auto',
-        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(20%, 1fr))',
         gridGap: theme.spacing(2),
         padding: theme.spacing(2, 0),
         paddingRight: theme.spacing(1),
@@ -82,24 +82,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AddCollectibleDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
-    title?: string
     onClose?(): void
-    onAdd?(
-        contract: NonFungibleTokenContract<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        tokenIds: string[],
+    onSubmit?(
+        result: [
+            contract: NonFungibleTokenContract<
+                Web3Helper.Definition[T]['ChainId'],
+                Web3Helper.Definition[T]['SchemaType']
+            >,
+            tokenIds: string[],
+        ],
     ): void
 }
 
-export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function AddCollectibleDialog({
+export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(function AddCollectiblesDialog({
     open,
     pluginID,
     chainId,
     onClose,
-    onAdd,
+    onSubmit,
 }) {
     const t = useSharedI18N()
     const account = useAccount()
@@ -111,7 +115,18 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
                 .string()
                 .min(1, t.collectible_contract_require())
                 .refine((address) => Others.isValidAddress(address), t.collectible_contract_invalid()),
-            tokenIds: z.string().min(1, t.collectible_token_id_require()),
+            tokenIds: z
+                .string()
+                .min(1, t.collectible_token_id_require())
+                .refine((tokenIds) => {
+                    const containsInvalidId = tokenIds.split(',').some((v) => {
+                        const trimmed = v.trim()
+                        if (!trimmed) return false
+                        const id = Number.parseInt(trimmed, 10)
+                        return isNaN(id) || id <= 0
+                    })
+                    return !containsInvalidId
+                }, t.collectible_token_id_invalid()),
         })
     }, [t, Others.isValidAddress])
     type FormInputs = z.infer<typeof schema>
@@ -133,13 +148,6 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
     const hub = useWeb3Hub(pluginID)
     const connection = useWeb3Connection(pluginID)
 
-    const assetsQueries = useQueries({
-        queries: tokenIds.map((tokenId) => ({
-            enabled: isValid,
-            queryKey: ['nft-asset', pluginID, chainId, address, tokenId, isValid],
-            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
-        })),
-    })
     const {
         data: contract,
         isLoading: isLoadingContract,
@@ -147,7 +155,14 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
         refetch,
     } = useQuery({
         queryKey: ['nft-contract', pluginID, chainId, address],
-        queryFn: () => connection.getNonFungibleTokenContract(address),
+        queryFn: () => connection.getNonFungibleTokenContract(address, undefined, { chainId }),
+    })
+    const assetsQueries = useQueries({
+        queries: tokenIds.map((tokenId) => ({
+            enabled: isValid,
+            queryKey: ['nft-asset', pluginID, chainId, address, tokenId, isValid],
+            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
+        })),
     })
     const noResults = assetsQueries.every((x) => !x.isLoading && !x.data)
     const someNotMine = assetsQueries.some((x) => (x.data ? !isSameAddress(x.data.owner?.address, account) : false))
@@ -179,8 +194,8 @@ export const AddCollectibleDialog: FC<AddCollectibleDialogProps> = memo(function
 
     const handleAdd = useCallback(() => {
         if (!contract) return
-        onAdd?.(contract, selectedTokenIds)
-    }, [contract, selectedTokenIds, onAdd])
+        onSubmit?.([contract, selectedTokenIds])
+    }, [contract, selectedTokenIds, onSubmit])
 
     return (
         <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={onClose} title={t.add_collectibles()}>

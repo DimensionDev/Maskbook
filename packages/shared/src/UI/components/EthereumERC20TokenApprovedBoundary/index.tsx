@@ -2,12 +2,14 @@ import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
 import { ActionButton, type ActionButtonProps, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
 import { noop } from 'lodash-es'
 import React, { useCallback } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
+import { useChainContext, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     icon: {},
@@ -34,7 +36,6 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
     infiniteUnlockContent?: React.ReactNode
     ActionButtonProps?: ActionButtonProps
-    onlyInfiniteUnlock?: boolean
     contractName?: string
     showHelperToken?: boolean
     failedContent?: React.ReactNode
@@ -55,48 +56,50 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     const t = useSharedI18N()
     const { classes } = useStyles(undefined, { props })
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: token?.chainId })
 
-    const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
+    const {
+        data: spenders,
+        isLoading: spendersLoading,
+        isError,
+        refetch,
+    } = useFungibleTokenSpenders(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+        account,
+    })
+
+    const approved = !!spenders?.find(
+        (x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender),
+    )
+
+    const [{ type: approveStateType, allowance }, transactionState, approveCallback, _resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, token?.chainId)
 
+    const loading = spendersLoading || approveStateType === ApproveStateType.UPDATING || transactionState.loadingApprove
+
     const onApprove = useCallback(async () => {
-        if (approveStateType !== ApproveStateType.NOT_APPROVED) return
+        if (approved || loading) return
         await approveCallback(false)
-    }, [approveStateType, transactionState, approveCallback])
+    }, [approved, loading, approveCallback])
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <>{typeof children === 'function' ? children(allowance) : children}</>
 
-    if (approveStateType === ApproveStateType.UNKNOWN)
+    if (isError)
         return (
             <ActionButton
                 className={classes.button}
                 fullWidth
                 variant="contained"
-                disabled
-                {...props.ActionButtonProps}>
-                {fallback ?? t.wallet_transfer_error_amount_absence()}
-            </ActionButton>
-        )
-    if (approveStateType === ApproveStateType.FAILED)
-        return (
-            <ActionButton
-                className={classes.button}
-                fullWidth
-                variant="contained"
-                onClick={resetApproveCallback}
+                onClick={() => refetch()}
                 {...props.ActionButtonProps}>
                 {failedContent ?? t.wallet_load_retry({ symbol: token.symbol ?? token.name ?? 'Token' })}
             </ActionButton>
         )
-    if (
-        approveStateType === ApproveStateType.NOT_APPROVED ||
-        transactionState.loading ||
-        approveStateType === ApproveStateType.UPDATING
-    )
+    if (loading || !approved)
         return (
             <ActionButton
-                loading={transactionState.loading || approveStateType === ApproveStateType.UPDATING}
+                loading={loading}
                 className={classes.button}
                 fullWidth
                 variant="contained"
@@ -131,8 +134,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 {infiniteUnlockContent ?? t.plugin_wallet_token_infinite_unlock({ symbol: token.symbol })}
             </ActionButton>
         )
-    if (approveStateType === ApproveStateType.APPROVED)
-        return <>{typeof children === 'function' ? children(allowance) : children}</>
+    if (approved) return <>{typeof children === 'function' ? children(allowance) : children}</>
 
-    unreachable(approveStateType)
+    unreachable(approved)
 }

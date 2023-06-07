@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             overscrollBehavior: 'contain',
             borderRadius: theme.spacing(1.5),
             boxShadow: theme.palette.shadow.popup,
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.maskColor.bottom,
         },
         loading: {
             display: 'flex',
@@ -45,9 +45,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
         },
         header: {
-            background: isDark
-                ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
+            background: theme.palette.maskColor.modalTitleBg,
             padding: theme.spacing(2, 2, 0, 2),
             boxSizing: 'border-box',
             flexShrink: 0,
@@ -79,8 +77,8 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(10px)',
+            background: theme.palette.maskColor.secondaryBottom,
+            backdropFilter: 'blur(px)',
             padding: theme.spacing(1.5),
             boxSizing: 'border-box',
             fontWeight: 700,

@@ -106,7 +106,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
 
 const { Tag, Type } = RSS3BaseAPI
 export function isCollectibleFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.CollectibleFeed {
-    return feed.tag === Tag.Collectible && feed.type !== Type.Approval
+    return feed.tag === Tag.Collectible && [Type.Mint, Type.Trade, Type.Transfer, Type.Burn].includes(feed.type)
 }
 
 function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {

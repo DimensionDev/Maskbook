@@ -25,7 +25,7 @@ import {
 
 interface AssetsContextOptions {
     assetsMapRef: MutableRefObject<Record<string, AssetsState>>
-    getAssets(id: string): AssetsState
+    getAssets(collection: Web3Helper.NonFungibleCollectionAll): AssetsState
     /** Get verified-by marketplaces */
     getVerifiedBy(id: string): string[]
     loadAssets(collection: Web3Helper.NonFungibleCollectionAll): Promise<void>
@@ -67,6 +67,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
             if (!collection.id) return
 
             const { id, chainId } = collection
+            const stateKey = `${id}.${chainId}`
             const realId = collectionId ?? id
             const assetsState = assetsMapRef.current[id]
 
@@ -74,7 +75,7 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
             // Also expand size if for id chunk, since there might be more assets than chunk size
             const size = assetsState?.assets.length || collectionId ? 20 : 4
             const indicator = (!collectionId && indicatorMapRef.current.get(id)) || createIndicator()
-            dispatch({ type: 'SET_LOADING_STATUS', id, loading: true })
+            dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, loading: true })
             const pageable = await Hub.getNonFungibleAssetsByCollectionAndOwner(realId, address, {
                 indicator,
                 size,
@@ -90,11 +91,11 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
             if (pageable.nextIndicator) {
                 indicatorMapRef.current.set(id, pageable.nextIndicator as PageIndicator)
             }
-            dispatch({ type: 'APPEND_ASSETS', id, assets: pageable.data })
+            dispatch({ type: 'APPEND_ASSETS', id: stateKey, assets: pageable.data })
             // If collectionId is set, that means we are loading part of a merged collection.
             // And we will let the merged collection's iterator decide if it has ended
             const finished = !collectionId && !pageable.nextIndicator
-            dispatch({ type: 'SET_LOADING_STATUS', id, finished, loading: false })
+            dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, finished, loading: false })
         },
         [Hub, address],
     )
@@ -103,8 +104,9 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
         async (collection: Web3Helper.NonFungibleCollectionAll) => {
             if (!collection.id) return
 
-            const { id } = collection
-            const assetsState = assetsMapRef.current[id]
+            const { id, chainId } = collection
+            const stateKey = `${id}.${chainId}`
+            const assetsState = assetsMapRef.current[stateKey]
             if (assetsState?.finished || assetsState?.loading) return
             const allIds = id.split(',')
 
@@ -118,10 +120,10 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
                     yield
                 }
             }
-            const iterator = assetsLoaderIterators.current.get(id) || generate(collection)
-            assetsLoaderIterators.current.set(id, iterator)
+            const iterator = assetsLoaderIterators.current.get(stateKey) || generate(collection)
+            assetsLoaderIterators.current.set(stateKey, iterator)
             const result = await iterator.next()
-            if (result.done) dispatch({ type: 'SET_LOADING_STATUS', id, finished: true, loading: false })
+            if (result.done) dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, finished: true, loading: false })
         },
         [Hub, address, loadAssetsViaHub],
     )
@@ -136,7 +138,13 @@ export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID
         [Hub?.getNonFungibleCollectionVerifiedBy],
     )
 
-    const getAssets = useCallback((id: string) => assetsMap[id] ?? createAssetsState(), [assetsMap])
+    const getAssets = useCallback(
+        (collection: Web3Helper.NonFungibleCollectionAll) => {
+            const key = `${collection.id}.${collection.chainId}`
+            return assetsMap[key] ?? createAssetsState()
+        },
+        [assetsMap],
+    )
     const getVerifiedBy = useCallback((id: string) => verifiedMap[id] ?? EMPTY_LIST, [verifiedMap])
     const contextValue = useMemo((): AssetsContextOptions => {
         return {

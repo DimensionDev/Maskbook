@@ -51,11 +51,7 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
 
     if (isProfileProxyFeed(feed)) return <ProfileProxyCard feed={feed} {...rest} />
 
-    if (process.env.NODE_ENV === 'development') {
-        return <UnknownCard feed={feed} {...rest} />
-    }
-
-    return null
+    return <UnknownCard feed={feed} {...rest} />
 })
 
 FeedCard.displayName = 'FeedCard'

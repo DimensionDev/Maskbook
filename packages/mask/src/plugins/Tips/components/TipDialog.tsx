@@ -1,25 +1,22 @@
-import { useCallback, useMemo } from 'react'
-import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
-import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
+import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
-import type { NonFungibleAsset } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { TokenType } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
+import { useCallback, useMemo } from 'react'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { pluginIDSettings } from '../../../../shared/legacy-settings/settings.js'
+import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
-import { TokenType } from '@masknet/web3-shared-base'
-import { AddDialog } from './AddDialog.js'
-import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
+import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -63,7 +60,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const {
         tipType,
         setTipType,
@@ -76,9 +72,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         recipientSnsId,
         nonFungibleTokenAddress,
         nonFungibleTokenContract,
-        setNonFungibleTokenAddress,
         nonFungibleTokenId,
-        setNonFungibleTokenId,
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
@@ -109,12 +103,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [])
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
-
-    const handleAddToken = useCallback((token: NonFungibleAsset<ChainId, SchemaType>) => {
-        setNonFungibleTokenAddress(token.address ?? '')
-        setNonFungibleTokenId(token.tokenId)
-        openAddTokenDialog(false)
-    }, [])
 
     const createTipsTx = useCreateTipsTransaction()
     const send = useCallback(async () => {
@@ -187,7 +175,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     </PluginWalletStatusBar>
                 </DialogContent>
             </InjectedDialog>
-            <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
         </TabContext>
     )
 }

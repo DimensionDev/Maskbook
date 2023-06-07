@@ -145,6 +145,7 @@
     "plugin_wallet_unsupported_network": "crwdns19987:0crwdne19987:0",
     "plugin_wallet_switch_network_title": "crwdns20261:0crwdne20261:0",
     "plugin_wallet_unsupported_chain": "crwdns19989:0{{network}}crwdne19989:0",
+    "plugin_wallet_switch_chain_failed": "crwdns20267:0crwdne20267:0",
     "plugin_wallet_switch_network": "crwdns18866:0{{network}}crwdne18866:0",
     "plugin_wallet_not_support_network": "crwdns18868:0crwdne18868:0",
     "plugin_wallet_switch_network_under_going": "crwdns18870:0{{network}}crwdne18870:0",

@@ -176,7 +176,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = openSelectNFTDialog
+    const title = showHistory
+        ? t.history()
+        : openSelectNFTDialog
         ? t.nft_select_collection()
         : openNFTConfirmDialog
         ? i18n('confirm')
@@ -243,7 +245,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             <>
                                 <div
                                     style={{
-                                        visibility: showHistory ? 'hidden' : 'visible',
                                         ...(showHistory ? { display: 'none' } : {}),
                                         height: showHistory
                                             ? 0

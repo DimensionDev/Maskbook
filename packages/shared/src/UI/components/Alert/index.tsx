@@ -9,10 +9,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         borderRadius: 4,
         padding: 12,
-        backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
+        backgroundColor: theme.palette.maskColor.bg,
         fontSize: 14,
         alignItems: 'center',
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.main,
+        backdropFilter: 'blur(5px)',
         gap: 10,
     },
 }))

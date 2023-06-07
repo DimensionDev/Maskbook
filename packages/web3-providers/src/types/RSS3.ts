@@ -173,6 +173,10 @@ export namespace RSS3BaseAPI {
         description: string
         contract_address: string
     }
+    interface CollectiveEditMetadata {
+        action: 'renew'
+        cost: TransactionMetadata
+    }
     interface ApprovalBaseMetadata {
         name: string
         action: 'approve' | 'revoke'
@@ -307,6 +311,7 @@ export namespace RSS3BaseAPI {
             [Type.Mint]: MintMetadata
             [Type.Burn]: TransactionMetadata
             [Type.Poap]: PoapMetadata
+            [Type.Edit]: CollectiveEditMetadata
         }
         [Tag.Social]: {
             [Type.Mint]: PostMetadata
@@ -427,6 +432,7 @@ export namespace RSS3BaseAPI {
         Launch = 'launch',
         Donate = 'donate',
         Staking = 'staking',
+        Edit = 'edit',
     }
 
     export enum AssetType {

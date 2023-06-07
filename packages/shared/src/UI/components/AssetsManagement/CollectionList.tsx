@@ -314,9 +314,9 @@ export function CollectionList({
                             pluginID={pluginID}
                             collection={currentCollection}
                             key={currentCollection.id}
-                            assets={getAssets(currentCollection.id!).assets}
+                            assets={getAssets(currentCollection).assets}
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
-                            loading={getAssets(currentCollection.id!).loading}
+                            loading={getAssets(currentCollection).loading}
                             expanded
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
@@ -327,7 +327,7 @@ export function CollectionList({
                     ) : (
                         <Box className={classes.grid}>
                             {collections.map((collection) => {
-                                const assetsState = getAssets(collection.id!)
+                                const assetsState = getAssets(collection)
                                 return (
                                     <LazyCollection
                                         pluginID={pluginID}
@@ -364,8 +364,7 @@ const ExpandedCollection: FC<ExpandedCollectionProps> = memo(({ gridProps = EMPT
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps
-    const id = collection.id!
-    const { finished, loading } = getAssets(id)
+    const { finished, loading } = getAssets(collection)
     return (
         <>
             <Box width="100%">

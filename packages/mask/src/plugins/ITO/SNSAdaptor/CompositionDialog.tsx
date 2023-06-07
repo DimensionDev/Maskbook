@@ -233,7 +233,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 ) : null
             }
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-            disableBackdropClick
             isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
             title={t('plugin_ito_display_name')}

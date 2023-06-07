@@ -130,20 +130,18 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                 ...resolveSnackbarConfig(progress.status),
                 ...{
                     message: (
-                        <div>
-                            <Link
-                                sx={{ wordBreak: 'break-word' }}
-                                className={classes.link}
-                                color="inherit"
-                                href={Others.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                {progress.status === TransactionStatusType.SUCCEED
-                                    ? computed.snackbar?.successfulDescription ?? computed.description
-                                    : computed.description}{' '}
-                                <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                            </Link>
-                        </div>
+                        <Link
+                            sx={{ wordBreak: 'break-word' }}
+                            className={classes.link}
+                            color="inherit"
+                            href={Others.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {progress.status === TransactionStatusType.SUCCEED
+                                ? computed.snackbar?.successfulDescription ?? computed.description
+                                : computed.description}{' '}
+                            <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                        </Link>
                     ),
                 },
             },

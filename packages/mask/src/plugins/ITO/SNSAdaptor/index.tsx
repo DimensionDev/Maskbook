@@ -12,10 +12,12 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
+import { NetworkPluginID, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { ITOInjection } from './ITOInjection.js'
+import { openDialog } from './emitter.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -40,6 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [ITO_MetaKey_1, onAttached_ITO],
         [ITO_MetaKey_2, onAttached_ITO],
     ]),
+    GlobalInjection: ITOInjection,
     CompositionDialogEntry: {
         dialog({ open, onClose, isOpenFromApplicationBoard }) {
             return (
@@ -63,15 +66,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <Icons.Markets size={36} />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
-            const clickHandler = () =>
-                CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-                    reason: 'timeline',
-                    open: true,
-                    options: {
-                        startupPlugin: base.ID,
-                        isOpenFromApplicationBoard: true,
-                    },
-                })
 
             return {
                 ApplicationEntryID: base.ID,
@@ -84,8 +78,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             iconFilterColor={iconFilterColor}
                             onClick={
                                 EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(clickHandler)
-                                    : clickHandler
+                                    ? () => EntryComponentProps.onClick?.(openDialog)
+                                    : openDialog
                             }
                         />
                     )

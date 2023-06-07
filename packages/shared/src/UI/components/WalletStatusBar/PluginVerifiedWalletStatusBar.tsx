@@ -80,7 +80,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const globalChainId = useChainId()
         const { chainId } = useChainContext()
         const allWallets = useWallets()
-
+        const { pluginID: currentPluginID } = useNetworkContext()
         const isSmartPay = !!allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
         const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
@@ -90,8 +90,6 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
-
-        const { pluginID: currentPluginID } = useNetworkContext()
 
         const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
 

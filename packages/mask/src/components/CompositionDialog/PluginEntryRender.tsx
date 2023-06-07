@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingLeft: 2,
     },
     clickRoot: {
-        background: theme.palette.background.paper,
+        background: theme.palette.maskColor.bottom,
         boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
     },
 }))

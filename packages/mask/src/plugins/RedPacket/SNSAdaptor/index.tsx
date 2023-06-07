@@ -147,7 +147,14 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     return (
         <div style={containerStyle}>
             <Icons.RedPacket size={20} />
-            <Typography fontSize="12px" lineHeight="16px" fontFamily="Helvetica" marginLeft="8px">
+            <Typography
+                fontSize="12px"
+                lineHeight="16px"
+                fontFamily="Helvetica"
+                marginLeft="8px"
+                maxWidth="450px"
+                overflow="hidden"
+                textOverflow="ellipsis">
                 {message || fallback}
             </Typography>
         </div>

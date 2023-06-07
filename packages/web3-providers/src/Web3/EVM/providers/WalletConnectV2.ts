@@ -116,7 +116,7 @@ export default class WalletConnectV2Provider
     }
 
     private async logout() {
-        if (!this.signClient.session) return
+        if (!this.signClient.session?.topic) return
         await this.signClient.client?.disconnect({
             topic: this.signClient.session.topic,
             reason: getSdkError('USER_DISCONNECTED'),
