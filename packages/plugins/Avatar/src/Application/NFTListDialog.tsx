@@ -11,13 +11,7 @@ import {
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useChainContext,
-    useNetworkContext,
-    useWallets,
-    useWeb3Connection,
-    useWeb3Hub,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWallets, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
