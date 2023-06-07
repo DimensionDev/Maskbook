@@ -16,8 +16,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, type FungibleToken, minus } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
 
-const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; listItemBackgroundIcon?: string }>()(
-    (theme, { isViewed, listItemBackground, listItemBackgroundIcon }) => {
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()(
+    (theme, { listItemBackground, listItemBackgroundIcon }) => {
         const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
         return {
             message: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
             root: {
                 width: '100%',
                 padding: 0,
-                background: isViewed ? theme.palette.common.white : 'unset',
+                background: theme.palette.common.white,
                 marginBottom: theme.spacing(1.5),
                 borderRadius: 8,
             },
@@ -41,26 +41,24 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 position: 'static !important' as any,
                 height: 'auto !important',
                 padding: theme.spacing(1.5),
-                background: isViewed ? listItemBackground ?? theme.palette.background.default : 'unset',
+                background: listItemBackground ?? theme.palette.background.default,
                 [smallQuery]: {
                     padding: theme.spacing(2, 1.5),
                 },
-                '&:before': isViewed
-                    ? {
-                          position: 'absolute',
-                          content: '""',
-                          top: 45,
-                          left: 400,
-                          zIndex: 0,
-                          width: 114,
-                          opacity: 0.2,
-                          height: 61,
-                          filter: 'blur(1.5px)',
-                          background: listItemBackgroundIcon,
-                          backgroundRepeat: 'no-repeat',
-                          backgroundSize: '114px 114px',
-                      }
-                    : {},
+                '&:before': {
+                    position: 'absolute',
+                    content: '""',
+                    top: 45,
+                    left: 400,
+                    zIndex: 0,
+                    width: 114,
+                    opacity: 0.2,
+                    height: 61,
+                    filter: 'blur(1.5px)',
+                    background: listItemBackgroundIcon,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '114px 114px',
+                },
             },
             box: {
                 display: 'flex',
@@ -145,7 +143,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
             },
             popper: {
                 overflow: 'visible',
-                backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
+                backgroundColor: theme.palette.maskColor.dark,
                 transform: 'translate(196px, 47px)',
                 borderRadius: 8,
                 width: 328,
@@ -159,12 +157,12 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 height: 0,
                 borderLeft: '6px solid transparent',
                 borderRight: '6px solid transparent',
-                borderBottom: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
+                borderBottom: `6px solid ${theme.palette.maskColor.dark}`,
                 transform: 'translateY(6px)',
             },
             popperText: {
                 cursor: 'default',
-                color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
+                color: theme.palette.common.white,
                 fontSize: 12,
             },
             disabledButton: {
@@ -181,6 +179,9 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 height: 18,
                 marginLeft: 6,
                 zIndex: -1,
+            },
+            invisible: {
+                visibility: 'hidden',
             },
         }
     },
@@ -206,7 +207,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const creation_time = receipt?.creation_time ?? 0
 
     const { classes, cx } = useStyles({
-        isViewed: isViewed && !!rpid,
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
@@ -269,108 +269,110 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     return (
         <ListItem className={classes.root}>
             <section className={classes.contentItem} ref={ref}>
-                {!rpid ? null : (
-                    <Box className={classes.box}>
-                        <Box className={classes.content}>
-                            <section className={classes.section}>
-                                <div className={classes.div}>
-                                    <div className={classes.fullWidthBox}>
-                                        <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                                            {patchedHistory.sender.message === ''
-                                                ? t.best_wishes()
-                                                : patchedHistory.sender.message}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.fullWidthBox}>
-                                        <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                            {t.create_time()}
-                                        </Typography>
-                                        <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                            {t.history_duration({ time: dateTimeFormat(new Date(creation_time)) })}
-                                        </Typography>
-                                    </div>
+                <Box className={classes.box}>
+                    <Box className={classes.content}>
+                        <section className={classes.section}>
+                            <div className={classes.div}>
+                                <div className={classes.fullWidthBox}>
+                                    <Typography variant="body1" className={cx(classes.title, classes.message)}>
+                                        {patchedHistory.sender.message === ''
+                                            ? t.best_wishes()
+                                            : patchedHistory.sender.message}
+                                    </Typography>
                                 </div>
-                                {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
-                                    <>
-                                        <ActionButton
-                                            loading={isRefunding}
-                                            fullWidth={isSmall}
-                                            onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
-                                            onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
-                                                canSend && !isPasswordValid
-                                                    ? setAnchorEl(event.currentTarget)
-                                                    : undefined
-                                            }}
-                                            onMouseLeave={() => {
-                                                canSend && !isPasswordValid ? setAnchorEl(null) : undefined
-                                            }}
-                                            disabled={
-                                                listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding
-                                            }
-                                            className={cx(
-                                                classes.actionButton,
-                                                canSend && !isPasswordValid ? classes.disabledButton : '',
-                                            )}
-                                            size="large">
-                                            {canSend
-                                                ? t.share()
-                                                : isRefunding
-                                                ? t.refunding()
-                                                : listOfStatus.includes(RedPacketStatus.empty) || refunded
-                                                ? t.empty()
-                                                : t.refund()}
-                                        </ActionButton>
-                                        <Popper
-                                            className={classes.popper}
-                                            id="popper"
-                                            open={openPopper}
-                                            anchorEl={anchorEl}
-                                            transition
-                                            disablePortal>
-                                            <Typography className={classes.popperText}>
-                                                {t.data_broken({ duration: formatRefundDuration })}
-                                            </Typography>
-                                            <div className={classes.arrow} />
-                                        </Popper>
-                                    </>
-                                ) : null}
-                            </section>
+                                <div className={classes.fullWidthBox}>
+                                    <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
+                                        {t.create_time()}
+                                    </Typography>
+                                    <Typography
+                                        variant="body1"
+                                        className={cx(classes.info, classes.message, rpid ? '' : classes.invisible)}>
+                                        {t.history_duration({ time: dateTimeFormat(new Date(creation_time)) })}
+                                    </Typography>
+                                </div>
+                            </div>
+                            {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
+                                <>
+                                    <ActionButton
+                                        loading={isRefunding}
+                                        fullWidth={isSmall}
+                                        onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
+                                        onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
+                                            canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
+                                        }}
+                                        onMouseLeave={() => {
+                                            canSend && !isPasswordValid ? setAnchorEl(null) : undefined
+                                        }}
+                                        disabled={
+                                            listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding
+                                        }
+                                        className={cx(
+                                            classes.actionButton,
+                                            canSend && !isPasswordValid ? classes.disabledButton : '',
+                                        )}
+                                        size="large">
+                                        {canSend
+                                            ? t.share()
+                                            : isRefunding
+                                            ? t.refunding()
+                                            : listOfStatus.includes(RedPacketStatus.empty) || refunded
+                                            ? t.empty()
+                                            : t.refund()}
+                                    </ActionButton>
+                                    <Popper
+                                        className={classes.popper}
+                                        id="popper"
+                                        open={openPopper}
+                                        anchorEl={anchorEl}
+                                        transition
+                                        disablePortal>
+                                        <Typography className={classes.popperText}>
+                                            {t.data_broken({ duration: formatRefundDuration })}
+                                        </Typography>
+                                        <div className={classes.arrow} />
+                                    </Popper>
+                                </>
+                            ) : null}
+                        </section>
 
-                            <section className={classes.footer}>
-                                <Typography variant="body1" className={classes.footerInfo}>
-                                    <Translate.history_claimed
-                                        components={{
-                                            span: <span />,
-                                        }}
-                                        values={{
-                                            claimedShares: String(claimerNumber),
-                                            shares: String(patchedHistory.shares),
-                                            amount: formatBalance(
-                                                patchedHistory.total,
-                                                historyToken?.decimals,
-                                                6,
-                                                true,
-                                            ),
-                                            claimedAmount: formatBalance(
-                                                minus(patchedHistory.total, total_remaining ?? 0),
-                                                historyToken?.decimals,
-                                                6,
-                                                true,
-                                            ),
-                                            symbol: historyToken?.symbol,
-                                        }}
-                                    />
-                                </Typography>
+                        <section className={classes.footer}>
+                            <Typography variant="body1" className={classes.footerInfo}>
+                                <Translate.history_claimed
+                                    components={{
+                                        span: <span />,
+                                    }}
+                                    values={{
+                                        claimedShares: String(claimerNumber),
+                                        shares: String(patchedHistory.shares),
+                                        amount: formatBalance(
+                                            patchedHistory.total,
+                                            historyToken?.decimals ?? 18,
+                                            6,
+                                            true,
+                                        ),
+                                        claimedAmount: rpid
+                                            ? formatBalance(
+                                                  minus(patchedHistory.total, total_remaining ?? 0),
+                                                  historyToken?.decimals ?? 18,
+                                                  6,
+                                                  true,
+                                              )
+                                            : '',
+                                        symbol: historyToken?.symbol,
+                                    }}
+                                />
+                            </Typography>
+                            {historyToken?.logoURL ? (
                                 <TokenIcon
                                     className={classes.icon}
                                     address={historyToken?.address ?? ''}
                                     name={historyToken?.name}
                                     logoURL={historyToken?.logoURL}
                                 />
-                            </section>
-                        </Box>
+                            ) : null}
+                        </section>
                     </Box>
-                )}
+                </Box>
             </section>
         </ListItem>
     )

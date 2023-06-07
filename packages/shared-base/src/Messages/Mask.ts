@@ -173,6 +173,10 @@ export interface redpacketDialogEvent {
     source?: PluginID
 }
 
+export interface ITODialogEvent {
+    open: boolean
+}
+
 export interface SmartPayDialogEvent {
     open: boolean
 }

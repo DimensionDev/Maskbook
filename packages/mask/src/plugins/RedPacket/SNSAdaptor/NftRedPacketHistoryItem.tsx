@@ -15,14 +15,14 @@ import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.j
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
 import { TokenIcon } from '@masknet/shared'
 
-const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; listItemBackgroundIcon?: string }>()(
-    (theme, { isViewed, listItemBackground, listItemBackgroundIcon }) => {
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()(
+    (theme, { listItemBackground, listItemBackgroundIcon }) => {
         const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
         return {
             root: {
                 width: '100%',
                 padding: 0,
-                background: isViewed ? theme.palette.common.white : 'unset',
+                background: theme.palette.common.white,
                 marginBottom: theme.spacing(1.5),
                 borderRadius: 8,
             },
@@ -32,26 +32,24 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 position: 'static !important' as any,
                 height: 'auto !important',
                 padding: theme.spacing(1.5),
-                background: isViewed ? listItemBackground ?? theme.palette.background.default : 'unset',
+                background: listItemBackground ?? theme.palette.background.default,
                 [smallQuery]: {
                     padding: theme.spacing(2, 1.5),
                 },
-                '&:before': isViewed
-                    ? {
-                          position: 'absolute',
-                          content: '""',
-                          top: 45,
-                          left: 400,
-                          zIndex: 0,
-                          width: 114,
-                          opacity: 0.2,
-                          height: 61,
-                          filter: 'blur(1.5px)',
-                          background: listItemBackgroundIcon,
-                          backgroundRepeat: 'no-repeat',
-                          backgroundSize: '114px 114px',
-                      }
-                    : {},
+                '&:before': {
+                    position: 'absolute',
+                    content: '""',
+                    top: 45,
+                    left: 400,
+                    zIndex: 0,
+                    width: 114,
+                    opacity: 0.2,
+                    height: 61,
+                    filter: 'blur(1.5px)',
+                    background: listItemBackgroundIcon,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '114px 114px',
+                },
             },
             message: {
                 whiteSpace: 'nowrap',
@@ -87,6 +85,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 zIndex: -1,
             },
             title: {
+                color: theme.palette.maskColor.dark,
                 whiteSpace: 'break-spaces',
                 fontWeight: 500,
                 fontSize: 16,
@@ -171,7 +170,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const entry = useIntersectionObserver(ref, {})
         const t = useI18N()
 
-        const { value: receipt } = useCreateNftRedPacketReceipt(history.txid)
+        const { value: receipt } = useCreateNftRedPacketReceipt(isViewed ? history.txid : '')
         const rpid = receipt?.rpid ?? ''
         const creation_time = receipt?.creation_time ?? 0
         const patchedHistory: NftRedPacketJSONPayload = useMemo(
@@ -181,7 +180,6 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
         const { classes, cx } = useStyles({
-            isViewed: isViewed && !!rpid,
             listItemBackground: networkDescriptor?.backgroundGradient,
             listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
         })
@@ -222,73 +220,71 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         return (
             <ListItem className={classes.root}>
                 <section className={classes.contentItem} ref={ref}>
-                    {!rpid ? null : (
-                        <Box className={classes.box}>
-                            <Box className={classes.content}>
-                                <section className={classes.section}>
-                                    <div>
-                                        <div className={classes.fullWidthBox}>
-                                            <Typography
-                                                variant="body1"
-                                                className={cx(classes.title, classes.message, classes.ellipsis)}>
-                                                {patchedHistory.sender.message === ''
-                                                    ? t.best_wishes()
-                                                    : patchedHistory.sender.message}
-                                            </Typography>
-                                        </div>
-                                        <div className={classes.fullWidthBox}>
-                                            <Typography
-                                                variant="body1"
-                                                className={cx(classes.infoTitle, classes.message)}>
-                                                {t.create_time()}
-                                            </Typography>
+                    <Box className={classes.box}>
+                        <Box className={classes.content}>
+                            <section className={classes.section}>
+                                <div>
+                                    <div className={classes.fullWidthBox}>
+                                        <Typography
+                                            variant="body1"
+                                            className={cx(classes.title, classes.message, classes.ellipsis)}>
+                                            {patchedHistory.sender.message === ''
+                                                ? t.best_wishes()
+                                                : patchedHistory.sender.message}
+                                        </Typography>
+                                    </div>
+                                    <div className={classes.fullWidthBox}>
+                                        <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
+                                            {t.create_time()}
+                                        </Typography>
+                                        {rpid ? (
                                             <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                                 {t.history_duration({
                                                     time: dateTimeFormat(new Date(patchedHistory.creation_time)),
                                                 })}
                                             </Typography>
-                                        </div>
+                                        ) : null}
                                     </div>
+                                </div>
 
-                                    {canSend ? (
-                                        <ActionButton
-                                            onMouseEnter={handleMouseEnter}
-                                            onMouseLeave={onHidePopover}
-                                            onClick={handleSend}
-                                            disabled={!isPasswordValid}
-                                            className={classes.actionButton}
-                                            size="large">
-                                            {t.share()}
-                                        </ActionButton>
-                                    ) : null}
-                                </section>
+                                {canSend ? (
+                                    <ActionButton
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseLeave={onHidePopover}
+                                        onClick={handleSend}
+                                        disabled={!isPasswordValid}
+                                        className={classes.actionButton}
+                                        size="large">
+                                        {t.share()}
+                                    </ActionButton>
+                                ) : null}
+                            </section>
 
-                                <section className={classes.footer}>
-                                    <Typography variant="body1" className={classes.footerInfo}>
-                                        <Translate.history_nft_claimed
-                                            components={{
-                                                span: <span />,
-                                            }}
-                                            values={{
-                                                claimedShares: bitStatusList.filter(Boolean).length.toString(),
-                                                shares: patchedHistory.shares.toString(),
-                                                symbol: collection?.name ?? '',
-                                            }}
-                                        />
-                                    </Typography>
-                                    <TokenIcon
-                                        className={classes.icon}
-                                        address={collection?.address ?? ''}
-                                        name={collection?.name ?? '-'}
-                                        logoURL={
-                                            collection?.iconURL ??
-                                            new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
-                                        }
+                            <section className={classes.footer}>
+                                <Typography variant="body1" className={classes.footerInfo}>
+                                    <Translate.history_nft_claimed
+                                        components={{
+                                            span: <span />,
+                                        }}
+                                        values={{
+                                            claimedShares: rpid ? bitStatusList.filter(Boolean).length.toString() : '0',
+                                            shares: patchedHistory.shares.toString(),
+                                            symbol: collection?.name ?? '',
+                                        }}
                                     />
-                                </section>
-                            </Box>
+                                </Typography>
+                                <TokenIcon
+                                    className={classes.icon}
+                                    address={collection?.address ?? ''}
+                                    name={collection?.name ?? '-'}
+                                    logoURL={
+                                        collection?.iconURL ??
+                                        new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                                    }
+                                />
+                            </section>
                         </Box>
-                    )}
+                    </Box>
                 </section>
             </ListItem>
         )

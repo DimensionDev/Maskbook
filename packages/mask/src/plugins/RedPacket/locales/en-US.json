@@ -86,6 +86,7 @@
     "send": "Send",
     "history_duration": "{{- time}} (UTC+8)",
     "best_wishes": "Best Wishes!",
+    "enter_quantity": "Enter quantity",
     "create_time": "Create time:",
     "blessing_words": "Blessing words",
     "nft_data_broken": "The Lucky Drop can’t be sent due to data damage.",

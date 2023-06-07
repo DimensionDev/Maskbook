@@ -160,8 +160,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             if (shares_ === '') setShares('')
             else if (/^[1-9]+\d*$/.test(shares_)) {
                 const parsed = Number.parseInt(shares_, 10)
-                if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES)
+                if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES) {
                     setShares(Number.parseInt(shares_, 10))
+                } else if (parsed > RED_PACKET_MAX_SHARES) {
+                    setShares(RED_PACKET_MAX_SHARES)
+                }
             }
         },
         [RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES],
@@ -198,7 +201,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message,
+            message: message || t.best_wishes(),
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -225,7 +228,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message,
+            message: message || t.best_wishes(),
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -344,7 +347,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: '0',
+                            placeholder: t.enter_quantity(),
                             pattern: '^[0-9]$',
                             spellCheck: false,
                         },
