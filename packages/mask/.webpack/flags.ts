@@ -1,6 +1,6 @@
 import type { Configuration } from 'webpack'
-import { BuildFlags } from '../../scripts/src/extension/flags'
 import { join, isAbsolute } from 'path'
+import { BuildFlags } from '../../scripts/src/extension/flags'
 
 export type { BuildFlags } from '../../scripts/src/extension/flags'
 

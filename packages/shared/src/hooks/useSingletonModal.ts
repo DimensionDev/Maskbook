@@ -1,5 +1,5 @@
 import { useImperativeHandle, useMemo, useRef, useState } from 'react'
-import type { SingletonModalRefCreator } from '../libs/SingletonModal.js'
+import type { SingletonModalRefCreator } from '@masknet/shared-base'
 
 export function useSingletonModal<OpenProps, CloseProps>(
     ref: React.ForwardedRef<SingletonModalRefCreator<OpenProps, CloseProps>>,

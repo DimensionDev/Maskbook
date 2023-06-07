@@ -1,9 +1,5 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
-import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import {
     alpha,
     Box,
@@ -16,6 +12,11 @@ import {
     ListItemButton,
     Typography,
 } from '@mui/material'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { Web3All, OthersAll } from '@masknet/web3-providers'
+import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
+import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
 import {
     NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
@@ -25,11 +26,10 @@ import {
     NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
+import { DialogDismissIconUI, ImageIcon, ProviderIcon, useSharedI18N } from '@masknet/shared'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { DialogDismissIconUI, ImageIcon, ProviderIcon, useSharedI18N } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Web3All, OthersAll } from '@masknet/web3-providers'
 
 const descriptors: Record<
     NetworkPluginID,

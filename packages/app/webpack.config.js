@@ -76,6 +76,7 @@ function Configuration(env, argv) {
             new HtmlWebpackPlugin(),
             new webpack.DefinePlugin({
                 'process.env.NODE_DEBUG': 'undefined',
+                'process.env.VERSION': JSON.stringify('v19.0.0'),
                 'process.env.channel': JSON.stringify('stable'),
                 'process.version': JSON.stringify('v19.0.0'),
                 'process.browser': 'true',

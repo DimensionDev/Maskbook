@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { ExampleDialog, Modals } from '@masknet/shared'
+import { ExampleDialog, Modals } from './components/modals/index.js'
 
 export function App() {
     const [email, setEmail] = useState('')
+
     return (
         <div className="bg-white py-16 sm:py-24 lg:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
