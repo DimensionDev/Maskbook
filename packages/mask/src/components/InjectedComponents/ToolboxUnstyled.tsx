@@ -125,6 +125,11 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     const theme = useTheme()
     const providerDescriptor = useProviderDescriptor()
 
+    console.log('DEBUG: provider description')
+    console.log({
+        providerDescriptor,
+    })
+
     return (
         <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
             <Container>
