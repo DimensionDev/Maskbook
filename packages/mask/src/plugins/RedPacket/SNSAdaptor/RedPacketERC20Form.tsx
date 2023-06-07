@@ -201,7 +201,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message,
+            message: message || t.best_wishes(),
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -228,7 +228,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message,
+            message: message || t.best_wishes(),
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -347,7 +347,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: '0',
+                            placeholder: t.enter_quantity(),
                             pattern: '^[0-9]$',
                             spellCheck: false,
                         },
