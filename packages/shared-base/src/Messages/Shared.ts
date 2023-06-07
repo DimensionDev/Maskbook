@@ -15,6 +15,7 @@ import type {
     PersonaSelectPanelDialogEvent,
     AvatarSettingDialogEvent,
     redpacketDialogEvent,
+    ITODialogEvent,
     PersonaBindFinishEvent,
     SmartPayDialogEvent,
     RenameWalletEvent,
@@ -51,6 +52,7 @@ export interface CrossIsolationEvents {
     walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingDialogEvent: AvatarSettingDialogEvent
     redpacketDialogEvent: redpacketDialogEvent
+    ITODialogEvent: ITODialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent
     /** emit when open new page . */
