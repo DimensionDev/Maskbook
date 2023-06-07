@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -12,8 +12,8 @@ import type { BoxProps } from '@mui/system'
 import { range, sortBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
-import { CollectibleItemSkeleton } from './CollectibleItem.js'
-import { Collection, LazyCollection, type CollectionProps } from './Collection.js'
+import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
+import { Collection, LazyCollection, type CollectionProps, CollectionSkeleton } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useUserAssets } from './UserAssetsContext.js'
 import type { CollectibleGridProps } from './types.js'
@@ -152,9 +152,14 @@ export interface CollectionListProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
     selectedAsset?: Web3Helper.NonFungibleAssetAll
+    /** User customized assets, will be rendered as flatten */
+    additionalAssets?: Web3Helper.NonFungibleAssetAll[]
+    /** Pending user customized assets, used to render loading skeletons */
+    pendingAdditionalAssetCount?: number
+    onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
 }
 
-export function CollectionList({
+export const CollectionList = memo(function CollectionList({
     className,
     account,
     pluginID,
@@ -162,10 +167,13 @@ export function CollectionList({
     gridProps = EMPTY_OBJECT,
     disableSidebar,
     disableAction,
+    selectedAsset,
+    additionalAssets,
+    pendingAdditionalAssetCount = 0,
     disableWindowScroll,
     onActionClick,
     onItemClick,
-    selectedAsset,
+    onChainChange,
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
@@ -206,6 +214,7 @@ export function CollectionList({
                     className={classes.networkButton}
                     onClick={() => {
                         setChainId(undefined)
+                        onChainChange?.(undefined)
                         setCurrentCollectionId(undefined)
                     }}>
                     All
@@ -220,6 +229,7 @@ export function CollectionList({
                     disableRipple
                     onClick={() => {
                         setChainId(x.chainId)
+                        onChainChange?.(x.chainId)
                         setCurrentCollectionId(undefined)
                     }}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
@@ -326,6 +336,27 @@ export function CollectionList({
                         />
                     ) : (
                         <Box className={classes.grid}>
+                            {pendingAdditionalAssetCount > 0 ? (
+                                <CollectionSkeleton
+                                    id="additional-assets"
+                                    count={pendingAdditionalAssetCount}
+                                    expanded
+                                />
+                            ) : null}
+                            {additionalAssets?.map((asset) => (
+                                <CollectibleItem
+                                    key={`additional.${asset.chainId}.${asset.address}.${asset.tokenId}`}
+                                    className={className}
+                                    asset={asset}
+                                    pluginID={pluginID}
+                                    disableName
+                                    actionLabel={t.send()}
+                                    disableAction={disableAction}
+                                    onActionClick={onActionClick}
+                                    onItemClick={onItemClick}
+                                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
+                                />
+                            ))}
                             {collections.map((collection) => {
                                 const assetsState = getAssets(collection)
                                 return (
@@ -353,7 +384,7 @@ export function CollectionList({
             </div>
         </Box>
     )
-}
+})
 
 interface ExpandedCollectionProps extends CollectionProps {
     gridProps?: CollectibleGridProps
