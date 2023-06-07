@@ -6,10 +6,13 @@ import type { FC } from 'react'
 import { useFeedOwner } from '../../contexts/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
+import { Translate } from '../../../locales/index.js'
+import { useAddressLabel } from '../../hooks/index.js'
+import { Label } from './common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
-        color: theme.palette.maskColor.danger,
+        color: theme.palette.maskColor.third,
     },
 }))
 
@@ -18,10 +21,12 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 export const UnknownCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     const action = feed.actions[0]
 
+    const user = useAddressLabel(feed.owner)
+    const targetUser = useAddressLabel(feed.address_to)
     const owner = useFeedOwner()
     const isFromOwner = isSameAddress(owner.address, action.address_from)
 
@@ -30,8 +35,22 @@ export const UnknownCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                Unknown feed. Tag: {feed.tag}, Type: {feed.type}, {feed.actions.length} actions
+                <Translate.carry_out_activity
+                    values={{
+                        user,
+                        target: targetUser,
+                        platform: feed.platform!,
+                    }}
+                    components={{
+                        bold: <Label />,
+                    }}
+                />
             </Typography>
+            {process.env.NODE_ENV === 'development' ? (
+                <Typography color={theme.palette.maskColor.danger}>
+                    Unknown feed. Tag: {feed.tag}, Type: {feed.type}, {feed.actions.length} actions
+                </Typography>
+            ) : null}
         </CardFrame>
     )
 }
