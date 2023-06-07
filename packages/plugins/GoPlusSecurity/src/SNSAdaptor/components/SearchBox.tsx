@@ -11,7 +11,7 @@ import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
     option: {
-        background: theme.palette.maskColor.input,
+        // background: theme.palette.maskColor.input,
     },
     selectedButton: {
         padding: theme.spacing(1.5),

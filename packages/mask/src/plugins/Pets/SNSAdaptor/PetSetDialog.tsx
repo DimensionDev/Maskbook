@@ -17,6 +17,7 @@ import {
     MenuItem,
     Snackbar,
     Typography,
+    inputBaseClasses,
     useTheme,
 } from '@mui/material'
 import { Web3Storage } from '@masknet/web3-providers'
@@ -45,6 +46,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         margin: theme.spacing(2, 0, 0),
+        [`&.${inputBaseClasses.focused}`]: {
+            backgroundColor: theme.palette.maskColor.bottom,
+        },
     },
     inputOption: {
         margin: theme.spacing(4, 0, 0),
@@ -84,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     boxPaper: {
-        backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
+        backgroundColor: theme.palette.maskColor.bottom,
         marginBottom: 10,
         boxShadow: theme.palette.mode === 'dark' ? '0 0 5px #FFFFFF' : '0 0 5px #CCCCCC',
     },

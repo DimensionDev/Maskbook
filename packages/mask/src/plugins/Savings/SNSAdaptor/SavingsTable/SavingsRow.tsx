@@ -15,7 +15,7 @@ import { useApr, useBalance } from '../hooks/index.js'
 const useStyles = makeStyles()((theme, props) => ({
     tableRow: {
         display: 'flex',
-        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
+        background: theme.palette.maskColor.bg,
         borderRadius: theme.spacing(1),
         marginBottom: theme.spacing(1),
 
