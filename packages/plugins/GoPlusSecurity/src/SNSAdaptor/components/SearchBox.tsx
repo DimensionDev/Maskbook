@@ -10,8 +10,7 @@ import { useI18N } from '../../locales/index.js'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
-    option: {
-    },
+    option: {},
     selectedButton: {
         padding: theme.spacing(1.5),
         width: '100%',
