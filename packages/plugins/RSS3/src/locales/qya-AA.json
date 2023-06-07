@@ -41,6 +41,7 @@
     "collectible_trade$no_platform": "crwdns19415:0{{user}}crwdnd19415:0{{collectible}}crwdnd19415:0{{recipient}}crwdnd19415:0{{cost_value}}crwdnd19415:0{{cost_symbol}}crwdne19415:0",
     "collectible_trade$platform": "crwdns19417:0{{user}}crwdnd19417:0{{collectible}}crwdnd19417:0{{recipient}}crwdnd19417:0{{cost_value}}crwdnd19417:0{{cost_symbol}}crwdnd19417:0{{platform}}crwdne19417:0",
     "collectible_burn": "crwdns18965:0{{user}}crwdnd18965:0{{collectible}}crwdne18965:0",
+    "carry_out_activity": "crwdns20271:0{{user}}crwdnd20271:0{{target}}crwdnd20271:0{{platform}}crwdne20271:0",
     "donation_donate": "crwdns18967:0{{user}}crwdnd18967:0{{cost_value}}crwdnd18967:0{{cost_symbol}}crwdne18967:0",
     "donation_donate_verbose": "crwdns18969:0{{user}}crwdnd18969:0{{cost_value}}crwdnd18969:0{{cost_symbol}}crwdnd18969:0{{project}}crwdne18969:0",
     "note$post": "crwdns19027:0{{user}}crwdnd19027:0{{platform}}crwdne19027:0",
