@@ -256,7 +256,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (!account) return tr('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return t.enter_shares()
         if (isGreaterThan(shares || '0', 255)) return t.max_shares()
-        if (isGreaterThan(minTotalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
+        if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
+            return t.insufficient_token_balance({ symbol: token?.symbol })
         if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address))) {
             return isRandom ? t.enter_total_amount() : t.enter_each_amount()
         }
@@ -284,14 +285,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
-        if (isGreaterThan(totalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
         if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
         if (new BigNumber(transactionValue).isLessThanOrEqualTo(0)) return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, totalAmount, balance, token?.symbol, transactionValue])
+    }, [isAvailableBalance, balance, token?.symbol, transactionValue])
 
     if (!token) return null
 
