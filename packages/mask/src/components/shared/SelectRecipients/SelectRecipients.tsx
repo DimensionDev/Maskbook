@@ -8,6 +8,7 @@ import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { usePersonasFromNextID } from '@masknet/shared'
+import { useContacts } from './useContacts.js'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -43,15 +44,15 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
-    const value = resolveValueToSearch(valueToSearch)
+    const _value = resolveValueToSearch(valueToSearch)
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
-        value,
+        _value,
         type ?? NextIDPlatform.NextID,
         MaskMessages.events.ownProofChanged,
         false,
     )
 
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, _value, type)
     const myUserId = currentIdentity?.identifier.userId
     const searchedList = useMemo(() => {
         if (!items.recipients) return EMPTY_LIST
@@ -60,6 +61,8 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         // Next.ID, which are not stored locally
         return uniqBy(profileItems.concat(NextIDItems, selected), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
     }, [NextIDItems, selected, items.recipients, myUserId])
+
+    const { value = [] } = useContacts(currentIdentity?.identifier.network!)
 
     useEffect(() => {
         if (!open) return
@@ -71,7 +74,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             loading={searchLoading}
             onSearch={setValueToSearch}
             open={open}
-            items={searchedList}
+            items={uniqBy([...searchedList, ...value], (x) => x.linkedPersona?.publicKeyAsHex)}
             selected={selected}
             disabled={false}
             submitDisabled={false}
