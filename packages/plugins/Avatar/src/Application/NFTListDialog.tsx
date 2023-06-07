@@ -86,7 +86,6 @@ export const NFTListDialog: FC = () => {
     const [disabled, setDisabled] = useState(false)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSNSAdaptorContext()
-    const [selectedAccount, setSelectedAccount] = useState(targetAccount)
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => {
@@ -100,7 +99,6 @@ export const NFTListDialog: FC = () => {
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
         setAccount(address)
         setTargetAccount(address)
-        setSelectedAccount(address)
         setSelectedPluginId(pluginID)
         setChainId(chainId as ChainId)
         setSelectedToken(undefined)
@@ -173,10 +171,6 @@ export const NFTListDialog: FC = () => {
         setSelectedPluginId(pluginID)
     }, [pluginID])
 
-    useEffect(() => {
-        setChainId(chainId as ChainId)
-    }, [chainId])
-
     const walletItems = proofs.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
@@ -189,10 +183,10 @@ export const NFTListDialog: FC = () => {
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <UserAssetsProvider pluginID={selectedPluginId} address={selectedAccount || account}>
+                    <UserAssetsProvider pluginID={selectedPluginId} address={targetAccount}>
                         <CollectionList
                             height={479}
-                            account={selectedAccount || account}
+                            account={targetAccount}
                             pluginID={selectedPluginId}
                             gridProps={gridProps}
                             disableWindowScroll
@@ -262,11 +256,11 @@ export const NFTListDialog: FC = () => {
                     }
                     verifiedWallets={walletItems}
                     onChange={onChangeWallet}
-                    expectedAddress={selectedAccount}>
+                    expectedAddress={targetAccount}>
                     <ChainBoundary
                         expectedChainId={chainId}
                         predicate={supportPluginIds.includes(selectedPluginId) ? () => true : undefined}
-                        expectedAccount={selectedAccount}
+                        expectedAccount={targetAccount}
                         expectedPluginID={
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
