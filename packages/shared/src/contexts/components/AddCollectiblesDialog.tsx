@@ -5,16 +5,18 @@ import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useWeb3Connection, useWeb3Hub, useWeb3Others } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { AddressType, type ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useMemo, type FC, type FormEvent, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { InjectedDialog } from './InjectedDialog.js'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, isNaN, uniq } from 'lodash-es'
+import { memo, useCallback, useMemo, useState, type FC, type FormEvent } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../UI/components/AssetsManagement/CollectibleItem.js'
+import { InjectedDialog } from './InjectedDialog.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -98,6 +100,21 @@ export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkP
     ): void
 }
 
+function isValidTokenIds(rawIds: string) {
+    const containsInvalidId = rawIds.split(',').some((v) => {
+        const trimmed = v.trim()
+        if (!trimmed) return false
+        const id = Number.parseInt(trimmed, 10)
+        return isNaN(id) || id <= 0
+    })
+    return !containsInvalidId
+}
+
+async function isContract(address: string, chainId: ChainId) {
+    const addressType = await Web3.getAddressType(address, { chainId })
+    return addressType === AddressType.Contract
+}
+
 export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(function AddCollectiblesDialog({
     open,
     pluginID,
@@ -114,21 +131,14 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
             address: z
                 .string()
                 .min(1, t.collectible_contract_require())
-                .refine((address) => Others.isValidAddress(address), t.collectible_contract_invalid()),
+                .refine(Others.isValidAddress, t.collectible_contract_invalid())
+                .refine((addr) => isContract(addr, chainId as ChainId), t.collectible_contract_invalid()),
             tokenIds: z
                 .string()
                 .min(1, t.collectible_token_id_require())
-                .refine((tokenIds) => {
-                    const containsInvalidId = tokenIds.split(',').some((v) => {
-                        const trimmed = v.trim()
-                        if (!trimmed) return false
-                        const id = Number.parseInt(trimmed, 10)
-                        return isNaN(id) || id <= 0
-                    })
-                    return !containsInvalidId
-                }, t.collectible_token_id_invalid()),
+                .refine(isValidTokenIds, t.collectible_token_id_invalid()),
         })
-    }, [t, Others.isValidAddress])
+    }, [t, Others.isValidAddress, chainId])
     type FormInputs = z.infer<typeof schema>
 
     const {
@@ -136,7 +146,7 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
         watch,
         handleSubmit,
         resetField,
-        formState: { errors, isValid },
+        formState: { errors, isValid, isValidating },
     } = useForm<FormInputs>({
         mode: 'onBlur',
         resolver: zodResolver(schema),
@@ -196,6 +206,8 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
         if (!contract) return
         onSubmit?.([contract, selectedTokenIds])
     }, [contract, selectedTokenIds, onSubmit])
+
+    const disabled = !selectedTokenIds.length || isLoadingContract || isValidating
 
     return (
         <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={onClose} title={t.add_collectibles()}>
@@ -290,7 +302,7 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
                         <Button
                             fullWidth
                             startIcon={<Icons.ConnectWallet size={18} />}
-                            disabled={!selectedTokenIds.length || isLoadingContract}
+                            disabled={disabled}
                             onClick={handleAdd}>
                             {t.add_collectibles()}
                         </Button>

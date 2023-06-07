@@ -80,10 +80,12 @@ export const NFTListDialog: FC = () => {
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId, setAccount } = useChainContext()
+    const [assetChainId, setAssetChainId] = useState<ChainId | undefined>()
     const wallets = useWallets(pluginID)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
     const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
+    const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSNSAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
@@ -132,40 +134,44 @@ export const NFTListDialog: FC = () => {
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
     const addCollectibles = useAddCollectibles()
+    // Pass to Add Collectibles dialog
+    const fromChainId = assetChainId || chainId
     const handleAddCollectibles = useCallback(async () => {
         const result = await addCollectibles({
             pluginID,
-            chainId,
+            chainId: fromChainId,
         })
-        if (!result || !chainId) return
+        if (!result || !fromChainId) return
         const [contract, tokenIds] = result
         const address = contract.address
+        setPendingTokenCount((count) => count + tokenIds.length)
         const results = await Promise.allSettled(
             tokenIds.map(async (tokenId) => {
                 const [asset, token, isOwner] = await Promise.all([
                     Hub.getNonFungibleAsset(address, tokenId, {
-                        chainId,
+                        chainId: fromChainId,
                         account,
                     }),
                     Web3.getNonFungibleToken(address, tokenId, undefined, {
-                        chainId,
+                        chainId: fromChainId,
                     }),
                     Web3.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
-                        chainId,
+                        chainId: fromChainId,
                     }),
                 ])
 
-                if (!asset?.contract?.chainId || !token.chainId || token.contract?.chainId !== chainId) return
+                if (!asset?.contract?.chainId || !token.chainId || token.contract?.chainId !== fromChainId) return
                 if (!isOwner) return
                 return { ...token, ...asset } as AllChainsNonFungibleToken
             }),
         )
+        setPendingTokenCount((count) => Math.max(count - tokenIds.length, 0))
         const tokens = compact(results.map((x) => (x.status === 'fulfilled' ? x.value : null)))
         if (!tokens.length) return
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [addCollectibles, pluginID, chainId, account])
+    }, [addCollectibles, pluginID, fromChainId, account])
 
     useEffect(() => {
         setSelectedPluginId(pluginID)
@@ -190,8 +196,11 @@ export const NFTListDialog: FC = () => {
                             pluginID={selectedPluginId}
                             gridProps={gridProps}
                             disableWindowScroll
-                            onItemClick={setSelectedToken}
                             selectedAsset={selectedToken}
+                            additionalAssets={tokens}
+                            pendingAdditionalAssetCount={pendingTokenCount}
+                            onItemClick={setSelectedToken}
+                            onChainChange={setAssetChainId as (chainId?: Web3Helper.ChainIdAll) => void}
                         />
                     </UserAssetsProvider>
                 ) : (
