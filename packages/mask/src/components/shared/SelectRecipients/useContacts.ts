@@ -7,16 +7,16 @@ import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
 
 export function useContacts(network: string): AsyncStateRetry<ProfileInformation[]> {
-    const cache = useRef<Map<number, Relation | undefined>>(new Map([]))
+    const cache = useRef<Relation | undefined>()
     const currentPersona = useCurrentPersona()
 
     // If the network type be changed, clean cache
     useUpdateEffect(() => {
-        cache.current = new Map()
+        cache.current = undefined
     }, [network, currentPersona])
 
     return useAsyncRetry(async () => {
-        const lastValue = cache.current.get(0)
+        const lastValue = cache.current
 
         const values = await Services.Identity.queryRelationPaged(
             currentPersona?.identifier,
@@ -28,8 +28,7 @@ export function useContacts(network: string): AsyncStateRetry<ProfileInformation
             1000,
         )
 
-        // Cache the last record of  each page
-        cache.current.set(0, last(values))
+        cache.current = last(values)
 
         if (values.length === 0) return []
 
