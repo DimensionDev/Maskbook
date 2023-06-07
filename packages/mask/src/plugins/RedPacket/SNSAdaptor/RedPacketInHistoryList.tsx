@@ -145,7 +145,7 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
             },
             popper: {
                 overflow: 'visible',
-                backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
+                backgroundColor: theme.palette.maskColor.dark,
                 transform: 'translate(196px, 47px)',
                 borderRadius: 8,
                 width: 328,
@@ -159,12 +159,12 @@ const useStyles = makeStyles<{ isViewed: boolean; listItemBackground?: string; l
                 height: 0,
                 borderLeft: '6px solid transparent',
                 borderRight: '6px solid transparent',
-                borderBottom: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
+                borderBottom: `6px solid ${theme.palette.maskColor.dark}`,
                 transform: 'translateY(6px)',
             },
             popperText: {
                 cursor: 'default',
-                color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
+                color: theme.palette.common.white,
                 fontSize: 12,
             },
             disabledButton: {
