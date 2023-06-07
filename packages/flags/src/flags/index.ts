@@ -42,9 +42,6 @@ export const flags = {
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: false,
 
-    // how many users should use blockpi rpc
-    blockpi_grayscale: 5,
-
     /** The earliest version for the sentry to watch events and exceptions. */
     sentry_earliest_version: process.env.VERSION,
     sentry_sample_rate: 0.05,
