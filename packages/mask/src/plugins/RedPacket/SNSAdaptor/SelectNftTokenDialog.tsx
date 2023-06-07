@@ -11,7 +11,7 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
+import { RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
 
@@ -252,7 +252,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
     const isSelectSharesExceed =
-        (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
+        (tokenDetailedOwnerList.length === 0 ? RED_PACKET_MAX_SHARES - 1 : RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
     const { classes, cx } = useStyles({ isSelectSharesExceed })
     const [selectAll, setSelectAll] = useState(false)
@@ -355,7 +355,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         onClose()
     }, [tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
-    const maxSharesOptions = { amount: NFT_RED_PACKET_MAX_SHARES.toString() }
+    const maxSharesOptions = { amount: RED_PACKET_MAX_SHARES.toString() }
 
     return tokenDetailedOwnerList.length === 0 ? (
         <DialogContent className={classes.dialogContent}>
@@ -405,7 +405,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <ShadowRootTooltip
                         title={
                             <Typography className={classes.tooltipText}>
-                                {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
+                                {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES
                                     ? t.nft_max_shares_tip(maxSharesOptions)
                                     : t.nft_max_shares(maxSharesOptions)}
                             </Typography>
@@ -513,7 +513,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <ShadowRootTooltip
                         title={
                             <Typography className={classes.tooltipText}>
-                                {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
+                                {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES
                                     ? t.nft_max_shares_tip(maxSharesOptions)
                                     : t.nft_max_shares(maxSharesOptions)}
                             </Typography>

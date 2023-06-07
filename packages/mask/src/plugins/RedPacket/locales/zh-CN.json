@@ -32,7 +32,6 @@
     "refund": "退款",
     "empty": "空的",
     "refunding": "退款中",
-    "history_send": "发送",
     "history_total_amount": "总额: {{- amount}} {{symbol}}",
     "history_split_mode": "分享模式：{{mode}}",
     "attached_message": "附加信息",

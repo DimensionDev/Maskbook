@@ -33,6 +33,7 @@ import {
     SelectGasSettingsToolbar,
     useAvailableBalance,
     TokenValue,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
 import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
@@ -143,8 +144,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #endregion
 
     // #region packet settings
-    const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
-    const [message, setMessage] = useState(origin?.message || t.best_wishes())
+    const [isRandom, setRandom] = useState(!origin ? 1 : origin?.isRandom ? 1 : 0)
+    const [message, setMessage] = useState(origin?.message || '')
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -168,7 +169,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // amount
     const [rawAmount, setRawAmount] = useState(
-        origin?.isRandom
+        !origin
+            ? ''
+            : origin?.isRandom
             ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
@@ -187,7 +190,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [chainId, nativeTokenDetailed])
 
     useEffect(() => {
-        setRawAmount('0')
+        setRawAmount('')
     }, [token])
 
     const creatingParams = useMemo(
@@ -195,7 +198,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message: message || t.best_wishes(),
+            message,
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -222,7 +225,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message: message || t.best_wishes(),
+            message,
             shares: shares || 0,
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
@@ -253,7 +256,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (!account) return tr('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return t.enter_shares()
         if (isGreaterThan(shares || '0', 255)) return t.max_shares()
-        if (isGreaterThan(minTotalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
+        if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
+            return t.insufficient_token_balance({ symbol: token?.symbol })
         if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address))) {
             return isRandom ? t.enter_total_amount() : t.enter_each_amount()
         }
@@ -281,14 +285,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
-        if (isGreaterThan(totalAmount, balance)) return t.insufficient_token_balance({ symbol: token?.symbol })
         if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
         if (new BigNumber(transactionValue).isLessThanOrEqualTo(0)) return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, totalAmount, balance, token?.symbol, transactionValue])
+    }, [isAvailableBalance, balance, token?.symbol, transactionValue])
 
     if (!token) return null
 
@@ -398,7 +401,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     expectedChainId={chainId}
                     actualPluginID={pluginID}>
                     <EthereumERC20TokenApprovedBoundary
-                        onlyInfiniteUnlock
                         amount={totalAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}
                         ActionButtonProps={{
@@ -414,14 +416,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
-                            <ActionButton
-                                size="medium"
-                                className={classes.button}
-                                fullWidth
-                                disabled={!!validationMessage || !!gasValidationMessage}
-                                onClick={onClick}>
-                                {validationMessage || gasValidationMessage || t.next()}
-                            </ActionButton>
+                            <WalletConnectedBoundary expectedChainId={chainId}>
+                                <ActionButton
+                                    size="medium"
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={!!validationMessage || !!gasValidationMessage}
+                                    onClick={onClick}>
+                                    {validationMessage || gasValidationMessage || t.next()}
+                                </ActionButton>
+                            </WalletConnectedBoundary>
                         </ChainBoundary>
                     </EthereumERC20TokenApprovedBoundary>
                 </PluginWalletStatusBar>
