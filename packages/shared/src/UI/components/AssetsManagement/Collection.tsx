@@ -210,13 +210,11 @@ export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, cou
 
     // We render up to 4 skeletons unless it's expanded.
     const renderCount = expanded ? count : Math.min(4, count)
-    const renderAsFolder = renderCount > 2 && !expanded
+    const asFolder = renderCount > 2 && !expanded
 
-    const skeletons = range(renderCount).map((i) => (
-        <CollectibleItemSkeleton omitInfo={renderAsFolder} key={`${id}.${i}`} />
-    ))
+    const skeletons = range(renderCount).map((i) => <CollectibleItemSkeleton omitInfo={asFolder} key={`${id}.${i}`} />)
 
-    if (renderAsFolder)
+    if (asFolder)
         return (
             <div className={cx(className, classes.folder)} ref={containerRef} {...rest}>
                 <div className={classes.grid}>{skeletons}</div>

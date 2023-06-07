@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         backgroundColor: theme.palette.maskColor.bottom,
         position: 'absolute',
+        zIndex: 3,
         left: 0,
         bottom: 0,
         width: '100%',
@@ -65,6 +66,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const gridProps = {
+    columns: 'repeat(auto-fill, minmax(20%, 1fr))',
+}
 export const NFTListDialog: FC = () => {
     const t = useI18N()
     const sharedI18N = useSharedI18N()
@@ -180,10 +184,6 @@ export const NFTListDialog: FC = () => {
     useUpdateEffect(() => {
         setTargetAccount(account)
     }, [account])
-
-    const gridProps = {
-        columns: 'repeat(auto-fill, minmax(20%, 1fr))',
-    }
 
     return (
         <>
