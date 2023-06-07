@@ -137,13 +137,6 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
     const hub = useWeb3Hub(pluginID)
     const connection = useWeb3Connection(pluginID)
 
-    const assetsQueries = useQueries({
-        queries: tokenIds.map((tokenId) => ({
-            enabled: isValid,
-            queryKey: ['nft-asset', pluginID, chainId, address, tokenId, isValid],
-            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
-        })),
-    })
     const {
         data: contract,
         isLoading: isLoadingContract,
@@ -151,7 +144,14 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
         refetch,
     } = useQuery({
         queryKey: ['nft-contract', pluginID, chainId, address],
-        queryFn: () => connection.getNonFungibleTokenContract(address),
+        queryFn: () => connection.getNonFungibleTokenContract(address, undefined, { chainId }),
+    })
+    const assetsQueries = useQueries({
+        queries: tokenIds.map((tokenId) => ({
+            enabled: isValid,
+            queryKey: ['nft-asset', pluginID, chainId, address, tokenId, isValid],
+            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
+        })),
     })
     const noResults = assetsQueries.every((x) => !x.isLoading && !x.data)
     const someNotMine = assetsQueries.some((x) => (x.data ? !isSameAddress(x.data.owner?.address, account) : false))

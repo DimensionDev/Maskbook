@@ -84,7 +84,7 @@ export interface AlchemyResponse_EVM_Metadata {
     id: {
         tokenId: string
         tokenMetadata: {
-            tokenType: 'ERC721' | 'ERC1155'
+            tokenType: 'ERC721' | 'ERC1155' | 'NOT_A_CONTRACT'
         }
     }
     title: string
@@ -119,6 +119,11 @@ export interface AlchemyResponse_EVM_Metadata {
         }>
     }
     timeLastUpdated: string
+    /**
+     * e.g. "Contract does not have any code"
+     * and id.tokenMetadata.tokenType will be NOT_A_CONTRACT
+     */
+    error?: string
 }
 
 export interface AlchemyResponse_EVM_Contact_Metadata {
