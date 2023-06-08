@@ -8,7 +8,7 @@ import {
     usePluginI18NField,
     useCompositionContext,
 } from '@masknet/plugin-infra/content-script'
-import { DialogContent } from '@mui/material'
+import { DialogContent, alpha } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { GrantPermissions, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
@@ -22,7 +22,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     clickRoot: {
         background: theme.palette.maskColor.bottom,
-        boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
+        boxShadow: `0px 0px 20px 0px ${alpha(theme.palette.maskColor.main, 0.05)}`,
+        marginBottom: 0,
     },
 }))
 
