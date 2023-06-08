@@ -19,10 +19,6 @@ export function useContacts(network: string): AsyncStateRetry<ProfileInformation
         if (values.length === 0) return EMPTY_LIST
 
         const identifiers = values.map((x) => x.profile)
-        const [, profiles] = await Promise.all([
-            Services.Identity.queryAvatarsDataURL(identifiers),
-            Services.Identity.queryProfilesInformation(identifiers),
-        ])
-        return profiles
+        return Services.Identity.queryProfilesInformation(identifiers)
     }, [network, currentPersona])
 }
