@@ -18,6 +18,7 @@ const useStyles = makeStyles()({
         height: 280,
         width: '100%',
         justifyContent: 'center',
+        rowGap: 12,
     },
 })
 
