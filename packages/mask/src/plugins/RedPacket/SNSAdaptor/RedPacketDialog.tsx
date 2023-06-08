@@ -77,7 +77,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
@@ -233,6 +233,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     chains={chainIdList}
                                     hideArrowButton={currentTab === tabs.collectibles}
                                     pluginID={NetworkPluginID.PLUGIN_EVM}
+                                    onChange={(chainId: ChainId) => setChainId(chainId)}
                                 />
                             </div>
                         ) : null
