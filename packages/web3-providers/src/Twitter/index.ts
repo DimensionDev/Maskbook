@@ -3,8 +3,8 @@ import { timeout } from '@masknet/kit'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
-    getTokens,
-    getUserViaWebAPI,
+    getHeaders,
+    getUserViaWebTimesAPI,
     getDefaultUserSettings,
     getUserSettings,
     getUserViaTwitterIdentity,
@@ -55,8 +55,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const result = await attemptUntil<TwitterBaseAPI.NFT | undefined>(
             [
                 async () => {
-                    const { bearerToken, queryToken, csrfToken } = await getTokens()
-                    const response = await getUserNFTContainer(screenName, queryToken, bearerToken, csrfToken)
+                    const response = await getUserNFTContainer(screenName)
                     const result = response?.data.user?.result
                     if (!result?.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
 
@@ -82,14 +81,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
-        const { bearerToken, csrfToken } = await getTokens()
-        const headers = {
-            authorization: `Bearer ${bearerToken}`,
-            'x-csrf-token': csrfToken,
-            'x-twitter-auth-type': 'OAuth2Session',
-            'x-twitter-active-user': 'yes',
+        const headers = await getHeaders({
             referer: `https://twitter.com/${screenName}`,
-        }
+        })
 
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
@@ -123,21 +117,10 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             headers,
         })
     }
-    async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
-        const { bearerToken, queryToken, csrfToken } = await getTokens()
-        const headers = {
-            authorization: `Bearer ${bearerToken}`,
-            'x-csrf-token': csrfToken,
-            'content-type': 'application/json',
-            'x-twitter-auth-type': 'OAuth2Session',
-            'x-twitter-active-user': 'yes',
-            referer: `https://twitter.com/${screenName}`,
-        }
-        const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
-        if (!bearerToken || !queryToken || !csrfToken) return
 
+    async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
         const response = await fetch(
-            urlcat(updateProfileImageURL, {
+            urlcat('https://twitter.com/i/api/1.1/account/update_profile_image.json', {
                 media_id: media_id_str,
                 skip_status: 1,
                 return_user: true,
@@ -145,11 +128,14 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             {
                 method: 'POST',
                 credentials: 'include',
-                headers,
+                headers: await getHeaders({
+                    referer: `https://twitter.com/${screenName}`,
+                }),
             },
         )
 
         const updateInfo = await response.json()
+
         return {
             imageUrl: updateInfo.profile_image_url_https,
             mediaId: updateInfo.id_str,
@@ -157,10 +143,11 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             userId: updateInfo.screen_name,
         }
     }
+
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
-        if (checkNFTAvatar) return getUserViaWebAPI(screenName)
+        if (checkNFTAvatar) return getUserViaWebTimesAPI(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
-            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebAPI(screenName)],
+            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebTimesAPI(screenName)],
             null,
         )
     }
