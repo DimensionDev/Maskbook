@@ -1,25 +1,32 @@
 /* spell-checker: disable */
-import { Configuration, ProvidePlugin, DefinePlugin, EnvironmentPlugin } from 'webpack'
+import webpack from 'webpack'
+const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 import WebExtensionPlugin from 'webpack-target-webextension'
 import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
-import CopyPlugin = require('copy-webpack-plugin')
-import HTMLPlugin = require('html-webpack-plugin')
-import ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin'
-import { emitManifestFile } from './manifest'
-import { emitGitInfo, getGitInfo } from './git-info'
+import CopyPlugin from 'copy-webpack-plugin'
+import HTMLPlugin from 'html-webpack-plugin'
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin.js'
+import { emitManifestFile } from './manifest.js'
+import { emitGitInfo, getGitInfo } from './git-info.js'
 
-import { join } from 'path'
-import { readFileSync, readdirSync } from 'fs'
-import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
-import { BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags'
+import { dirname, join } from 'node:path'
+import { readFileSync, readdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { readFile } from 'node:fs/promises'
+import { createRequire } from 'node:module'
 
-import './clean-hmr'
+import { nonNullable, type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
+import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
 
-export function createConfiguration(_inputFlags: BuildFlags): Configuration {
-    const VERSION = require('../src/manifest.json').version
+import './clean-hmr.js'
+
+const __dirname = fileURLToPath(dirname(import.meta.url))
+const require = createRequire(import.meta.url)
+export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
+    const VERSION = JSON.parse(await readFile(new URL('../src/manifest.json', import.meta.url), 'utf-8')).version
     const flags = normalizeBuildFlags(_inputFlags)
     const computedFlags = computedBuildFlags(flags)
     const cacheKey = computeCacheKey(flags, computedFlags)
@@ -28,7 +35,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
 
     const patchesDir = join(__dirname, '../../../patches')
     const pnpmPatches = readdirSync(patchesDir).map((x) => join(patchesDir, x))
-    const baseConfig: Configuration = {
+    const baseConfig: webpack.Configuration = {
         name: 'mask',
         // to set a correct base path for source map
         context: join(__dirname, '../../../'),
@@ -41,7 +48,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             type: 'filesystem',
             readonly: flags.readonlyCache,
             buildDependencies: {
-                config: [__filename],
+                config: [fileURLToPath(import.meta.url)],
                 patches: pnpmPatches,
             },
             version: cacheKey,
@@ -53,7 +60,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             },
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
-                const alias = {
+                const alias: Record<string, string> = {
                     // We want to always use the full version.
                     'async-call-rpc$': require.resolve('async-call-rpc/full'),
                     // It's a Node impl for xhr which is unnecessary
@@ -236,7 +243,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                     // split each npm package into a chunk.
                     defaultVendors: {
                         test: /[/\\]node_modules[/\\]/,
-                        name(module) {
+                        name(module: any) {
                             const path = (module.context as string)
                                 .replace(/\\/g, '/')
                                 .match(/node_modules\/\.pnpm\/(.+)/)![1]
