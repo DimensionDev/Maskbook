@@ -27,8 +27,8 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     options?: ConnectionOptions<T>,
 ) {
     const { chainId } = useChainContext(options)
-    const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID)
-    const maskTokenAddress = useMaskTokenAddress()
+    const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID, options)
+    const maskTokenAddress = useMaskTokenAddress(pluginID, options)
     const { value: maskBalance = '0' } = useFungibleTokenBalance(undefined, maskTokenAddress)
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, address ?? '', {
