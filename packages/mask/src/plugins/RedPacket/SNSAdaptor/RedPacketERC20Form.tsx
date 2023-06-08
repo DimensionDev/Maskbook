@@ -261,7 +261,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isGreaterThan(shares || '0', 255)) return t.max_shares()
         if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
             return t.insufficient_token_balance({ symbol: token?.symbol })
-        if (isZero(amount) || ((!gasOption?.gas || loadingTransactionValue) && isNativeTokenAddress(token?.address))) {
+        if (isZero(amount) || (loadingTransactionValue && isNativeTokenAddress(token?.address))) {
             return isRandom ? t.enter_total_amount() : t.enter_each_amount()
         }
 
@@ -271,20 +271,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [
-        isRandom,
-        account,
-        amount,
-        totalAmount,
-        shares,
-        token,
-        balance,
-        t,
-        tr,
-        loadingTransactionValue,
-        gasOption?.gas,
-        minTotalAmount,
-    ])
+    }, [isRandom, account, amount, totalAmount, shares, token, balance, t, tr, loadingTransactionValue, minTotalAmount])
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
