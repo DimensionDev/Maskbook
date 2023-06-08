@@ -150,7 +150,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@nice-labs/emit-file-webpack-plugin": "^1.1.3",
+    "@nice-labs/emit-file-webpack-plugin": "^1.1.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@types/color": "^3.0.3",
     "@types/react-devtools-inline": "^4.24.3",

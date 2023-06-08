@@ -269,7 +269,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@5.1.0-dev.20230418)
+        version: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@4.9.5)
       typescript:
         specifier: 5.1.0-dev.20230418
         version: 5.1.0-dev.20230418
@@ -1152,8 +1152,8 @@ importers:
         version: 3.21.4
     devDependencies:
       '@nice-labs/emit-file-webpack-plugin':
-        specifier: ^1.1.3
-        version: 1.1.3(webpack@5.85.0)
+        specifier: ^1.1.4
+        version: 1.1.4(webpack@5.85.0)
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.10
         version: 0.5.10(react-refresh@0.14.0)(webpack-dev-server@4.13.3)(webpack@5.85.0)
@@ -9034,8 +9034,8 @@ packages:
     dev: false
     optional: true
 
-  /@nice-labs/emit-file-webpack-plugin@1.1.3(webpack@5.85.0):
-    resolution: {integrity: sha512-xWOcKi+ZOir2DSbUSVtakkBdP4bhQWFVvC7M+6nu52PdCHA1ljj/7xEoMciuy86kINosNS41Xam30fSAVe9YoQ==}
+  /@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@5.85.0):
+    resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
       webpack: '>= 5'
@@ -20775,7 +20775,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@5.1.0-dev.20230418)
+      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@4.9.5)
       tsort: 0.0.1
       typescript: 5.1.0-dev.20230418
       undici: 5.20.0
@@ -22681,7 +22681,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@5.1.0-dev.20230418)
+      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@4.9.5)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -26576,7 +26576,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.22
-      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@5.1.0-dev.20230418)
+      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@4.9.5)
       yaml: 1.10.2
     dev: false
 
@@ -26594,7 +26594,7 @@ packages:
     dependencies:
       lilconfig: 2.0.6
       postcss: 8.4.22
-      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@5.1.0-dev.20230418)
+      ts-node: 10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@4.9.5)
       yaml: 2.1.3
     dev: false
 
@@ -30837,7 +30837,6 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.59)(@types/node@18.15.11)(typescript@5.1.0-dev.20230418):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -31111,7 +31110,6 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /typescript@5.1.0-dev.20230418:
     resolution: {integrity: sha512-BfA/KV0xddF8ZCAQZxZ0FoS8p+nWKXVaa5fctXW6WNGfcYF04cXlLB6F6uf3uCVbd0iad4YdHchz3KR0722QLg==}
@@ -33366,7 +33364,7 @@ time:
   /@mui/lab@5.0.0-alpha.102: '2022-10-03T16:22:19.340Z'
   /@mui/material@5.10.8: '2022-10-03T16:22:57.228Z'
   /@mui/system@5.10.8: '2022-10-03T16:21:59.688Z'
-  /@nice-labs/emit-file-webpack-plugin@1.1.3: '2022-07-20T13:31:37.048Z'
+  /@nice-labs/emit-file-webpack-plugin@1.1.4: '2023-06-08T14:34:13.568Z'
   /@nice-labs/git-rev@3.5.1: '2022-09-17T04:11:47.528Z'
   /@pmmmwh/react-refresh-webpack-plugin@0.5.10: '2022-11-24T13:38:27.856Z'
   /@react-hookz/web@23.0.0: '2023-03-23T11:33:35.599Z'

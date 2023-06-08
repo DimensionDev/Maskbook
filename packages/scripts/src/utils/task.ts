@@ -1,6 +1,7 @@
 import { series, type TaskFunction } from 'gulp'
 import { shell } from './run.js'
 import { awaitChildProcess } from './awaitChildProcess.js'
+import { cleanupWhenExit } from './exit.js'
 
 export function task(f: TaskFunction, name: string, description: string, flags?: TaskFunction['flags']): TaskFunction {
     f.displayName = name
@@ -27,6 +28,7 @@ export function fromNPMTask(baseDir: URL, name: string, description: string, fla
         return awaitChildProcess(shell.cwd(baseDir)`pnpm run build`)
     }
     async function watch() {
+        cleanupWhenExit()
         shell.cwd(baseDir)`pnpm run start`
     }
     watchTask(build, watch, name, description, flags)
