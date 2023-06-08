@@ -84,22 +84,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID> {
-    open: boolean
-    pluginID?: T
-    chainId?: Web3Helper.Definition[T]['ChainId']
-    onClose?(): void
-    onSubmit?(
-        result: [
-            contract: NonFungibleTokenContract<
-                Web3Helper.Definition[T]['ChainId'],
-                Web3Helper.Definition[T]['SchemaType']
-            >,
-            tokenIds: string[],
-        ],
-    ): void
-}
-
 function isValidTokenIds(rawIds: string) {
     const containsInvalidId = rawIds.split(',').some((v) => {
         const trimmed = v.trim()
@@ -115,15 +99,38 @@ async function isContract(address: string, chainId: ChainId) {
     return addressType === AddressType.Contract
 }
 
+export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+    open: boolean
+    pluginID?: T
+    chainId?: Web3Helper.Definition[T]['ChainId']
+    /**
+     * Specified account.
+     * For example, in PFP, we can add collectibles from verified wallets if no wallet connected.
+     */
+    account?: string
+    onClose?(): void
+    onSubmit?(
+        result: [
+            contract: NonFungibleTokenContract<
+                Web3Helper.Definition[T]['ChainId'],
+                Web3Helper.Definition[T]['SchemaType']
+            >,
+            tokenIds: string[],
+        ],
+    ): void
+}
+
 export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(function AddCollectiblesDialog({
     open,
     pluginID,
     chainId,
+    account: defaultAccount,
     onClose,
     onSubmit,
 }) {
     const t = useSharedI18N()
-    const account = useAccount()
+    const walletAccount = useAccount()
+    const account = defaultAccount || walletAccount
     const { classes } = useStyles()
     const Others = useWeb3Others(pluginID)
     const schema = useMemo(() => {

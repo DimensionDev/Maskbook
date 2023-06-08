@@ -138,6 +138,7 @@ export const NFTListDialog: FC = () => {
         const result = await addCollectibles({
             pluginID,
             chainId: assetChainId,
+            account: targetAccount,
         })
         if (!result || !assetChainId) return
         const [contract, tokenIds] = result
@@ -148,12 +149,12 @@ export const NFTListDialog: FC = () => {
                 const [asset, token, isOwner] = await Promise.all([
                     Hub.getNonFungibleAsset(address, tokenId, {
                         chainId: assetChainId,
-                        account,
+                        account: targetAccount,
                     }),
                     Web3.getNonFungibleToken(address, tokenId, undefined, {
                         chainId: assetChainId,
                     }),
-                    Web3.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
+                    Web3.getNonFungibleTokenOwnership(address, tokenId, targetAccount, undefined, {
                         chainId: assetChainId,
                     }),
                 ])
@@ -169,7 +170,7 @@ export const NFTListDialog: FC = () => {
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [addCollectibles, pluginID, assetChainId, account])
+    }, [addCollectibles, pluginID, assetChainId, targetAccount])
 
     useEffect(() => {
         setSelectedPluginId(pluginID)
