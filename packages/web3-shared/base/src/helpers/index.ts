@@ -17,6 +17,7 @@ export * from './isValidTimestamp.js'
 export * from './formatCount.js'
 export * from './number.js'
 export * from './resolver.js'
+export * from './squashPromise.js'
 export * from './token.js'
 export * from './types.js'
 

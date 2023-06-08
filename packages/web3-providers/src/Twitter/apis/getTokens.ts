@@ -1,4 +1,5 @@
 import { escapeRegExp } from 'lodash-es'
+import { squashPromise } from '@masknet/web3-shared-base'
 import { fetchText } from '../../entry-helpers.js'
 
 function getScriptURL(content: string, name: string) {
@@ -35,9 +36,7 @@ function getAPIScriptURL(content: string) {
     return `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
 }
 
-export async function getScripts() {
-    console.log('DEBUG: get scripts')
-
+async function getScripts() {
     const indexContent = await fetchContent('https://twitter.com')
     const swContent = await fetchContent('https://twitter.com/sw.js')
 
@@ -58,8 +57,10 @@ export async function getScripts() {
     }
 }
 
+const getScriptSquashed = squashPromise('GET_TWITTER_SCRIPTS', getScripts, 60_000)
+
 export async function getTokens(operationName?: string) {
-    const { mainContent, userNFT_Content, API_Content } = await getScripts()
+    const { mainContent, userNFT_Content, API_Content } = await getScriptSquashed()
     const bearerToken = getScriptContentMatched(mainContent ?? '', /"(\w{20,}%3D\w{20,})"/)
     const queryToken = getScriptContentMatched(userNFT_Content ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
