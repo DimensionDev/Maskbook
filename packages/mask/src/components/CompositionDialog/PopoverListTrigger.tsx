@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     selected: {
         lineHeight: '18px',
+        fontSize: 14,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
@@ -69,7 +70,7 @@ export function PopoverListTrigger({
                     setAnchorEl(anchorEl ? null : e.currentTarget)
                 }}>
                 <Typography className={classes.selected}>{selectedTitle}</Typography>
-                <Icons.RightArrow className={classes.selected} />
+                <Icons.RightArrow className={classes.selected} size={20} />
             </button>
             <Popover
                 container={ref}

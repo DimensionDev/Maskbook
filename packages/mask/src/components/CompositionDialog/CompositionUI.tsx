@@ -47,6 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     optionTitle: {
         lineHeight: '18px',
+        fontSize: 14,
         color: theme.palette.text.secondary,
         marginRight: 12,
     },
