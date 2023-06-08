@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { ProfileInformation } from '@masknet/shared-base'
+import { EMPTY_LIST, type ProfileInformation } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
@@ -16,7 +16,7 @@ export function useContacts(network: string): AsyncStateRetry<ProfileInformation
             },
             1000,
         )
-        if (values.length === 0) return []
+        if (values.length === 0) return EMPTY_LIST
 
         const identifiers = values.map((x) => x.profile)
         const [, profiles] = await Promise.all([
