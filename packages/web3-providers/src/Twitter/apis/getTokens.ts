@@ -35,11 +35,8 @@ function getAPIScriptURL(content: string) {
     return `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
 }
 
-export async function getTokens(operationName?: string) {
-    console.log('DEBUG: get tokens')
-    console.log({
-        operationName,
-    })
+export async function getScripts() {
+    console.log('DEBUG: get scripts')
 
     const indexContent = await fetchContent('https://twitter.com')
     const swContent = await fetchContent('https://twitter.com/sw.js')
@@ -50,15 +47,24 @@ export async function getTokens(operationName?: string) {
         fetchContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
         fetchContent(getAPIScriptURL(indexContent ?? '')),
     ])
-    const [mainContentPrimary, mainContentSecondary, nftContent, apiContent] = allSettled.map((x) =>
+    const [mainContentPrimary, mainContentSecondary, userNFT_Content, API_Content] = allSettled.map((x) =>
         x.status === 'fulfilled' ? x.value ?? '' : '',
     )
-    const mainContent = mainContentPrimary || mainContentSecondary
+
+    return {
+        mainContent: mainContentPrimary || mainContentSecondary,
+        userNFT_Content,
+        API_Content,
+    }
+}
+
+export async function getTokens(operationName?: string) {
+    const { mainContent, userNFT_Content, API_Content } = await getScripts()
     const bearerToken = getScriptContentMatched(mainContent ?? '', /"(\w{20,}%3D\w{20,})"/)
-    const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
+    const queryToken = getScriptContentMatched(userNFT_Content ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
-        ? getScriptContentMatched(apiContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
+        ? getScriptContentMatched(API_Content ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
         : undefined
 
     return {
@@ -66,5 +72,19 @@ export async function getTokens(operationName?: string) {
         queryToken,
         csrfToken,
         queryId,
+    }
+}
+
+export async function getHeaders(overrides?: Record<string, string>) {
+    const { bearerToken, csrfToken } = await getTokens()
+
+    return {
+        authorization: `Bearer ${bearerToken}`,
+        'x-csrf-token': csrfToken,
+        'content-type': 'application/json',
+        'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-active-user': 'yes',
+        referer: 'https://twitter.com/',
+        ...overrides,
     }
 }

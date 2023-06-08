@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
-import { getTokens } from './getTokens.js'
-import { getHeaders } from './getHeaders.js'
+import { getTokens, getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 

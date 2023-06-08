@@ -1,8 +1,7 @@
 import urlcat from 'urlcat'
 import { isNull } from 'lodash-es'
 import { attemptTimes } from '@masknet/web3-shared-base'
-import { getTokens } from './getTokens.js'
-import { getHeaders } from './getHeaders.js'
+import { getTokens, getHeaders } from './getTokens.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 import { fetchCached, staleCached } from '../../entry-helpers.js'
 
