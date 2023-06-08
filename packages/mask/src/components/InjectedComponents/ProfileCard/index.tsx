@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            background: theme.palette.maskColor.secondaryBottom,
+            background: theme.palette.maskColor.bg,
             backdropFilter: 'blur(px)',
             padding: theme.spacing(1.5),
             boxSizing: 'border-box',

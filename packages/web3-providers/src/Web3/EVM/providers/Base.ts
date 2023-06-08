@@ -104,7 +104,8 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
             // Unrecognized chain ID "xxx". Try adding the chain using wallet_addEthereumChain first.
             if (
                 typeof errorMessage === 'string' &&
-                errorMessage?.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN)
+                (errorMessage?.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN) ||
+                    errorMessage?.includes('addEthereumChain'))
             ) {
                 await this.request<void>({
                     method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
