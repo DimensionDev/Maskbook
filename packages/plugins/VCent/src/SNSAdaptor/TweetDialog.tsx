@@ -1,16 +1,17 @@
-import urlcat from 'urlcat'
-import { first } from 'lodash-es'
-import { useAsync } from 'react-use'
-import { alpha, Box, Button, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { PluginVCentRPC } from '../messages.js'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
+import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { ImageIcon } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { alpha, Box, Button, Typography } from '@mui/material'
+import { first } from 'lodash-es'
+import { memo } from 'react'
+import { useAsync } from 'react-use'
+import urlcat from 'urlcat'
 import { VALUABLES_VCENT_URL } from '../constants.js'
 import { useI18N } from '../locales/i18n_generated.js'
+import { PluginVCentRPC } from '../messages.js'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -36,6 +37,12 @@ const useStyle = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    fieldName: {
+        marginRight: theme.spacing(0.5),
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: theme.palette.maskColor.publicSecond,
+    },
     button: {
         backgroundColor: theme.palette.maskColor.publicMain,
         color: theme.palette.maskColor.white,
@@ -48,7 +55,7 @@ const useStyle = makeStyles()((theme) => ({
     },
 }))
 
-export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
+export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
     const { classes } = useStyle()
     const t = useI18N()
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
@@ -69,13 +76,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
                     </Typography>
                 </Box>
                 <Box className={classes.title}>
-                    <Typography
-                        sx={{ marginRight: 0.5 }}
-                        fontWeight="bold"
-                        fontSize={14}
-                        color={(t) => t.palette.maskColor.second}>
-                        {t.plugin_vcent_last_offer_at()}
-                    </Typography>
+                    <Typography className={classes.fieldName}>{t.plugin_vcent_last_offer_at()}</Typography>
                     <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
                         ${tweet.amount_usd}
                     </Typography>
@@ -90,4 +91,4 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
             </Button>
         </Box>
     )
-}
+})
