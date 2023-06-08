@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             alignItems: 'center',
             background: theme.palette.maskColor.bg,
-            backdropFilter: 'blur(px)',
+            backdropFilter: 'blur(5px)',
             padding: theme.spacing(1.5),
             boxSizing: 'border-box',
             fontWeight: 700,
