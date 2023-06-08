@@ -56,7 +56,7 @@ export function OffersList(props: OffersListProps) {
                 />
             </div>
         )
-    if (!_offers.length) return <EmptyStatus height={280}>{t.plugin_collectible_nft_offers_empty()}</EmptyStatus>
+    if (!_offers.length) return <EmptyStatus height={215}>{t.plugin_collectible_nft_offers_empty()}</EmptyStatus>
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
