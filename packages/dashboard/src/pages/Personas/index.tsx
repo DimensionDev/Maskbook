@@ -1,9 +1,9 @@
-import { Paper, Stack, Tab, Tabs } from '@mui/material'
-import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
-import { PageFrame } from '../../components/PageFrame/index.js'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { capitalize } from 'lodash-es'
 import { TabContext, TabPanel } from '@mui/lab'
+import { Paper, Stack, Tab, Tabs } from '@mui/material'
+import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
 import { PersonaSetup } from './components/PersonaSetup/index.js'
 import { PersonaDrawer } from './components/PersonaDrawer/index.js'
 import { PersonaContext } from './hooks/usePersonaContext.js'
@@ -14,7 +14,7 @@ import { PersonaContent } from './components/PersonaContent/index.js'
 import { PersonaRowCard } from './components/PersonaCard/Row.js'
 import { PersonaStateBar } from './components/PersonaStateBar/index.js'
 import { UserProvider } from '../Settings/hooks/UserContext.js'
-import { useNavigate } from 'react-router-dom'
+import { PageFrame } from '../../components/PageFrame/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tab: {
