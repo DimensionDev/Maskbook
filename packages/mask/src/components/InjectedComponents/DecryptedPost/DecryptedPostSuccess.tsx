@@ -1,11 +1,16 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { MaskMessages, useI18N } from '../../../utils/index.js'
+import { MaskMessages, attachNextIDToProfile, useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
-import { EMPTY_LIST, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    type ProfileIdentifier,
+    type ProfileInformation,
+    type ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
@@ -155,6 +160,9 @@ function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, re
             profiles={recipients.recipients || EMPTY_LIST}
             onClose={onClose}
             onSelect={async (profiles) => {
+                for (const item of profiles) {
+                    await attachNextIDToProfile(item as ProfileInformationFromNextID)
+                }
                 await Services.Crypto.appendShareTarget(
                     info.version.getCurrentValue()!,
                     iv,
