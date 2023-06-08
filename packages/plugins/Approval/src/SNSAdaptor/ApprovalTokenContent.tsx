@@ -124,7 +124,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             color: theme.palette.maskColor.secondaryDark,
         },
         button: {
-            width: 80,
+            minWidth: 80,
             height: 32,
             fontSize: 12,
             color: theme.palette.common.white,

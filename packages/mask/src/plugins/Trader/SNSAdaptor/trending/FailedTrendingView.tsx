@@ -27,9 +27,7 @@ export const FailedTrendingView: FC<Props> = ({ result, resultList, setResult, .
         <ThemeProvider theme={MaskLightTheme}>
             <TrendingCard {...rest}>
                 <div className={classes.content}>
-                    <EmptyStatus style={{ height: 'auto', flexGrow: 1, minHeight: 'unset' }}>
-                        {t('load_failed')}
-                    </EmptyStatus>
+                    <EmptyStatus style={{ height: 'auto', flexGrow: 1 }}>{t('load_failed')}</EmptyStatus>
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 </div>
             </TrendingCard>

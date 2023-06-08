@@ -273,7 +273,7 @@ export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(functi
                         ) : isError ? (
                             <ReloadStatus flexGrow={1} onRetry={refetch} />
                         ) : noResults || !isValid ? (
-                            <EmptyStatus>{t.no_results()}</EmptyStatus>
+                            <EmptyStatus height="100%">{t.no_results()}</EmptyStatus>
                         ) : (
                             <Box className={classes.grid}>
                                 {assetsQueries.map(({ data: asset, isLoading }, i) => {

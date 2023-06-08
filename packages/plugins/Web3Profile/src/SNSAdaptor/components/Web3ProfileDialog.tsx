@@ -163,7 +163,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                 {loadingBinding && !twitterProofs.length ? (
                     range(3).map((v) => <ProfileCardSkeleton className={classes.profileCard} key={v} />)
                 ) : isFetched && !twitterProofs.length ? (
-                    <EmptyStatus>{t.no_verified_account()}</EmptyStatus>
+                    <EmptyStatus height={360}>{t.no_verified_account()}</EmptyStatus>
                 ) : (
                     twitterProofs.map((proof) => {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar

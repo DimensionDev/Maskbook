@@ -49,7 +49,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
             </div>
         )
 
-    if (!_events.length) return <EmptyStatus height={280}>{t.plugin_collectible_nft_activity_empty()}</EmptyStatus>
+    if (!_events.length) return <EmptyStatus height={215}>{t.plugin_collectible_nft_activity_empty()}</EmptyStatus>
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
