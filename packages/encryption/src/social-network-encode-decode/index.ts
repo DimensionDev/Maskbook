@@ -8,12 +8,15 @@ export function socialNetworkDecoder(network: SocialNetworkEnum, content: string
             .map((x) => [x])
             .unwrapOr([])
     }
-    const newVersion = sharedDecoder(content)
-    if (newVersion.some) return [newVersion.val]
+    const possiblePayload = content.match(/(\u{1F3BC}[\w+/=|]+:\|\|)/giu) || []
 
-    const v38 = content.match(/(\u{1F3BC}[\w+/=|]+:\|\|)/giu)
-    if (v38) return v38
-    return []
+    const result: Array<string | Uint8Array> = []
+    for (const payload of possiblePayload) {
+        const decoded = sharedDecoder(payload)
+        if (decoded.some) result.push(decoded.val)
+        else result.push(payload)
+    }
+    return result
 }
 export function socialNetworkEncoder(network: SocialNetworkEnum, content: string | Uint8Array): string {
     // v38
