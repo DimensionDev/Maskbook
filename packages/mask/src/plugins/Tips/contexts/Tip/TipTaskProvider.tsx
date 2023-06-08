@@ -6,12 +6,11 @@ import {
     useCallback,
     useContext,
     useEffect,
-    useLayoutEffect,
     useMemo,
     useState,
 } from 'react'
 import { useSubscription } from 'use-subscription'
-import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
+import { useNonFungibleTokenContract, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
 import { isSameAddress, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
@@ -63,9 +62,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const [tipType, setTipType] = useState(TokenType.Fungible)
     const [amount, setAmount] = useState('')
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState('')
-    const { value: nativeTokenDetailed = null } = useFungibleToken(targetPluginID, undefined, undefined, {
-        chainId: targetChainId,
-    })
+    const { value: nativeTokenDetailed = null } = useNativeToken(targetPluginID, { chainId: targetChainId })
 
     const [tokenMap, setTokenMap] = useState<Record<string, TipContextOptions['token']>>({})
     const key = `${targetPluginID}:${targetChainId}`
@@ -78,11 +75,6 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         },
         [key],
     )
-    useLayoutEffect(() => {
-        if (nativeTokenDetailed) {
-            setToken(nativeTokenDetailed)
-        }
-    }, [nativeTokenDetailed, setToken])
     const token = tokenMap[key] ?? nativeTokenDetailed
 
     // #region balance
