@@ -103,3 +103,4 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         )
     },
 )
+FungibleTokenInput.displayName = 'FungibleTokenInput'

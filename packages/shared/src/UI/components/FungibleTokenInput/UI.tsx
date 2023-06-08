@@ -212,3 +212,4 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
         )
     },
 )
+FungibleTokenInputUI.displayName = 'FungibleTokenInputUI'
