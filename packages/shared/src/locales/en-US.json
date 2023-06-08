@@ -216,5 +216,15 @@
     "plugin_wallet_support_chains_tips": "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc.",
     "plugin_wallet_connect_fortmatic": "Connect Fortmatic",
     "plugin_wallet_choose_network": "Choose Network",
-    "plugin_wallet_select_provider_dialog_title": "Connect Wallet"
+    "plugin_wallet_select_provider_dialog_title": "Connect Wallet",
+    "plugin_wallet_view_on_explorer": "View on Explorer",
+    "plugin_wallet_disconnect": "Disconnect",
+    "plugin_wallet_dialog_title": "Wallet Account",
+    "recent_transaction_success": "Success",
+    "recent_transaction_failed": "Failed",
+    "wallet_status_pending_clear": "Clear",
+    "wallet_status_pending_one": "{{count}} Pending",
+    "wallet_status_pending_other": "{{count}} Pendings",
+    "wallet_status_pending_clear_all": "Clear All",
+    "plugin_wallet_on_connect": "Connect Wallet"
 }

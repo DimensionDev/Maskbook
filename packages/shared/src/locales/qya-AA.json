@@ -216,5 +216,14 @@
     "plugin_wallet_support_chains_tips": "crwdns20283:0crwdne20283:0",
     "plugin_wallet_connect_fortmatic": "crwdns20285:0crwdne20285:0",
     "plugin_wallet_choose_network": "crwdns20287:0crwdne20287:0",
-    "plugin_wallet_select_provider_dialog_title": "crwdns20289:0crwdne20289:0"
+    "plugin_wallet_select_provider_dialog_title": "crwdns20289:0crwdne20289:0",
+    "plugin_wallet_view_on_explorer": "crwdns4617:0crwdne4617:0",
+    "plugin_wallet_dialog_title": "crwdns17216:0crwdne17216:0",
+    "recent_transaction_success": "crwdns16390:0crwdne16390:0",
+    "recent_transaction_failed": "crwdns16392:0crwdne16392:0",
+    "wallet_status_pending_clear": "crwdns16400:0crwdne16400:0",
+    "wallet_status_pending_one": "crwdns18180:0{{count}}crwdne18180:0",
+    "wallet_status_pending_other": "crwdns18182:0{{count}}crwdne18182:0",
+    "wallet_status_pending_clear_all": "crwdns16398:0crwdne16398:0",
+    "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0"
 }

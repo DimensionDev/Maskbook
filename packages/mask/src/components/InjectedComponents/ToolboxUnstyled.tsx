@@ -26,7 +26,7 @@ import {
     useRecentTransactions,
     useMountReport,
 } from '@masknet/web3-hooks-base'
-import { WalletIcon, SelectProviderDialog } from '@masknet/shared'
+import { WalletIcon, SelectProviderDialog, WalletStatusDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { Icons } from '@masknet/icons'
@@ -177,12 +177,6 @@ function useToolbox() {
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
     // #endregion
 
-    // #region Wallet
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
-    // #endregion
-
     const { data: domain } = useReverseAddress(undefined, account)
 
     function renderButtonText() {
@@ -202,8 +196,8 @@ function useToolbox() {
     }
 
     const openWallet = useCallback(() => {
-        return account ? openWalletStatusDialog() : SelectProviderDialog.open()
-    }, [openWalletStatusDialog, account])
+        return account ? WalletStatusDialog.open() : SelectProviderDialog.open()
+    }, [account])
 
     const walletTitle = renderButtonText()
 

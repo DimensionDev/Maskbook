@@ -1,7 +1,6 @@
 import type { Services as ServiceType } from '../../mask/background/services/types.js'
 import type { ECKeyIdentifier, MaskEvents } from '@masknet/shared-base'
 import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { WalletMessages } from '@masknet/plugin-wallet'
 
 export let Services: ServiceType = null!
 export let Messages: WebExtensionMessage<MaskEvents> = null!
@@ -28,7 +27,6 @@ export interface PluginServices {
     }
 }
 export interface PluginMessages {
-    Wallet: Pick<(typeof WalletMessages)['events'], 'walletStatusDialogUpdated'>
     Transak: {
         buyTokenDialogUpdated: UnboundedRegistry<
             | {
