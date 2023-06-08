@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { EMPTY_LIST, type ProfileInformation as Profile, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { Fuse } from '@masknet/web3-providers'
@@ -9,6 +9,8 @@ import { compact, uniqBy } from 'lodash-es'
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
+import { useContacts } from '../SelectRecipients/useContacts.js'
+import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -71,15 +73,14 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     const { classes, cx } = useStyles(undefined, { props })
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
     const [search, setSearch] = useState('')
-
     const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(search))
     const keyword = registeredAddress || search
-
     const selectedPubkeyList = compact(selected.map((x) => x.linkedPersona?.publicKeyAsHex))
     const frozenPubkeyList = useMemo(
         () => compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex)),
         [frozenSelected],
     )
+    const { value = EMPTY_LIST } = useContacts(activatedSocialNetworkUI.networkIdentifier)
 
     const onSelectedAllChange = useCallback(
         (checked: boolean) => {
@@ -121,12 +122,14 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     }, [items])
 
     const results = useMemo(() => {
+        if (!keyword) return items
         return fuse
             .search(keyword)
             .map((item) => item.item)
             .filter((x) => !frozenPubkeyList.includes(x.linkedPersona?.publicKeyAsHex!))
-    }, [keyword, frozenPubkeyList, fuse])
-    const isEmpty = frozenSelected.length === 0 && results.length === 0 && items.length === 0
+    }, [keyword, frozenPubkeyList, fuse, items])
+
+    const profiles = uniqBy([...frozenSelected, ...items, ...results, ...value], (x) => x.identifier)
 
     return (
         <div className={classes.root}>
@@ -144,7 +147,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     )}
                     onKeyDown={(e) => {
                         if (e.code !== 'Enter') return
-                        startTransition(() => props.onSearch(search))
+                        startTransition(() => props.onSearch(keyword))
                     }}
                     startAdornment={
                         <InputAdornment position="start">
@@ -164,31 +167,29 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     <div className={classes.listParent}>
                         <div className={classes.listBody}>
                             <Box className={classes.list}>
-                                {isEmpty ? (
+                                {profiles.length === 0 ? (
                                     <EmptyStatus className={classes.empty}>
                                         {t('compose_encrypt_share_dialog_empty')}
                                     </EmptyStatus>
                                 ) : (
-                                    uniqBy([...frozenSelected, ...items, ...results], (x) => x.identifier).map(
-                                        (item) => {
-                                            const pubkey = item.linkedPersona?.publicKeyAsHex as string
-                                            const selected = selectedPubkeyList.includes(pubkey)
-                                            const disabled = frozenPubkeyList.includes(pubkey)
-                                            return (
-                                                <ProfileInList
-                                                    key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
-                                                    profile={item as ProfileInformationFromNextID}
-                                                    disabled={disabled}
-                                                    selected={selected || disabled}
-                                                    onChange={onSelectedProfile}
-                                                />
-                                            )
-                                        },
-                                    )
+                                    profiles.map((item) => {
+                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                        const selected = selectedPubkeyList.includes(pubkey)
+                                        const disabled = frozenPubkeyList.includes(pubkey)
+                                        return (
+                                            <ProfileInList
+                                                key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
+                                                profile={item as ProfileInformationFromNextID}
+                                                disabled={disabled}
+                                                selected={selected || disabled}
+                                                onChange={onSelectedProfile}
+                                            />
+                                        )
+                                    })
                                 )}
                             </Box>
                         </div>
-                        {!isEmpty ? (
+                        {profiles.length ? (
                             <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0px' }}>
                                 <Checkbox
                                     sx={{ width: 20, height: 20 }}

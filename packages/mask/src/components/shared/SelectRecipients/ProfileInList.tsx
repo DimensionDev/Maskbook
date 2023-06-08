@@ -174,7 +174,6 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                             textToHighlight={secondaryText}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
-                        <Icons.LinkOut className={classes.actionIcon} />
                         {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }

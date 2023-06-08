@@ -86,6 +86,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
+
     const value = resolveValueToSearch(valueToSearch)
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
         value,
