@@ -14,14 +14,18 @@ import {
     useChainIdValid,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { FormattedAddress, useSnackbarCallback, WalletIcon, SelectProviderDialog } from '@masknet/shared'
+import {
+    FormattedAddress,
+    useSnackbarCallback,
+    WalletIcon,
+    SelectProviderDialog,
+    useSharedI18N,
+    WalletStatusDialog,
+} from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
 
 const useStyles = makeStyles<{
@@ -107,8 +111,7 @@ export interface WalletStatusBox {
     closeDialog?: () => void
 }
 export function WalletStatusBox(props: WalletStatusBox) {
-    const { t } = useI18N()
-
+    const t = useSharedI18N()
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
@@ -143,13 +146,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
         undefined,
         undefined,
         undefined,
-        t('copy_success_of_wallet_addr'),
-    )
-    // #endregion
-
-    // #region change provider
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+        t.copy_success_of_wallet_addr(),
     )
     // #endregion
 
@@ -164,7 +161,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     variant="contained"
                     size="small"
                     onClick={() => SelectProviderDialog.open()}>
-                    {t('plugin_wallet_on_connect')}
+                    {t.plugin_wallet_on_connect()}
                 </Button>
             </section>
         )
@@ -200,7 +197,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             className={classes.link}
                             underline="none"
                             component="button"
-                            title={t('wallet_status_button_copy_address')}
+                            title={t.wallet_status_button_copy_address()}
                             onClick={onCopy}>
                             <Icons.Copy className={cx(classes.icon, classes.copyIcon)} />
                         </Link>
@@ -209,7 +206,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 className={classes.link}
                                 href={Others.explorerResolver.addressLink(chainId, account) ?? ''}
                                 target="_blank"
-                                title={t('plugin_wallet_view_on_explorer')}
+                                title={t.plugin_wallet_view_on_explorer()}
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
                             </Link>
@@ -237,10 +234,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 props.closeDialog?.()
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
-                                closeWalletStatusDialog()
+                                WalletStatusDialog.close()
                                 await Web3.disconnect()
                             }}>
-                            {t('plugin_wallet_disconnect')}
+                            {t.plugin_wallet_disconnect()}
                         </Button>
                         <Button
                             className={cx(classes.actionButton)}
@@ -250,7 +247,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 SelectProviderDialog.open()
                                 props.closeDialog?.()
                             }}>
-                            {t('wallet_status_button_change')}
+                            {t.wallet_status_button_change()}
                         </Button>
                     </section>
                 )}

@@ -1,13 +1,11 @@
 import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
 import { type BindingProof, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import {
@@ -28,7 +26,7 @@ import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { SelectProviderDialog, useMenuConfig } from '../../../index.js'
+import { SelectProviderDialog, WalletStatusDialog, useMenuConfig } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -83,10 +81,6 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const { pluginID: currentPluginID } = useNetworkContext()
         const isSmartPay = !!allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
         const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
-
-        const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-            WalletMessages.events.walletStatusDialogUpdated,
-        )
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
@@ -232,7 +226,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         {...omit(descriptionProps, 'address')}
                         onClick={openMenu}
                         pending={!!pendingTransactions.length}
-                        onPendingClick={openWalletStatusDialog}
+                        onPendingClick={() => WalletStatusDialog.open()}
                     />
                     <Action openSelectWalletDialog={() => SelectProviderDialog.open()}>{children}</Action>
                 </Box>

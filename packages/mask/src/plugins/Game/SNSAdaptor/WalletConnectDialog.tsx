@@ -6,7 +6,7 @@ import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import { InjectedDialog, PluginWalletStatusBar, ChainBoundary, WalletStatusDialog } from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
 import GameList from './GameList.js'
 import GameWindow from './GameWindow.js'
@@ -71,14 +71,10 @@ const WalletConnectDialog = () => {
             return
         }
         _closeDialog()
-        closeWalletDialog()
+        WalletStatusDialog.close()
         setGameInfo(gameInfo)
         setGameShow(true)
     }
-
-    const { closeDialog: closeWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
 
     const [isShareShow, setShareShow] = useState(false)
     const handleGameShare = () => setShareShow(true)

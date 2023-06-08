@@ -2,7 +2,6 @@ import { getEnumAsArray } from '@masknet/kit'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { WalletStatusDialog } from './WalletStatusDialog/index.js'
 import { ConnectWalletDialog } from './ConnectWalletDialog/index.js'
 import { WalletRiskWarningDialog } from './RiskWarningDialog/index.js'
 import { GasSettingDialog } from './GasSettingDialog/index.js'
@@ -17,7 +16,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <WalletStatusDialog />
                 <ApplicationBoardDialog />
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />

@@ -193,5 +193,14 @@
     "lens_following": "已关注",
     "view": "查看",
     "verified_by": "由 {{ marketplace }} 验证",
-    "no_NFTs_found": "没有找到任何NFT。"
+    "no_NFTs_found": "没有找到任何NFT。",
+    "plugin_wallet_view_on_explorer": "区块链浏览器查看",
+    "plugin_wallet_dialog_title": "钱包账户",
+    "recent_transaction_success": "成功",
+    "recent_transaction_failed": "失败",
+    "wallet_status_pending_clear": "清除",
+    "wallet_status_pending_one": "{{count}} 个待定",
+    "wallet_status_pending_other": "{{count}} 个待定",
+    "wallet_status_pending_clear_all": "全部清除",
+    "plugin_wallet_on_connect": "连接钱包"
 }

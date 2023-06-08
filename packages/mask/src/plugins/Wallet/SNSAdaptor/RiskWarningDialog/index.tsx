@@ -3,13 +3,12 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
