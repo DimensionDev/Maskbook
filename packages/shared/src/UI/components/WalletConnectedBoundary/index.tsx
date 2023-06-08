@@ -1,6 +1,4 @@
 import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSharedI18N } from '../../../locales/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
@@ -14,7 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SelectProviderDialog } from '../../../index.js'
+import { SelectProviderDialog, WalletRiskWarningDialog } from '../../../index.js'
 
 const useStyles = makeStyles()({
     button: {
@@ -47,10 +45,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     })
     const approved = useRiskWarningApproved()
 
-    const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletRiskWarningDialogUpdated,
-    )
-
     const buttonClass = cx(classes.button, classes.connectWallet)
 
     if (!account)
@@ -72,8 +66,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                    setRiskWarningDialog({
-                        open: true,
+                    WalletRiskWarningDialog.open({
                         account,
                         pluginID,
                     })

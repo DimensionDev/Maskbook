@@ -225,5 +225,13 @@
     "wallet_status_pending_one": "crwdns18180:0{{count}}crwdne18180:0",
     "wallet_status_pending_other": "crwdns18182:0{{count}}crwdne18182:0",
     "wallet_status_pending_clear_all": "crwdns16398:0crwdne16398:0",
+    "wallet_risk_warning_no_select_wallet": "crwdns4563:0crwdne4563:0",
+    "wallet_risk_warning_dialog_title": "crwdns4561:0crwdne4561:0",
+    "wallet_risk_warning_content": "crwdns4565:0crwdne4565:0",
+    "wallet_risk_warning_confirm_tips": "crwdns19991:0crwdne19991:0",
+    "confirm": "crwdns7569:0crwdne7569:0",
+    "done": "crwdns4145:0crwdne4145:0",
+    "wallet_risk_confirm_failed": "crwdns4571:0crwdne4571:0",
+    "wallet_risk_confirm_confirming": "crwdns4569:0crwdne4569:0",
     "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0"
 }
