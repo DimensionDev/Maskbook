@@ -226,5 +226,13 @@
     "wallet_status_pending_one": "{{count}} Pending",
     "wallet_status_pending_other": "{{count}} Pendings",
     "wallet_status_pending_clear_all": "Clear All",
+    "wallet_risk_warning_no_select_wallet": "Not select wallet yet.",
+    "wallet_risk_warning_dialog_title": "Risk Warning",
+    "wallet_risk_warning_content": "Dear User,<br/><br/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<br/><br/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the freedom of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when conducting any blockchain contract interaction. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves.",
+    "wallet_risk_warning_confirm_tips": "Clicking the confirm button means that you agree to bear the above possible risks.",
+    "confirm": "Confirm",
+    "done": "Done",
+    "wallet_risk_confirm_confirming": "Confirming",
+    "wallet_risk_confirm_failed": "Confirm Failed",
     "plugin_wallet_on_connect": "Connect Wallet"
 }

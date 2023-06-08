@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils/index.js'
+import { useI18N, useQueryNavigatorPermission } from '../../utils/index.js'
 import formatDateTime from 'date-fns/format'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
@@ -20,7 +20,7 @@ import type { AutoPasteFailedEvent } from '@masknet/shared-base'
 import { DraggableDiv } from '../shared/DraggableDiv.js'
 import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material'
 import { saveFileFromUrl } from '../../../shared/index.js'
-import { Image } from '@masknet/shared'
+import { Image, useMatchXS } from '@masknet/shared'
 
 export interface AutoPasteFailedDialogProps {
     onClose: () => void

@@ -197,5 +197,7 @@
     "plugin_wallet_view_on_explorer": "Explorer で見る",
     "plugin_wallet_disconnect": "接続解除",
     "plugin_wallet_dialog_title": "ウォレットアカウント",
+    "confirm": "確認",
+    "done": "完了です！",
     "plugin_wallet_on_connect": "ウォレットに接続しています"
 }
