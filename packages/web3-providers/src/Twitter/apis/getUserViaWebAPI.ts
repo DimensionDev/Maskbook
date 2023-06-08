@@ -1,4 +1,6 @@
 import urlcat from 'urlcat'
+import { isNull } from 'lodash-es'
+import { attemptTimes } from '@masknet/web3-shared-base'
 import { getTokens } from './getTokens.js'
 import { getHeaders } from './getHeaders.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
@@ -17,6 +19,7 @@ const features = {
     highlights_tweets_tab_ui_enabled: false,
     hidden_profile_likes_enabled: false,
 }
+
 async function createRequest(screenName: string) {
     const { queryId } = await getTokens('UserByScreenName')
     if (!queryId) return
@@ -37,31 +40,35 @@ async function createRequest(screenName: string) {
     })
 }
 
-export async function getUserViaWebAPI(screenName: string, times = 0): Promise<TwitterBaseAPI.User | null> {
+export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
     if (!request) return null
+
     const response = await fetchCached(request)
-    if (!response.ok) {
-        if (times >= 3) return null
-        const patchingFeatures: string[] = []
-        const failedResponse: TwitterBaseAPI.FailedResponse = await response.json()
-        for (const error of failedResponse.errors) {
-            const match = error.message.match(/The following features cannot be null: (.*)$/)
-            if (match) {
-                if (process.env.NODE_ENV === 'development') {
-                    console.error('Error in getUserByScreenName:', error.message)
-                }
-                patchingFeatures.push(...match[1].split(/,\s+/))
-            }
-        }
-        if (patchingFeatures.length) {
-            Object.assign(features, Object.fromEntries(patchingFeatures.map((x) => [x, false])))
-            return getUserViaWebAPI(screenName, times + 1)
-        }
+    if (response.ok) {
+        const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
+        return json.data.user.result
     }
 
-    const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
-    return json.data.user.result
+    const patchingFeatures: string[] = []
+    const failedResponse: TwitterBaseAPI.FailedResponse = await response.json()
+    for (const error of failedResponse.errors) {
+        const matched = error.message.match(/The following features cannot be null: (.*)$/)
+        if (matched) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error in getUserByScreenName:', error.message)
+            }
+            patchingFeatures.push(...matched[1].split(/,\s+/))
+        }
+    }
+    if (patchingFeatures.length) {
+        Object.assign(features, Object.fromEntries(patchingFeatures.map((x) => [x, false])))
+    }
+    return null
+}
+
+export const getUserViaWebTimesAPI = (screenName: string) => {
+    return attemptTimes(() => getUserViaWebAPI(screenName), null, isNull)
 }
 
 export async function staleUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {

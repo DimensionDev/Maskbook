@@ -32,8 +32,7 @@ async function fetchContent(url?: string) {
 function getAPIScriptURL(content: string) {
     const matches = content.match(/api:"(\w+)",/)
     if (!matches) return
-    const url = `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
-    return url
+    return `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
 }
 
 export async function getTokens(operationName?: string) {

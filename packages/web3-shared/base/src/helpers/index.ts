@@ -1,4 +1,5 @@
 export * from './attemptUntil.js'
+export * from './attemptTimes.js'
 export * from './constant.js'
 export * from './fetch.js'
 export * from './formatBalance.js'

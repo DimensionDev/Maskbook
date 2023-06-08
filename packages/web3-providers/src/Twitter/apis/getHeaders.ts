@@ -9,7 +9,7 @@ export async function getHeaders(overrides?: Record<string, string>) {
         'content-type': 'application/json',
         'x-twitter-auth-type': 'OAuth2Session',
         'x-twitter-active-user': 'yes',
-        referer: `https://twitter.com/`,
+        referer: 'https://twitter.com/',
         ...overrides,
     }
 }

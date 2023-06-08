@@ -4,7 +4,7 @@ import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
     getHeaders,
-    getUserViaWebAPI,
+    getUserViaWebTimesAPI,
     getDefaultUserSettings,
     getUserSettings,
     getUserViaTwitterIdentity,
@@ -145,9 +145,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
-        if (checkNFTAvatar) return getUserViaWebAPI(screenName)
+        if (checkNFTAvatar) return getUserViaWebTimesAPI(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
-            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebAPI(screenName)],
+            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebTimesAPI(screenName)],
             null,
         )
     }
