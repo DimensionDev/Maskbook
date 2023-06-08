@@ -1,6 +1,7 @@
 export * from './getDatabase.js'
 export * from './getSettings.js'
 export * from './getTokens.js'
+export * from './getHeaders.js'
 export * from './getUserNFTContainer.js'
 export * from './getUserSettings.js'
 export * from './getUserViaTwitterIdentity.js'

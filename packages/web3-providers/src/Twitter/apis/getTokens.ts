@@ -37,6 +37,11 @@ function getAPIScriptURL(content: string) {
 }
 
 export async function getTokens(operationName?: string) {
+    console.log('DEBUG: get tokens')
+    console.log({
+        operationName,
+    })
+
     const indexContent = await fetchContent('https://twitter.com')
     const swContent = await fetchContent('https://twitter.com/sw.js')
 

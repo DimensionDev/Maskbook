@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
+import { getHeaders } from './getHeaders.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 import { fetchCached, staleCached } from '../../entry-helpers.js'
 
@@ -17,7 +18,7 @@ const features = {
     hidden_profile_likes_enabled: false,
 }
 async function createRequest(screenName: string) {
-    const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
+    const { queryId } = await getTokens('UserByScreenName')
     if (!queryId) return
     const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
         queryId,
@@ -30,14 +31,9 @@ async function createRequest(screenName: string) {
     })
 
     return new Request(url, {
-        headers: {
-            authorization: `Bearer ${bearerToken}`,
-            'x-csrf-token': csrfToken,
-            'content-type': 'application/json',
-            'x-twitter-auth-type': 'OAuth2Session',
-            'x-twitter-active-user': 'yes',
+        headers: await getHeaders({
             referer: `https://twitter.com/${screenName}`,
-        },
+        }),
     })
 }
 
