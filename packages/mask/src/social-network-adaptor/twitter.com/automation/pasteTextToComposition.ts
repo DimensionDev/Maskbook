@@ -36,7 +36,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             await untilElementAvailable(i)
             checkSignal()
             while (!hasFocus(i)) {
-                i.evaluate()!.focus()
+                i.evaluate()!.click()
                 checkSignal()
                 await delay(interval)
             }

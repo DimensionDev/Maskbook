@@ -22,7 +22,7 @@ export async function pasteImageToCompositionTwitter(
     await untilElementAvailable(i)
 
     while (!hasFocus(i)) {
-        i.evaluate()!.focus()
+        i.evaluate()!.click()
         await delay(interval)
     }
     pasteImageToCompositionDefault(() => false)(url, options)
