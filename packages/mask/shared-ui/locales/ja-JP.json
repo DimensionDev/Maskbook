@@ -493,13 +493,5 @@
     "plugin_snapshot_vote_confirm_dialog_choice": "本当に 「{{ choiceText }}」 に投票しますか？",
     "plugin_snapshot_vote_confirm_dialog_warning": "このアクションは元に戻すことはできません。",
     "plugin_snapshot_current_result_title": "現在の結果",
-    "plugin_wallet_qr_code_with_wallet_connect": "WalletConnect 対応の QR コードを読みこむ",
-    "plugin_wallet_solana_tips": "Phantom は Solana チェーンのみを対応します。",
-    "plugin_wallet_blocto_tips": "Phantom は Solana チェーンのみを対応します。",
-    "plugin_wallet_fortmatic_tips": "FortmaticはETHとBNBチェーンのみを対応しています。",
-    "plugin_wallet_support_chains_tips": "EVMチェーン、ETH、BNBチェーン、Polygon、Arb、Opなどをサポートしています。",
-    "plugin_wallet_connect_fortmatic": "Fortmaticと接続します",
-    "plugin_wallet_choose_network": "ネットワークを選択します",
-    "plugin_wallet_select_provider_dialog_title": "ウォレットを接続",
     "plugin_snapshot_download_report": "レポートをダウンロードする"
 }
