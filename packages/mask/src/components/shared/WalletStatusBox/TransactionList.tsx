@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 52,
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(1, 1),
-        '&:nth-child(even)': {
+        '&:nth-of-type(even)': {
             backgroundColor: theme.palette.background.default,
         },
     },
