@@ -106,7 +106,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
     const formatAvg = formatBalance(
-        new BigNumber(total).div(settings?.shares ?? 1),
+        new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
         settings?.token?.decimals ?? 18,
         isNativeToken ? 3 : 0,
     )
