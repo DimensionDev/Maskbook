@@ -19,7 +19,6 @@ import {
     type GasConfig,
     SchemaType,
     useRedPacketConstants,
-    isNativeTokenAddress,
     createNativeToken,
 } from '@masknet/web3-shared-evm'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
@@ -261,7 +260,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isGreaterThan(shares || '0', 255)) return t.max_shares()
         if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
             return t.insufficient_token_balance({ symbol: token?.symbol })
-        if (isZero(amount) || (loadingTransactionValue && isNativeTokenAddress(token?.address))) {
+        if (isZero(amount)) {
             return isRandom ? t.enter_total_amount() : t.enter_each_amount()
         }
 
@@ -271,17 +270,18 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [isRandom, account, amount, totalAmount, shares, token, balance, t, tr, loadingTransactionValue, minTotalAmount])
+    }, [isRandom, account, amount, totalAmount, shares, token, balance, t, tr, minTotalAmount])
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
         if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
-        if (new BigNumber(transactionValue).isLessThanOrEqualTo(0)) return t.insufficient_balance()
+        if (!loadingTransactionValue && new BigNumber(transactionValue).isLessThanOrEqualTo(0))
+            return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, balance, token?.symbol, transactionValue])
+    }, [isAvailableBalance, balance, token?.symbol, transactionValue, loadingTransactionValue])
 
     if (!token) return null
 
