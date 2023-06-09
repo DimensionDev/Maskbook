@@ -4,10 +4,10 @@ import { Web3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { isValidAddress, type GasConfig } from '@masknet/web3-shared-evm'
+import { isValidAddress, type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
 
-export function useNativeTransferCallback() {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+export function useNativeTransferCallback(expectedChainId?: ChainId) {
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
 
     return useAsyncFn(
         async (amount?: string, recipient?: string, gasConfig?: GasConfig, memo?: string) => {
@@ -36,6 +36,7 @@ export function useNativeTransferCallback() {
                 value: amount,
                 data: memo ? toHex(memo) : undefined,
                 ...gasConfig,
+                chainId,
             }
 
             // send transaction and wait for hash

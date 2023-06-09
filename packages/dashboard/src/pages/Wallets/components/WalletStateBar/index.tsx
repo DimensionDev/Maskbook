@@ -16,7 +16,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { useNetworkSelector } from './useNetworkSelector.js'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -69,8 +68,6 @@ export const WalletStateBar = memo(() => {
     const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
-    const [menu, openMenu] = useNetworkSelector()
-
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
     if (!account) {
@@ -85,9 +82,7 @@ export const WalletStateBar = memo(() => {
             network={networkDescriptor}
             provider={providerDescriptor}
             openConnectWalletDialog={WalletStatusDialog.open}
-            openMenu={openMenu}>
-            {menu}
-        </WalletStateBarUI>
+        />
     )
 })
 
@@ -99,10 +94,9 @@ interface WalletStateBarUIProps {
     address?: string
     domain?: string
     openConnectWalletDialog(): void
-    openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
 
-export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>> = ({
+export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
     isPending,
     network,
     provider,
@@ -110,8 +104,6 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
     address,
     domain,
     openConnectWalletDialog,
-    openMenu,
-    children,
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
@@ -126,8 +118,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                 justifyContent="center"
                 sx={{ '--network-icon-color': network.iconColor, px: 2, mr: 1 }}
                 color={network.iconColor ?? ''}
-                className={classes.bar}
-                onClick={openMenu}>
+                className={classes.bar}>
                 <Typography component="span" sx={{ backgroundColor: network.iconColor }} className={classes.dot} />
                 <Typography component="span" fontSize={12}>
                     {network.name}
@@ -173,7 +164,6 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                     </Box>
                 </Box>
             </Stack>
-            {children}
         </Stack>
     )
 }
