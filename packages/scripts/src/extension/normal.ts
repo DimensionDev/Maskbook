@@ -52,7 +52,7 @@ watchTask(buildBaseExtension, extensionWatch, 'webpack', 'Build Mask Network ext
 
 function webpack(flags: BuildFlagsExtended) {
     const command = [
-        process.execPath,
+        JSON.stringify(process.execPath),
         '--loader',
         'ts-node/esm/transpile-only',
         'node_modules/webpack/bin/webpack.js',
@@ -65,5 +65,5 @@ function webpack(flags: BuildFlagsExtended) {
         flags.profiling && '--json=../../compilation-stats.json',
     ]
     command.push('--env', 'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'))
-    return shell.cwd(new URL('mask', PKG_PATH))(['npx ' + compact(command).join(' ')])
+    return shell.cwd(new URL('mask', PKG_PATH))([compact(command).join(' ')])
 }
