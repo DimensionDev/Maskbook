@@ -1,10 +1,9 @@
 import { delay } from '@masknet/kit'
-import { inputText, pasteText } from '@masknet/injected-script'
+import { pasteText } from '@masknet/injected-script'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import type { SocialNetworkUI } from '@masknet/types'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
-import { isMobileTwitter } from '../utils/isMobile.js'
 import { MaskMessages } from '../../../utils/messages.js'
 import { selectElementContents } from '../../../utils/utils.js'
 
@@ -27,6 +26,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             ) {
                 // open tweet window
                 await untilElementAvailable(newPostButtonSelector())
+                await delay(interval)
                 newPostButtonSelector().evaluate()!.click()
                 checkSignal()
             }
@@ -34,21 +34,23 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             // get focus
             const i = postEditorDraftContentSelector()
             await untilElementAvailable(i)
+            await delay(interval)
             checkSignal()
+
+            if (opt?.reason === 'verify') {
+                selectElementContents(i.evaluate()!)
+            }
+
             while (!hasFocus(i)) {
                 i.evaluate()!.click()
                 checkSignal()
                 await delay(interval)
             }
 
-            if (opt?.reason === 'verify') {
-                selectElementContents(i.evaluate()!)
-                await untilElementAvailable(i)
-            }
-
             // paste
-            isMobileTwitter ? inputText(text) : pasteText(text)
+            pasteText(text)
             await delay(interval)
+
             if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
                 fail(new Error('Unable to paste text automatically'))
             }
