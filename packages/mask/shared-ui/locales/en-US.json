@@ -109,7 +109,7 @@
     "compose_shared_friends_other": "{{count}} friends",
     "compose_encrypt_visible_to_share": "Share with",
     "compose_encrypt_visible_to_share_sub": "Just Selected Contacts",
-    "compose_encrypt_share_dialog_empty": "No encrypted friends, you can try searching.",
+    "compose_encrypt_share_dialog_empty": "No Persona-based encryption friends locally, please try searching.",
     "copy_success": "Copy wallet address successfully!",
     "automation_request_click_post_button": "Please click the “Post” button to open the compose dialog.",
     "try_again": "Try Again",
