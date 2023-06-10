@@ -191,6 +191,7 @@ export function info_light_url() { return new URL("./general/Info.light.svg", im
 export function interaction_url() { return new URL("./general/Interaction.svg", import.meta.url) }
 export function interaction_circle_url() { return new URL("./general/InteractionCircle.svg", import.meta.url) }
 export function ito_url() { return new URL("./general/ITO.svg", import.meta.url) }
+export function ito_label_url() { return new URL("./general/ITOLabel.svg", import.meta.url) }
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url) }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url) }
 export function link_url() { return new URL("./general/Link.svg", import.meta.url) }
@@ -202,6 +203,7 @@ export function local_backup_url() { return new URL("./general/LocalBackup.png",
 export function marketing_url() { return new URL("./general/Marketing.svg", import.meta.url) }
 export function mask_avatar_dark_url() { return new URL("./general/MaskAvatar.dark.svg", import.meta.url) }
 export function mask_avatar_light_url() { return new URL("./general/MaskAvatar.light.svg", import.meta.url) }
+export function mask_in_minds_url() { return new URL("./general/MaskInMinds.svg", import.meta.url) }
 export function masks_url() { return new URL("./general/Masks.svg", import.meta.url) }
 export function message_url() { return new URL("./general/Message.svg", import.meta.url) }
 export function more_url() { return new URL("./general/More.svg", import.meta.url) }
@@ -209,6 +211,7 @@ export function next_id_persona_warning_url() { return new URL("./general/NextId
 export function nft_link_url() { return new URL("./general/NFTLink.svg", import.meta.url) }
 export function nft_red_packet_url() { return new URL("./general/NFTRedPacket.svg", import.meta.url) }
 export function nft_selected_url() { return new URL("./general/NFTSelected.svg", import.meta.url) }
+export function outlined_mask_url() { return new URL("./general/OutlinedMask.svg", import.meta.url) }
 export function personas_url() { return new URL("./general/Personas.svg", import.meta.url) }
 export function pin_dark_url() { return new URL("./general/Pin.dark.svg", import.meta.url) }
 export function pin_light_url() { return new URL("./general/Pin.light.svg", import.meta.url) }
@@ -250,6 +253,7 @@ export function send_url() { return new URL("./general/Send.svg", import.meta.ur
 export function send_colorful_url() { return new URL("./general/SendColorful.svg", import.meta.url) }
 export function setting_url() { return new URL("./general/Setting.svg", import.meta.url) }
 export function settings_url() { return new URL("./general/Settings.svg", import.meta.url) }
+export function sharp_mask_url() { return new URL("./general/SharpMask.svg", import.meta.url) }
 export function sign_in_account_url() { return new URL("./general/SignInAccount.svg", import.meta.url) }
 export function sign_up_account_url() { return new URL("./general/SignUpAccount.png", import.meta.url) }
 export function slider_url() { return new URL("./general/Slider.svg", import.meta.url) }
