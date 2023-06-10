@@ -1,9 +1,7 @@
-import { Flags } from '@masknet/flags'
 import list from './i18n-cache-query-list.js'
 
 export type Bundle = [namespace: string, lang: string, json: object]
 export async function queryRemoteI18NBundle(lang: string): Promise<Bundle[]> {
-    if (!Flags.i18nTranslationHotUpdate) return []
     // skip fetching in development. if you need to debug this, please comment this code.
     if (process.env.NODE_ENV === 'development') return []
 
