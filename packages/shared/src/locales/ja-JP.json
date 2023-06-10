@@ -193,11 +193,5 @@
     "lens_following": "フォロー中",
     "view": "表示",
     "verified_by": "{{ marketplace }} によって検証されました",
-    "no_NFTs_found": "NFTが見つかりません。",
-    "plugin_wallet_view_on_explorer": "Explorer で見る",
-    "plugin_wallet_disconnect": "接続解除",
-    "plugin_wallet_dialog_title": "ウォレットアカウント",
-    "confirm": "確認",
-    "done": "完了です！",
-    "plugin_wallet_on_connect": "ウォレットに接続しています"
+    "no_NFTs_found": "NFTが見つかりません。"
 }
