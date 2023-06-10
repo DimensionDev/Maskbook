@@ -2,7 +2,6 @@ import { setService, setPluginMessages, setMessages, setPluginServices, Integrat
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { createSubscriptionFromAsync } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import Services from '../service.js'
 import { WalletRPC } from '../../plugins/Wallet/messages.js'
 import { MaskMessages } from '../../../shared/messages.js'
@@ -17,7 +16,6 @@ setPluginServices({
     Wallet: WalletRPC,
 })
 setPluginMessages({
-    Wallet: WalletMessages.events,
     Transak: PluginTransakMessages,
 })
 startPluginDashboard(

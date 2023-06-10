@@ -1,9 +1,5 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
-import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import {
     alpha,
     Box,
@@ -16,6 +12,11 @@ import {
     ListItemButton,
     Typography,
 } from '@mui/material'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { Web3All, OthersAll } from '@masknet/web3-providers'
+import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
+import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
 import {
     NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
@@ -25,14 +26,10 @@ import {
     NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
+import { DialogDismissIconUI, ImageIcon, ProviderIcon, useSharedI18N } from '@masknet/shared'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { ImageIcon } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Web3All, OthersAll } from '@masknet/web3-providers'
-import { ProviderIcon } from './ProviderIcon.js'
-import { useI18N } from '../../../../utils/index.js'
-import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
 
 const descriptors: Record<
     NetworkPluginID,
@@ -167,7 +164,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     requiredSupportPluginID,
 }: PluginProviderRenderProps) {
     const { classes, cx } = useStyles()
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const snsPlugins = useActivatedPluginsSNSAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
@@ -219,14 +216,14 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
         if (provider === SolProviderType.Phantom) {
-            return t('plugin_wallet_solana_tips')
+            return t.plugin_wallet_solana_tips()
         } else if (provider === FlowProviderType.Blocto) {
-            return t('plugin_wallet_blocto_tips')
+            return t.plugin_wallet_blocto_tips()
         } else if (provider === ProviderType.Fortmatic) {
-            return t('plugin_wallet_fortmatic_tips')
+            return t.plugin_wallet_fortmatic_tips()
         }
 
-        return t('plugin_wallet_support_chains_tips')
+        return t.plugin_wallet_support_chains_tips()
     }, [])
 
     const getDisabled = useCallback(
@@ -314,10 +311,10 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                             onClick={() => setSelectChainDialogOpen(false)}>
                             <DialogDismissIconUI />
                         </IconButton>
-                        <Typography className={classes.dialogTitle}>{t('plugin_wallet_connect_fortmatic')}</Typography>
+                        <Typography className={classes.dialogTitle}>{t.plugin_wallet_connect_fortmatic()}</Typography>
                     </DialogTitle>
                     <DialogContent sx={{ minWidth: 352 }}>
-                        <Typography className={classes.chooseNetwork}>{t('plugin_wallet_choose_network')}</Typography>
+                        <Typography className={classes.chooseNetwork}>{t.plugin_wallet_choose_network()}</Typography>
                         <List className={classes.list}>
                             {EVM_NETWORK_DESCRIPTORS.filter((x) =>
                                 [ChainId.Mainnet, ChainId.BSC].includes(x.chainId),

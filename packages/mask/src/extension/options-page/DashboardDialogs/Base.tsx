@@ -13,9 +13,9 @@ import { makeStyles } from '@masknet/theme'
 import { type Theme, type ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useMatchXS } from '../../../utils/index.js'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
 import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings.js'
+import { useMatchXS } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

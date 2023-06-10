@@ -15,14 +15,13 @@ import {
     ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
+import { SelectProviderDialog, WalletStatusDialog } from '../../../index.js'
 
 export const useStyles = makeStyles()((theme) => ({
     root: {
@@ -82,22 +81,12 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const { data: domain } = useReverseAddress(pluginID, account)
         const Others = useWeb3Others()
 
-        const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-            WalletMessages.events.selectProviderDialogUpdated,
-        )
-
         const openSelectProviderDialog = useCallback(() => {
-            setSelectProviderDialog({
-                open: true,
-                network: expectedNetworkDescriptor,
+            SelectProviderDialog.open({
                 requiredSupportChainIds,
                 requiredSupportPluginID,
             })
         }, [expectedNetworkDescriptor, requiredSupportChainIds, requiredSupportPluginID])
-
-        const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-            WalletMessages.events.walletStatusDialogUpdated,
-        )
 
         const pendingTransactions = useRecentTransactions(pluginID, TransactionStatusType.NOT_DEPEND)
 
@@ -128,7 +117,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     formattedAddress={Others.formatAddress(account, 4)}
                     addressLink={Others.explorerResolver.addressLink(chainId, account)}
                     onClick={onClick ?? openSelectProviderDialog}
-                    onPendingClick={openWalletStatusDialog}
+                    onPendingClick={() => WalletStatusDialog.open()}
                 />
                 <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
             </Box>

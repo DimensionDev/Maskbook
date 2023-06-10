@@ -193,5 +193,22 @@
     "lens_following": "已关注",
     "view": "查看",
     "verified_by": "由 {{ marketplace }} 验证",
-    "no_NFTs_found": "没有找到任何NFT。"
+    "no_NFTs_found": "没有找到任何NFT。",
+    "plugin_wallet_view_on_explorer": "区块链浏览器查看",
+    "plugin_wallet_dialog_title": "钱包账户",
+    "recent_transaction_success": "成功",
+    "recent_transaction_failed": "失败",
+    "wallet_status_pending_clear": "清除",
+    "wallet_status_pending_one": "{{count}} 个待定",
+    "wallet_status_pending_other": "{{count}} 个待定",
+    "wallet_status_pending_clear_all": "全部清除",
+    "wallet_risk_warning_no_select_wallet": "尚未选择钱包。",
+    "wallet_risk_warning_dialog_title": "风险提示",
+    "wallet_risk_warning_content": "亲爱的用户，<br/><br/>当再使用Mask Network中任何与钱包相关的插件时，请确认以下使用风险：<br/><br/>Mask Network提供非商业性免费服务。 该插件由社区成员和其他优秀的第三方去中心化应用团队提供。 由于去中心化网络的自由性和其他不确定的风险因素， 用户被要求适当地保护他们的敏感信息，例如钱包助记词和私钥。 请谨慎进行任何区块链合同交互。任何第三方去中心化应用(插件)造成的风险都由第三方去中心化应用自身承担。 点击确认按钮意味着您同意承担上述风险。",
+    "wallet_risk_warning_confirm_tips": "点击确认按钮意味着您同意承担上述风险。",
+    "confirm": "确认",
+    "done": "完成",
+    "wallet_risk_confirm_failed": "确认失败",
+    "wallet_risk_confirm_confirming": "确认中",
+    "plugin_wallet_on_connect": "连接钱包"
 }

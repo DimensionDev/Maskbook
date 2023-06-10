@@ -1,0 +1,18 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "composite": false
+  },
+  "files": [
+    "./clean-hmr.ts",
+    "./config.ts",
+    "./EnvironmentPlugin.ts",
+    "./fix-regenerator-runtime.ts",
+    "./flags.ts",
+    "./git-info.ts",
+    "./manifest.ts",
+    "./utils.ts",
+    "./webpack.config.ts"
+  ]
+}

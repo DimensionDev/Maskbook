@@ -1,12 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { DialogContent, dialogClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletStatusBox, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
-import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -23,34 +19,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletStatusDialogProps {}
+export interface WalletStatusProps {
+    open: boolean
+    onClose: () => void
+    isHidden: boolean
+    setHidden: (isHidden: boolean) => void
+}
 
-export function WalletStatusDialog(props: WalletStatusDialogProps) {
-    const { t } = useI18N()
+export function WalletStatus({ open, onClose, isHidden = false, setHidden }: WalletStatusProps) {
+    const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const [isHidden, setIsHidden] = useState(false)
-
     // #region remote controlled dialog logic
-    const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-        (ev) => {
-            if (ev.open) setIsHidden(false)
-        },
-    )
-
     const closeDialog = useCallback(() => {
-        _closeDialog()
+        onClose()
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: 'timeline',
             open: false,
         })
-    }, [])
+    }, [onClose])
     // #endregion
 
     return (
         <InjectedDialog
-            title={t('plugin_wallet_dialog_title')}
+            title={t.plugin_wallet_dialog_title()}
             open={open}
             onClose={closeDialog}
             maxWidth="sm"
@@ -59,8 +51,8 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                 <WalletStatusBox
                     showPendingTransaction
                     closeDialog={() => {
-                        setIsHidden(true)
-                        _closeDialog()
+                        setHidden(true)
+                        onClose()
                     }}
                 />
             </DialogContent>

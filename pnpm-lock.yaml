@@ -73,7 +73,7 @@ patchedDependencies:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
   gulp@4.0.2:
-    hash: 2y5kpiugqogdejwrac5fzdim7y
+    hash: tfijye3fclipdzo6an37r223ay
     path: patches/gulp@4.0.2.patch
   micromark-util-symbol@1.0.1:
     hash: jkhnsgx77ffpyllfnod5pyn4ue
@@ -251,7 +251,7 @@ importers:
         version: 2.0.0(@typescript-eslint/eslint-plugin@5.59.0)(eslint@8.38.0)
       gulp:
         specifier: ^4.0.2
-        version: 4.0.2(patch_hash=2y5kpiugqogdejwrac5fzdim7y)
+        version: 4.0.2(patch_hash=tfijye3fclipdzo6an37r223ay)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -306,6 +306,9 @@ importers:
       '@masknet/plugin-wallet':
         specifier: workspace:^
         version: link:../plugins/Wallet
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../shared
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
@@ -327,9 +330,6 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../web3-hooks/base
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
@@ -526,9 +526,6 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../web3-hooks/evm
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
@@ -901,9 +898,6 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../web3-hooks/evm
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
@@ -1158,8 +1152,8 @@ importers:
         version: 3.21.4
     devDependencies:
       '@nice-labs/emit-file-webpack-plugin':
-        specifier: ^1.1.3
-        version: 1.1.3(webpack@5.85.0)
+        specifier: ^1.1.4
+        version: 1.1.4(webpack@5.85.0)
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.10
         version: 0.5.10(react-refresh@0.14.0)(webpack-dev-server@4.13.3)(webpack@5.85.0)
@@ -1398,9 +1392,6 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -1539,9 +1530,6 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -1683,9 +1671,6 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2145,9 +2130,6 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2220,9 +2202,6 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2373,9 +2352,6 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2532,9 +2508,6 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../../web3-helpers
-      '@masknet/web3-modals':
-        specifier: workspace:^
-        version: link:../../web3-modals
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
@@ -2793,6 +2766,12 @@ importers:
 
   packages/shared:
     dependencies:
+      '@headlessui/react':
+        specifier: ^1.7.14
+        version: 1.7.14(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+      '@heroicons/react':
+        specifier: ^2.0.17
+        version: 2.0.17(react@0.0.0-experimental-9a72e6227-20230525)
       '@hookform/resolvers':
         specifier: ^3.1.0
         version: 3.1.0(react-hook-form@7.43.9)
@@ -2847,6 +2826,9 @@ importers:
       '@react-hookz/web':
         specifier: ^23.0.0
         version: 23.0.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@solana/web3.js':
         specifier: ^1.75.0
         version: 1.75.0
@@ -3348,87 +3330,6 @@ importers:
       web3-core:
         specifier: 1.8.0
         version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
-      web3-utils:
-        specifier: 1.8.0
-        version: 1.8.0
-
-  packages/web3-modals:
-    dependencies:
-      '@headlessui/react':
-        specifier: ^1.7.14
-        version: 1.7.14(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@heroicons/react':
-        specifier: ^2.0.17
-        version: 2.0.17(react@0.0.0-experimental-9a72e6227-20230525)
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../icons
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../theme
-      '@masknet/web3-constants':
-        specifier: workspace:^
-        version: link:../web3-constants
-      '@masknet/web3-contracts':
-        specifier: workspace:^
-        version: link:../web3-contracts
-      '@masknet/web3-helpers':
-        specifier: workspace:^
-        version: link:../web3-helpers
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../web3-hooks/base
-      '@masknet/web3-hooks-evm':
-        specifier: workspace:^
-        version: link:../web3-hooks/evm
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../web3-shared/evm
-      '@masknet/web3-shared-flow':
-        specifier: workspace:^
-        version: link:../web3-shared/flow
-      '@masknet/web3-shared-solana':
-        specifier: workspace:^
-        version: link:../web3-shared/solana
-      '@servie/events':
-        specifier: ^3.0.0
-        version: 3.0.0
-      bignumber.js:
-        specifier: 9.1.1
-        version: 9.1.1
-      date-fns:
-        specifier: ^2.29.3
-        version: 2.29.3
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      urlcat:
-        specifier: ^3.1.0
-        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
-      web3:
-        specifier: 1.8.0
-        version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
-      web3-core:
-        specifier: 1.8.0
-        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
-      web3-core-helpers:
-        specifier: 1.8.0
-        version: 1.8.0
-      web3-eth-abi:
-        specifier: 1.8.0
-        version: 1.8.0
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
@@ -9133,8 +9034,8 @@ packages:
     dev: false
     optional: true
 
-  /@nice-labs/emit-file-webpack-plugin@1.1.3(webpack@5.85.0):
-    resolution: {integrity: sha512-xWOcKi+ZOir2DSbUSVtakkBdP4bhQWFVvC7M+6nu52PdCHA1ljj/7xEoMciuy86kINosNS41Xam30fSAVe9YoQ==}
+  /@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@5.85.0):
+    resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
       webpack: '>= 5'
@@ -20738,7 +20639,7 @@ packages:
       - supports-color
     dev: true
 
-  /gulp@4.0.2(patch_hash=2y5kpiugqogdejwrac5fzdim7y):
+  /gulp@4.0.2(patch_hash=tfijye3fclipdzo6an37r223ay):
     resolution: {integrity: sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==}
     engines: {node: '>= 0.10'}
     hasBin: true
@@ -33463,7 +33364,7 @@ time:
   /@mui/lab@5.0.0-alpha.102: '2022-10-03T16:22:19.340Z'
   /@mui/material@5.10.8: '2022-10-03T16:22:57.228Z'
   /@mui/system@5.10.8: '2022-10-03T16:21:59.688Z'
-  /@nice-labs/emit-file-webpack-plugin@1.1.3: '2022-07-20T13:31:37.048Z'
+  /@nice-labs/emit-file-webpack-plugin@1.1.4: '2023-06-08T14:34:13.568Z'
   /@nice-labs/git-rev@3.5.1: '2022-09-17T04:11:47.528Z'
   /@pmmmwh/react-refresh-webpack-plugin@0.5.10: '2022-11-24T13:38:27.856Z'
   /@react-hookz/web@23.0.0: '2023-03-23T11:33:35.599Z'

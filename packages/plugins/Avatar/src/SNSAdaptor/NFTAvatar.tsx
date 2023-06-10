@@ -1,14 +1,13 @@
-import { WalletMessages } from '@masknet/plugin-wallet'
 import {
     ChainBoundary,
     ElementAnchor,
     ReloadStatus,
     ReversedAddress,
+    SelectProviderDialog,
     isSameNFT,
     useAddCollectibles,
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
@@ -153,10 +152,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
         setCustomCollectibles((tokens) => uniqBy([...tokens, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [addCollectibles, pluginID, chainId, account])
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-
     const loadingSkeletons = (
         <List className={classes.list}>
             {range(8).map((i) => (
@@ -179,7 +174,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         {!hideWallet ? (
                             <Button
                                 variant="text"
-                                onClick={openSelectProviderDialog}
+                                onClick={() => SelectProviderDialog.open()}
                                 size="small"
                                 className={classes.changeButton}>
                                 {t.nft_wallet_change()}

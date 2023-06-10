@@ -2,8 +2,7 @@ import React, { type FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { FormattedAddress, WalletIcon } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { FormattedAddress, WalletIcon, SelectProviderDialog, WalletStatusDialog } from '@masknet/shared'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -16,7 +15,6 @@ import { Others } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useNetworkSelector } from './useNetworkSelector.js'
 
@@ -71,20 +69,12 @@ export const WalletStateBar = memo(() => {
     const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.walletStatusDialogUpdated,
-    )
-
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.selectProviderDialogUpdated,
-    )
-
     const [menu, openMenu] = useNetworkSelector()
 
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
     if (!account) {
-        return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
+        return <Button onClick={() => SelectProviderDialog.open()}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI
@@ -94,7 +84,7 @@ export const WalletStateBar = memo(() => {
             domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
-            openConnectWalletDialog={openWalletStatusDialog}
+            openConnectWalletDialog={WalletStatusDialog.open}
             openMenu={openMenu}>
             {menu}
         </WalletStateBarUI>

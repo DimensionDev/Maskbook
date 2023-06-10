@@ -1,5 +1,5 @@
 import { compact } from 'lodash-es'
-import { awaitChildProcess, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
+import { awaitChildProcess, cleanupWhenExit, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
 import { buildPolyfill } from '../projects/polyfill.js'
@@ -30,6 +30,7 @@ export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', {
 })
 
 export async function extensionWatch(f: Function | BuildFlagsExtended) {
+    cleanupWhenExit()
     buildPolyfill()
     buildGun()
     watchInjectedScript()
@@ -51,7 +52,10 @@ watchTask(buildBaseExtension, extensionWatch, 'webpack', 'Build Mask Network ext
 
 function webpack(flags: BuildFlagsExtended) {
     const command = [
-        'webpack',
+        JSON.stringify(process.execPath),
+        '--loader',
+        'ts-node/esm/transpile-only',
+        'node_modules/webpack/bin/webpack.js',
         flags.mode === 'development' ? 'serve' : undefined,
         '--mode',
         flags.mode === 'development' ? 'development' : 'production',
@@ -61,5 +65,5 @@ function webpack(flags: BuildFlagsExtended) {
         flags.profiling && '--json=../../compilation-stats.json',
     ]
     command.push('--env', 'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'))
-    return shell.cwd(new URL('mask', PKG_PATH))(['npx ' + compact(command).join(' ')])
+    return shell.cwd(new URL('mask', PKG_PATH))([compact(command).join(' ')])
 }

@@ -1,11 +1,5 @@
 {
   "extends": "../../tsconfig.json",
   "files": [],
-  "ts-node": {
-    "swc": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
   "references": [{ "path": "./src" }, { "path": "./devtools" }]
 }
