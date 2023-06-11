@@ -1,6 +1,7 @@
 {
   "name": "@masknet/gun-utils",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
