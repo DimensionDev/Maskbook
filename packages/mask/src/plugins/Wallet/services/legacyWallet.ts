@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts';
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { fromHex, toHex } from '@masknet/shared-base'

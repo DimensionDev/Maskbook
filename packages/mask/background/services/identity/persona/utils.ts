@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import * as wallet from /* webpackDefer: true */ 'wallet.ts';
+import * as wallet from /* webpackDefer: true */ 'wallet.ts'
 import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import {
     type EC_Private_JsonWebKey,
