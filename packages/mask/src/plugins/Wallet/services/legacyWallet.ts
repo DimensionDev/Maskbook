@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import { EthereumAddress, HDKey } from 'wallet.ts'
+import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { fromHex, toHex } from '@masknet/shared-base'
@@ -73,14 +73,14 @@ async function recoverWalletFromMnemonicWords(
     path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
 ) {
     const seed = await bip39.mnemonicToSeed(mnemonic.join(' '), passphrase)
-    const masterKey = HDKey.parseMasterSeed(seed)
+    const masterKey = wallet_ts.HDKey.parseMasterSeed(seed)
     const extendedPrivateKey = masterKey.derive(path).extendedPrivateKey!
-    const childKey = HDKey.parseExtendedKey(extendedPrivateKey)
+    const childKey = wallet_ts.HDKey.parseExtendedKey(extendedPrivateKey)
     const wallet = childKey.derive('')
     const walletPublicKey = wallet.publicKey
     const walletPrivateKey = wallet.privateKey!
     return {
-        address: EthereumAddress.from(walletPublicKey).address,
+        address: wallet_ts.EthereumAddress.from(walletPublicKey).address,
         privateKey: walletPrivateKey,
         privateKeyValid: true,
         privateKeyInHex: `0x${toHex(walletPrivateKey)}`,
@@ -95,7 +95,7 @@ async function recoverWalletFromPrivateKey(privateKey: string) {
     const privateKey_ = privateKey.replace(/^0x/, '').trim() // strip 0x
     const key = ec.keyFromPrivate(privateKey_)
     return {
-        address: EthereumAddress.from(key.getPublic(false, 'array') as any).address,
+        address: wallet_ts.EthereumAddress.from(key.getPublic(false, 'array') as any).address,
         privateKey: fromHex(privateKey_),
         privateKeyValid: privateKeyVerify(privateKey_),
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
