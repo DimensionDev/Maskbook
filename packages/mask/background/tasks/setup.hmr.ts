@@ -1,7 +1,6 @@
 import './Cancellable/NewInstalled.js'
 import './Cancellable/InjectContentScripts_imperative.js'
 import './Cancellable/InjectContentScripts_declarative.js'
-import './Cancellable/IsolatedDashboardBridge.js'
 import './Cancellable/CleanProfileAndAvatar.js'
 import './Cancellable/PopupSSR/index_hasWorker.js'
 import './Cancellable/PopupSSR/index_noWorker.js'
