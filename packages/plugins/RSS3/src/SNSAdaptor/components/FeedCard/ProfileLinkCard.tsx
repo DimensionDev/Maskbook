@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -83,7 +82,7 @@ const resolveHandle = (metadata: RSS3BaseAPI.FollowMetadata) => {
  *
  * - ProfileLink, aka Follow, Unfollow
  */
-export const ProfileLinkCard: FC<ProfileLinkCardProps> = ({ feed, className, ...rest }) => {
+export const ProfileLinkCard = ({ feed, className, ...rest }: ProfileLinkCardProps) => {
     const { classes, cx } = useStyles()
 
     const action = feed.actions[0]

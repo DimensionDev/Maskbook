@@ -12,7 +12,7 @@ import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, isNaN, uniq } from 'lodash-es'
-import { memo, useCallback, useMemo, useState, type FC, type FormEvent } from 'react'
+import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../UI/components/AssetsManagement/CollectibleItem.js'
@@ -120,14 +120,14 @@ export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkP
     ): void
 }
 
-export const AddCollectiblesDialog: FC<AddCollectiblesDialogProps> = memo(function AddCollectiblesDialog({
+export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
     open,
     pluginID,
     chainId,
     account: defaultAccount,
     onClose,
     onSubmit,
-}) {
+}: AddCollectiblesDialogProps) {
     const t = useSharedI18N()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount

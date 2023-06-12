@@ -1,4 +1,4 @@
-import { type FC, type HTMLProps, useCallback, useMemo } from 'react'
+import { type HTMLProps, useCallback, useMemo } from 'react'
 import { Web3 } from '@masknet/web3-providers'
 import { compact, uniqWith } from 'lodash-es'
 import { Icons } from '@masknet/icons'
@@ -81,7 +81,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onEmpty?(empty: boolean): void
 }
 
-export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
+export const NFTSection = ({ className, onEmpty, ...rest }: Props) => {
     const {
         nonFungibleTokenAddress: tokenAddress,
         nonFungibleTokenId: tokenId,

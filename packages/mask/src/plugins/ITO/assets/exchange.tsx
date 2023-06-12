@@ -1,6 +1,6 @@
 import { SvgIcon, type SvgIconProps } from '@mui/material'
 
-export const SwapIcon: React.FC = (props: SvgIconProps) => (
+export const SwapIcon = (props: SvgIconProps) => (
     <SvgIcon {...props}>
         <svg
             xmlns="http://www.w3.org/2000/svg"

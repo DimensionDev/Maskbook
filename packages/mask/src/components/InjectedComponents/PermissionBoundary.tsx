@@ -6,7 +6,7 @@ import {
     forwardRef,
     memo,
     type PropsWithChildren,
-    type ReactElement,
+    type ReactNode,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -18,8 +18,8 @@ import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
 interface PermissionBoundaryProps extends PropsWithChildren<{}> {
     permissions: string[]
     fallback?:
-        | ReactElement
-        | ((grantState: AsyncState<boolean>, onGrantPermissions: () => Promise<boolean | undefined>) => ReactElement)
+        | ReactNode
+        | ((grantState: AsyncState<boolean>, onGrantPermissions: () => Promise<boolean | undefined>) => ReactNode)
 }
 
 const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallback, children }) => {
@@ -28,7 +28,7 @@ const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallbac
     const [grantState, onGrant] = useGrantPermissions(permissions)
 
     if (!hasPermissions && fallback && permissions.length)
-        return typeof fallback === 'function' ? fallback(grantState, onGrant) : fallback
+        return <>{typeof fallback === 'function' ? fallback(grantState, onGrant) : fallback}</>
 
     return <>{children}</>
 })

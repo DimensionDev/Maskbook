@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isGreaterThan } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
@@ -57,7 +56,7 @@ interface TokenApprovalFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - TokenApproval
  */
-export const TokenApprovalCard: FC<TokenApprovalFeedCardProps> = ({ feed, ...rest }) => {
+export const TokenApprovalCard = ({ feed, ...rest }: TokenApprovalFeedCardProps) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

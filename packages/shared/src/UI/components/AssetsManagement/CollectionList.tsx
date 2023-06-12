@@ -10,7 +10,7 @@ import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { range, sortBy } from 'lodash-es'
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, LazyCollection, type CollectionProps, CollectionSkeleton } from './Collection.js'
@@ -391,7 +391,7 @@ interface ExpandedCollectionProps extends CollectionProps {
 }
 
 /** An ExpandedCollection tiles collectable cards */
-const ExpandedCollection: FC<ExpandedCollectionProps> = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps }) => {
+const ExpandedCollection = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps }: ExpandedCollectionProps) => {
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps
@@ -400,7 +400,7 @@ const ExpandedCollection: FC<ExpandedCollectionProps> = memo(({ gridProps = EMPT
         <>
             <Box width="100%">
                 <Box className={classes.grid}>
-                    <Collection {...collectionProps} />
+                    <Collection {...collectionProps} ref={undefined} />
                     {loading ? range(20).map((i) => <CollectibleItemSkeleton omitName key={i} />) : null}
                 </Box>
             </Box>

@@ -10,7 +10,7 @@ import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from 
 import { DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { compact } from 'lodash-es'
-import { memo, useCallback, useMemo, useState, type FC } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { InjectedDialog } from '../InjectedDialog.js'
 import { ContractItem } from './ContractItem.js'
@@ -67,8 +67,8 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     ): void
 }
 
-export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialogProps> = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit }) => {
+export const SelectNonFungibleContractDialog = memo(
+    ({ open, pluginID, chainId, onClose, onSubmit }: SelectNonFungibleContractDialogProps) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')

@@ -1,4 +1,4 @@
-import type { FC, HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -19,7 +19,7 @@ interface SingleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 's
     onClick(options: { compositionType: CompositionType }): void
 }
 
-export const SingleFileChip: FC<SingleFileChipProps> = ({ name, size, onClick, ...rest }) => {
+export const SingleFileChip = ({ name, size, onClick, ...rest }: SingleFileChipProps) => {
     const { classes } = useStyles()
     const t = useI18N()
     const { type } = useCompositionContext()
@@ -41,7 +41,7 @@ interface MultipleFileChipProps
         Pick<SingleFileChipProps, 'onClick'> {
     count: number
 }
-export const MultipleFileChip: FC<MultipleFileChipProps> = ({ count, onClick, ...rest }) => {
+export const MultipleFileChip = ({ count, onClick, ...rest }: MultipleFileChipProps) => {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const { type } = useCompositionContext()

@@ -1,4 +1,4 @@
-import React, { createContext, type ReactNode, useContext, useState, useMemo } from 'react'
+import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { compose, type MaskEvents, type NetworkPluginID } from '@masknet/shared-base'
@@ -42,11 +42,11 @@ NetworkContext.displayName = 'NetworkContext'
 const ChainContext = createContext<ChainContextGetter & ChainContextSetter>(null!)
 ChainContext.displayName = 'ChainContext'
 
-export function EnvironmentContextProvider({ value, children }: React.ProviderProps<EnvironmentContext>) {
+export function EnvironmentContextProvider({ value, children }: ProviderProps<EnvironmentContext>) {
     return <EnvironmentContext.Provider value={value}>{children}</EnvironmentContext.Provider>
 }
 
-export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
+export function NetworkContextProvider({ value, children }: ProviderProps<NetworkPluginID>) {
     const [pluginID = value, setPluginID] = useState<NetworkPluginID>()
     const context = useMemo(
         () => ({
@@ -58,7 +58,7 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
     return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
 }
 
-export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
+export function ChainContextProvider({ value, children }: ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
     const { controlled } = value
 
@@ -95,7 +95,7 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
 export function Web3ContextProvider({
     value,
     children,
-}: React.ProviderProps<
+}: ProviderProps<
     {
         pluginID: NetworkPluginID
         messages?: WebExtensionMessage<MaskEvents>

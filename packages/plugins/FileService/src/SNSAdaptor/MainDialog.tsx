@@ -39,12 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const FileServiceDialog: React.FC<FileServiceDialogProps> = ({
-    onClose,
-    selectMode,
-    selectedFileIds,
-    compositionType,
-}) => {
+const FileServiceDialog = ({ onClose, selectMode, selectedFileIds, compositionType }: FileServiceDialogProps) => {
     const { classes } = useStyles()
     const [confirmed] = useTermsConfirmed()
 

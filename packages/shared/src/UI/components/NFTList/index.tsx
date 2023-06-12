@@ -1,4 +1,4 @@
-import { type FC, useCallback } from 'react'
+import { useCallback } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
@@ -116,7 +116,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
     }
 })
 
-export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
+export const NFTItem = ({ token, pluginID }: NFTItemProps) => {
     const { classes } = useStyles({})
     const Others = useWeb3Others(pluginID)
     const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others.formatTokenId(token.tokenId, 4)
@@ -160,7 +160,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     )
 }
 
-export const NFTList: FC<Props> = ({
+export const NFTList = ({
     selectable,
     selectedPairs,
     tokens,
@@ -173,7 +173,7 @@ export const NFTList: FC<Props> = ({
     finished,
     pluginID,
     hasError,
-}) => {
+}: Props) => {
     const { classes, cx } = useStyles({ columns, gap })
 
     const isRadio = limit === 1

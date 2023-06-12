@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { useI18N } from '../../../locales/index.js'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
@@ -81,7 +80,7 @@ const contextMap: Partial<
  * - TokenOut
  * - TokenBurn
  */
-export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) => {
+export const TokenOperationCard = ({ feed, ...rest }: TokenFeedCardProps) => {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()

@@ -1,4 +1,4 @@
-import { Children, type FC, useState, type HTMLProps, type ReactElement } from 'react'
+import { Children, useState, type HTMLProps, type ComponentType, type ReactElement } from 'react'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
 
@@ -61,16 +61,18 @@ interface TabPanelProps extends HTMLProps<HTMLDivElement> {
     value?: number | string
 }
 
-export const FolderTabPanel: FC<TabPanelProps> = ({ className, ...rest }) => {
+export const FolderTabPanel = ({ className, ...rest }: TabPanelProps) => {
     const { classes, cx } = useStyles()
     return <div className={cx(classes.tabPanel, className)} role="tabpanel" {...rest} />
 }
 
-type TabPanelReactElement = ReactElement<TabPanelProps, FC<TabPanelProps>>
+// this is a subtype of ReactElement
+// eslint-disable-next-line @typescript-eslint/ban-types
+type TabPanelReactElement = ReactElement<TabPanelProps, ComponentType<TabPanelProps>>
 
-interface FolderTabsProps extends HTMLProps<HTMLDivElement> {}
+interface FolderTabsProps extends Pick<HTMLProps<HTMLDivElement>, 'defaultValue' | 'children'> {}
 
-export const FolderTabs: FC<FolderTabsProps> = ({ children: childNodes, defaultValue = 0, ...rest }) => {
+export const FolderTabs = ({ children: childNodes, defaultValue = 0 }: FolderTabsProps) => {
     const { classes, cx } = useStyles()
     const [value, setValue] = useState(defaultValue)
     const tabs = Children.map(childNodes as TabPanelReactElement[], (child, index) => {

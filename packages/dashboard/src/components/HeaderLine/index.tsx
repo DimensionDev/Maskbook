@@ -1,10 +1,8 @@
-import { type FC, type HTMLProps, memo } from 'react'
+import { type HTMLProps, memo } from 'react'
 import { useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 
-interface Props extends HTMLProps<HTMLDivElement> {}
-
-export const HeaderLine: FC<Props> = memo((props) => {
+export const HeaderLine = memo((props: HTMLProps<HTMLElement>) => {
     const mode = useTheme().palette.mode
     const Icon = mode === 'dark' ? Icons.MaskBanner : Icons.Mask
     return (

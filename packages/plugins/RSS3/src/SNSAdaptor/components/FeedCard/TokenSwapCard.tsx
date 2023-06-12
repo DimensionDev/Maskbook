@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
@@ -61,7 +60,7 @@ interface TokenSwapCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - TokenSwap
  */
-export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
+export const TokenSwapCard = ({ feed, ...rest }: TokenSwapCardProps) => {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()

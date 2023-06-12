@@ -2,7 +2,6 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
@@ -48,7 +47,7 @@ interface CollectibleApprovalFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - CollectibleApproval
  */
-export const CollectibleApprovalCard: FC<CollectibleApprovalFeedCardProps> = ({ feed, ...rest }) => {
+export const CollectibleApprovalCard = ({ feed, ...rest }: CollectibleApprovalFeedCardProps) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

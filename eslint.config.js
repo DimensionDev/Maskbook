@@ -55,6 +55,26 @@ const avoidMistakeRules = {
             types: {
                 // {} is widely used in React.PropsWithChildren<{}>. Unban this until we find better alternatives
                 '{}': false,
+                FC: {
+                    message:
+                        "To declare a component, you don't have to use FC to annotate it. To type something that accepts/is a React Component, use ComponentType<T>.",
+                    fixWith: 'ComponentType',
+                },
+                ReactElement: {
+                    message:
+                        'In most cases, you want ReactNode. Only ignore this rule when you want to use cloneElement.',
+                    fixWith: 'ReactNode',
+                },
+                'React.FC': {
+                    message:
+                        "To declare a component, you don't have to use React.FC to annotate it. To type something that accepts/is a React Component, use React.ComponentType<T>.",
+                    fixWith: 'React.ComponentType',
+                },
+                'React.ReactElement': {
+                    message:
+                        'In most cases, you want React.ReactNode. Only ignore this rule when you want to use cloneElement.',
+                    fixWith: 'React.ReactNode',
+                },
             },
             extendDefaults: true,
         },
@@ -458,6 +478,9 @@ const plugins = {
     'react-hooks': ReactHooksPlugin,
 }
 export default [
+    {
+        settings: { react: { version: '18.3' } },
+    },
     {
         ignores: [
             '**/*.d.ts',

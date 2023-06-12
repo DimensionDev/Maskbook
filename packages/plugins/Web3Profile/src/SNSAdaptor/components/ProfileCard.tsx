@@ -16,7 +16,7 @@ import {
     alpha,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { memo, type FC, useState, useCallback, useMemo, useRef } from 'react'
+import { memo, useState, useCallback, useMemo, useRef } from 'react'
 import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -107,7 +107,7 @@ interface Props extends CardProps {
     onAddWallet?(): void
 }
 
-export const ProfileCard: FC<Props> = memo(function ProfileCard({
+export const ProfileCard = memo(function ProfileCard({
     profile,
     avatar,
     walletProofs = EMPTY_LIST,
@@ -119,7 +119,7 @@ export const ProfileCard: FC<Props> = memo(function ProfileCard({
     onToggle,
     onAddWallet,
     ...rest
-}) {
+}: Props) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const [expanded, setExpanded] = useState(initialExpanded)

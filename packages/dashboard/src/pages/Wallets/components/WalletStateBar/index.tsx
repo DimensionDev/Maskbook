@@ -1,4 +1,4 @@
-import React, { type FC, memo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
@@ -102,7 +102,7 @@ interface WalletStateBarUIProps {
     openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
 
-export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>> = ({
+export const WalletStateBarUI = ({
     isPending,
     network,
     provider,
@@ -112,7 +112,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
     openConnectWalletDialog,
     openMenu,
     children,
-}) => {
+}: PropsWithChildren<WalletStateBarUIProps>) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 

@@ -1,4 +1,4 @@
-import { type FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
+import { forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import format from 'date-fns/format'
@@ -81,7 +81,7 @@ interface TransactionProps extends GridProps {
     transaction: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
-const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear = noop, ...rest }) => {
+const Transaction = ({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) => {
     const t = useSharedI18N()
     const { classes, theme } = useStyles()
 
@@ -170,17 +170,24 @@ interface Props extends ListProps {
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 
-export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
-    const { classes, cx } = useStyles()
-    const { chainId } = useChainContext()
-    if (!transactions.length) return null
-    return (
-        <List className={cx(classes.list, className)} {...rest} ref={ref}>
-            {transactions.map((tx) => (
-                <ListItem key={tx.id} className={classes.listItem}>
-                    <Transaction className={classes.transaction} transaction={tx} chainId={chainId} onClear={onClear} />
-                </ListItem>
-            ))}
-        </List>
-    )
-})
+export const TransactionList = forwardRef<HTMLUListElement, Props>(
+    ({ className, transactions, onClear = noop, ...rest }, ref) => {
+        const { classes, cx } = useStyles()
+        const { chainId } = useChainContext()
+        if (!transactions.length) return null
+        return (
+            <List className={cx(classes.list, className)} {...rest} ref={ref}>
+                {transactions.map((tx) => (
+                    <ListItem key={tx.id} className={classes.listItem}>
+                        <Transaction
+                            className={classes.transaction}
+                            transaction={tx}
+                            chainId={chainId}
+                            onClear={onClear}
+                        />
+                    </ListItem>
+                ))}
+            </List>
+        )
+    },
+)

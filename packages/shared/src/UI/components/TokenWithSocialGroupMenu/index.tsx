@@ -1,4 +1,4 @@
-import { type FC, type PropsWithChildren, useCallback, memo } from 'react'
+import { type PropsWithChildren, useCallback, memo } from 'react'
 import { groupBy, toPairs } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TokenWithSocialGroupProps extends MenuProps {
+export interface TokenWithSocialGroupProps extends PropsWithChildren<MenuProps> {
     collectionList: Web3Helper.TokenResultAll[]
     currentCollection?: Web3Helper.TokenResultAll
     socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
@@ -84,96 +84,92 @@ const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungib
     NonFungibleCollection: 'NFT',
 }
 
-export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroupProps>> = memo(
-    function TokenWithSocialGroupMenu({
-        currentCollection,
-        collectionList: collectionList_,
-        disablePortal = true,
-        disableScrollLock = true,
-        socialAccounts,
-        currentAddress,
-        onAddressChange,
-        fromSocialCard,
-        onTokenChange,
-        onClose,
-        ...rest
-    }) {
-        const { classes } = useStyles()
-        const t = useSharedI18N()
+export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
+    currentCollection,
+    collectionList: collectionList_,
+    disablePortal = true,
+    disableScrollLock = true,
+    socialAccounts,
+    currentAddress,
+    onAddressChange,
+    fromSocialCard,
+    onTokenChange,
+    onClose,
+    ...rest
+}: TokenWithSocialGroupProps) {
+    const { classes } = useStyles()
+    const t = useSharedI18N()
 
-        const onSelect = useCallback(
-            (value: Web3Helper.TokenResultAll, index: number) => {
-                onTokenChange?.(value, index)
-                onClose?.()
-            },
-            [onTokenChange, onClose],
-        )
+    const onSelect = useCallback(
+        (value: Web3Helper.TokenResultAll, index: number) => {
+            onTokenChange?.(value, index)
+            onClose?.()
+        },
+        [onTokenChange, onClose],
+    )
 
-        const collectionList = useTokenMenuCollectionList(collectionList_, currentCollection)
+    const collectionList = useTokenMenuCollectionList(collectionList_, currentCollection)
 
-        const groups: Array<
-            [
-                type: SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
-                collectionList: Web3Helper.TokenResultAll[],
-            ]
-        > = toPairs(groupBy(collectionList, (x) => x.type)).map(([type, collectionList]) => [
-            type as SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
-            collectionList,
-        ])
+    const groups: Array<
+        [
+            type: SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
+            collectionList: Web3Helper.TokenResultAll[],
+        ]
+    > = toPairs(groupBy(collectionList, (x) => x.type)).map(([type, collectionList]) => [
+        type as SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
+        collectionList,
+    ])
 
-        return (
-            <Menu
-                disablePortal={disablePortal}
-                disableScrollLock={disableScrollLock}
-                PaperProps={{
-                    className: classes.addressMenu,
-                }}
-                onClose={onClose}
-                {...rest}>
-                {groups.map(([type, groupOptions]) => (
-                    <div key={type} className={classes.group}>
-                        <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
-                        <Divider className={classes.divider} />
-                        <TokenMenuList
-                            options={groupOptions}
-                            currentOption={currentCollection}
-                            onSelect={onSelect}
-                            fromSocialCard={fromSocialCard}
-                        />
-                    </div>
-                ))}
-
-                <div key="rss3" className={classes.group}>
-                    {collectionList?.length > 0 && socialAccounts?.length ? (
-                        <>
-                            <Typography className={classes.groupName}>
-                                {t.address_viewer_address_name_address()}
-                            </Typography>
-                            <Divider className={classes.divider} />
-                        </>
-                    ) : null}
-                    {socialAccounts?.map((x) => {
-                        return (
-                            <MenuItem
-                                className={classes.menuItem}
-                                key={x.address}
-                                value={x.address}
-                                onClick={() => {
-                                    onAddressChange?.(x.address)
-                                    onClose?.()
-                                }}>
-                                <div className={classes.addressItem}>
-                                    <AddressItem socialAccount={x} linkIconClassName={classes.secondLinkIcon} />
-                                    <AccountIcon socialAccount={x} />
-                                </div>
-                                {isSameAddress(currentAddress, x.address) && (
-                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
-                                )}
-                            </MenuItem>
-                        )
-                    })}
+    return (
+        <Menu
+            disablePortal={disablePortal}
+            disableScrollLock={disableScrollLock}
+            PaperProps={{
+                className: classes.addressMenu,
+            }}
+            onClose={onClose}
+            {...rest}>
+            {groups.map(([type, groupOptions]) => (
+                <div key={type} className={classes.group}>
+                    <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
+                    <Divider className={classes.divider} />
+                    <TokenMenuList
+                        options={groupOptions}
+                        currentOption={currentCollection}
+                        onSelect={onSelect}
+                        fromSocialCard={fromSocialCard}
+                    />
                 </div>
-            </Menu>
-        )
-    },
-)
+            ))}
+
+            <div key="rss3" className={classes.group}>
+                {collectionList?.length > 0 && socialAccounts?.length ? (
+                    <>
+                        <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
+                        <Divider className={classes.divider} />
+                    </>
+                ) : null}
+                {socialAccounts?.map((x) => {
+                    return (
+                        <MenuItem
+                            className={classes.menuItem}
+                            key={x.address}
+                            value={x.address}
+                            onClick={() => {
+                                onAddressChange?.(x.address)
+                                onClose?.()
+                            }}>
+                            <div className={classes.addressItem}>
+                                <AddressItem socialAccount={x} linkIconClassName={classes.secondLinkIcon} />
+                                <AccountIcon socialAccount={x} />
+                            </div>
+                            {isSameAddress(currentAddress, x.address) && (
+                                <Icons.CheckCircle size={20} className={classes.selectedIcon} />
+                            )}
+                        </MenuItem>
+                    )
+                })}
+            </div>
+        </Menu>
+    )
+})

@@ -1,4 +1,4 @@
-import { type FC, useCallback } from 'react'
+import { useCallback } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
@@ -79,7 +79,7 @@ interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
 }
 
-export const NFTItem: FC<NFTItemProps> = ({ token }) => {
+export const NFTItem = ({ token }: NFTItemProps) => {
     const { classes } = useStyles()
     return (
         <AssetPreviewer
@@ -91,7 +91,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-export const NFTList: FC<Props> = ({
+export const NFTList = ({
     selectedPairs,
     tokens,
     onChange,
@@ -100,7 +100,7 @@ export const NFTList: FC<Props> = ({
     nextPage,
     loadFinish,
     loadError,
-}) => {
+}: Props) => {
     const { classes, cx } = useStyles()
     const { pluginID } = useNetworkContext()
 

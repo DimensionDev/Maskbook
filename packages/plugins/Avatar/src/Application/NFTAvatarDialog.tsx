@@ -1,4 +1,4 @@
-import { type FC, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Box, DialogContent } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { MemoryRouter } from 'react-router-dom'
@@ -29,7 +29,7 @@ interface NFTAvatarDialogProps extends InjectedDialogProps {
     startPicking?: boolean
 }
 
-export const NFTAvatarDialog: FC<NFTAvatarDialogProps> = ({ startPicking, ...rest }) => {
+export const NFTAvatarDialog = ({ startPicking, ...rest }: NFTAvatarDialogProps) => {
     const { classes } = useStyles()
 
     const initialEntries = useMemo(() => {

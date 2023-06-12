@@ -1,4 +1,4 @@
-import { cloneElement, useCallback, useReducer } from 'react'
+import { cloneElement, useCallback, useReducer, type ReactElement } from 'react'
 import { cloneDeep, merge } from 'lodash-es'
 import {
     type DialogProps,
@@ -244,7 +244,9 @@ const dialogTheme = extendsTheme((theme) => ({
 }))
 
 interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
-    icon?: React.ReactElement
+    // cloneElement is used
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    icon?: ReactElement
     iconColor?: string
     primary: string
     secondary?: React.ReactNode

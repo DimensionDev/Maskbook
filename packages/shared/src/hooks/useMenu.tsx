@@ -41,7 +41,7 @@ export function useMenuConfig(
     config: MenuConfigOptions,
     ref?: MutableRefObject<HTMLDivElement | null>,
 ): [
-    menu: React.ReactElement,
+    menu: React.ReactNode,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
     closeDialog: () => void,
 ] {

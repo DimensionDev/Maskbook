@@ -1,4 +1,4 @@
-import { type FC, memo, useRef } from 'react'
+import { memo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { AccountIcon, ReversedAddress } from '@masknet/shared'
@@ -113,7 +113,7 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
     return mapping[pluginID]
 }
 
-const ExternalLink: FC<{ account: SocialAccount<Web3Helper.ChainIdAll> }> = ({ account }) => {
+const ExternalLink = ({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const Others = useWeb3Others(account.pluginID)
@@ -135,7 +135,7 @@ const ExternalLink: FC<{ account: SocialAccount<Web3Helper.ChainIdAll> }> = ({ a
 interface Props {
     className?: string
 }
-export const RecipientSelect: FC<Props> = memo(({ className }) => {
+export const RecipientSelect = memo(({ className }: Props) => {
     const { classes, cx } = useStyles()
     const selectRef = useRef(null)
     const { recipient, recipients, setRecipient } = useTip()

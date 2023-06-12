@@ -6,7 +6,6 @@ import { noop, omit } from 'lodash-es'
 import {
     createContext,
     type Dispatch,
-    type FC,
     memo,
     type PropsWithChildren,
     type SetStateAction,
@@ -67,7 +66,7 @@ interface Props extends PropsWithChildren<{}> {
     compositionType: CompositionType
 }
 
-export const FileManagementProvider: FC<Props> = memo(({ children, compositionType }) => {
+export const FileManagementProvider = memo(({ children, compositionType }: Props) => {
     const { value: files = EMPTY_LIST, retry: refetchFiles } = useAsyncRetry(
         () => PluginFileServiceRPC.getAllFiles(),
         [],

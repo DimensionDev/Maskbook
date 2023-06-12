@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
-import { useMemo, type FC } from 'react'
+import { useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -62,7 +62,7 @@ interface VoteCardProps extends Omit<FeedCardProps, 'feed'> {
  * - NoteCreate
  * - NoteEdit
  */
-export const VoteCard: FC<VoteCardProps> = ({ feed, className, ...rest }) => {
+export const VoteCard = ({ feed, className, ...rest }: VoteCardProps) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()

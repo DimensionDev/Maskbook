@@ -92,7 +92,7 @@ interface ApplicationEntryProps {
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     iconFilterColor?: string
-    tooltipHint?: string | React.ReactElement
+    tooltipHint?: React.ReactNode
     onClick: () => void
 }
 

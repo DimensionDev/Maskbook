@@ -1,6 +1,6 @@
-import React from 'react'
+import type { PropsWithChildren } from 'react'
 
-interface FixSizeListItemProps<T> extends React.PropsWithChildren<{}> {
+interface FixSizeListItemProps<T> extends PropsWithChildren<{}> {
     data: {
         dataSet: T[]
         onSelect: any
@@ -9,7 +9,7 @@ interface FixSizeListItemProps<T> extends React.PropsWithChildren<{}> {
     style: any
 }
 
-export interface MaskSearchableListItemProps<T> extends React.PropsWithChildren<{}> {
+export interface MaskSearchableListItemProps<T> extends PropsWithChildren<{}> {
     data: T
     index: number
     onSelect(item: T): void

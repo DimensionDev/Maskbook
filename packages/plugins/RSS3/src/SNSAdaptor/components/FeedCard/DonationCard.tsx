@@ -2,7 +2,7 @@ import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { type FC, type HTMLProps, memo, useState } from 'react'
+import { type HTMLProps, memo, useState } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
@@ -98,7 +98,7 @@ interface DonationCardProps extends Omit<FeedCardProps, 'feed'> {
 interface CardBodyProps extends HTMLProps<HTMLDivElement> {
     metadata: RSS3BaseAPI.DonateMetadata
 }
-const CardBody: FC<CardBodyProps> = memo(({ metadata, className, ...rest }) => {
+const CardBody = memo(({ metadata, className, ...rest }: CardBodyProps) => {
     const { classes, cx } = useStyles()
     return (
         <div className={cx(classes.body, className)} {...rest}>
@@ -117,7 +117,7 @@ const CardBody: FC<CardBodyProps> = memo(({ metadata, className, ...rest }) => {
  *
  * - DonationDonate
  */
-export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, className, ...rest }) => {
+export const DonationCard = ({ feed, actionIndex, className, ...rest }: DonationCardProps) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()

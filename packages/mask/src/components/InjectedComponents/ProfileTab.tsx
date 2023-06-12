@@ -1,4 +1,4 @@
-import { type ReactElement, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type PropsWithChildren } from 'react'
 import { useMount } from 'react-use'
 import { Typography } from '@mui/material'
 import { MaskMessages, useLocationChange } from '../../utils/index.js'
@@ -7,10 +7,9 @@ import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { ProfileTabs } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared'
 
-export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
+export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren<{}> {
     clear(): void
     reset(): void
-    children?: ReactElement
     // Required! This component don't have it own style.
     classes: Record<'root' | 'button' | 'selected', string>
     title: string

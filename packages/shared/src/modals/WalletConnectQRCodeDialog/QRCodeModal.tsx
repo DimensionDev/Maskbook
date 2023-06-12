@@ -14,9 +14,11 @@ const useStyles = makeStyles()((theme) => ({
     tip: { fontSize: 12, marginTop: '10px' },
 }))
 
-export const QRCodeModal: React.FC<{
+interface QRCodeModalProps {
     uri: string
-}> = ({ uri }) => {
+}
+
+export const QRCodeModal = ({ uri }: QRCodeModalProps) => {
     const t = useSharedI18N()
     const { classes } = useStyles()
 

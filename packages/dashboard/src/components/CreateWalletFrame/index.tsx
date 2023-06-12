@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 const useStyles = makeStyles()({
@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export interface CreateMaskWalletFrameProps extends React.PropsWithChildren<{}> {}
+export interface CreateMaskWalletFrameProps extends PropsWithChildren<{}> {}
 
 export const CreateMaskWalletFrame = memo<CreateMaskWalletFrameProps>((props) => {
     const { classes } = useStyles()

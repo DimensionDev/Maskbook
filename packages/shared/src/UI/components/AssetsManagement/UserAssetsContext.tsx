@@ -8,7 +8,6 @@ import {
     useMemo,
     useReducer,
     useRef,
-    type FC,
     type PropsWithChildren,
     type MutableRefObject,
 } from 'react'
@@ -40,7 +39,7 @@ export const AssetsContext = createContext<AssetsContextOptions>({
     loadVerifiedBy: () => Promise.resolve(),
 })
 
-interface Props {
+interface Props extends PropsWithChildren<{}> {
     pluginID: NetworkPluginID
     address: string
 }
@@ -48,7 +47,7 @@ interface Props {
 /** Min merged collection chunk size */
 const CHUNK_SIZE = 8
 
-export const UserAssetsProvider: FC<PropsWithChildren<Props>> = memo(({ pluginID, address, children }) => {
+export const UserAssetsProvider = memo(({ pluginID, address, children }: Props) => {
     const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
     const indicatorMapRef = useRef<Map<string, PageIndicator | undefined>>(new Map())
     const assetsMapRef = useRef<AssetsReducerState['assetsMap']>({})

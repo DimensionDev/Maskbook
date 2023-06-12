@@ -1,9 +1,8 @@
-import type { FC } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { RoutePaths } from '../constants.js'
 import { Terms, FileBrowser, FilePicker, UploadFile } from './components/index.js'
 
-export const FileRoutes: FC = () => (
+export const FileRoutes = () => (
     <Routes>
         <Route path={RoutePaths.Browser} element={<FileBrowser />} />
         <Route path={RoutePaths.FileSelector} element={<FilePicker />} />
