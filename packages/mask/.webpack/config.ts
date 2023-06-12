@@ -210,7 +210,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     { from: join(__dirname, '../public/'), to: flags.outputPath },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: flags.outputPath },
                     { from: join(__dirname, '../../gun-utils/gun.js'), to: flags.outputPath },
-                    { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: flags.outputPath },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
                         from: '*.js',
