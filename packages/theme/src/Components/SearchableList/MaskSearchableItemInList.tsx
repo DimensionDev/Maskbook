@@ -15,8 +15,10 @@ export interface MaskSearchableListItemProps<T> extends PropsWithChildren<{}> {
     onSelect(item: T): void
 }
 
-export const MaskSearchableItemInList = <T,>({ children, data, index, style }: FixSizeListItemProps<T>) => (
-    <div style={style}>
-        {React.createElement(children as any, { data: data.dataSet[index], index, onSelect: data.onSelect })}
-    </div>
-)
+export function MaskSearchableItemInList<T>({ children, data, index, style }: FixSizeListItemProps<T>) {
+    return (
+        <div style={style}>
+            {React.createElement(children as any, { data: data.dataSet[index], index, onSelect: data.onSelect })}
+        </div>
+    )
+}

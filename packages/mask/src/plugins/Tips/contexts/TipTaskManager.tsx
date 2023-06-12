@@ -15,7 +15,7 @@ interface Task extends TipTask {
     id: number
 }
 
-export const TipTaskManager = ({ children }: PropsWithChildren<{}>) => {
+export function TipTaskManager({ children }: PropsWithChildren<{}>) {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {

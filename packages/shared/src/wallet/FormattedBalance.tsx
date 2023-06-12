@@ -18,7 +18,7 @@ export interface FormattedBalanceProps extends withClasses<'balance' | 'symbol'>
     formatter?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
 }
 
-export const FormattedBalance = (props: FormattedBalanceProps) => {
+export function FormattedBalance(props: FormattedBalanceProps) {
     const { value, decimals, significant, symbol, minimumBalance, formatter = (value) => value } = props
     const valueInt = new BigNumber(value ?? '0').toFixed(0)
     let formatted = formatter(valueInt, decimals, significant)

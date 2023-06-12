@@ -56,7 +56,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
     }
 }
 
-export const UploadAvatarDialog = () => {
+export function UploadAvatarDialog() {
     const t = useI18N()
     const { classes } = useStyles()
     const { proof, proofs, selectedTokenInfo } = useAvatarManagement()

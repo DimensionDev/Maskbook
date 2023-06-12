@@ -80,7 +80,7 @@ const contextMap: Partial<
  * - TokenOut
  * - TokenBurn
  */
-export const TokenOperationCard = ({ feed, ...rest }: TokenFeedCardProps) => {
+export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()

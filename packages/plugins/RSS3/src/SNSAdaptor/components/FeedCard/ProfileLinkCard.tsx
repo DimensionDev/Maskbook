@@ -82,7 +82,7 @@ const resolveHandle = (metadata: RSS3BaseAPI.FollowMetadata) => {
  *
  * - ProfileLink, aka Follow, Unfollow
  */
-export const ProfileLinkCard = ({ feed, className, ...rest }: ProfileLinkCardProps) => {
+export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardProps) {
     const { classes, cx } = useStyles()
 
     const action = feed.actions[0]

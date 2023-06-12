@@ -76,7 +76,7 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  * - TokenOut
  * - UnknownBurn
  */
-export const LiquidityCard = ({ feed, className, ...rest }: TokenFeedCardProps) => {
+export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()

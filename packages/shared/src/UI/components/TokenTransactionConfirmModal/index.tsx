@@ -81,7 +81,7 @@ export interface TokenTransactionConfirmModalProps extends PropsWithChildren<Inj
     onConfirm?(): void
 }
 
-export const TokenTransactionConfirmModal = ({
+export function TokenTransactionConfirmModal({
     className,
     confirmText,
     onConfirm,
@@ -95,7 +95,7 @@ export const TokenTransactionConfirmModal = ({
     nonFungibleTokenId,
     onClose,
     ...rest
-}: TokenTransactionConfirmModalProps) => {
+}: TokenTransactionConfirmModalProps) {
     const { classes } = useStyles()
     const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'

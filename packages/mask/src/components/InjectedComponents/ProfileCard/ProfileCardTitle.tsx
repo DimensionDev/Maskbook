@@ -98,14 +98,14 @@ export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     address?: string
     onAddressChange?(address: string): void
 }
-export const ProfileCardTitle = ({
+export function ProfileCardTitle({
     className,
     socialAccounts,
     address,
     identity,
     onAddressChange,
     ...rest
-}: ProfileCardTitleProps) => {
+}: ProfileCardTitleProps) {
     const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
 

@@ -47,7 +47,7 @@ interface CollectibleApprovalFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - CollectibleApproval
  */
-export const CollectibleApprovalCard = ({ feed, ...rest }: CollectibleApprovalFeedCardProps) => {
+export function CollectibleApprovalCard({ feed, ...rest }: CollectibleApprovalFeedCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

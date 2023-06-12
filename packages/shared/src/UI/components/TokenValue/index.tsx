@@ -43,7 +43,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     token?: Web3Helper.FungibleTokenAll | null
 }
 
-export const TokenValue = ({ className, token, amount, ...rest }: Props) => {
+export function TokenValue({ className, token, amount, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

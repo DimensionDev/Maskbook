@@ -51,7 +51,7 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
     },
 }
 
-export const LeavePageConfirmDialog = () => {
+export function LeavePageConfirmDialog() {
     const [open, setOpen] = useState(false)
     const [info, setInfo] = useState<OpenPageConfirmEvent>()
     const { classes } = useStyles({ positionStyle: positionStyleMap[info?.position ?? 'center'] })

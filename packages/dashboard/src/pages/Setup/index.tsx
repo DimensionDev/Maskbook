@@ -14,7 +14,7 @@ const Title = styled('div')(
 `,
 )
 
-const Setup = () => {
+function Setup() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 

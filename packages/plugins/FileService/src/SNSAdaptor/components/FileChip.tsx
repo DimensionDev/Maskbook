@@ -19,7 +19,7 @@ interface SingleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 's
     onClick(options: { compositionType: CompositionType }): void
 }
 
-export const SingleFileChip = ({ name, size, onClick, ...rest }: SingleFileChipProps) => {
+export function SingleFileChip({ name, size, onClick, ...rest }: SingleFileChipProps) {
     const { classes } = useStyles()
     const t = useI18N()
     const { type } = useCompositionContext()
@@ -41,7 +41,7 @@ interface MultipleFileChipProps
         Pick<SingleFileChipProps, 'onClick'> {
     count: number
 }
-export const MultipleFileChip = ({ count, onClick, ...rest }: MultipleFileChipProps) => {
+export function MultipleFileChip({ count, onClick, ...rest }: MultipleFileChipProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const { type } = useCompositionContext()

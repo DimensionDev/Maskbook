@@ -204,7 +204,7 @@ export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
     count: number
     expanded?: boolean
 }
-export const CollectionSkeleton = ({ className, count, id, expanded, ...rest }: CollectionSkeletonProps) => {
+export function CollectionSkeleton({ className, count, id, expanded, ...rest }: CollectionSkeletonProps) {
     const { compact, containerRef } = useCompactDetection()
     const { classes, cx } = useStyles({ compact })
 

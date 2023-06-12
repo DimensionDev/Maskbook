@@ -7,7 +7,7 @@ export interface FormattedAddressProps {
     formatter?: (address: string, size?: number) => string
 }
 
-export const FormattedAddress = ({ address, size, formatter = identity }: FormattedAddressProps) => {
+export function FormattedAddress({ address, size, formatter = identity }: FormattedAddressProps) {
     if (!address) return null
     return <Fragment>{formatter(address, size)}</Fragment>
 }

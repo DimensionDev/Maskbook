@@ -18,7 +18,7 @@ interface Props extends IconButtonProps {
     userId: string
     identity?: SocialIdentity
 }
-export const CollectionProjectAvatarBadge = ({ address, userId, className, identity, ...rest }: Props) => {
+export function CollectionProjectAvatarBadge({ address, userId, className, identity, ...rest }: Props) {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 

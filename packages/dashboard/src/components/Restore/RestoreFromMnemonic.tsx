@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const RestoreFromMnemonic = () => {
+export function RestoreFromMnemonic() {
     const navigate = useNavigate()
     const { classes } = useStyles()
     const [error, setError] = useState('')

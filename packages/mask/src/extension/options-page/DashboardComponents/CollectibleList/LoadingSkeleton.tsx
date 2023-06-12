@@ -4,7 +4,7 @@ import { CollectibleItemSkeleton } from './CollectibleItem.js'
 
 interface Props extends Pick<HTMLProps<HTMLDivElement>, 'className'> {}
 
-export const LoadingSkeleton = ({ className }: Props) => {
+export function LoadingSkeleton({ className }: Props) {
     return (
         <div className={className}>
             {range(3).map((i) => (

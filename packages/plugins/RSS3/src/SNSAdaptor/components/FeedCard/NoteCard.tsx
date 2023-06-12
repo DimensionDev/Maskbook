@@ -133,7 +133,7 @@ const cardTypeMap = {
  * - NoteEdit
  * - NoteLink
  */
-export const NoteCard = ({ feed, className, ...rest }: NoteCardProps) => {
+export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 

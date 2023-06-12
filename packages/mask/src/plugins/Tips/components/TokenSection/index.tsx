@@ -16,7 +16,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export const TokenSection = (props: HTMLProps<HTMLDivElement>) => {
+export function TokenSection(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount, isAvailableBalance, balance } = useTip()
     const { pluginID } = useNetworkContext()

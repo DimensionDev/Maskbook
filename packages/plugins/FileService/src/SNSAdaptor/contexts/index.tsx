@@ -6,7 +6,7 @@ export * from './Confirm/index.js'
 export * from './RenameDialog/index.js'
 export * from './FileManagement/index.js'
 
-export const UIProvider = ({ children }: PropsWithChildren<{}>) => {
+export function UIProvider({ children }: PropsWithChildren<{}>) {
     return (
         <ConfirmProvider>
             <RenameProvider>{children}</RenameProvider>

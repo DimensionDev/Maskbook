@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends IconButtonProps {
     userId: string
 }
-export const ProfileAvatarBadge = ({ userId, className, ...rest }: Props) => {
+export function ProfileAvatarBadge({ userId, className, ...rest }: Props) {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 

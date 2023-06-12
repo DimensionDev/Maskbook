@@ -102,7 +102,7 @@ interface WalletStateBarUIProps {
     openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
 
-export const WalletStateBarUI = ({
+export function WalletStateBarUI({
     isPending,
     network,
     provider,
@@ -112,7 +112,7 @@ export const WalletStateBarUI = ({
     openConnectWalletDialog,
     openMenu,
     children,
-}: PropsWithChildren<WalletStateBarUIProps>) => {
+}: PropsWithChildren<WalletStateBarUIProps>) {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 

@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
-export const NFTListDialog = () => {
+export function NFTListDialog() {
     const t = useI18N()
     const sharedI18N = useSharedI18N()
     const { classes } = useStyles()

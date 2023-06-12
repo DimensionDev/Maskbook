@@ -45,7 +45,7 @@ async function onClear() {
         }),
     )
 }
-export const DatabaseOps = () => {
+export function DatabaseOps() {
     const { t } = useI18N()
     return (
         <section>

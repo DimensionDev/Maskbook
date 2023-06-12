@@ -79,7 +79,7 @@ interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
 }
 
-export const NFTItem = ({ token }: NFTItemProps) => {
+export function NFTItem({ token }: NFTItemProps) {
     const { classes } = useStyles()
     return (
         <AssetPreviewer
@@ -91,7 +91,7 @@ export const NFTItem = ({ token }: NFTItemProps) => {
     )
 }
 
-export const NFTList = ({
+export function NFTList({
     selectedPairs,
     tokens,
     onChange,
@@ -100,7 +100,7 @@ export const NFTList = ({
     nextPage,
     loadFinish,
     loadError,
-}: Props) => {
+}: Props) {
     const { classes, cx } = useStyles()
     const { pluginID } = useNetworkContext()
 

@@ -328,13 +328,13 @@ const codeStyleRules = {
     'unicorn/throw-new-error': 'warn',
     // 'unicorn/prefer-logical-operator-over-ternary': 'warn', // prefer ?? and ||
     // 'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
-    // 'react/function-component-definition': [
-    //     'warn',
-    //     {
-    //         namedComponents: 'function-declaration',
-    //         unnamedComponents: 'function-expression',
-    //     },
-    // ],
+    'react/function-component-definition': [
+        'warn',
+        {
+            namedComponents: 'function-declaration',
+            unnamedComponents: ['function-expression', 'arrow-function'],
+        },
+    ],
     'react/jsx-boolean-value': ['error', 'never'],
     // 'react/jsx-boolean-value': ['error', 'never', { always: ['value'] }],
     // 'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],

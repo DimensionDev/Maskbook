@@ -13,7 +13,7 @@ export interface SendingCodeFieldProps {
     onChange?(code: string): void
     onSend?(): void
 }
-export const SendingCodeField = ({
+export function SendingCodeField({
     onSend,
     sendButtonText = 'Send',
     label,
@@ -22,7 +22,7 @@ export const SendingCodeField = ({
     disabled = false,
     autoSend = false,
     onChange,
-}: SendingCodeFieldProps) => {
+}: SendingCodeFieldProps) {
     const [code, setCode] = useState<string>('')
     const sendButton = useRef<HTMLButtonElement>(null)
 

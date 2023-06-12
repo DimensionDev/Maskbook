@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const SourceProviderSwitcher = ({ sources, onSelect, selected }: SourceProviderSwitcherProps) => {
+export function SourceProviderSwitcher({ sources, onSelect, selected }: SourceProviderSwitcherProps) {
     const { classes } = useStyles()
     const _sources = sources ?? sourceList
     const handleClick = (source: SourceType) => {

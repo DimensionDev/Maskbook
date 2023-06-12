@@ -18,12 +18,12 @@ interface PluginHeaderProps extends React.PropsWithChildren<{}> {
     isTokenTagPopper?: boolean
 }
 
-export const PluginDescriptor = ({
+export function PluginDescriptor({
     children,
     isCollectionProjectPopper,
     isProfilePage,
     isTokenTagPopper,
-}: PluginHeaderProps) => {
+}: PluginHeaderProps) {
     const { classes } = useStyles()
     const t = useSharedI18N()
 

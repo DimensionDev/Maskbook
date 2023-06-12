@@ -184,7 +184,7 @@ interface TokenItemProps {
     exchangeToken: FungibleToken<ChainId, SchemaType>
 }
 
-const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
+function TokenItem({ price, token, exchangeToken }: TokenItemProps) {
     const { classes } = useStyles({})
 
     return (

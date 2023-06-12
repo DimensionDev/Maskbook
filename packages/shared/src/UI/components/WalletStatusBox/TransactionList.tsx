@@ -81,7 +81,7 @@ interface TransactionProps extends GridProps {
     transaction: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
-const Transaction = ({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) => {
+function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) {
     const t = useSharedI18N()
     const { classes, theme } = useStyles()
 

@@ -82,7 +82,7 @@ export interface SpaceMenuProps {
     disableScrollLock?: boolean
 }
 
-export const SpaceMenu = ({
+export function SpaceMenu({
     options,
     currentOption,
     onSelect,
@@ -91,7 +91,7 @@ export const SpaceMenu = ({
     setSpaceMenuOpen,
     disablePortal,
     disableScrollLock,
-}: SpaceMenuProps) => {
+}: SpaceMenuProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return (

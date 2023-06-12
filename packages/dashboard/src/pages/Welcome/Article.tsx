@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Permissions = () => {
+function Permissions() {
     const { classes } = useStyles()
     const { value: sites = [] } = useAsync(() => {
         return Services.SiteAdaptor.getSitesWithoutPermission()
@@ -90,7 +90,7 @@ const Permissions = () => {
     )
 }
 
-export const Article = (props: HTMLProps<HTMLElement>) => {
+export function Article(props: HTMLProps<HTMLElement>) {
     const { classes, cx } = useStyles()
 
     return (

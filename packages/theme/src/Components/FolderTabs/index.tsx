@@ -61,7 +61,7 @@ interface TabPanelProps extends HTMLProps<HTMLDivElement> {
     value?: number | string
 }
 
-export const FolderTabPanel = ({ className, ...rest }: TabPanelProps) => {
+export function FolderTabPanel({ className, ...rest }: TabPanelProps) {
     const { classes, cx } = useStyles()
     return <div className={cx(classes.tabPanel, className)} role="tabpanel" {...rest} />
 }
@@ -72,7 +72,7 @@ type TabPanelReactElement = ReactElement<TabPanelProps, ComponentType<TabPanelPr
 
 interface FolderTabsProps extends Pick<HTMLProps<HTMLDivElement>, 'defaultValue' | 'children'> {}
 
-export const FolderTabs = ({ children: childNodes, defaultValue = 0 }: FolderTabsProps) => {
+export function FolderTabs({ children: childNodes, defaultValue = 0 }: FolderTabsProps) {
     const { classes, cx } = useStyles()
     const [value, setValue] = useState(defaultValue)
     const tabs = Children.map(childNodes as TabPanelReactElement[], (child, index) => {

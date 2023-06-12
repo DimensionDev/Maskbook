@@ -32,7 +32,7 @@ const useStyles = makeStyles()({
     },
 })
 
-const MindsBannerTimeline = () => {
+function MindsBannerTimeline() {
     const { classes } = useStyles()
     return (
         <Banner
@@ -45,7 +45,7 @@ const MindsBannerTimeline = () => {
     )
 }
 
-const MindsBannerPopup = () => {
+function MindsBannerPopup() {
     const { classes } = useStyles()
     return <Banner iconType="minds" classes={{ buttonText: classes.buttonNoMargin }} />
 }

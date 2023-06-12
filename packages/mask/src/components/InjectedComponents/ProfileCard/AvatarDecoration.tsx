@@ -9,7 +9,7 @@ interface Props {
     size: number
     userId?: string
 }
-export const AvatarDecoration = ({ clipPathId, userId, className, size }: Props) => {
+export function AvatarDecoration({ clipPathId, userId, className, size }: Props) {
     const { value: user } = useAsync(async () => {
         if (!userId) return null
         return Twitter.getUserByScreenName(userId, true)

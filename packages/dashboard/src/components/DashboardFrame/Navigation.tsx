@@ -23,12 +23,12 @@ import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 
-const ListItemLinkUnStyled = ({
+function ListItemLinkUnStyled({
     to,
     ...props
 }: ListItemProps & {
     to: string
-}) => {
+}) {
     const navigate = useNavigate()
 
     return (
