@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { SecurityAPI } from '../entry-types.js'
 
 export interface GoPlusSpender {
@@ -47,7 +48,7 @@ export interface NFTSpenderInfo {
     address: string
     amount: string
     name: string
-    logo: React.ReactNode | undefined
+    logo: ReactNode | undefined
     contract: {
         address: string
         name: string

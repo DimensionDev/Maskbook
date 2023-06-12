@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { FormControl, type FormControlProps, Typography } from '@mui/material'
-import type { FC } from 'react'
 import { useTip } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'
 import { RecipientSelect } from './RecipientSelect.js'
@@ -36,7 +35,7 @@ const useStyles = makeStyles()((theme) => {
 
 interface Props extends FormControlProps {}
 
-export const RecipientSection: FC<Props> = ({ className, ...rest }) => {
+export const RecipientSection = ({ className, ...rest }: Props) => {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const {

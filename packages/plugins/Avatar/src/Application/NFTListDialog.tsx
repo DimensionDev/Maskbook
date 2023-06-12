@@ -16,7 +16,7 @@ import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { supportPluginIds } from '../constants.js'
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
-export const NFTListDialog: FC = () => {
+export const NFTListDialog = () => {
     const t = useI18N()
     const sharedI18N = useSharedI18N()
     const { classes } = useStyles()

@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from 'react'
-import React, { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
+import { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
 import { useMap } from 'react-use'
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -36,6 +36,7 @@ interface StepperProps {
         render: ReactNode
         trigger: boolean
     }
+    // eslint-disable-next-line @typescript-eslint/ban-types In this case we only accept ReactElement because we need to add more props.
     children: ReactElement[]
 }
 export const Stepper = (props: StepperProps) => {
@@ -44,6 +45,7 @@ export const Stepper = (props: StepperProps) => {
     const [currentStep, setCurrentStep] = useState(defaultStep)
     const [currentTransition, setCurrentTransition] = useState(transition?.render)
 
+    // eslint-disable-next-line @typescript-eslint/ban-types documented above
     const [steps, { set: setSteps }] = useMap<{ [key: string]: ReactElement }>()
     const [stepParams, { set: setParam }] = useMap<{ [key: string]: any }>()
 
@@ -53,6 +55,7 @@ export const Stepper = (props: StepperProps) => {
     }
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-types documented above
         Children.forEach(props.children, (child: ReactElement<StepProps>) => {
             if (!isValidElement(child)) return
             const name = child.props.name

@@ -1,4 +1,4 @@
-import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, type SyntheticEvent, useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -395,7 +395,7 @@ export interface Prior1559TransferUIProps {
     handleConfirm: () => void
     confirmLoading: boolean
     maxAmount: string
-    popoverContent?: ReactElement
+    popoverContent?: ReactNode
     disableConfirm?: boolean
 }
 

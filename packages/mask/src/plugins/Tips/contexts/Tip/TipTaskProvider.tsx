@@ -1,6 +1,5 @@
 import {
     type Dispatch,
-    type FC,
     memo,
     type SetStateAction,
     useCallback,
@@ -8,6 +7,7 @@ import {
     useEffect,
     useMemo,
     useState,
+    type PropsWithChildren,
 } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useNonFungibleTokenContract, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
@@ -26,7 +26,7 @@ import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 
-interface Props {
+interface Props extends PropsWithChildren<{}> {
     task: TipTask
 }
 
@@ -52,7 +52,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
     return [isDirty, setIsDirty]
 }
 
-export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
+export const TipTaskProvider = memo(({ children, task }: Props) => {
     const { targetPluginID, setTargetPluginID } = TargetRuntimeContext.useContainer()
     const { chainId: targetChainId } = useChainContext()
 

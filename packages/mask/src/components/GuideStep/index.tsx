@@ -1,4 +1,4 @@
-import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect } from 'react'
+import { cloneElement, useRef, useState, useLayoutEffect, type ReactElement } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
@@ -92,6 +92,7 @@ const NextButton = styled(ActionButton)({
 })
 
 export interface GuideStepProps {
+    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used.
     children: ReactElement
     total: number
     step: number

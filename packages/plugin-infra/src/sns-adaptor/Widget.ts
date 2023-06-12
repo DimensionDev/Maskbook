@@ -7,7 +7,7 @@ import type { Plugin } from '../types.js'
 export interface WidgetProps<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry> {
     name: Name
     pluginID?: PluginID
-    fallback?: React.ReactElement | null
+    fallback?: React.ReactNode | null
 }
 
 export function Widget<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
@@ -20,6 +20,6 @@ export function Widget<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
         return null
     }, [plugins])
 
-    if (!WidgetComponent) return fallback || createElement(Fragment, {})
+    if (!WidgetComponent) return createElement(Fragment, { children: fallback })
     return createElement(WidgetComponent, rest)
 }

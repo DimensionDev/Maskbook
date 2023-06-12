@@ -1,4 +1,4 @@
-import { type FC, memo, type MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, type MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { fill } from 'lodash-es'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -165,8 +165,8 @@ export interface NftRedPacketHistoryItemProps {
     onShowPopover: (anchorEl: HTMLElement, text: string) => void
     onHidePopover: () => void
 }
-export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
-    ({ history, onSend, onShowPopover, onHidePopover, collections }) => {
+export const NftRedPacketHistoryItem = memo(
+    ({ history, onSend, onShowPopover, onHidePopover, collections }: NftRedPacketHistoryItemProps) => {
         const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [isViewed, setIsViewed] = useState(false)
         const ref = useRef<HTMLLIElement | null>(null)

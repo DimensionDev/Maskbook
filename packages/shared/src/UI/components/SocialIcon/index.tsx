@@ -1,4 +1,4 @@
-import type { ComponentType, FC, HTMLProps } from 'react'
+import type { ComponentType, HTMLProps } from 'react'
 import { type GeneratedIconProps, Icons } from '@masknet/icons'
 
 const socialIconMap = {
@@ -11,7 +11,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     /** Social url */
     url?: string
 }
-export const SocialIcon: FC<Props> = ({ url, ...rest }) => {
+export const SocialIcon = ({ url, ...rest }: Props) => {
     if (!url) return null
 
     const host = new URL(url).host as keyof typeof socialIconMap

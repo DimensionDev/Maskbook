@@ -13,6 +13,7 @@ const useStyles = makeStyles()({
 
 interface SocialTooltipProps {
     platform?: NextIDPlatform
+    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used.
     children: ReactElement
 }
 export function SocialTooltip({ children, platform }: SocialTooltipProps) {

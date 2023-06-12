@@ -1,4 +1,4 @@
-import { type FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
@@ -88,8 +88,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const GasSetting1559: FC<GasSettingProps> = memo(
-    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
+export const GasSetting1559 = memo(
+    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { t } = useI18N()
         const { classes } = useStyles()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -199,7 +199,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onConfirm?.({
-                    gasLimit: data.gasLimit,
+                    gasLimit: data.gasLimit as any,
                     maxFee: formatGweiToWei(data.maxFeePerGas).toFixed(0),
                     priorityFee: formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0),
                     gasOption: selectedGasOption,

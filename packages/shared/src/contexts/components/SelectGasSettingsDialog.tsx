@@ -1,4 +1,4 @@
-import { type FC, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '@masknet/shared'
@@ -43,7 +43,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     onClose?(): void
 }
 
-export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
+export const SelectGasSettingsDialog = ({
     open,
     pluginID,
     chainId,
@@ -55,7 +55,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     onSubmit,
     onClose,
     title,
-}) => {
+}: SelectGasSettingsDialogProps) => {
     const t = useSharedI18N()
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)

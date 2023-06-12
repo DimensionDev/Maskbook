@@ -2,7 +2,7 @@ import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import type { ComponentProps, FC } from 'react'
+import type { ComponentProps } from 'react'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,7 +30,7 @@ interface LabelProps extends ComponentProps<typeof Typography> {
     title?: string
 }
 
-export const Label: FC<LabelProps> = ({ className, ...rest }) => {
+export const Label = ({ className, ...rest }: LabelProps) => {
     const { classes, cx } = useStyles()
     return <Typography className={cx(classes.label, className)} component="span" {...rest} />
 }
@@ -38,7 +38,7 @@ export const Label: FC<LabelProps> = ({ className, ...rest }) => {
 interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
     address?: ReverseAddressProps['address']
 }
-export const AddressLabel: FC<AddressLabelProps> = ({ address, pluginID, size, className, ...rest }) => {
+export const AddressLabel = ({ address, pluginID, size, className, ...rest }: AddressLabelProps) => {
     const { classes, cx } = useStyles()
     return address ? (
         <ReversedAddress

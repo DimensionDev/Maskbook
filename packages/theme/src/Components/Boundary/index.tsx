@@ -1,13 +1,12 @@
 import {
     cloneElement,
     createContext,
-    type FC,
     memo,
-    type ReactElement,
     type RefObject,
     useContext,
     useMemo,
     useRef,
+    type ReactElement,
 } from 'react'
 
 interface Options {
@@ -19,10 +18,11 @@ const BoundaryContext = createContext<Options>({
 })
 
 interface BoundaryProps {
+    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used.
     children: ReactElement
 }
 
-export const Boundary: FC<BoundaryProps> = memo(({ children }) => {
+export const Boundary = memo(({ children }: BoundaryProps) => {
     const boundaryRef = useRef<HTMLElement>(null)
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (

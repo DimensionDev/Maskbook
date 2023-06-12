@@ -4,7 +4,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -62,7 +61,7 @@ interface TokenBridgeCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - TokenBridge
  */
-export const TokenBridgeCard: FC<TokenBridgeCardProps> = ({ feed, ...rest }) => {
+export const TokenBridgeCard = ({ feed, ...rest }: TokenBridgeCardProps) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

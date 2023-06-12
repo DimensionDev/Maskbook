@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Typography } from '@mui/material'
-import { type FC, memo, type ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -60,8 +60,8 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
 }
 
 // Yet, another Confirm Dialog
-export const ConfirmDialog: FC<ConfirmDialogProps> = memo(
-    ({ title, message, description, confirmLabel = 'Confirm', onSubmit, onClose, ...rest }) => {
+export const ConfirmDialog = memo(
+    ({ title, message, description, confirmLabel = 'Confirm', onSubmit, onClose, ...rest }: ConfirmDialogProps) => {
         const { classes } = useStyles()
 
         return (

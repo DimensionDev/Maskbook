@@ -1,4 +1,4 @@
-import { type FC, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useSubscription } from 'use-subscription'
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
@@ -56,7 +56,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
     }
 }
 
-export const UploadAvatarDialog: FC = () => {
+export const UploadAvatarDialog = () => {
     const t = useI18N()
     const { classes } = useStyles()
     const { proof, proofs, selectedTokenInfo } = useAvatarManagement()

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type MouseEvent } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import {
     List,
@@ -113,7 +113,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const mode = useTheme().palette.mode
     const { pluginID } = useNetworkContext()
 
-    const onExpand = (e: React.MouseEvent<HTMLElement>) => {
+    const onExpand = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation()
         toggleNavigationExpand()
     }

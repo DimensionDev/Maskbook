@@ -9,7 +9,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { useCallback, useEffect, useMemo, type FC, type HTMLProps, type MouseEventHandler } from 'react'
+import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUserId,
@@ -43,7 +43,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, props) => ({
     },
 }))
 
-export const TipButton: FC<Props> = (props) => {
+export const TipButton = (props: Props) => {
     const {
         className,
         accounts: receivingAccounts = EMPTY_LIST,

@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { NFTListDialog } from './NFTListDialog.js'
 import { PersonaPage } from './PersonaPage.js'
@@ -11,7 +10,7 @@ export enum RoutePaths {
     Exit = '/exit',
 }
 
-export const AvatarRoutes: FC = () => (
+export const AvatarRoutes = () => (
     <Routes>
         <Route path={RoutePaths.Personas} element={<PersonaPage />} />
         <Route path={RoutePaths.NFTPicker} element={<NFTListDialog />} />

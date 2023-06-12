@@ -11,6 +11,7 @@ import { useDashboardI18N } from '../../locales/index.js'
 import { Version } from './Version.js'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets/index.js'
+import type { ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -67,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const brands: Record<string, React.ReactNode> = {
+const brands: Record<string, ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
     'https://twitter.com/realMaskNetwork': <TwitterIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,

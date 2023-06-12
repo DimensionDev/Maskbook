@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { IconButton, InputBase, type InputBaseProps } from '@mui/material'
+import type { PropsWithChildren } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -10,10 +11,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface InputBoxProps extends withClasses<'root'> {
+export interface InputBoxProps extends withClasses<'root'>, PropsWithChildren<{}> {
     label: string
     onChange?: (keyword: string) => void
-    children?: React.ReactElement
     value?: string
     inputBaseProps?: Partial<InputBaseProps>
 }

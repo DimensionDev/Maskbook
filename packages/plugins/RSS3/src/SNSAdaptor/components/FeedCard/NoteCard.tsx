@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import { type FC, useCallback } from 'react'
+import { useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -133,7 +133,7 @@ const cardTypeMap = {
  * - NoteEdit
  * - NoteLink
  */
-export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
+export const NoteCard = ({ feed, className, ...rest }: NoteCardProps) => {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 

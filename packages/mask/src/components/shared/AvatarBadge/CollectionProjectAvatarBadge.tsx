@@ -1,4 +1,4 @@
-import { type FC, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import type { SocialIdentity } from '@masknet/shared-base'
@@ -18,7 +18,7 @@ interface Props extends IconButtonProps {
     userId: string
     identity?: SocialIdentity
 }
-export const CollectionProjectAvatarBadge: FC<Props> = ({ address, userId, className, identity, ...rest }) => {
+export const CollectionProjectAvatarBadge = ({ address, userId, className, identity, ...rest }: Props) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 
