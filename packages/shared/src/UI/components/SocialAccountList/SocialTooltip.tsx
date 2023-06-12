@@ -55,7 +55,7 @@ export function SocialTooltip({ children, platform }: SocialTooltipProps) {
             arrow
             placement="top"
             title={title}>
-            {cloneElement(children, { ...children.props, ref })}
+            {cloneElement(children, { ...children.props, ref } as any)}
         </ShadowRootTooltip>
     )
 }
