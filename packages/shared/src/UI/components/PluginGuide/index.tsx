@@ -4,12 +4,12 @@ import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
     cloneElement,
     createContext,
-    type ReactElement,
     useEffect,
     useLayoutEffect,
     useRef,
     useState,
     useMemo,
+    type ReactElement,
 } from 'react'
 import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
@@ -78,7 +78,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface GuideStepProps {
-    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used.
+    // cloneElement is used.
+    // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement
     step: number
     totalStep: number

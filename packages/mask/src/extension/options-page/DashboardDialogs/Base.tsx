@@ -244,7 +244,8 @@ const dialogTheme = extendsTheme((theme) => ({
 }))
 
 interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
-    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used
+    // cloneElement is used
+    // eslint-disable-next-line @typescript-eslint/ban-types
     icon?: ReactElement
     iconColor?: string
     primary: string

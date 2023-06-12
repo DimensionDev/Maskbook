@@ -18,7 +18,8 @@ const BoundaryContext = createContext<Options>({
 })
 
 interface BoundaryProps {
-    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used.
+    // cloneElement is used.
+    // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement
 }
 

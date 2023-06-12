@@ -1,11 +1,12 @@
 import { Tooltip as MuiTooltip, type TooltipProps } from '@mui/material'
-import { cloneElement, memo, type ReactElement, type ReactNode } from 'react'
+import { cloneElement, memo, type ReactElement } from 'react'
 import type { ShadowRootTooltip } from '../../entry.js'
 import { useDetectOverflow } from '../../hooks/index.js'
 
 interface TextOverflowTooltipProps extends TooltipProps {
     as?: typeof MuiTooltip | typeof ShadowRootTooltip
-    // eslint-disable-next-line @typescript-eslint/ban-types cloneElement is used.
+    // cloneElement is used.
+    // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement
 }
 

@@ -1,4 +1,4 @@
-import { Children, useState, type HTMLProps, type ReactElement, type ComponentType } from 'react'
+import { Children, useState, type HTMLProps, type ComponentType, type ReactElement } from 'react'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
 
@@ -66,7 +66,8 @@ export const FolderTabPanel = ({ className, ...rest }: TabPanelProps) => {
     return <div className={cx(classes.tabPanel, className)} role="tabpanel" {...rest} />
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types this is a subtype of ReactElement
+// this is a subtype of ReactElement
+// eslint-disable-next-line @typescript-eslint/ban-types
 type TabPanelReactElement = ReactElement<TabPanelProps, ComponentType<TabPanelProps>>
 
 interface FolderTabsProps extends Pick<HTMLProps<HTMLDivElement>, 'defaultValue' | 'children'> {}
