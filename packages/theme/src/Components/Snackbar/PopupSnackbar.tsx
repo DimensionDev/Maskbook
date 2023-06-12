@@ -49,7 +49,7 @@ const useStyles = makeStyles()(() => ({
 
 export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     return (
         <SnackbarProvider

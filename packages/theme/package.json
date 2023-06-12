@@ -2,26 +2,13 @@
   "name": "@masknet/theme",
   "sideEffects": false,
   "private": true,
-  "description": "@mui/material theme of design system of Mask Network",
+  "description": "@mui/material theme of the design system of Mask Network",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/src/entry.d.ts",
-      "mask-src": "./src/entry.ts",
-      "default": "./dist/src/entry.d.ts"
-    },
-    "./base": {
-      "types": "./dist/src/entry-base.d.ts",
-      "mask-src": "./src/entry-base.ts",
-      "default": "./dist/src/entry-base.js"
-    }
-  },
-  "types": "./dist/src/entry.d.ts",
-  "typesVersions": {
-    "*": {
-      "base": [
-        "./dist/src/entry-base.d.ts"
-      ]
+      "types": "./dist/src/index.d.ts",
+      "mask-src": "./src/index.ts",
+      "default": "./dist/src/index.d.ts"
     }
   },
   "scripts": {

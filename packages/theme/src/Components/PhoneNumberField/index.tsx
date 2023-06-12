@@ -37,8 +37,8 @@ export function PhoneNumberField({
     onChange,
 }: PhoneNumberFieldProps) {
     const { classes } = useStyles()
-    const [phone, setPhone] = useState<string>(value.phone)
-    const [countryCode, setCountryCode] = useState<string>(value.country)
+    const [phone, setPhone] = useState(value.phone)
+    const [countryCode, setCountryCode] = useState(value.country)
 
     const handleCountryCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value

@@ -1,6 +1,6 @@
 import { Tooltip as MuiTooltip, type TooltipProps } from '@mui/material'
 import { cloneElement, memo, type ReactElement } from 'react'
-import type { ShadowRootTooltip } from '../../entry.js'
+import type { ShadowRootTooltip } from '../../Components/index.js'
 import { useDetectOverflow } from '../../hooks/index.js'
 
 interface TextOverflowTooltipProps extends TooltipProps {
