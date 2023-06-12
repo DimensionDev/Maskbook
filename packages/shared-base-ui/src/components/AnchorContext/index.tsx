@@ -13,11 +13,7 @@ interface Props {
     anchorEl: HTMLElement | null
     anchorBounding?: DOMRect
 }
-export const AnchorProvider = function AnchorProvider({
-    anchorEl,
-    anchorBounding,
-    children,
-}: PropsWithChildren<Props>) {
+export function AnchorProvider({ anchorEl, anchorBounding, children }: PropsWithChildren<Props>) {
     const contextValue = useMemo(() => ({ anchorEl, anchorBounding }), [anchorEl, anchorBounding])
     return <AnchorContext.Provider value={contextValue}>{children}</AnchorContext.Provider>
 }
