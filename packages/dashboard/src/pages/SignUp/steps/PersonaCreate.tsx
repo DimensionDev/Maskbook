@@ -6,7 +6,7 @@ import { SignUpRoutePath } from '../routePath.js'
 import { Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 
-export const PersonaCreate = () => {
+export function PersonaCreate() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 

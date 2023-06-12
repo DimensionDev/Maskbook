@@ -6,6 +6,6 @@ export interface CoinIconProps extends TokenIconProps {
     type: TokenType
 }
 
-export const CoinIcon = ({ type, ...rest }: CoinIconProps) => {
+export function CoinIcon({ type, ...rest }: CoinIconProps) {
     return <TokenIcon tokenType={type} pluginID={NetworkPluginID.PLUGIN_EVM} {...rest} />
 }

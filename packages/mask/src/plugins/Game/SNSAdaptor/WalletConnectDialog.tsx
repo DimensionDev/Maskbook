@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const WalletConnectDialog = () => {
+function WalletConnectDialog() {
     const t = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()

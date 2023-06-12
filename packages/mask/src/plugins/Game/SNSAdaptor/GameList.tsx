@@ -90,7 +90,7 @@ interface Props {
     onPlay: (game: GameInfo) => void
 }
 
-const GameList = (props: Props) => {
+function GameList(props: Props) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const gameList = useGameList()

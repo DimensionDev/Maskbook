@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const PersonaItemUI = (props: PersonaItemProps) => {
+export function PersonaItemUI(props: PersonaItemProps) {
     const { data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
     const { classes } = useStyles(undefined, { props })
 

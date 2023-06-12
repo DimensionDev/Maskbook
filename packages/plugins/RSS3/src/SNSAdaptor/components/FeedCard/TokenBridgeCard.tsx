@@ -61,7 +61,7 @@ interface TokenBridgeCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - TokenBridge
  */
-export const TokenBridgeCard = ({ feed, ...rest }: TokenBridgeCardProps) => {
+export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

@@ -127,7 +127,7 @@ interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
  * - CollectibleMint
  * - CollectibleOut
  */
-export const CollectibleCard = ({ feed, ...rest }: CollectibleCardProps) => {
+export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

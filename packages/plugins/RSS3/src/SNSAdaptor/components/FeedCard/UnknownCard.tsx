@@ -19,7 +19,7 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.Web3Feed
 }
 
-export const UnknownCard = ({ feed, ...rest }: TokenFeedCardProps) => {
+export function UnknownCard({ feed, ...rest }: TokenFeedCardProps) {
     const { classes, theme } = useStyles()
 
     const action = feed.actions[0]

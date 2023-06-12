@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const PluginDescriptor = () => {
+export function PluginDescriptor() {
     const { t } = useI18N()
     const tr = useSharedI18N()
     const { classes } = useStyles()

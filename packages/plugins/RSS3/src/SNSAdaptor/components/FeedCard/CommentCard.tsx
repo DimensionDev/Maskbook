@@ -86,7 +86,7 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - NoteLink
  */
-export const CommentCard = ({ feed, ...rest }: CommentCardProps) => {
+export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()

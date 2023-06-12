@@ -12,13 +12,13 @@ interface TokenPriceProps extends Omit<HTMLProps<HTMLSpanElement>, 'children'> {
     currencyType?: CurrencyType
 }
 
-export const TokenPrice = ({
+export function TokenPrice({
     chainId,
     contractAddress,
     amount,
     currencyType = CurrencyType.USD,
     ...rest
-}: TokenPriceProps) => {
+}: TokenPriceProps) {
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
         contractAddress?.toLowerCase(),

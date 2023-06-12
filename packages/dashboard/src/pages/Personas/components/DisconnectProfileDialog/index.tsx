@@ -30,14 +30,14 @@ enum steps {
     action = 2,
 }
 
-export const DisconnectProfileDialog = ({
+export function DisconnectProfileDialog({
     open,
     onClose,
     networkIdentifier,
     profileIdentifiers,
     onDisconnect,
     personaIdentifier,
-}: DisconnectProfileDialogProps) => {
+}: DisconnectProfileDialogProps) {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [currentStep, setCurrentStep] = useState<steps>(steps.selection)

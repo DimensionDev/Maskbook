@@ -4,7 +4,7 @@ interface ModelViewProps extends HTMLProps<HTMLDivElement> {
     source: string
 }
 
-const ModelView = ({ source, ...rest }: ModelViewProps) => {
+function ModelView({ source, ...rest }: ModelViewProps) {
     if (!source) return null
 
     return (

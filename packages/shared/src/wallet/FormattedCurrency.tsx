@@ -7,12 +7,12 @@ export interface FormattedCurrencyProps {
     formatter?: (value: BigNumber.Value, sign?: string) => string
 }
 
-export const FormattedCurrency = ({
+export function FormattedCurrency({
     value,
     sign,
     // it's a BigNumber so it's ok
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+
     formatter = (value, sign) => `${sign} ${value}`.trim(),
-}: FormattedCurrencyProps) => {
+}: FormattedCurrencyProps) {
     return <Fragment>{formatter(value, sign)}</Fragment>
 }

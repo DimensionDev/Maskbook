@@ -43,7 +43,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, props) => ({
     },
 }))
 
-export const TipButton = (props: Props) => {
+export function TipButton(props: Props) {
     const {
         className,
         accounts: receivingAccounts = EMPTY_LIST,

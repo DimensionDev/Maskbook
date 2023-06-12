@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const GasSettingDialog = () => {
+export function GasSettingDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [gasOptionType, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)

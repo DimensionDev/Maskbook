@@ -116,7 +116,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
     }
 })
 
-export const NFTItem = ({ token, pluginID }: NFTItemProps) => {
+export function NFTItem({ token, pluginID }: NFTItemProps) {
     const { classes } = useStyles({})
     const Others = useWeb3Others(pluginID)
     const caption = isLens(token.metadata?.name) ? token.metadata?.name : Others.formatTokenId(token.tokenId, 4)
@@ -160,7 +160,7 @@ export const NFTItem = ({ token, pluginID }: NFTItemProps) => {
     )
 }
 
-export const NFTList = ({
+export function NFTList({
     selectable,
     selectedPairs,
     tokens,
@@ -173,7 +173,7 @@ export const NFTList = ({
     finished,
     pluginID,
     hasError,
-}: Props) => {
+}: Props) {
     const { classes, cx } = useStyles({ columns, gap })
 
     const isRadio = limit === 1

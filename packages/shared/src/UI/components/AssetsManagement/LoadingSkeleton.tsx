@@ -5,7 +5,7 @@ import { CollectionSkeleton } from './Collection.js'
 
 export interface LoadingSkeletonProps extends Pick<HTMLProps<HTMLDivElement>, 'className'> {}
 
-export const LoadingSkeleton = ({ className }: LoadingSkeletonProps) => {
+export function LoadingSkeleton({ className }: LoadingSkeletonProps) {
     return (
         <div className={className}>
             {range(4).map((i) => (

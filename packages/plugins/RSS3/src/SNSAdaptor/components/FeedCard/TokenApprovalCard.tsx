@@ -56,7 +56,7 @@ interface TokenApprovalFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - TokenApproval
  */
-export const TokenApprovalCard = ({ feed, ...rest }: TokenApprovalFeedCardProps) => {
+export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

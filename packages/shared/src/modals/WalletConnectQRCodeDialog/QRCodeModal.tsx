@@ -18,7 +18,7 @@ interface QRCodeModalProps {
     uri: string
 }
 
-export const QRCodeModal = ({ uri }: QRCodeModalProps) => {
+export function QRCodeModal({ uri }: QRCodeModalProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 

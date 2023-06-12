@@ -67,7 +67,7 @@ export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' |
     badge?: ReactNode
 }
 
-export const CardFrame = ({
+export function CardFrame({
     type,
     feed,
     actionIndex,
@@ -77,7 +77,7 @@ export const CardFrame = ({
     verbose,
     badge,
     ...rest
-}: CardFrameProps) => {
+}: CardFrameProps) {
     const { classes, cx } = useStyles()
     const CardIcon = cardTypeIconMap[type]
     const PrimaryPlatformIcon = getPlatformIcon(feed.network)

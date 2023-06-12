@@ -57,7 +57,7 @@ interface StakingFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  * - TokenStake
  * - TokenUnstake
  */
-export const StakingCard = ({ feed, ...rest }: StakingFeedCardProps) => {
+export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()

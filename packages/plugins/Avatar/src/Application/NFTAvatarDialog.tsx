@@ -29,7 +29,7 @@ interface NFTAvatarDialogProps extends InjectedDialogProps {
     startPicking?: boolean
 }
 
-export const NFTAvatarDialog = ({ startPicking, ...rest }: NFTAvatarDialogProps) => {
+export function NFTAvatarDialog({ startPicking, ...rest }: NFTAvatarDialogProps) {
     const { classes } = useStyles()
 
     const initialEntries = useMemo(() => {

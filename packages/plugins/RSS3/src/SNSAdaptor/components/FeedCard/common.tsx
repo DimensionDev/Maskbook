@@ -30,7 +30,7 @@ interface LabelProps extends ComponentProps<typeof Typography> {
     title?: string
 }
 
-export const Label = ({ className, ...rest }: LabelProps) => {
+export function Label({ className, ...rest }: LabelProps) {
     const { classes, cx } = useStyles()
     return <Typography className={cx(classes.label, className)} component="span" {...rest} />
 }
@@ -38,7 +38,7 @@ export const Label = ({ className, ...rest }: LabelProps) => {
 interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
     address?: ReverseAddressProps['address']
 }
-export const AddressLabel = ({ address, pluginID, size, className, ...rest }: AddressLabelProps) => {
+export function AddressLabel({ address, pluginID, size, className, ...rest }: AddressLabelProps) {
     const { classes, cx } = useStyles()
     return address ? (
         <ReversedAddress
@@ -59,7 +59,7 @@ export const formatValue = (value?: { value: string; decimals: number } | null):
     return formatBalance(value.value, value.decimals, 5)
 }
 
-const LinkifyRender = ({ attributes, content }: IntermediateRepresentation) => {
+function LinkifyRender({ attributes, content }: IntermediateRepresentation) {
     const { classes, cx } = useStyles()
     return (
         <Link {...attributes} className={cx(classes.link, attributes.className)}>

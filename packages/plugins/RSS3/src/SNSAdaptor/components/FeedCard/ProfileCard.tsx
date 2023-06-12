@@ -79,7 +79,7 @@ interface ProfileCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - ProfileCreate
  */
-export const ProfileCard = ({ feed, ...rest }: ProfileCardProps) => {
+export function ProfileCard({ feed, ...rest }: ProfileCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends TrendingCardProps, TrendingViewDescriptorProps {}
 
-export const FailedTrendingView = ({ result, resultList, setResult, ...rest }: Props) => {
+export function FailedTrendingView({ result, resultList, setResult, ...rest }: Props) {
     const { t } = useI18N()
     const { classes } = useStyles()
     return (

@@ -117,7 +117,7 @@ const CardBody = memo(({ metadata, className, ...rest }: CardBodyProps) => {
  *
  * - DonationDonate
  */
-export const DonationCard = ({ feed, actionIndex, className, ...rest }: DonationCardProps) => {
+export function DonationCard({ feed, actionIndex, className, ...rest }: DonationCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()

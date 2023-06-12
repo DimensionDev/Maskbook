@@ -63,7 +63,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     onClose?(): void
 }
 
-export const SelectFungibleTokenDialog = ({
+export function SelectFungibleTokenDialog({
     open,
     pluginID,
     chainId,
@@ -77,7 +77,7 @@ export const SelectFungibleTokenDialog = ({
     onClose,
     title,
     enableManage = true,
-}: SelectFungibleTokenDialogProps) => {
+}: SelectFungibleTokenDialogProps) {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds

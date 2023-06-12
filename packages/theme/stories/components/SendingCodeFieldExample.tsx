@@ -3,7 +3,9 @@ import { SendingCodeField } from '../../src/Components/SendingCodeField/index.js
 const handleBlur = () => {}
 const handleSend = () => {}
 
-const Label = () => <div>Send to test@test.com</div>
+function Label() {
+    return <div>Send to test@test.com</div>
+}
 
 export function SendingCodeFieldExample() {
     return (

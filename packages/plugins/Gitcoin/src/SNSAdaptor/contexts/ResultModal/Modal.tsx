@@ -47,7 +47,7 @@ export interface ResultModalProps extends PropsWithChildren<InjectedDialogProps>
     onShare?(): void
 }
 
-export const ResultModal = ({
+export function ResultModal({
     className,
     confirmLabel,
     children,
@@ -56,7 +56,7 @@ export const ResultModal = ({
     onSubmit,
     onShare,
     ...rest
-}: ResultModalProps) => {
+}: ResultModalProps) {
     const { classes } = useStyles()
     const t = useI18N()
     return (

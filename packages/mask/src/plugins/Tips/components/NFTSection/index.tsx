@@ -81,7 +81,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onEmpty?(empty: boolean): void
 }
 
-export const NFTSection = ({ className, onEmpty, ...rest }: Props) => {
+export function NFTSection({ className, onEmpty, ...rest }: Props) {
     const {
         nonFungibleTokenAddress: tokenAddress,
         nonFungibleTokenId: tokenId,

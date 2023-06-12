@@ -11,7 +11,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     /** Social url */
     url?: string
 }
-export const SocialIcon = ({ url, ...rest }: Props) => {
+export function SocialIcon({ url, ...rest }: Props) {
     if (!url) return null
 
     const host = new URL(url).host as keyof typeof socialIconMap

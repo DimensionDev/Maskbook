@@ -64,7 +64,7 @@ interface ProfileProxyCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - ProfileProxy
  */
-export const ProfileProxyCard = ({ feed, className, ...rest }: ProfileProxyCardProps) => {
+export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardProps) {
     const { classes, cx } = useStyles()
 
     const action = feed.actions[0]

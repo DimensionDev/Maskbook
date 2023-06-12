@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const NetworkSection = () => {
+export function NetworkSection() {
     const { classes } = useStyles()
     const { setTargetChainId } = TargetRuntimeContext.useContainer()
 

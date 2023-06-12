@@ -53,7 +53,7 @@ export interface TokenMenuListProps {
     fromSocialCard?: boolean
 }
 
-export const TokenMenuList = ({ options, currentOption, onSelect, fromSocialCard = false }: TokenMenuListProps) => {
+export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard = false }: TokenMenuListProps) {
     const { classes } = useStyles()
     const theme = useTheme()
     return (

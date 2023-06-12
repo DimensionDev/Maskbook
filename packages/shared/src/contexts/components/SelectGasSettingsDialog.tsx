@@ -43,7 +43,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     onClose?(): void
 }
 
-export const SelectGasSettingsDialog = ({
+export function SelectGasSettingsDialog({
     open,
     pluginID,
     chainId,
@@ -55,7 +55,7 @@ export const SelectGasSettingsDialog = ({
     onSubmit,
     onClose,
     title,
-}: SelectGasSettingsDialogProps) => {
+}: SelectGasSettingsDialogProps) {
     const t = useSharedI18N()
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)

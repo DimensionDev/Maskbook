@@ -45,7 +45,7 @@ interface ProposeCardProps extends Omit<FeedCardProps, 'feed'> {
  * - NoteCreate
  * - NoteEdit
  */
-export const ProposeCard = ({ feed, ...rest }: ProposeCardProps) => {
+export function ProposeCard({ feed, ...rest }: ProposeCardProps) {
     const { classes } = useStyles()
 
     const action = feed.actions[0]

@@ -19,7 +19,7 @@ interface ErrorPanelProps {
     onRetry(): void
 }
 
-export const ErrorPanel = ({ onRetry }: ErrorPanelProps) => {
+export function ErrorPanel({ onRetry }: ErrorPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 

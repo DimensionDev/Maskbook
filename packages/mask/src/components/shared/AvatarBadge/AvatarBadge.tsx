@@ -10,7 +10,7 @@ interface Props extends IconButtonProps {
     identity?: SocialIdentity
     socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
-export const AvatarBadge = ({ userId, identity, socialAccounts }: Props) => {
+export function AvatarBadge({ userId, identity, socialAccounts }: Props) {
     const { value: collectionList } = useCollectionByTwitterHandler(userId)
     if (collectionList?.[0]) {
         return (

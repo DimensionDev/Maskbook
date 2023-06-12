@@ -53,7 +53,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
     onLoadMore?(): void
 }
 
-export const FileList = ({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) => {
+export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
@@ -152,13 +152,13 @@ interface SelectableFileListProps extends Omit<FileListBaseProps, 'onChange' | '
 }
 
 const FILE_LIMIT = 2
-export const SelectableFileList = ({
+export function SelectableFileList({
     files,
     className,
     selectedIds = EMPTY_LIST,
     onChange,
     ...rest
-}: SelectableFileListProps) => {
+}: SelectableFileListProps) {
     const { classes, cx } = useStyles()
 
     const selectedIdsRef = useRef(selectedIds)
@@ -205,7 +205,7 @@ interface DisplayingFileFileListProps extends FileListBaseProps, Pick<Displaying
 /**
  * Render in decrypted post
  */
-export const DisplayingFileList = ({ files, className, onSave, onDownload, ...rest }: DisplayingFileFileListProps) => {
+export function DisplayingFileList({ files, className, onSave, onDownload, ...rest }: DisplayingFileFileListProps) {
     const { classes, cx } = useStyles()
 
     return (

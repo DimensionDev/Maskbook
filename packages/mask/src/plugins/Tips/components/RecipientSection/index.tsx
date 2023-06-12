@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => {
 
 interface Props extends FormControlProps {}
 
-export const RecipientSection = ({ className, ...rest }: Props) => {
+export function RecipientSection({ className, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const {

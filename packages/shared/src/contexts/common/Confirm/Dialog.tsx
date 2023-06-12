@@ -32,14 +32,14 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
     maxWidthOfContent?: number
 }
 
-export const ConfirmDialog = ({
+export function ConfirmDialog({
     title,
     confirmLabel,
     content,
     onSubmit,
     maxWidthOfContent,
     ...rest
-}: ConfirmDialogProps) => {
+}: ConfirmDialogProps) {
     const t = useSharedI18N()
     const { classes } = useStyles(maxWidthOfContent)
 

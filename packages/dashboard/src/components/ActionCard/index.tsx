@@ -37,7 +37,7 @@ export interface ISetupActionCardProps {
     }
 }
 
-export const ActionCard = ({ icon, title, subtitle, action }: ISetupActionCardProps) => {
+export function ActionCard({ icon, title, subtitle, action }: ISetupActionCardProps) {
     return (
         <Card
             variant="outlined"

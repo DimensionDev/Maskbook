@@ -17,7 +17,7 @@ interface QRCodeDialogProps {
     onClose(): void
 }
 
-export const QRCodeDialog = ({ uri, open, onClose }: QRCodeDialogProps) => {
+export function QRCodeDialog({ uri, open, onClose }: QRCodeDialogProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
     return (

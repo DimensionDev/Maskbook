@@ -113,7 +113,7 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
     return mapping[pluginID]
 }
 
-const ExternalLink = ({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) => {
+function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const Others = useWeb3Others(account.pluginID)

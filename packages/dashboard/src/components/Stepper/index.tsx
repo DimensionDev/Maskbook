@@ -22,7 +22,7 @@ interface StepProps {
     children: (toNext: (stepName: string, callbackParams?: any) => void, params: any) => ReactNode
 }
 
-export const Step = ({ children, toStep, params }: StepProps) => {
+export function Step({ children, toStep, params }: StepProps) {
     return <>{children(toStep!, params)}</>
 }
 
@@ -40,7 +40,7 @@ interface StepperProps {
     // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement[]
 }
-export const Stepper = (props: StepperProps) => {
+export function Stepper(props: StepperProps) {
     const { defaultStep, transition, step } = props
     const { classes } = useStyles()
     const [currentStep, setCurrentStep] = useState(defaultStep)
