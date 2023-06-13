@@ -201,5 +201,12 @@
     "verified_by": "{{ marketplace }} によって検証されました",
     "no_NFTs_found": "NFTが見つかりません。",
     "add_collectibles": "コレクティブルを追加",
-    "collectible_contract_require": "受取可能なアドレスが必要です"
+    "collectible_contract_require": "受取可能なアドレスが必要です",
+    "collectible_contract_invalid": "不正なコントラクトアドレス",
+    "collectible_token_id_require": "受取可能なトークンIDが必要です",
+    "collectible_token_id_invalid": "不正な受取トークンID",
+    "collection_not_belong_to_you": "コントラクトアドレスが正しくないか、コレクションはあなたに属していません。",
+    "collectible_search_placeholder": "名前またはコントラクトアドレス。例：PUNK or 0x234...",
+    "add_collectibles_address_placeholder": "コントラクトアドレスを入力",
+    "add_collectibles_token_id_placeholder": "トークンIDはカンマで区切られています。例: 1223,1224"
 }
