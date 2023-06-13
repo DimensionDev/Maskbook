@@ -145,6 +145,7 @@
     "plugin_wallet_unsupported_network": "対応していないネットワーク",
     "plugin_wallet_switch_network_title": "ネットワークを切り替え",
     "plugin_wallet_unsupported_chain": "このネットワークは現在のウォレットでは対応されていません。",
+    "plugin_wallet_switch_chain_failed": "ネットワークエラーまたはユーザーがプロセスをキャンセルします。",
     "plugin_wallet_switch_network": "{{network}} に切り替え",
     "plugin_wallet_not_support_network": "{network} はまだサポートされていません.",
     "plugin_wallet_switch_network_under_going": "{{network}} に切り替え",
@@ -161,6 +162,8 @@
     "plugin_wallet_approve_all_nft_successfully": "{{symbol}} のロックを解除しました",
     "plugin_wallet_fail_to_load_nft_contract": "クリックして再試行",
     "plugin_wallet_change_wallet": "ウォレットを変更",
+    "wallet_connect_qr_code_dialog_title": "ウォレット接続",
+    "wallet_connect_qr_code_dialog_content": "WalletConnect対応ウォレットでQRコードスキャン",
     "save": "保存",
     "cancel": "キャンセル",
     "add_wallet": "ウォレットを追加",
@@ -196,5 +199,7 @@
     "lens_following": "フォロー中",
     "view": "表示",
     "verified_by": "{{ marketplace }} によって検証されました",
-    "no_NFTs_found": "NFTが見つかりません。"
+    "no_NFTs_found": "NFTが見つかりません。",
+    "add_collectibles": "コレクティブルを追加",
+    "collectible_contract_require": "受取可能なアドレスが必要です"
 }
