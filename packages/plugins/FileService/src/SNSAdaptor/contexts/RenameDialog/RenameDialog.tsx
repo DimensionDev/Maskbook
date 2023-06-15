@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { type FC, memo, type ReactNode, useState } from 'react'
+import { memo, type ReactNode, useState } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -66,8 +66,8 @@ export interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | '
     onSubmit?(result: string | null): void
 }
 
-export const RenameDialog: FC<RenameDialogProps> = memo(
-    ({ title, message, description, currentName, onSubmit, onClose, ...rest }) => {
+export const RenameDialog = memo(
+    ({ title, message, description, currentName, onSubmit, onClose, ...rest }: RenameDialogProps) => {
         const { classes } = useStyles()
         const t = useI18N()
         const [name, setName] = useState(currentName)

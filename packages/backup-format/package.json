@@ -1,6 +1,7 @@
 {
   "name": "@masknet/backup-format",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {

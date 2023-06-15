@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState, type ChangeEvent } from 'react'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Card, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -43,7 +43,7 @@ export default function FileUpload({ width, height, readAsText, onChange, accept
     const { classes } = useStyles()
     const [file, setFile] = useState<File | null>()
 
-    const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         if (target.files) {
             setFile(target.files[0])
         }

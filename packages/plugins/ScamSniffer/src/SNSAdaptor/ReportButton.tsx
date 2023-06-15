@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ReportButton = () => {
+function ReportButton() {
     const { classes } = useStyles()
     const [isSending, setSending] = useState(false)
     const links = usePostInfoDetails.mentionedLinks()

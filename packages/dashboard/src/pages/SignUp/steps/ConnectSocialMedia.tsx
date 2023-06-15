@@ -15,7 +15,7 @@ import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { ActionCard } from '../../../components/ActionCard/index.js'
 
-export const ConnectSocialMedia = () => {
+export function ConnectSocialMedia() {
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const { currentPersona, connectPersona, definedSocialNetworks } = PersonaContext.useContainer()

@@ -4,13 +4,12 @@ import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
     cloneElement,
     createContext,
-    type PropsWithChildren,
-    type ReactElement,
     useEffect,
     useLayoutEffect,
     useRef,
     useState,
     useMemo,
+    type ReactElement,
 } from 'react'
 import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
@@ -78,7 +77,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface GuideStepProps extends PropsWithChildren<{}> {
+export interface GuideStepProps {
+    // cloneElement is used.
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    children: ReactElement
     step: number
     totalStep: number
     arrow?: boolean
@@ -142,7 +144,7 @@ export function PluginGuide({
 
     return (
         <>
-            {cloneElement(children as ReactElement, { ref: childrenRef })}
+            {cloneElement(children, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (

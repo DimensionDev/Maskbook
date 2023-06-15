@@ -53,7 +53,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     allPluginsReady: boolean
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
-    maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
     /** @deprecated do not use it in new code. */

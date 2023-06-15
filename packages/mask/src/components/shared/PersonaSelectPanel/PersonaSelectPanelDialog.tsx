@@ -48,7 +48,7 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
     },
 }
 
-export const PersonaSelectPanelDialog = () => {
+export function PersonaSelectPanelDialog() {
     const { t } = useI18N()
 
     const [finishTarget, setFinishTarget] = useState<string>()

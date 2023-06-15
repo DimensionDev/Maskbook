@@ -64,9 +64,7 @@ function FooterLinkItem(props: FooterLinkAnchorProps) {
     )
 }
 
-interface Props extends HTMLProps<HTMLDivElement> {}
-
-export const FooterLine = memo((props: Props) => {
+export const FooterLine = memo((props: HTMLProps<HTMLDivElement>) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)

@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const PreviewCard = ({ links }: PreviewCardProps) => {
+export function PreviewCard({ links }: PreviewCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
 

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { type FC, memo } from 'react'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     alert: {
@@ -22,7 +22,7 @@ interface Props extends BoxProps {
     onClose?: () => void
 }
 
-export const Alert: FC<Props> = memo(function Alert({ className, children, open, onClose, ...rest }) {
+export const Alert = memo(function Alert({ className, children, open, onClose, ...rest }: Props) {
     const { classes, cx } = useStyles()
 
     if (!open) return null

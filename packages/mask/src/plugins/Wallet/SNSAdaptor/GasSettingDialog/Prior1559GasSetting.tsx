@@ -1,4 +1,4 @@
-import { type FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Trans } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
@@ -84,8 +84,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Prior1559GasSetting: FC<GasSettingProps> = memo(
-    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
+export const Prior1559GasSetting = memo(
+    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { classes } = useStyles()
         const { t } = useI18N()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -167,7 +167,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onConfirm({
-                    gasLimit: data.gasLimit,
+                    gasLimit: data.gasLimit as any,
                     gasPrice: toWei(data.gasPrice, 'gwei'),
                     gasOption: selectedGasOption,
                 })

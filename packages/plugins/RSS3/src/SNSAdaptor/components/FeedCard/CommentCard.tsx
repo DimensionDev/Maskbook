@@ -4,7 +4,6 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
-import type { FC } from 'react'
 import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -87,7 +86,7 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - NoteLink
  */
-export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
+export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()

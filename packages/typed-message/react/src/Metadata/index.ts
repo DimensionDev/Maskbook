@@ -1,6 +1,6 @@
 import type { TypedMessage } from '@masknet/typed-message'
 import { type Result, Ok, Err, Some, type Option, None } from 'ts-results-es'
-import type { ReactElement, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import z_schema from 'z-schema'
 import { produce, enableMapSet, type Draft } from 'immer'
 
@@ -72,7 +72,7 @@ export function isDataMatchJSONSchema(data: any, jsonSchema: object) {
  * @param metadataReader A metadata reader (can be return value of createTypedMessageMetadataReader)
  */
 export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage['meta']) => Result<T, void>) {
-    return (metadata: TypedMessage['meta'], render: (data: T) => ReactElement | null): ReactElement | null => {
+    return (metadata: TypedMessage['meta'], render: (data: T) => ReactNode | null): ReactNode | null => {
         const message = metadataReader(metadata)
         if (message.ok) return render(message.val)
         return null

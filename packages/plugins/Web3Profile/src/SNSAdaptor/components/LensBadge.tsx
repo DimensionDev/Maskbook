@@ -1,4 +1,4 @@
-import { memo, type FC, useRef, useEffect } from 'react'
+import { memo, useRef, useEffect } from 'react'
 import { IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -24,7 +24,7 @@ interface Props {
     userId: string
 }
 
-export const LensBadge: FC<Props> = memo(({ slot, accounts, userId }) => {
+export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes } = useStyles()
 

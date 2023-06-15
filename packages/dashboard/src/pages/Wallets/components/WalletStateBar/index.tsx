@@ -1,4 +1,4 @@
-import React, { type FC, memo } from 'react'
+import { memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
@@ -96,7 +96,7 @@ interface WalletStateBarUIProps {
     openConnectWalletDialog(): void
 }
 
-export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
+export function WalletStateBarUI({
     isPending,
     network,
     provider,
@@ -104,7 +104,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
     address,
     domain,
     openConnectWalletDialog,
-}) => {
+}: WalletStateBarUIProps) {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 

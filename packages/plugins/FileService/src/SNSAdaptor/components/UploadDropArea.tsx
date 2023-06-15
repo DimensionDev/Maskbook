@@ -63,7 +63,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onSelectFile(file: File): void
 }
 
-export const UploadDropArea: React.FC<Props> = memo(({ maxFileSize, onSelectFile, className, ...rest }) => {
+export const UploadDropArea = memo(({ maxFileSize, onSelectFile, className, ...rest }: Props) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()

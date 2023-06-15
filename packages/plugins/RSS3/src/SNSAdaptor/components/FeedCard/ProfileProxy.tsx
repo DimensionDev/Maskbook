@@ -3,7 +3,6 @@ import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -65,7 +64,7 @@ interface ProfileProxyCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - ProfileProxy
  */
-export const ProfileProxyCard: FC<ProfileProxyCardProps> = ({ feed, className, ...rest }) => {
+export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardProps) {
     const { classes, cx } = useStyles()
 
     const action = feed.actions[0]

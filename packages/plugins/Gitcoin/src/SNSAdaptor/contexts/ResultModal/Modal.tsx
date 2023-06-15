@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import type { FC, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { useI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -47,7 +47,7 @@ export interface ResultModalProps extends PropsWithChildren<InjectedDialogProps>
     onShare?(): void
 }
 
-export const ResultModal: FC<ResultModalProps> = ({
+export function ResultModal({
     className,
     confirmLabel,
     children,
@@ -56,7 +56,7 @@ export const ResultModal: FC<ResultModalProps> = ({
     onSubmit,
     onShare,
     ...rest
-}) => {
+}: ResultModalProps) {
     const { classes } = useStyles()
     const t = useI18N()
     return (

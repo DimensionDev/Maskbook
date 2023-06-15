@@ -1,4 +1,4 @@
-import { type FC, useEffect, useMemo, useState, memo } from 'react'
+import { useEffect, useMemo, useState, memo } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
@@ -101,7 +101,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const ProfileCard: FC<Props> = memo(({ identity, currentAddress, ...rest }) => {
+export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const { t } = useI18N()

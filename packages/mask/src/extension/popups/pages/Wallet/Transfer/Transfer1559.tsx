@@ -1,4 +1,4 @@
-import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, type SyntheticEvent, useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Trans } from 'react-i18next'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
@@ -606,7 +606,7 @@ export interface Transfer1559UIProps {
     handleCancel: () => void
     handleConfirm: () => void
     confirmLoading: boolean
-    popoverContent?: ReactElement
+    popoverContent?: ReactNode
     disableConfirm?: boolean
     isAvailableBalance: boolean
 }

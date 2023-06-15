@@ -1,7 +1,7 @@
 import { Radio as MuiRadio, RadioGroup, FormControlLabel, type FormControlLabelProps } from '@mui/material'
 import { story } from '../utils/index.js'
 
-const C = (props: FormControlLabelProps) => {
+function C(props: FormControlLabelProps) {
     return (
         <RadioGroup name="choose">
             <FormControlLabel value="1" control={<MuiRadio />} label="Item 1" />

@@ -1,10 +1,10 @@
-import { type FC, type PropsWithChildren, useEffect } from 'react'
+import { type PropsWithChildren, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { TermsAgreedContext } from '../hooks/useTermsAgreed.js'
 
-const TermsGuardInner: FC<PropsWithChildren<{}>> = ({ children }) => {
+function TermsGuardInner({ children }: PropsWithChildren<{}>) {
     const navigate = useNavigate()
     const [agreed] = TermsAgreedContext.useContainer()
     const { pathname, search } = useLocation()
@@ -24,7 +24,7 @@ const TermsGuardInner: FC<PropsWithChildren<{}>> = ({ children }) => {
     return <>{children}</>
 }
 
-export const TermsGuard: FC<PropsWithChildren<{}>> = ({ children }) => {
+export function TermsGuard({ children }: PropsWithChildren<{}>) {
     return (
         <TermsAgreedContext.Provider>
             <TermsGuardInner>{children}</TermsGuardInner>

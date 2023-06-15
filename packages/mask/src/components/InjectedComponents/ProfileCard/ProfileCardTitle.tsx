@@ -12,7 +12,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
-import type { FC, HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
@@ -98,14 +98,14 @@ export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     address?: string
     onAddressChange?(address: string): void
 }
-export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
+export function ProfileCardTitle({
     className,
     socialAccounts,
     address,
     identity,
     onAddressChange,
     ...rest
-}) => {
+}: ProfileCardTitleProps) {
     const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
 

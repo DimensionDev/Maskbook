@@ -28,17 +28,17 @@ export interface PhoneNumberFieldProps {
     onChange?(value: PhoneNumberFieldValue): void
 }
 
-export const PhoneNumberField = ({
+export function PhoneNumberField({
     label,
     value,
     error,
     onBlur,
     countryPlaceholder = '+1',
     onChange,
-}: PhoneNumberFieldProps) => {
+}: PhoneNumberFieldProps) {
     const { classes } = useStyles()
-    const [phone, setPhone] = useState<string>(value.phone)
-    const [countryCode, setCountryCode] = useState<string>(value.country)
+    const [phone, setPhone] = useState(value.phone)
+    const [countryCode, setCountryCode] = useState(value.country)
 
     const handleCountryCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value

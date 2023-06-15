@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import { Plugin } from '@masknet/plugin-infra'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { PluginGuide } from '@masknet/shared'
@@ -62,14 +61,14 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
 }))
 
 const { TipsSlot } = Plugin.SNSAdaptor
-export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
+export function TipsRealmContent({
     identity,
     slot,
     accounts,
     iconSize = 24,
     buttonSize = 34,
     onStatusUpdate,
-}) => {
+}: Plugin.SNSAdaptor.TipsRealmOptions) {
     const t = useI18N()
     const { classes, cx } = useStyles({ buttonSize })
     const userGuide = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)

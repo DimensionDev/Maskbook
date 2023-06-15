@@ -90,7 +90,7 @@ interface VerifyNextIDProps extends Partial<WizardDialogProps> {
     onDone?: () => void
 }
 
-export const VerifyNextID = ({
+export function VerifyNextID({
     personaName,
     personaIdentifier,
     username,
@@ -100,7 +100,7 @@ export const VerifyNextID = ({
     onClose,
     network,
     disableVerify,
-}: VerifyNextIDProps) => {
+}: VerifyNextIDProps) {
     const { t } = useI18N()
 
     const { classes, cx } = useStyles()

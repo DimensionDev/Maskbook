@@ -1,16 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { range } from 'lodash-es'
-import {
-    type FC,
-    Children,
-    useState,
-    useRef,
-    type CSSProperties,
-    type HTMLProps,
-    useEffect,
-    useLayoutEffect,
-} from 'react'
+import { Children, useState, useRef, type CSSProperties, type HTMLProps, useEffect, useLayoutEffect } from 'react'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {},
@@ -49,7 +40,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onUpdate?(index: number): void
 }
 
-export const Slider: FC<Props> = ({ children, className, onUpdate, ...rest }) => {
+export function Slider({ children, className, onUpdate, ...rest }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const { classes, cx } = useStyles()
     const [index, setIndex] = useState(0)

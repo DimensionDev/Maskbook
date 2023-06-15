@@ -15,7 +15,7 @@ export const DEBUG_INFO = {
 function onNewBugIssue() {
     return openWindow(makeNewBugIssueURL())
 }
-export const DebugInfo = () => {
+export function DebugInfo() {
     const { t } = useI18N()
 
     return (

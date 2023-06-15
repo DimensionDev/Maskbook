@@ -14,13 +14,15 @@ import { Box, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
 
-const Label = ({ value }: { value: string }) => (
-    <Typography
-        variant="body2"
-        sx={{ marginBottom: '8px', fontWeight: 'bolder', color: (theme) => theme.palette.primary.main }}>
-        {value}
-    </Typography>
-)
+function Label({ value }: { value: string }) {
+    return (
+        <Typography
+            variant="body2"
+            sx={{ marginBottom: '8px', fontWeight: 'bolder', color: (theme) => theme.palette.primary.main }}>
+            {value}
+        </Typography>
+    )
+}
 
 export interface PersonaNameUIProps {
     error?: string
@@ -28,7 +30,7 @@ export interface PersonaNameUIProps {
     loading?: boolean
 }
 
-export const PersonaNameUI = ({ onNext, error, loading }: PersonaNameUIProps) => {
+export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 

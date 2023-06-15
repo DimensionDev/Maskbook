@@ -1,4 +1,4 @@
-import anchorme from 'anchorme'
+import * as anchorme from /* webpackDefer: true */ 'anchorme'
 import type { TypedMessageAnchor } from '../extension/index.js'
 
 export type ParseLinkResult =
@@ -14,7 +14,7 @@ export type ParseLinkResult =
 
 export function parseLink(text: string): ParseLinkResult[] {
     // ESM-CJS interop
-    const parsed = (anchorme.default || anchorme).list(text)
+    const parsed = (anchorme.default.default || anchorme.default).list(text)
 
     const result: ParseLinkResult[] = []
 

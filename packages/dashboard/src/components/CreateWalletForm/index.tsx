@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type ReactNode } from 'react'
 import {
     FormControl,
     ListItemIcon,
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface CreateWalletFormProps {
     options: Array<{
         label: string
-        icon: React.ReactNode
+        icon: ReactNode
         value: number
     }>
 }

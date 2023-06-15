@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import type { FC, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,7 +81,7 @@ export interface TokenTransactionConfirmModalProps extends PropsWithChildren<Inj
     onConfirm?(): void
 }
 
-export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps> = ({
+export function TokenTransactionConfirmModal({
     className,
     confirmText,
     onConfirm,
@@ -95,7 +95,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
     nonFungibleTokenId,
     onClose,
     ...rest
-}) => {
+}: TokenTransactionConfirmModalProps) {
     const { classes } = useStyles()
     const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'

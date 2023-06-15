@@ -4,7 +4,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
-import { memo, type FC } from 'react'
+import { memo } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { useAsync } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -76,7 +76,7 @@ interface Props extends ListProps {
     accounts: FireflyBaseAPI.LensAccount[]
 }
 
-export const LensList: FC<Props> = memo(({ className, accounts, ...rest }) => {
+export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { classes, cx } = useStyles()
     const t = useI18N()
     return (

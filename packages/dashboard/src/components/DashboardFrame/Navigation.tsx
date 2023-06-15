@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type MouseEvent } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import {
     List,
@@ -23,12 +23,12 @@ import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 
-const ListItemLinkUnStyled = ({
+function ListItemLinkUnStyled({
     to,
     ...props
 }: ListItemProps & {
     to: string
-}) => {
+}) {
     const navigate = useNavigate()
 
     return (
@@ -113,7 +113,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const mode = useTheme().palette.mode
     const { pluginID } = useNetworkContext()
 
-    const onExpand = (e: React.MouseEvent<HTMLElement>) => {
+    const onExpand = (e: MouseEvent<HTMLElement>) => {
         e.stopPropagation()
         toggleNavigationExpand()
     }

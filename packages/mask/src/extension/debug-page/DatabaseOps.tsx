@@ -45,7 +45,7 @@ async function onClear() {
         }),
     )
 }
-export const DatabaseOps: React.FC = () => {
+export function DatabaseOps() {
     const { t } = useI18N()
     return (
         <section>

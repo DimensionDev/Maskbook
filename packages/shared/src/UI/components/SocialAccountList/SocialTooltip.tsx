@@ -3,7 +3,8 @@ import { type NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { useRef, type ReactElement, cloneElement, useEffect, useState } from 'react'
+import { useRef, cloneElement, useEffect, useState } from 'react'
+import type { ReactElement } from 'react-markdown/lib/react-markdown.js'
 
 const useStyles = makeStyles()({
     title: {
@@ -13,6 +14,8 @@ const useStyles = makeStyles()({
 
 interface SocialTooltipProps {
     platform?: NextIDPlatform
+    // cloneElement is used.
+    // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement
 }
 export function SocialTooltip({ children, platform }: SocialTooltipProps) {
@@ -52,7 +55,7 @@ export function SocialTooltip({ children, platform }: SocialTooltipProps) {
             arrow
             placement="top"
             title={title}>
-            {cloneElement(children, { ...children.props, ref })}
+            {cloneElement(children, { ...children.props, ref } as any)}
         </ShadowRootTooltip>
     )
 }

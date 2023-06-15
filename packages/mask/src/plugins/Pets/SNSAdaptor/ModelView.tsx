@@ -1,10 +1,10 @@
-import type { FC, HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 
 interface ModelViewProps extends HTMLProps<HTMLDivElement> {
     source: string
 }
 
-const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
+function ModelView({ source, ...rest }: ModelViewProps) {
     if (!source) return null
 
     return (

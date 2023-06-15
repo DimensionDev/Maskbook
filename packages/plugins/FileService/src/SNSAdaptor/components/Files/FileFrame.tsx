@@ -1,13 +1,4 @@
-import {
-    type FC,
-    type HTMLProps,
-    memo,
-    type PropsWithChildren,
-    type ReactNode,
-    useEffect,
-    useRef,
-    useState,
-} from 'react'
+import { type HTMLProps, memo, type ReactNode, useEffect, useRef, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
@@ -50,13 +41,7 @@ interface FileFrameProps extends FileBaseProps {
     operations?: ReactNode
 }
 
-export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function FileFrame({
-    className,
-    children,
-    file,
-    operations,
-    ...rest
-}) {
+export const FileFrame = memo(function FileFrame({ className, children, file, operations, ...rest }: FileFrameProps) {
     const { classes, cx } = useStyles()
 
     const rootRef = useRef<HTMLDivElement>(null)

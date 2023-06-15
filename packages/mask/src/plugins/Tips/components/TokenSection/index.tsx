@@ -1,4 +1,4 @@
-import { type FC, type HTMLProps, useCallback } from 'react'
+import { type HTMLProps, useCallback } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useSelectFungibleToken, FungibleTokenInput, TokenValue } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -16,9 +16,7 @@ const useStyles = makeStyles()({
     },
 })
 
-interface Props extends HTMLProps<HTMLDivElement> {}
-
-export const TokenSection: FC<Props> = ({ className, ...rest }) => {
+export function TokenSection(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount, isAvailableBalance, balance } = useTip()
     const { pluginID } = useNetworkContext()
@@ -38,7 +36,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     }, [selectFungibleToken, token?.address, pluginID, chainId])
 
     return (
-        <div className={cx(className, classes.container)} {...rest}>
+        <div {...props} className={cx(props.className, classes.container)}>
             <FungibleTokenInput
                 label=""
                 token={token}
