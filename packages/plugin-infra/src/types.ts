@@ -25,6 +25,7 @@ import type {
     Wallet,
     SocialAccount,
     SocialIdentity,
+    BooleanPreference,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -41,7 +42,6 @@ import type {
 import type { TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
-import type { BooleanPreference } from '@masknet/public-api'
 
 export declare namespace Plugin {
     /**

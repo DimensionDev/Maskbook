@@ -5,7 +5,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { attachReactTreeWithContainer, startWatch, untilElementAvailable } from '../../../utils/index.js'
 import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { ProfileTabs, PluginID, MaskMessages } from '@masknet/shared-base'
+import { ProfileTabs, PluginID, MaskMessages, BooleanPreference } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     searchAppBarBackSelector,
@@ -24,7 +24,6 @@ import { useCurrentVisitingIdentity } from '../../../components/DataSource/useAc
 import Services from '../../../extension/service.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 import { useAsync } from 'react-use'
-import { BooleanPreference } from '@masknet/public-api'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration

@@ -9,10 +9,11 @@ import {
     type PersonaIdentifier,
     type ValueRefWithReady,
     decentralizedSearchSettings,
+    appearanceSettings,
+    BooleanPreference,
 } from '@masknet/shared-base'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
-import { appearanceSettings, telemetrySettings } from '../../../shared/legacy-settings/settings.js'
-import { BooleanPreference } from '@masknet/public-api'
+import { telemetrySettings } from '@masknet/web3-telemetry'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {

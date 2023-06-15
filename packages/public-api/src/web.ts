@@ -89,9 +89,3 @@ export interface PriceRecord {
 export interface CryptoPrice {
     [token: string]: PriceRecord
 }
-
-export enum BooleanPreference {
-    False = 0,
-    Default = 1,
-    True = 2,
-}

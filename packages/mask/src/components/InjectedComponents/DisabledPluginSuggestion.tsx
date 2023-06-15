@@ -7,7 +7,7 @@ import {
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
@@ -17,7 +17,6 @@ import type { Option } from 'ts-results-es'
 import { useSubscription } from 'use-subscription'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
-import { BooleanPreference } from '@masknet/public-api'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))

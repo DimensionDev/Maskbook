@@ -1,6 +1,12 @@
 import { isEqual } from 'lodash-es'
-import { BooleanPreference, LanguageOptions } from '@masknet/public-api'
-import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
+import { Appearance, LanguageOptions } from '@masknet/public-api'
+import {
+    EnhanceableSite,
+    ExtensionSite,
+    updateLanguage,
+    NetworkPluginID,
+    BooleanPreference,
+} from '@masknet/shared-base'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
@@ -30,6 +36,8 @@ export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
 export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
+
+export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 
 /**
  * ! DO NOT use this directly to query the plugin status !
