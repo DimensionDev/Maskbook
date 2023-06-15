@@ -156,8 +156,6 @@
     "wallets_balance_Swap": "crwdns1735:0crwdne1735:0",
     "wallets_balance_Receive": "crwdns1737:0crwdne1737:0",
     "wallets_assets_token": "crwdns1739:0crwdne1739:0",
-    "wallets_assets_token_sent_not_connect_tip": "crwdns9343:0{{chainName}}crwdne9343:0",
-    "wallets_assets_token_sent_switch_network_tip": "crwdns9345:0crwdne9345:0",
     "wallets_assets_investment": "crwdns1741:0crwdne1741:0",
     "wallets_assets_collectibles": "crwdns8171:0crwdne8171:0",
     "wallets_assets_custom_token": "crwdns1745:0crwdne1745:0",
@@ -396,5 +394,6 @@
     "welcome_request_to_collect": "crwdns19511:0crwdne19511:0",
     "wallet_history_no_data": "crwdns19885:0crwdne19885:0",
     "welcome_agreement_policy": "crwdns19513:0crwdne19513:0",
-    "wallets_history_burn": "crwdns20005:0crwdne20005:0"
+    "wallets_history_burn": "crwdns20005:0crwdne20005:0",
+    "wallet_connect_tips": "crwdns20371:0crwdne20371:0"
 }
