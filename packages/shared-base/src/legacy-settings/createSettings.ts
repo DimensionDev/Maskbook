@@ -1,5 +1,5 @@
 import type { Option } from 'ts-results-es'
-import { MaskMessages } from '../messages.js'
+import { MaskMessages } from '../Messages/index.js'
 import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '../utils/index.js'
 
 let getValue: (key: string) => Promise<Option<any>>

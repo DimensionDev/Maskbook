@@ -1,11 +1,11 @@
 import { delay } from '@masknet/kit'
 import { pasteText } from '@masknet/injected-script'
-import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import type { SocialNetworkUI } from '@masknet/types'
+import { MaskMessages } from '@masknet/shared-base'
+import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { selectElementContents } from '../../../utils/utils.js'
-import { MaskMessages } from '@masknet/shared-base'
 
 /**
  * Wait for up to 5000 ms

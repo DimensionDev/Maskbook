@@ -1,8 +1,8 @@
-import { downloadUrl, pasteImageToActiveElements } from '../../../utils/index.js'
 import { waitDocumentReadyState } from '@masknet/kit'
 import type { SocialNetworkUI } from '@masknet/types'
-import { activatedSocialNetworkUI } from '../../ui.js'
 import { MaskMessages } from '@masknet/shared-base'
+import { activatedSocialNetworkUI } from '../../ui.js'
+import { downloadUrl, pasteImageToActiveElements } from '../../../utils/index.js'
 
 export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean> | boolean) {
     return async function (
