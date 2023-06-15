@@ -1,15 +1,16 @@
 import { SingletonModal } from '@masknet/shared-base'
-import { WalletConnectQRCode, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
+import { memo } from 'react'
 import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
-import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
+import { WalletConnectQRCode, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
+import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
 
-export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>().bind()
-export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>().bind()
-export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>().bind()
-export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>().bind()
+export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
+export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
+export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>()
+export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>()
 
-export function Modals() {
+export const Modals = memo(function Modals() {
     return (
         <>
             <WalletConnectQRCode ref={WalletConnectQRCodeDialog.register} />
@@ -18,4 +19,4 @@ export function Modals() {
             <WalletRiskWarningModal ref={WalletRiskWarningDialog.register} />
         </>
     )
-}
+})

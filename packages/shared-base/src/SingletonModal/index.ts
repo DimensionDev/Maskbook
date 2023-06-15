@@ -25,6 +25,14 @@ export class SingletonModal<
     private dispatchClose: ReturnType<T>['close'] | undefined
     private dispatchAbort: ReturnType<T>['abort'] | undefined
 
+    constructor() {
+        this.register = this.register.bind(this)
+        this.open = this.open.bind(this)
+        this.close = this.close.bind(this)
+        this.abort = this.abort.bind(this)
+        this.openAndWaitForClose = this.openAndWaitForClose.bind(this)
+    }
+
     /**
      * Register a React modal component that implemented a forwarded ref.
      * The ref item should be fed with open and close methods.
@@ -81,14 +89,5 @@ export class SingletonModal<
             this.onClose = (props) => resolve(props)
             this.onAbort = (error) => reject(error)
         })
-    }
-
-    bind() {
-        this.register = this.register.bind(this)
-        this.open = this.open.bind(this)
-        this.close = this.close.bind(this)
-        this.abort = this.abort.bind(this)
-        this.openAndWaitForClose = this.openAndWaitForClose.bind(this)
-        return this
     }
 }
