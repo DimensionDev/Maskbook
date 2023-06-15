@@ -4,13 +4,11 @@ import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
 import { MaskIconInMinds, MaskSharpIcon, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useMount } from 'react-use'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
-import { MaskMessages } from '../../utils/messages.js'
 
 interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string

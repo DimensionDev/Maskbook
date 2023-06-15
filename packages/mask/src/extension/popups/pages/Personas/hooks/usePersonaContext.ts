@@ -9,10 +9,10 @@ import {
     type PersonaInformation,
     ProfileIdentifier,
     NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP,
+    MaskMessages,
+    currentPersonaIdentifier,
 } from '@masknet/shared-base'
-import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../service.js'
-import { MaskMessages } from '../../../../../utils/index.js'
 import type { Account } from '../type.js'
 import { initialPersonaInformation } from './PersonaContextInitialData.js'
 import { usePersonaProofs } from '@masknet/shared'

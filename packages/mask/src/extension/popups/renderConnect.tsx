@@ -5,8 +5,7 @@ import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import { Services } from '../service.js'
-import { createSubscriptionFromAsync } from '@masknet/shared-base'
-import { MaskMessages } from '../../utils/messages.js'
+import { MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
 
 status.then(() => createNormalReactRoot(<PopupsConnect />)).then(startPluginHost)
 

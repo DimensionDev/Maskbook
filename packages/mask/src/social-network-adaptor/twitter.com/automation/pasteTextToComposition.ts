@@ -4,8 +4,8 @@ import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/
 import type { SocialNetworkUI } from '@masknet/types'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
-import { MaskMessages } from '../../../utils/messages.js'
 import { selectElementContents } from '../../../utils/utils.js'
+import { MaskMessages } from '@masknet/shared-base'
 
 /**
  * Wait for up to 5000 ms

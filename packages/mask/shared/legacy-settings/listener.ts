@@ -1,11 +1,11 @@
+import { appearanceSettings, telemetrySettings } from './settings.js'
 import {
-    appearanceSettings,
-    telemetrySettings,
     pluginIDSettings,
+    type MaskSettingsEvents,
+    type ValueRefWithReady,
     languageSettings,
     currentPersonaIdentifier,
-} from './settings.js'
-import type { MaskSettingsEvents, ValueRefWithReady } from '@masknet/shared-base'
+} from '@masknet/shared-base'
 
 type ToBeListedSettings = {
     [key in keyof MaskSettingsEvents]: ValueRefWithReady<MaskSettingsEvents[key]>

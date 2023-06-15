@@ -14,7 +14,14 @@ import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '
 import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType, type SocialIdentity } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    PluginID,
+    NetworkPluginID,
+    getSiteType,
+    type SocialIdentity,
+    pluginIDSettings,
+} from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -30,7 +37,6 @@ import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 import { ContentTabs } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'

@@ -2,9 +2,9 @@ import { cloneElement, useRef, useState, useLayoutEffect, type ReactElement } fr
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
-import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
+import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

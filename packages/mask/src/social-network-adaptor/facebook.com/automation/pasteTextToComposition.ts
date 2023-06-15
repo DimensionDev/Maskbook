@@ -1,9 +1,9 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import type { SocialNetworkUI } from '@masknet/types'
-import { MaskMessages } from '../../../utils/messages.js'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
+import { MaskMessages } from '@masknet/shared-base'
 
 /**
  * Access: https://(www|m).facebook.com/

@@ -11,9 +11,9 @@ import {
     ProfileIdentifier,
     RelationFavor,
     fromBase64URL,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
-import { MaskMessages } from '../../../shared/index.js'
 import type {
     FullPersonaDBTransaction,
     ProfileTransaction,

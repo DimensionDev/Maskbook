@@ -1,5 +1,4 @@
 export * from '@masknet/base'
-
 export * from './constant.js'
 export * from './Account/index.js'
 export * from './MIME/index.js'
@@ -32,3 +31,5 @@ export * from './serializer/index.js'
 export * from './test-helpers/index.js'
 export * from './unsafe-html/index.js'
 export * from './utils/index.js'
+export * from './legacy-settings/index.js'
+export * from './messages.js'

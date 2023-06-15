@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
@@ -12,6 +12,7 @@ import {
     searchProfileTabSelector,
 } from '../utils/selector.js'
 import { useMatchXS } from '@masknet/shared'
+import { MaskMessages } from '@masknet/shared-base'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false

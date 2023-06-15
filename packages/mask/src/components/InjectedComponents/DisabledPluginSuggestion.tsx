@@ -1,6 +1,5 @@
 import { Icons } from '@masknet/icons'
 import {
-    BooleanPreference,
     type Plugin,
     PluginI18NFieldRender,
     registeredPlugins,
@@ -18,6 +17,7 @@ import type { Option } from 'ts-results-es'
 import { useSubscription } from 'use-subscription'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
+import { BooleanPreference } from '@masknet/public-api'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))

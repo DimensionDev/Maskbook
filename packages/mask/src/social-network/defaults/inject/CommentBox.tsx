@@ -4,8 +4,8 @@ import { type DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-
 import { CommentBox, type CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { makeStyles } from '@masknet/theme'
-import { MaskMessages } from '../../../utils/messages.js'
 import { startWatch } from '../../../utils/watcher.js'
+import { MaskMessages } from '@masknet/shared-base'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,

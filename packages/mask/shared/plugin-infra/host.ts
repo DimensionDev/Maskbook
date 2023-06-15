@@ -1,10 +1,10 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
 import './register.js'
-import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
-import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
-import { MaskMessages } from '../../shared/messages.js'
+import { MaskMessages, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
+import type { BooleanPreference } from '@masknet/public-api'
+import type { Plugin } from '@masknet/plugin-infra'
 
 export type PartialSharedUIContext = Pick<Plugin.Shared.SharedUIContext, 'createKVStorage'>
 export const createPartialSharedUIContext = (id: string, signal: AbortSignal): PartialSharedUIContext => {

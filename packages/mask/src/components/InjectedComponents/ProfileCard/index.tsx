@@ -10,14 +10,14 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, MaskMessages } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { ScopedDomainsContainer, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
+import { addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {

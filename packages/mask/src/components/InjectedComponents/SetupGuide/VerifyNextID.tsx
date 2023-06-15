@@ -3,10 +3,8 @@ import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { type WizardDialogProps, WizardDialog } from './WizardDialog.js'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
-import { dismissVerifyNextID } from '../../../../shared/legacy-settings/settings.js'
 import { useState } from 'react'
-import type { PersonaIdentifier } from '@masknet/shared-base'
+import { SetupGuideStep, type PersonaIdentifier, dismissVerifyNextID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 export const useStyles = makeStyles()((theme) => ({

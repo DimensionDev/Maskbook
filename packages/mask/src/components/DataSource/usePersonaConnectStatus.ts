@@ -1,12 +1,15 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
-import { DashboardRoutes } from '@masknet/shared-base'
+import {
+    DashboardRoutes,
+    SetupGuideStep,
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
+} from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../extension/service.js'
-import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 

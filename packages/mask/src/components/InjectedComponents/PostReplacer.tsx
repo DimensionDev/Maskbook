@@ -16,8 +16,8 @@ import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
-import { MaskMessages } from '../../utils/messages.js'
 import { produce } from 'immer'
+import { MaskMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     root: {

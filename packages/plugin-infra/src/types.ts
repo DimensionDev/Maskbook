@@ -41,6 +41,7 @@ import type {
 import type { TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
+import type { BooleanPreference } from '@masknet/public-api'
 
 export declare namespace Plugin {
     /**
@@ -1189,10 +1190,4 @@ export namespace Plugin.__Host {
             disabled: [id: string]
         }>
     }
-}
-
-export enum BooleanPreference {
-    False = 0,
-    Default = 1,
-    True = 2,
 }

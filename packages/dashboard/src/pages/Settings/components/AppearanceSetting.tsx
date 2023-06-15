@@ -1,10 +1,10 @@
 import { MenuItem, type SelectChangeEvent } from '@mui/material'
 import { Services } from '../../../API.js'
 import { useAppearance } from '../../Personas/api.js'
-import { Appearance } from '@masknet/theme'
 
 import SettingSelect from './SettingSelect.js'
 import { useDashboardI18N } from '../../../locales/index.js'
+import { Appearance } from '@masknet/public-api'
 
 function handleChange(event: SelectChangeEvent<Appearance>) {
     Services.Settings.setTheme(event.target.value as Appearance)

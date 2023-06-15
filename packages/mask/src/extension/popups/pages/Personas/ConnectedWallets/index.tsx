@@ -6,7 +6,14 @@ import { useLocation } from 'react-router-dom'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
-import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes, SignType } from '@masknet/shared-base'
+import {
+    MaskMessages,
+    NetworkPluginID,
+    NextIDAction,
+    NextIDPlatform,
+    PopupRoutes,
+    SignType,
+} from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -14,7 +21,6 @@ import { ConnectedWalletsUI } from './UI.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import type { ConnectedWalletInfo } from '../type.js'
 import Service from '../../../../service.js'
-import { MaskMessages } from '../../../../../../shared/messages.js'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()

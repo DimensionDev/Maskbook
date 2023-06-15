@@ -2,7 +2,7 @@ import './register.js'
 
 import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
-import { BooleanPreference, CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import {
     createConstantSubscription,
     createI18NBundle,
@@ -15,6 +15,7 @@ import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
 import { worker } from './rpc.js'
+import { BooleanPreference } from '@masknet/public-api'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(

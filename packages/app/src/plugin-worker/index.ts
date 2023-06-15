@@ -1,11 +1,12 @@
 import './register.js'
 
 import { noop } from 'lodash-es'
-import { BooleanPreference, startPluginWorker, type Plugin } from '@masknet/plugin-infra/background-worker'
+import { startPluginWorker, type Plugin } from '@masknet/plugin-infra/background-worker'
 import { Emitter } from '@servie/events'
 import { createI18NBundle, createKVStorageHost, i18NextInstance } from '@masknet/shared-base'
 import { createPluginDatabase } from './database/database.js'
 import { indexedDBStorageBackend, inMemoryStorageBackend } from './storage.js'
+import { BooleanPreference } from '@masknet/public-api'
 
 const inMemoryStorage = createKVStorageHost(inMemoryStorageBackend, {
     on: () => noop,
