@@ -241,7 +241,6 @@ export const TransferERC721 = memo(() => {
     const onTransfer = useCallback(
         async (data: FormInputs) => {
             let hash: string | undefined
-            console.log(isValidAddress(data.recipient), data)
             if (isValidAddress(data.recipient)) {
                 hash = await transferCallback()
             } else if (isValidDomain(data.recipient) && isValidAddress(registeredAddress)) {
