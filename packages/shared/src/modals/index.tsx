@@ -4,18 +4,18 @@ import { SelectProviderModal, type SelectProviderDialogOpenProps } from './Selec
 import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
 
-export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
-export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
-export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>()
-export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>()
+export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>().bind()
+export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>().bind()
+export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>().bind()
+export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>().bind()
 
 export function Modals() {
     return (
         <>
-            <WalletConnectQRCode ref={WalletConnectQRCodeDialog.register.bind(WalletConnectQRCodeDialog)} />
-            <SelectProviderModal ref={SelectProviderDialog.register.bind(SelectProviderDialog)} />
-            <WalletStatusModal ref={WalletStatusDialog.register.bind(WalletStatusDialog)} />
-            <WalletRiskWarningModal ref={WalletRiskWarningDialog.register.bind(WalletRiskWarningDialog)} />
+            <WalletConnectQRCode ref={WalletConnectQRCodeDialog.register} />
+            <SelectProviderModal ref={SelectProviderDialog.register} />
+            <WalletStatusModal ref={WalletStatusDialog.register} />
+            <WalletRiskWarningModal ref={WalletRiskWarningDialog.register} />
         </>
     )
 }

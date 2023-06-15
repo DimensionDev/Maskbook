@@ -82,4 +82,13 @@ export class SingletonModal<
             this.onAbort = (error) => reject(error)
         })
     }
+
+    bind() {
+        this.register = this.register.bind(this)
+        this.open = this.open.bind(this)
+        this.close = this.close.bind(this)
+        this.abort = this.abort.bind(this)
+        this.openAndWaitForClose = this.openAndWaitForClose.bind(this)
+        return this
+    }
 }
