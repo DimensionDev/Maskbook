@@ -3,8 +3,6 @@ const prodOnly = process.env.NODE_ENV === 'production'
 const insiderOnly = process.env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
-// TODO: In future, we can turn this object into a Proxy to receive flags from remote
-
 export const flags = {
     isolated_dashboard_bridge_enabled: false,
     /** Firefox has a special API that can inject to the document with a higher permission. */
@@ -38,7 +36,6 @@ export const flags = {
 
     using_emoji_flag: true,
 
-    i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: false,
 
     /** The earliest version for the sentry to watch events and exceptions. */
