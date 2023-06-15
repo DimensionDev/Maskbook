@@ -1,19 +1,10 @@
-import {
-    ChartBarSquareIcon,
-    Cog6ToothIcon,
-    FolderIcon,
-    GlobeAltIcon,
-    ServerIcon,
-    SignalIcon,
-} from '@heroicons/react/24/outline'
+import { ArrowPathRoundedSquareIcon, Cog6ToothIcon, RocketLaunchIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { classNames } from '../helpers/classNames.js'
 
 const navigation = [
-    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-    { name: 'Deployments', href: '#', icon: ServerIcon, current: true },
-    { name: 'Activity', href: '#', icon: SignalIcon, current: false },
-    { name: 'Domains', href: '#', icon: GlobeAltIcon, current: false },
-    { name: 'Usage', href: '#', icon: ChartBarSquareIcon, current: false },
+    { name: 'Explore', href: '#', icon: RocketLaunchIcon, current: false },
+    { name: 'Favorites', href: '#', icon: HeartIcon, current: true },
+    { name: 'Trade', href: '#', icon: ArrowPathRoundedSquareIcon, current: false },
     { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
 ]
 
@@ -59,7 +50,7 @@ export function SidebarForDesktop(props: SidebarForDesktopProps) {
                             </ul>
                         </li>
                         <li>
-                            <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
+                            <div className="text-xs font-semibold leading-6 text-gray-400">Shortcuts</div>
                             <ul role="list" className="-mx-2 mt-2 space-y-1">
                                 {teams.map((team) => (
                                     <li key={team.name}>

@@ -18,10 +18,10 @@ const deployments = [
         href: '#',
         projectName: 'ios-app',
         teamName: 'Planetaria',
-        status: 'offline',
+        status: 'offline' as const,
         statusText: 'Initiated 1m 32s ago',
         description: 'Deploys from GitHub',
-        environment: 'Preview',
+        environment: 'Preview' as const,
     },
     // More deployments...
 ]

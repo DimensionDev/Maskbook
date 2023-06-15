@@ -111,7 +111,7 @@ export function SidebarForMobile(props: SidebarForMobileProps) {
                                         </li>
                                         <li>
                                             <div className="text-xs font-semibold leading-6 text-gray-400">
-                                                Your teams
+                                                Shortcuts
                                             </div>
                                             <ul role="list" className="-mx-2 mt-2 space-y-1">
                                                 {teams.map((team) => (
