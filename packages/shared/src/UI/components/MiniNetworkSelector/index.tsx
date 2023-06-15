@@ -33,12 +33,6 @@ const useStyles = makeStyles<{
             borderRadius: '50%',
         },
     },
-    networkDisabled: {
-        cursor: 'not-allowed',
-        '&:hover': {
-            opacity: 0.6,
-        },
-    },
 }))
 
 export interface NetworkSelectorMinProps {
@@ -59,19 +53,11 @@ export interface NetworkSelectorMinProps {
         } | null,
     ): void
     hideAllNetworkButton?: boolean
-    disabledNonCurrentNetwork?: boolean
     size?: number
 }
 
 export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
-    ({
-        hideAllNetworkButton = false,
-        onSelect,
-        networks = [],
-        selectedNetwork,
-        disabledNonCurrentNetwork = false,
-        size = 30,
-    }) => {
+    ({ hideAllNetworkButton = false, onSelect, networks = [], selectedNetwork, size = 30 }) => {
         const { classes } = useStyles({ size })
 
         return (
@@ -98,7 +84,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                 position="relative"
                                 mr={1}
                                 height={size}
-                                onClick={() => !disabledNonCurrentNetwork && onSelect(network)}
+                                onClick={() => onSelect(network)}
                                 sx={{
                                     cursor: 'pointer',
                                     opacity: '0.6',
@@ -106,13 +92,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                     userSelect: 'none',
                                     lineHeight: `${size}px`,
                                 }}
-                                className={
-                                    selectedNetwork?.ID === network.ID
-                                        ? classes.networkSelected
-                                        : disabledNonCurrentNetwork
-                                        ? classes.networkDisabled
-                                        : ''
-                                }>
+                                className={selectedNetwork?.ID === network.ID ? classes.networkSelected : ''}>
                                 {network.isMainnet ? (
                                     <WalletIcon mainIcon={network.icon} size={size} />
                                 ) : (

@@ -1,14 +1,15 @@
 import { memo } from 'react'
-import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, TableCell, TableRow, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
-import { useChainContext, useNetworkDescriptors, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { CurrencyType, formatBalance, formatCurrency, getTokenUSDValue } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { ChangeNetworkTip } from './ChangeNetworkTip.js'
+import { Context } from '../../hooks/useContext.js'
+import { useContainer } from 'unstated-next'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -48,13 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${theme.palette.background.default}`,
         borderRadius: '50%',
     },
-    tip: {
-        padding: theme.spacing(1),
-        background: '#111432',
-    },
-    tipArrow: {
-        color: '#111432',
-    },
 }))
 
 export interface TokenTableRowProps {
@@ -66,10 +60,10 @@ export interface TokenTableRowProps {
 export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { chainId } = useChainContext()
-    const networkDescriptors = useNetworkDescriptors()
+
+    const { chainId, pluginID, setSelectedNetwork } = useContainer(Context)
+    const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
     const { pluginID: currentPluginId } = useNetworkContext()
-    const isOnCurrentChain = chainId === asset.chainId
 
     return (
         <TableRow className={classes.row}>
@@ -85,10 +79,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             size={36}
                         />
                         <Box className={classes.chainIcon}>
-                            <WalletIcon
-                                size={16}
-                                mainIcon={networkDescriptors.find((x) => x.chainId === asset.chainId)?.icon}
-                            />
+                            <WalletIcon size={16} mainIcon={networkDescriptor?.icon} />
                         </Box>
                     </Box>
                     <Typography className={classes.symbol}>{asset.symbol}</Typography>
@@ -119,51 +110,28 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
             </TableCell>
             {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
                 <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
-                    <Tooltip
-                        disableHoverListener={isOnCurrentChain}
-                        disableTouchListener
-                        title={<ChangeNetworkTip chainId={asset.chainId} />}
-                        placement="top"
-                        classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
-                        arrow>
-                        <span>
-                            <Button
-                                size="small"
-                                style={!isOnCurrentChain ? { pointerEvents: 'none' } : {}}
-                                disabled={!isOnCurrentChain}
-                                variant="outlined"
-                                color="secondary"
-                                sx={{ marginRight: 1 }}
-                                className={classes.button}
-                                onClick={() => onSend(asset)}>
-                                {t.wallets_balance_Send()}
-                            </Button>
-                        </span>
-                    </Tooltip>
-                    <Tooltip
-                        disableHoverListener={isOnCurrentChain || asset.chainId !== ChainId.Conflux}
-                        disableTouchListener
-                        title={<ChangeNetworkTip chainId={asset.chainId} />}
-                        placement="top"
-                        classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
-                        arrow>
-                        <span>
-                            <Button
-                                size="small"
-                                style={
-                                    !isOnCurrentChain || asset.chainId === ChainId.Conflux
-                                        ? { pointerEvents: 'none' }
-                                        : {}
-                                }
-                                disabled={!isOnCurrentChain || asset.chainId === ChainId.Conflux}
-                                variant="outlined"
-                                color="secondary"
-                                onClick={() => onSwap(asset)}
-                                className={classes.button}>
-                                {t.wallets_balance_Swap()}
-                            </Button>
-                        </span>
-                    </Tooltip>
+                    <Button
+                        size="small"
+                        variant="outlined"
+                        color="secondary"
+                        sx={{ marginRight: 1 }}
+                        className={classes.button}
+                        onClick={() => {
+                            onSend(asset)
+                            setSelectedNetwork?.(networkDescriptor ?? null)
+                        }}>
+                        {t.wallets_balance_Send()}
+                    </Button>
+                    <Button
+                        size="small"
+                        style={asset.chainId === ChainId.Conflux ? { pointerEvents: 'none' } : {}}
+                        disabled={asset.chainId === ChainId.Conflux}
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => onSwap(asset)}
+                        className={classes.button}>
+                        {t.wallets_balance_Swap()}
+                    </Button>
                 </TableCell>
             )}
         </TableRow>

@@ -100,7 +100,6 @@ export const Balance = memo<BalanceCardProps>(
             return BigNumber.sum(...values).toNumber()
         }, [selectedNetwork, fungibleAssets.value])
 
-        const isDisabledNonCurrentChainSelect = !!isWalletTransferPath
         const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath || networks.length <= 1
 
         return (
@@ -118,7 +117,6 @@ export const Balance = memo<BalanceCardProps>(
                         </BalanceContent>
                         <MiniNetworkSelector
                             hideAllNetworkButton={isHiddenAllButton}
-                            disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
                             selectedNetwork={selectedNetwork}
                             networks={networks}
                             onSelect={(network: Web3Helper.NetworkDescriptorAll | null) =>
