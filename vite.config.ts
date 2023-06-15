@@ -6,7 +6,7 @@ function createURL(pathToFile: string) {
 
 export default defineConfig({
     test: {
-        include: ['./packages/**/tests/**/*.ts'],
+        include: ['./packages/**/tests/**/*.ts', './packages/**/*.test.ts'],
         alias: {
             '@masknet/base': createURL('./packages/base/src/index.ts'),
             '@masknet/flags': createURL('./packages/flags/src/index.ts'),
