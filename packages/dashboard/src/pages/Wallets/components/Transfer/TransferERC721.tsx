@@ -67,15 +67,23 @@ const GAS_LIMIT = 30000
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
-    const { chainId, pluginID, isWalletConnectNetworkNotMatch, account } = useContainer(Context)
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch, account, setSelectedNetwork } = useContainer(Context)
     const anchorEl = useRef<HTMLDivElement | null>(null)
 
     const { state } = useLocation() as {
         state: {
             nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>
             type?: TransferTab
+            chainId?: ChainId
         } | null
     }
+
+    const networkDescriptor = useNetworkDescriptor(pluginID, state?.chainId)
+
+    useEffect(() => {
+        if (!state?.chainId || !networkDescriptor) return
+        setSelectedNetwork?.(networkDescriptor)
+    }, [networkDescriptor, state?.chainId])
 
     const { classes } = useStyles()
     const Others = useWeb3Others()
@@ -92,8 +100,8 @@ export const TransferERC721 = memo(() => {
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
 
-    const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const nativeToken = useNativeToken(pluginID, { chainId })
+    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
     // form
     const schema = z.object({
         recipient: z
@@ -115,18 +123,24 @@ export const TransferERC721 = memo(() => {
         defaultValues: { recipient: '', contract: '', tokenId: '' },
     })
 
-    const [contractAddress, setContractAddress] = useState('')
+    const [contractAddress, setContractAddress] = useState(state?.nonFungibleToken?.address || '')
 
     useEffect(() => {
-        if (!state) return
-        if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
-        if (state.nonFungibleToken.chainId !== chainId) return
+        if (!state?.nonFungibleToken || state?.chainId !== chainId || state?.type !== TransferTab.Collectibles) {
+            setContract(undefined)
+            setContractAddress('')
+            setValue('contract', '')
+            setValue('tokenId', '')
+            setDefaultToken(null)
+            return
+        }
 
         setContract(state.nonFungibleToken.contract)
+        setContractAddress(state.nonFungibleToken.address)
         setValue('contract', state.nonFungibleToken.contract?.name ?? '')
         setValue('tokenId', state.nonFungibleToken.tokenId)
         setDefaultToken(state.nonFungibleToken)
-    }, [state])
+    }, [state, chainId])
 
     const allFormFields = watch()
 

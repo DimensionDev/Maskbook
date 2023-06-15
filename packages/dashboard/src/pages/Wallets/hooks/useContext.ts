@@ -14,6 +14,7 @@ import { useMemo } from 'react'
 function useContext(initialState?: {
     account?: string
     chainId?: Web3Helper.ChainIdAll
+    setSelectedNetwork?: (x: Web3Helper.NetworkDescriptorAll | null) => void
     pluginID?: NetworkPluginID
     connectedChainId?: Web3Helper.ChainIdAll
 }) {
@@ -43,6 +44,7 @@ function useContext(initialState?: {
     return {
         account,
         chainId,
+        setSelectedNetwork: initialState?.setSelectedNetwork,
         isWalletConnectNetworkNotMatch:
             (providerType === ProviderType.WalletConnect || providerType === ProviderType.WalletConnectV2) &&
             initialState?.connectedChainId !== chainId,

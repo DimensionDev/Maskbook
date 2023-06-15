@@ -17,6 +17,7 @@ import { WalletStateBar } from './components/WalletStateBar/index.js'
 import { useIsMatched } from './hooks/index.js'
 import { Context } from './hooks/useContext.js'
 import { StartUp } from './StartUp.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const r = relativeRouteOf(DashboardRoutes.Wallets)
 
@@ -35,7 +36,7 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const { pluginID } = useNetworkContext()
-    const networkDescriptor = useNetworkDescriptor()
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Helper.NetworkDescriptorAll | null>(
         networkDescriptor ?? null,
     )
@@ -87,6 +88,7 @@ function Wallets() {
             ) : (
                 <Context.Provider
                     initialState={{
+                        setSelectedNetwork,
                         chainId: selectedNetwork?.chainId,
                         pluginID: NetworkPluginID.PLUGIN_EVM,
                         connectedChainId: chainId,
