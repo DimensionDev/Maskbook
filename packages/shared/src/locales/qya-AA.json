@@ -233,5 +233,10 @@
     "done": "crwdns4145:0crwdne4145:0",
     "wallet_risk_confirm_failed": "crwdns4571:0crwdne4571:0",
     "wallet_risk_confirm_confirming": "crwdns4569:0crwdne4569:0",
+    "plugin_wallet_connect_with": "crwdns12981:0crwdne12981:0",
+    "plugin_wallet_connect_with_retry": "crwdns12983:0crwdne12983:0",
+    "plugin_wallet_connected_with": "crwdns12985:0crwdne12985:0",
+    "initializing": "crwdns10111:0crwdne10111:0",
+    "plugin_wallet_metamask_error_already_request": "crwdns12987:0crwdne12987:0",
     "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0"
 }

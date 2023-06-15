@@ -210,5 +210,10 @@
     "done": "完成",
     "wallet_risk_confirm_failed": "确认失败",
     "wallet_risk_confirm_confirming": "确认中",
+    "plugin_wallet_connect_with": "连接到",
+    "plugin_wallet_connect_with_retry": "再试一次",
+    "plugin_wallet_connected_with": "连接到",
+    "initializing": "初始化中...",
+    "plugin_wallet_metamask_error_already_request": "您已打开弹出窗口，请确认。",
     "plugin_wallet_on_connect": "连接钱包"
 }

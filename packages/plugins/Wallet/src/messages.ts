@@ -1,6 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
 import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type { PluginID } from '@masknet/shared-base'
 import type { GasOptionType, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -17,17 +16,6 @@ export type ApplicationDialogEvent = {
         }
     }
 }
-
-export type ConnectWalletDialogEvent =
-    | {
-          open: true
-          network: Web3Helper.NetworkDescriptorAll
-          provider: Web3Helper.ProviderDescriptorAll
-          walletConnectedCallback?: () => void
-      }
-    | {
-          open: false
-      }
 
 export type GasSettingDialogEvent = {
     open: boolean
@@ -51,11 +39,6 @@ export type SelectNftContractDialogEvent = {
 }
 
 export interface WalletMessage {
-    /**
-     * Connect wallet dialog
-     */
-    connectWalletDialogUpdated: ConnectWalletDialogEvent
-
     /**
      * Application dialog
      */

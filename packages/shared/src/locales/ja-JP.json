@@ -199,5 +199,10 @@
     "plugin_wallet_dialog_title": "ウォレットアカウント",
     "confirm": "確認",
     "done": "完了です！",
+    "plugin_wallet_connect_with": "と接続する",
+    "plugin_wallet_connect_with_retry": "再試行",
+    "plugin_wallet_connected_with": "と接続する",
+    "initializing": "初期化中...",
+    "plugin_wallet_metamask_error_already_request": "ポップアップが開いています。確認してください。",
     "plugin_wallet_on_connect": "ウォレットに接続しています"
 }
