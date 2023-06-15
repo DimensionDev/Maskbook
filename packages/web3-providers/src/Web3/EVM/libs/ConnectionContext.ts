@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
@@ -11,7 +12,6 @@ import {
     type Transaction,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionOptions } from '../types/index.js'
-import { omit } from 'lodash-es'
 
 let pid = 0
 
@@ -57,11 +57,13 @@ export class ConnectionContext {
     }
 
     get account() {
-        return this.payloadEditor.from ?? this._options?.account ?? this._account
+        return this.payloadEditor.from ?? this._options?.overrides?.from ?? this._options?.account ?? this._account
     }
 
     get chainId() {
-        return this.payloadEditor.chainId ?? this._options?.chainId ?? this._chainId
+        return (
+            this.payloadEditor.chainId ?? this._options?.overrides?.chainId ?? this._options?.chainId ?? this._chainId
+        )
     }
 
     get providerType() {
@@ -87,7 +89,7 @@ export class ConnectionContext {
             from: this._options?.overrides?.from || this.payloadEditor.config?.from,
             chainId:
                 typeof this._options?.overrides?.chainId === 'string'
-                    ? Number.parseInt(this._options?.overrides?.chainId, 10)
+                    ? Number.parseInt(this._options?.overrides?.chainId, 16)
                     : this.payloadEditor.config?.chainId,
         }
     }
