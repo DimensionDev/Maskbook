@@ -39,14 +39,31 @@ export function updateLanguage(next: LanguageOptions) {
 }
 
 const cache = Symbol('shared-base i18n cache')
+const interpolationLike = /({{.+?}})/g
+function getInterpolations(string: string) {
+    return [...string.matchAll(interpolationLike)]
+        .map((arr) => arr[0])
+        .sort(undefined)
+        .join('')
+}
 export function queryRemoteI18NBundle(
-    _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: object]>>,
+    _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: Record<string, string>]>>,
 ) {
     const updater: typeof _updater & { [cache]?: DebouncedFunc<() => Promise<void>> } = _updater as any
     const update = (updater[cache] ??= debounce(async () => {
         const result = await updater(i18NextInstance.language)
         for (const [ns, lang, json] of result) {
-            i18NextInstance.addResourceBundle(lang, ns, json, true, true)
+            const next = { ...i18NextInstance.getResourceBundle(lang, ns) }
+            for (const key in json) {
+                const value = json[key]
+                if (typeof value !== 'string') continue
+                if (!next[key]) next[key] = value
+                // we only accept i18n hot update if and only if the interpolations are the same, otherwise the translation will be broken.
+                else if (getInterpolations(value) === next[key]) {
+                    next[key] = value
+                }
+            }
+            i18NextInstance.addResourceBundle(lang, ns, next, true, true)
         }
     }, 1500))
     update()
