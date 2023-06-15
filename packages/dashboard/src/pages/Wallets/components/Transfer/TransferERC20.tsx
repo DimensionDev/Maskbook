@@ -15,7 +15,7 @@ import {
     useWallet,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import {
     TokenType,
@@ -38,14 +38,16 @@ import {
     DepositPaymaster,
     addGasMargin,
     type EIP1559GasConfig,
+    createNativeToken,
 } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { Tune as TuneIcon } from '@mui/icons-material'
-import { Box, Button, IconButton, Link, Popover, Stack, Typography, useTheme } from '@mui/material'
+import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { Context } from '../../hooks/useContext.js'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface TransferERC20Props {
     token: FungibleToken<ChainId, SchemaType>
@@ -69,31 +71,41 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const wallet = useWallet()
     const anchorEl = useRef<HTMLDivElement | null>(null)
+    const navigate = useNavigate()
+    const { state } = useLocation() as {
+        state: {
+            token?: FungibleToken<ChainId, SchemaType>
+        } | null
+    }
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [message, setMessage] = useState('')
     const [popoverOpen, setPopoverOpen] = useState(false)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
-    const network = useNetworkDescriptor()
+
     const { classes } = useStyles()
     const [gasLimit_, setGasLimit_] = useState(0)
-    const theme = useTheme()
 
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
 
-    const { chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch, setSelectedNetwork } = useContainer(Context)
+    const network = useNetworkDescriptor(pluginID, state?.token?.chainId)
     const Others = useWeb3Others()
+
     const is1559Supported = useMemo(() => Others?.chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
     useEffect(() => {
-        setSelectedToken(token)
-    }, [token])
+        token.chainId === chainId ? setSelectedToken(token) : setSelectedToken(createNativeToken(chainId as ChainId))
+    }, [token, chainId])
 
     // workaround: transferERC20 should support non-evm network
     const isNativeToken = isNativeTokenAddress(selectedToken.address)
     const tokenType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
+
+    const nativeToken = useNativeToken(pluginID, { chainId })
+    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
 
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
@@ -101,8 +113,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         selectedToken?.address ?? '',
         { chainId },
     )
-    const nativeToken = useNativeToken(pluginID, { chainId })
-    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
 
     // #region resolve ENS domain
     const {
@@ -127,6 +137,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
+
+    useEffect(() => {
+        if (!state?.token?.chainId || !network) return
+        setSelectedNetwork?.(network)
+    }, [network, state?.token?.chainId])
 
     useEffect(() => {
         setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value ?? 0)
@@ -348,6 +363,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             loading: false,
                             ChipProps: {
                                 onClick: async () => {
+                                    // Clear the previous location state of the token.
+                                    navigate(DashboardRoutes.WalletsTransfer, { state: {} })
                                     const pickedToken = await selectFungibleToken({
                                         disableNativeToken: false,
                                         chainId,

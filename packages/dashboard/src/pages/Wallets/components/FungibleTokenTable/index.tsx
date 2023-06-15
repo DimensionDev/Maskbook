@@ -75,6 +75,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
                     address: token.address,
                     decimals: token.decimals,
                 },
+                chainId: token.chainId,
             },
         })
     }, [])

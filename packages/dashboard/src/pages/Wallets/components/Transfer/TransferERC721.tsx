@@ -200,6 +200,14 @@ export const TransferERC721 = memo(() => {
     }, [account, allFormFields.tokenId, pluginID, contractAddress, allFormFields.recipient, Web3])
 
     const handleSelectNFT = async () => {
+        // Clear the previous location state.
+        navigate(DashboardRoutes.WalletsTransfer, {
+            state: {
+                type: TransferTab.Collectibles,
+                nonFungibleToken: undefined,
+                chainId,
+            },
+        })
         const contract = await selectNFTContract({
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
