@@ -12,11 +12,13 @@ import { Assets } from './components/Assets/index.js'
 import { Balance } from './components/Balance/index.js'
 import { History } from './components/History/index.js'
 import { ReceiveDialog } from './components/ReceiveDialog/index.js'
-import { Transfer } from './components/Transfer/index.js'
+import { Transfer, TransferTab } from './components/Transfer/index.js'
 import { WalletStateBar } from './components/WalletStateBar/index.js'
 import { useIsMatched } from './hooks/index.js'
 import { Context } from './hooks/useContext.js'
 import { StartUp } from './StartUp.js'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const r = relativeRouteOf(DashboardRoutes.Wallets)
 
@@ -26,7 +28,14 @@ function Wallets() {
     const { account, chainId } = useChainContext()
     const wallets = useWallets()
 
-    const { pathname } = useLocation()
+    const { pathname, state } = useLocation() as {
+        state: {
+            token?: FungibleToken<ChainId, SchemaType>
+            nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>
+            type?: TransferTab
+        } | null
+        pathname: string
+    }
     const isWalletPath = useIsMatched(DashboardRoutes.Wallets)
     const isWalletTransferPath = useIsMatched(DashboardRoutes.WalletsTransfer)
     const isWalletHistoryPath = useIsMatched(DashboardRoutes.WalletsHistory)
@@ -35,7 +44,12 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const { pluginID } = useNetworkContext()
-    const networkDescriptor = useNetworkDescriptor()
+
+    const networkDescriptor = useNetworkDescriptor(
+        NetworkPluginID.PLUGIN_EVM,
+        (state?.type === TransferTab.Token ? state?.token?.chainId : state?.nonFungibleToken?.chainId) ??
+            ChainId.Mainnet,
+    )
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Helper.NetworkDescriptorAll | null>(
         networkDescriptor ?? null,
     )
@@ -86,7 +100,12 @@ function Wallets() {
                 <StartUp />
             ) : (
                 <Context.Provider
-                    initialState={{ chainId: selectedNetwork?.chainId, pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    initialState={{
+                        setSelectedNetwork,
+                        chainId: selectedNetwork?.chainId,
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                        connectedChainId: chainId,
+                    }}>
                     <Balance
                         onSend={() => navigate(DashboardRoutes.WalletsTransfer)}
                         onBuy={openBuyDialog}

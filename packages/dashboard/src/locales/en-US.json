@@ -156,8 +156,6 @@
     "wallets_balance_Swap": "Swap",
     "wallets_balance_Receive": "Receive",
     "wallets_assets_token": "Token",
-    "wallets_assets_token_sent_not_connect_tip": "Not connected to {{chainName}}.",
-    "wallets_assets_token_sent_switch_network_tip": "Click to switch.",
     "wallets_assets_investment": "Investment",
     "wallets_assets_collectibles": "Collectibles",
     "wallets_assets_custom_token": "Custom Token",
@@ -396,5 +394,6 @@
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
     "wallet_history_no_data": "No history records.",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
-    "wallets_history_burn": "Burn"
+    "wallets_history_burn": "Burn",
+    "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 }

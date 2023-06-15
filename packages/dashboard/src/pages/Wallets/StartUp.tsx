@@ -28,7 +28,7 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_connect_action(),
-                                handler: SelectProviderDialog.open,
+                                handler: () => SelectProviderDialog.open(),
                             }}
                         />
                     </Box>

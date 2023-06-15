@@ -156,8 +156,6 @@
     "wallets_balance_Swap": "스왑",
     "wallets_balance_Receive": "받기",
     "wallets_assets_token": "토큰",
-    "wallets_assets_token_sent_not_connect_tip": "{{chainName}} 에 연결되지 않습니다.",
-    "wallets_assets_token_sent_switch_network_tip": "전환하기",
     "wallets_assets_investment": "투자",
     "wallets_assets_collectibles": "수집품",
     "wallets_assets_custom_token": "맞춤형 토큰",
