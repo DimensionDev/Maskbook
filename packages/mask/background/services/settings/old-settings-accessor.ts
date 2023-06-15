@@ -1,4 +1,5 @@
 import { head } from 'lodash-es'
+import { telemetrySettings } from '@masknet/web3-telemetry'
 import {
     currentPersonaIdentifier,
     ECKeyIdentifier,
@@ -13,7 +14,6 @@ import {
     BooleanPreference,
 } from '@masknet/shared-base'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
-import { telemetrySettings } from '@masknet/web3-telemetry'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {

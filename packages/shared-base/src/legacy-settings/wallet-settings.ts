@@ -1,4 +1,4 @@
-import { PluginID } from '../index.js'
+import { PluginID } from '../Plugin/index.js'
 import { createGlobalSettings } from './createSettings.js'
 
 export enum LockStatus {

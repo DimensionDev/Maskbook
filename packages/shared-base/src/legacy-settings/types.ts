@@ -1,4 +1,4 @@
-export type SetupGuideContext = {
+export interface SetupGuideContext {
     /** The persona to be connected */
     persona?: string
     /** The user name given by user */
