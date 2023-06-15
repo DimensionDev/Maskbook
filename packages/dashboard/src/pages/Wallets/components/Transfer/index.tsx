@@ -35,7 +35,7 @@ export const Transfer = memo(() => {
         [TransferTab.Collectibles]: t.wallets_assets_collectibles(),
     }
     const [currentTab, onChange, , setTab] = useTabs(TransferTab.Token, TransferTab.Collectibles)
-    console.log({ state })
+
     useEffect(() => {
         if (!state) return
         if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
