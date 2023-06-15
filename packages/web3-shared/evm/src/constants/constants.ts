@@ -38,6 +38,7 @@ import {
     transformAllFromJSON,
     transformFromJSON,
 } from '@masknet/web3-shared-base'
+import { getEnumAsArray } from '@masknet/kit'
 import { ChainId } from '../types/index.js'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
@@ -50,6 +51,8 @@ function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
         return ''
     }
 }
+
+export const ChainIdList = getEnumAsArray(ChainId).map((x) => x.value)
 
 export const getEthereumConstant = transform(ChainId, Ethereum)
 export const getEthereumConstants = transformAll(ChainId, Ethereum)

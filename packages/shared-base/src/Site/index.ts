@@ -1,3 +1,4 @@
+import { getEnumAsArray } from '@masknet/kit'
 import { Sniffings } from '../Sniffings/index.js'
 import { ExtensionSite, EnhanceableSite } from './types.js'
 
@@ -16,6 +17,9 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.Popup]: /popups\.html/i,
     [ExtensionSite.PopupConnect]: /popups-connect\.html/i,
 }
+
+export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.value)
+export const ExtensionSiteList = getEnumAsArray(ExtensionSite).map((x) => x.value)
 
 export function getEnhanceableSiteType(url?: string) {
     const { host } = location

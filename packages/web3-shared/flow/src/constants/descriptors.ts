@@ -1,5 +1,4 @@
-import { getEnumAsArray } from '@masknet/kit'
-import { EnhanceableSite, ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSiteList, ExtensionSiteList, NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainDescriptor,
     createFungibleToken,
@@ -7,6 +6,7 @@ import {
     type ProviderDescriptor,
 } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
+import { ChainIdList } from './constants.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW
 
@@ -98,9 +98,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://portto.com/',
         shortenLink: 'portto.com',
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
         },
     },
 ]
