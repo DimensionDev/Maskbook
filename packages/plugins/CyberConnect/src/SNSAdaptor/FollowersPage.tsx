@@ -1,6 +1,6 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { Box, Button, Typography } from '@mui/material'
-import { ElementAnchor } from '@masknet/shared'
+import { LoadingBase, MaskLightTheme, makeStyles } from '@masknet/theme'
+import { Box } from '@mui/material'
+import { ElementAnchor, LoadingStatus, ReloadStatus } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { useFollowers } from '../hooks/useFollowers.js'
 import type { ProfileTab } from '../constants.js'
@@ -8,16 +8,10 @@ import type { IFollowIdentity } from '../Worker/apis/index.js'
 import { FollowRow } from './FollowTab.js'
 import { useEffect } from 'react'
 import { useIterator } from '@masknet/web3-hooks-base'
+import { ThemeProvider } from '@emotion/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
-    statusBox: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 400,
-        flexDirection: 'column',
-    },
 }))
 
 interface FollowersPageProps {
@@ -39,30 +33,18 @@ export function FollowersPage(props: FollowersPageProps) {
 
     if (error) {
         return (
-            <Box className={classes.statusBox} p={2}>
-                <Typography
-                    color={(theme) => theme.palette.maskColor.publicSecond}
-                    marginBottom="14px"
-                    fontSize="12px"
-                    fontWeight={700}>
-                    {t.failed()}
-                </Typography>
-                <Button variant="roundedContained" onClick={retry}>
-                    {t.reload()}
-                </Button>
-            </Box>
+            <ThemeProvider theme={MaskLightTheme}>
+                <ReloadStatus height={400} p={2} message={t.failed()} onRetry={retry} />
+            </ThemeProvider>
         )
     }
 
-    if (!value?.length && loading)
-        return (
-            <Box className={classes.statusBox}>
-                <LoadingBase />
-            </Box>
-        )
+    if (!value?.length && loading) return <LoadingStatus height={400} omitText />
     return (
         <Box className={classes.root}>
-            {value?.length ? value.map((x: IFollowIdentity) => <FollowRow key={x.address} identity={x} />) : props.hint}
+            {value?.length
+                ? value.map((x: IFollowIdentity) => <FollowRow key={x.ens || x.address} identity={x} />)
+                : props.hint}
             <ElementAnchor callback={() => next?.()}>{!done && value?.length ? <LoadingBase /> : null}</ElementAnchor>
         </Box>
     )

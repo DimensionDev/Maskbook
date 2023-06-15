@@ -18,13 +18,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const LoadingStatus = memo(function LoadingStatus({ className, children, ...rest }: BoxProps) {
+interface Props extends BoxProps {
+    omitText?: boolean
+}
+
+export const LoadingStatus = memo(function LoadingStatus({ omitText, className, children, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const t = useSharedI18N()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
             <LoadingBase size={32} />
-            <Typography className={classes.text}>{children ?? t.loading()}</Typography>
+            {omitText ? null : <Typography className={classes.text}>{children ?? t.loading()}</Typography>}
         </Box>
     )
 })
