@@ -1,6 +1,6 @@
-import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '@masknet/shared-base'
 import type { Option } from 'ts-results-es'
 import { MaskMessages } from '../messages.js'
+import { ValueRefJSON, type ValueRef, ValueRefWithReady, type ValueComparer } from '../index.js'
 
 let getValue: (key: string) => Promise<Option<any>>
 export function setupLegacySettingsAtBackground(

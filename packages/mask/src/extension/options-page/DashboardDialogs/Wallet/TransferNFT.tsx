@@ -4,10 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import { isValidAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { useTokenTransferCallback } from '@masknet/web3-hooks-evm'
-import { Image, MaskIconOutlined } from '@masknet/shared'
+import { Image } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleListContext } from '../../DashboardComponents/CollectibleList/index.js'
 import { DashboardDialogCore, DashboardDialogWrapper, type WrappedDialogProps } from '../Base.js'
+import { Icons } from '@masknet/icons'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
@@ -17,8 +18,6 @@ const useTransferDialogStylesNFT = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
     },
     placeholder: {
-        width: 48,
-        height: 48,
         opacity: 0.1,
     },
 }))
@@ -70,7 +69,7 @@ export function DashboardWalletTransferDialogNFT(
                             src={token.metadata.mediaURL}
                         />
                     ) : (
-                        <MaskIconOutlined className={classes.placeholder} />
+                        <Icons.OutlinedMask size={48} className={classes.placeholder} />
                     )
                 }
                 size="medium"

@@ -1,13 +1,7 @@
 import { isEqual } from 'lodash-es'
 import { Appearance, LanguageOptions } from '@masknet/public-api'
-import {
-    EnhanceableSite,
-    ExtensionSite,
-    updateLanguage,
-    NetworkPluginID,
-    BooleanPreference,
-} from '@masknet/shared-base'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
+import { BooleanPreference, EnhanceableSite, ExtensionSite, NetworkPluginID, updateLanguage } from '../index.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)

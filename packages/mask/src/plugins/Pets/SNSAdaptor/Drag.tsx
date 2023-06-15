@@ -1,4 +1,4 @@
-import { PureComponent, type PropsWithChildren, type MouseEvent as ReactMouseEvent } from 'react'
+import { PureComponent, type PropsWithChildren, type MouseEvent as ReactMouseEvent, createRef } from 'react'
 
 interface StateProps {
     pos: {
@@ -26,7 +26,7 @@ interface DraggableProps {
 // TODO: use library like react-dnd instead.
 // eslint-disable-next-line @masknet/jsx-no-class-component
 class Draggable extends PureComponent<PropsWithChildren<DraggableProps>> {
-    ref = React.createRef<HTMLDivElement>()
+    ref = createRef<HTMLDivElement>()
     mouseMoveFuc = this.onMouseMove.bind(this)
     mouseUpFuc = this.onMouseUp.bind(this)
 

@@ -1,13 +1,14 @@
-import { useState, useCallback } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { DashboardRoutes, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { MaskColors, makeStyles } from '@masknet/theme'
 import { IconButton } from '@mui/material'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { useCallback, useState } from 'react'
+import { useMount } from 'react-use'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
-import { DashboardRoutes, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
-import { MaskIconInMinds, MaskSharpIcon, useCurrentPersonaConnectStatus } from '@masknet/shared'
-import { useMount } from 'react-use'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 
 interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
@@ -29,8 +30,8 @@ interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | '
 }
 
 const ICON_MAP: Record<string, JSX.Element> = {
-    minds: <MaskIconInMinds />,
-    default: <MaskSharpIcon color="primary" />,
+    minds: <Icons.MaskInMinds size={18} />,
+    default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
 }
 const useStyles = makeStyles()({
     buttonText: {
