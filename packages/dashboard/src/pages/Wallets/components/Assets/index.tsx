@@ -74,8 +74,7 @@ export const Assets = memo<AssetsProps>(({ network }) => {
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
-                    nonFungibleToken: asset,
-                    chainId,
+                    nonFungibleToken: { ...asset, chainId },
                 },
             })
         },
@@ -145,5 +144,3 @@ export const Assets = memo<AssetsProps>(({ network }) => {
         </>
     )
 })
-
-Assets.displayName = 'Assets'

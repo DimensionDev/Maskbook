@@ -67,7 +67,7 @@ const GAS_LIMIT = 30000
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
-    const { chainId, pluginID, isWalletConnectNetworkNotMatch, account, setSelectedNetwork } = useContainer(Context)
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch, account } = useContainer(Context)
     const anchorEl = useRef<HTMLDivElement | null>(null)
 
     const { state } = useLocation() as {
@@ -77,13 +77,6 @@ export const TransferERC721 = memo(() => {
             chainId?: ChainId
         } | null
     }
-
-    const networkDescriptor = useNetworkDescriptor(pluginID, state?.chainId)
-
-    useEffect(() => {
-        if (!state?.chainId || !networkDescriptor) return
-        setSelectedNetwork?.(networkDescriptor)
-    }, [networkDescriptor, state?.chainId])
 
     const { classes } = useStyles()
     const Others = useWeb3Others()
@@ -126,7 +119,11 @@ export const TransferERC721 = memo(() => {
     const [contractAddress, setContractAddress] = useState(state?.nonFungibleToken?.address || '')
 
     useEffect(() => {
-        if (!state?.nonFungibleToken || state?.chainId !== chainId || state?.type !== TransferTab.Collectibles) {
+        if (
+            !state?.nonFungibleToken ||
+            state?.nonFungibleToken.chainId !== chainId ||
+            state?.type !== TransferTab.Collectibles
+        ) {
             setContract(undefined)
             setContractAddress('')
             setValue('contract', '')
@@ -200,14 +197,6 @@ export const TransferERC721 = memo(() => {
     }, [account, allFormFields.tokenId, pluginID, contractAddress, allFormFields.recipient, Web3])
 
     const handleSelectNFT = async () => {
-        // Clear the previous location state.
-        navigate(DashboardRoutes.WalletsTransfer, {
-            state: {
-                type: TransferTab.Collectibles,
-                nonFungibleToken: undefined,
-                chainId,
-            },
-        })
         const contract = await selectNFTContract({
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
@@ -223,6 +212,13 @@ export const TransferERC721 = memo(() => {
             })
             setContract(contract as NonFungibleTokenContract<ChainId, SchemaType>)
             setValue('tokenId', '')
+            // Update the previous location state.
+            navigate(DashboardRoutes.WalletsTransfer, {
+                state: {
+                    type: TransferTab.Collectibles,
+                    nonFungibleToken: contract,
+                },
+            })
         }
     }
 

@@ -48,6 +48,7 @@ import { useGasConfig } from '../../hooks/useGasConfig.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { Context } from '../../hooks/useContext.js'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { TransferTab } from './types.js'
 
 export interface TransferERC20Props {
     token: FungibleToken<ChainId, SchemaType>
@@ -91,7 +92,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
 
-    const { chainId, pluginID, isWalletConnectNetworkNotMatch, setSelectedNetwork } = useContainer(Context)
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
+
     const network = useNetworkDescriptor(pluginID, state?.token?.chainId)
     const Others = useWeb3Others()
 
@@ -137,11 +139,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
-
-    useEffect(() => {
-        if (!state?.token?.chainId || !network) return
-        setSelectedNetwork?.(network)
-    }, [network, state?.token?.chainId])
 
     useEffect(() => {
         setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value ?? 0)
@@ -363,13 +360,17 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             loading: false,
                             ChipProps: {
                                 onClick: async () => {
-                                    // Clear the previous location state of the token.
-                                    navigate(DashboardRoutes.WalletsTransfer, { state: {} })
                                     const pickedToken = await selectFungibleToken({
                                         disableNativeToken: false,
                                         chainId,
                                     })
-                                    if (pickedToken) setSelectedToken(pickedToken)
+                                    if (pickedToken) {
+                                        setSelectedToken(pickedToken)
+                                        // Update the previous location state of the token.
+                                        navigate(DashboardRoutes.WalletsTransfer, {
+                                            state: { type: TransferTab.Token, token: pickedToken },
+                                        })
+                                    }
                                 },
                             },
                         }}

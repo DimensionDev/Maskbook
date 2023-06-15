@@ -14,6 +14,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { Context } from '../../hooks/useContext.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
+import { TransferTab } from '../Transfer/types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -81,7 +82,8 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
     }, [])
 
     const onSend = useCallback(
-        (token: Web3Helper.FungibleAssetAll) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+        (token: Web3Helper.FungibleAssetAll) =>
+            navigate(DashboardRoutes.WalletsTransfer, { state: { token, type: TransferTab.Token } }),
         [],
     )
 
