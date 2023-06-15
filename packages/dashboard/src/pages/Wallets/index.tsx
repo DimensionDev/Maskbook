@@ -86,7 +86,11 @@ function Wallets() {
                 <StartUp />
             ) : (
                 <Context.Provider
-                    initialState={{ chainId: selectedNetwork?.chainId, pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    initialState={{
+                        chainId: selectedNetwork?.chainId,
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                        connectedChainId: chainId,
+                    }}>
                     <Balance
                         onSend={() => navigate(DashboardRoutes.WalletsTransfer)}
                         onBuy={openBuyDialog}

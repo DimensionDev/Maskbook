@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { MaskColorVar, MaskTextField } from '@masknet/theme'
+import { MaskColorVar, MaskTextField, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import {
     TokenType,
     type FungibleToken,
@@ -41,7 +41,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { Tune as TuneIcon } from '@mui/icons-material'
-import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
+import { Box, Button, IconButton, Link, Popover, Stack, Typography, useTheme } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
@@ -53,6 +53,18 @@ export interface TransferERC20Props {
 
 const GAS_LIMIT = 21000
 
+const useStyles = makeStyles()((theme) => {
+    return {
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
+        },
+    }
+})
+
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const wallet = useWallet()
@@ -63,17 +75,18 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [popoverOpen, setPopoverOpen] = useState(false)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const network = useNetworkDescriptor()
+    const { classes } = useStyles()
     const [gasLimit_, setGasLimit_] = useState(0)
+    const theme = useTheme()
 
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
 
-    const { chainId, pluginID } = useContainer(Context)
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
     const Others = useWeb3Others()
     const is1559Supported = useMemo(() => Others?.chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
-    console.log({ chainId, token })
     useEffect(() => {
         setSelectedToken(token)
     }, [token])
@@ -373,9 +386,27 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Box>
                 ) : null}
                 <Box mt={4} display="flex" flexDirection="row" justifyContent="center">
-                    <Button sx={{ width: 240 }} disabled={!!validationMessage || isTransferring} onClick={onTransfer}>
-                        {validationMessage || t.wallets_transfer_send()}
-                    </Button>
+                    {isWalletConnectNetworkNotMatch ? (
+                        <ShadowRootTooltip
+                            title={t.wallet_connect_tips()}
+                            placement="top"
+                            arrow
+                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}>
+                            <div>
+                                <Button sx={{ width: 240 }} disabled onClick={onTransfer}>
+                                    {t.wallets_transfer_send()}
+                                    <Icons.Questions size={18} sx={{ marginLeft: 0.5 }} />
+                                </Button>
+                            </div>
+                        </ShadowRootTooltip>
+                    ) : (
+                        <Button
+                            sx={{ width: 240 }}
+                            disabled={!!validationMessage || isTransferring}
+                            onClick={onTransfer}>
+                            {validationMessage || t.wallets_transfer_send()}
+                        </Button>
+                    )}
                 </Box>
             </Stack>
         </Stack>
