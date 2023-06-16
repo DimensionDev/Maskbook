@@ -7,7 +7,7 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-flow'
-import { FlowWeb3State, SharedUIPluginContext } from '@masknet/web3-providers'
+import { FlowWeb3State, SharedPluginContext } from '@masknet/web3-providers'
 import { base } from '../../base.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        SharedUIPluginContext.setup(context)
+        SharedPluginContext.setup(context)
 
         const state = await FlowWeb3State.create(context)
 

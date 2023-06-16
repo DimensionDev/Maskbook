@@ -7,7 +7,7 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { SharedUIPluginContext, Web3State } from '@masknet/web3-providers'
+import { SharedPluginContext, Web3State } from '@masknet/web3-providers'
 import { base } from '../../base.js'
 
 const dashboard: Plugin.Dashboard.Definition<
@@ -23,7 +23,7 @@ const dashboard: Plugin.Dashboard.Definition<
         console.log('DEBUG: snsadatpor')
         console.log(context)
 
-        SharedUIPluginContext.setup(context)
+        SharedPluginContext.setup(context)
 
         const state = await Web3State.create(context)
 

@@ -63,7 +63,7 @@ import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
 import { SID_DomainAPI } from './SID/index.js'
-import { SNSAdaptorContextAPI, SharedUIContextAPI } from './PluginContext/index.js'
+import { SNSAdaptorContextAPI, SharedContextAPI } from './PluginContext/index.js'
 import { ApprovalAPI } from './Approval/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
 import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
@@ -123,7 +123,7 @@ export const Snapshot = new SnapshotAPI()
 export const Approval = new ApprovalAPI()
 
 // Plugin Context
-export const SharedUIPluginContext = new SharedUIContextAPI()
+export const SharedPluginContext = new SharedContextAPI()
 export const SNSAdaptorPluginContext = new SNSAdaptorContextAPI()
 
 export { Providers } from './Web3/EVM/providers/index.js'
