@@ -203,16 +203,6 @@ export interface postReplacerHiddenEvent {
     postId: string
 }
 
-export interface OpenPageConfirmEvent {
-    open: boolean
-    target: 'dashboard' | 'other'
-    url: string
-    title: string
-    text: string
-    actionHint: string
-    position?: 'center' | 'top-right'
-}
-
 export interface HideSearchResultInspectorEvent {
     hide: boolean
 }

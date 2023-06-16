@@ -1,10 +1,7 @@
+import { useCallback } from 'react'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useCallback, useEffect, useState } from 'react'
-import Services from '../../extension/service.js'
-import { CrossIsolationMessages, DashboardRoutes, type OpenPageConfirmEvent } from '@masknet/shared-base'
+import { InjectedDialog } from '@masknet/shared'
 
 type PositionStyle = {
     top?: number
@@ -51,29 +48,34 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
     },
 }
 
-export function LeavePageConfirmDialog() {
-    const [open, setOpen] = useState(false)
-    const [info, setInfo] = useState<OpenPageConfirmEvent>()
+export interface OpenPageConfirm {
+    target: 'dashboard' | 'other'
+    url: string
+    title: string
+    text: string
+    actionHint: string
+    position?: 'center' | 'top-right'
+}
+
+export interface LeavePageConfirmProps {
+    open: boolean
+    onClose: () => void
+    openDashboard?: () => ReturnType<typeof browser.tabs.create>
+    info?: OpenPageConfirm
+}
+
+export function LeavePageConfirm(props: LeavePageConfirmProps) {
+    const { open, onClose, info, openDashboard } = props
     const { classes } = useStyles({ positionStyle: positionStyleMap[info?.position ?? 'center'] })
-
-    const { closeDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.openPageConfirm)
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.openPageConfirm.on((evt) => {
-            setOpen(evt.open)
-            if (!evt.open) return
-            setInfo(evt)
-        })
-    }, [])
 
     const onClick = useCallback(() => {
         if (!info) return
         if (info.target === 'dashboard') {
-            Services.Helper.openDashboard(DashboardRoutes.Setup)
-            closeDialog()
+            openDashboard?.()
+            onClose()
             return
         }
-    }, [info])
+    }, [info, onClose, openDashboard])
 
     return open ? (
         <InjectedDialog
@@ -84,7 +86,7 @@ export function LeavePageConfirmDialog() {
                 dialogTitle: classes.header,
             }}
             maxWidth="sm"
-            onClose={closeDialog}
+            onClose={onClose}
             title={info?.title}
             titleBarIconStyle="close">
             <DialogContent classes={{ root: classes.content }}>

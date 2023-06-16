@@ -1,3 +1,6 @@
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -11,11 +14,9 @@ import {
     type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
+import { LeavePageConfirmDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Button, Stack, Typography } from '@mui/material'
-import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
@@ -97,21 +98,19 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         [],
     )
 
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.openPageConfirm,
-    )
-
     useLayoutEffect(() => {
         if (personas.length || loading || error) return
 
         onClose?.()
-        setCreatePersonaConfirmDialog({
-            open: true,
-            target: 'dashboard',
-            url: DashboardRoutes.Setup,
-            text: t('applications_create_persona_hint'),
-            title: t('applications_create_persona_title'),
-            actionHint: t('applications_create_persona_action'),
+        LeavePageConfirmDialog.open({
+            openDashboard: () => Services.Helper.openDashboard(DashboardRoutes.Setup),
+            info: {
+                target: 'dashboard',
+                url: DashboardRoutes.Setup,
+                text: t('applications_create_persona_hint'),
+                title: t('applications_create_persona_title'),
+                actionHint: t('applications_create_persona_action'),
+            },
         })
     }, [!personas.length, loading, !error])
 
