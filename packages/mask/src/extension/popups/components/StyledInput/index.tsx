@@ -1,6 +1,6 @@
 import { forwardRef, memo } from 'react'
-import { type TextFieldProps, TextField } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { type TextFieldProps } from '@mui/material'
+import { MaskTextField, makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()(({ palette }) => ({
     textField: {
@@ -26,10 +26,10 @@ export const StyledInput = memo(
         const { classes, cx } = useStyles(undefined, { props })
 
         return (
-            <TextField
+            <MaskTextField
                 {...props}
                 inputRef={ref}
-                variant="filled"
+                variant="standard"
                 className={cx(classes.textField, props.className)}
                 autoComplete="off"
                 inputProps={{ className: classes.input, 'aria-autocomplete': 'none', ...props.inputProps }}

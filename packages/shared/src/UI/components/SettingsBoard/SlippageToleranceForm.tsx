@@ -5,6 +5,7 @@ import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
+import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioChip } from './RadioChip.js'
@@ -89,9 +90,9 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                                 placeholder={t.gas_settings_custom()}
                                 InputProps={{
                                     type: 'number',
-                                }}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                                 value={customSlippageTolerance}
                                 error={!!methods.formState.errors.customSlippageTolerance?.message}

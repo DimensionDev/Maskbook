@@ -8,6 +8,7 @@ import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
+import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import {
     type ChainId,
     formatGweiToWei,
@@ -185,11 +186,11 @@ export function GasForm(props: GasFormProps) {
                                 <MaskTextField
                                     {...field}
                                     InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                         type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                    }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                     }}
                                     value={isZero(gasPriceByUser ?? 0) ? gasPrice : gasPriceByUser}
                                     label={
@@ -216,12 +217,12 @@ export function GasForm(props: GasFormProps) {
                             <MaskTextField
                                 {...field}
                                 InputProps={{
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                     type: 'number',
                                 }}
                                 disabled={props.disableGasLimit}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                }}
                                 value={isZero(gasLimit) ? defaultGasLimit : new BigNumber(gasLimit).toString()}
                                 label={
                                     <Typography className={classes.caption}>
@@ -249,11 +250,11 @@ export function GasForm(props: GasFormProps) {
                                 <MaskTextField
                                     {...field}
                                     InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                         type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                    }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                     }}
                                     value={
                                         isZero(maxPriorityFeePerGasByUser ?? 0)
@@ -283,11 +284,11 @@ export function GasForm(props: GasFormProps) {
                                 <MaskTextField
                                     {...field}
                                     InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                         type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                    }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                     }}
                                     value={isZero(maxFeePerGasByUser ?? 0) ? maxFeePerGas : maxFeePerGasByUser}
                                     label={
