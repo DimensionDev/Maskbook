@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { InjectedDialog } from '@masknet/shared'
 
 type PositionStyle = {
     top?: number
@@ -57,12 +57,13 @@ export interface OpenPageConfirm {
     position?: 'center' | 'top-right'
 }
 
-interface LeavePageConfirmProps {
+export interface LeavePageConfirmProps {
     open: boolean
     onClose: () => void
-    openDashboard?: () => Promise<any>
+    openDashboard?: () => ReturnType<typeof browser.tabs.create>
     info?: OpenPageConfirm
 }
+
 export function LeavePageConfirm(props: LeavePageConfirmProps) {
     const { open, onClose, info, openDashboard } = props
     const { classes } = useStyles({ positionStyle: positionStyleMap[info?.position ?? 'center'] })
