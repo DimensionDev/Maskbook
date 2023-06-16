@@ -57,11 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'auto',
         marginRight: 'auto',
     },
-    token: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-    },
     ellipsis: {
         fontSize: 24,
         fontWeight: 700,
