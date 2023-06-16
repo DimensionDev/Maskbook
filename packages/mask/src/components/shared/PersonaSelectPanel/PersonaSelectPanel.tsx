@@ -103,7 +103,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         onClose?.()
         LeavePageConfirmDialog.open({
-            openDashboard: () => Services.Helper.openDashboard(DashboardRoutes.Setup),
+            openDashboard: Services.Helper.openDashboard,
             info: {
                 target: 'dashboard',
                 url: DashboardRoutes.Setup,
