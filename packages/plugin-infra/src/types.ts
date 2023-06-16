@@ -173,11 +173,13 @@ export namespace Plugin.Shared {
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+
         /** Confirm a request */
         confirmRequest(
             payload: JsonRpcPayload,
             options?: { disableClose?: boolean; popupsWindow?: boolean },
         ): Promise<JsonRpcResponse | void>
+
         /** Reject a request */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
 
