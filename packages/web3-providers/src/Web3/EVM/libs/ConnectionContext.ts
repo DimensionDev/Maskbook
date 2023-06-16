@@ -1,6 +1,5 @@
 import type { RequestArguments } from 'web3-core'
-import type { ECKeyIdentifier, SignType } from '@masknet/shared-base'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
     ErrorEditor,
@@ -8,7 +7,6 @@ import {
     PayloadEditor,
     ProviderType,
     createJsonRpcPayload,
-    type TransactionOptions,
     createJsonRpcResponse,
     type Transaction,
 } from '@masknet/web3-shared-evm'
@@ -35,13 +33,6 @@ export class ConnectionContext {
             getDefaultProviderType: () => ProviderType | undefined
             getDefaultOwner?: (providerType: ProviderType) => string | undefined
             getDefaultIdentifier?: (providerType: ProviderType) => ECKeyIdentifier | undefined
-            mask_send?: (request: JsonRpcPayload, options: TransactionOptions) => Promise<JsonRpcResponse>
-            mask_signWithPersona?: <T>(
-                type: SignType,
-                message: T,
-                identifier?: ECKeyIdentifier,
-                silent?: boolean,
-            ) => Promise<string>
         },
     ) {
         // increase pid
@@ -134,13 +125,6 @@ export class ConnectionContext {
 
     get proof() {
         return this.payloadEditor.proof
-    }
-
-    get bridge() {
-        return {
-            send: this._init?.mask_send,
-            signWithPersona: this._init?.mask_signWithPersona,
-        }
     }
 
     get requestId() {
