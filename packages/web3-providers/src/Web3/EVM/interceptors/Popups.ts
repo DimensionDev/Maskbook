@@ -12,7 +12,7 @@ import {
     ProviderType,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
-import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, toFixed } from '@masknet/web3-shared-base'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
@@ -30,6 +30,7 @@ export class Popups implements Middleware<ConnectionContext> {
     private Bundler = new SmartPayBundlerAPI()
 
     private async getPaymentToken(context: ConnectionContext) {
+        const maskAddress = getMaskTokenAddress(context.chainId)
         try {
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
@@ -45,8 +46,6 @@ export class Popups implements Middleware<ConnectionContext> {
             })
 
             if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
-
-            const maskAddress = getMaskTokenAddress(context.chainId)
 
             const gas = await this.Web3.estimateTransaction?.(signableConfig, undefined, {
                 chainId: context.chainId,
@@ -82,6 +81,14 @@ export class Popups implements Middleware<ConnectionContext> {
                 paymentToken: context.paymentToken ?? !availableBalanceTooLow ? maskAddress : undefined,
             }
         } catch (error) {
+            const nativeBalance = await this.Web3.getNativeTokenBalance({
+                account: context.account,
+                chainId: context.chainId,
+            })
+
+            if (isZero(nativeBalance))
+                return { allowMaskAsGas: true, paymentToken: context.paymentToken ?? maskAddress }
+
             return {
                 allowMaskAsGas: false,
                 paymentToken: undefined,
