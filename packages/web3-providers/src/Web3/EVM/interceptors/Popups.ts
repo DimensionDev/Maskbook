@@ -13,6 +13,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
+import { SharedContextRef } from '../../../PluginContext/index.js'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
@@ -107,7 +108,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 isUndefined,
             )
 
-            const response = await context.bridge.send?.(context.request, options)
+            const response = await SharedContextRef.value.send(context.request, options)
             const editor = ErrorEditor.from(null, response)
 
             if (editor.presence) {
