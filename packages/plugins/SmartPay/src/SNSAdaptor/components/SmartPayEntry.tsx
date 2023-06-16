@@ -1,8 +1,8 @@
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { memo, useCallback, useEffect } from 'react'
-import { ApplicationEntry, useSharedI18N } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useAllPersonas } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
@@ -19,13 +19,10 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
     const wallets = useWallets()
     const personas = useAllPersonas()
+    const { openDashboard } = useSNSAdaptorContext()
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.openPageConfirm,
     )
 
     const { setDialog: setSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
@@ -46,31 +43,18 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
         // If there is no persona and no signer
         if (!personas.length && !value.signPersona && !value.signWallet) {
-            return setCreatePersonaConfirmDialog({
-                open: true,
-                target: 'dashboard',
-                url: DashboardRoutes.Setup,
-                text: t.create_persona_hint(),
-                title: t.create_persona_title(),
-                actionHint: t.create_persona_action(),
-                position: 'center',
+            return LeavePageConfirmDialog.open({
+                info: {
+                    target: 'dashboard',
+                    url: DashboardRoutes.Setup,
+                    text: t.create_persona_hint(),
+                    title: t.create_persona_title(),
+                    actionHint: t.create_persona_action(),
+                    position: 'center',
+                },
+                openDashboard,
             })
         }
-
-        // if there is verified persona but current persona isn't verified
-        if ((value.hasVerifiedPersona || personas.length) && !value.signPersona && !value.signWallet) {
-            return setPersonaSelectPanelDialog({
-                open: true,
-                enableVerify: true,
-                target: PluginID.SmartPay,
-            })
-        }
-
-        return setSmartPayDialog({
-            open: true,
-            signWallet: value.signWallet,
-            signPersona: value.signPersona,
-        })
     }, [loading, wallets, value, personas])
 
     useEffect(() => {

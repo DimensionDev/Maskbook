@@ -25,6 +25,7 @@ import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
+import { LeavePageConfirmDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -97,21 +98,19 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         [],
     )
 
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.openPageConfirm,
-    )
-
     useLayoutEffect(() => {
         if (personas.length || loading || error) return
 
         onClose?.()
-        setCreatePersonaConfirmDialog({
-            open: true,
-            target: 'dashboard',
-            url: DashboardRoutes.Setup,
-            text: t('applications_create_persona_hint'),
-            title: t('applications_create_persona_title'),
-            actionHint: t('applications_create_persona_action'),
+        LeavePageConfirmDialog.open({
+            openDashboard: () => Services.Helper.openDashboard(DashboardRoutes.Setup),
+            info: {
+                target: 'dashboard',
+                url: DashboardRoutes.Setup,
+                text: t('applications_create_persona_hint'),
+                title: t('applications_create_persona_title'),
+                actionHint: t('applications_create_persona_action'),
+            },
         })
     }, [!personas.length, loading, !error])
 

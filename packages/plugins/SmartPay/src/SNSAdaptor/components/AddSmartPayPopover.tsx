@@ -2,8 +2,8 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { memo, useCallback, useEffect } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { Icon, useSharedI18N } from '@masknet/shared'
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { Icon, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
+import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import { useNavigate } from 'react-router-dom'
@@ -69,15 +69,12 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
+    const { openDashboard } = useSNSAdaptorContext()
 
     const { value: qualifications, loading } = useQueryQualifications()
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.openPageConfirm,
     )
 
     const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
@@ -87,15 +84,18 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
 
         // If there is no persona and no signer
         if (!personas.length && !qualifications.signPersona && !qualifications.signWallet) {
-            setCreatePersonaConfirmDialog({
-                open: true,
-                target: 'dashboard',
-                url: DashboardRoutes.Setup,
-                text: sharedI18N.create_persona_hint(),
-                title: sharedI18N.create_persona_title(),
-                actionHint: sharedI18N.create_persona_action(),
-                position: 'center',
+            LeavePageConfirmDialog.open({
+                openDashboard,
+                info: {
+                    target: 'dashboard',
+                    url: DashboardRoutes.Setup,
+                    text: sharedI18N.create_persona_hint(),
+                    title: sharedI18N.create_persona_title(),
+                    actionHint: sharedI18N.create_persona_action(),
+                    position: 'center',
+                },
             })
+
             return
         }
 

@@ -1,5 +1,5 @@
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
-import { useSharedI18N } from '../index.js'
+import { LeavePageConfirmDialog, useSharedI18N } from '../index.js'
 import type { PersonaConnectStatus } from '../types.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -37,28 +37,24 @@ export function useCurrentPersonaConnectStatus(
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
     )
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.openPageConfirm,
-    )
 
-    const create = useCallback(
-        (target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
-            if (direct) {
-                openDashboard?.(DashboardRoutes.Setup)
-            } else {
-                setCreatePersonaConfirmDialog({
-                    open: true,
+    const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
+        if (direct) {
+            openDashboard?.(DashboardRoutes.Setup)
+        } else {
+            LeavePageConfirmDialog.open({
+                openDashboard,
+                info: {
                     target: 'dashboard',
                     url: target ?? DashboardRoutes.Setup,
                     text: t.applications_create_persona_hint(),
                     title: t.applications_create_persona_title(),
                     actionHint: t.applications_create_persona_action(),
                     position,
-                })
-            }
-        },
-        [setCreatePersonaConfirmDialog],
-    )
+                },
+            })
+        }
+    }, [])
 
     const openPersonListDialog = useCallback(
         (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
