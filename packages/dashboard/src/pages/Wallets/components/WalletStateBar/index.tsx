@@ -1,9 +1,8 @@
-import React, { type FC, memo } from 'react'
+import { memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { FormattedAddress, WalletIcon } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { FormattedAddress, WalletIcon, SelectProviderDialog, WalletStatusDialog } from '@masknet/shared'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -16,9 +15,7 @@ import { Others } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { useNetworkSelector } from './useNetworkSelector.js'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -71,20 +68,10 @@ export const WalletStateBar = memo(() => {
     const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.walletStatusDialogUpdated,
-    )
-
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.selectProviderDialogUpdated,
-    )
-
-    const [menu, openMenu] = useNetworkSelector()
-
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
     if (!account) {
-        return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
+        return <Button onClick={() => SelectProviderDialog.open()}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI
@@ -94,10 +81,8 @@ export const WalletStateBar = memo(() => {
             domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
-            openConnectWalletDialog={openWalletStatusDialog}
-            openMenu={openMenu}>
-            {menu}
-        </WalletStateBarUI>
+            openConnectWalletDialog={WalletStatusDialog.open}
+        />
     )
 })
 
@@ -109,10 +94,9 @@ interface WalletStateBarUIProps {
     address?: string
     domain?: string
     openConnectWalletDialog(): void
-    openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
 
-export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>> = ({
+export function WalletStateBarUI({
     isPending,
     network,
     provider,
@@ -120,9 +104,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
     address,
     domain,
     openConnectWalletDialog,
-    openMenu,
-    children,
-}) => {
+}: WalletStateBarUIProps) {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
@@ -136,8 +118,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                 justifyContent="center"
                 sx={{ '--network-icon-color': network.iconColor, px: 2, mr: 1 }}
                 color={network.iconColor ?? ''}
-                className={classes.bar}
-                onClick={openMenu}>
+                className={classes.bar}>
                 <Typography component="span" sx={{ backgroundColor: network.iconColor }} className={classes.dot} />
                 <Typography component="span" fontSize={12}>
                     {network.name}
@@ -183,7 +164,6 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                     </Box>
                 </Box>
             </Stack>
-            {children}
         </Stack>
     )
 }

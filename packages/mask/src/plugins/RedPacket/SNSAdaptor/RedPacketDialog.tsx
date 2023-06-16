@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -51,19 +51,6 @@ const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistor
             width: '100%',
             paddingBottom: theme.spacing(2),
         },
-        tab: {
-            height: 36,
-            minHeight: 36,
-        },
-        tabPaper: {
-            backgroundColor: 'inherit',
-        },
-        indicator: {
-            display: 'none',
-        },
-        tabPanel: {
-            marginTop: 12,
-        },
     }),
 )
 
@@ -90,16 +77,18 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const { classes } = useStyles({ currentTab, showHistory })
-    const chainIdList = compact<ChainId>(
-        currentTab === tabs.tokens
-            ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
-            : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
-    )
+    const chainIdList = useMemo(() => {
+        return compact<ChainId>(
+            currentTab === tabs.tokens
+                ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+                : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+        )
+    }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
     const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
 
     // #region token lucky drop
@@ -187,7 +176,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = openSelectNFTDialog
+    const title = showHistory
+        ? t.history()
+        : openSelectNFTDialog
         ? t.nft_select_collection()
         : openNFTConfirmDialog
         ? i18n('confirm')
@@ -239,15 +230,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         !openSelectNFTDialog ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
-                                    classes={{
-                                        tab: classes.tab,
-                                        tabPanel: classes.tabPanel,
-                                        indicator: classes.indicator,
-                                        tabPaper: classes.tabPaper,
-                                    }}
                                     chains={chainIdList}
                                     hideArrowButton={currentTab === tabs.collectibles}
                                     pluginID={NetworkPluginID.PLUGIN_EVM}
+                                    onChange={(chainId: ChainId) => setChainId(chainId)}
                                 />
                             </div>
                         ) : null
@@ -260,7 +246,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             <>
                                 <div
                                     style={{
-                                        visibility: showHistory ? 'hidden' : 'visible',
                                         ...(showHistory ? { display: 'none' } : {}),
                                         height: showHistory
                                             ? 0
@@ -306,6 +291,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 onCreated={handleCreated}
                                 settings={settings}
                                 gasOption={gasOption}
+                                onGasOptionChange={handleGasSettingChange}
                             />
                         ) : null}
                     </DialogContent>

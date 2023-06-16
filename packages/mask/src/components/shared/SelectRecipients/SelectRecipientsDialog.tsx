@@ -1,17 +1,23 @@
-import { startTransition, useDeferredValue, useMemo, useState } from 'react'
+import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog } from '@masknet/shared'
-import type {
-    ProfileInformation as Profile,
-    ProfileInformation,
-    ProfileInformationFromNextID,
-} from '@masknet/shared-base'
+import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/shared'
+import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { Fuse } from '@masknet/web3-providers'
-import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
+import {
+    Button,
+    Checkbox,
+    DialogActions,
+    DialogContent,
+    InputAdornment,
+    InputBase,
+    Stack,
+    Typography,
+    alpha,
+} from '@mui/material'
+import { attachNextIDToProfile, useI18N } from '../../../utils/index.js'
 import { ProfileInList } from './ProfileInList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,13 +30,12 @@ const useStyles = makeStyles()((theme) => ({
         padding: '4px 10px',
         borderRadius: 8,
         width: '100%',
-        background: theme.palette.background.input,
-        border: '1px solid transparent',
+        background: theme.palette.maskColor.input,
         fontSize: 14,
         marginBottom: 16,
     },
     inputFocused: {
-        background: 'none',
+        background: theme.palette.maskColor.bottom,
         borderColor: theme.palette.text.third,
     },
     paper: {
@@ -59,26 +64,59 @@ const useStyles = makeStyles()((theme) => ({
     },
     listParent: {
         height: 400,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    listBody: {
+        height: 400,
         '::-webkit-scrollbar': {
             display: 'none',
         },
         overflowY: 'auto',
+        flex: 1,
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     list: {
         gridGap: '12px',
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
-
         alignItems: 'flex-start',
     },
     actions: {
         display: 'flex',
-        gap: 8,
+        gap: 16,
         padding: 16,
         boxSizing: 'border-box',
         alignItems: 'center',
-        background: theme.palette.background.paper,
-        boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
+        background: alpha(theme.palette.maskColor.bottom, 0.8),
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+        borderRadius: '0px 0px 12px 12px',
+        flex: 1,
+        backdropFilter: 'blur(8px)',
+    },
+    back: {
+        color: theme.palette.maskColor.main,
+        background: theme.palette.maskColor.thirdMain,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        '&:hover': {
+            color: theme.palette.maskColor.main,
+            background: theme.palette.maskColor.thirdMain,
+            fontSize: 14,
+            fontWeight: 700,
+            lineHeight: '18px',
+        },
+    },
+    done: {
+        color: theme.palette.maskColor.bottom,
+        background: theme.palette.maskColor.main,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
     },
 }))
 
@@ -92,9 +130,8 @@ export interface SelectRecipientsDialogUIProps {
     searchEmptyText?: string
     onSubmit: () => void
     onClose: () => void
-    onSelect: (item: ProfileInformationFromNextID | ProfileInformation) => void
-    onDeselect: (item: Profile) => void
     onSearch(v: string): void
+    onSetSelected(selected: Profile[]): void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
@@ -102,7 +139,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { items, onSearch } = props
     const [searchInput, setSearchInput] = useState('')
     const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(searchInput))
-
+    const [selectedAllProfiles, setSelectedAllProfiles] = useState<readonly Profile[]>([])
     const keyword = registeredAddress || searchInput
 
     const results = useMemo(() => {
@@ -130,13 +167,35 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         setSearchInput('')
         onSearch('')
     }
-    const handleSubmit = () => {
+
+    const handleSubmit = useCallback(async () => {
+        props.onSetSelected([...selectedAllProfiles])
+        for (const item of selectedAllProfiles) {
+            await attachNextIDToProfile(item as ProfileInformationFromNextID)
+        }
         props.onSubmit()
         setSearchInput('')
         onSearch('')
-    }
+    }, [selectedAllProfiles])
 
-    const selectedPubkeyList = compact(props.selected.map((x) => x.linkedPersona?.publicKeyAsHex))
+    const onSelectedProfile = useCallback((item: Profile, checked: boolean) => {
+        if (checked) {
+            setSelectedAllProfiles((profiles) => [...profiles, item])
+        } else setSelectedAllProfiles((profiles) => profiles.filter((x) => x !== item))
+    }, [])
+
+    const selectedPubkeyList = compact(selectedAllProfiles.map((x) => x.linkedPersona?.publicKeyAsHex))
+
+    const onSelectedAllChange = useCallback(
+        (checked: boolean) => {
+            if (checked) {
+                setSelectedAllProfiles([...results])
+            } else {
+                setSelectedAllProfiles([])
+            }
+        },
+        [results],
+    )
 
     return (
         <InjectedDialog
@@ -172,48 +231,68 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 ) : (
                     <Boundary>
                         <div className={classes.listParent}>
-                            <div className={classes.list}>
-                                {results.length === 0 ? (
-                                    <div className={classes.empty}>
-                                        <Icons.EmptySimple size={36} />
-                                        <Typography>
+                            <div className={classes.listBody}>
+                                <div className={classes.list}>
+                                    {results.length === 0 ? (
+                                        <EmptyStatus className={classes.empty}>
                                             {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
-                                        </Typography>
-                                    </div>
-                                ) : (
-                                    results.map((item) => {
-                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
-                                        const selected = selectedPubkeyList.includes(pubkey)
-                                        return (
-                                            <ProfileInList
-                                                key={pubkey}
-                                                item={item as ProfileInformationFromNextID}
-                                                highlightText={keyword}
-                                                selected={selected}
-                                                disabled={props.disabled}
-                                                onChange={(_, checked) => {
-                                                    if (checked) {
-                                                        props.onSelect(item)
-                                                    } else {
-                                                        props.onDeselect(item)
-                                                    }
-                                                }}
-                                            />
-                                        )
-                                    })
-                                )}
+                                        </EmptyStatus>
+                                    ) : (
+                                        results.map((item) => {
+                                            const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                            const selected = selectedPubkeyList.includes(pubkey)
+                                            return (
+                                                <ProfileInList
+                                                    key={pubkey}
+                                                    profile={item as ProfileInformationFromNextID}
+                                                    highlightText={keyword}
+                                                    selected={selected}
+                                                    disabled={props.disabled}
+                                                    onChange={onSelectedProfile}
+                                                />
+                                            )
+                                        })
+                                    )}
+                                </div>
                             </div>
+                            {results.length > 0 ? (
+                                <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0' }}>
+                                    <Checkbox
+                                        size="small"
+                                        sx={{ width: 20, height: 20 }}
+                                        onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
+                                    />
+                                    <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
+                                </Stack>
+                            ) : null}
                         </div>
                     </Boundary>
                 )}
             </DialogContent>
-            <DialogActions className={classes.actions}>
-                <Button fullWidth variant="roundedOutlined" disabled={props.submitDisabled} onClick={handleClose}>
-                    {t('back')}
-                </Button>
-                <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={handleSubmit}>
-                    {t('done')}
-                </Button>
+            <DialogActions style={{ padding: 0 }}>
+                <div className={classes.actions}>
+                    <Button
+                        className={classes.back}
+                        fullWidth
+                        variant="roundedContained"
+                        disabled={props.submitDisabled}
+                        onClick={handleClose}>
+                        {t('back')}
+                    </Button>
+                    <ActionButtonPromise
+                        className={classes.done}
+                        fullWidth
+                        variant="roundedContained"
+                        disabled={props.submitDisabled}
+                        executor={handleSubmit}
+                        completeIcon={null}
+                        failIcon={null}
+                        failedOnClick="use executor"
+                        complete={t('done')}
+                        init={t('done')}
+                        waiting={t('done')}
+                    />
+                </div>
             </DialogActions>
         </InjectedDialog>
     )

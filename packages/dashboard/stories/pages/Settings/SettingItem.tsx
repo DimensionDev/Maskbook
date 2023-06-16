@@ -3,7 +3,9 @@ import C from '../../../src/pages/Settings/components/SettingItem.js'
 
 const { meta, of } = story(C)
 
-const Icon = () => <span>icon</span>
+function Icon() {
+    return <span>icon</span>
+}
 
 export default meta({
     title: 'Pages/Settings/Setting Item',

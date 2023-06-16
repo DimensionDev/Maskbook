@@ -68,7 +68,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         )
     }
     if (!feeds.length && !loading) {
-        return <EmptyStatus>{t.no_data({ context: tag || 'activities' })}</EmptyStatus>
+        return <EmptyStatus height={260}>{t.no_data({ context: tag || 'activities' })}</EmptyStatus>
     }
 
     return (

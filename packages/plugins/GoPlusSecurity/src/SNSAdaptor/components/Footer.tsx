@@ -3,7 +3,7 @@ import { useI18N } from '../../locales/index.js'
 import { GoPlusLabLogo } from '../icons/Logo.js'
 import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants.js'
 
-export const Footer = () => {
+export function Footer() {
     const t = useI18N()
     return (
         <Stack justifyContent="flex-end" direction="row">

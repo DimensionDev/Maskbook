@@ -447,7 +447,6 @@ export class ConnectionAPI
     override async switchChain(chainId: ChainId, initial?: ConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
         await Providers[options.providerType].switchChain(chainId)
-        throw new Error('To be implemented.')
     }
 
     override async sendTransaction(transaction: Transaction, initial?: ConnectionOptions) {

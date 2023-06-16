@@ -1,11 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-es'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
+import { makeStyles, MaskColorVar, MaskTextField, ShadowRootTooltip } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import {
     isSameAddress,
@@ -19,35 +19,41 @@ import {
     formatWeiToEther,
     NetworkType,
     type ChainId,
-    explorerResolver,
     isValidDomain,
     isValidAddress,
     formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
-import { FormattedAddress } from '@masknet/shared'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { FormattedAddress, useSelectNonFungibleContract } from '@masknet/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { KeyboardArrowDown as KeyboardArrowDownIcon, Tune as TuneIcon } from '@mui/icons-material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
-    useChainContext,
     useGasPrice,
     useLookupAddress,
     useNetworkDescriptor,
     useNativeToken,
     useNativeTokenPrice,
+    useWeb3Others,
+    useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
-import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import { useGasLimit, useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { SelectNFTList } from './SelectNFTList.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/index.js'
 import { TransferTab } from './types.js'
+import { Context } from '../../hooks/useContext.js'
+import { useContainer } from 'unstated-next'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
         opacity: 1,
+    },
+    tooltip: {
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
+    },
+    arrow: {
+        color: theme.palette.maskColor.publicMain,
     },
 }))
 
@@ -61,17 +67,19 @@ const GAS_LIMIT = 30000
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch, account } = useContainer(Context)
     const anchorEl = useRef<HTMLDivElement | null>(null)
 
     const { state } = useLocation() as {
         state: {
             nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>
             type?: TransferTab
+            chainId?: ChainId
         } | null
     }
 
     const { classes } = useStyles()
+    const Others = useWeb3Others()
     const [defaultToken, setDefaultToken] = useState<NonFungibleToken<ChainId, SchemaType> | null>(null)
     const navigate = useNavigate()
     const [popoverOpen, setPopoverOpen] = useState(false)
@@ -81,11 +89,12 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType>>()
+    const selectNFTContract = useSelectNonFungibleContract<NetworkPluginID.PLUGIN_EVM>()
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
 
-    const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const nativeToken = useNativeToken(pluginID, { chainId })
+    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
     // form
     const schema = z.object({
         recipient: z
@@ -107,16 +116,28 @@ export const TransferERC721 = memo(() => {
         defaultValues: { recipient: '', contract: '', tokenId: '' },
     })
 
+    const [contractAddress, setContractAddress] = useState(state?.nonFungibleToken?.address || '')
+
     useEffect(() => {
-        if (!state) return
-        if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
-        if (state.nonFungibleToken.chainId !== chainId) return
+        if (
+            !state?.nonFungibleToken ||
+            state?.nonFungibleToken.chainId !== chainId ||
+            state?.type !== TransferTab.Collectibles
+        ) {
+            setContract(undefined)
+            setContractAddress('')
+            setValue('contract', '')
+            setValue('tokenId', '')
+            setDefaultToken(null)
+            return
+        }
 
         setContract(state.nonFungibleToken.contract)
+        setContractAddress(state.nonFungibleToken.address)
         setValue('contract', state.nonFungibleToken.contract?.name ?? '')
         setValue('tokenId', state.nonFungibleToken.tokenId)
         setDefaultToken(state.nonFungibleToken)
-    }, [state])
+    }, [state, chainId])
 
     const allFormFields = watch()
 
@@ -164,10 +185,42 @@ export const TransferERC721 = memo(() => {
     }, [erc721GasLimit.value])
     const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, GAS_LIMIT)
 
-    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
-        SchemaType.ERC721,
-        contract?.address ?? '',
-    )
+    const Web3 = useWeb3Connection(pluginID, {
+        account,
+        chainId,
+    })
+
+    const [{ loading: isTransferring }, transferCallback] = useAsyncFn(async () => {
+        if (!contractAddress) return
+        if (pluginID === NetworkPluginID.PLUGIN_EVM && !allFormFields.tokenId) return
+        return Web3.transferNonFungibleToken(contractAddress, allFormFields.tokenId ?? '', allFormFields.recipient, '1')
+    }, [account, allFormFields.tokenId, pluginID, contractAddress, allFormFields.recipient, Web3])
+
+    const handleSelectNFT = async () => {
+        const contract = await selectNFTContract({
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            chainId,
+        })
+
+        setContractAddress(contract.address || '')
+        if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
+            setDefaultToken(null)
+        }
+        if (contract) {
+            setValue('contract', contract.name || contract.address || '', {
+                shouldValidate: true,
+            })
+            setContract(contract as NonFungibleTokenContract<ChainId, SchemaType>)
+            setValue('tokenId', '')
+            // Update the previous location state.
+            navigate(DashboardRoutes.WalletsTransfer, {
+                state: {
+                    type: TransferTab.Collectibles,
+                    nonFungibleToken: contract,
+                },
+            })
+        }
+    }
 
     // gas price
     const { value: defaultGasPrice = '0' } = useGasPrice()
@@ -175,35 +228,19 @@ export const TransferERC721 = memo(() => {
     const gasFee = useMemo(() => multipliedBy(gasLimit, gasPrice), [gasLimit, gasPrice])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice.value ?? 0)
 
-    // dialog
-    const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectNftContractDialogUpdated,
-        (ev) => {
-            if (ev.open || !ev.collection) return
-            if (!contract || (contract && !isSameAddress(contract.address, ev.collection.address))) {
-                if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
-                    setDefaultToken(null)
-                }
-                setValue('contract', ev.collection.name || ev.collection.address || '', { shouldValidate: true })
-                setContract(ev.collection as NonFungibleTokenContract<ChainId, SchemaType>)
-                setValue('tokenId', '')
-            }
-        },
-    )
-
     const { loading: loadingOwnerList, value: tokenDetailedOwnerList = [] } = useNonFungibleOwnerTokens(
         contract?.address ?? '',
         account,
-        chainId,
+        chainId as ChainId,
     )
 
     const onTransfer = useCallback(
         async (data: FormInputs) => {
             let hash: string | undefined
             if (isValidAddress(data.recipient)) {
-                hash = await transferCallback(data.tokenId, data.recipient, gasConfig)
+                hash = await transferCallback()
             } else if (isValidDomain(data.recipient) && isValidAddress(registeredAddress)) {
-                hash = await transferCallback(data.tokenId, registeredAddress, gasConfig)
+                hash = await transferCallback()
             }
             if (typeof hash === 'string') {
                 navigate(DashboardRoutes.WalletsHistory)
@@ -218,7 +255,7 @@ export const TransferERC721 = memo(() => {
             return (
                 <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Link
-                        href={explorerResolver.domainLink(chainId, allFormFields.recipient)}
+                        href={Others.explorerResolver.domainLink(chainId, allFormFields.recipient)}
                         target="_blank"
                         rel="noopener noreferrer"
                         underline="none">
@@ -323,7 +360,7 @@ export const TransferERC721 = memo(() => {
                         <Controller
                             control={control}
                             render={(field) => (
-                                <Box onClick={() => setSelectContractDialog({ open: true })}>
+                                <Box onClick={handleSelectNFT}>
                                     <MaskTextField
                                         {...field}
                                         error={!!errors.contract || !!errors.tokenId}
@@ -398,9 +435,24 @@ export const TransferERC721 = memo(() => {
                         </Box>
                     </Box>
                     <Box mt={4}>
-                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || isTransferring}>
-                            {t.wallets_transfer_send()}
-                        </Button>
+                        {isWalletConnectNetworkNotMatch ? (
+                            <ShadowRootTooltip
+                                title={t.wallet_connect_tips()}
+                                placement="top"
+                                arrow
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}>
+                                <div>
+                                    <Button sx={{ width: 240 }} type="submit" disabled>
+                                        {t.wallets_transfer_send()}
+                                        <Icons.Questions size={18} sx={{ marginLeft: 0.5 }} />
+                                    </Button>
+                                </div>
+                            </ShadowRootTooltip>
+                        ) : (
+                            <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || isTransferring}>
+                                {t.wallets_transfer_send()}
+                            </Button>
+                        )}
                     </Box>
                 </Stack>
             </form>

@@ -1,5 +1,4 @@
 import { Twitter } from '@masknet/web3-providers'
-import type { FC } from 'react'
 import { useAsync } from 'react-use'
 import { RSS3_KEY_SNS, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
 import { MaskMessages } from '../../../utils/messages.js'
@@ -10,7 +9,7 @@ interface Props {
     size: number
     userId?: string
 }
-export const AvatarDecoration: FC<Props> = ({ clipPathId, userId, className, size }) => {
+export function AvatarDecoration({ clipPathId, userId, className, size }: Props) {
     const { value: user } = useAsync(async () => {
         if (!userId) return null
         return Twitter.getUserByScreenName(userId, true)

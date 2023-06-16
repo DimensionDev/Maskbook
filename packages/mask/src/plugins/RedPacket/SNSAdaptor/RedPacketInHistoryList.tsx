@@ -1,159 +1,194 @@
 import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
 import { useIntersectionObserver } from '@react-hookz/web'
-import { Box, ListItem, Typography, Popper, useMediaQuery, type Theme } from '@mui/material'
+import { Box, Typography, Popper, useMediaQuery, type Theme, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { TokenIcon } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { Translate, useI18N } from '../locales/index.js'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
-import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.js'
 import { type RedPacketJSONPayload, type RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, type FungibleToken, minus } from '@masknet/web3-shared-base'
+import { TokenIcon } from '@masknet/shared'
 
-const useStyles = makeStyles<{ isViewed: boolean }>()((theme, { isViewed }) => {
-    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
-    return {
-        message: {
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            [smallQuery]: {
-                whiteSpace: 'normal',
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()(
+    (theme, { listItemBackground, listItemBackgroundIcon }) => {
+        const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+        return {
+            message: {
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                [smallQuery]: {
+                    whiteSpace: 'normal',
+                },
             },
-        },
-        strong: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        span: {
-            maxWidth: 400,
-            display: 'inline-flex',
-        },
-        root: {
-            borderRadius: 10,
-            border: isViewed ? `solid 1px ${theme.palette.divider}` : 'unset',
-            marginBottom: theme.spacing(1.5),
-            position: 'static !important' as any,
-            height: 'auto !important',
-            padding: theme.spacing(2),
-            [smallQuery]: {
-                padding: theme.spacing(2, 1.5),
+            root: {
+                width: '100%',
+                padding: 0,
+                background: theme.palette.common.white,
+                marginBottom: theme.spacing(1.5),
+                borderRadius: 8,
+                '&:last-child': {
+                    marginBottom: '80px',
+                },
             },
-        },
-        box: {
-            display: 'flex',
-            width: '100%',
-        },
-        content: {
-            transform: 'translateY(-4px)',
-            width: '100%',
-            paddingLeft: theme.spacing(2),
-            [smallQuery]: {
-                paddingLeft: theme.spacing(1.5),
-                width: 'auto',
+            contentItem: {
+                width: '100%',
+                borderRadius: 8,
+                position: 'static !important' as any,
+                height: 'auto !important',
+                padding: theme.spacing(1.5),
+                background: listItemBackground ?? theme.palette.background.default,
+                [smallQuery]: {
+                    padding: theme.spacing(2, 1.5),
+                },
+                '&:before': {
+                    position: 'absolute',
+                    content: '""',
+                    top: 45,
+                    left: 400,
+                    zIndex: 0,
+                    width: 114,
+                    opacity: 0.2,
+                    height: 61,
+                    filter: 'blur(1.5px)',
+                    background: listItemBackgroundIcon,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '114px 114px',
+                },
             },
-        },
-        section: {
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: theme.spacing(2),
-            [smallQuery]: {
-                flexWrap: 'wrap',
+            box: {
+                display: 'flex',
+                width: '100%',
             },
-        },
-        div: {
-            maxWidth: 350,
-        },
-        icon: {
-            width: 27,
-            height: 27,
-        },
-        title: {
-            fontWeight: 500,
-            fontSize: 16,
-        },
-        info: {
-            color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
-            [smallQuery]: {
-                fontSize: 13,
+            content: {
+                transform: 'translateY(-4px)',
+                width: '100%',
+                [smallQuery]: {
+                    paddingLeft: theme.spacing(1.5),
+                    width: 'auto',
+                },
             },
-        },
-        actionButton: {
-            height: 26,
-            background: theme.palette.mode === 'light' ? '#000' : '#fff',
-            color: theme.palette.mode === 'light' ? '#fff' : '#000',
-            minHeight: 'auto',
-            [smallQuery]: {
-                marginTop: theme.spacing(1),
+            section: {
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 15,
+                [smallQuery]: {
+                    flexWrap: 'wrap',
+                },
             },
-            '&:hover': {
-                background: theme.palette.mode === 'light' ? '#000' : '#fff',
-                color: theme.palette.mode === 'light' ? '#fff' : '#000',
-                opacity: 0.8,
+            div: {
+                maxWidth: 350,
             },
-        },
-        footer: {
-            width: '100%',
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            marginTop: theme.spacing(2),
-        },
-        footerInfo: {
-            fontSize: 15,
-            color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
-            '& strong': {
-                color: theme.palette.text.primary,
+            title: {
+                color: theme.palette.maskColor.dark,
+                fontWeight: 700,
+                fontSize: 14,
             },
-        },
-        popper: {
-            overflow: 'visible',
-            backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
-            transform: 'translate(134px, 66px)',
-            borderRadius: 8,
-            width: 328,
-            padding: 10,
-        },
-        arrow: {
-            position: 'absolute',
-            top: -12,
-            right: 40,
-            width: 0,
-            height: 0,
-            borderLeft: '6px solid transparent',
-            borderRight: '6px solid transparent',
-            borderBottom: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
-            transform: 'translateY(6px)',
-        },
-        popperText: {
-            cursor: 'default',
-            color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
-            fontSize: 12,
-        },
-        disabledButton: {
-            color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
-            boxShadow: 'none',
-            backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-            cursor: 'default',
-            '&:hover': {
-                backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-                color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
+            info: {
+                color: theme.palette.maskColor.dark,
+                [smallQuery]: {
+                    fontSize: 13,
+                },
+                fontSize: 14,
             },
-        },
-        fullWidthBox: {
-            width: '100%',
-        },
-    }
-})
+            infoTitle: {
+                color: theme.palette.maskColor.secondaryDark,
+                marginRight: 4,
+                fontSize: 14,
+                [smallQuery]: {
+                    fontSize: 13,
+                },
+            },
+            actionButton: {
+                fontSize: 12,
+                width: 88,
+                height: 32,
+                background: theme.palette.maskColor.dark,
+                color: theme.palette.maskColor.white,
+                borderRadius: '999px',
+                minHeight: 'auto',
+                [smallQuery]: {
+                    marginTop: theme.spacing(1),
+                },
+                '&:disabled': {
+                    background: theme.palette.maskColor.dark,
+                    color: theme.palette.common.white,
+                },
+                '&:hover': {
+                    background: theme.palette.maskColor.dark,
+                    color: theme.palette.maskColor.white,
+                    opacity: 0.8,
+                },
+            },
+            footer: {
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'nowrap',
+                marginTop: 15,
+            },
+            footerInfo: {
+                fontSize: 14,
+                color: theme.palette.maskColor.secondaryDark,
+                '& span': {
+                    color: theme.palette.maskColor.dark,
+                    marginRight: 2,
+                },
+            },
+            popper: {
+                overflow: 'visible',
+                backgroundColor: theme.palette.maskColor.dark,
+                transform: 'translate(196px, 47px)',
+                borderRadius: 8,
+                width: 328,
+                padding: 10,
+            },
+            arrow: {
+                position: 'absolute',
+                top: -12,
+                right: 40,
+                width: 0,
+                height: 0,
+                borderLeft: '6px solid transparent',
+                borderRight: '6px solid transparent',
+                borderBottom: `6px solid ${theme.palette.maskColor.dark}`,
+                transform: 'translateY(6px)',
+            },
+            popperText: {
+                cursor: 'default',
+                color: theme.palette.common.white,
+                fontSize: 12,
+            },
+            disabledButton: {
+                background: theme.palette.maskColor.dark,
+                color: theme.palette.common.white,
+                opacity: 0.6,
+            },
+            fullWidthBox: {
+                width: '100%',
+                display: 'flex',
+            },
+            icon: {
+                width: 18,
+                height: 18,
+                marginLeft: 6,
+                zIndex: -1,
+            },
+            invisible: {
+                visibility: 'hidden',
+            },
+        }
+    },
+)
 
 export interface RedPacketInHistoryListProps {
     history: RedPacketJSONPayload | RedPacketJSONPayloadFromChain
@@ -169,11 +204,15 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const { value: receipt } = useCreateRedPacketReceipt(isViewed ? history.txid : '')
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
-    const { classes, cx } = useStyles({ isViewed: isViewed && !!rpid })
+    const { classes, cx } = useStyles({
+        listItemBackground: networkDescriptor?.backgroundGradient,
+        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
+    })
 
     const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
         () => ({ ...props.history, rpid, creation_time }),
@@ -231,17 +270,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     // #endregion
 
     return (
-        <ListItem className={classes.root} ref={ref}>
-            {!rpid ? null : (
+        <ListItem className={classes.root}>
+            <section className={classes.contentItem} ref={ref}>
                 <Box className={classes.box}>
-                    {isViewed ? (
-                        <TokenIcon
-                            className={classes.icon}
-                            address={historyToken?.address ?? ''}
-                            name={historyToken?.name}
-                            logoURL={historyToken?.logoURL}
-                        />
-                    ) : null}
                     <Box className={classes.content}>
                         <section className={classes.section}>
                             <div className={classes.div}>
@@ -252,26 +283,16 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                             : patchedHistory.sender.message}
                                     </Typography>
                                 </div>
-                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                    {t.history_duration({
-                                        startTime: dateTimeFormat(new Date(creation_time)),
-                                        endTime: dateTimeFormat(
-                                            new Date(creation_time + patchedHistory.duration),
-                                            false,
-                                        ),
-                                    })}
-                                </Typography>
-                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                    {t.history_total_amount({
-                                        amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
-                                        symbol: historyToken?.symbol,
-                                    })}
-                                </Typography>
-                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                    {t.history_split_mode({
-                                        mode: patchedHistory.is_random ? t.random() : t.average(),
-                                    })}
-                                </Typography>
+                                <div className={classes.fullWidthBox}>
+                                    <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
+                                        {t.create_time()}
+                                    </Typography>
+                                    <Typography
+                                        variant="body1"
+                                        className={cx(classes.info, classes.message, rpid ? '' : classes.invisible)}>
+                                        {t.history_duration({ time: dateTimeFormat(new Date(creation_time)) })}
+                                    </Typography>
+                                </div>
                             </div>
                             {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
                                 <>
@@ -294,12 +315,10 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         )}
                                         size="large">
                                         {canSend
-                                            ? t.send()
-                                            : refunded
-                                            ? t.refund()
+                                            ? t.share()
                                             : isRefunding
                                             ? t.refunding()
-                                            : listOfStatus.includes(RedPacketStatus.empty)
+                                            : listOfStatus.includes(RedPacketStatus.empty) || refunded
                                             ? t.empty()
                                             : t.refund()}
                                     </ActionButton>
@@ -318,44 +337,46 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 </>
                             ) : null}
                         </section>
-                        <StyledLinearProgress
-                            variant="determinate"
-                            value={100 * (1 - Number(total_remaining) / Number(patchedHistory.total))}
-                        />
+
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
                                 <Translate.history_claimed
                                     components={{
-                                        strong: <strong />,
+                                        span: <span />,
                                     }}
                                     values={{
                                         claimedShares: String(claimerNumber),
                                         shares: String(patchedHistory.shares),
-                                    }}
-                                />
-                            </Typography>
-                            <Typography variant="body1" className={classes.footerInfo}>
-                                <Translate.history_total_claimed_amount
-                                    components={{
-                                        strong: <strong className={classes.strong} />,
-                                        span: <span className={classes.span} />,
-                                    }}
-                                    values={{
-                                        amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
-                                        claimedAmount: formatBalance(
-                                            minus(patchedHistory.total, total_remaining ?? 0),
-                                            historyToken?.decimals,
+                                        amount: formatBalance(
+                                            patchedHistory.total,
+                                            historyToken?.decimals ?? 18,
                                             6,
                                             true,
                                         ),
+                                        claimedAmount: rpid
+                                            ? formatBalance(
+                                                  minus(patchedHistory.total, total_remaining ?? 0),
+                                                  historyToken?.decimals ?? 18,
+                                                  6,
+                                                  true,
+                                              )
+                                            : '',
                                         symbol: historyToken?.symbol,
                                     }}
                                 />
                             </Typography>
+                            {historyToken?.logoURL ? (
+                                <TokenIcon
+                                    className={classes.icon}
+                                    address={historyToken?.address ?? ''}
+                                    name={historyToken?.name}
+                                    logoURL={historyToken?.logoURL}
+                                />
+                            ) : null}
                         </section>
                     </Box>
                 </Box>
-            )}
+            </section>
         </ListItem>
     )
 }

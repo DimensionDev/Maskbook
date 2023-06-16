@@ -1,4 +1,4 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { Link, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { makeStyles } from '@masknet/theme'
@@ -36,7 +36,7 @@ interface TokenPanelProps {
     tokenMarketCap?: number
 }
 
-export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
+export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
     const t = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()

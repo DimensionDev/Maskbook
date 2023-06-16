@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const LoadingBase = (props: GeneratedIconProps) => {
+export function LoadingBase(props: GeneratedIconProps) {
     const { classes, cx } = useStyles()
     return <Icons.CircleLoading {...props} className={cx(classes.animated, props.className)} />
 }

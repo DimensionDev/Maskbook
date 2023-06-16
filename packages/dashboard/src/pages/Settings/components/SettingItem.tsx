@@ -4,7 +4,7 @@ import { MaskColorVar } from '@masknet/theme'
 export interface SettingItemProps extends React.PropsWithChildren<{}> {
     title: React.ReactNode | string
     desc?: React.ReactNode
-    icon?: React.ReactElement
+    icon?: React.ReactNode
     error?: boolean
 }
 

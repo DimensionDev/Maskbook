@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { formatBalance, isZero, leftShift } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI, type FungibleTokenInputUIProps } from './UI.js'
 
@@ -75,7 +76,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                     min: 0,
                     minLength: MIN_AMOUNT_LENGTH,
                     maxLength: MAX_AMOUNT_LENGTH,
-                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                    pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                     spellCheck: false,
                 }}
                 placeholder={placeholder}
@@ -103,3 +104,4 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         )
     },
 )
+FungibleTokenInput.displayName = 'FungibleTokenInput'

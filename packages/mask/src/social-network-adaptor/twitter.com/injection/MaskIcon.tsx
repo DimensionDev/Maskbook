@@ -13,6 +13,7 @@ import {
     floatingBioCardSelector,
     isProfilePageLike,
 } from '../utils/selector.js'
+import { Flags } from '@masknet/flags'
 
 function Icon(props: { size: number }) {
     return (
@@ -68,7 +69,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true } })
+        const proxy = DOMProxy({ afterShadowRootInit: Flags.shadowRootInit })
         proxy.realCurrent = node
         const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
         root.render(<Icon size={24} />)

@@ -208,7 +208,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ]
         }
 
-        const bindingProofs = await this.NextIDProof.queryProfilesByDomain(domain!)
+        const bindingProofs = await this.NextIDProof.queryProfilesByAddress(address)
 
         if (bindingProofs?.length > 0) {
             return [

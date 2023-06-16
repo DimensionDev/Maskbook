@@ -1,6 +1,7 @@
+import { useCallback, useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
-import { useSharedI18N } from '../index.js'
-import type { PersonaConnectStatus } from '../types.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     CrossIsolationMessages,
@@ -11,10 +12,10 @@ import {
     isSameProfile,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { useCallback, useEffect } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { LeavePageConfirmDialog } from '../modals/index.js'
+import { useSharedI18N } from '../locales/index.js'
+import type { PersonaConnectStatus } from '../types.js'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
     action: undefined,
@@ -37,28 +38,24 @@ export function useCurrentPersonaConnectStatus(
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
     )
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.openPageConfirm,
-    )
 
-    const create = useCallback(
-        (target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
-            if (direct) {
-                openDashboard?.(DashboardRoutes.Setup)
-            } else {
-                setCreatePersonaConfirmDialog({
-                    open: true,
+    const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
+        if (direct) {
+            openDashboard?.(DashboardRoutes.Setup)
+        } else {
+            LeavePageConfirmDialog.open({
+                openDashboard,
+                info: {
                     target: 'dashboard',
                     url: target ?? DashboardRoutes.Setup,
                     text: t.applications_create_persona_hint(),
                     title: t.applications_create_persona_title(),
                     actionHint: t.applications_create_persona_action(),
                     position,
-                })
-            }
-        },
-        [setCreatePersonaConfirmDialog],
-    )
+                },
+            })
+        }
+    }, [])
 
     const openPersonListDialog = useCallback(
         (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
@@ -128,14 +125,7 @@ export function useCurrentPersonaConnectStatus(
                 hasPersona: true,
             }
         }
-    }, [
-        currentPersonaIdentifier,
-        personas,
-        identity?.identifier?.toText(),
-        create,
-        openPersonListDialog,
-        openDashboard,
-    ])
+    }, [currentPersonaIdentifier, personas, identity?.identifier, create, openPersonListDialog])
 
     useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message?.events.ownPersonaChanged])
 

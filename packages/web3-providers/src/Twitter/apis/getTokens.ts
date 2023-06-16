@@ -1,4 +1,5 @@
 import { escapeRegExp } from 'lodash-es'
+import { squashPromise } from '@masknet/web3-shared-base'
 import { fetchText } from '../../entry-helpers.js'
 
 function getScriptURL(content: string, name: string) {
@@ -32,11 +33,10 @@ async function fetchContent(url?: string) {
 function getAPIScriptURL(content: string) {
     const matches = content.match(/api:"(\w+)",/)
     if (!matches) return
-    const url = `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
-    return url
+    return `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
 }
 
-export async function getTokens(operationName?: string) {
+async function getScripts() {
     const indexContent = await fetchContent('https://twitter.com')
     const swContent = await fetchContent('https://twitter.com/sw.js')
 
@@ -46,15 +46,26 @@ export async function getTokens(operationName?: string) {
         fetchContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
         fetchContent(getAPIScriptURL(indexContent ?? '')),
     ])
-    const [mainContentPrimary, mainContentSecondary, nftContent, apiContent] = allSettled.map((x) =>
+    const [mainContentPrimary, mainContentSecondary, userNFT_Content, API_Content] = allSettled.map((x) =>
         x.status === 'fulfilled' ? x.value ?? '' : '',
     )
-    const mainContent = mainContentPrimary || mainContentSecondary
+
+    return {
+        mainContent: mainContentPrimary || mainContentSecondary,
+        userNFT_Content,
+        API_Content,
+    }
+}
+
+const getScriptSquashed = squashPromise('GET_TWITTER_SCRIPTS', getScripts, 60_000)
+
+export async function getTokens(operationName?: string) {
+    const { mainContent, userNFT_Content, API_Content } = await getScriptSquashed()
     const bearerToken = getScriptContentMatched(mainContent ?? '', /"(\w{20,}%3D\w{20,})"/)
-    const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
+    const queryToken = getScriptContentMatched(userNFT_Content ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
-        ? getScriptContentMatched(apiContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
+        ? getScriptContentMatched(API_Content ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
         : undefined
 
     return {
@@ -62,5 +73,19 @@ export async function getTokens(operationName?: string) {
         queryToken,
         csrfToken,
         queryId,
+    }
+}
+
+export async function getHeaders(overrides?: Record<string, string>) {
+    const { bearerToken, csrfToken } = await getTokens()
+
+    return {
+        authorization: `Bearer ${bearerToken}`,
+        'x-csrf-token': csrfToken,
+        'content-type': 'application/json',
+        'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-active-user': 'yes',
+        referer: 'https://twitter.com/',
+        ...overrides,
     }
 }

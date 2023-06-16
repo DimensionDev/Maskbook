@@ -1,6 +1,7 @@
-import { type FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import { Trans } from 'react-i18next'
+import { Controller, useForm } from 'react-hook-form'
 import { isEmpty, noop } from 'lodash-es'
 import { toWei } from 'web3-utils'
 import { z as zod } from 'zod'
@@ -13,14 +14,13 @@ import {
     formatGweiToEther,
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
-import { useI18N } from '../../../../utils/index.js'
-import type { GasSettingProps } from './types.js'
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
-import { Trans } from 'react-i18next'
+import { Typography } from '@mui/material'
+import { useI18N } from '../../../../utils/index.js'
+import type { GasSettingProps } from './types.js'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -84,8 +84,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Prior1559GasSetting: FC<GasSettingProps> = memo(
-    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
+export const Prior1559GasSetting = memo(
+    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { classes } = useStyles()
         const { t } = useI18N()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -167,7 +167,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onConfirm({
-                    gasLimit: data.gasLimit,
+                    gasLimit: data.gasLimit as any,
                     gasPrice: toWei(data.gasPrice, 'gwei'),
                     gasOption: selectedGasOption,
                 })
@@ -212,27 +212,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.gasLimit?.message}
-                            //         helperText={errors.gasLimit?.message}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="gasLimit"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
                     <Typography className={classes.label}>
                         {t('popups_wallet_gas_price')}
                         <Typography component="span" className={classes.price}>
@@ -244,27 +224,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             })}
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.gasPrice?.message}
-                            //         helperText={errors.gasPrice?.message}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="gasPrice"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="gasPrice" />
                 </form>
                 <ActionButton
                     loading={getGasOptionsLoading}

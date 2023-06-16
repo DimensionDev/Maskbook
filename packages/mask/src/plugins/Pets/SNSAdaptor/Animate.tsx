@@ -16,7 +16,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const AnimatePic = () => {
+function AnimatePic() {
     const { classes } = useStyles()
 
     const petShow = useValueRef<boolean>(petShowSettings)

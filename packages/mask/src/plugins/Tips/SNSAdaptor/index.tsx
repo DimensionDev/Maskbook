@@ -47,7 +47,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 icon,
                 name,
                 iconFilterColor,
-                appBoardSortingDefaultPriority: 5,
                 nextIdRequired: true,
                 entryWalletConnectedNotRequired: true,
             }

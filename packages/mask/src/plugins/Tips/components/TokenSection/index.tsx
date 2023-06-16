@@ -1,11 +1,10 @@
-import { type FC, type HTMLProps, useCallback } from 'react'
+import { type HTMLProps, useCallback } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput, TokenValue } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useTip } from '../../contexts/index.js'
 import { GasSettingsBar } from './GasSettingsBar.js'
-import { TokenValue } from './TokenValue.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -17,9 +16,7 @@ const useStyles = makeStyles()({
     },
 })
 
-interface Props extends HTMLProps<HTMLDivElement> {}
-
-export const TokenSection: FC<Props> = ({ className, ...rest }) => {
+export function TokenSection(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount, isAvailableBalance, balance } = useTip()
     const { pluginID } = useNetworkContext()
@@ -39,7 +36,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     }, [selectFungibleToken, token?.address, pluginID, chainId])
 
     return (
-        <div className={cx(className, classes.container)} {...rest}>
+        <div {...props} className={cx(props.className, classes.container)}>
             <FungibleTokenInput
                 label=""
                 token={token}
@@ -50,7 +47,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
                 onSelectToken={onSelectTokenChipClick}
             />
             {pluginID === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
-            <TokenValue className={classes.tokenValue} />
+            <TokenValue className={classes.tokenValue} token={token} amount={amount} />
         </div>
     )
 }

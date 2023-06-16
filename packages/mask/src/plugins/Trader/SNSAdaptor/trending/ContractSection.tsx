@@ -17,14 +17,14 @@ export interface ContractSectionProps {
     iconURL?: string
 }
 
-export const ContractSection = ({
+export function ContractSection({
     chainId,
     address,
     name,
     symbol,
     iconURL,
     pluginID = NetworkPluginID.PLUGIN_EVM,
-}: ContractSectionProps) => {
+}: ContractSectionProps) {
     const theme = useTheme()
     const Others = useWeb3Others(pluginID)
     const [, copyToClipboard] = useCopyToClipboard()

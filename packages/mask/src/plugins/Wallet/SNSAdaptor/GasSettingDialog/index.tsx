@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react'
+import { useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const GasSettingDialog: FC = () => {
+export function GasSettingDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [gasOptionType, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)

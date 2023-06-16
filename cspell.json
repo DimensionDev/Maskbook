@@ -53,7 +53,6 @@
         "blockhash",
         "blockie",
         "blockies",
-        "blockpi",
         "bluebar",
         "blurhash",
         "boba",
@@ -401,6 +400,7 @@
         "renfil",
         "shapeclip",
         "simplehash",
+        "splinecode",
         "splinetool",
         "ssrb",
         "steth",
@@ -430,8 +430,7 @@
         "xyumi",
         "yumi",
         "yumiswap",
-        "zkscan",
-        "splinecode"
+        "zkscan"
     ],
     "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [

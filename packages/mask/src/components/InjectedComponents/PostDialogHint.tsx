@@ -1,9 +1,9 @@
-import { memo } from 'react'
+import { Icons } from '@masknet/icons'
+import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useI18N } from '../../utils/index.js'
+import { memo } from 'react'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
-import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
+import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
 
 interface TooltipConfigProps {
@@ -38,8 +38,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ICON_MAP: Record<string, JSX.Element> = {
-    minds: <MaskIconInMinds />,
-    default: <MaskSharpIcon color="primary" />,
+    minds: <Icons.MaskInMinds size={18} />,
+    default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
 }
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {

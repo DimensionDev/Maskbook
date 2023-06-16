@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         display: 'flex',
         height: '100%',
+        backgroundColor: theme.palette.maskColor.input,
         [`& > .${inputBaseClasses.input}`]: {
             height: 'calc(100% - 22px) !important',
             overflow: 'unset',

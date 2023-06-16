@@ -22,7 +22,6 @@
     "collectible_on_polygon": "只有Etherum上的NFT支持预览。我们目前<br/>也在支持 Polygon NFT。 <br/>请在这里添加您的NFT。",
     "collectible_no_eth": "没有任何可预览的NFT。请在这里添加您的NFT。",
     "collectible_no_collectible": "当前钱包中未找到任何NFT。",
-    "no_collectible_found": "未找到任何 NFT。",
     "load_failed": "加载失败",
     "reload": "重新加载",
     "application_hint": "在社交网络上展示您的 NFT。人们可以在Twitter上出价、购买或查看您珍贵的 NFT。",

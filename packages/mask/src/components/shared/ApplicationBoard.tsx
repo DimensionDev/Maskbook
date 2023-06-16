@@ -2,9 +2,8 @@ import { createContext, useContext, useMemo, useState, type PropsWithChildren } 
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useCurrentPersonaConnectStatus } from '@masknet/shared'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { useCurrentPersonaConnectStatus, SelectProviderDialog } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
@@ -28,7 +27,7 @@ const useStyles = makeStyles<{
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(0, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 3),
+            padding: theme.spacing(0, navigator.userAgent.includes('Firefox') ? 1.5 : 0.25, 1, 3),
             transform: props.isCarouselReady ? 'translateX(-8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -37,8 +36,8 @@ const useStyles = makeStyles<{
             gridTemplateRows: '100px',
             gridGap: 10,
             justifyContent: 'space-between',
-            height: 386,
-            width: props.shouldScroll && process.env.engine !== 'firefox' ? 583 : 570,
+            maxHeight: 386,
+            width: props.shouldScroll && !navigator.userAgent.includes('Firefox') ? 583 : 570,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
@@ -182,9 +181,6 @@ function ApplicationBoardContent() {
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
@@ -193,20 +189,20 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (!application.enabled) return true
 
         return !!application.entry.nextIdRequired && ApplicationEntryStatus.isLoading
-    }, [application, ApplicationEntryStatus])
+    }, [application, ApplicationEntryStatus.isLoading])
     // #endregion
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
             return (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback, requiredSupportPluginID })
+                SelectProviderDialog.open({ walletConnectedCallback, requiredSupportPluginID })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
         if (ApplicationEntryStatus.shouldVerifyNextId)
             return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
         return
-    }, [setSelectProviderDialog, ApplicationEntryStatus, application])
+    }, [ApplicationEntryStatus, application])
 
     // #endregion
 

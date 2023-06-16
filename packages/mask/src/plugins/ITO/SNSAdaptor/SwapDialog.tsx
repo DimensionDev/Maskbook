@@ -243,7 +243,6 @@ export function SwapDialog(props: SwapDialogProps) {
             <section className={classes.swapButtonWrapper}>
                 <WalletConnectedBoundary expectedChainId={payload.chain_id}>
                     <EthereumERC20TokenApprovedBoundary
-                        onlyInfiniteUnlock
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>

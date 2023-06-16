@@ -32,7 +32,7 @@ interface ColumnLayoutProps extends React.PropsWithChildren<{}> {
     haveFooter?: boolean
 }
 
-export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps) => {
+export function ColumnLayout({ haveFooter = true, children }: ColumnLayoutProps) {
     const { classes } = useStyles()
 
     return (

@@ -13,7 +13,7 @@ const PRIVACY_POLICY_PAGE_MAPPING: Record<string, string> = {
     en: new URL('./en.html', import.meta.url).toString(),
 }
 
-const PrivacyPolicy = () => {
+function PrivacyPolicy() {
     // todo: fix language is auto
     const lang = useLanguage()
     const privacyPolicyURL = PRIVACY_POLICY_PAGE_MAPPING[lang] ?? PRIVACY_POLICY_PAGE_MAPPING.en

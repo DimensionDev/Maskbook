@@ -17,7 +17,7 @@ export function useCreateRedPacketReceipt(txid: string) {
     return useAsyncRetry(async () => {
         if (!txid) return null
 
-        const receipt = await Web3.getTransactionReceipt(txid)
+        const receipt = await Web3.getTransactionReceipt(txid, { chainId })
         if (!receipt) return null
 
         const log = receipt.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
@@ -37,5 +37,5 @@ export function useCreateRedPacketReceipt(txid: string) {
             rpid: eventParams.id ?? '',
             creation_time: eventParams.creation_time.toNumber() * 1000,
         }
-    }, [txid, HAPPY_RED_PACKET_ADDRESS_V4])
+    }, [txid, HAPPY_RED_PACKET_ADDRESS_V4, chainId])
 }

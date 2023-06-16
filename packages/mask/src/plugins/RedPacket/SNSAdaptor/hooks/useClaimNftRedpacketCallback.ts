@@ -20,6 +20,6 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             gas: toFixed((await transaction.estimateGas({ from: account })) + EXTRA_GAS_PER_NFT * totalAmount),
             chainId,
         })
-        return Web3.sendTransaction(tx)
+        return Web3.sendTransaction(tx, { chainId })
     }, [id, signedMsg, account, chainId, totalAmount])
 }

@@ -11,10 +11,10 @@ import type {
     SettingsDialogEvent,
     NonFungibleTokenDialogEvent,
     WalletSettingsDialogEvent,
-    OpenPageConfirmEvent,
     PersonaSelectPanelDialogEvent,
     AvatarSettingDialogEvent,
     redpacketDialogEvent,
+    ITODialogEvent,
     PersonaBindFinishEvent,
     SmartPayDialogEvent,
     RenameWalletEvent,
@@ -51,10 +51,9 @@ export interface CrossIsolationEvents {
     walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingDialogEvent: AvatarSettingDialogEvent
     redpacketDialogEvent: redpacketDialogEvent
+    ITODialogEvent: ITODialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent
-    /** emit when open new page . */
-    openPageConfirm: OpenPageConfirmEvent
     /**
      * Application Persona List dialog
      */

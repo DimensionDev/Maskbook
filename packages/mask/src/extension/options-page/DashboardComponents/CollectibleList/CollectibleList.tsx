@@ -3,8 +3,8 @@ import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
-import { Box, Button, Typography } from '@mui/material'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
 import { type ChangeEventOptions, CollectibleItem, type SelectableProps } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
@@ -30,12 +30,10 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap 
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '100%',
+            height: 260,
         },
         button: {
-            '&:hover': {
-                border: 'solid 1px transparent',
-            },
+            marginTop: 8,
         },
         list: {
             overflow: 'auto',
@@ -114,9 +112,9 @@ export function CollectibleList(props: CollectibleListProps) {
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
-                            <Button className={classes.button} variant="text" onClick={retry}>
+                            <ActionButton className={classes.button} onClick={retry}>
                                 {t('retry')}
-                            </Button>
+                            </ActionButton>
                         ) : null}
                     </Box>
                 ) : (

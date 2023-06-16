@@ -7,7 +7,7 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-solana'
-import { SharedUIPluginContext, SolanaWeb3State } from '@masknet/web3-providers'
+import { SharedPluginContext, SolanaWeb3State } from '@masknet/web3-providers'
 import { base } from '../../base.js'
 
 const dashboard: Plugin.Dashboard.Definition<
@@ -20,7 +20,7 @@ const dashboard: Plugin.Dashboard.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        SharedUIPluginContext.setup(context)
+        SharedPluginContext.setup(context)
 
         const state = await SolanaWeb3State.create(context)
 

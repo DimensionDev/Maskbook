@@ -2,17 +2,18 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { type FC, memo } from 'react'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     alert: {
         display: 'flex',
         borderRadius: 4,
         padding: 12,
-        backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
+        backgroundColor: theme.palette.maskColor.bg,
         fontSize: 14,
         alignItems: 'center',
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.main,
+        backdropFilter: 'blur(5px)',
         gap: 10,
     },
 }))
@@ -21,7 +22,7 @@ interface Props extends BoxProps {
     onClose?: () => void
 }
 
-export const Alert: FC<Props> = memo(function Alert({ className, children, open, onClose, ...rest }) {
+export const Alert = memo(function Alert({ className, children, open, onClose, ...rest }: Props) {
     const { classes, cx } = useStyles()
 
     if (!open) return null

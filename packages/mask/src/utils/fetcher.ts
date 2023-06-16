@@ -7,7 +7,11 @@ export function contentFetch(input: RequestInfo, init?: RequestInit) {
     const request = new Request(input, init)
 
     if (canAccessAsContent(request.url)) {
-        if (process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object') {
+        if (
+            navigator.userAgent.includes('Firefox') &&
+            browser.runtime.getManifest().manifest_version === 2 &&
+            typeof content === 'object'
+        ) {
             return content.fetch(request, init)
         } else {
             return original_fetch(request, init)

@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useI18N } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
@@ -58,7 +57,7 @@ interface StakingFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  * - TokenStake
  * - TokenUnstake
  */
-export const StakingCard: FC<StakingFeedCardProps> = ({ feed, ...rest }) => {
+export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()

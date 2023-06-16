@@ -4,11 +4,12 @@ import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useLayoutEffect, useRef, useState, type FC, type HTMLProps } from 'react'
+import { memo, useEffect, useLayoutEffect, useRef, useState, type HTMLProps } from 'react'
 import { useSharedI18N } from '../../../index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
+import { isSameNFT } from '../../../utils/index.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -89,7 +90,7 @@ export interface CollectionProps
 /**
  * Props inherited from div on take effect when rendering as a folder
  */
-export const Collection: FC<CollectionProps> = memo(
+export const Collection = memo(
     ({
         className,
         collection,
@@ -105,7 +106,7 @@ export const Collection: FC<CollectionProps> = memo(
         onItemClick,
         selectedAsset,
         ...rest
-    }) => {
+    }: CollectionProps) => {
         const t = useSharedI18N()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
@@ -136,7 +137,7 @@ export const Collection: FC<CollectionProps> = memo(
                     onActionClick={onActionClick}
                     onItemClick={onItemClick}
                     verifiedBy={verifiedBy}
-                    selectedAsset={selectedAsset}
+                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                 />
             ))
             return <>{renderAssets}</>
@@ -203,19 +204,17 @@ export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
     count: number
     expanded?: boolean
 }
-export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, count, id, expanded, ...rest }) => {
+export function CollectionSkeleton({ className, count, id, expanded, ...rest }: CollectionSkeletonProps) {
     const { compact, containerRef } = useCompactDetection()
     const { classes, cx } = useStyles({ compact })
 
     // We render up to 4 skeletons unless it's expanded.
     const renderCount = expanded ? count : Math.min(4, count)
-    const renderAsFolder = renderCount > 2 && !expanded
+    const asFolder = renderCount > 2 && !expanded
 
-    const skeletons = range(renderCount).map((i) => (
-        <CollectibleItemSkeleton omitInfo={renderAsFolder} key={`${id}.${i}`} />
-    ))
+    const skeletons = range(renderCount).map((i) => <CollectibleItemSkeleton omitInfo={asFolder} key={`${id}.${i}`} />)
 
-    if (renderAsFolder)
+    if (asFolder)
         return (
             <div className={cx(className, classes.folder)} ref={containerRef} {...rest}>
                 <div className={classes.grid}>{skeletons}</div>
@@ -234,7 +233,7 @@ export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, cou
     return <>{skeletons}</>
 }
 
-export const LazyCollection: FC<CollectionProps> = memo((props) => {
+export const LazyCollection = memo((props: CollectionProps) => {
     const { className, collection } = props
     const placeholderRef = useRef<HTMLDivElement>(null)
     const [seen, setSeen] = useState(false)
@@ -257,7 +256,7 @@ export const LazyCollection: FC<CollectionProps> = memo((props) => {
     }, [placeholderRef.current, seen])
 
     if (seen) {
-        return <Collection {...props} />
+        return <Collection {...props} ref={undefined} />
     }
     return (
         <div className={className} ref={placeholderRef}>

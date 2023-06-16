@@ -1,4 +1,4 @@
-import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, type SyntheticEvent, useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -7,7 +7,7 @@ import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import {
     formatGweiToWei,
     formatEthereumAddress,
@@ -395,7 +395,7 @@ export interface Prior1559TransferUIProps {
     handleConfirm: () => void
     confirmLoading: boolean
     maxAmount: string
-    popoverContent?: ReactElement
+    popoverContent?: ReactNode
     disableConfirm?: boolean
 }
 
@@ -513,6 +513,12 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                     error={!!errors.amount?.message}
                                     helperText={errors.amount?.message}
                                     InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            min: 0,
+                                            minLength: 1,
+                                            maxLength: 79,
+                                        },
                                         autoComplete: 'off',
                                         autoCorrect: 'off',
                                         title: 'Token Amount',
@@ -553,12 +559,6 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                             </Box>
                                         ),
                                     }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                        min: 0,
-                                        minLength: 1,
-                                        maxLength: 79,
-                                    }}
                                 />
                             )
                         }}
@@ -574,8 +574,10 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                         {...field}
                                         error={!!errors.gasPrice?.message}
                                         helperText={errors.gasPrice?.message}
-                                        inputProps={{
-                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        InputProps={{
+                                            inputProps: {
+                                                pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            },
                                         }}
                                     />
                                 )}
@@ -590,8 +592,10 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                         {...field}
                                         error={!!errors.gasLimit?.message}
                                         helperText={errors.gasLimit?.message}
-                                        inputProps={{
-                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        InputProps={{
+                                            inputProps: {
+                                                pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            },
                                         }}
                                     />
                                 )}

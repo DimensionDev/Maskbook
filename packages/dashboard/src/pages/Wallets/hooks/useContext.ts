@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import { type NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import {
     useFungibleAssets,
     useChainContext,
@@ -7,12 +7,21 @@ import {
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 
-function useContext(initialState?: { account?: string; chainId?: Web3Helper.ChainIdAll; pluginID?: NetworkPluginID }) {
-    const { account, chainId } = useChainContext({ account: initialState?.account, chainId: initialState?.chainId })
+function useContext(initialState?: {
+    account?: string
+    chainId?: Web3Helper.ChainIdAll
+    setSelectedNetwork?: (x: Web3Helper.NetworkDescriptorAll | null) => void
+    pluginID?: NetworkPluginID
+    connectedChainId?: Web3Helper.ChainIdAll
+}) {
+    const { account, chainId, providerType } = useChainContext({
+        account: initialState?.account,
+        chainId: initialState?.chainId,
+    })
     const Others = useWeb3Others(initialState?.pluginID)
     const fungibleAssets = useFungibleAssets<'all'>(initialState?.pluginID, undefined, {
         account,
@@ -35,6 +44,11 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
     return {
         account,
         chainId,
+        setSelectedNetwork: initialState?.setSelectedNetwork,
+        isWalletConnectNetworkNotMatch:
+            (providerType === ProviderType.WalletConnect || providerType === ProviderType.WalletConnectV2) &&
+            initialState?.connectedChainId !== chainId,
+        pluginID: initialState?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
         fungibleAssets: { ...fungibleAssets, value: assets, loading: loading || fungibleAssets.loading },
     }
 }

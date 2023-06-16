@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material'
 
-export const TrendingTokenSecurity = () => {
+export function TrendingTokenSecurity() {
     return <Stack />
 }

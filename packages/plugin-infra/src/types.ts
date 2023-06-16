@@ -128,7 +128,7 @@ export namespace Plugin.Shared {
         wallets: Subscription<Wallet[]>
 
         /** Open Dashboard with a new window */
-        openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
+        openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -142,7 +142,7 @@ export namespace Plugin.Shared {
         openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
-        openWalletConnectDialog(uri: string, callback: () => void): void
+        openWalletConnectDialog(uri: string): Promise<void>
 
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
@@ -173,11 +173,13 @@ export namespace Plugin.Shared {
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+
         /** Confirm a request */
         confirmRequest(
             payload: JsonRpcPayload,
             options?: { disableClose?: boolean; popupsWindow?: boolean },
         ): Promise<JsonRpcResponse | void>
+
         /** Reject a request */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
 

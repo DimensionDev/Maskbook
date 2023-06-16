@@ -62,6 +62,7 @@ export function ConnectWalletDialog() {
         if (!account) throw new Error('Failed to build connection.')
 
         const site = getSiteType()
+
         if (pluginID && site) {
             pluginIDSettings.value = {
                 ...pluginIDSettings.value,

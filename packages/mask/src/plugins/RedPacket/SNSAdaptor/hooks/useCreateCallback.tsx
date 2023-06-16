@@ -152,14 +152,15 @@ export function useCreateCallback(
                 from: account,
                 value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
                 gas,
+                chainId,
                 ...gasOption,
             },
         )
 
-        const hash = await Web3.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
-        const receipt = await Web3.getTransactionReceipt(hash)
+        const hash = await Web3.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency, chainId })
+        const receipt = await Web3.getTransactionReceipt(hash, { chainId })
         if (receipt) {
-            const events = decodeEvents(Web3.getWeb3(), redPacketContract.options.jsonInterface, receipt)
+            const events = decodeEvents(Web3.getWeb3({ chainId }), redPacketContract.options.jsonInterface, receipt)
 
             return {
                 hash,
@@ -168,5 +169,5 @@ export function useCreateCallback(
             }
         }
         return { hash, receipt }
-    }, [account, redPacketContract, redPacketSettings, gasOption])
+    }, [account, redPacketContract, redPacketSettings, gasOption, chainId])
 }

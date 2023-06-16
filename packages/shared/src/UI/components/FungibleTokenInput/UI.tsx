@@ -14,7 +14,6 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { noop } from 'lodash-es'
 import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,8 +26,8 @@ const useStyles = makeStyles()((theme) => ({
             paddingBottom: '0px !important',
             flex: 2,
             paddingLeft: '0px !important',
-            fontSize: 18,
-            fontWeight: 700,
+            fontSize: 14,
+            fontWeight: 400,
         },
     },
     title: {
@@ -80,16 +79,21 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     maxChip: {
-        background: 'inherit',
-        color: theme.palette.maskColor.primary,
+        color: theme.palette.maskColor.white,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 18,
+        width: 30,
         borderRadius: 4,
-        fontSize: 14,
+        fontSize: 10,
+        marginLeft: 4,
         fontWeight: 700,
         lineHeight: '18px',
-        padding: '3px 4px',
         cursor: 'pointer',
+        background: theme.palette.maskColor.primary,
         '&:hover': {
-            background: alpha(theme.palette.maskColor.white, 0.2),
+            background: alpha(theme.palette.maskColor.primary, 0.8),
         },
         [`& > .${chipClasses.label}`]: {
             padding: 0,
@@ -188,7 +192,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                                 />
                                             }
                                             deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
-                                            onDelete={noop}
+                                            onDelete={onSelectToken}
                                             label={token.symbol}
                                         />
                                     </>
@@ -203,8 +207,18 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                     </Box>
                 }
                 {...props}
+                onChange={(ev) => {
+                    if (
+                        ev.currentTarget.value &&
+                        !new RegExp(props?.inputProps?.pattern).test(ev.currentTarget.value)
+                    ) {
+                        return
+                    }
+                    props.onChange?.(ev)
+                }}
                 className={cx(classes.root, props.className)}
             />
         )
     },
 )
+FungibleTokenInputUI.displayName = 'FungibleTokenInputUI'

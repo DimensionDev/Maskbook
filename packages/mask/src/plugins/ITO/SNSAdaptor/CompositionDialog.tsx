@@ -43,12 +43,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
 
         overflowX: 'hidden',
     },
-    tabs: {
-        top: 0,
-        left: 0,
-        right: 0,
-        position: 'absolute',
-    },
     abstractTabWrapper: {
         width: '100%',
         paddingBottom: theme.spacing(2),
@@ -239,7 +233,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 ) : null
             }
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-            disableBackdropClick
             isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
             title={t('plugin_ito_display_name')}
@@ -250,11 +243,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                         !showHistory ? (
                             <>
                                 <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab
-                                        classes={{ tabs: classes.tabs }}
-                                        chains={chainIdList}
-                                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                                    />
+                                    <NetworkTab chains={chainIdList} pluginID={NetworkPluginID.PLUGIN_EVM} />
                                 </div>
                                 <CreateForm
                                     onNext={onNext}

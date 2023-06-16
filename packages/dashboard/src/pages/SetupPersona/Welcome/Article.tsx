@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { FC, HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 import { useAsync } from 'react-use'
 import { Services } from '../../../API.js'
 
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Permissions: FC = () => {
+function Permissions() {
     const { classes } = useStyles()
     const { value: sites = [] } = useAsync(() => {
         return Services.SiteAdaptor.getSitesWithoutPermission()
@@ -82,7 +82,7 @@ const Permissions: FC = () => {
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
-export const Article: FC<Props> = ({ className, ...rest }) => {
+export function Article({ className, ...rest }: Props) {
     const { classes, cx } = useStyles()
 
     return (

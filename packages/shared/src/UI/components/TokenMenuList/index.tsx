@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import { isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -54,7 +53,7 @@ export interface TokenMenuListProps {
     fromSocialCard?: boolean
 }
 
-export const TokenMenuList: FC<TokenMenuListProps> = ({ options, currentOption, onSelect, fromSocialCard = false }) => {
+export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard = false }: TokenMenuListProps) {
     const { classes } = useStyles()
     const theme = useTheme()
     return (

@@ -13,6 +13,7 @@ import type {
     SocialIdentity,
     SocialAccount,
 } from '@masknet/shared-base'
+import type { ComponentType, ReactNode } from 'react'
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -324,7 +325,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
-    symbol?: string
+    symbol?: string | null
     description?: string
     /** some providers define id, while others don't. For those don't, we will fallback to contract address */
     id?: string
@@ -548,7 +549,7 @@ export interface FungibleTokenSpender<ChainId, SchemaType> {
     /** spender name */
     name: string | undefined
     /** spender logo */
-    logo: React.ReactNode | undefined
+    logo: ReactNode | undefined
     /** allowance token amount of this spender */
     amount?: number
     /** allowance token amount(not formatted by token decimals) of this spender */
@@ -563,7 +564,7 @@ export interface NonFungibleContractSpender<ChainId, SchemaType> {
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
     name: string | undefined
-    logo: React.ReactNode | undefined
+    logo: ReactNode | undefined
 }
 
 /**
@@ -932,6 +933,20 @@ export interface TokenState<ChainId, SchemaType> {
         address: string,
         token?: NonFungibleToken<ChainId, SchemaType>,
     ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+    nonFungibleCollectionMap?: Subscription<
+        Record<
+            string,
+            Array<{
+                contract: NonFungibleTokenContract<ChainId, SchemaType>
+                tokenIds: string[]
+            }>
+        >
+    >
+    addNonFungibleCollection?(
+        owner: string,
+        contract: NonFungibleTokenContract<ChainId, SchemaType>,
+        tokenIds: string[],
+    ): Promise<void>
 }
 export interface TransactionState<ChainId, Transaction> {
     ready: boolean
@@ -1063,7 +1078,7 @@ export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Trans
 export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
     network: NetworkDescriptor<ChainId, NetworkType>
     provider?: ProviderDescriptor<ChainId, ProviderType>
-    children?: React.ReactNode
+    children?: ReactNode
     onClick?: (
         network: NetworkDescriptor<ChainId, NetworkType>,
         provider?: ProviderDescriptor<ChainId, ProviderType>,
@@ -1072,7 +1087,7 @@ export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
 
 export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
     provider: ProviderDescriptor<ChainId, ProviderType>
-    children?: React.ReactNode
+    children?: ReactNode
     onClick?: (
         network: NetworkDescriptor<ChainId, NetworkType>,
         provider: ProviderDescriptor<ChainId, ProviderType>,
@@ -1087,12 +1102,12 @@ export interface AddressFormatterProps {
 export interface Web3UI<ChainId, ProviderType, NetworkType> {
     SelectNetworkMenu?: {
         /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
+        NetworkIconClickBait?: ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
     SelectProviderDialog?: {
         /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
+        NetworkIconClickBait?: ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
         /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-        ProviderIconClickBait?: React.ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
+        ProviderIconClickBait?: ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
     }
 }

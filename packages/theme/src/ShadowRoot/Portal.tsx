@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, forwardRef, useContext } from 'react'
+import { Flags } from '@masknet/flags'
 import type { PopperProps } from '@mui/material'
 import {
     DisableShadowRootContext,
@@ -40,7 +41,7 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
 
         const root = document.createElement('div')
         root.dataset.portalShadowRoot = debugKey || ''
-        const shadow = root.attachShadow({ mode: process.env.shadowRootMode, delegatesFocus: true })
+        const shadow = root.attachShadow(Flags.shadowRootInit)
 
         for (const each of preventEventPropagationList) {
             shadow.addEventListener(each, stopPropagation, { signal: signal.current.signal })

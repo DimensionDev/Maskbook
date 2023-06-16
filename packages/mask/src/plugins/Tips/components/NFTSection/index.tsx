@@ -1,23 +1,16 @@
-import { type FC, type HTMLProps, useCallback, useMemo } from 'react'
-import { useBoolean } from 'react-use'
-import { uniqWith } from 'lodash-es'
+import { type HTMLProps, useCallback, useMemo } from 'react'
+import { Web3 } from '@masknet/web3-providers'
+import { compact, uniqWith } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useNonFungibleAssets, useNetworkContext } from '@masknet/web3-hooks-base'
-import { ElementAnchor, RetryHint } from '@masknet/shared'
+import { useChainContext, useNonFungibleAssets, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { ElementAnchor, RetryHint, useAddCollectibles } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, type NonFungibleAsset } from '@masknet/web3-shared-base'
-import {
-    isLensProfileAddress,
-    type ChainId,
-    type SchemaType,
-    isLensFollower,
-    isLensCollect,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { FormControl, Typography } from '@mui/material'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { useI18N } from '../../locales/index.js'
-import { AddDialog } from '../AddDialog.js'
 import { useTip } from '../../contexts/index.js'
 
 export * from './NFTList.js'
@@ -88,7 +81,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onEmpty?(empty: boolean): void
 }
 
-export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
+export function NFTSection({ className, onEmpty, ...rest }: Props) {
     const {
         nonFungibleTokenAddress: tokenAddress,
         nonFungibleTokenId: tokenId,
@@ -97,7 +90,6 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
     } = useTip()
     const { classes, theme, cx } = useStyles()
     const t = useI18N()
-    const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
@@ -130,17 +122,37 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
         )
     }, [fetchedTokens, isEvm])
 
-    const handleAddToken = useCallback((token: NonFungibleAsset<ChainId, SchemaType>) => {
-        setNonFungibleTokenAddress(token.address ?? '')
-        setNonFungibleTokenId(token.tokenId)
-        openAddTokenDialog(false)
-    }, [])
+    const addCollectibles = useAddCollectibles()
+    const { Token } = useWeb3State(pluginID)
+    const handleAddToken = useCallback(async () => {
+        const result = await addCollectibles({
+            pluginID,
+            chainId,
+        })
+        if (!result || !chainId) return
+        const [contract, tokenIds] = result
+        const results = await Promise.allSettled(
+            tokenIds.map(async (tokenId) => {
+                const token = await Web3.getNonFungibleToken(contract.address, tokenId, SchemaType.ERC721, {
+                    chainId: chainId as ChainId,
+                    account,
+                })
+                await Token?.addToken?.(account, token)
+                return token
+            }),
+        )
+        const tokens = compact(results.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        if (!tokens.length) return
+
+        setNonFungibleTokenAddress(tokens[0].address)
+        setNonFungibleTokenId(tokens[0].tokenId)
+    }, [account, pluginID, chainId, Token?.addNonFungibleCollection])
 
     return (
         <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
                 {isEvm && account ? (
-                    <Typography className={classes.addButton} onClick={() => openAddTokenDialog(true)}>
+                    <Typography className={classes.addButton} onClick={handleAddToken}>
                         {t.tip_add_collectibles()}
                     </Typography>
                 ) : null}
@@ -198,7 +210,6 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                     )
                 })()}
             </div>
-            <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
         </div>
     )
 }

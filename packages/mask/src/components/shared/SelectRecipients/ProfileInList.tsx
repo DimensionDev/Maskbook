@@ -1,10 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
-import { formatPersonaFingerprint, type ProfileInformationFromNextID } from '@masknet/shared-base'
+import { EMPTY_LIST, formatPersonaFingerprint, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
-import { useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/index.js'
@@ -14,6 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         borderRadius: 8,
         cursor: 'pointer',
+        padding: 0,
     },
     overflow: {
         textOverflow: 'ellipsis',
@@ -30,8 +31,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionIcon: {
-        width: 14,
-        height: 14,
+        width: 16,
+        height: 16,
         cursor: 'pointer',
         marginLeft: theme.spacing(0.5),
     },
@@ -41,9 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
-        background: theme.palette.background.default,
+        background: theme.palette.maskColor.bg,
     },
     avatarBox: {
+        padding: '6px 0px 6px 8px',
         minWidth: 46,
     },
     avatar: {
@@ -52,9 +54,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     highLightBase: {
         lineHeight: '20px',
+        fontSize: 14,
     },
     highLightSecond: {
-        fontSize: 14,
+        fontSize: 16,
         lineHeight: '20px',
     },
     listItemRoot: {
@@ -77,16 +80,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ProfileInListProps {
-    item: ProfileInformationFromNextID
+    profile: ProfileInformationFromNextID
     highlightText?: string
     selected?: boolean
     disabled?: boolean
-    onChange: (ev: React.MouseEvent<HTMLElement>, checked: boolean) => void
+    onChange: (profile: ProfileInformationFromNextID, checked: boolean) => void
 }
-export function ProfileInList(props: ProfileInListProps) {
+
+export const ProfileInList = memo(function ProfileInList(props: ProfileInListProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
-    const profile = props.item
+    const { profile, selected, disabled, highlightText, onChange } = props
+    const searchWords = useMemo(() => (highlightText ? [highlightText] : EMPTY_LIST), [highlightText])
 
     const [, copyToClipboard] = useCopyToClipboard()
     const rawPublicKey = profile.linkedPersona?.rawPublicKey
@@ -101,7 +106,7 @@ export function ProfileInList(props: ProfileInListProps) {
         undefined,
         t('copied'),
     )
-    const highlightText = (() => {
+    const primaryText = (() => {
         if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
         const mentions = profile.linkedTwitterNames?.map((x) => '@' + x).join(' ') ?? ''
         if (mentions.length < 15) return mentions
@@ -116,13 +121,21 @@ export function ProfileInList(props: ProfileInListProps) {
         return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
     })()
 
-    const onClick = useCallback((ev: React.MouseEvent<HTMLElement>) => props.onChange(ev, !props.selected), [props])
-    const textToHighlight = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
+    const handleClick = useCallback(() => onChange(profile, !selected), [onChange, selected])
+    const secondaryText = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
     return (
         <ListItem
-            onClick={onClick}
-            disabled={props.disabled}
-            className={cx(classes.root, props.selected ? classes.highLightBg : null)}>
+            onClick={handleClick}
+            className={cx(classes.root, selected ? classes.highLightBg : null)}
+            secondaryAction={
+                <Checkbox
+                    disabled={disabled}
+                    checked={!!selected}
+                    color="primary"
+                    size="small"
+                    sx={{ width: 20, height: 20 }}
+                />
+            }>
             <ListItemAvatar classes={{ root: classes.avatarBox }}>
                 <Avatar classes={{ root: classes.avatar }} person={profile} />
             </ListItemAvatar>
@@ -143,9 +156,9 @@ export function ProfileInList(props: ProfileInListProps) {
                             <Highlighter
                                 className={classes.highLightBase}
                                 highlightClassName={classes.highlighted}
-                                searchWords={[props.highlightText ?? '']}
+                                searchWords={searchWords}
                                 autoEscape
-                                textToHighlight={highlightText}
+                                textToHighlight={primaryText}
                             />
                         </div>
                     </ShadowRootTooltip>
@@ -155,17 +168,16 @@ export function ProfileInList(props: ProfileInListProps) {
                     <div className={classes.flex}>
                         <Highlighter
                             className={classes.highLightSecond}
-                            highlightClassName={classes.highlighted}
-                            searchWords={[props.highlightText ?? '']}
+                            highlightClassName={classes.highLightSecond}
+                            searchWords={searchWords}
                             autoEscape
-                            textToHighlight={textToHighlight}
+                            textToHighlight={secondaryText}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
                         {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }
             />
-            <Checkbox checked={!!props.selected} color="primary" />
         </ListItem>
     )
-}
+})

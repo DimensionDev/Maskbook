@@ -135,12 +135,15 @@ const useStyles = makeStyles<{
             right: 0,
             display: 'flex',
             alignItems: 'center',
-            background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+            background: theme.palette.maskColor.bg,
             backdropFilter: 'blur(5px)',
             boxSizing: 'border-box',
             borderBottomRightRadius: '16px',
             borderBottomLeftRadius: '16px',
             zIndex: 2,
+        },
+        link: {
+            outline: 0,
         },
     }
 })
@@ -257,7 +260,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
                             <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                <Linking href={first(coin.home_urls)}>
+                                <Linking LinkProps={{ className: classes.link }} href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
                                             type={coin.type}
@@ -377,7 +380,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                     {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTabs.Market ? (
-                        <Stack style={{ height: 48, width: '100%' }} />
+                        <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
                     ) : null}
                 </Paper>
                 {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (

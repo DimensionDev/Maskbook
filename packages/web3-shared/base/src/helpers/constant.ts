@@ -57,6 +57,7 @@ export function transformAllFromJSON<ChainId extends number, T extends Constants
     fallbackConstants: T,
     environment: Record<string, string> = {},
 ) {
+    if (!json) return transformAll(chainIdEnum, fallbackConstants, environment)
     try {
         const constants = JSON.parse(json) as T
         return transformAll(chainIdEnum, constants, environment)

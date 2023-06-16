@@ -12,7 +12,7 @@ import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei }
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes, NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import {
     formatCurrency,
     GasOptionType,
@@ -384,8 +384,10 @@ export const GasSetting1559 = memo(() => {
                                 }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                InputProps={{
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                             />
                         )
@@ -425,8 +427,10 @@ export const GasSetting1559 = memo(() => {
                             }}
                             error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
                             helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
-                            inputProps={{
-                                pattern: '^[0-9]*[.,]?[0-9]*$',
+                            InputProps={{
+                                inputProps: {
+                                    pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                },
                             }}
                         />
                     )}
@@ -463,8 +467,10 @@ export const GasSetting1559 = memo(() => {
                             }}
                             error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
                             helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
-                            inputProps={{
-                                pattern: '^[0-9]*[.,]?[0-9]*$',
+                            InputProps={{
+                                inputProps: {
+                                    pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                },
                             }}
                         />
                     )}

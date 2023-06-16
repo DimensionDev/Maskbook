@@ -9,9 +9,10 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferERC721 } from './TransferERC721.js'
 import { TransferTab } from './types.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useNativeToken } from '@masknet/web3-hooks-base'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useContainer } from 'unstated-next'
+import { Context } from '../../hooks/useContext.js'
 
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
@@ -26,7 +27,9 @@ export const Transfer = memo(() => {
             type?: TransferTab
         } | null
     }
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useContainer(Context)
+    const Others = useWeb3Others()
+    const nativeToken = Others.createNativeToken(chainId)
     const transferTabsLabel: Record<TransferTab, string> = {
         [TransferTab.Token]: t.wallets_assets_token(),
         [TransferTab.Collectibles]: t.wallets_assets_collectibles(),

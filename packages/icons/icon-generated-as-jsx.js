@@ -1519,6 +1519,11 @@ export const ITO = /*#__PURE__*/ __createIcon('ITO', [
         u: () => new URL('./general/ITO.svg', import.meta.url),
     },
 ])
+export const ITOLabel = /*#__PURE__*/ __createIcon('ITOLabel', [
+    {
+        u: () => new URL('./general/ITOLabel.svg', import.meta.url),
+    },
+])
 export const KeySquare = /*#__PURE__*/ __createIcon(
     'KeySquare',
     [
@@ -1633,6 +1638,11 @@ export const MaskAvatar = /*#__PURE__*/ __createIcon('MaskAvatar', [
         u: () => new URL('./general/MaskAvatar.light.svg', import.meta.url),
     },
 ])
+export const MaskInMinds = /*#__PURE__*/ __createIcon('MaskInMinds', [
+    {
+        u: () => new URL('./general/MaskInMinds.svg', import.meta.url),
+    },
+])
 export const Masks = /*#__PURE__*/ __createIcon('Masks', [
     {
         u: () => new URL('./general/Masks.svg', import.meta.url),
@@ -1677,6 +1687,11 @@ export const NFTRedPacket = /*#__PURE__*/ __createIcon('NFTRedPacket', [
 export const NFTSelected = /*#__PURE__*/ __createIcon('NFTSelected', [
     {
         u: () => new URL('./general/NFTSelected.svg', import.meta.url),
+    },
+])
+export const OutlinedMask = /*#__PURE__*/ __createIcon('OutlinedMask', [
+    {
+        u: () => new URL('./general/OutlinedMask.svg', import.meta.url),
     },
 ])
 export const Personas = /*#__PURE__*/ __createIcon(
@@ -2156,6 +2171,21 @@ export const Settings = /*#__PURE__*/ __createIcon('Settings', [
                 children: /*#__PURE__*/ _jsx('path', {
                     fill: 'currentColor',
                     d: 'm12 23-9.5-5.5v-11L12 1l9.5 5.5v11L12 23zm0-19.688L4.5 7.653v8.694l7.5 4.342 7.5-4.342V7.653L12 3.311v.001zM12 16a4 4 0 1 1 2.828-1.172A4.027 4.027 0 0 1 12 16zm0-6a2 2 0 1 0-.001 4A2 2 0 0 0 12 10z',
+                }),
+            }),
+        s: true,
+    },
+])
+export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
+    {
+        u: () => new URL('./general/SharpMask.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                viewBox: '0 0 38 38',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'M3.8 0h30.4A3.8 3.8 0 0 1 38 3.8v30.4a3.8 3.8 0 0 1-3.8 3.8H3.8A3.8 3.8 0 0 1 0 34.2V3.8A3.8 3.8 0 0 1 3.8 0Zm31.294 21.682v-8.94H2.906v19.133a3.219 3.219 0 0 0 3.219 3.22h25.75a3.219 3.219 0 0 0 3.219-3.22v-7.51h-5.199A12.16 12.16 0 0 1 18.98 31.16c-5.795 0-10.642-4.052-11.864-9.477h27.978ZM18.98 28.498a9.468 9.468 0 0 0 7.828-4.133H11.15a9.468 9.468 0 0 0 7.829 4.133Zm-11.821-9.32a5.008 5.008 0 0 1 9.913 0h-2.744a2.326 2.326 0 0 0-4.425 0H7.159Zm13.77 0a5.008 5.008 0 0 1 9.912 0h-2.744a2.326 2.326 0 0 0-4.425 0h-2.744ZM35.093 6.126a3.219 3.219 0 0 0-3.219-3.22H6.125a3.219 3.219 0 0 0-3.22 3.22v3.934h32.189V6.125Z',
                 }),
             }),
         s: true,

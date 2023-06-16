@@ -10,6 +10,7 @@ import { facebookShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { collectNodeText } from '../../../utils/index.js'
 import { None, Some, type Option } from 'ts-results-es'
+import { Flags } from '@masknet/flags'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article]  [id]  span[dir="auto"]',
@@ -36,8 +37,8 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .closest('[role=article] [id] span[dir="auto"]')
 
             const rootProxy = DOMProxy({
-                afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
-                beforeShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                afterShadowRootInit: Flags.shadowRootInit,
+                beforeShadowRootInit: Flags.shadowRootInit,
             })
             rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
 

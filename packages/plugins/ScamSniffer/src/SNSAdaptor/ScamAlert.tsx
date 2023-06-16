@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ScamAlert = ({ result }: { result: ScamResult }) => {
+function ScamAlert({ result }: { result: ScamResult }) {
     const { classes } = useStyles()
     const [autoReport, setAutoReport] = useState(false)
     const t = useI18N()

@@ -1,8 +1,9 @@
-import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/index.js'
 
 let currentPopupWindowId = 0
+
 function isLocked() {
     return new Promise<boolean>((resolve) => {
         const off = MaskMessages.events.wallet_is_locked.on(([type, value]) => {
@@ -35,9 +36,9 @@ async function openWindow(url: string): Promise<void> {
             // opened from the background chrome process for the extension that
             // has no physical dimensions
 
-            if (process.env.manifest === '2') {
-                // @ts-expect-error the project is configured to run in a worker, but mv2 is actually a page env.
-                const { screenX, screenY, outerWidth } = window
+            // Note: DOM is only available in MV2 or MV3 page mode.
+            const { screenX, outerWidth, screenY } = globalThis as any
+            if (typeof screenX === 'number' && typeof outerWidth === 'number') {
                 top = Math.max(screenY, 0)
                 left = Math.max(screenX + (outerWidth - 350), 0)
             } else {
@@ -64,14 +65,6 @@ async function openWindow(url: string): Promise<void> {
                     currentPopupWindowId = 0
                 }
             })
-
-            // firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1271047
-            if (process.env.engine === 'firefox') {
-                browser.windows.update(id, {
-                    left,
-                    top,
-                })
-            }
         }
     }
 }

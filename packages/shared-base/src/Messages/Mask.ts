@@ -53,7 +53,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     allPluginsReady: boolean
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
-    maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
     /** @deprecated do not use it in new code. */
@@ -173,6 +172,10 @@ export interface redpacketDialogEvent {
     source?: PluginID
 }
 
+export interface ITODialogEvent {
+    open: boolean
+}
+
 export interface SmartPayDialogEvent {
     open: boolean
 }
@@ -198,16 +201,6 @@ export interface ProfileTabEvent {
 export interface postReplacerHiddenEvent {
     hidden: boolean
     postId: string
-}
-
-export interface OpenPageConfirmEvent {
-    open: boolean
-    target: 'dashboard' | 'other'
-    url: string
-    title: string
-    text: string
-    actionHint: string
-    position?: 'center' | 'top-right'
 }
 
 export interface HideSearchResultInspectorEvent {

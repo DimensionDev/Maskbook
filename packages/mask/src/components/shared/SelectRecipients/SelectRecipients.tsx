@@ -1,22 +1,14 @@
-import {
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    NextIDPlatform,
-    ProfileIdentifier,
-    type ProfileInformation as Profile,
-    type ProfileInformationFromNextID,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { batch } from 'async-call-rpc'
-import { cloneDeep, uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
-import Services from '../../../extension/service.js'
 import { MaskMessages, useI18N } from '../../../utils/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { usePersonasFromNextID } from '@masknet/shared'
+import { useContacts } from './useContacts.js'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -28,7 +20,7 @@ export interface SelectRecipientsUIProps {
     onClose(): void
     onSetSelected(selected: Profile[]): void
 }
-const resolveNextIDPlatform = (value: string) => {
+export const resolveNextIDPlatform = (value: string) => {
     const address = value
     if (isValidAddress(address)) return NextIDPlatform.Ethereum
 
@@ -41,7 +33,7 @@ const resolveNextIDPlatform = (value: string) => {
     return
 }
 
-const resolveValueToSearch = (value: string) => {
+export const resolveValueToSearch = (value: string) => {
     if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
     return value.toLowerCase()
 }
@@ -52,15 +44,15 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
-    const value = resolveValueToSearch(valueToSearch)
+    const _value = resolveValueToSearch(valueToSearch)
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
-        value,
+        _value,
         type ?? NextIDPlatform.NextID,
         MaskMessages.events.ownProofChanged,
         false,
     )
 
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, _value, type)
     const myUserId = currentIdentity?.identifier.userId
     const searchedList = useMemo(() => {
         if (!items.recipients) return EMPTY_LIST
@@ -70,22 +62,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         return uniqBy(profileItems.concat(NextIDItems, selected), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
     }, [NextIDItems, selected, items.recipients, myUserId])
 
-    const onSelect = async (item: ProfileInformationFromNextID) => {
-        onSetSelected([...selected, item])
-        const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
-
-        if (!item?.fromNextID || !item.linkedPersona || !whoAmI) return
-        const [rpc, emit] = batch(Services.Identity)
-        item.linkedTwitterNames?.forEach((x) => {
-            const newItem = {
-                ...item,
-                nickname: x,
-                identifier: ProfileIdentifier.of('twitter.com', x).expect(`${x} should be a valid user id`),
-            }
-            rpc.attachNextIDPersonaToProfile(newItem, whoAmI)
-        })
-        emit()
-    }
+    const { value = EMPTY_LIST } = useContacts(currentIdentity?.identifier.network!)
 
     useEffect(() => {
         if (!open) return
@@ -97,20 +74,13 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             loading={searchLoading}
             onSearch={setValueToSearch}
             open={open}
-            items={searchedList}
+            items={uniqBy([...searchedList, ...value], (x) => x.linkedPersona?.publicKeyAsHex)}
             selected={selected}
             disabled={false}
             submitDisabled={false}
             onSubmit={onClose}
             onClose={onClose}
-            onSelect={(item) => onSelect(item as ProfileInformationFromNextID)}
-            onDeselect={(item) => {
-                onSetSelected(
-                    cloneDeep(selected).filter(
-                        (x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex,
-                    ),
-                )
-            }}
+            onSetSelected={onSetSelected}
         />
     )
 }

@@ -1,13 +1,12 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
-import { isEqual, isEqualWith, range, sortBy, uniqBy } from 'lodash-es'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PersonaGuard, usePersonaProofs } from '@masknet/shared'
+import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Web3Storage } from '@masknet/web3-providers'
-import { hiddenAddressesAdapter, useChainContext, useHiddenAddressConfig } from '@masknet/web3-hooks-base'
+import { useChainContext, useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
 import { DialogActions, DialogContent } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 import { context } from '../context.js'
@@ -38,10 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
 }))
-
-interface AddressConfig {
-    hiddenAddresses: Record<string, string[]>
-}
 
 interface Props {
     open: boolean
@@ -86,33 +81,29 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         )
     }, [proofs])
 
-    const {
-        data: unlistedAddressConfig,
-        isInitialLoading,
-        refetch,
-    } = useHiddenAddressConfig(personaPublicKey, PluginID.Web3Profile)
-    const migratedUnlistedAddressConfig = useMemo(() => {
-        if (!unlistedAddressConfig || !twitterProofs.length) return EMPTY_OBJECT
-        if (!Array.isArray(unlistedAddressConfig)) return unlistedAddressConfig
-
-        return hiddenAddressesAdapter(
-            unlistedAddressConfig,
-            twitterProofs.map((x) => x.identity),
-        )
-    }, [unlistedAddressConfig, twitterProofs])
+    const socialIds = useMemo(() => twitterProofs.map((x) => x.identity), [twitterProofs])
+    const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
+        useUnlistedAddressConfig({
+            identifier: currentPersona?.identifier,
+            pluginID: PluginID.Web3Profile,
+            socialIds,
+        })
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
-    useUpdateEffect(() => {
-        setPendingUnlistedConfig(migratedUnlistedAddressConfig)
-    }, [migratedUnlistedAddressConfig])
+    useEffect(() => {
+        setPendingUnlistedConfig(unlistedAddressConfig)
+    }, [unlistedAddressConfig])
     const isClean = useMemo(() => {
-        return isEqualWith(migratedUnlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
-            for (const key of Object.keys(config1)) {
-                if (!isEqual(sortBy(config1[key]), sortBy(config2[key]))) return false
+        return isEqualWith(unlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
+            // Some identities might only in pendingUnlistedConfig but not in migratedUnlistedAddressConfig,
+            // so we merged all the identities
+            const keys = uniq([...Object.keys(config1), ...Object.keys(config2)])
+            for (const key of keys) {
+                if (!isEqual(sortBy(config1[key] || []), sortBy(config2[key] || []))) return false
             }
             return true
         })
-    }, [migratedUnlistedAddressConfig, pendingUnlistedConfig])
+    }, [unlistedAddressConfig, pendingUnlistedConfig])
 
     const toggleUnlisted = useCallback((identity: string, address: string) => {
         setPendingUnlistedConfig((config) => {
@@ -126,16 +117,8 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
 
     const { showSnackbar } = useCustomSnackbar()
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
-        if (!currentPersona?.identifier) return
-        const storage = Web3Storage.createNextIDStorage(
-            currentPersona?.identifier.publicKeyAsHex,
-            NextIDPlatform.NextID,
-            currentPersona.identifier,
-        )
         try {
-            await storage.set<AddressConfig>(PluginID.Web3Profile, {
-                hiddenAddresses: pendingUnlistedConfig,
-            })
+            await updateConfig(pendingUnlistedConfig)
             showSnackbar(t.save_successfully(), {
                 variant: 'success',
                 message: t.save_successfully_message(),
@@ -149,7 +132,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         }
 
         refetch()
-    }, [currentPersona?.identifier, pendingUnlistedConfig, t])
+    }, [pendingUnlistedConfig, t, updateConfig])
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
@@ -180,11 +163,11 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                 {loadingBinding && !twitterProofs.length ? (
                     range(3).map((v) => <ProfileCardSkeleton className={classes.profileCard} key={v} />)
                 ) : isFetched && !twitterProofs.length ? (
-                    <EmptyStatus>{t.no_verified_account()}</EmptyStatus>
+                    <EmptyStatus height={360}>{t.no_verified_account()}</EmptyStatus>
                 ) : (
                     twitterProofs.map((proof) => {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
-                        const unlistedAddresses = migratedUnlistedAddressConfig[proof.identity] ?? EMPTY_LIST
+                        const unlistedAddresses = unlistedAddressConfig[proof.identity] ?? EMPTY_LIST
                         const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
                         const isCurrent = proof.identity.toLowerCase() === myProfile?.identifier?.userId.toLowerCase()
                         return (
@@ -222,20 +205,5 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                 </DialogActions>
             ) : null}
         </InjectedDialog>
-    )
-})
-
-export const Web3ProfileDialogWrapper = memo(function Web3ProfileDialogWrapper(props: Props) {
-    const personas = useAllPersonas()
-    const persona = useCurrentPersona()
-    const identity = useLastRecognizedProfile()
-    return (
-        <PersonaGuard
-            personas={personas}
-            currentPersonaIdentifier={persona?.toText()}
-            identity={identity}
-            onDiscard={props.onClose}>
-            <Web3ProfileDialog {...props} />
-        </PersonaGuard>
     )
 })

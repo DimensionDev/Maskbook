@@ -1,12 +1,11 @@
 import { memo } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox/index.js'
 import { LoadingButton } from '@mui/lab'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletStatusBox } from '@masknet/shared'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatPersonaFingerprint, NetworkPluginID, type PersonaInformation } from '@masknet/shared-base'
 

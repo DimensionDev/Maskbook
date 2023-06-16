@@ -2,7 +2,6 @@ import { first, noop } from 'lodash-es'
 import {
     createContext,
     type Dispatch,
-    type FC,
     memo,
     type PropsWithChildren,
     type SetStateAction,
@@ -47,7 +46,7 @@ export const AvatarManagementContext = createContext<AvatarManagementContextOpti
 
 interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 
-export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdentity }) => {
+export const AvatarManagementProvider = memo(({ children, socialIdentity }: Props) => {
     const nextIDWallets = useMemo(
         () =>
             socialIdentity?.binding?.proofs.filter(

@@ -25,7 +25,7 @@ import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, type OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTSelectOption } from '../types.js'
-import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
+import { RED_PACKET_MAX_SHARES } from '../constants.js'
 import {
     useChainContext,
     useNativeToken,
@@ -306,7 +306,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         [selectOption, setSelectOption, setExistTokenDetailedList, setAllTokenDetailedList],
     )
 
-    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, balance)
+    const maxSelectShares = Math.min(RED_PACKET_MAX_SHARES, balance)
 
     const clearToken = useCallback(() => {
         setExistTokenDetailedList(EMPTY_LIST)
@@ -355,7 +355,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         return ''
     }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH, tr])
 
-    setIsNFTRedPacketLoaded?.(balance > 0)
+    useEffect(() => {
+        setIsNFTRedPacketLoaded?.(balance > 0)
+    }, [balance > 0])
 
     if (openSelectNFTDialog) {
         return (
@@ -395,7 +397,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     />
                 </Box>
                 {collection && balance ? (
-                    // TODO: replace to radio
                     <Box className={classes.selectWrapper}>
                         <div
                             className={cx(
@@ -419,7 +420,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 {balance === 0
                                     ? 'All'
                                     : t.nft_select_all_option({
-                                          total: Math.min(NFT_RED_PACKET_MAX_SHARES, balance).toString(),
+                                          total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
                                       })}
                             </Typography>
                         </div>

@@ -124,7 +124,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             color: theme.palette.maskColor.secondaryDark,
         },
         button: {
-            width: 80,
+            minWidth: 80,
             height: 32,
             fontSize: 12,
             color: theme.palette.common.white,
@@ -148,7 +148,11 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { data: spenders, isLoading, refetch } = useFungibleTokenSpenders({ chainId, account })
+    const {
+        data: spenders,
+        isLoading,
+        refetch,
+    } = useFungibleTokenSpenders(NetworkPluginID.PLUGIN_EVM, { chainId, account })
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({

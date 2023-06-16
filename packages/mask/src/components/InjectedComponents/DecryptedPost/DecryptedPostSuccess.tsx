@@ -1,11 +1,16 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { MaskMessages, useI18N } from '../../../utils/index.js'
+import { MaskMessages, attachNextIDToProfile, useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
-import { EMPTY_LIST, type ProfileIdentifier, type ProfileInformation } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    type ProfileIdentifier,
+    type ProfileInformation,
+    type ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
@@ -95,17 +100,14 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
     const [showDialog, setShowDialog] = useState(false)
     const theme = useTheme()
     const recipients = useRecipientsList()
-    const { value: alreadySelectedPreviously = EMPTY_LIST, retry } = useSelectedRecipientsList()
+    const { value: selectedRecipients = EMPTY_LIST, retry } = useSelectedRecipientsList()
 
     const rightActions =
         props.author?.userId === props.whoAmI?.userId ? (
             canAppendShareTarget && props.whoAmI ? (
                 <>
-                    {alreadySelectedPreviously?.length ? (
-                        <RecipientsToolTip
-                            recipients={alreadySelectedPreviously}
-                            openDialog={() => setShowDialog(true)}
-                        />
+                    {selectedRecipients?.length ? (
+                        <RecipientsToolTip recipients={selectedRecipients} openDialog={() => setShowDialog(true)} />
                     ) : (
                         <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
                             <Typography color="textPrimary" fontSize={12} fontWeight={500}>
@@ -119,7 +121,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
 
                     {showDialog ? (
                         <AppendShareDetail
-                            alreadySelectedPreviously={alreadySelectedPreviously}
+                            selectedRecipients={selectedRecipients}
                             retry={retry}
                             whoAmI={props.whoAmI}
                             onClose={() => setShowDialog(false)}
@@ -138,34 +140,38 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>
 })
 
-function AppendShareDetail(props: {
+interface Props {
     onClose(): void
     recipients: LazyRecipients
     whoAmI: ProfileIdentifier
-    alreadySelectedPreviously: ProfileInformation[]
+    selectedRecipients: ProfileInformation[]
     retry(): void
-}) {
+}
+function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, retry }: Props) {
     const info = useContext(PostInfoContext)!
     const iv = usePostInfoDetails.postIVIdentifier()!
 
-    useEffect(props.recipients.request, [])
+    useEffect(recipients.request, [])
 
     return (
         <SelectProfileDialog
             open
-            alreadySelectedPreviously={props.alreadySelectedPreviously}
-            profiles={props.recipients.recipients || EMPTY_LIST}
-            onClose={props.onClose}
+            selectedProfiles={selectedRecipients}
+            profiles={recipients.recipients || EMPTY_LIST}
+            onClose={onClose}
             onSelect={async (profiles) => {
+                for (const item of profiles) {
+                    await attachNextIDToProfile(item as ProfileInformationFromNextID)
+                }
                 await Services.Crypto.appendShareTarget(
                     info.version.getCurrentValue()!,
                     iv,
                     profiles.map((x) => x.identifier),
-                    props.whoAmI,
+                    whoAmI,
                     activatedSocialNetworkUI.encryptionNetwork,
                 )
                 await delay(1500)
-                props.retry()
+                retry()
             }}
         />
     )

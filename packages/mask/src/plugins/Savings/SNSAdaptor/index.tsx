@@ -1,8 +1,8 @@
+import { useState } from 'react'
+import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
-import { useState } from 'react'
 import { base } from '../base.js'
 import { SavingsDialog } from './SavingsDialog.js'
 

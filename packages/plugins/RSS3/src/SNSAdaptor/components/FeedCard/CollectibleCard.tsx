@@ -4,7 +4,7 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { type FC, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -106,7 +106,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
 
 const { Tag, Type } = RSS3BaseAPI
 export function isCollectibleFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.CollectibleFeed {
-    return feed.tag === Tag.Collectible && feed.type !== Type.Approval
+    return feed.tag === Tag.Collectible && [Type.Mint, Type.Trade, Type.Transfer, Type.Burn].includes(feed.type)
 }
 
 function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {
@@ -127,7 +127,7 @@ interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
  * - CollectibleMint
  * - CollectibleOut
  */
-export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
+export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 

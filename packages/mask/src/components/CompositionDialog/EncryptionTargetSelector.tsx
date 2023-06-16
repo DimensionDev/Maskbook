@@ -18,6 +18,7 @@ import Services from '../../extension/service.js'
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
         lineHeight: '18px',
+        fontSize: 14,
         color: theme.palette.text.secondary,
         marginRight: 12,
     },
@@ -53,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface EncryptionTargetSelectorProps {
     target: EncryptionTargetType
     e2eDisabled: E2EUnavailableReason | undefined
-    onChange(v: EncryptionTargetType): void
+    onClick(v: EncryptionTargetType): void
     selectedRecipientLength: number
 }
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
@@ -118,7 +119,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={(v) => {
-                    props.onChange(v as EncryptionTargetType)
+                    props.onClick(v as EncryptionTargetType)
                     if (v === EncryptionTargetType.E2E) setAnchorEl(null)
                 }}>
                 <PopoverListItem
@@ -142,6 +143,11 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.E2E}
                     title={t('compose_encrypt_visible_to_share')}
                     subTitle={t('compose_encrypt_visible_to_share_sub')}
+                    onClick={(v: string) => {
+                        if (props.e2eDisabled) return
+                        props.onClick(v as EncryptionTargetType)
+                        if (v === EncryptionTargetType.E2E) setAnchorEl(null)
+                    }}
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}

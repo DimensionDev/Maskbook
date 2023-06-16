@@ -4,7 +4,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
-import { type FC, memo, useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import { useShowConfirm } from '../contexts/common/index.js'
 import { useSharedI18N } from '../locales/index.js'
 
@@ -43,7 +43,7 @@ interface ShareTransactionOptions {
 
 type ShareTransactionProps = Omit<ShareTransactionOptions, 'title' | 'onShare'>
 
-const ShareTransaction: FC<ShareTransactionProps> = memo(({ message, content, hash }) => {
+const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps) => {
     const { classes } = useStyles()
     const t = useSharedI18N()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

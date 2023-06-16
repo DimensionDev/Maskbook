@@ -1,4 +1,4 @@
-import { type ForwardedRef, forwardRef } from 'react'
+import { type ForwardedRef, forwardRef, useCallback, type ChangeEvent } from 'react'
 import { omit } from 'lodash-es'
 import type { BoxProps } from '@mui/system'
 import {
@@ -9,6 +9,7 @@ import {
     type InputProps,
     Typography,
     InputBase,
+    inputBaseClasses,
 } from '@mui/material'
 import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
@@ -50,6 +51,9 @@ const useStyles = makeStyles()((theme) => ({
         '& input::-webkit-input-placeholder': {
             color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : undefined,
         },
+        [`&.${inputBaseClasses.focused}`]: {
+            background: theme.palette.maskColor.bottom,
+        },
     },
     input: {
         padding: theme.spacing(1),
@@ -84,6 +88,15 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
     const InputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
+    const onChange = useCallback(
+        (ev: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+            if (ev.currentTarget.value && !new RegExp(InputProps.inputProps?.pattern).test(ev.currentTarget.value)) {
+                return
+            }
+            props.onChange?.(ev)
+        },
+        [InputProps.inputProps?.pattern, props.onChange],
+    )
     return (
         <Box sx={sx} {...wrapperProps}>
             {label && typeof label === 'string' ? (
@@ -101,6 +114,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 <TextField
                     ref={ref}
                     {...rest}
+                    onChange={onChange}
                     classes={{ root: classes.field }}
                     variant="standard"
                     required={required}
@@ -120,7 +134,8 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 <InputBase
                     className={classes.field}
                     {...InputProps}
-                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps')}
+                    onChange={onChange}
+                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps')}
                 />
             )}
         </Box>

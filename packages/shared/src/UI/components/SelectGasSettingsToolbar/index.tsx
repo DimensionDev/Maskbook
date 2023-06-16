@@ -27,7 +27,7 @@ import {
     GasEditor,
     formatGas,
 } from '@masknet/web3-shared-evm'
-import { Typography, MenuItem, Box } from '@mui/material'
+import { Typography, MenuItem, Box, Grid } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
@@ -50,6 +50,8 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     gasConfig?: GasConfig
     onChange?(gasConfig?: GasConfig): void
     supportMultiCurrency?: boolean
+    estimateGasFee?: string
+    editMode?: boolean
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -114,6 +116,13 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             margin: '0px 4px',
         },
+        edit: {
+            lineHeight: '18px',
+            color: theme.palette.maskColor.primary,
+            marginRight: 4,
+            fontWeight: 700,
+            cursor: 'pointer',
+        },
     }
 })
 
@@ -134,7 +143,9 @@ export function SelectGasSettingsToolbarUI({
     gasLimit,
     nativeToken,
     nativeTokenPrice,
+    estimateGasFee,
     supportMultiCurrency,
+    editMode,
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles()
@@ -249,7 +260,9 @@ export function SelectGasSettingsToolbarUI({
         () => setApproveDialogOpen(true),
     )
 
-    const { value: currencyToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, { chainId })
+    const { value: currencyToken = nativeToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, {
+        chainId,
+    })
     const { value: currencyTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, currentGasCurrency)
 
     const gasFee = useMemo(() => {
@@ -287,28 +300,53 @@ export function SelectGasSettingsToolbarUI({
     ])
 
     return gasOptions && !isZero(gasFee) ? (
-        <Box className={classes.section}>
-            <Typography className={classes.title}>{t.gas_settings_label_gas_fee()}</Typography>
-            <Typography className={classes.gasSection} component="div">
-                <FormattedBalance
-                    value={gasFee}
-                    decimals={currencyToken?.decimals ?? 0}
-                    significant={4}
-                    symbol={currencyToken?.symbol}
-                    formatter={formatBalance}
-                />
-                <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
-                <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
-                    <Typography className={classes.text}>
-                        {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
+        editMode ? (
+            <>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.gas_settings_label_transaction_cost()}
                     </Typography>
-                    <Icons.Candle width={12} height={12} />
-                </div>
-                {supportMultiCurrency ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
-                {menu}
-                {supportMultiCurrency ? currencyMenu : null}
-            </Typography>
-            <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
-        </Box>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        <Typography component="span" className={classes.edit} onClick={openCustomGasSettingsDialog}>
+                            {t.edit()}
+                        </Typography>
+                        <FormattedBalance
+                            value={gasFee ?? estimateGasFee}
+                            decimals={nativeToken?.decimals}
+                            symbol={nativeToken?.symbol}
+                            formatter={formatBalance}
+                            significant={3}
+                        />
+                        ({gasFeeUSD})
+                    </Typography>
+                </Grid>
+            </>
+        ) : (
+            <Box className={classes.section}>
+                <Typography className={classes.title}>{t.gas_settings_label_gas_fee()}</Typography>
+                <Typography className={classes.gasSection} component="div">
+                    <FormattedBalance
+                        value={gasFee}
+                        decimals={currencyToken?.decimals ?? 0}
+                        significant={4}
+                        symbol={currencyToken?.symbol}
+                        formatter={formatBalance}
+                    />
+                    <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
+                    <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
+                        <Typography className={classes.text}>
+                            {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
+                        </Typography>
+                        <Icons.Candle width={12} height={12} />
+                    </div>
+                    {supportMultiCurrency ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
+                    {menu}
+                    {supportMultiCurrency ? currencyMenu : null}
+                </Typography>
+                <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
+            </Box>
+        )
     ) : null
 }

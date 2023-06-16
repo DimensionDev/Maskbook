@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         tabs: {
             overflow: 'visible',
+            backgroundColor: theme.palette.maskColor.input,
         },
         additions: {
             fontWeight: 700,
@@ -28,6 +29,12 @@ const useStyles = makeStyles()((theme) => {
         },
         price: {
             fontWeight: 700,
+        },
+        tab: {
+            color: theme.palette.maskColor.second,
+            '&[aria-selected="true"]': {
+                color: theme.palette.maskColor.main,
+            },
         },
     }
 })
@@ -102,8 +109,12 @@ export function GasSection(props: GasSectionProps) {
                         variant="round"
                         aria-label="Gas Tabs"
                         onChange={(event, tab) => setActiveTab(tab as GasSettingsType)}>
-                        <Tab label={t.gas_settings_tab_basic()} value={GasSettingsType.Basic} />
-                        <Tab label={t.gas_settings_tab_advanced()} value={GasSettingsType.Advanced} />
+                        <Tab className={classes.tab} label={t.gas_settings_tab_basic()} value={GasSettingsType.Basic} />
+                        <Tab
+                            className={classes.tab}
+                            label={t.gas_settings_tab_advanced()}
+                            value={GasSettingsType.Advanced}
+                        />
                     </MaskTabList>
                 </TabContext>
                 {activeTab === GasSettingsType.Basic ? (

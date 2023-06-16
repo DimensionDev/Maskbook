@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, type ButtonGroupProps, styled, Tab } from '@mui/material'
+import { Box, Button, ButtonGroup, type ButtonGroupProps, styled, Tab, alpha } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab'
 import {
     forwardRef,
@@ -64,7 +64,7 @@ const FlexibleButtonGroupPanel = styled(Box, {
         ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
         : 'none',
     backdropFilter: 'blur(20px)',
-    background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+    background: alpha(theme.palette.maskColor.bottom, 0.8),
     boxSizing: 'content-box',
 }))
 
@@ -83,7 +83,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     ...(maskVariant === 'round'
         ? {
               padding: theme.spacing(0.5),
-              background: theme.palette.background.input,
+              background: theme.palette.maskColor.input,
               borderRadius: 18,
           }
         : maskVariant === 'flexible'

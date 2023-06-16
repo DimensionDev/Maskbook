@@ -86,7 +86,7 @@ async function onSwitch(id: string, checked: boolean) {
         return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
     await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
 }
-export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) => {
+export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPluginSwitch({ focusPluginID }: Props) {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)

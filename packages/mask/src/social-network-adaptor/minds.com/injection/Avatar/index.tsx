@@ -4,6 +4,7 @@ import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
 import { noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 
 export async function injectAvatar(signal: AbortSignal) {
     startWatch(
@@ -13,7 +14,7 @@ export async function injectAvatar(signal: AbortSignal) {
 
             const run = async () => {
                 const proxy = DOMProxy({
-                    afterShadowRootInit: { mode: process.env.shadowRootMode, delegatesFocus: true },
+                    afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 // TODO fetch userId

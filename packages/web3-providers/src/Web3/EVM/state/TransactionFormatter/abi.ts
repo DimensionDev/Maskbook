@@ -93,8 +93,8 @@ class ABI {
     }
 }
 
-const abi = new ABI()
+let abi: ABI
 
 export function readABIs(signature?: string) {
-    return abi.read(signature)
+    return (abi ||= new ABI()).read(signature)
 }

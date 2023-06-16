@@ -51,6 +51,8 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
                 chainId,
             })
 
+            if (!receipt?.status) return
+
             return receipt?.transactionHash
         } catch (error) {
             if (error instanceof Error) {

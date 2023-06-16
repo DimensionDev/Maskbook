@@ -19,8 +19,5 @@
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0"
   },
-  "peerDependencies": {
-    "react-i18next": "^12"
-  },
-  "sideEffect": false
+  "sideEffects": false
 }

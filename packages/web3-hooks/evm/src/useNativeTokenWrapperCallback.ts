@@ -30,6 +30,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             const hash = await Web3.sendTransaction(tx, { overrides: { ...gasConfig } })
             const receipt = await Web3.getTransactionReceipt(hash)
 
+            if (!receipt?.status) return
             return receipt?.transactionHash
         },
         [account, wrapperContract],

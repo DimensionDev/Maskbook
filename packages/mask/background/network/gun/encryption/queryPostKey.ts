@@ -10,7 +10,7 @@ import {
 } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
-import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
+import * as gun_utils from /* webpackDefer: true */ '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { isObject, noop, uniq } from 'lodash-es'
 import { queryPublicKey } from '../../../database/persona/helper.js'
@@ -21,7 +21,7 @@ export async function GUN_queryPostKey_version40(
     whoAmI: string,
 ): Promise<null | DecryptStaticECDH_PostKey> {
     // PATH ON GUN: maskbook > posts > iv > userID
-    const result = await getGunData('maskbook', 'posts', encodeArrayBuffer(iv), whoAmI)
+    const result = await gun_utils.getGunData('maskbook', 'posts', encodeArrayBuffer(iv), whoAmI)
     if (!isValidData(result)) return null
     return {
         encryptedPostKey: new Uint8Array(decodeArrayBuffer(result.encryptedKey)),
@@ -62,8 +62,8 @@ namespace Version38Or39 {
             (
                 await Promise.all([
                     //
-                    getGunData(postHash[0], keyHash),
-                    getGunData(postHash[1], keyHash),
+                    gun_utils.getGunData(postHash[0], keyHash),
+                    gun_utils.getGunData(postHash[1], keyHash),
                 ])
             )
                 .filter(isNonNull)
@@ -73,15 +73,15 @@ namespace Version38Or39 {
                 .filter((x) => x !== '_'),
         )
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])
-        const resultPromise = internalNodeNames.map((key) => getGunData(key))
+        const resultPromise = internalNodeNames.map((key) => gun_utils.getGunData(key))
 
         const iter = new EventIterator<DecryptStaticECDH_PostKey>((queue) => {
             // immediate results
             for (const result of resultPromise) result.then(emit, noop)
             // future results
             Promise.all([
-                main(subscribeGunMapData([postHash[1]], isValidData, abortSignal)),
-                main(subscribeGunMapData([postHash[0]], isValidData, abortSignal)),
+                main(gun_utils.subscribeGunMapData([postHash[1]], isValidData, abortSignal)),
+                main(gun_utils.subscribeGunMapData([postHash[0]], isValidData, abortSignal)),
             ]).then(() => queue.stop())
 
             async function main(keyProvider: AsyncGenerator) {
@@ -127,7 +127,7 @@ namespace Version38Or39 {
                     salt: encodeArrayBuffer(ivToBePublished),
                 }
                 console.log(`gun[${postHash}][${keyHash}].push(`, post, ')')
-                pushToGunDataArray([postHash, keyHash], post)
+                gun_utils.pushToGunDataArray([postHash, keyHash], post)
             } catch (error) {
                 console.error('[@masknet/encryption] An error occurs when sending E2E keys', error)
             }
@@ -225,20 +225,20 @@ namespace Version37 {
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
         const keyPartition = `${networkHint}-${postHash}-${keyHash}`
         console.log(`[@masknet/encryption] Reading key partition [${keyPartition}]`)
-        const internalNodeNames = await getGunData(keyPartition).then((x) => {
+        const internalNodeNames = await gun_utils.getGunData(keyPartition).then((x) => {
             if (!x) return []
             if (typeof x !== 'object') return []
             return Object.keys(x)
         })
         // ? In this step we get all keys in this category (gun2[keyPartition])
-        const resultPromise = internalNodeNames.map((key) => getGunData(key))
+        const resultPromise = internalNodeNames.map((key) => gun_utils.getGunData(key))
 
         const iter = new EventIterator<DecryptEphemeralECDH_PostKey>((queue) => {
             // immediate results
             for (const result of resultPromise) result.then(emit, noop)
 
             // future results
-            main(subscribeGunMapData([keyPartition], isValidData, abortSignal))
+            main(gun_utils.subscribeGunMapData([keyPartition], isValidData, abortSignal))
 
             async function main(keyProvider: AsyncGenerator) {
                 for await (const data of keyProvider) Promise.resolve(data).then(emit, noop)
@@ -290,7 +290,7 @@ namespace Version37 {
                     post.k = encodeArrayBuffer(new Uint8Array(await crypto.subtle.exportKey('raw', ephemeralPublicKey)))
                 }
                 console.log(`[@masknet/encryption] gun[${keyPartition}].push(`, post, ')')
-                pushToGunDataArray([keyPartition], post)
+                gun_utils.pushToGunDataArray([keyPartition], post)
             } catch (error) {
                 console.error('[@masknet/encryption] An error occurs when sending E2E keys', error)
             }

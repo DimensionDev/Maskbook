@@ -12,7 +12,7 @@ import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 
-export const PersonaRecovery = () => {
+export function PersonaRecovery() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 

@@ -1,4 +1,5 @@
 import { getEnumAsArray } from '@masknet/kit'
+import { Flags } from '@masknet/flags'
 import {
     type ChainDescriptor,
     type NetworkDescriptor,
@@ -312,11 +313,33 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         type: ProviderType.WalletConnect,
         name: 'WalletConnect',
         icon: new URL('../assets/walletconnect.png', import.meta.url),
-        enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
-        },
+        enableRequirements: Flags.wc_v1_enabled
+            ? {
+                  supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+                  supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+                  supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+              }
+            : undefined,
+        homeLink: 'https://walletconnect.com',
+        shortenLink: 'walletconnect.com',
+        downloadLink: 'https://walletconnect.com',
+        iconFilterColor: 'rgba(59, 153, 252, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_walletconnect_V2`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.WalletConnectV2,
+        name: 'WalletConnect V2',
+        icon: new URL('../assets/walletconnect.png', import.meta.url),
+        enableRequirements: Flags.wc_v2_enabled
+            ? {
+                  supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+                  supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+                  supportedExtensionSites: Flags.wc_v2_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
+              }
+            : undefined,
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
         downloadLink: 'https://walletconnect.com',

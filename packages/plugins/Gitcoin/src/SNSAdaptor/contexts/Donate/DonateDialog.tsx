@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { type FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
@@ -74,7 +74,7 @@ export interface DonateDialogProps extends InjectedDialogProps {
     grant: GitcoinGrant
 }
 
-export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...rest }) => {
+export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProps) => {
     const t = useI18N()
     const { classes, theme } = useStyles()
     const { title, admin_address: address, tenants } = grant

@@ -1,7 +1,7 @@
 import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { LinearProgress, linearProgressClasses, Typography } from '@mui/material'
-import { type FC, memo } from 'react'
+import { memo } from 'react'
 import { type FileBaseProps, FileFrame } from './FileFrame.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -29,7 +29,7 @@ export interface UploadingFileProps extends FileBaseProps {
     progress?: number
 }
 
-export const UploadingFile: FC<UploadingFileProps> = memo(({ file, progress, ...rest }) => {
+export const UploadingFile = memo(({ file, progress, ...rest }: UploadingFileProps) => {
     const { classes } = useStyles()
 
     return (

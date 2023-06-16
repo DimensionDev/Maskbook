@@ -1,19 +1,53 @@
 import type { Configuration } from 'webpack'
-import { BuildFlags } from '../../scripts/src/extension/flags'
-import { join, isAbsolute } from 'path'
+import { join, isAbsolute, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+const __dirname = fileURLToPath(dirname(import.meta.url))
 
-export type { BuildFlags } from '../../scripts/src/extension/flags'
-
+export interface BuildFlags {
+    engine: 'chromium' | 'firefox' | 'safari'
+    /** @default 2 */
+    manifest?: 2 | 3
+    mode: 'development' | 'production'
+    /** @default 'stable' */
+    channel?: 'stable' | 'beta' | 'insider'
+    /** @default false */
+    profiling?: boolean
+    /** @default true in development */
+    hmr?: boolean
+    /** @default true in development and hmr is true */
+    reactRefresh?: boolean
+    /** @default false */
+    readonlyCache?: boolean
+    /** @default false */
+    reproducibleBuild?: boolean
+    outputPath?: string
+    /** @default true */
+    devtools?: boolean
+    /** @default "vscode://file/{path}:{line}" */
+    devtoolsEditorURI?: string
+    /** @default true */
+    sourceMapPreference?: boolean | string
+    /** @default true */
+    sourceMapHideFrameworks?: boolean | undefined
+}
 export type NormalizedFlags = Required<BuildFlags>
 export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
-    const { mode, profiling = false, engine, manifest = 2, readonlyCache = false, channel = 'stable' } = flags
+    const {
+        mode,
+        profiling = false,
+        engine,
+        manifest = 2,
+        readonlyCache = false,
+        channel = 'stable',
+        devtoolsEditorURI = 'vscode://file/{path}:{line}',
+        sourceMapHideFrameworks = true,
+    } = flags
     let {
         hmr = mode === 'development',
         reactRefresh = hmr,
         reproducibleBuild = false,
         devtools = mode === 'development' || channel !== 'stable',
         sourceMapPreference = mode === 'development',
-        devtoolsEditorURI = 'vscode://file/{path}:{line}',
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
@@ -38,6 +72,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         hmr,
         reactRefresh,
         sourceMapPreference,
+        sourceMapHideFrameworks,
         devtools,
         devtoolsEditorURI,
         // CI / profiling

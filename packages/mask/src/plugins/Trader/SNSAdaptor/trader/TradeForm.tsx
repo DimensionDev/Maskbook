@@ -130,7 +130,7 @@ const useStyles = makeStyles()((theme) => {
         controller: {
             width: '100%',
             // Just for design
-            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : theme.palette.background.paper,
+            backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : theme.palette.maskColor.bottom,
             position: 'sticky',
             bottom: Sniffings.is_popup_page ? -12 : -20,
         },

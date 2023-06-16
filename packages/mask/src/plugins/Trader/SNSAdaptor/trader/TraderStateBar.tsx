@@ -183,7 +183,6 @@ export function TraderStateBar({
                 onClick={Sniffings.is_popup_page ? openSelectWalletPopup : undefined}>
                 <WalletConnectedBoundary offChain expectedChainId={chainId}>
                     <EthereumERC20TokenApprovedBoundary
-                        onlyInfiniteUnlock
                         spender={approveAddress}
                         amount={approveAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}

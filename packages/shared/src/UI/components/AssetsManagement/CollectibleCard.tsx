@@ -1,11 +1,11 @@
-import { memo, type HTMLProps, type FC } from 'react'
+import { memo, type HTMLProps } from 'react'
 import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { resolveImageURL } from '@masknet/web3-shared-evm'
-import { Icons } from '@masknet/icons'
+import { Icons, type GeneratedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,11 +57,24 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableNetworkIcon?: boolean
     /** disable inspect NFT details */
     disableInspect?: boolean
+    /**
+     * Use Icons.Checkbox for multiple select
+     */
+    indicatorIcon?: GeneratedIcon
     isSelected?: boolean
 }
 
-export const CollectibleCard: FC<CollectibleCardProps> = memo(
-    ({ className, pluginID, asset, disableNetworkIcon, disableInspect, ...rest }) => {
+export const CollectibleCard = memo(
+    ({
+        className,
+        pluginID,
+        asset,
+        disableNetworkIcon,
+        disableInspect,
+        indicatorIcon,
+        isSelected,
+        ...rest
+    }: CollectibleCardProps) => {
         const { classes, cx } = useStyles()
 
         const icon =
@@ -74,6 +87,8 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
             asset.collection?.name,
             asset.contract?.address,
         )
+
+        const IndicatorIcon = indicatorIcon ?? Icons.CheckCircle
 
         return (
             <div className={cx(classes.root, className)} {...rest}>
@@ -88,7 +103,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                {rest.isSelected ? <Icons.CheckCircle className={classes.indicator} size={24} /> : null}
+                {isSelected ? <IndicatorIcon className={classes.indicator} size={20} /> : null}
             </div>
         )
     },

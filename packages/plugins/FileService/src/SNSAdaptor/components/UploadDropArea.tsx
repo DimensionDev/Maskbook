@@ -20,10 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(3),
         overflow: 'hidden',
         userSelect: 'none',
-        background:
-            theme.palette.mode === 'dark'
-                ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+        background: theme.palette.maskColor.whiteBlue,
     },
     dragOver: {
         borderColor: theme.palette.maskColor.primary,
@@ -66,7 +63,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onSelectFile(file: File): void
 }
 
-export const UploadDropArea: React.FC<Props> = memo(({ maxFileSize, onSelectFile, className, ...rest }) => {
+export const UploadDropArea = memo(({ maxFileSize, onSelectFile, className, ...rest }: Props) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()

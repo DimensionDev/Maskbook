@@ -1,7 +1,7 @@
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { MaskColorVar } from '@masknet/theme'
 import { Grid, styled, type Theme, useMediaQuery } from '@mui/material'
-import { memo, Suspense, useMemo, useState } from 'react'
+import { memo, Suspense, useMemo, useState, type PropsWithChildren } from 'react'
 import { FollowUs } from '../FollowUs/index.js'
 import { NavigationVersionFooter } from '../NavigationVersionFooter/index.js'
 import { DashboardContext } from './context.js'
@@ -23,7 +23,7 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
     paddingBottom: '22px',
 }))
 
-export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
+export interface DashboardFrameProps extends PropsWithChildren<{}> {}
 
 export const DashboardFrame = memo((props: DashboardFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))

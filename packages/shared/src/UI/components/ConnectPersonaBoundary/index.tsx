@@ -45,7 +45,7 @@ interface ConnectPersonaBoundaryProps {
     beforeAction?: (status: PersonaConnectStatus) => Promise<void> | void
     afterAction?: (status: PersonaConnectStatus) => Promise<void> | void
     currentPersonaIdentifier: string
-    openDashboard: (route?: DashboardRoutes, search?: string) => Promise<any>
+    openDashboard: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
     identity?: IdentityResolved
     ownPersonaChanged: UnboundedRegistry<void>
     ownProofChanged: UnboundedRegistry<void>

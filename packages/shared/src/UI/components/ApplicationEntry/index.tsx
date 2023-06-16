@@ -70,8 +70,8 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
         },
         recommendFeatureAppListItemName: {
             textAlign: 'left',
-            fontSize: 14,
-            fontWeight: 500,
+            fontSize: 18,
+            fontWeight: 700,
             cursor: disabled ? 'default' : 'pointer',
             color: theme.palette.common.white,
         },
@@ -92,7 +92,7 @@ interface ApplicationEntryProps {
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     iconFilterColor?: string
-    tooltipHint?: string | React.ReactElement
+    tooltipHint?: React.ReactNode
     onClick: () => void
 }
 
@@ -148,7 +148,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             ) : null}
         </Button>
     )
-    return tooltipHint ? (
+    return tooltipHint && !disabled ? (
         <ShadowRootTooltip
             PopperProps={{
                 ...popperProps,
@@ -160,8 +160,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             }}
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow
-            disableHoverListener={!tooltipHint}
-            title={disabled ? null : <Typography>{tooltipHint}</Typography>}>
+            title={<Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

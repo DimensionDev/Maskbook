@@ -1,11 +1,14 @@
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     CurrencyType,
-    type FungibleAsset,
-    type FungibleToken,
+    TokenType,
+    isSameAddress,
     leftShift,
     multipliedBy,
+    type FungibleAsset,
+    type FungibleToken,
     type NonFungibleToken,
-    TokenType,
 } from '@masknet/web3-shared-base'
 
 export function createFungibleToken<ChainId, SchemaType>(
@@ -70,4 +73,18 @@ export function createNonFungibleToken<ChainId, SchemaType>(
 export const formatPublicKey = (publicKey?: string) => {
     if (!publicKey) return ''
     return `${publicKey.slice(0, 6)}...${publicKey.slice(-6)}`
+}
+
+export function isSameNFT(
+    pluginID: NetworkPluginID,
+    a: Web3Helper.NonFungibleAssetAll,
+    b?: Web3Helper.NonFungibleAssetAll,
+) {
+    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) return a.tokenId === b?.tokenId && a.id === b.id
+    if (!a.contract) return false
+    return (
+        isSameAddress(a.contract.address, b?.contract?.address) &&
+        a.contract?.chainId === b?.contract?.chainId &&
+        a.tokenId === b?.tokenId
+    )
 }

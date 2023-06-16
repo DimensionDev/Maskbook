@@ -1,11 +1,16 @@
-import { useState, useCallback } from 'react'
-import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { EMPTY_LIST, type ProfileInformation as Profile, type ProfileInformationFromNextID } from '@masknet/shared-base'
+import { Boundary, makeStyles } from '@masknet/theme'
+import { useLookupAddress } from '@masknet/web3-hooks-base'
+import { Fuse } from '@masknet/web3-providers'
+import { Box, Checkbox, InputAdornment, InputBase, Stack, Typography } from '@mui/material'
+import { compact, uniqBy } from 'lodash-es'
+import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
-import { ProfileInList } from './ProfileInList.js'
-import { ProfileInChip } from './ProfileInChip.js'
-import { FixedSizeList } from 'react-window'
+import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
+import { useContacts } from '../SelectRecipients/useContacts.js'
+import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -13,49 +18,118 @@ export interface SelectProfileUIProps extends withClasses<'root'> {
     frozenSelected: Profile[]
     onSetSelected(selected: Profile[]): void
     disabled?: boolean
+    onSearch(v: string): void
+    loading: boolean
 }
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     selectedArea: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         display: 'flex',
-        padding: '12px 6px 6px 12px',
+        padding: 0,
     },
-    input: { flex: 1, minWidth: '10em' },
-    buttons: { marginLeft: 8, padding: '2px 6px' },
-})
+    input: {
+        flex: 1,
+        marginBottom: theme.spacing(2),
+    },
+    empty: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: 12,
+        color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
+    },
+    listParent: {
+        height: 400,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    listBody: {
+        height: 400,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+        overflowY: 'auto',
+        flex: 1,
+    },
+    list: {
+        gridGap: '12px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        alignItems: 'flex-start',
+    },
+    mainText: {
+        color: theme.palette.text.primary,
+    },
+}))
+
 export function SelectProfileUI(props: SelectProfileUIProps) {
     const { t } = useI18N()
-    const { classes } = useStyles(undefined, { props })
-
+    const { classes, cx } = useStyles(undefined, { props })
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
-
     const [search, setSearch] = useState('')
-    const listBeforeSearch = items.filter((x) => {
-        if (selected.find((y) => x.identifier === y.identifier)) return false
-        return true
-    })
-    const listAfterSearch = listBeforeSearch.filter((x) => {
-        if (frozenSelected.find((y) => x.identifier === y.identifier)) return false
-        if (search === '') return true
-        return (
-            !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-            !!x.linkedPersona?.rawPublicKey?.toLowerCase().match(search.toLowerCase()) ||
-            !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
-        )
-    })
-    const SelectAllButton = (
-        <Button className={classes.buttons} onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
-            {t('select_all')}
-        </Button>
+    const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(search))
+    const keyword = registeredAddress || search
+    const selectedPubkeyList = compact(selected.map((x) => x.linkedPersona?.publicKeyAsHex))
+    const frozenPubkeyList = useMemo(
+        () => compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex)),
+        [frozenSelected],
     )
-    const SelectNoneButton = (
-        <Button className={classes.buttons} onClick={() => onSetSelected([])}>
-            {t('select_none')}
-        </Button>
+    const { value = EMPTY_LIST } = useContacts(activatedSocialNetworkUI.networkIdentifier)
+
+    const onSelectedAllChange = useCallback(
+        (checked: boolean) => {
+            if (checked) {
+                onSetSelected([...items])
+            } else {
+                onSetSelected([])
+            }
+        },
+        [items],
     )
-    const showSelectAll = listAfterSearch.length > 0
-    const showSelectNone = selected.length > 0
+
+    const onSelectedProfile = useCallback(
+        (item: Profile, checked: boolean) => {
+            if (checked) {
+                onSetSelected([...selected, item])
+            } else
+                onSetSelected(
+                    selected.filter((x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex),
+                )
+        },
+        [selected],
+    )
+
+    const fuse = useMemo(() => {
+        return Fuse.create(items, {
+            keys: [
+                'identifier.userId',
+                'nickname',
+                'walletAddress',
+                'linkedPersona.rawPublicKey',
+                'linkedPersona.publicKeyAsHex',
+                'linkedTwitterNames',
+            ],
+            isCaseSensitive: false,
+            ignoreLocation: true,
+            threshold: 0,
+        })
+    }, [items])
+
+    const results = useMemo(() => {
+        if (!keyword) return items
+        return fuse
+            .search(keyword)
+            .map((item) => item.item)
+            .filter((x) => !frozenPubkeyList.includes(x.linkedPersona?.publicKeyAsHex!))
+    }, [keyword, frozenPubkeyList, fuse, items])
+
+    const profiles = uniqBy([...frozenSelected, ...items, ...results, ...value], (x) => x.identifier)
 
     return (
         <div className={classes.root}>
@@ -64,31 +138,6 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 sx={{
                     display: 'flex',
                 }}>
-                {frozenSelected.length === items.length || !listBeforeSearch.length ? (
-                    <Chip
-                        disabled={disabled}
-                        style={{ marginRight: 6, marginBottom: 6 }}
-                        color="primary"
-                        onDelete={frozenSelected.length !== items.length ? () => onSetSelected([]) : undefined}
-                        label={t('all_friends')}
-                    />
-                ) : (
-                    <>
-                        {frozenSelected.map((x) => FrozenChip(x))}
-                        {selected
-                            .filter((item) => !frozenSelected.includes(item))
-                            .map((item) => (
-                                <ProfileInChip
-                                    disabled={disabled}
-                                    key={item.identifier.toText()}
-                                    item={item}
-                                    onDelete={() =>
-                                        onSetSelected(selected.filter((x) => x.identifier !== item.identifier))
-                                    }
-                                />
-                            ))}
-                    </>
-                )}
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
@@ -96,60 +145,62 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
                         [],
                     )}
-                    onKeyDown={(event) => {
-                        if (search !== '' || event.key !== 'Backspace') return
-                        onSetSelected(selected.slice(0, selected.length - 1))
+                    onKeyDown={(e) => {
+                        if (e.code !== 'Enter') return
+                        startTransition(() => props.onSearch(keyword))
                     }}
-                    placeholder={disabled ? '' : t('search_box_placeholder')}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <Icons.Search />
+                        </InputAdornment>
+                    }
+                    placeholder={t('post_dialog_share_with_input_placeholder')}
                     disabled={disabled}
                 />
             </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                }}>
-                {showSelectAll ? SelectAllButton : null}
-                {showSelectNone ? SelectNoneButton : null}
-            </Box>
-            <Box
-                sx={{
-                    flex: 1,
-                }}>
-                <List dense>
-                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search ? (
-                        <ListItem>
-                            <ListItemText primary={t('no_search_result')} />
-                        </ListItem>
-                    ) : null}
-                    <FixedSizeList
-                        itemSize={56}
-                        itemCount={listAfterSearch.length}
-                        overscanCount={5}
-                        width="100%"
-                        height={400}>
-                        {({ index, style }) =>
-                            listAfterSearch[index] ? profileListItem(listAfterSearch[index], style as any) : null
-                        }
-                    </FixedSizeList>
-                </List>
-            </Box>
+            {props.loading ? (
+                <div className={cx(classes.empty, classes.mainText)}>
+                    <LoadingStatus />
+                </div>
+            ) : (
+                <Boundary>
+                    <div className={classes.listParent}>
+                        <div className={classes.listBody}>
+                            <Box className={classes.list}>
+                                {profiles.length === 0 ? (
+                                    <EmptyStatus className={classes.empty}>
+                                        {t('compose_encrypt_share_dialog_empty')}
+                                    </EmptyStatus>
+                                ) : (
+                                    profiles.map((item) => {
+                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                        const selected = selectedPubkeyList.includes(pubkey)
+                                        const disabled = frozenPubkeyList.includes(pubkey)
+                                        return (
+                                            <ProfileInList
+                                                key={item.linkedPersona?.publicKeyAsHex ?? item.identifier.toText()}
+                                                profile={item as ProfileInformationFromNextID}
+                                                disabled={disabled}
+                                                selected={selected || disabled}
+                                                onChange={onSelectedProfile}
+                                            />
+                                        )
+                                    })
+                                )}
+                            </Box>
+                        </div>
+                        {profiles.length ? (
+                            <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0px' }}>
+                                <Checkbox
+                                    sx={{ width: 20, height: 20 }}
+                                    onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
+                                />
+                                <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
+                            </Stack>
+                        ) : null}
+                    </div>
+                </Boundary>
+            )}
         </div>
     )
-    function profileListItem(item: Profile, style: React.CSSProperties) {
-        return (
-            <ProfileInList
-                key={item.identifier.toText()}
-                item={item}
-                disabled={disabled}
-                onClick={() => {
-                    onSetSelected(selected.concat(item))
-                    setSearch('')
-                }}
-                ListItemProps={{ style }}
-            />
-        )
-    }
-}
-function FrozenChip(item: Profile) {
-    return <ProfileInChip disabled key={item.identifier.toText()} item={item} />
 }

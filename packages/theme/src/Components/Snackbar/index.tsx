@@ -16,7 +16,7 @@ import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@m
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
-import { usePortalShadowRoot } from '../../entry-base.js'
+import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
 
 export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
 export { SnackbarProvider, useSnackbar } from 'notistack'
@@ -141,7 +141,7 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         },
         content: {
             alignItems: 'center',
-            padding: theme.spacing(1.5, 2),
+            padding: theme.spacing(2),
             borderRadius: 12,
             width: 380,
             flexWrap: 'nowrap !important' as 'nowrap',
@@ -174,6 +174,9 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         },
         texts: {
             marginLeft: theme.spacing(1.5),
+            '& :focus:not(:focus-visible)': {
+                outline: 0,
+            },
         },
         title,
         message,

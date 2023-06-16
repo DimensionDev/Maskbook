@@ -165,7 +165,7 @@ export class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId, Sch
             AlchemyResponse_EVM_Owners | undefined,
         ]
 
-        if (!metadataResponse) return
+        if (!metadataResponse || metadataResponse.error || !ownersResponse) return
         return createNonFungibleAsset(chainId, metadataResponse, contractMetadataResponse, ownersResponse)
     }
 

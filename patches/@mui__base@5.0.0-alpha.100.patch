@@ -1,5 +1,168 @@
+diff --git a/ClickAwayListener/ClickAwayListener.d.ts b/ClickAwayListener/ClickAwayListener.d.ts
+index 23feece4867a4d3162c67ba0986ba77b762e45f5..6caacf9f10d39b8868c84337b67ad03e71b7ee35 100644
+--- a/ClickAwayListener/ClickAwayListener.d.ts
++++ b/ClickAwayListener/ClickAwayListener.d.ts
+@@ -26,6 +26,11 @@ export interface ClickAwayListenerProps {
+      * @default 'onTouchEnd'
+      */
+     touchEvent?: ClickAwayTouchEventHandler | false;
++    /**
++     * Patched prop
++     * @default false
++     */
++    useCapture?: boolean
+ }
+ /**
+  * Listen for click events that occur somewhere in the document, outside of the element itself.
+diff --git a/ClickAwayListener/ClickAwayListener.js b/ClickAwayListener/ClickAwayListener.js
+index 7678a9df3dedd9374f2edae4d586ebe113e19567..96c2905a5aa2b97081e9064f218321f1869589e5 100644
+--- a/ClickAwayListener/ClickAwayListener.js
++++ b/ClickAwayListener/ClickAwayListener.js
+@@ -30,7 +30,8 @@ function ClickAwayListener(props) {
+     disableReactTree = false,
+     mouseEvent = 'onClick',
+     onClickAway,
+-    touchEvent = 'onTouchEnd'
++    touchEvent = 'onTouchEnd',
++    useCapture = false
+   } = props;
+   const movedRef = React.useRef(false);
+   const nodeRef = React.useRef(null);
+@@ -55,38 +56,50 @@ function ClickAwayListener(props) {
+   // Only special HTML elements have these default behaviors.
+ 
+   const handleClickAway = useEventCallback(event => {
+-    // Given developers can stop the propagation of the synthetic event,
+-    // we can only be confident with a positive value.
+-    const insideReactTree = syntheticEventRef.current;
+-    syntheticEventRef.current = false;
+-    const doc = ownerDocument(nodeRef.current); // 1. IE11 support, which trigger the handleClickAway even after the unbind
+-    // 2. The child might render null.
+-    // 3. Behave like a blur listener.
+-
+-    if (!activatedRef.current || !nodeRef.current || 'clientX' in event && clickedRootScrollbar(event, doc)) {
+-      return;
+-    } // Do not act if user performed touchmove
+-
+-
+-    if (movedRef.current) {
+-      movedRef.current = false;
+-      return;
++    const check = () => {
++      // Given developers can stop the propagation of the synthetic event,
++      // we can only be confident with a positive value.
++      const insideReactTree = syntheticEventRef.current;
++      syntheticEventRef.current = false;
++      const doc = ownerDocument(nodeRef.current); // 1. IE11 support, which trigger the handleClickAway even after the unbind
++      // 2. The child might render null.
++      // 3. Behave like a blur listener.
++
++      if (!activatedRef.current || !nodeRef.current || 'clientX' in event && clickedRootScrollbar(event, doc)) {
++        return;
++      } // Do not act if user performed touchmove
++
++
++      if (movedRef.current) {
++        movedRef.current = false;
++        return;
++      }
++
++      let insideDOM; // If not enough, can use https://github.com/DieterHolvoet/event-propagation-path/blob/master/propagationPath.js
++
++      if (event.composedPath) {
++        insideDOM = event.composedPath().indexOf(nodeRef.current) > -1;
++      } else {
++        insideDOM = !doc.documentElement.contains( // @ts-expect-error returns `false` as intended when not dispatched from a Node
++        event.target) || nodeRef.current.contains( // @ts-expect-error returns `false` as intended when not dispatched from a Node
++        event.target);
++      }
++
++      if (!insideDOM && (disableReactTree || !insideReactTree)) {
++        onClickAway(event);
++      }
+     }
+-
+-    let insideDOM; // If not enough, can use https://github.com/DieterHolvoet/event-propagation-path/blob/master/propagationPath.js
+-
+-    if (event.composedPath) {
+-      insideDOM = event.composedPath().indexOf(nodeRef.current) > -1;
++    // If useCapture is true, `childrenPropsHandler` created by
++    // `createHandleSynthetic` will fire after `handleClickAway`,
++    // `syntheticEventRef.current` (or `insideReactTree`) will always be false
++    // at the first checking
++    if (useCapture) {
++      setTimeout(check)
+     } else {
+-      insideDOM = !doc.documentElement.contains( // @ts-expect-error returns `false` as intended when not dispatched from a Node
+-      event.target) || nodeRef.current.contains( // @ts-expect-error returns `false` as intended when not dispatched from a Node
+-      event.target);
+-    }
+-
+-    if (!insideDOM && (disableReactTree || !insideReactTree)) {
+-      onClickAway(event);
++      check()
+     }
+   }); // Keep track of mouse/touch events that bubbled up through the portal.
++  
+ 
+   const createHandleSynthetic = handlerName => event => {
+     syntheticEventRef.current = true;
+@@ -114,16 +127,16 @@ function ClickAwayListener(props) {
+         movedRef.current = true;
+       };
+ 
+-      doc.addEventListener(mappedTouchEvent, handleClickAway);
+-      doc.addEventListener('touchmove', handleTouchMove);
++      doc.addEventListener(mappedTouchEvent, handleClickAway, useCapture);
++      doc.addEventListener('touchmove', handleTouchMove, useCapture);
+       return () => {
+-        doc.removeEventListener(mappedTouchEvent, handleClickAway);
+-        doc.removeEventListener('touchmove', handleTouchMove);
++        doc.removeEventListener(mappedTouchEvent, handleClickAway, useCapture);
++        doc.removeEventListener('touchmove', handleTouchMove, useCapture);
+       };
+     }
+ 
+     return undefined;
+-  }, [handleClickAway, touchEvent]);
++  }, [handleClickAway, touchEvent, useCapture]);
+ 
+   if (mouseEvent !== false) {
+     childrenProps[mouseEvent] = createHandleSynthetic(mouseEvent);
+@@ -133,14 +146,14 @@ function ClickAwayListener(props) {
+     if (mouseEvent !== false) {
+       const mappedMouseEvent = mapEventPropToEvent(mouseEvent);
+       const doc = ownerDocument(nodeRef.current);
+-      doc.addEventListener(mappedMouseEvent, handleClickAway);
++      doc.addEventListener(mappedMouseEvent, handleClickAway, useCapture);
+       return () => {
+-        doc.removeEventListener(mappedMouseEvent, handleClickAway);
++        doc.removeEventListener(mappedMouseEvent, handleClickAway, useCapture);
+       };
+     }
+ 
+     return undefined;
+-  }, [handleClickAway, mouseEvent]);
++  }, [handleClickAway, mouseEvent, useCapture]);
+   return /*#__PURE__*/_jsx(React.Fragment, {
+     children: /*#__PURE__*/React.cloneElement(children, childrenProps)
+   });
+@@ -181,7 +194,12 @@ process.env.NODE_ENV !== "production" ? ClickAwayListener.propTypes
+    * The touch event to listen to. You can disable the listener by providing `false`.
+    * @default 'onTouchEnd'
+    */
+-  touchEvent: PropTypes.oneOf(['onTouchEnd', 'onTouchStart', false])
++  touchEvent: PropTypes.oneOf(['onTouchEnd', 'onTouchStart', false]),
++  /**
++   * Patched prop
++   * @default false
++   */
++  useCapture: PropTypes.bool
+ } : void 0;
+ 
+ if (process.env.NODE_ENV !== 'production') {
 diff --git a/ModalUnstyled/ModalManager.d.ts b/ModalUnstyled/ModalManager.d.ts
-index 9fd0ec291cb1fe4f326bb32f5976520f5c65016d..1dd68f641ce0311b91d284e7217dda09da630db9 100644
+index 9fd0ec291cb1fe4f326bb32f5976520f5c65016d..c4fec16dc0fea5125e6d2b2ef06d32ff7f552e28 100644
 --- a/ModalUnstyled/ModalManager.d.ts
 +++ b/ModalUnstyled/ModalManager.d.ts
 @@ -1,5 +1,6 @@
@@ -10,7 +173,7 @@ index 9fd0ec291cb1fe4f326bb32f5976520f5c65016d..1dd68f641ce0311b91d284e7217dda09
  export declare function ariaHidden(element: Element, show: boolean): void;
  interface Modal {
 diff --git a/ModalUnstyled/ModalManager.js b/ModalUnstyled/ModalManager.js
-index 532d7900e9cbb8c99132d072cdb9bbb158e47127..4b241432607f43f922156d251c34096b4e178338 100644
+index 532d7900e9cbb8c99132d072cdb9bbb158e47127..53633249671761e580743384ab0d1130e6d33f00 100644
 --- a/ModalUnstyled/ModalManager.js
 +++ b/ModalUnstyled/ModalManager.js
 @@ -60,7 +60,7 @@ function findIndexOf(items, callback) {
@@ -34,7 +197,7 @@ index 532d7900e9cbb8c99132d072cdb9bbb158e47127..4b241432607f43f922156d251c34096b
      } else {
        // Improve Gatsby support
 diff --git a/ModalUnstyled/ModalUnstyled.js b/ModalUnstyled/ModalUnstyled.js
-index 35bba11d796242845460d31d7df00185d6e32032..6261973427314d3d5f1419541dc78375c3074b40 100644
+index 35bba11d796242845460d31d7df00185d6e32032..5047d610e5bb1526d27655de9fac16a07cd6665a 100644
 --- a/ModalUnstyled/ModalUnstyled.js
 +++ b/ModalUnstyled/ModalUnstyled.js
 @@ -1,6 +1,6 @@
@@ -64,7 +227,7 @@ index 35bba11d796242845460d31d7df00185d6e32032..6261973427314d3d5f1419541dc78375
  
      modalRef.current.scrollTop = 0;
 diff --git a/ModalUnstyled/ModalUnstyled.types.d.ts b/ModalUnstyled/ModalUnstyled.types.d.ts
-index fb39cc325d7a7f721a324bd7b488dcfa3b8c8c96..dfe0fa4a22b95c6be4d2d21ab2af961a5a9a03f3 100644
+index fb39cc325d7a7f721a324bd7b488dcfa3b8c8c96..da365c53acb757cbe3be0bf733001a7f935491dd 100644
 --- a/ModalUnstyled/ModalUnstyled.types.d.ts
 +++ b/ModalUnstyled/ModalUnstyled.types.d.ts
 @@ -44,6 +44,7 @@ export interface ModalUnstyledOwnProps {
@@ -76,7 +239,7 @@ index fb39cc325d7a7f721a324bd7b488dcfa3b8c8c96..dfe0fa4a22b95c6be4d2d21ab2af961a
       * If `true`, the modal will not automatically shift focus to itself when it opens, and
       * replace it to the last focused element when it closes.
 diff --git a/legacy/ModalUnstyled/ModalManager.js b/legacy/ModalUnstyled/ModalManager.js
-index bd7544dccf949b70551e31e41592ce00a4dc829d..61d05249b690b4e82736b90fb6dc03195276d979 100644
+index bd7544dccf949b70551e31e41592ce00a4dc829d..00104f1505c6e8cdf58f92f364040dae9bfe5cb3 100644
 --- a/legacy/ModalUnstyled/ModalManager.js
 +++ b/legacy/ModalUnstyled/ModalManager.js
 @@ -65,7 +65,7 @@ function findIndexOf(items, callback) {
@@ -100,7 +263,7 @@ index bd7544dccf949b70551e31e41592ce00a4dc829d..61d05249b690b4e82736b90fb6dc0319
      } else {
        // Improve Gatsby support
 diff --git a/legacy/ModalUnstyled/ModalUnstyled.js b/legacy/ModalUnstyled/ModalUnstyled.js
-index d08d33e66f7e614437f6fb43965e216f636c9686..509f5d01840863a5ff7eee93a36068a428f9b42e 100644
+index d08d33e66f7e614437f6fb43965e216f636c9686..96937baf052e4eb2fddc206e7d83ccf3fb94faf6 100644
 --- a/legacy/ModalUnstyled/ModalUnstyled.js
 +++ b/legacy/ModalUnstyled/ModalUnstyled.js
 @@ -85,7 +85,7 @@ var ModalUnstyled = /*#__PURE__*/React.forwardRef(function ModalUnstyled(props,
@@ -123,7 +286,7 @@ index d08d33e66f7e614437f6fb43965e216f636c9686..509f5d01840863a5ff7eee93a36068a4
  
      modalRef.current.scrollTop = 0;
 diff --git a/modern/ModalUnstyled/ModalManager.js b/modern/ModalUnstyled/ModalManager.js
-index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..0d9f88f468d5cb3212f3a8ce45e827258f5e0549 100644
+index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..3e6f63bf422fc1b0369ade9c973ddce530ec88b1 100644
 --- a/modern/ModalUnstyled/ModalManager.js
 +++ b/modern/ModalUnstyled/ModalManager.js
 @@ -60,7 +60,7 @@ function findIndexOf(items, callback) {
@@ -147,7 +310,7 @@ index 2a5614b978ce2dd2e54be7e9d9985afd846681b2..0d9f88f468d5cb3212f3a8ce45e82725
      } else {
        // Improve Gatsby support
 diff --git a/modern/ModalUnstyled/ModalUnstyled.js b/modern/ModalUnstyled/ModalUnstyled.js
-index 95e6813091cbe48670ba30944c1c4f693bf599ce..3065df9831c9122c79b754856d84efdd1707d0c6 100644
+index 95e6813091cbe48670ba30944c1c4f693bf599ce..334d3c6958c4a17df771cd7c8bcb9373481c3d85 100644
 --- a/modern/ModalUnstyled/ModalUnstyled.js
 +++ b/modern/ModalUnstyled/ModalUnstyled.js
 @@ -1,6 +1,6 @@
@@ -177,7 +340,7 @@ index 95e6813091cbe48670ba30944c1c4f693bf599ce..3065df9831c9122c79b754856d84efdd
  
      modalRef.current.scrollTop = 0;
 diff --git a/node/ModalUnstyled/ModalManager.js b/node/ModalUnstyled/ModalManager.js
-index b858d9550bc1b1b155348670d6cc294a2fd53245..8d538cd1db4d89d94b152f5150ddeb4247bae937 100644
+index b858d9550bc1b1b155348670d6cc294a2fd53245..ebfee6144f3cd12f558c6603d5f0b0ffb27d8093 100644
 --- a/node/ModalUnstyled/ModalManager.js
 +++ b/node/ModalUnstyled/ModalManager.js
 @@ -68,7 +68,7 @@ function findIndexOf(items, callback) {

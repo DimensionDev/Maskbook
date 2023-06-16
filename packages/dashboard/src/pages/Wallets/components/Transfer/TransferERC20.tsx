@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import {
-    useChainContext,
     useFungibleTokenBalance,
     useGasPrice,
     useLookupAddress,
@@ -16,8 +15,8 @@ import {
     useWallet,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { MaskColorVar, MaskTextField } from '@masknet/theme'
+import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { MaskColorVar, MaskTextField, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import {
     TokenType,
     type FungibleToken,
@@ -33,20 +32,23 @@ import {
     SchemaType,
     formatWeiToEther,
     type ChainId,
-    chainResolver,
-    explorerResolver,
     isValidAddress,
     NetworkType,
     isNativeTokenAddress,
     DepositPaymaster,
     addGasMargin,
     type EIP1559GasConfig,
+    createNativeToken,
 } from '@masknet/web3-shared-evm'
+import { useContainer } from 'unstated-next'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { Context } from '../../hooks/useContext.js'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { TransferTab } from './types.js'
 
 export interface TransferERC20Props {
     token: FungibleToken<ChainId, SchemaType>
@@ -54,49 +56,72 @@ export interface TransferERC20Props {
 
 const GAS_LIMIT = 21000
 
+const useStyles = makeStyles()((theme) => {
+    return {
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
+        },
+    }
+})
+
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const wallet = useWallet()
     const anchorEl = useRef<HTMLDivElement | null>(null)
+    const navigate = useNavigate()
+    const { state } = useLocation() as {
+        state: {
+            token?: FungibleToken<ChainId, SchemaType>
+        } | null
+    }
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
-    const [memo, setMemo] = useState('')
+    const [message, setMessage] = useState('')
     const [popoverOpen, setPopoverOpen] = useState(false)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
-    const network = useNetworkDescriptor()
+
+    const { classes } = useStyles()
     const [gasLimit_, setGasLimit_] = useState(0)
 
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 
+    const { chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
+
+    const network = useNetworkDescriptor(pluginID, state?.token?.chainId)
     const Others = useWeb3Others()
 
+    const is1559Supported = useMemo(() => Others?.chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
     useEffect(() => {
-        setSelectedToken(token)
-    }, [token])
+        token.chainId === chainId ? setSelectedToken(token) : setSelectedToken(createNativeToken(chainId as ChainId))
+    }, [token, chainId])
 
     // workaround: transferERC20 should support non-evm network
     const isNativeToken = isNativeTokenAddress(selectedToken.address)
     const tokenType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
 
+    const nativeToken = useNativeToken(pluginID, { chainId })
+    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
+
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         selectedToken?.address ?? '',
+        { chainId },
     )
-    const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
     // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, address)
+    } = useLookupAddress(pluginID, address, chainId)
     // #endregion
 
     // transfer amount
@@ -170,22 +195,35 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return BigNumber.max(0, amount_).toFixed()
     }, [actualBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
-    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
+    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
+        tokenType,
+        selectedToken.address,
+        chainId as ChainId,
+    )
 
     const onTransfer = useCallback(async () => {
         let hash: string | undefined
         if (isValidAddress(address)) {
-            hash = await transferCallback(transferAmount, address, gasConfig, memo)
+            hash = await transferCallback(transferAmount, address, gasConfig, message)
         } else if (Others.isValidDomain(address)) {
-            hash = await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
+            hash = await transferCallback(transferAmount, registeredAddress, gasConfig, message)
         }
         if (typeof hash === 'string') {
-            setMemo('')
+            setMessage('')
             setAddress('')
             setAmount('')
             tokenBalanceRetry()
         }
-    }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig, registeredAddress, Others])
+    }, [
+        transferAmount,
+        address,
+        message,
+        selectedToken.decimals,
+        transferCallback,
+        gasConfig,
+        registeredAddress,
+        Others,
+    ])
 
     // #region validation
     const validationMessage = useMemo(() => {
@@ -220,7 +258,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
             return (
                 <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Link
-                        href={explorerResolver.domainLink(chainId, address)}
+                        href={Others.explorerResolver.domainLink(chainId, address)}
                         target="_blank"
                         rel="noopener noreferrer"
                         underline="none">
@@ -311,7 +349,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Popover>
                 </Box>
                 <Box mt={2}>
-                    {/* TODO: Remove forced type conversion */}
                     <TokenAmountPanel
                         amount={amount}
                         maxAmount={maxAmount}
@@ -327,7 +364,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                                         disableNativeToken: false,
                                         chainId,
                                     })
-                                    if (pickedToken) setSelectedToken(pickedToken)
+                                    if (pickedToken) {
+                                        setSelectedToken(pickedToken)
+                                        // Update the previous location state of the token.
+                                        navigate(DashboardRoutes.WalletsTransfer, {
+                                            state: { type: TransferTab.Token, token: pickedToken },
+                                        })
+                                    }
                                 },
                             },
                         }}
@@ -353,17 +396,35 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                 {isNativeToken ? (
                     <Box mt={2}>
                         <MaskTextField
-                            value={memo}
+                            value={message}
                             placeholder={t.wallets_transfer_memo_placeholder()}
-                            onChange={(e) => setMemo(e.currentTarget.value)}
+                            onChange={(e) => setMessage(e.currentTarget.value)}
                             label={t.wallets_transfer_memo()}
                         />
                     </Box>
                 ) : null}
                 <Box mt={4} display="flex" flexDirection="row" justifyContent="center">
-                    <Button sx={{ width: 240 }} disabled={!!validationMessage || isTransferring} onClick={onTransfer}>
-                        {validationMessage || t.wallets_transfer_send()}
-                    </Button>
+                    {isWalletConnectNetworkNotMatch ? (
+                        <ShadowRootTooltip
+                            title={t.wallet_connect_tips()}
+                            placement="top"
+                            arrow
+                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}>
+                            <div>
+                                <Button sx={{ width: 240 }} disabled onClick={onTransfer}>
+                                    {t.wallets_transfer_send()}
+                                    <Icons.Questions size={18} sx={{ marginLeft: 0.5 }} />
+                                </Button>
+                            </div>
+                        </ShadowRootTooltip>
+                    ) : (
+                        <Button
+                            sx={{ width: 240 }}
+                            disabled={!!validationMessage || isTransferring}
+                            onClick={onTransfer}>
+                            {validationMessage || t.wallets_transfer_send()}
+                        </Button>
+                    )}
                 </Box>
             </Stack>
         </Stack>
