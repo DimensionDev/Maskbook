@@ -51,7 +51,7 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
 
 export interface OpenPageConfirm {
     target: 'dashboard' | 'other'
-    url: string
+    url: DashboardRoutes
     title: string
     text: string
     actionHint: string
@@ -72,7 +72,7 @@ export function LeavePageConfirm(props: LeavePageConfirmProps) {
     const onClick = useCallback(() => {
         if (!info) return
         if (info.target === 'dashboard') {
-            openDashboard?.(info.url as DashboardRoutes)
+            openDashboard?.(info.url)
             onClose()
             return
         }

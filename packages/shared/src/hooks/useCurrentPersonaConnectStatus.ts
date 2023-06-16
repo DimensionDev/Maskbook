@@ -39,23 +39,26 @@ export function useCurrentPersonaConnectStatus(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
     )
 
-    const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
-        if (direct) {
-            openDashboard?.(DashboardRoutes.Setup)
-        } else {
-            LeavePageConfirmDialog.open({
-                openDashboard,
-                info: {
-                    target: 'dashboard',
-                    url: target ?? DashboardRoutes.Setup,
-                    text: t.applications_create_persona_hint(),
-                    title: t.applications_create_persona_title(),
-                    actionHint: t.applications_create_persona_action(),
-                    position,
-                },
-            })
-        }
-    }, [])
+    const create = useCallback(
+        (target?: DashboardRoutes, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
+            if (direct) {
+                openDashboard?.(DashboardRoutes.Setup)
+            } else {
+                LeavePageConfirmDialog.open({
+                    openDashboard,
+                    info: {
+                        target: 'dashboard',
+                        url: target ?? DashboardRoutes.Setup,
+                        text: t.applications_create_persona_hint(),
+                        title: t.applications_create_persona_title(),
+                        actionHint: t.applications_create_persona_action(),
+                        position,
+                    },
+                })
+            }
+        },
+        [],
+    )
 
     const openPersonListDialog = useCallback(
         (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
