@@ -20,9 +20,6 @@ const dashboard: Plugin.Dashboard.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        console.log('DEBUG: snsadatpor')
-        console.log(context)
-
         SharedPluginContext.setup(context)
 
         const state = await Web3State.create(context)

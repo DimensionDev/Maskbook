@@ -4,9 +4,6 @@ import '../messages.js'
 
 const worker: Plugin.Worker.Definition = {
     ...base,
-    init(signal, context) {
-        console.log('DEBUG: worker context')
-        console.log(context)
-    },
+    init(signal) {},
 }
 export default worker
