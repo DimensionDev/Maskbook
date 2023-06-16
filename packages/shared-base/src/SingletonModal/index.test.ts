@@ -1,8 +1,9 @@
 import { describe, expect, it, vi, beforeAll } from 'vitest'
-import { SingletonModal } from './index.js'
+import { SingletonModal } from '../SingletonModal/index.js'
 
 describe('SingletonModal', () => {
     const modal = new SingletonModal<void, { closeProp: number }>()
+    const peek = vi.fn()
     const open = vi.fn()
     const close = vi.fn()
     const abort = vi.fn()
@@ -13,6 +14,7 @@ describe('SingletonModal', () => {
             closeCallback = registerOnClose
             rejectCallback = registerOnAbort
             return {
+                peek,
                 open,
                 close,
                 abort,
