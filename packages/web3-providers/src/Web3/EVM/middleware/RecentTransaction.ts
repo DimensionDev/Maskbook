@@ -19,12 +19,19 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
         try {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
-                case EthereumMethodType.MASK_DEPLOY:
-                case EthereumMethodType.MASK_FUND:
                     const tx = context.result as string
                     if (!tx || !context.config) return
-                    await Transaction?.addTransaction?.(context.chainId, context.account, tx, context.config)
-                    await TransactionWatcher?.watchTransaction(context.chainId, tx, context.config)
+                    const account = context.config.from ?? context.account
+                    const chainId = context.config.chainId ?? context.chainId
+                    await Transaction?.addTransaction?.(chainId, account, tx, context.config)
+                    await TransactionWatcher?.watchTransaction(chainId, tx, context.config)
+                    break
+                case EthereumMethodType.MASK_DEPLOY:
+                case EthereumMethodType.MASK_FUND:
+                    const tx_ = context.result as string
+                    if (!tx_ || !context.config) return
+                    await Transaction?.addTransaction?.(context.chainId, '', tx_, { ...context.config, from: '' })
+                    await TransactionWatcher?.watchTransaction(context.chainId, tx_, { ...context.config, from: '' })
                     break
                 case EthereumMethodType.ETH_SEND_USER_OPERATION:
                     if (!context.userOperation || typeof context.result !== 'string') return
