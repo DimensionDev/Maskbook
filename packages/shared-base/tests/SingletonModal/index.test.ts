@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeAll } from 'vitest'
-import { SingletonModal } from '../SingletonModal/index.js'
+import { SingletonModal } from '../../src/SingletonModal/index.js'
 
 describe('SingletonModal', () => {
     const modal = new SingletonModal<void, { closeProp: number }>()
