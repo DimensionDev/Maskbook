@@ -5,9 +5,7 @@ export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
     onClose: (props?: CloseProps) => void,
     onAbort: (error: Error) => void,
 ) => {
-    // the open state computer
-    readonly opened: boolean
-
+    peek: () => boolean
     open: (props?: OpenProps) => void
     close: (props?: CloseProps) => void
     abort?: (error: Error) => void
@@ -29,7 +27,7 @@ export class SingletonModal<
     private dispatchOpen: ReturnType<T>['open'] | undefined
     private dispatchClose: ReturnType<T>['close'] | undefined
     private dispatchAbort: ReturnType<T>['abort'] | undefined
-    private dispatchPeek: (() => ReturnType<T>['opened']) | undefined
+    private dispatchPeek: ReturnType<T>['peek'] | undefined
 
     constructor() {
         bindAll(this, 'register', 'open', 'close', 'abort', 'openAndWaitForClose')
@@ -62,7 +60,7 @@ export class SingletonModal<
         this.dispatchOpen = ref.open
         this.dispatchClose = ref.close
         this.dispatchAbort = ref.abort
-        this.dispatchPeek = () => ref.opened
+        this.dispatchPeek = ref.peek
     }
 
     /**

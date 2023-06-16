@@ -20,7 +20,7 @@ export function useSingletonModal<OpenProps, CloseProps>(
 
     const creator: T = useCallback((dispatchOpen, dispatchClose, dispatchAbort) => {
         dispatchRef.current = {
-            get opened() {
+            peek() {
                 return openRef.current
             },
             open(props) {
