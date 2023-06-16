@@ -57,7 +57,7 @@ export const Welcome = memo(function Welcome() {
 
     const handleAgree = useCallback(async () => {
         if (allowedToCollect) {
-            await Services.Settings.setTelemetryEnabled(true)
+            Services.Settings.setTelemetryEnabled(true)
         }
         setAgreed(true)
         const from = params.get('from')
@@ -84,8 +84,7 @@ export const Welcome = memo(function Welcome() {
             <Article />
 
             <FormControlLabel
-                className={classes.checkboxRow}
-                classes={{ label: classes.label }}
+                classes={{ label: classes.label, root: classes.checkboxRow }}
                 control={
                     <Checkbox
                         className={classes.checkbox}

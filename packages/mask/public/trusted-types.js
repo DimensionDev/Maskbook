@@ -27,7 +27,6 @@ if (typeof trustedTypes === 'object' && location.protocol.includes('extension'))
         createScriptURL: (string) => string,
 
         createHTML: (html) => {
-            if (location.hash.includes('/setup/sign-up/onboarding')) return html
             if (html !== ReactQueryStyle) {
                 throw new TypeError('Failed to convent a String to a TrustedHTML')
             }

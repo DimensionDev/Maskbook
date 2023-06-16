@@ -11,7 +11,7 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { Words } from './Words.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
-import { toJpeg } from 'html-to-image'
+import { toBlob } from 'html-to-image'
 import { Services } from '../../../API.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 
@@ -91,10 +91,12 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
 
     const [, handleDownload] = useAsyncFn(async () => {
         if (!ref.current) return
-        const dataUrl = await toJpeg(ref.current, { quality: 0.95 })
+        const dataUrl = await toBlob(ref.current, { quality: 0.95 })
+        if (!dataUrl) return
+
         const link = document.createElement('a')
         link.download = `mask-persona-${state.personaName}.jpeg`
-        link.href = dataUrl
+        link.href = URL.createObjectURL(dataUrl)
         link.click()
     }, [])
 
@@ -128,7 +130,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         if (copyState.error?.message) {
             showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
         }
-    }, [copyState])
+    }, [copyState.value, copyState.error?.message])
 
     return (
         <Box>

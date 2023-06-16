@@ -1,40 +1,54 @@
 import { makeStyles } from '@masknet/theme'
-import { Grid, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4,1fr)',
+        gap: theme.spacing(2),
+        paddingLeft: 0,
+        margin: 0,
+    },
     wordCard: {
         backgroundColor: theme.palette.maskColor.bg,
         padding: theme.spacing(1),
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
         borderRadius: 8,
+        listStyleType: 'decimal',
+        listStylePosition: 'inside',
+        position: 'relative',
+        '&::marker': {
+            backgroundColor: theme.palette.maskColor.bg,
+            color: theme.palette.maskColor.third,
+            fontSize: 14,
+        },
     },
-    index: {
-        fontSize: 14,
-        lineHeight: '20px',
-        color: theme.palette.maskColor.third,
+    text: {
+        width: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 8,
+        display: 'flex',
+        justifyContent: 'center',
     },
 }))
 
-export const Words = memo(function Words({ words }: { words: string[] }) {
-    const { classes } = useStyles()
+export interface WordsProps extends withClasses<'container' | 'wordCard' | 'text'> {
+    words: string[]
+}
+
+export const Words = memo<WordsProps>(function Words({ words, ...props }) {
+    const { classes } = useStyles(undefined, { props })
 
     return (
-        <Grid container spacing={2}>
+        <Box component="ul" className={classes.container}>
             {words.map((item, index) => (
-                <Grid item xs={3} key={index}>
-                    <Typography className={classes.wordCard}>
-                        <Typography component="span" className={classes.index}>
-                            {index + 1}.
-                        </Typography>
-                        <Typography component="span" fontWeight={700}>
-                            {item}
-                        </Typography>
+                <Box className={classes.wordCard} component="li" key={index}>
+                    <Typography className={classes.text} component="span" fontWeight={700}>
+                        {item}
                     </Typography>
-                </Grid>
+                </Box>
             ))}
-        </Grid>
+        </Box>
     )
 })

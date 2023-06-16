@@ -96,10 +96,14 @@ export const Article: FC<Props> = ({ className, ...rest }) => {
             </Typography>
             <Typography className={classes.p}>
                 We are a browser extension that needs to request permission from certain websites in order to fulfill
-                our product's functions. For example, setting an NFT avatar in social media, searching for
-                cryptocurrency or artwork related to Twitter, and getting information enhancement on Twitter. Donating
-                to Gitcoin and voting in Snapshot on the Twitter timeline, and viewing information about assets and
-                artwork related to certain social accounts.
+                our product's functions. For example,
+                <ul>
+                    <li>Setting an NFT avatar in social media,</li>
+                    <li>Searching for cryptocurrency or artwork related to Twitter,</li>
+                    <li>Getting information enhancement on Twitter,</li>
+                    <li>Donating to Gitcoin and voting in Snapshot on the Twitter timeline,</li>
+                    <li>Viewing information about assets and artwork related to certain social accounts.</li>
+                </ul>
             </Typography>
             <Permissions />
         </article>
