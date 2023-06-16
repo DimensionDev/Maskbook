@@ -24,10 +24,10 @@ export class SingletonModal<
     private onClose: ReturnType<T>['close'] | undefined
     private onAbort: ReturnType<T>['abort'] | undefined
 
+    private dispatchPeek: ReturnType<T>['peek'] | undefined
     private dispatchOpen: ReturnType<T>['open'] | undefined
     private dispatchClose: ReturnType<T>['close'] | undefined
     private dispatchAbort: ReturnType<T>['abort'] | undefined
-    private dispatchPeek: ReturnType<T>['peek'] | undefined
 
     constructor() {
         bindAll(this, 'register', 'open', 'close', 'abort', 'openAndWaitForClose')
@@ -57,10 +57,10 @@ export class SingletonModal<
             (props) => this.onClose?.(props),
             (error) => this.onAbort?.(error),
         )
+        this.dispatchPeek = ref.peek
         this.dispatchOpen = ref.open
         this.dispatchClose = ref.close
         this.dispatchAbort = ref.abort
-        this.dispatchPeek = ref.peek
     }
 
     /**
