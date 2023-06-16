@@ -1,3 +1,6 @@
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -11,11 +14,9 @@ import {
     type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
+import { LeavePageConfirmDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Button, Stack, Typography } from '@mui/material'
-import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
@@ -25,7 +26,6 @@ import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
-import { LeavePageConfirmDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {

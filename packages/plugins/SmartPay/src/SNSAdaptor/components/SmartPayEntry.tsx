@@ -1,12 +1,12 @@
-import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { memo, useCallback, useEffect } from 'react'
+import { Trans } from 'react-i18next'
+import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { ApplicationEntry, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+import { useWallets } from '@masknet/web3-hooks-base'
 import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
-import { useWallets } from '@masknet/web3-hooks-base'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 export interface SmartPayEntryProps {
     disabled: boolean
@@ -34,7 +34,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
         // Contract account already exists
         if (wallets.filter((x) => x.owner).length)
-            return setSmartPayDialog({
+            setSmartPayDialog({
                 open: true,
                 hasAccounts: true,
                 signWallet: value.signWallet,
@@ -43,7 +43,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
         // If there is no persona and no signer
         if (!personas.length && !value.signPersona && !value.signWallet) {
-            return LeavePageConfirmDialog.open({
+            LeavePageConfirmDialog.open({
                 info: {
                     target: 'dashboard',
                     url: DashboardRoutes.Setup,
@@ -55,6 +55,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 openDashboard,
             })
         }
+        return
     }, [loading, wallets, value, personas])
 
     useEffect(() => {

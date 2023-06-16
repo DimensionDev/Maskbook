@@ -1,7 +1,7 @@
+import { useCallback } from 'react'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useCallback } from 'react'
 
 type PositionStyle = {
     top?: number

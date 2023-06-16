@@ -1,18 +1,18 @@
-import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { memo, useCallback, useEffect } from 'react'
-import { Box, Button, Popover, Typography } from '@mui/material'
-import { useI18N } from '../../locales/i18n_generated.js'
-import { Icon, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
-import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
-import { SmartPayFunder } from '@masknet/web3-providers'
 import { useNavigate } from 'react-router-dom'
+import { Box, Button, Popover, Typography } from '@mui/material'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { Icon, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
+import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { SmartPayFunder } from '@masknet/web3-providers'
+import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
-import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -95,7 +95,6 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                     position: 'center',
                 },
             })
-
             return
         }
 

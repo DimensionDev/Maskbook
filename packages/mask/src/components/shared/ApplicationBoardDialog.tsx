@@ -91,7 +91,7 @@ export function ApplicationBoardDialog() {
                     ) : null
                 }
                 titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
-                independent={Boolean(LeavePageConfirmDialog.open)}
+                independent={!!LeavePageConfirmDialog.open}
                 title={openSettings ? t('application_settings') : t('applications')}
                 titleTail={
                     openSettings ? null : (

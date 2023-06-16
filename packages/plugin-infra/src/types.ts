@@ -128,7 +128,7 @@ export namespace Plugin.Shared {
         wallets: Subscription<Wallet[]>
 
         /** Open Dashboard with a new window */
-        openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
+        openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>

@@ -1,5 +1,5 @@
-import { SingletonModal } from '@masknet/shared-base'
 import { memo } from 'react'
+import { SingletonModal } from '@masknet/shared-base'
 import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
 import { WalletConnectQRCode, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'

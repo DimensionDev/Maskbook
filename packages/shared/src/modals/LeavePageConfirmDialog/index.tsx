@@ -4,7 +4,7 @@ import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 import { LeavePageConfirm, type OpenPageConfirm } from './LeavePageConfirm.js'
 
 export interface LeavePageConfirmDialogOpenProps {
-    openDashboard?: () => Promise<any>
+    openDashboard?: () => ReturnType<typeof browser.tabs.create>
     info?: OpenPageConfirm
 }
 
@@ -14,7 +14,7 @@ export const LeavePageConfirmModal = forwardRef<
     SingletonModalRefCreator<LeavePageConfirmDialogOpenProps>,
     LeavePageConfirmDialogProps
 >((props, ref) => {
-    const [openDashboard, setOpenDashboard] = useState<() => Promise<void>>()
+    const [openDashboard, setOpenDashboard] = useState<() => ReturnType<typeof browser.tabs.create>>()
     const [info, setInfo] = useState<OpenPageConfirm>()
 
     const [open, dispatch] = useSingletonModal(ref, {
