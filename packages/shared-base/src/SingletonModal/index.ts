@@ -1,8 +1,13 @@
+import { bindAll } from 'lodash-es'
+
 export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
     onOpen: (props?: OpenProps) => void,
     onClose: (props?: CloseProps) => void,
     onAbort: (error: Error) => void,
 ) => {
+    // the open state computer
+    readonly opened: boolean
+
     open: (props?: OpenProps) => void
     close: (props?: CloseProps) => void
     abort?: (error: Error) => void
@@ -24,13 +29,17 @@ export class SingletonModal<
     private dispatchOpen: ReturnType<T>['open'] | undefined
     private dispatchClose: ReturnType<T>['close'] | undefined
     private dispatchAbort: ReturnType<T>['abort'] | undefined
+    private dispatchPeek: (() => ReturnType<T>['opened']) | undefined
 
     constructor() {
-        this.register = this.register.bind(this)
-        this.open = this.open.bind(this)
-        this.close = this.close.bind(this)
-        this.abort = this.abort.bind(this)
-        this.openAndWaitForClose = this.openAndWaitForClose.bind(this)
+        bindAll(this, 'register', 'open', 'close', 'abort', 'openAndWaitForClose')
+    }
+
+    /**
+     * Peek the open state of the React modal component.
+     */
+    get opened() {
+        return this.dispatchPeek?.() ?? false
     }
 
     /**
@@ -53,6 +62,7 @@ export class SingletonModal<
         this.dispatchOpen = ref.open
         this.dispatchClose = ref.close
         this.dispatchAbort = ref.abort
+        this.dispatchPeek = () => ref.opened
     }
 
     /**

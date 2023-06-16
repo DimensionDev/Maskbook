@@ -14,10 +14,15 @@ export function useSingletonModal<OpenProps, CloseProps>(
     const [open, setOpen] = useState(false)
     const dispatchRef = useRef<ReturnType<T>>()
     const optionsRef = useRef<typeof options>()
+    const openRef = useRef<boolean>(open)
     optionsRef.current = options
+    openRef.current = open
 
     const creator: T = useCallback((dispatchOpen, dispatchClose, dispatchAbort) => {
         dispatchRef.current = {
+            get opened() {
+                return openRef.current
+            },
             open(props) {
                 optionsRef.current?.onOpen?.(props)
                 dispatchOpen(props)
