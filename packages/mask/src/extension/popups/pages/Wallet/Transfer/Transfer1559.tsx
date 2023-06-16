@@ -44,7 +44,7 @@ import { LoadingButton } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ExpandMore } from '@mui/icons-material'
 import {
@@ -735,6 +735,12 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                     error={!!errors.amount?.message}
                                     helperText={errors.amount?.message}
                                     InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            min: 0,
+                                            minLength: 1,
+                                            maxLength: 79,
+                                        },
                                         autoComplete: 'off',
                                         autoCorrect: 'off',
                                         title: 'Token Amount',
@@ -775,12 +781,6 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                             </Box>
                                         ),
                                     }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                        min: 0,
-                                        minLength: 1,
-                                        maxLength: 79,
-                                    }}
                                 />
                             )
                         }}
@@ -793,8 +793,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 {...field}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                InputProps={{
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                             />
                         )}
@@ -828,8 +830,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 {...field}
                                 error={!!errors.maxPriorityFeePerGas?.message}
                                 helperText={errors.maxPriorityFeePerGas?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                InputProps={{
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                             />
                         )}
@@ -861,8 +865,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 {...field}
                                 error={!!errors.maxFeePerGas?.message}
                                 helperText={errors.maxFeePerGas?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                InputProps={{
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                             />
                         )}

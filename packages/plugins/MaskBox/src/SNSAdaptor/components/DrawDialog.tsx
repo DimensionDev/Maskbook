@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton, MaskTextField } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
 import { useChainContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import {
     FormattedAddress,
     ImageIcon,
@@ -13,7 +14,7 @@ import {
     EthereumERC20TokenApprovedBoundary,
     GasSettingBar,
 } from '@masknet/shared'
-import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, multipliedBy } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -156,7 +157,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     onClick={() => onCount(-1)}>
                                     <Remove color="inherit" />
                                 </Button>
-                                <TextField
+                                <MaskTextField
                                     className={classes.textfield}
                                     type="number"
                                     size="small"
@@ -183,7 +184,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                             min: 0,
                                             max: 255,
                                             minLength: 1,
-                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                             spellCheck: false,
                                         },
                                     }}

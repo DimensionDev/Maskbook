@@ -2,6 +2,7 @@ import { type ChangeEvent, useCallback, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { Box, Chip, type ChipProps, type InputProps, type StandardTextFieldProps, Typography } from '@mui/material'
 import { makeStyles, MaskTextField } from '@masknet/theme'
+import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SelectTokenChip, type SelectTokenChipProps } from '../SelectTokenChip/index.js'
@@ -119,7 +120,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                     min: 0,
                     minLength: MIN_AMOUNT_LENGTH,
                     maxLength: MAX_AMOUNT_LENGTH,
-                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                    pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                     spellCheck: false,
                     className: classes.input,
                 },

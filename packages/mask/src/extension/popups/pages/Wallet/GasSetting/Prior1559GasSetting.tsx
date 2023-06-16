@@ -8,6 +8,7 @@ import { isEmpty } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
@@ -20,7 +21,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Web3 } from '@masknet/web3-providers'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -292,8 +292,10 @@ export const Prior1559GasSetting = memo(() => {
                                 }}
                                 error={!!errors.gasLimit?.message}
                                 helperText={errors.gasLimit?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                InputProps={{
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                             />
                         )
@@ -312,8 +314,10 @@ export const Prior1559GasSetting = memo(() => {
                             }}
                             error={!!errors.gasPrice?.message}
                             helperText={errors.gasPrice?.message}
-                            inputProps={{
-                                pattern: '^[0-9]*[.,]?[0-9]*$',
+                            InputProps={{
+                                inputProps: {
+                                    pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                },
                             }}
                         />
                     )}

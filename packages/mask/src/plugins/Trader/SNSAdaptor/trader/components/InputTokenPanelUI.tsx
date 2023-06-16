@@ -4,7 +4,7 @@ import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
-import { Sniffings } from '@masknet/shared-base'
+import { Sniffings, NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 
@@ -172,6 +172,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         const onChange = useCallback(
             (ev: ChangeEvent<HTMLInputElement>) => {
                 const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+                if (amount_ && !new RegExp(NUMERIC_INPUT_REGEXP_PATTERN).test(amount_)) return
                 if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) onAmountChange(`0${amount_}`)
                 else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
             },
