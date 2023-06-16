@@ -32,15 +32,16 @@ export function isValidAddress(address?: string): address is string {
     return isAddress(address)
 }
 
-export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {
+export function isValidChainId(chainId?: ChainId): chainId is ChainId {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
-})
+}
 
 export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
 const nativeTokenSet = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
+
 export function isNativeTokenAddress(address?: string): address is string {
     return !!(address && nativeTokenSet.has(address))
 }
@@ -51,6 +52,7 @@ const {
     HAPPY_RED_PACKET_ADDRESS_V3,
     HAPPY_RED_PACKET_ADDRESS_V4,
 } = getRedPacketConstants()
+
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     switch (version) {
         case 1:
