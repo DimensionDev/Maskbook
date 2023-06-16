@@ -649,7 +649,7 @@ importers:
         version: 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       '@storybook/react':
         specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418)
+        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418)
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
@@ -3034,7 +3034,7 @@ importers:
         version: 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       '@storybook/react':
         specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418)
+        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418)
       stream-browserify:
         specifier: '3'
         version: 3.0.0
@@ -3100,7 +3100,7 @@ importers:
         version: 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       '@storybook/addon-essentials':
         specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0)
+        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@5.85.0)
       '@storybook/addon-links':
         specifier: ^6.5.13
         version: 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -3112,13 +3112,13 @@ importers:
         version: 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       '@storybook/react':
         specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418)
+        version: 6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418)
       '@types/react-window':
         specifier: ^1.8.5
         version: 1.8.5
       babel-loader:
         specifier: ^9.1.2
-        version: 9.1.2(@babel/core@7.21.4)(webpack@4.46.0)
+        version: 9.1.2(@babel/core@7.21.4)(webpack@5.85.0)
 
   packages/typed-message/base:
     dependencies:
@@ -10349,61 +10349,6 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-docs@6.5.13(@babel/core@7.21.4)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0):
-    resolution: {integrity: sha512-RG/NjsheD9FixZ789RJlNyNccaR2Cuy7CtAwph4oUNi3aDFjtOI8Oe9L+FOT7qtVnZLw/YMjF+pZxoDqJNKLPw==}
-    peerDependencies:
-      '@storybook/mdx2-csf': ^0.0.3
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-9a72e6227-20230525
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-9a72e6227-20230525
-    peerDependenciesMeta:
-      '@storybook/mdx2-csf':
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      '@babel/plugin-transform-react-jsx': 7.19.0(@babel/core@7.21.4)
-      '@babel/preset-env': 7.20.2(@babel/core@7.21.4)
-      '@jest/transform': 26.6.2
-      '@mdx-js/react': 1.6.22(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/api': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/components': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/core-common': 6.5.13(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
-      '@storybook/core-events': 6.5.13
-      '@storybook/csf': 0.0.2--canary.4566f4d.1
-      '@storybook/docs-tools': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/mdx1-csf': 0.0.1(@babel/core@7.21.4)
-      '@storybook/node-logger': 6.5.13
-      '@storybook/postinstall': 6.5.13
-      '@storybook/preview-web': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/source-loader': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/theming': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      babel-loader: 8.3.0(@babel/core@7.21.4)(webpack@4.46.0)
-      core-js: 3.30.1
-      fast-deep-equal: 3.1.3
-      global: 4.4.0
-      lodash: 4.17.21
-      react: 0.0.0-experimental-9a72e6227-20230525
-      react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
-      regenerator-runtime: 0.13.11
-      remark-external-links: 8.0.0
-      remark-slug: 6.1.0
-      ts-dedent: 2.2.0
-      util-deprecate: 1.0.2
-    transitivePeerDependencies:
-      - '@babel/core'
-      - eslint
-      - supports-color
-      - typescript
-      - vue-template-compiler
-      - webpack
-      - webpack-cli
-      - webpack-command
-    dev: true
-
   /@storybook/addon-docs@6.5.13(@babel/core@7.21.4)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@5.85.0):
     resolution: {integrity: sha512-RG/NjsheD9FixZ789RJlNyNccaR2Cuy7CtAwph4oUNi3aDFjtOI8Oe9L+FOT7qtVnZLw/YMjF+pZxoDqJNKLPw==}
     peerDependencies:
@@ -10455,95 +10400,6 @@ packages:
       - typescript
       - vue-template-compiler
       - webpack
-      - webpack-cli
-      - webpack-command
-    dev: true
-
-  /@storybook/addon-essentials@6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0):
-    resolution: {integrity: sha512-G9FVAWV7ixjVLWeLgIX+VT90tcAk6yQxfZQegfg5ucRilGysJCDaNnoab4xuuvm1R40TfFhba3iAGZtQYsddmw==}
-    peerDependencies:
-      '@babel/core': ^7.9.6
-      '@storybook/angular': '*'
-      '@storybook/builder-manager4': '*'
-      '@storybook/builder-manager5': '*'
-      '@storybook/builder-webpack4': '*'
-      '@storybook/builder-webpack5': '*'
-      '@storybook/html': '*'
-      '@storybook/vue': '*'
-      '@storybook/vue3': '*'
-      '@storybook/web-components': '*'
-      lit: '*'
-      lit-html: '*'
-      react: '*'
-      react-dom: '*'
-      svelte: '*'
-      sveltedoc-parser: '*'
-      vue: '*'
-      webpack: '*'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      '@storybook/angular':
-        optional: true
-      '@storybook/builder-manager4':
-        optional: true
-      '@storybook/builder-manager5':
-        optional: true
-      '@storybook/builder-webpack4':
-        optional: true
-      '@storybook/builder-webpack5':
-        optional: true
-      '@storybook/html':
-        optional: true
-      '@storybook/vue':
-        optional: true
-      '@storybook/vue3':
-        optional: true
-      '@storybook/web-components':
-        optional: true
-      lit:
-        optional: true
-      lit-html:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      svelte:
-        optional: true
-      sveltedoc-parser:
-        optional: true
-      vue:
-        optional: true
-      webpack:
-        optional: true
-    dependencies:
-      '@babel/core': 7.21.4
-      '@storybook/addon-actions': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addon-backgrounds': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addon-controls': 6.5.13(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
-      '@storybook/addon-docs': 6.5.13(@babel/core@7.21.4)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0)
-      '@storybook/addon-measure': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addon-outline': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addon-toolbars': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addon-viewport': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/api': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
-      '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
-      '@storybook/core-common': 6.5.13(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
-      '@storybook/node-logger': 6.5.13
-      core-js: 3.29.0
-      react: 0.0.0-experimental-9a72e6227-20230525
-      react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
-      regenerator-runtime: 0.13.11
-      ts-dedent: 2.2.0
-      webpack: 4.46.0
-    transitivePeerDependencies:
-      - '@storybook/mdx2-csf'
-      - eslint
-      - supports-color
-      - typescript
-      - vue-template-compiler
       - webpack-cli
       - webpack-command
     dev: true
@@ -11298,7 +11154,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/core@6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0):
+  /@storybook/core@6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@5.85.0):
     resolution: {integrity: sha512-kw1lCgbsxzUimGww6t5rmuWJmFPe9kGGyzIqvj4RC4BBcEsP40LEu9XhSfvnb8vTOLIULFZeZpdRFfJs4TYbUw==}
     peerDependencies:
       '@storybook/builder-webpack5': '*'
@@ -11320,13 +11176,13 @@ packages:
         optional: true
     dependencies:
       '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
-      '@storybook/core-client': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0)
+      '@storybook/core-client': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@5.85.0)
       '@storybook/core-server': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       '@storybook/manager-webpack5': 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       react: 0.0.0-experimental-9a72e6227-20230525
       react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
       typescript: 5.1.0-dev.20230418
-      webpack: 4.46.0
+      webpack: 5.85.0(@swc/core@1.3.59)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - bluebird
@@ -11577,7 +11433,7 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /@storybook/react@6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418):
+  /@storybook/react@6.5.13(@babel/core@7.21.4)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(require-from-string@2.0.2)(typescript@5.1.0-dev.20230418):
     resolution: {integrity: sha512-4gO8qihEkVZ8RNm9iQd7G2iZz4rRAHizJ6T5m58Sn21fxfyg9zAMzhgd0JzXuPXR8lTTj4AvRyPv1Qx7b43smg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -11616,13 +11472,13 @@ packages:
       '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       '@storybook/client-logger': 6.5.13
-      '@storybook/core': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@4.46.0)
+      '@storybook/core': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)(webpack@5.85.0)
       '@storybook/core-common': 6.5.13(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       '@storybook/csf': 0.0.2--canary.4566f4d.1
       '@storybook/docs-tools': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       '@storybook/manager-webpack5': 6.5.13(@swc/core@1.3.59)(eslint@8.38.0)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)(typescript@5.1.0-dev.20230418)
       '@storybook/node-logger': 6.5.13
-      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin@1.0.2(typescript@5.1.0-dev.20230418)(webpack@4.46.0)
+      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin@1.0.2(typescript@5.1.0-dev.20230418)(webpack@5.85.0)
       '@storybook/semver': 7.3.2
       '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       '@types/estree': 0.0.51
@@ -11650,17 +11506,20 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.1.0-dev.20230418
       util-deprecate: 1.0.2
-      webpack: 4.46.0
+      webpack: 5.85.0(@swc/core@1.3.59)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
+      - '@swc/core'
       - '@types/webpack'
       - bluebird
       - bufferutil
       - encoding
+      - esbuild
       - eslint
       - sockjs-client
       - supports-color
       - type-fest
+      - uglify-js
       - utf-8-validate
       - vue-template-compiler
       - webpack-cli
@@ -14773,22 +14632,6 @@ packages:
       make-dir: 3.1.0
       schema-utils: 2.7.1
       webpack: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1)
-    dev: true
-
-  /babel-loader@9.1.2(@babel/core@7.21.4)(webpack@4.46.0):
-    resolution: {integrity: sha512-mN14niXW43tddohGl8HPu5yfQq70iUThvFL/4QzESA7GcZoC0eVOhvWdQ8+3UlSjaDE9MVtsW9mxDY07W7VpVA==}
-    engines: {node: '>= 14.15.0'}
-    peerDependencies:
-      '@babel/core': ^7.12.0
-      webpack: '>=5'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/core': 7.21.4
-      find-cache-dir: 3.3.2
-      schema-utils: 4.0.0
-      webpack: 4.46.0
     dev: true
 
   /babel-loader@9.1.2(@babel/core@7.21.4)(webpack@5.85.0):
@@ -27617,7 +27460,7 @@ packages:
       react: 0.0.0-experimental-9a72e6227-20230525
     dev: false
 
-  /react-docgen-typescript-plugin@1.0.2(typescript@5.1.0-dev.20230418)(webpack@4.46.0):
+  /react-docgen-typescript-plugin@1.0.2(typescript@5.1.0-dev.20230418)(webpack@5.85.0):
     resolution: {integrity: sha512-/8OKrPRDTAGDnOkumGvDWixfrNPrRWhEMGLZnJr1NiJtRwdvNRGqGA2J/SeSvWerawqSPxNyXK+EfERCir6mMw==}
     peerDependencies:
       typescript: '>= 4.x || 5'
@@ -27634,7 +27477,7 @@ packages:
       react-docgen-typescript: 2.2.2(typescript@5.1.0-dev.20230418)
       tslib: 2.5.0
       typescript: 5.1.0-dev.20230418
-      webpack: 4.46.0
+      webpack: 5.85.0(@swc/core@1.3.59)
       webpack-sources: 2.3.1
     transitivePeerDependencies:
       - supports-color
@@ -32765,6 +32608,46 @@ packages:
       webpack-sources: 1.4.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /webpack@5.85.0(@swc/core@1.3.59):
+    resolution: {integrity: sha512-7gazTiYqwo5OSqwH1tigLDL2r3qDeP2dOKYgd+LlXpsUMqDTklg6tOghexqky0/+6QY38kb/R/uRPUleuL43zg==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
+    dependencies:
+      '@types/eslint-scope': 3.7.4
+      '@types/estree': 1.0.0
+      '@webassemblyjs/ast': 1.11.5
+      '@webassemblyjs/wasm-edit': 1.11.5
+      '@webassemblyjs/wasm-parser': 1.11.5
+      acorn: 8.8.2
+      acorn-import-assertions: 1.9.0(acorn@8.8.2)
+      browserslist: 4.21.5
+      chrome-trace-event: 1.0.3
+      enhanced-resolve: 5.14.1
+      es-module-lexer: 1.2.1
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.10
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.1.2
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.7(@swc/core@1.3.59)(webpack@5.85.0)
+      watchpack: 2.4.0
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
     dev: true
 
   /websocket-driver@0.7.4:
