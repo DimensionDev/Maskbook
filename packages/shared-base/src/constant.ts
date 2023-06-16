@@ -21,4 +21,5 @@ export const MEDIA_VIEWER_URL = 'https://media-viewer.r2d2.to/index.html'
 
 export const MAX_WALLET_LIMIT = 100
 
+// Not allow 0000.1, 000100
 export const NUMERIC_INPUT_REGEXP_PATTERN = '^[1-9]|^0(?![0-9])[.,]?[0-9]*$'
