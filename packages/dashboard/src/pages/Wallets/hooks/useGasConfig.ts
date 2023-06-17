@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useChainContext, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { GasSettingDialog } from '@masknet/shared'
 
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -22,18 +22,14 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const gasPrice = customGasPrice || defaultGasPrice
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
-    const { setDialog: setGasSettingDialog, closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.gasSettingDialogUpdated,
-    )
-
-    useEffect(() => closeDialog, [closeDialog])
+    useEffect(() => GasSettingDialog.close, [])
 
     useEffect(() => {
         setGasLimit_(gasLimit)
     }, [gasLimit])
 
     useEffect(() => {
-        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+        return WalletMessages.events.gasSettingUpdated.on((evt) => {
             if (evt.open) return
             if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
             if (evt.gasOption) setGasOption(evt.gasOption)
@@ -83,6 +79,6 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         gasConfig,
         gasLimit: gasLimit_,
         maxFee,
-        onCustomGasSetting: () => setGasSettingDialog({ open: true, gasLimit: gasLimit_, gasOption, minGasLimit }),
+        onCustomGasSetting: () => GasSettingDialog.open({ gasLimit: gasLimit_, gasOption, minGasLimit }),
     }
 }

@@ -29,7 +29,7 @@ export type ConnectWalletDialogEvent =
           open: false
       }
 
-export type GasSettingDialogEvent = {
+export type GasSettingEvent = {
     open: boolean
     gasLimit: number
     minGasLimit?: number
@@ -64,7 +64,7 @@ export interface WalletMessage {
     /**
      * Gas setting dialog
      */
-    gasSettingDialogUpdated: GasSettingDialogEvent
+    gasSettingUpdated: GasSettingEvent
 
     /**
      * Select nft contract dialog

@@ -5,12 +5,14 @@ import { WalletConnectQRCode, type WalletConnectQRCodeOpenProps } from './Wallet
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
 import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
 import { LeavePageConfirmModal, type LeavePageConfirmDialogOpenProps } from './LeavePageConfirmDialog/index.js'
+import { GasSettingModal, type GasSettingDialogOpenProps } from './GasSettingDialog/index.js'
 
 export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
 export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>()
 export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>()
 export const LeavePageConfirmDialog = new SingletonModal<LeavePageConfirmDialogOpenProps>()
+export const GasSettingDialog = new SingletonModal<GasSettingDialogOpenProps>()
 
 export const Modals = memo(function Modals() {
     return (
@@ -20,6 +22,7 @@ export const Modals = memo(function Modals() {
             <WalletStatusModal ref={WalletStatusDialog.register} />
             <WalletRiskWarningModal ref={WalletRiskWarningDialog.register} />
             <LeavePageConfirmModal ref={LeavePageConfirmDialog.register} />
+            <GasSettingModal ref={GasSettingDialog.register} />
         </>
     )
 })

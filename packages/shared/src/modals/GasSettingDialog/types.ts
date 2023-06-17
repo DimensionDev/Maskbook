@@ -12,7 +12,7 @@ export interface GasSettingProps {
     gasLimit?: number
     minGasLimit?: number
     onGasLimitChange?: (newGasLimit: number) => void
-    gasOptionType?: GasOptionType
+    gasOptionType?: GasOptionType | null
     onGasOptionChange?: (newOption: GasOptionType) => void
     onConfirm?: (options: EIP1559ConfirmOptions) => void
 }

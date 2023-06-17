@@ -1,12 +1,11 @@
-import { useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../../utils/index.js'
-import { GasSetting } from './GasSetting.js'
+import { GasSettingDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { GasSettingSupported } from './GasSettingSupported.js'
+import type { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -14,32 +13,45 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function GasSettingDialog() {
-    const { t } = useI18N()
+interface GasSettingProps {
+    open: boolean
+    onClose: () => void
+    gasOption?: GasOptionType | null
+    gasLimit?: number
+    minGasLimit?: number
+    gasPrice?: BigNumber.Value
+    maxFee?: BigNumber.Value
+    priorityFee?: BigNumber.Value
+    setGasLimit: (minGasLimit: number) => void
+    setGasOptionType: (gasOptionType: GasOptionType) => void
+}
+
+export function GasSetting(props: GasSettingProps) {
+    const t = useSharedI18N()
     const { classes } = useStyles()
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
-    const [gasLimit, setGasLimit] = useState(0)
-    const [minGasLimit, setMinGasLimit] = useState(0)
-    const { open, closeDialog, setDialog } = useRemoteControlledDialog(
-        WalletMessages.events.gasSettingDialogUpdated,
-        (evt) => {
-            if (!evt.open) return
-            if (evt.gasOption) setGasOptionType(evt.gasOption)
-            if (evt.gasLimit) setGasLimit(evt.gasLimit)
-            if (evt.minGasLimit !== undefined) setMinGasLimit(evt.minGasLimit)
-        },
-    )
+    const {
+        open,
+        onClose,
+        gasOption = GasOptionType.NORMAL,
+        gasLimit = 0,
+        minGasLimit = 0,
+        setGasLimit,
+        setGasOptionType,
+    } = props
+
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingUpdated)
 
     return (
-        <InjectedDialog title={t('popups_wallet_gas_fee_settings')} open={open} onClose={closeDialog}>
+        <InjectedDialog title={t.popups_wallet_gas_fee_settings()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <GasSetting
+                <GasSettingSupported
                     gasLimit={gasLimit}
                     minGasLimit={minGasLimit}
                     onGasLimitChange={setGasLimit}
-                    gasOptionType={gasOptionType}
+                    gasOptionType={gasOption}
                     onGasOptionChange={setGasOptionType}
                     onConfirm={({ gasPrice, gasLimit, maxFee, priorityFee, gasOption }) => {
+                        GasSettingDialog.close()
                         setDialog({
                             open: false,
                             gasOption,
