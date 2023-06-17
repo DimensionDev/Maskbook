@@ -2,7 +2,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { forwardRef, useState } from 'react'
 import { useSingletonModal } from '../../index.js'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { GasSetting } from './GasSetingModal.js'
+import { GasSetting } from './GasSettingModal.js'
 import { type BigNumber } from 'bignumber.js'
 
 export interface GasSettingDialogOpenProps {
