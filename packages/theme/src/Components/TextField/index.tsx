@@ -1,4 +1,4 @@
-import { type ForwardedRef, forwardRef } from 'react'
+import { type ForwardedRef, forwardRef, useCallback, type ChangeEvent } from 'react'
 import { omit } from 'lodash-es'
 import type { BoxProps } from '@mui/system'
 import {
@@ -88,6 +88,15 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
     const InputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
+    const onChange = useCallback(
+        (ev: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+            if (ev.currentTarget.value && !new RegExp(InputProps.inputProps?.pattern).test(ev.currentTarget.value)) {
+                return
+            }
+            props.onChange?.(ev)
+        },
+        [InputProps.inputProps?.pattern, props.onChange],
+    )
     return (
         <Box sx={sx} {...wrapperProps}>
             {label && typeof label === 'string' ? (
@@ -105,6 +114,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 <TextField
                     ref={ref}
                     {...rest}
+                    onChange={onChange}
                     classes={{ root: classes.field }}
                     variant="standard"
                     required={required}
@@ -124,6 +134,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 <InputBase
                     className={classes.field}
                     {...InputProps}
+                    onChange={onChange}
                     {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps')}
                 />
             )}

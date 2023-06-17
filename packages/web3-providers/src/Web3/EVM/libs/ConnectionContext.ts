@@ -1,6 +1,6 @@
+import { omit } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
-import type { ECKeyIdentifier, SignType } from '@masknet/shared-base'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
     ErrorEditor,
@@ -8,12 +8,10 @@ import {
     PayloadEditor,
     ProviderType,
     createJsonRpcPayload,
-    type TransactionOptions,
     createJsonRpcResponse,
     type Transaction,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionOptions } from '../types/index.js'
-import { omit } from 'lodash-es'
 
 let pid = 0
 
@@ -35,13 +33,6 @@ export class ConnectionContext {
             getDefaultProviderType: () => ProviderType | undefined
             getDefaultOwner?: (providerType: ProviderType) => string | undefined
             getDefaultIdentifier?: (providerType: ProviderType) => ECKeyIdentifier | undefined
-            mask_send?: (request: JsonRpcPayload, options: TransactionOptions) => Promise<JsonRpcResponse>
-            mask_signWithPersona?: <T>(
-                type: SignType,
-                message: T,
-                identifier?: ECKeyIdentifier,
-                silent?: boolean,
-            ) => Promise<string>
         },
     ) {
         // increase pid
@@ -66,11 +57,13 @@ export class ConnectionContext {
     }
 
     get account() {
-        return this.payloadEditor.from ?? this._options?.account ?? this._account
+        return this.payloadEditor.from ?? this._options?.overrides?.from ?? this._options?.account ?? this._account
     }
 
-    get chainId() {
-        return this.payloadEditor.chainId ?? this._options?.chainId ?? this._chainId
+    get chainId(): ChainId {
+        return (
+            this.payloadEditor.chainId ?? this._options?.overrides?.chainId ?? this._options?.chainId ?? this._chainId
+        )
     }
 
     get providerType() {
@@ -96,7 +89,7 @@ export class ConnectionContext {
             from: this._options?.overrides?.from || this.payloadEditor.config?.from,
             chainId:
                 typeof this._options?.overrides?.chainId === 'string'
-                    ? Number.parseInt(this._options?.overrides?.chainId, 10)
+                    ? Number.parseInt(this._options?.overrides?.chainId, 16)
                     : this.payloadEditor.config?.chainId,
         }
     }
@@ -134,13 +127,6 @@ export class ConnectionContext {
 
     get proof() {
         return this.payloadEditor.proof
-    }
-
-    get bridge() {
-        return {
-            send: this._init?.mask_send,
-            signWithPersona: this._init?.mask_signWithPersona,
-        }
     }
 
     get requestId() {

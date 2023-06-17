@@ -207,6 +207,15 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                     </Box>
                 }
                 {...props}
+                onChange={(ev) => {
+                    if (
+                        ev.currentTarget.value &&
+                        !new RegExp(props?.inputProps?.pattern).test(ev.currentTarget.value)
+                    ) {
+                        return
+                    }
+                    props.onChange?.(ev)
+                }}
                 className={cx(classes.root, props.className)}
             />
         )

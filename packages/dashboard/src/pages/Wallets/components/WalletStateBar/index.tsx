@@ -81,7 +81,7 @@ export const WalletStateBar = memo(() => {
             domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
-            openConnectWalletDialog={() => WalletStatusDialog.open()}
+            openConnectWalletDialog={WalletStatusDialog.open}
         />
     )
 })

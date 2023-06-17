@@ -35,7 +35,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     rejectRequest: WalletRPC.rejectRequest,
 
     openDashboard: Services.Helper.openDashboard,
-
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
     openPopupConnectWindow: Services.Helper.openPopupConnectWindow,

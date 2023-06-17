@@ -6,11 +6,12 @@ import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shar
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import {
     type ChainId,
-    EthereumMethodType,
     type Transaction,
     type TransactionOptions,
     type UserOperation,
+    EthereumMethodType,
 } from '../types/index.js'
+import { isValidChainId } from '../helpers/address.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
@@ -66,14 +67,14 @@ export class PayloadEditor {
         }
     }
 
-    get chainId() {
-        if (typeof this.config?.chainId === 'string') {
-            return (Number.parseInt(this.config.chainId, 16) as ChainId) || this.options?.chainId
-        }
+    get chainId(): ChainId | undefined {
+        const chainId_ = this.config?.chainId
+        if (typeof chainId_ === 'string') return Number.parseInt(chainId_, 16) || this.options?.chainId
+        if (typeof chainId_ === 'number' && isValidChainId(chainId_)) return chainId_
         return this.options?.chainId
     }
 
-    private getRaw() {
+    private getRawConfig() {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.ETH_CALL:
@@ -83,23 +84,26 @@ export class PayloadEditor {
                 return (params as [Transaction])[0]
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 return (params as [string, Transaction])[1]
-            case EthereumMethodType.MASK_DEPLOY:
-                if (!this.options?.chainId) throw new Error('Unknown chain id.')
+            case EthereumMethodType.MASK_DEPLOY: {
+                const chainId = this.options?.chainId
+                if (!isValidChainId(chainId)) throw new Error('Unknown chain id.')
 
                 const [owner] = params as [string]
 
                 // compose a fake transaction to be accepted by Transaction Watcher
                 return {
                     from: owner,
-                    to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
-                    chainId: this.options?.chainId,
+                    to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
+                    chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toHex(0)],
                     ),
                 }
-            case EthereumMethodType.MASK_FUND:
-                if (!this.options?.chainId) throw new Error('Unknown chain id.')
+            }
+            case EthereumMethodType.MASK_FUND: {
+                const chainId = this.options?.chainId
+                if (!isValidChainId(chainId)) throw new Error('Unknown chain id.')
 
                 const [proof] = params as [Proof]
                 const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
@@ -109,19 +113,20 @@ export class PayloadEditor {
                     from: ownerAddress,
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
-                    chainId: this.options?.chainId,
+                    chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toHex(nonce)],
                     ),
                 }
+            }
             default:
                 return
         }
     }
 
     get config() {
-        const raw = this.getRaw()
+        const raw = this.getRawConfig()
 
         return {
             ...raw,

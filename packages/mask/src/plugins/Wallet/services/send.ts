@@ -2,7 +2,7 @@ import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
-import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
+import { SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -15,8 +15,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
 import { signWithWallet } from './wallet/index.js'
-import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { signWithPersona } from '../../../../background/services/identity/index.js'
+import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 
 /**
  * Send to built-in RPC endpoints.
@@ -62,7 +62,9 @@ async function internalSend(
                         null,
                         createJsonRpcResponse(
                             pid,
-                            await Web3.sendSignedTransaction(await signer.signTransaction(signableConfig), { chainId }),
+                            await Web3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
+                                chainId,
+                            }),
                         ),
                     )
                 }
@@ -111,7 +113,7 @@ async function internalSend(
             callback(new Error('Method not implemented.'))
             break
         default:
-            await Web3.getWeb3Provider({ chainId }).send(payload, callback)
+            await Web3Readonly.getWeb3Provider({ chainId }).send(payload, callback)
             break
     }
 }

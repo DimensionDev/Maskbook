@@ -1,7 +1,8 @@
-import { type DashboardRoutes, PopupRoutes, MaskMessages } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { type DashboardRoutes, PopupRoutes, MaskMessages } from '@masknet/shared-base'
 
 let currentPopupWindowId = 0
+
 function isLocked() {
     return new Promise<boolean>((resolve) => {
         const off = MaskMessages.events.wallet_is_locked.on(([type, value]) => {

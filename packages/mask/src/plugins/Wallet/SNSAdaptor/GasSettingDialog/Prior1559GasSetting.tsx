@@ -212,27 +212,7 @@ export const Prior1559GasSetting = memo(
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.gasLimit?.message}
-                            //         helperText={errors.gasLimit?.message}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="gasLimit"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
                     <Typography className={classes.label}>
                         {t('popups_wallet_gas_price')}
                         <Typography component="span" className={classes.price}>
@@ -244,27 +224,7 @@ export const Prior1559GasSetting = memo(
                             })}
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.gasPrice?.message}
-                            //         helperText={errors.gasPrice?.message}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="gasPrice"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="gasPrice" />
                 </form>
                 <ActionButton
                     loading={getGasOptionsLoading}

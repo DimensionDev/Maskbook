@@ -291,27 +291,7 @@ export const GasSetting1559 = memo(
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.gasLimit?.message}
-                            //         helperText={errors.gasLimit?.message}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="gasLimit"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
                     <Typography className={classes.label}>
                         {t('popups_wallet_gas_fee_settings_max_priority_fee')}
                         <Typography component="span" className={classes.unit}>
@@ -331,27 +311,7 @@ export const GasSetting1559 = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
-                            //         helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="maxPriorityFeePerGas"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="maxPriorityFeePerGas" />
                     <Typography className={classes.label}>
                         {t('popups_wallet_gas_fee_settings_max_fee')}
                         <Typography component="span" className={classes.unit}>
@@ -371,27 +331,7 @@ export const GasSetting1559 = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
-                            //         helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="maxFeePerGas"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="maxFeePerGas" />
                 </form>
                 <ActionButton
                     loading={getGasOptionsLoading}
