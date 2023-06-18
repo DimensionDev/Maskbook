@@ -1,5 +1,3 @@
-import { bindAll } from 'lodash-es'
-
 export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
     onOpen: (props?: OpenProps) => void,
     onClose: (props?: CloseProps) => void,
@@ -29,10 +27,6 @@ export class SingletonModal<
     private dispatchClose: ReturnType<T>['close'] | undefined
     private dispatchAbort: ReturnType<T>['abort'] | undefined
 
-    constructor() {
-        bindAll(this, 'register', 'open', 'close', 'abort', 'openAndWaitForClose')
-    }
-
     /**
      * Peek the open state of the React modal component.
      */
@@ -44,7 +38,7 @@ export class SingletonModal<
      * Register a React modal component that implemented a forwarded ref.
      * The ref item should be fed with open and close methods.
      */
-    register(creator: T | null) {
+    register = (creator: T | null) => {
         if (!creator) {
             this.dispatchOpen = undefined
             this.dispatchClose = undefined
@@ -67,7 +61,7 @@ export class SingletonModal<
      * Open the registered modal component with props
      * @param props
      */
-    open(props?: OpenProps) {
+    open = (props?: OpenProps) => {
         this.dispatchOpen?.(props)
     }
 
@@ -75,14 +69,14 @@ export class SingletonModal<
      * Close the registered modal component with props
      * @param props
      */
-    close(props?: CloseProps) {
+    close = (props?: CloseProps) => {
         this.dispatchClose?.(props)
     }
 
     /**
      * Abort the registered modal component with Error
      */
-    abort(error: Error) {
+    abort = (error: Error) => {
         this.dispatchAbort?.(error)
     }
 
@@ -90,7 +84,7 @@ export class SingletonModal<
      * Open the registered modal component and wait for it closes
      * @param props
      */
-    openAndWaitForClose(props?: OpenProps): Promise<CloseProps | undefined> {
+    openAndWaitForClose = (props?: OpenProps): Promise<CloseProps | undefined> => {
         return new Promise<CloseProps | undefined>((resolve, reject) => {
             this.open(props)
 
