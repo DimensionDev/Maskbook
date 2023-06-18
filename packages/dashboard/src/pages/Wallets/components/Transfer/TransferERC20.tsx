@@ -138,7 +138,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     )
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
 
-    const gasPrice = gasConfig.gasPrice || defaultGasPrice
+    const gasPrice = gasConfig?.gasPrice || defaultGasPrice
 
     useEffect(() => {
         setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value ?? 0)

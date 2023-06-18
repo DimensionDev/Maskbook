@@ -51,7 +51,13 @@ export function GasSetting(props: GasSettingProps) {
                     gasOptionType={gasOption}
                     onGasOptionChange={setGasOptionType}
                     onConfirm={({ gasPrice, gasLimit, maxFee, priorityFee, gasOption }) => {
-                        GasSettingDialog.close()
+                        GasSettingDialog.close({
+                            gasOption,
+                            gasPrice,
+                            gasLimit,
+                            priorityFee,
+                            maxFee,
+                        })
                         setDialog({
                             open: false,
                             gasOption,

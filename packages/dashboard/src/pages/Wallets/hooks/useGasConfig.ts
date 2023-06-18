@@ -1,14 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { chainResolver } from '@masknet/web3-shared-evm'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { chainResolver, type GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { GasSettingDialog } from '@masknet/shared'
 
-export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
+interface gasConfigProps {
+    gasConfig: GasConfig
+    gasLimit: number
+    maxFee: BigNumber.Value
+    onCustomGasSetting: () => ReturnType<typeof GasSettingDialog.openAndWaitForClose>
+}
+
+export function useGasConfig(gasLimit: number, minGasLimit: number): gasConfigProps {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const [gasLimit_, setGasLimit_] = useState(0)
@@ -22,21 +28,11 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const gasPrice = customGasPrice || defaultGasPrice
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
-    useEffect(() => GasSettingDialog.close, [])
+    useEffect(() => GasSettingDialog.close(), [])
 
     useEffect(() => {
         setGasLimit_(gasLimit)
     }, [gasLimit])
-
-    useEffect(() => {
-        return WalletMessages.events.gasSettingUpdated.on((evt) => {
-            if (evt.open) return
-            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
-            if (evt.gasOption) setGasOption(evt.gasOption)
-            if (evt.gasLimit) setGasLimit_(evt.gasLimit)
-            if (evt.maxFee) setMaxFee(evt.maxFee)
-        })
-    }, [])
 
     useEffect(() => {
         if (!gasOptions) return
@@ -65,7 +61,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         }
     }, [chainId, gasOptions?.normal])
 
-    const gasConfig = useMemo(() => {
+    const gasConfig: GasConfig = useMemo(() => {
         return is1559Supported
             ? {
                   gas: toHex(gasLimit_),
@@ -79,6 +75,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         gasConfig,
         gasLimit: gasLimit_,
         maxFee,
-        onCustomGasSetting: () => GasSettingDialog.open({ gasLimit: gasLimit_, gasOption, minGasLimit }),
+        onCustomGasSetting: async () =>
+            GasSettingDialog.openAndWaitForClose({ gasLimit: gasLimit_, gasOption, minGasLimit }),
     }
 }
