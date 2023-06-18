@@ -7,14 +7,14 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { GasSettingDialog } from '@masknet/shared'
 
-interface gasConfigProps {
+interface GasConfigProps {
     gasConfig: GasConfig
     gasLimit: number
     maxFee: BigNumber.Value
     onCustomGasSetting: () => ReturnType<typeof GasSettingDialog.openAndWaitForClose>
 }
 
-export function useGasConfig(gasLimit: number, minGasLimit: number): gasConfigProps {
+export function useGasConfig(gasLimit: number, minGasLimit: number): GasConfigProps {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const [gasLimit_, setGasLimit_] = useState(0)
