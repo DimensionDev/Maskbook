@@ -1,10 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { ExtensionSite, getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { ExtensionSite, getSiteType } from '@masknet/shared-base'
 import { ConnectWalletDialog } from '../SNSAdaptor/ConnectWalletDialog/index.js'
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog/index.js'
-import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar/index.js'
-import { Modals } from '@masknet/shared'
+import { Modals, TransactionSnackbar } from '@masknet/shared'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
@@ -14,9 +13,7 @@ const dashboard: Plugin.Dashboard.Definition = {
             <>
                 <ConnectWalletDialog />
                 <GasSettingDialog />
-                {getSiteType() !== ExtensionSite.Popup ? (
-                    <TransactionSnackbar pluginID={NetworkPluginID.PLUGIN_EVM} />
-                ) : null}
+                {getSiteType() !== ExtensionSite.Popup ? TransactionSnackbar.open() : null}
                 <Modals />
             </>
         )

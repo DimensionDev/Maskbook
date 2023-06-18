@@ -199,5 +199,12 @@
     "plugin_wallet_dialog_title": "ウォレットアカウント",
     "confirm": "確認",
     "done": "完了です！",
+    "plugin_wallet_snackbar_wait_for_confirming": "ウォレットでこの取引を確認する",
+    "plugin_wallet_snackbar_hash": "取引が送信されました",
+    "plugin_wallet_snackbar_confirmed": "取引が確認されました",
+    "plugin_wallet_snackbar_success": "取引が成功しました",
+    "plugin_wallet_snackbar_failed": "取引が失敗しました",
+    "plugin_wallet_snackbar_swap_successful": "トークンを成功にスワップしました",
+    "plugin_wallet_snackbar_swap_token": "トークンをスワップしました。",
     "plugin_wallet_on_connect": "ウォレットに接続しています"
 }
