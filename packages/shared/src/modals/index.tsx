@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { SingletonModal } from '@masknet/shared-base'
 import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
-import { WalletConnectQRCode, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
+import { WalletConnectQRCodeModal, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
 import { ConnectWalletModal, type ConnectWalletDialogOpenProps } from './ConnectWalletDialog/index.js'
 import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
@@ -18,7 +18,7 @@ export const Modals = memo(function Modals() {
     return (
         <>
             <ConnectWalletModal ref={ConnectWalletDialog.register} />
-            <WalletConnectQRCode ref={WalletConnectQRCodeDialog.register} />
+            <WalletConnectQRCodeModal ref={WalletConnectQRCodeDialog.register} />
             <SelectProviderModal ref={SelectProviderDialog.register} />
             <WalletStatusModal ref={WalletStatusDialog.register} />
             <WalletRiskWarningModal ref={WalletRiskWarningDialog.register} />

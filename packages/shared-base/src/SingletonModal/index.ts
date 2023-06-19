@@ -1,11 +1,13 @@
+import { Emitter } from '@servie/events'
+
 export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
-    onOpen: (props?: OpenProps) => void,
-    onClose: (props?: CloseProps) => void,
+    onOpen: (props: OpenProps) => void,
+    onClose: (props: CloseProps) => void,
     onAbort: (error: Error) => void,
 ) => {
     peek: () => boolean
-    open: (props?: OpenProps) => void
-    close: (props?: CloseProps) => void
+    open: (props: OpenProps) => void
+    close: (props: CloseProps) => void
     abort?: (error: Error) => void
 }
 
@@ -18,6 +20,12 @@ export class SingletonModal<
     CloseProps = void,
     T extends SingletonModalRefCreator<OpenProps, CloseProps> = SingletonModalRefCreator<OpenProps, CloseProps>,
 > {
+    readonly emitter = new Emitter<{
+        open: [OpenProps]
+        close: [CloseProps]
+        abort: [Error]
+    }>()
+
     private onOpen: ReturnType<T>['open'] | undefined
     private onClose: ReturnType<T>['close'] | undefined
     private onAbort: ReturnType<T>['abort'] | undefined
@@ -61,7 +69,8 @@ export class SingletonModal<
      * Open the registered modal component with props
      * @param props
      */
-    open = (props?: OpenProps) => {
+    open = (props: OpenProps) => {
+        this.emitter.emit('open', props)
         this.dispatchOpen?.(props)
     }
 
@@ -69,7 +78,8 @@ export class SingletonModal<
      * Close the registered modal component with props
      * @param props
      */
-    close = (props?: CloseProps) => {
+    close = (props: CloseProps) => {
+        this.emitter.emit('close', props)
         this.dispatchClose?.(props)
     }
 
@@ -77,6 +87,7 @@ export class SingletonModal<
      * Abort the registered modal component with Error
      */
     abort = (error: Error) => {
+        this.emitter.emit('abort', error)
         this.dispatchAbort?.(error)
     }
 
@@ -84,8 +95,8 @@ export class SingletonModal<
      * Open the registered modal component and wait for it closes
      * @param props
      */
-    openAndWaitForClose = (props?: OpenProps): Promise<CloseProps | undefined> => {
-        return new Promise<CloseProps | undefined>((resolve, reject) => {
+    openAndWaitForClose = (props: OpenProps): Promise<CloseProps> => {
+        return new Promise<CloseProps>((resolve, reject) => {
             this.open(props)
 
             this.onClose = (props) => resolve(props)

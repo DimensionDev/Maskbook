@@ -9,14 +9,14 @@ export interface WalletConnectQRCodeOpenProps {
 
 export interface WalletConnectQRCodeDialogProps {}
 
-export const WalletConnectQRCode = forwardRef<
+export const WalletConnectQRCodeModal = forwardRef<
     SingletonModalRefCreator<WalletConnectQRCodeOpenProps>,
     WalletConnectQRCodeDialogProps
 >((props, ref) => {
     const [uri, setURI] = useState('')
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setURI(props?.uri ?? '')
+            setURI(props.uri)
         },
     })
 
