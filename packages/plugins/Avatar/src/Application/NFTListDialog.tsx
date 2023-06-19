@@ -1,3 +1,7 @@
+import { compact, uniqBy } from 'lodash-es'
+import { useCallback, useEffect, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
@@ -15,10 +19,6 @@ import { useChainContext, useNetworkContext, useWallets, useWeb3Connection, useW
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { compact, uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useUpdateEffect } from 'react-use'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'

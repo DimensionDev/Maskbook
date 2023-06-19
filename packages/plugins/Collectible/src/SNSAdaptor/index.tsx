@@ -1,20 +1,14 @@
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import { Icons } from '@masknet/icons'
-import {
-    SNSAdaptorContext,
-    usePluginWrapper,
-    usePostInfoDetails,
-    type Plugin,
-} from '@masknet/plugin-infra/content-script'
-import { CollectionList, UserAssetsProvider } from '@masknet/shared'
 import { Box } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
+import { CollectionList, UserAssetsProvider } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
-import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
@@ -52,18 +46,16 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
-                <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
-                    <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                        <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
-                            <CollectionList
-                                account={socialAccount.address}
-                                pluginID={socialAccount.pluginID}
-                                gridProps={gridProps}
-                                onItemClick={inspectCollectible}
-                            />
-                        </UserAssetsProvider>
-                    </Web3ContextProvider>
-                </SNSAdaptorContext.Provider>
+                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                    <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
+                        <CollectionList
+                            account={socialAccount.address}
+                            pluginID={socialAccount.pluginID}
+                            gridProps={gridProps}
+                            onItemClick={inspectCollectible}
+                        />
+                    </UserAssetsProvider>
+                </Web3ContextProvider>
             )
         },
     },
@@ -86,16 +78,10 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
-        SNSAdaptorPluginContext.setup(context)
-
         setupContext(context)
     },
     GlobalInjection() {
-        return (
-            <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
-                <DialogInspector />
-            </SNSAdaptorContext.Provider>
-        )
+        return <DialogInspector />
     },
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
@@ -122,20 +108,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     if (!socialAccount) return null
 
                     return (
-                        <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
-                            <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                                <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
-                                    <CollectionList
-                                        height={392}
-                                        account={socialAccount.address}
-                                        pluginID={socialAccount.pluginID}
-                                        gridProps={gridProps}
-                                        disableWindowScroll
-                                        onItemClick={inspectCollectible}
-                                    />
-                                </UserAssetsProvider>
-                            </Web3ContextProvider>
-                        </SNSAdaptorContext.Provider>
+                        <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                            <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
+                                <CollectionList
+                                    height={392}
+                                    account={socialAccount.address}
+                                    pluginID={socialAccount.pluginID}
+                                    gridProps={gridProps}
+                                    disableWindowScroll
+                                    onItemClick={inspectCollectible}
+                                />
+                            </UserAssetsProvider>
+                        </Web3ContextProvider>
                     )
                 },
             },
@@ -167,22 +151,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
                     return (
-                        <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
-                            <Box style={{ minHeight: 300 }}>
-                                <Web3ContextProvider value={{ pluginID: result.pluginID }}>
-                                    <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>
-                                        <CollectionList
-                                            height={479}
-                                            account={socialAccount.address}
-                                            pluginID={socialAccount.pluginID}
-                                            gridProps={gridProps}
-                                            disableWindowScroll
-                                            onItemClick={inspectCollectible}
-                                        />
-                                    </UserAssetsProvider>
-                                </Web3ContextProvider>
-                            </Box>
-                        </SNSAdaptorContext.Provider>
+                        <Box style={{ minHeight: 300 }}>
+                            <Web3ContextProvider value={{ pluginID: result.pluginID }}>
+                                <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>
+                                    <CollectionList
+                                        height={479}
+                                        account={socialAccount.address}
+                                        pluginID={socialAccount.pluginID}
+                                        gridProps={gridProps}
+                                        disableWindowScroll
+                                        onItemClick={inspectCollectible}
+                                    />
+                                </UserAssetsProvider>
+                            </Web3ContextProvider>
+                        </Box>
                     )
                 },
             },
