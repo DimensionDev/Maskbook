@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { DashboardRoutes, SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 import { LeavePageConfirm, type OpenPageConfirm } from './LeavePageConfirm.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
 export interface LeavePageConfirmDialogOpenProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
@@ -20,8 +20,8 @@ export const LeavePageConfirmModal = forwardRef<
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setOpenDashboard(() => props?.openDashboard)
-            setInfo(props?.info)
+            setOpenDashboard(() => props.openDashboard)
+            setInfo(props.info)
         },
     })
 

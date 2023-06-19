@@ -1,11 +1,11 @@
 import { forwardRef, useState } from 'react'
 import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '../../index.js'
 import { WalletRiskWarning } from './WalletRiskWarning.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
 export interface WalletRiskWarningModalOpenProps {
-    account: string
     pluginID: NetworkPluginID
+    account: string
 }
 
 export interface WalletRiskWarningModalProps {}
@@ -19,8 +19,8 @@ export const WalletRiskWarningModal = forwardRef<
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setAccount(props?.account || '')
-            setPluginID(props?.pluginID || NetworkPluginID.PLUGIN_EVM)
+            setAccount(props.account)
+            setPluginID(props.pluginID)
         },
     })
 
