@@ -12,6 +12,5 @@ export const MiniNetworkSelector = of({
         selectedNetwork: null,
         onSelect: () => {},
         hideAllNetworkButton: false,
-        disabledNonCurrentNetwork: false,
     },
 })

@@ -1,4 +1,4 @@
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type PropsWithChildren } from 'react'
 import { isEqual } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -15,7 +15,7 @@ interface Task extends TipTask {
     id: number
 }
 
-export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
+export function TipTaskManager({ children }: PropsWithChildren<{}>) {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {

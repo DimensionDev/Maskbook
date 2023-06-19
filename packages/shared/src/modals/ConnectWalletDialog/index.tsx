@@ -34,7 +34,7 @@ export const ConnectWalletModal = forwardRef<
             setPluginID(props?.pluginID)
             setProviderType(props?.providerType)
             setNetworkType(props?.networkType)
-            setWalletConnectedCallback(props?.walletConnectedCallback)
+            setWalletConnectedCallback(() => props?.walletConnectedCallback)
         },
     })
 

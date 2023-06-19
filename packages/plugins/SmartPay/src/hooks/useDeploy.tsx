@@ -32,7 +32,7 @@ export function useDeploy(
     const snackbarKeyRef = useRef<SnackbarKey>()
     const t = useI18N()
 
-    const { TransactionWatcher } = useWeb3State()
+    const { TransactionWatcher, Transaction } = useWeb3State()
     const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSNSAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -130,7 +130,8 @@ export function useDeploy(
 
             const deployResult = await Web3.confirmTransaction(deployHash, options)
             if (!deployResult?.status) return
-
+            await Transaction?.removeTransaction?.(chainId, '', hash)
+            await Transaction?.removeTransaction?.(chainId, '', deployHash)
             onSuccess?.()
 
             return deployResult.transactionHash
@@ -172,5 +173,6 @@ export function useDeploy(
         nonce,
         onSuccess,
         TransactionWatcher,
+        Transaction,
     ])
 }

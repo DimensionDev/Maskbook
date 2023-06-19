@@ -1,4 +1,4 @@
-import { type FC, type HTMLProps, useMemo } from 'react'
+import { type HTMLProps, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useChainContext, useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
@@ -43,7 +43,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     token?: Web3Helper.FungibleTokenAll | null
 }
 
-export const TokenValue: FC<Props> = ({ className, token, amount, ...rest }) => {
+export function TokenValue({ className, token, amount, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

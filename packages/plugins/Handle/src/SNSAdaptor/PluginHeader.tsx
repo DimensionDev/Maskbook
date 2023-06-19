@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme, props) => {
     }
 })
 
-export const PluginHeader = () => {
+export function PluginHeader() {
     const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()

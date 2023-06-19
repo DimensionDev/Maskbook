@@ -1,7 +1,7 @@
 import { Box, IconButton, Paper, Typography } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { SetupGuideStep } from '@masknet/shared-base'
 
 interface ContentUIProps {
     dialogType: SetupGuideStep

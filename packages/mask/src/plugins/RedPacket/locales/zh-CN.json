@@ -59,7 +59,7 @@
     "insufficient_balance": "余额不足",
     "back": "返回",
     "hint": "您可以在发送红包24小时后提取红包余额。",
-    "total_amount": "总数额",
+    "total_cost": "总数额",
     "amount_per_share": "单个红包数额",
     "estimate_gas_fee": "预估 Gas 费用",
     "shares": "份额",

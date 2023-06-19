@@ -1,7 +1,7 @@
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
-import { type FC, type HTMLProps, useCallback, useRef } from 'react'
+import { type HTMLProps, useCallback, useRef } from 'react'
 import {
     DisplayingFile,
     type DisplayingFileProps,
@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface FileListBaseProps extends HTMLProps<HTMLDivElement> {
+interface FileListBaseProps extends HTMLProps<HTMLElement> {
     files: FileInfo[]
     onLoadMore?(): void
 }
@@ -53,7 +53,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
     onLoadMore?(): void
 }
 
-export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDownload, onSend, ...rest }) => {
+export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
@@ -152,13 +152,13 @@ interface SelectableFileListProps extends Omit<FileListBaseProps, 'onChange' | '
 }
 
 const FILE_LIMIT = 2
-export const SelectableFileList: FC<SelectableFileListProps> = ({
+export function SelectableFileList({
     files,
     className,
     selectedIds = EMPTY_LIST,
     onChange,
     ...rest
-}) => {
+}: SelectableFileListProps) {
     const { classes, cx } = useStyles()
 
     const selectedIdsRef = useRef(selectedIds)
@@ -205,13 +205,7 @@ interface DisplayingFileFileListProps extends FileListBaseProps, Pick<Displaying
 /**
  * Render in decrypted post
  */
-export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
-    files,
-    className,
-    onSave,
-    onDownload,
-    ...rest
-}) => {
+export function DisplayingFileList({ files, className, onSave, onDownload, ...rest }: DisplayingFileFileListProps) {
     const { classes, cx } = useStyles()
 
     return (

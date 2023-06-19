@@ -22,6 +22,7 @@ import {
     GroupID,
 } from '../types/index.js'
 import { TelemetryID } from '../constants/index.js'
+import { telemetrySettings } from '../settings/index.js'
 
 const IGNORE_ERRORS = [
     // FIXME
@@ -126,6 +127,9 @@ export class SentryAPI implements Provider<Event, Event> {
             Sentry.setTag('device_seed', getABTestSeed())
             Sentry.setTag('track_id', trackID)
         })
+
+        // register listener
+        telemetrySettings.addListener((x) => (x ? this.enable() : this.disable()))
     }
 
     // The sentry needs to be opened at the runtime.

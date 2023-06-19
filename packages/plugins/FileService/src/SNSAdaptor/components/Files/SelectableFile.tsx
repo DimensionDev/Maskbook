@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Typography } from '@mui/material'
-import { type FC, memo } from 'react'
+import { memo } from 'react'
 import { Translate } from '../../../locales/index.js'
 import { type FileBaseProps, FileFrame } from './FileFrame.js'
 
@@ -28,7 +28,7 @@ interface SelectableFileProps extends Omit<FileBaseProps, 'onChange'> {
     onChange?(/** file id */ value: string, checked: boolean): void
 }
 
-export const SelectableFile: FC<SelectableFileProps> = memo(({ file, selected, onChange, disabled, ...rest }) => {
+export const SelectableFile = memo(({ file, selected, onChange, disabled, ...rest }: SelectableFileProps) => {
     const { classes, theme } = useStyles()
 
     return (

@@ -1,14 +1,20 @@
-import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    EMPTY_LIST,
+    MaskMessages,
+    NextIDPlatform,
+    type ProfileInformation as Profile,
+} from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
-import { MaskMessages, useI18N } from '../../../utils/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { usePersonasFromNextID } from '@masknet/shared'
 import { useContacts } from './useContacts.js'
+import { useI18N } from '../../../utils/index.js'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients

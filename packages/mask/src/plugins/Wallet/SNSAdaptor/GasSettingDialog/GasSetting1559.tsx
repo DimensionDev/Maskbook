@@ -1,4 +1,4 @@
-import { type FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
@@ -88,8 +88,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const GasSetting1559: FC<GasSettingProps> = memo(
-    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
+export const GasSetting1559 = memo(
+    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { t } = useI18N()
         const { classes } = useStyles()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -199,7 +199,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onConfirm?.({
-                    gasLimit: data.gasLimit,
+                    gasLimit: data.gasLimit as any,
                     maxFee: formatGweiToWei(data.maxFeePerGas).toFixed(0),
                     priorityFee: formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0),
                     gasOption: selectedGasOption,
@@ -291,27 +291,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.gasLimit?.message}
-                            //         helperText={errors.gasLimit?.message}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="gasLimit"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
                     <Typography className={classes.label}>
                         {t('popups_wallet_gas_fee_settings_max_priority_fee')}
                         <Typography component="span" className={classes.unit}>
@@ -331,27 +311,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
-                            //         helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="maxPriorityFeePerGas"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="maxPriorityFeePerGas" />
                     <Typography className={classes.label}>
                         {t('popups_wallet_gas_fee_settings_max_fee')}
                         <Typography component="span" className={classes.unit}>
@@ -371,27 +331,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return <></>
-                            // return (
-                            //     <StyledInput
-                            //         {...field}
-                            //         onChange={(e) => {
-                            //             setGasOptionType(null)
-                            //             field.onChange(e)
-                            //         }}
-                            //         error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
-                            //         helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
-                            //         inputProps={{
-                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
-                            //         }}
-                            //     />
-                            // )
-                        }}
-                        name="maxFeePerGas"
-                    />
+                    <Controller control={control} render={({ field }) => <></>} name="maxFeePerGas" />
                 </form>
                 <ActionButton
                     loading={getGasOptionsLoading}

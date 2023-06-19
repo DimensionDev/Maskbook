@@ -16,7 +16,7 @@ import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@m
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
-import { usePortalShadowRoot } from '../../entry-base.js'
+import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
 
 export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
 export { SnackbarProvider, useSnackbar } from 'notistack'

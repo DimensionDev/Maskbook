@@ -3,7 +3,7 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import type { FC, HTMLProps, ReactNode } from 'react'
+import type { HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
 import { useViewFeedDetails } from '../contexts/index.js'
 import { type CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
@@ -67,7 +67,7 @@ export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' |
     badge?: ReactNode
 }
 
-export const CardFrame: FC<CardFrameProps> = ({
+export function CardFrame({
     type,
     feed,
     actionIndex,
@@ -77,7 +77,7 @@ export const CardFrame: FC<CardFrameProps> = ({
     verbose,
     badge,
     ...rest
-}) => {
+}: CardFrameProps) {
     const { classes, cx } = useStyles()
     const CardIcon = cardTypeIconMap[type]
     const PrimaryPlatformIcon = getPlatformIcon(feed.network)

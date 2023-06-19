@@ -7,8 +7,8 @@ import {
     PopupRoutes,
     type ECKeyIdentifier,
     type SignType,
+    MaskMessages,
 } from '@masknet/shared-base'
-import { MaskMessages } from '../../../../shared/index.js'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
 

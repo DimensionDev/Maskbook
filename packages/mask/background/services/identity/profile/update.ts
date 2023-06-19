@@ -6,9 +6,9 @@ import {
     ProfileIdentifier,
     type ProfileInformationFromNextID,
     RelationFavor,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { MaskMessages } from '../../../../shared/messages.js'
 import { storeAvatar } from '../../../database/avatar-cache/avatar.js'
 import {
     attachProfileDB,

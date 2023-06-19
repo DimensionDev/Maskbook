@@ -1,4 +1,4 @@
-import type { FC, RefObject } from 'react'
+import type { RefObject } from 'react'
 import { isEqual } from 'lodash-es'
 import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
@@ -82,7 +82,7 @@ export interface SpaceMenuProps {
     disableScrollLock?: boolean
 }
 
-export const SpaceMenu: FC<SpaceMenuProps> = ({
+export function SpaceMenu({
     options,
     currentOption,
     onSelect,
@@ -91,7 +91,7 @@ export const SpaceMenu: FC<SpaceMenuProps> = ({
     setSpaceMenuOpen,
     disablePortal,
     disableScrollLock,
-}) => {
+}: SpaceMenuProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return (

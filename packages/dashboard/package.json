@@ -52,8 +52,6 @@
     "html-to-image": "^1.11.11",
     "json-stable-stringify": "^1.0.2",
     "react-avatar-editor": "^13.0.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-hook-form": "^7.43.9",
     "react-qrcode-logo": "^2.7.0",
     "react-router-dom": "^6.10.0",

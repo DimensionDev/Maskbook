@@ -12,6 +12,8 @@ import { AddCollectibleDialog } from '../AddCollectibleDialog/index.js'
 import { FungibleTokenTable } from '../FungibleTokenTable/index.js'
 import { useNavigate } from 'react-router-dom'
 import { TransferTab } from '../Transfer/index.js'
+import { Context } from '../../hooks/useContext.js'
+import { useContainer } from 'unstated-next'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -43,6 +45,7 @@ const gridProps: CollectibleGridProps = {
     gap: 4,
 }
 export const Assets = memo<AssetsProps>(({ network }) => {
+    const { chainId } = useContainer(Context)
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { pluginID } = useNetworkContext()
@@ -71,11 +74,11 @@ export const Assets = memo<AssetsProps>(({ network }) => {
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
-                    nonFungibleToken: asset,
+                    nonFungibleToken: { ...asset, chainId },
                 },
             })
         },
-        [pluginID],
+        [pluginID, chainId],
     )
 
     return (
@@ -141,5 +144,3 @@ export const Assets = memo<AssetsProps>(({ network }) => {
         </>
     )
 })
-
-Assets.displayName = 'Assets'

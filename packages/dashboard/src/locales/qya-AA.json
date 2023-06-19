@@ -156,8 +156,6 @@
     "wallets_balance_Swap": "crwdns1735:0crwdne1735:0",
     "wallets_balance_Receive": "crwdns1737:0crwdne1737:0",
     "wallets_assets_token": "crwdns1739:0crwdne1739:0",
-    "wallets_assets_token_sent_not_connect_tip": "crwdns9343:0{{chainName}}crwdne9343:0",
-    "wallets_assets_token_sent_switch_network_tip": "crwdns9345:0crwdne9345:0",
     "wallets_assets_investment": "crwdns1741:0crwdne1741:0",
     "wallets_assets_collectibles": "crwdns8171:0crwdne8171:0",
     "wallets_assets_custom_token": "crwdns1745:0crwdne1745:0",

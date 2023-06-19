@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const UploadFile: React.FC = () => {
+export function UploadFile() {
     const t = useI18N()
     const { classes, theme } = useStyles()
     const [encrypted, setEncrypted] = useState(true)

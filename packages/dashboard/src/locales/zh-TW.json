@@ -144,8 +144,6 @@
     "wallets_balance_Swap": "交換",
     "wallets_balance_Receive": "接收",
     "wallets_assets_token": "代幣",
-    "wallets_assets_token_sent_not_connect_tip": "未连接至 {{chainName}}.",
-    "wallets_assets_token_sent_switch_network_tip": "點擊切換",
     "wallets_assets_investment": "投資",
     "wallets_assets_collectibles": "收藏品",
     "wallets_assets_custom_token": "自定義代幣",

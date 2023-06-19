@@ -87,7 +87,7 @@ interface Props {
     onShare: () => void
 }
 
-const GameWindow = (props: Props) => {
+function GameWindow(props: Props) {
     const { gameInfo, tokenProps, isShow, onClose } = props
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

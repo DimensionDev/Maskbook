@@ -2,7 +2,7 @@ import { Route, Routes, useParams } from 'react-router-dom'
 import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate, PersonaRecovery } from './steps/index.js'
 import { SignUpRoutePath } from './routePath.js'
 
-const Actions = () => {
+function Actions() {
     const { action } = useParams() as {
         action: string
     }
@@ -21,7 +21,7 @@ const Actions = () => {
     }
 }
 
-export const SignUpRoutes = () => {
+export function SignUpRoutes() {
     return (
         <Routes>
             <Route path=":action" element={<Actions />} />

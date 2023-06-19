@@ -25,7 +25,7 @@ interface ValidationAccountProps extends StepCommonProps {
     >
 }
 
-export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationAccountProps) => {
+export function ValidationAccount({ account, toStep, type, onNext }: ValidationAccountProps) {
     const language = useLanguage()
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()

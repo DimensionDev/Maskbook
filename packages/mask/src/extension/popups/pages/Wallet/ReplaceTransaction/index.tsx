@@ -1,6 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
+import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import { z as zod } from 'zod'
@@ -14,7 +15,6 @@ import { makeStyles } from '@masknet/theme'
 import { ProviderType, formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import {
     useChainContext,
@@ -226,8 +226,10 @@ const ReplaceTransaction = memo(() => {
                                     {...field}
                                     error={!!errors.gas?.message}
                                     helperText={errors.gas?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                    InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                     }}
                                 />
                             )}
@@ -246,8 +248,10 @@ const ReplaceTransaction = memo(() => {
                                     {...field}
                                     error={!!errors.maxPriorityFeePerGas?.message}
                                     helperText={errors.maxPriorityFeePerGas?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                    InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                     }}
                                 />
                             )}
@@ -268,8 +272,10 @@ const ReplaceTransaction = memo(() => {
                                     {...field}
                                     error={!!errors.maxFeePerGas?.message}
                                     helperText={errors.maxFeePerGas?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                                    InputProps={{
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                     }}
                                 />
                             )}
@@ -293,8 +299,10 @@ const ReplaceTransaction = memo(() => {
                                         {...field}
                                         error={!!errors.gasPrice?.message}
                                         helperText={errors.gasPrice?.message}
-                                        inputProps={{
-                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        InputProps={{
+                                            inputProps: {
+                                                pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            },
                                         }}
                                     />
                                 )}
@@ -312,8 +320,10 @@ const ReplaceTransaction = memo(() => {
                                         {...field}
                                         error={!!errors.gas?.message}
                                         helperText={errors.gas?.message}
-                                        inputProps={{
-                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                        InputProps={{
+                                            inputProps: {
+                                                pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            },
                                         }}
                                     />
                                 )}

@@ -6,10 +6,8 @@ import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     getSiteType,
-    type ValueRefWithReady,
     type NetworkPluginID,
-    type EnhanceableSite,
-    type ExtensionSite,
+    pluginIDSettings,
 } from '@masknet/shared-base'
 import { ConnectionProgress } from './ConnectionProgress.js'
 
@@ -26,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ConnectWalletProps {
-    pluginIDSettings?: ValueRefWithReady<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
     pluginID?: NetworkPluginID
     networkType?: Web3Helper.NetworkTypeAll
     providerType?: Web3Helper.ProviderTypeAll
@@ -36,7 +33,6 @@ interface ConnectWalletProps {
 }
 
 export function ConnectWallet({
-    pluginIDSettings,
     pluginID,
     networkType,
     providerType,
@@ -65,7 +61,7 @@ export function ConnectWallet({
 
         const site = getSiteType()
 
-        if (pluginID && site && pluginIDSettings) {
+        if (pluginID && site) {
             pluginIDSettings.value = {
                 ...pluginIDSettings?.value,
                 [site]: pluginID,

@@ -11,6 +11,7 @@ import { useDashboardI18N } from '../../locales/index.js'
 import { Version } from './Version.js'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets/index.js'
+import type { ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -67,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const brands: Record<string, React.ReactNode> = {
+const brands: Record<string, ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
     'https://twitter.com/realMaskNetwork': <TwitterIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
@@ -75,14 +76,16 @@ const brands: Record<string, React.ReactNode> = {
     'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
 }
 
-const MaskIcon = () =>
-    process.env.NODE_ENV === 'production' ? <Icons.MaskBlue size={120} /> : <Icons.MaskGrey size={120} />
-const MaskTitleIcon = () =>
-    process.env.NODE_ENV === 'production' ? (
+function MaskIcon() {
+    return process.env.NODE_ENV === 'production' ? <Icons.MaskBlue size={120} /> : <Icons.MaskGrey size={120} />
+}
+function MaskTitleIcon() {
+    return process.env.NODE_ENV === 'production' ? (
         <Icons.MaskText width={190} height={28} />
     ) : (
         <Icons.MaskTextNightly width={190} height={28} />
     )
+}
 
 export function About() {
     const { classes } = useStyles()

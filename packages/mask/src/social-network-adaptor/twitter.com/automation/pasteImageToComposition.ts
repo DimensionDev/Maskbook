@@ -14,6 +14,7 @@ export async function pasteImageToCompositionTwitter(
     if (!isCompose() && !hasEditor() && options?.reason !== 'reply') {
         // open tweet window
         await untilElementAvailable(newPostButtonSelector())
+        await delay(interval)
         newPostButtonSelector().evaluate()!.click()
     }
 
@@ -22,8 +23,9 @@ export async function pasteImageToCompositionTwitter(
     await untilElementAvailable(i)
 
     while (!hasFocus(i)) {
-        i.evaluate()!.focus()
+        i.evaluate()!.click()
         await delay(interval)
     }
+
     pasteImageToCompositionDefault(() => false)(url, options)
 }

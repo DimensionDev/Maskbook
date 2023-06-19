@@ -4,7 +4,7 @@ import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useLayoutEffect, useRef, useState, type FC, type HTMLProps } from 'react'
+import { memo, useEffect, useLayoutEffect, useRef, useState, type HTMLProps } from 'react'
 import { useSharedI18N } from '../../../index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
@@ -90,7 +90,7 @@ export interface CollectionProps
 /**
  * Props inherited from div on take effect when rendering as a folder
  */
-export const Collection: FC<CollectionProps> = memo(
+export const Collection = memo(
     ({
         className,
         collection,
@@ -106,7 +106,7 @@ export const Collection: FC<CollectionProps> = memo(
         onItemClick,
         selectedAsset,
         ...rest
-    }) => {
+    }: CollectionProps) => {
         const t = useSharedI18N()
         const { compact, containerRef } = useCompactDetection()
         const { classes, cx } = useStyles({ compact })
@@ -204,7 +204,7 @@ export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
     count: number
     expanded?: boolean
 }
-export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, count, id, expanded, ...rest }) => {
+export function CollectionSkeleton({ className, count, id, expanded, ...rest }: CollectionSkeletonProps) {
     const { compact, containerRef } = useCompactDetection()
     const { classes, cx } = useStyles({ compact })
 
@@ -233,7 +233,7 @@ export const CollectionSkeleton: FC<CollectionSkeletonProps> = ({ className, cou
     return <>{skeletons}</>
 }
 
-export const LazyCollection: FC<CollectionProps> = memo((props) => {
+export const LazyCollection = memo((props: CollectionProps) => {
     const { className, collection } = props
     const placeholderRef = useRef<HTMLDivElement>(null)
     const [seen, setSeen] = useState(false)
@@ -256,7 +256,7 @@ export const LazyCollection: FC<CollectionProps> = memo((props) => {
     }, [placeholderRef.current, seen])
 
     if (seen) {
-        return <Collection {...props} />
+        return <Collection {...props} ref={undefined} />
     }
     return (
         <div className={className} ref={placeholderRef}>

@@ -1,7 +1,6 @@
+import { isEmpty } from 'lodash-es'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
-import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB.js'
-import { assertPersonaDBConsistency } from './consistency.js'
+import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import {
     type AESJsonWebKey,
     convertIdentifierMapToRawMap,
@@ -11,9 +10,11 @@ import {
     ProfileIdentifier,
     RelationFavor,
     fromBase64URL,
+    MaskMessages,
 } from '@masknet/shared-base'
-import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
-import { MaskMessages } from '../../../shared/index.js'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
+import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB.js'
+import { assertPersonaDBConsistency } from './consistency.js'
 import type {
     FullPersonaDBTransaction,
     ProfileTransaction,
@@ -29,7 +30,6 @@ import type {
     RelationRecordDB,
     PersonaRecord,
 } from './type.js'
-import { isEmpty } from 'lodash-es'
 /**
  * Database structure:
  *

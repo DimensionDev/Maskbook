@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { type FC, memo } from 'react'
+import { memo } from 'react'
 import { Translate } from '../../../locales/index.js'
 import type { FileInfo } from '../../../types.js'
 import { type FileBaseProps, FileFrame } from './FileFrame.js'
@@ -36,7 +36,7 @@ export interface DisplayingFileProps extends FileBaseProps {
     onDownload?(file: FileInfo): void
 }
 
-export const DisplayingFile: FC<DisplayingFileProps> = memo(({ file, onSave, onDownload, ...rest }) => {
+export const DisplayingFile = memo(({ file, onSave, onDownload, ...rest }: DisplayingFileProps) => {
     const { classes } = useStyles()
 
     return (

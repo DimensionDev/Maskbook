@@ -1,13 +1,17 @@
 import { status } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
-import { createNormalReactRoot, hydrateNormalReactRoot, MaskMessages } from '../../utils/index.js'
+import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index.js'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { Services } from '../service.js'
 import Popups from './UI.js'
-import { currentPersonaIdentifier, pluginIDSettings } from '../../../shared/legacy-settings/settings.js'
 import { initialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
-import { createSubscriptionFromAsync } from '@masknet/shared-base'
+import {
+    MaskMessages,
+    createSubscriptionFromAsync,
+    currentPersonaIdentifier,
+    pluginIDSettings,
+} from '@masknet/shared-base'
 
 if (location.hash === '#/personas') {
     async function hydrate() {

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, type IconButtonProps } from '@mui/material'
-import { type FC, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends IconButtonProps {
     userId: string
 }
-export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) => {
+export function ProfileAvatarBadge({ userId, className, ...rest }: Props) {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 

@@ -1,7 +1,7 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import type { LanguageOptions } from '@masknet/public-api'
-import { Appearance, MaskColors } from '@masknet/theme'
+import { Appearance, type LanguageOptions } from '@masknet/public-api'
+import { MaskColors } from '@masknet/theme'
 import { type PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { MaskDarkTheme, MaskLightTheme } from './MaskTheme.js'
 import { useThemeLanguage } from './useThemeLanguage.js'

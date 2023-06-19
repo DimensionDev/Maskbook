@@ -1,7 +1,6 @@
 import { Trans } from 'react-i18next'
 import { set } from 'lodash-es'
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { ItoLabelIcon } from '../assets/ItoLabelIcon.js'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector.js'
@@ -123,7 +122,7 @@ function Badge({ payload }: BadgeProps) {
         : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
     return loadingToken ? null : (
         <div className={classes.root}>
-            <ItoLabelIcon size={14} />
+            <Icons.ITOLabel size={14} />
             <span className={classes.span}>
                 A ITO with {balance} ${symbol} from {sellerName}
             </span>

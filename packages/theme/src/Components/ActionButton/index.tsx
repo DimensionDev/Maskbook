@@ -8,13 +8,13 @@ export interface ActionButtonProps extends ButtonProps {
     loading?: boolean
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     loading: {
         ['& > *']: {
             opacity: 0.3,
         },
     },
-}))
+})
 
 export function ActionButton<T extends React.ComponentType<any> = React.ComponentType>(
     props: ActionButtonProps & PropsOf<T>,

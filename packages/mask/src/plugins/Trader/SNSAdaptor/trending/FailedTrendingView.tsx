@@ -1,5 +1,4 @@
 import { MaskLightTheme, makeStyles } from '@masknet/theme'
-import { type FC } from 'react'
 import { ThemeProvider } from '@mui/material'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { EmptyStatus } from '@masknet/shared'
@@ -20,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends TrendingCardProps, TrendingViewDescriptorProps {}
 
-export const FailedTrendingView: FC<Props> = ({ result, resultList, setResult, ...rest }) => {
+export function FailedTrendingView({ result, resultList, setResult, ...rest }: Props) {
     const { t } = useI18N()
     const { classes } = useStyles()
     return (

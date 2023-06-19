@@ -61,6 +61,7 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
+    "@masknet/public-api": "workspace:^",
     "@servie/events": "^3.0.0",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/use-subscription": "^1.0.0",
@@ -76,6 +77,7 @@
     "web3": "1.8.0",
     "web3-core": "1.8.0",
     "web3-core-helpers": "1.8.0",
-    "web3-utils": "1.8.0"
+    "web3-utils": "1.8.0",
+    "webextension-polyfill": "^0.10.0"
   }
 }

@@ -125,7 +125,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Profile = ({ url }: { url: string }) => {
+function Profile({ url }: { url: string }) {
     const t = useI18N()
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')

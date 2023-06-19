@@ -1,16 +1,18 @@
 import { head } from 'lodash-es'
-import { ECKeyIdentifier, type PersonaIdentifier, type ValueRefWithReady } from '@masknet/shared-base'
-import { BooleanPreference } from '@masknet/plugin-infra'
+import { telemetrySettings } from '@masknet/web3-telemetry'
 import {
-    appearanceSettings,
     currentPersonaIdentifier,
-    languageSettings,
+    ECKeyIdentifier,
     getCurrentPluginMinimalMode,
+    languageSettings,
+    MaskMessages,
     setCurrentPluginMinimalMode,
-    telemetrySettings,
+    type PersonaIdentifier,
+    type ValueRefWithReady,
     decentralizedSearchSettings,
-} from '../../../shared/legacy-settings/settings.js'
-import { MaskMessages } from '../../../shared/messages.js'
+    appearanceSettings,
+    BooleanPreference,
+} from '@masknet/shared-base'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
 
 function create<T>(settings: ValueRefWithReady<T>) {

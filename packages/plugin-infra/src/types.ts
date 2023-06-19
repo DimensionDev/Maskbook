@@ -25,6 +25,7 @@ import type {
     Wallet,
     SocialAccount,
     SocialIdentity,
+    BooleanPreference,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -128,7 +129,7 @@ export namespace Plugin.Shared {
         wallets: Subscription<Wallet[]>
 
         /** Open Dashboard with a new window */
-        openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
+        openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -173,11 +174,13 @@ export namespace Plugin.Shared {
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+
         /** Confirm a request */
         confirmRequest(
             payload: JsonRpcPayload,
             options?: { disableClose?: boolean; popupsWindow?: boolean },
         ): Promise<JsonRpcResponse | void>
+
         /** Reject a request */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
 
@@ -1189,10 +1192,4 @@ export namespace Plugin.__Host {
             disabled: [id: string]
         }>
     }
-}
-
-export enum BooleanPreference {
-    False = 0,
-    Default = 1,
-    True = 2,
 }

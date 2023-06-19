@@ -1,4 +1,4 @@
-import { cloneElement, useCallback, useReducer } from 'react'
+import { cloneElement, useCallback, useReducer, type ReactElement } from 'react'
 import { cloneDeep, merge } from 'lodash-es'
 import {
     type DialogProps,
@@ -14,8 +14,8 @@ import { type Theme, type ThemeOptions, ThemeProvider } from '@mui/material/styl
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
-import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useMatchXS } from '@masknet/shared'
+import { appearanceSettings, languageSettings } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -244,7 +244,9 @@ const dialogTheme = extendsTheme((theme) => ({
 }))
 
 interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
-    icon?: React.ReactElement
+    // cloneElement is used
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    icon?: ReactElement
     iconColor?: string
     primary: string
     secondary?: React.ReactNode

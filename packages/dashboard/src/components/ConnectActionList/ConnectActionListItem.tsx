@@ -1,9 +1,10 @@
 import { ListItemIcon, ListItemText, styled, ListItemButton } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
+import type { ReactNode } from 'react'
 
 export interface ConnectActionListItemProps {
     title: string
-    icon: React.ReactNode
+    icon: ReactNode
     onClick(): void
 }
 

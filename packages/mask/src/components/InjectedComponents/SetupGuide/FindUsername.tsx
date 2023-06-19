@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WizardDialog, type WizardDialogProps } from './WizardDialog.js'
 import { useI18N } from '../../../utils/index.js'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { SetupGuideStep } from '@masknet/shared-base'
 
 export const useFindUsernameStyles = makeStyles()((theme) => ({
     avatar: {

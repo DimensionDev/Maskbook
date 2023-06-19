@@ -1,10 +1,10 @@
 import { range } from 'lodash-es'
-import type { FC, HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+interface Props extends Pick<HTMLProps<HTMLDivElement>, 'className'> {}
 
-export const LoadingSkeleton: FC<Props> = ({ className }) => {
+export function LoadingSkeleton({ className }: Props) {
     return (
         <div className={className}>
             {range(3).map((i) => (

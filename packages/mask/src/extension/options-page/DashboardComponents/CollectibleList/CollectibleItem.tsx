@@ -129,11 +129,10 @@ export const CollectibleItem = memo(
     }),
 )
 
-interface SkeletonProps extends HTMLProps<HTMLDivElement> {}
-export function CollectibleItemSkeleton({ className, ...rest }: SkeletonProps) {
+export function CollectibleItemSkeleton(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()
     return (
-        <div className={cx(classes.card, className)} {...rest}>
+        <div {...props} className={cx(classes.card, props.className)}>
             <div className={classes.collectibleCard}>
                 <Skeleton animation="wave" variant="rectangular" height="100%" />
             </div>

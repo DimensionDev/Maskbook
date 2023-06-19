@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, LeavePageConfirmDialog } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
@@ -75,8 +75,6 @@ export function ApplicationBoardDialog() {
         reset()
     }, [openSettings, quickMode, reset])
 
-    const { open: personaDialogOpen } = useRemoteControlledDialog(CrossIsolationMessages.events.openPageConfirm)
-
     return open ? (
         <TabContext value={currentTab}>
             <InjectedDialog
@@ -93,7 +91,7 @@ export function ApplicationBoardDialog() {
                     ) : null
                 }
                 titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
-                independent={personaDialogOpen}
+                independent={LeavePageConfirmDialog.opened}
                 title={openSettings ? t('application_settings') : t('applications')}
                 titleTail={
                     openSettings ? null : (

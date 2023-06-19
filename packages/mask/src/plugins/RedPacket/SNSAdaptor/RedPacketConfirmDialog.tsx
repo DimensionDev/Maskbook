@@ -1,26 +1,34 @@
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useChainContext, useBalance, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useBalance,
+    useNativeToken,
+    useNativeTokenAddress,
+    useNativeTokenPrice,
+    useWallet,
+} from '@masknet/web3-hooks-base'
 import {
     chainResolver,
     explorerResolver,
     type GasConfig,
-    isNativeTokenAddress,
     useRedPacketConstants,
+    createNativeToken,
 } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { Launch as LaunchIcon } from '@mui/icons-material'
-import { FormattedBalance, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
+import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '@masknet/shared'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { Launch as LaunchIcon } from '@mui/icons-material'
+import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
 import { Icons } from '@masknet/icons'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -49,11 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'auto',
         marginRight: 'auto',
     },
-    token: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-    },
     ellipsis: {
         fontSize: 24,
         fontWeight: 700,
@@ -69,11 +72,12 @@ export interface ConfirmRedPacketFormProps {
     onClose: () => void
     settings?: RedPacketSettings
     gasOption?: GasConfig
+    onGasOptionChange?: (config: GasConfig) => void
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
-    const { onBack, settings, onCreated, onClose, gasOption } = props
+    const { onBack, settings, onCreated, onClose, gasOption, onGasOptionChange } = props
     const { classes, cx } = useStyles()
     const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -106,7 +110,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
     const formatAvg = formatBalance(
-        new BigNumber(total).div(settings?.shares ?? 1),
+        new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
         settings?.token?.decimals ?? 18,
         isNativeToken ? 3 : 0,
     )
@@ -183,6 +187,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         payload.current.network = chainResolver.networkType(chainId)
     }, [chainId, networkType, contract_version])
 
+    const nativeTokenDetailed = useMemo(() => createNativeToken(chainId), [chainId])
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const wallet = useWallet()
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const { value: params } = useCreateParams(settings!, contract_version, publicKey)
+
     return (
         <>
             <Grid container spacing={2} className={cx(classes.grid, classes.gridWrapper)}>
@@ -196,28 +206,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         {settings?.message}
                     </Typography>
                 </Grid>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textSecondary">
-                        {t.token()}
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
-                        <span>{settings?.token?.symbol}</span>
-                        {isNativeTokenAddress(settings?.token?.address) ? null : (
-                            <Link
-                                color="textPrimary"
-                                className={classes.link}
-                                href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={stop}>
-                                <LaunchIcon fontSize="small" />
-                            </Link>
-                        )}
-                    </Typography>
-                </Grid>
-
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
                         {t.split_mode()}
@@ -240,27 +228,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     </Typography>
                 </Grid>
 
-                {!estimateGasFee ? null : (
-                    <>
-                        <Grid item xs={6}>
-                            <Typography variant="body1" color="textSecondary">
-                                {t.estimate_gas_fee()}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant="body1" color="textPrimary" align="right">
-                                <FormattedBalance
-                                    value={estimateGasFee}
-                                    decimals={nativeToken?.decimals}
-                                    symbol={nativeToken?.symbol}
-                                    formatter={formatBalance}
-                                    significant={isNativeToken ? 3 : 0}
-                                />
-                            </Typography>
-                        </Grid>
-                    </>
-                )}
-
                 {settings?.isRandom ? null : (
                     <>
                         <Grid item xs={6}>
@@ -269,7 +236,22 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography variant="body1" color="textPrimary" align="right">
+                            <Typography
+                                variant="body1"
+                                color="textPrimary"
+                                align="right"
+                                display="flex"
+                                alignItems="center"
+                                flexDirection="row-reverse">
+                                <Link
+                                    color="textPrimary"
+                                    className={classes.link}
+                                    href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={stop}>
+                                    <LaunchIcon fontSize="small" />
+                                </Link>
                                 {isBalanceInsufficient ? '0' : formatAvg} {settings?.token?.symbol}
                             </Typography>
                         </Grid>
@@ -278,14 +260,41 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
-                        {t.total_amount()}
+                        {t.total_cost()}
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="body1" color="textPrimary" align="right">
+                    <Typography
+                        variant="body1"
+                        color="textPrimary"
+                        align="right"
+                        display="flex"
+                        alignItems="center"
+                        flexDirection="row-reverse">
+                        <Link
+                            color="textPrimary"
+                            className={classes.link}
+                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={stop}>
+                            <LaunchIcon fontSize="small" />
+                        </Link>
                         {formatTotal} {settings?.token?.symbol}
                     </Typography>
                 </Grid>
+                {estimateGasFee && !isZero(estimateGasFee) ? (
+                    <SelectGasSettingsToolbar
+                        nativeToken={nativeTokenDetailed}
+                        nativeTokenPrice={nativeTokenPrice}
+                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                        gasConfig={gasOption}
+                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
+                        onChange={onGasOptionChange}
+                        estimateGasFee={estimateGasFee}
+                        editMode
+                    />
+                ) : null}
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
                         <Icons.SettingInfo size={20} />

@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
@@ -46,7 +45,7 @@ interface ProposeCardProps extends Omit<FeedCardProps, 'feed'> {
  * - NoteCreate
  * - NoteEdit
  */
-export const ProposeCard: FC<ProposeCardProps> = ({ feed, ...rest }) => {
+export function ProposeCard({ feed, ...rest }: ProposeCardProps) {
     const { classes } = useStyles()
 
     const action = feed.actions[0]

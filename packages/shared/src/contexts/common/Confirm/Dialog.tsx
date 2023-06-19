@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -32,14 +32,14 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
     maxWidthOfContent?: number
 }
 
-export const ConfirmDialog: FC<ConfirmDialogProps> = ({
+export function ConfirmDialog({
     title,
     confirmLabel,
     content,
     onSubmit,
     maxWidthOfContent,
     ...rest
-}) => {
+}: ConfirmDialogProps) {
     const t = useSharedI18N()
     const { classes } = useStyles(maxWidthOfContent)
 

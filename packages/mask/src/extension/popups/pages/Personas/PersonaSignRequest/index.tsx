@@ -3,13 +3,13 @@ import { useAsyncFn } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { type PersonaInformation, PopupRoutes, SignType } from '@masknet/shared-base'
-import { MaskMessages, useI18N } from '../../../../../utils/index.js'
+import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

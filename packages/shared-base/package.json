@@ -43,5 +43,5 @@
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"
   },
-  "sideEffect": false
+  "sideEffects": false
 }

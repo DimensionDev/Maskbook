@@ -1,4 +1,4 @@
-import { type FC, memo } from 'react'
+import { memo } from 'react'
 import { useCountdown } from './useCountdown.js'
 
 interface Props {
@@ -15,7 +15,7 @@ function formatCountdown(options: Record<string, number>) {
     return paris.filter(Boolean).join(' ')
 }
 
-export const CountdownText: FC<Props> = memo(({ finishTime }) => {
+export const CountdownText = memo(({ finishTime }: Props) => {
     const { days, hours, minutes, seconds } = useCountdown(finishTime ?? 0)
     const buttonLabel = `Start Sale in ${formatCountdown({
         day: days,

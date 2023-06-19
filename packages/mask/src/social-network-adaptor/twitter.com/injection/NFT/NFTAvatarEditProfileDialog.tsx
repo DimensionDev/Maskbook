@@ -1,12 +1,12 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { ConnectPersonaBoundary } from '@masknet/shared'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, MaskMessages, PluginID, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { useEffect } from 'react'
-import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
+
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -14,7 +14,7 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import { Services } from '../../../../extension/service.js'
-import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { ButtonStyle } from '../../constant.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 

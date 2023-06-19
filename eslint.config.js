@@ -18,6 +18,15 @@ if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) 
     process.env.TSESTREE_SINGLE_RUN = 'true'
 }
 
+const deferPackages = [
+    'wallet.ts',
+    'anchorme',
+    '@blocto/fcl',
+    '@metamask/eth-sig-util',
+    '@masknet/gun-utils',
+    // add package names here.
+]
+
 // Prefer rules from @typescript-eslint > unicorn > other plugins
 // Level: if the rule is fixable and can be tolerate during dev, use 'warn' is better.
 //        if the fix needs big rewrite (e.g. XHR => fetch), use 'error' to notice the developer early.
@@ -47,6 +56,26 @@ const avoidMistakeRules = {
             types: {
                 // {} is widely used in React.PropsWithChildren<{}>. Unban this until we find better alternatives
                 '{}': false,
+                FC: {
+                    message:
+                        "To declare a component, you don't have to use FC to annotate it. To type something that accepts/is a React Component, use ComponentType<T>.",
+                    fixWith: 'ComponentType',
+                },
+                ReactElement: {
+                    message:
+                        'In most cases, you want ReactNode. Only ignore this rule when you want to use cloneElement.',
+                    fixWith: 'ReactNode',
+                },
+                'React.FC': {
+                    message:
+                        "To declare a component, you don't have to use React.FC to annotate it. To type something that accepts/is a React Component, use React.ComponentType<T>.",
+                    fixWith: 'React.ComponentType',
+                },
+                'React.ReactElement': {
+                    message:
+                        'In most cases, you want React.ReactNode. Only ignore this rule when you want to use cloneElement.',
+                    fixWith: 'React.ReactNode',
+                },
             },
             extendDefaults: true,
         },
@@ -300,13 +329,13 @@ const codeStyleRules = {
     'unicorn/throw-new-error': 'warn',
     // 'unicorn/prefer-logical-operator-over-ternary': 'warn', // prefer ?? and ||
     // 'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
-    // 'react/function-component-definition': [
-    //     'warn',
-    //     {
-    //         namedComponents: 'function-declaration',
-    //         unnamedComponents: 'function-expression',
-    //     },
-    // ],
+    'react/function-component-definition': [
+        'warn',
+        {
+            namedComponents: 'function-declaration',
+            unnamedComponents: ['function-expression', 'arrow-function'],
+        },
+    ],
     'react/jsx-boolean-value': ['error', 'never'],
     // 'react/jsx-boolean-value': ['error', 'never', { always: ['value'] }],
     // 'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
@@ -432,9 +461,7 @@ const moduleSystemRules = {
     '@masknet/prefer-defer-import': [
         'warn',
         {
-            deferPackages: [
-                // add package names here.
-            ],
+            deferPackages,
         },
     ],
 }
@@ -452,6 +479,9 @@ const plugins = {
     'react-hooks': ReactHooksPlugin,
 }
 export default [
+    {
+        settings: { react: { version: '18.3' } },
+    },
     {
         ignores: [
             '**/*.d.ts',

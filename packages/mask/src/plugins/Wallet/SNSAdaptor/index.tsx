@@ -5,7 +5,6 @@ import { base } from '@masknet/plugin-wallet'
 import { GasSettingDialog } from './GasSettingDialog/index.js'
 import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
-import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
 import { Modals } from '@masknet/shared'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -19,7 +18,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => (
                     <TransactionSnackbar key={key} pluginID={pluginID} />
                 ))}
-                <LeavePageConfirmDialog />
                 <Modals />
             </>
         )

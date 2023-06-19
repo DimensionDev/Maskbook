@@ -13,7 +13,7 @@ export async function setTelemetryID(sendNotification = true): Promise<string> {
         .slice(0, 40)
     await browser.storage.local.set({ telemetry_id: id })
     if (sendNotification) {
-        import('../../../shared/messages.js').then(({ MaskMessages }) => {
+        import('@masknet/shared-base').then(({ MaskMessages }) => {
             MaskMessages.events.telemetryIDReset.sendToAll(id)
         })
     }
