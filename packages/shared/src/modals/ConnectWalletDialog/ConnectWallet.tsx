@@ -64,7 +64,7 @@ export function ConnectWallet({
             }
         }
 
-        ConnectWalletDialog.open()
+        ConnectWalletDialog.close()
 
         walletConnectedCallback?.()
 
