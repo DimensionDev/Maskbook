@@ -24,6 +24,7 @@ setup('Backup', () => import(/* webpackPreload: true */ './backup/index.js'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper/index.js'))
 setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors/index.js'))
 setup('Settings', () => import(/* webpackPreload: true */ './settings/index.js'), false)
+setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins/index.js'))
 
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
@@ -32,6 +33,7 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
     import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('settings')))
     import.meta.webpackHot.accept(['./site-adaptors'], () => hmr.dispatchEvent(new Event('socialNetwork')))
+    import.meta.webpackHot.accept(['./third-party-plugins'], () => hmr.dispatchEvent(new Event('thirdPartyPlugin')))
 }
 
 function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>, hasLog = true) {

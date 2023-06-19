@@ -1,6 +1,7 @@
 import { compact } from 'lodash-es'
 import { awaitChildProcess, cleanupWhenExit, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
+import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
 import { buildPolyfill } from '../projects/polyfill.js'
 import { buildGun } from '../projects/gun.js'
 import { parallel, series, type TaskFunction } from 'gulp'
@@ -14,7 +15,10 @@ export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
     return f
 }
 export function buildExtensionFlag(name: string, args: BuildFlagsExtended): TaskFunction {
-    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildSentry), buildWebpackFlag(name, args))
+    const f = series(
+        parallel(buildPolyfill, buildInjectedScript, buildGun, buildMaskSDK, buildSentry),
+        buildWebpackFlag(name, args),
+    )
     const desc = 'Build extension for ' + name
     task(f, desc, desc)
     return f
@@ -30,6 +34,7 @@ export async function extensionWatch(f: Function | BuildFlagsExtended) {
     buildPolyfill()
     buildGun()
     watchInjectedScript()
+    watchMaskSDK()
     buildSentry()
     if (typeof f === 'function')
         return awaitChildProcess(
