@@ -292,5 +292,13 @@
     "lucky_drop": "Lucky Drop",
     "share": "Share",
     "ok": "OK",
-    "plugin_wallet_on_connect": "Connect Wallet"
+    "plugin_wallet_on_connect": "Connect Wallet",
+    "upload_error$single": "The input is not a single file.",
+    "upload_error$oversized": "The file is too large; limit is {{limit}}.",
+    "upload_file_title$failed": "Failed to upload file",
+    "upload_file_message$failed": "Exceeded the maximum file size of 10MB.",
+    "upload_drag_n_drop": "Drag & Drop your files here",
+    "upload_size_limit": "Size limit: 10 MB",
+    "upload_or": "or",
+    "upload_browse_files": "Browse Files"
 }

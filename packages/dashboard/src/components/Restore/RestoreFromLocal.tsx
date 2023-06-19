@@ -1,11 +1,10 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@mui/material'
 import type { BackupPreview } from '@masknet/backup-format'
 import { useDashboardI18N } from '../../locales/index.js'
 import { Messages, Services } from '../../API.js'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard.js'
-import { MaskAlert } from '../MaskAlert/index.js'
 import FileUpload from '../FileUpload/index.js'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +17,9 @@ import { LoadingButton } from '../LoadingButton/index.js'
 import PasswordField from '../PasswordField/index.js'
 import { useCustomSnackbar } from '@masknet/theme'
 import { delay } from '@masknet/kit'
+import { UploadDropArea } from '@masknet/shared'
+import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
+import { PrimaryButton } from '../PrimaryButton/index.js'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -31,12 +33,14 @@ const supportedFileType = {
     octetStream: 'application/octet-stream',
     macBinary: 'application/macbinary',
 }
+const acceptFileTypes = Object.values(supportedFileType).join(',')
 
 export const RestoreFromLocal = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
+    const { fillSubmitOutlet } = usePersonaRecovery()
 
     const [file, setFile] = useState<File | null>(null)
     const [json, setJSON] = useState<BackupPreview | null>(null)
@@ -87,9 +91,7 @@ export const RestoreFromLocal = memo(() => {
     const restoreCallback = useCallback(async () => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona)
-            }
+            if (lastedPersona) await changeCurrentPersona(lastedPersona)
         }
         await delay(1000)
         navigate(DashboardRoutes.Personas, { replace: true })
@@ -115,16 +117,32 @@ export const RestoreFromLocal = memo(() => {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
 
+    useLayoutEffect(() => {
+        return fillSubmitOutlet(
+            <PrimaryButton
+                size="large"
+                color="primary"
+                onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
+                disabled={restoreStatus === RestoreStatus.Verified ? !json : !file}>
+                {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
+            </PrimaryButton>,
+        )
+    }, [restoreStatus, decryptBackupFile, restoreDB])
+
     return (
         <>
             <Box sx={{ width: '100%' }}>
-                {restoreStatus === RestoreStatus.Verifying && <LoadingCard text="Verifying" />}
-                {restoreStatus === RestoreStatus.WaitingInput && (
-                    <Card variant="background" sx={{ height: '144px' }}>
-                        <FileUpload onChange={handleSetFile} accept={Object.values(supportedFileType).join(',')} />
-                    </Card>
-                )}
-                {restoreStatus === RestoreStatus.Verified && json ? <BackupPreviewCard json={json} /> : null}
+                {restoreStatus === RestoreStatus.Verifying ? (
+                    <LoadingCard text="Verifying" />
+                ) : restoreStatus === RestoreStatus.WaitingInput ? (
+                    <>
+                        <Card variant="background" sx={{ height: '144px' }}>
+                            <FileUpload onChange={handleSetFile} accept={acceptFileTypes} />
+                        </Card>
+                        <UploadDropArea onSelectFile={handleSetFile} />
+                    </>
+                ) : null}
+                {restoreStatus === RestoreStatus.Verified && json ? <BackupPreviewCard info={json} /> : null}
                 {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
                         <PasswordField
@@ -147,9 +165,6 @@ export const RestoreFromLocal = memo(() => {
                     {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
                 </LoadingButton>
             </ButtonContainer>
-            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
-                <MaskAlert description={t.sign_in_account_local_backup_warning()} />
-            </Box>
         </>
     )
 })

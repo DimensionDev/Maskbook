@@ -1,15 +1,15 @@
-import { useCallback, useMemo, useState } from 'react'
+import { Icons } from '@masknet/icons'
+import { UploadDropArea } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Checkbox, Radio, FormControlLabel, Typography } from '@mui/material'
+import { Checkbox, FormControlLabel, Radio, Typography } from '@mui/material'
+import { useCallback, useMemo, useState } from 'react'
+import { MAX_FILE_SIZE } from '../../constants.js'
+import { downloadFile } from '../../helpers.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import type { ProviderConfig } from '../../types.js'
-import { MAX_FILE_SIZE } from '../../constants.js'
-import { FileList } from './FileList.js'
-import { UploadDropArea } from './UploadDropArea.js'
 import { Provider } from '../../types.js'
-import { Icons } from '@masknet/icons'
 import { useFileManagement } from '../contexts/index.js'
-import { downloadFile } from '../../helpers.js'
+import { FileList } from './FileList.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

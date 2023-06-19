@@ -120,7 +120,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                         <div className={preview && content ? classes.hide : ''}>
                             <FileUpload height={180} readAsText onChange={(_, content) => setContent(content || '')} />
                         </div>
-                        {preview && content ? <BackupPreviewCard json={preview} /> : null}
+                        {preview && content ? <BackupPreviewCard info={preview} /> : null}
                     </StyledTabPanel>
                     <StyledTabPanel value="text">
                         <div className={preview && text ? classes.hide : ''}>
@@ -133,7 +133,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                                 placeholder="Paste the database backup as text here..."
                             />
                         </div>
-                        {preview && text ? <BackupPreviewCard json={preview} /> : null}
+                        {preview && text ? <BackupPreviewCard info={preview} /> : null}
                     </StyledTabPanel>
                 </TabContext>
             </div>

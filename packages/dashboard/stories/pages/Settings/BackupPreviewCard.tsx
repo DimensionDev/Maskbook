@@ -9,7 +9,7 @@ export default meta({
 
 export const BackupPreviewCard = of({
     args: {
-        json: {
+        info: {
             personas: 2,
             accounts: 2,
             posts: 5,

@@ -1,7 +1,6 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../locales/index.js'
 import { Box } from '@mui/material'
-import { MaskAlert } from '../MaskAlert/index.js'
 import { CodeValidation } from './CodeValidation.js'
 import { fetchBackupValue } from '../../pages/Settings/api.js'
 import { Messages, Services } from '../../API.js'
@@ -140,16 +139,16 @@ export const RestoreFromCloud = memo(() => {
         return undefined
     }, [fetchingBackupValue, decryptingBackup])
 
-    const synchronizePassword = () => {
+    const onCloseSynchronizePassword = useCallback(() => {
+        toggleSynchronizePasswordDialog(false)
+        navigate(DashboardRoutes.Personas, { replace: true })
+    }, [navigate])
+
+    const synchronizePassword = useCallback(() => {
         if (!account) return
         updateUser({ backupPassword: account.password })
         onCloseSynchronizePassword()
-    }
-
-    const onCloseSynchronizePassword = () => {
-        toggleSynchronizePasswordDialog(false)
-        navigate(DashboardRoutes.Personas, { replace: true })
-    }
+    }, [])
 
     useEffect(() => {
         return Messages.events.restoreSuccess.on(restoreCallback)
@@ -166,10 +165,10 @@ export const RestoreFromCloud = memo(() => {
                     )}
                 </Step>
                 <Step name="restore">
-                    {(_, { backupJson: backupBasicInfoJson, handleRestore }) => (
+                    {(_, { backupJson: backupBasicInfo, handleRestore }) => (
                         <>
                             <Box sx={{ width: '100%' }}>
-                                <BackupPreviewCard json={backupBasicInfoJson} />
+                                <BackupPreviewCard info={backupBasicInfo} />
                             </Box>
                             <ButtonContainer>
                                 <LoadingButton size="large" variant="rounded" color="primary" onClick={handleRestore}>
@@ -187,9 +186,6 @@ export const RestoreFromCloud = memo(() => {
                     onConform={synchronizePassword}
                 />
             ) : null}
-            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
-                <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
-            </Box>
         </>
     )
 })

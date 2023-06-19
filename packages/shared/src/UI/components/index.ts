@@ -1,4 +1,5 @@
 export * from './AccountIcon/index.js'
+export * from './UploadDropArea/index.js'
 export * from './ActionButton/index.js'
 export * from './AddressItem/index.js'
 export * from './Alert/index.js'

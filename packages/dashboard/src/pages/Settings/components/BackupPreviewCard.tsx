@@ -23,45 +23,45 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export interface Props {
-    json: BackupPreview
+    info: BackupPreview
 }
 
-export default function BackupPreviewCard({ json }: Props) {
+export default function BackupPreviewCard({ info }: Props) {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
 
     const records = [
         {
             name: t.settings_backup_preview_personas(),
-            value: json.personas,
+            value: info.personas,
         },
         {
             name: t.settings_backup_preview_associated_account(),
-            value: json.accounts,
+            value: info.accounts,
             sub: true,
         },
         {
             name: t.settings_backup_preview_posts(),
-            value: json.posts,
+            value: info.posts,
             sub: true,
         },
         {
             name: t.settings_backup_preview_contacts(),
-            value: json.contacts,
+            value: info.contacts,
             sub: true,
         },
         {
             name: t.settings_backup_preview_file(),
-            value: json.files,
+            value: info.files,
             sub: true,
         },
         {
             name: t.settings_backup_preview_wallets(),
-            value: json.wallets,
+            value: info.wallets,
         },
         {
             name: t.settings_backup_preview_created_at(),
-            value: json.createdAt ? formatDateTime(json.createdAt, 'MM-dd-yyyy HH:mm:ss') : '',
+            value: info.createdAt ? formatDateTime(info.createdAt, 'MM-dd-yyyy HH:mm:ss') : '',
         },
     ]
 
