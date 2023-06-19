@@ -64,17 +64,6 @@ const useStyles = makeStyles()((theme) => ({
         top: 206,
         right: 408,
     },
-    typed: {
-        fontSize: 36,
-        lineHeight: 1.2,
-        fontWeight: 700,
-        '& > strong': {
-            color: theme.palette.maskColor.highlight,
-        },
-    },
-    endTyping: {
-        opacity: 0.5,
-    },
     twitter: {
         color: theme.palette.maskColor.bottom,
     },
