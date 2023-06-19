@@ -101,7 +101,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 const asset = assetsBatchResponse?.find((y) => y.tokenId === x.token_id)
                 return {
                     ...x,
-                    nftscan_uri: asset?.metadata?.imageURL ?? '',
+                    imageURL: asset?.metadata?.imageURL ?? '',
                     transaction_link: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_EVM, chainId)}/${x.hash}`,
                     trade_token: getPaymentToken(chainId, { symbol: x.trade_symbol }),
                 }
