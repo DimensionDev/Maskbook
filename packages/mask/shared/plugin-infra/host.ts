@@ -25,6 +25,11 @@ export function createPluginHost<Context>(
     getPluginMinimalModeEnabled: (id: string) => Promise<BooleanPreference>,
     hasPermission: (host_permission: string[]) => Promise<boolean>,
 ): Plugin.__Host.Host<Context> {
+    console.log('DEBUG: create plugin host')
+    console.log({
+        signal,
+    })
+
     const minimalMode: Plugin.__Host.EnabledStatusReporter = {
         isEnabled: getPluginMinimalModeEnabled,
         events: new Emitter(),

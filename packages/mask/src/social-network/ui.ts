@@ -189,9 +189,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(
             signal,
-            (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
+            (id, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
                 return {
-                    ...createPartialSharedUIContext(pluginID, signal),
+                    ...createPartialSharedUIContext(id, signal),
                     ...RestPartOfPluginUIContextShared,
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
