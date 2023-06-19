@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, MaskMessages, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
-import { MaskMessages } from '../../utils/index.js'
 
 export function useConnectedPersonas() {
     const personasInDB = usePersonasFromDB()

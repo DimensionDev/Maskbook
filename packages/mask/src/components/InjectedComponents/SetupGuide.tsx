@@ -3,17 +3,20 @@ import stringify from 'json-stable-stringify'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NextIDProof } from '@masknet/web3-providers'
-import { type PersonaIdentifier, ProfileIdentifier, EnhanceableSite, EncryptionTargetType } from '@masknet/shared-base'
-import { useI18N } from '../../utils/index.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
+    type PersonaIdentifier,
+    ProfileIdentifier,
+    EnhanceableSite,
+    EncryptionTargetType,
     currentSetupGuideStatus,
+    SetupGuideStep,
+    userPinExtension,
     userGuideFinished,
     userGuideStatus,
-    userPinExtension,
-} from '../../../shared/legacy-settings/settings.js'
+} from '@masknet/shared-base'
+import { useI18N } from '../../utils/index.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
-import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { FindUsername } from './SetupGuide/FindUsername.js'
 import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'

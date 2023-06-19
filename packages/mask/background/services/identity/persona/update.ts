@@ -1,7 +1,11 @@
 import { decodeArrayBuffer } from '@masknet/kit'
-import { ECKeyIdentifierFromJsonWebKey, isEC_Private_JsonWebKey, type PersonaIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifierFromJsonWebKey,
+    isEC_Private_JsonWebKey,
+    MaskMessages,
+    type PersonaIdentifier,
+} from '@masknet/shared-base'
 import { decode } from '@msgpack/msgpack'
-import { MaskMessages } from '../../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     queryPersonaDB,

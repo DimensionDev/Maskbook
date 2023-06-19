@@ -1,6 +1,6 @@
 import type { Permissions } from 'webextension-polyfill'
+import { MaskMessages } from '@masknet/shared-base'
 import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
-import { MaskMessages } from '../../../shared/messages.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 
 export async function requestExtensionPermission(permission: Permissions.Permissions): Promise<boolean> {

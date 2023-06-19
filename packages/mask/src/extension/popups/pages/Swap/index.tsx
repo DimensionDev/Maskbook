@@ -1,4 +1,4 @@
-import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
+import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ThemeProvider, Typography } from '@mui/material'
 import { SharedContextProvider } from '@masknet/shared'
 import { SwapBox } from './SwapBox/index.js'
@@ -8,6 +8,7 @@ import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAl
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Appearance } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {
     return {

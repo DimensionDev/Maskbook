@@ -1,4 +1,4 @@
-export type SetupGuideContext = {
+export interface SetupGuideContext {
     /** The persona to be connected */
     persona?: string
     /** The user name given by user */
@@ -12,4 +12,10 @@ export enum SetupGuideStep {
     VerifyOnNextID = 'next-id-verify',
     PinExtension = 'pin-extension',
     Close = 'close',
+}
+
+export enum BooleanPreference {
+    False = 0,
+    Default = 1,
+    True = 2,
 }

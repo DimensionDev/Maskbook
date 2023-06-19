@@ -1,8 +1,11 @@
-import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '@masknet/shared-base'
-import type { Option } from 'ts-results-es'
-import { MaskMessages } from '../messages.js'
+import { type Option, None } from 'ts-results-es'
+import { MaskMessages } from '../Messages/index.js'
+import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '../utils/index.js'
 
-let getValue: (key: string) => Promise<Option<any>>
+let getValue: (key: string) => Promise<Option<any>> = async () => {
+    if (process.env.NODE_ENV === 'test') return None
+    throw new Error('No storage.')
+}
 export function setupLegacySettingsAtBackground(
     getStorage: (key: string) => Promise<any>,
     setStorage: (key: string, val: unknown) => Promise<void>,

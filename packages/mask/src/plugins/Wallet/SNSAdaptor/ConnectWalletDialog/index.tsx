@@ -6,11 +6,10 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getSiteType, type NetworkPluginID } from '@masknet/shared-base'
+import { getSiteType, pluginIDSettings, type NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ConnectionProgress } from './ConnectionProgress.js'
 import { useI18N } from '../../../../utils/index.js'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

@@ -1,18 +1,13 @@
 import { isEqual } from 'lodash-es'
-import { Appearance } from '@masknet/theme'
-import { LanguageOptions } from '@masknet/public-api'
-import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
-import { BooleanPreference } from '@masknet/plugin-infra'
-import { Sentry } from '@masknet/web3-telemetry'
+import { Appearance, LanguageOptions } from '@masknet/public-api'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
-
-export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
+import { updateLanguage } from '../i18n/index.js'
+import { NetworkPluginID } from '../Plugin/index.js'
+import { EnhanceableSite, ExtensionSite } from '../Site/types.js'
+import { BooleanPreference } from '../legacy-settings/types.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
-
-export const telemetrySettings = createGlobalSettings<boolean>('log', false)
-telemetrySettings.addListener((x) => (x ? Sentry.enable() : Sentry.disable()))
 
 export const pluginIDSettings = createGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
     'PluginIdBySite',
@@ -38,6 +33,8 @@ export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
 export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
+
+export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 
 /**
  * ! DO NOT use this directly to query the plugin status !

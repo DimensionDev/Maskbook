@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '../Plugin/index.js'
 import { createGlobalSettings } from './createSettings.js'
 
 export enum LockStatus {

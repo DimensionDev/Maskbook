@@ -45,6 +45,7 @@
         "@masknet/web3-shared-evm": "workspace:^",
         "@masknet/web3-shared-flow": "workspace:^",
         "@masknet/web3-shared-solana": "workspace:^",
+        "@masknet/public-api": "workspace:^",
         "@servie/events": "^3.0.0",
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@tailwindcss/container-queries": "^0.1.1",

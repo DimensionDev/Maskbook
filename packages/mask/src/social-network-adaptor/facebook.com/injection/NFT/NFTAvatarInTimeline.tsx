@@ -4,7 +4,7 @@ import {
     MutationObserverWatcher,
     type UnboundedRegistry,
 } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, type NFTAvatarEvent, attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { type NFTAvatarEvent, attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
@@ -13,6 +13,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
+import { MaskMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {

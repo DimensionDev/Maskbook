@@ -9,7 +9,13 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID, type SocialIdentity, ProfileTabs } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    PluginID,
+    type SocialIdentity,
+    ProfileTabs,
+    decentralizedSearchSettings,
+} from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -18,7 +24,6 @@ import { DSearch } from '@masknet/web3-providers'
 import { type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab } from '@mui/material'
-import { decentralizedSearchSettings } from '../../../shared/legacy-settings/settings.js'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
 const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResultType }>()(

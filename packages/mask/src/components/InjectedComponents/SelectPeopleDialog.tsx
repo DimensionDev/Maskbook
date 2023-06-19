@@ -2,14 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, alpha } from '@mui/material'
 import { InjectedDialog, usePersonasFromNextID } from '@masknet/shared'
-import { MaskMessages, useI18N } from '../../utils/index.js'
-import { EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
+import { EMPTY_LIST, MaskMessages, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { resolveNextIDPlatform, resolveValueToSearch } from '../shared/SelectRecipients/SelectRecipients.js'
 import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
 import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
+import { useI18N } from '../../utils/index.js'
 
 export interface SelectProfileDialogProps {
     open: boolean

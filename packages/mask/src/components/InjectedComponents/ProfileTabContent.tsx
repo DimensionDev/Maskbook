@@ -20,7 +20,15 @@ import {
     TokenWithSocialGroupMenu,
     SocialAccountList,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID, ProfileTabs } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    MaskMessages,
+    NextIDPlatform,
+    PluginID,
+    ProfileTabs,
+    currentPersonaIdentifier,
+} from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
@@ -29,7 +37,7 @@ import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@mask
 import { NextIDProof } from '@masknet/web3-providers'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
+import { addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -42,7 +50,6 @@ import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({

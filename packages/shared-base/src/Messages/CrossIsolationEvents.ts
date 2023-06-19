@@ -19,7 +19,7 @@ import type {
     SmartPayDialogEvent,
     RenameWalletEvent,
     FollowLensDialogEvent,
-} from './Mask.js'
+} from './Events.js'
 
 /**
  * @deprecated

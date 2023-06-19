@@ -16,13 +16,14 @@ import {
     type NextIDPlatform,
     PopupRoutes,
     EMPTY_LIST,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { MaskMessages, useI18N } from '../../../../../../utils/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import Services from '../../../../../service.js'
 import { DisconnectDialog } from '../DisconnectDialog/index.js'
 import { MethodAfterPersonaSign } from '../../../Wallet/type.js'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

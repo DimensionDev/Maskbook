@@ -306,6 +306,9 @@ importers:
       '@masknet/plugin-wallet':
         specifier: workspace:^
         version: link:../plugins/Wallet
+      '@masknet/public-api':
+        specifier: workspace:^
+        version: link:../public-api
       '@masknet/shared':
         specifier: workspace:^
         version: link:../shared
@@ -1184,6 +1187,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/public-api':
+        specifier: workspace:^
+        version: link:../public-api
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base

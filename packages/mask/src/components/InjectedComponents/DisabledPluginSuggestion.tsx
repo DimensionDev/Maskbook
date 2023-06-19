@@ -1,6 +1,5 @@
 import { Icons } from '@masknet/icons'
 import {
-    BooleanPreference,
     type Plugin,
     PluginI18NFieldRender,
     registeredPlugins,
@@ -8,7 +7,7 @@ import {
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'

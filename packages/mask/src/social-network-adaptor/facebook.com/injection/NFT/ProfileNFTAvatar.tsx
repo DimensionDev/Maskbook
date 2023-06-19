@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { attachReactTreeWithContainer, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { NFTAvatar, toPNG } from '@masknet/plugin-avatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
@@ -17,7 +17,7 @@ import { getAvatarId } from '../../utils/user.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
 import type { SelectTokenInfo } from '@masknet/plugin-avatar'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
