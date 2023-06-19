@@ -240,5 +240,10 @@
     "plugin_wallet_snackbar_failed": "crwdns10637:0crwdne10637:0",
     "plugin_wallet_snackbar_swap_successful": "crwdns10639:0crwdne10639:0",
     "plugin_wallet_snackbar_swap_token": "crwdns10641:0crwdne10641:0",
+    "plugin_wallet_connect_with": "crwdns12981:0crwdne12981:0",
+    "plugin_wallet_connect_with_retry": "crwdns12983:0crwdne12983:0",
+    "plugin_wallet_connected_with": "crwdns12985:0crwdne12985:0",
+    "initializing": "crwdns10111:0crwdne10111:0",
+    "plugin_wallet_metamask_error_already_request": "crwdns12987:0crwdne12987:0",
     "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0"
 }

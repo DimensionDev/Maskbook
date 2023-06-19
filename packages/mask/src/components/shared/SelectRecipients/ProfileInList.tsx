@@ -116,9 +116,10 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames ?? []
-        if (linkedNames.length < 2) return ''
+        if (linkedNames.length < 2)
+            return `${t('select_friends_dialog_persona_connect', { count: 1 })} @${profile.identifier.userId}.`
         const mentions = profile.linkedTwitterNames?.map((username) => '@' + username) ?? []
-        return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
+        return `${t('select_friends_dialog_persona_connect', { count: linkedNames.length })} ${mentions.join(', ')}.`
     })()
 
     const handleClick = useCallback(() => onChange(profile, !selected), [onChange, selected])

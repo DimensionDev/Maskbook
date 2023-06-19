@@ -240,5 +240,10 @@
     "plugin_wallet_snackbar_wait_for_confirming": "Confirm this transaction in your wallet",
     "plugin_wallet_snackbar_confirmed": "Transaction Confirmed",
     "plugin_wallet_snackbar_failed": "Transaction Failed",
+    "plugin_wallet_connect_with": "Connect with",
+    "plugin_wallet_connect_with_retry": "Try Again",
+    "plugin_wallet_connected_with": "Connected with",
+    "initializing": "Initializing...",
+    "plugin_wallet_metamask_error_already_request": "You've opened the popup, please confirm.",
     "plugin_wallet_on_connect": "Connect Wallet"
 }

@@ -8,23 +8,26 @@ import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/
 import {
     createSubscriptionFromAsync,
     createSubscriptionFromValueRef,
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
     DashboardRoutes,
     ECKeyIdentifier,
     EnhanceableSite,
     i18NextInstance,
+    MaskMessages,
     queryRemoteI18NBundle,
     ValueRef,
+    type SetupGuideContext,
+    SetupGuideStep,
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '@masknet/flags'
 import { Sentry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
-import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
-import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
-import { configureSelectorMissReporter, MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js'
+import { configureSelectorMissReporter, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'

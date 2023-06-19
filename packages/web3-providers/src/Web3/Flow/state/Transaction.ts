@@ -1,7 +1,12 @@
-import type { Subscription } from 'use-subscription'
-import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ChainId, formatAddress, isValidChainId, type Transaction as FlowTransaction } from '@masknet/web3-shared-flow'
+import {
+    ChainIdList,
+    formatAddress,
+    isValidChainId,
+    type ChainId,
+    type Transaction as FlowTransaction,
+} from '@masknet/web3-shared-flow'
+import type { Subscription } from 'use-subscription'
 import { TransactionState } from '../../Base/state/Transaction.js'
 
 export class Transaction extends TransactionState<ChainId, FlowTransaction> {
@@ -12,14 +17,9 @@ export class Transaction extends TransactionState<ChainId, FlowTransaction> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        super(
-            context,
-            getEnumAsArray(ChainId).map((x) => x.value),
-            subscriptions,
-            {
-                formatAddress,
-                isValidChainId,
-            },
-        )
+        super(context, ChainIdList, subscriptions, {
+            formatAddress,
+            isValidChainId,
+        })
     }
 }

@@ -100,7 +100,7 @@ export function createNonFungibleAsset(
     const payload = parseJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
     const description = payload?.description ?? collection?.description ?? ''
-    const uri = asset.nftscan_uri ?? asset.image_uri
+    const uri = asset.imageURL ?? asset.image_uri
     const mediaURL = resolveResourceURL(uri)
 
     const creator = asset.minter

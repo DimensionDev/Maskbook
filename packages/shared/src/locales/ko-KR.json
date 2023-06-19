@@ -25,6 +25,11 @@
     "plugin_wallet_snackbar_failed": "거래 실패",
     "plugin_wallet_snackbar_swap_successful": "토큰 스왑 성공",
     "plugin_wallet_snackbar_swap_token": "토큰 스왑",
+    "plugin_wallet_connect_with": "연결",
+    "plugin_wallet_connect_with_retry": "다시 시도",
+    "plugin_wallet_connected_with": "연결",
+    "initializing": "초기화 중...",
+    "plugin_wallet_metamask_error_already_request": "팝업을 열었습니다. 확인하시길 바랍니다.",
     "wallet_risk_warning_content": "유저님, <br/><br/>Mask Network의 월렛 관련된 플러그인을 사용하기 전에 다음의 이용 라스크를 확인하시길 바랍니다: <br/><br/> Mask Network는 비상업적 무료 서비스를 제공합니다. 플러그인은 커뮤니티 멤버들과 다른 제3자 DApp 팀이 제공하는 것입니다. 탈중앙화 네트워크의 자율성과 다른 기타 불확실한 리스크 요소때문에 사용자는 니모닉 단어, 개인키와 같은 중요한 정보를 적절히 보호해야 합니다. 블록체인 컨트렉트와 상호작용할 때 조심하시길 바랍니다. 제3자 DApp(플러그인) 으로 인한 리스크는 제3자 DApp 자체가 책임집니다. 확인 버튼을 클릭하면 위의 가능한 리스크를 감수하는 데 동의함을 의미합니다.",
     "plugin_wallet_on_connect": "월렛 연결하기"
 }

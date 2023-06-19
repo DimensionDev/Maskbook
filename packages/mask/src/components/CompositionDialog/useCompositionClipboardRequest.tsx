@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../extension/service.js'
-import { MaskMessages } from '../../utils/index.js'
 import type { CompositionProps } from './CompositionUI.js'
+import { MaskMessages } from '@masknet/shared-base'
 
 export function useCompositionClipboardRequest(
     requireClipboardPermission: boolean,

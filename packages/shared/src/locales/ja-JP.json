@@ -206,5 +206,10 @@
     "plugin_wallet_snackbar_failed": "取引が失敗しました",
     "plugin_wallet_snackbar_swap_successful": "トークンを成功にスワップしました",
     "plugin_wallet_snackbar_swap_token": "トークンをスワップしました。",
+    "plugin_wallet_connect_with": "と接続する",
+    "plugin_wallet_connect_with_retry": "再試行",
+    "plugin_wallet_connected_with": "と接続する",
+    "initializing": "初期化中...",
+    "plugin_wallet_metamask_error_already_request": "ポップアップが開いています。確認してください。",
     "plugin_wallet_on_connect": "ウォレットに接続しています"
 }

@@ -1,16 +1,16 @@
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { Box, Button, Link, Stack, Tab, Typography } from '@mui/material'
+import { Link, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import ConnectButton from './ConnectButton.js'
-import { useAsyncRetry } from 'react-use'
 import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { FormattedAddress, CopyButton } from '@masknet/shared'
+import { FormattedAddress, CopyButton, ReloadStatus, LoadingStatus, EmptyStatus } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { TabContext, TabPanel } from '@mui/lab'
 import { useI18N } from '../locales/index.js'
 import { ProfileTab } from '../constants.js'
 import { FollowersPage } from './FollowersPage.js'
+import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -81,13 +81,6 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
         borderRadius: '0 0 12px 12px',
     },
-    statusBox: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 400,
-        flexDirection: 'column',
-    },
     tab: {
         whiteSpace: 'nowrap',
         background: 'transparent',
@@ -103,26 +96,6 @@ const useStyles = makeStyles()((theme) => ({
             background: '#fff',
         },
     },
-    status: {
-        display: 'flex',
-        height: 196,
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-    },
-    retry: {
-        width: 254,
-        height: 40,
-        backgroundColor: theme.palette.maskColor.publicMain,
-        color: 'white',
-        fontSize: 14,
-        fontWeight: 700,
-        marginBottom: 4,
-        marginTop: 32,
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.publicMain,
-        },
-    },
 }))
 
 function Profile({ url }: { url: string }) {
@@ -130,51 +103,34 @@ function Profile({ url }: { url: string }) {
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
     const {
-        value: identity,
-        loading,
-        retry,
+        data: identity,
+        isLoading,
         error,
-    } = useAsyncRetry(async () => {
+        refetch,
+    } = useQuery(['cyber-connect', 'identity', queryAddress], async () => {
         const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
         return res.data.identity
-    }, [queryAddress])
+    })
 
     const [currentTab, onChange, tabs] = useTabs(ProfileTab.Followings, ProfileTab.Followers)
 
     function getNodata() {
         return (
-            <Box className={classes.statusBox} p={2}>
-                <Icons.EmptySimple size={32} />
-                <Typography
-                    color={(theme) => theme.palette.maskColor.publicSecond}
-                    marginTop="14px"
-                    fontSize="14px"
-                    fontWeight={400}>
+            <ThemeProvider theme={MaskLightTheme}>
+                <EmptyStatus height={400} p={2}>
                     {currentTab === tabs.Followers ? t.no_followers() : t.no_followings()}
-                </Typography>
-            </Box>
+                </EmptyStatus>
+            </ThemeProvider>
         )
     }
 
-    if (loading)
+    if (isLoading) return <LoadingStatus height={196} omitText />
+    if (error)
         return (
-            <Box className={classes.status}>
-                <LoadingBase />
-            </Box>
+            <ThemeProvider theme={MaskLightTheme}>
+                <ReloadStatus height={196} message={t.failed()} onRetry={refetch} />
+            </ThemeProvider>
         )
-
-    if (error) {
-        return (
-            <Box className={classes.status}>
-                <Typography textAlign="center" color="error">
-                    {t.failed()}
-                </Typography>
-                <Button variant="roundedContained" className={classes.retry} onClick={retry}>
-                    {t.reload()}
-                </Button>
-            </Box>
-        )
-    }
 
     return (
         <TabContext value={currentTab}>

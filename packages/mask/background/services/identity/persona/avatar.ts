@@ -1,5 +1,4 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { MaskMessages } from '../../../../shared/messages.js'
+import { MaskMessages, type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import { queryAvatarsDataURL, storeAvatar } from '../../../database/avatar-cache/avatar.js'
 
 export async function getPersonaAvatar(identifier: PersonaIdentifier | null | undefined): Promise<string | undefined> {

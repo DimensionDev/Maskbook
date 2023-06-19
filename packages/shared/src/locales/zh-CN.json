@@ -217,5 +217,10 @@
     "plugin_wallet_snackbar_failed": "交易失败",
     "plugin_wallet_snackbar_swap_successful": "已成功兑换代币",
     "plugin_wallet_snackbar_swap_token": "兑换代币",
+    "plugin_wallet_connect_with": "连接到",
+    "plugin_wallet_connect_with_retry": "再试一次",
+    "plugin_wallet_connected_with": "连接到",
+    "initializing": "初始化中...",
+    "plugin_wallet_metamask_error_already_request": "您已打开弹出窗口，请确认。",
     "plugin_wallet_on_connect": "连接钱包"
 }

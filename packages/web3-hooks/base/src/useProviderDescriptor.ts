@@ -1,6 +1,7 @@
+import { getPluginDefine } from '@masknet/plugin-infra'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getPluginDefine } from '@masknet/plugin-infra'
+import { useMemo } from 'react'
 import { useChainContext, useNetworkContext } from './useContext.js'
 
 export function useProviderDescriptor<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
@@ -10,7 +11,10 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { providerType } = useChainContext()
 
-    return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
-        [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    ) as Web3Helper.ProviderDescriptorScope<S, T>
+    const typeOrId = expectedProviderTypeOrID ?? providerType ?? ''
+    return useMemo(() => {
+        return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
+            [x.type, x.ID].includes(typeOrId),
+        ) as Web3Helper.ProviderDescriptorScope<S, T>
+    }, [pluginID, typeOrId])
 }

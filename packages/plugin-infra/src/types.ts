@@ -25,6 +25,7 @@ import type {
     Wallet,
     SocialAccount,
     SocialIdentity,
+    BooleanPreference,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -1191,10 +1192,4 @@ export namespace Plugin.__Host {
             disabled: [id: string]
         }>
     }
-}
-
-export enum BooleanPreference {
-    False = 0,
-    Default = 1,
-    True = 2,
 }

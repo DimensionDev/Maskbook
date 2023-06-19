@@ -1,7 +1,12 @@
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
-import { fetchInjectContentScriptList, contentScriptURL, injectedScriptURL } from './InjectContentScripts_imperative.js'
+import {
+    fetchInjectContentScriptList,
+    contentScriptURL,
+    injectedScriptURL,
+    maskSDK_URL,
+} from './InjectContentScripts_imperative.js'
 import type { Scripting } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
@@ -32,6 +37,7 @@ function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentS
         runAt: 'document_start',
         matches,
     }
+    if (Flags.mask_SDK_ready) result.js!.push(maskSDK_URL)
     return [result]
 }
 
@@ -46,6 +52,7 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
         runAt: 'document_start',
         matches,
     }
+    if (Flags.mask_SDK_ready) xrayScript.js!.push(maskSDK_URL)
 
     const content: Scripting.RegisteredContentScript = {
         id: 'content',

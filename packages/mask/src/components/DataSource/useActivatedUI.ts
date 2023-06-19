@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { first, isEqual } from 'lodash-es'
 import { type Subscription, useSubscription } from 'use-subscription'
-import { ValueRef } from '@masknet/shared-base'
+import { MaskMessages, ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -10,7 +10,6 @@ import type { ProfileInformation, SocialIdentity } from '@masknet/shared-base'
 import { FontSize, ThemeColor, ThemeMode, type ThemeSettings } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
-import { MaskMessages } from '../../utils/index.js'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return

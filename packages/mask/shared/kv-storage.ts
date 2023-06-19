@@ -1,5 +1,10 @@
-import { createProxyKVStorageBackend, createKVStorageHost, type KVStorageBackend, PluginID } from '@masknet/shared-base'
-import { MaskMessages } from './messages.js'
+import {
+    createProxyKVStorageBackend,
+    createKVStorageHost,
+    type KVStorageBackend,
+    PluginID,
+    MaskMessages,
+} from '@masknet/shared-base'
 
 const indexedDBProxy = createProxyKVStorageBackend()
 const inMemoryBackend = createProxyKVStorageBackend()

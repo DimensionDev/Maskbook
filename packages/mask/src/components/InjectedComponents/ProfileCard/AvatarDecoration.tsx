@@ -1,7 +1,7 @@
 import { Twitter } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import { RSS3_KEY_SNS, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
-import { MaskMessages } from '../../../utils/messages.js'
+import { MaskMessages } from '@masknet/shared-base'
 
 interface Props {
     className?: string
