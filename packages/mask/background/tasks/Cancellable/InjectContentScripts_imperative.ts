@@ -1,8 +1,8 @@
 import { noop } from 'lodash-es'
-import { MaskMessages } from '../../../shared/messages.js'
 import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
 import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
+import { MaskMessages } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
 export const injectedScriptURL = '/injected-script.js'
