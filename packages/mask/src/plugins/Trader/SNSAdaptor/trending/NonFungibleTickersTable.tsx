@@ -148,7 +148,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                     <div className={classes.nftCell}>
                         <Image
                             fallback={<Icons.MaskAvatar size={20} />}
-                            src={x.nftscan_uri}
+                            src={x.imageURL}
                             classes={{
                                 container: classes.nftImage,
                                 imageLoading: classes.imageLoading,
