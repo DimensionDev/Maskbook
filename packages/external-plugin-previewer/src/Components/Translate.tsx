@@ -1,6 +1,4 @@
-import type { Component } from './types.js'
-
-export const Translate: Component<{}> = () => {
+export function Translate() {
     return (
         <span>
             i18n: <slot />

@@ -1,5 +1,4 @@
 import { createElement } from 'react'
-import type { Component } from './types.js'
 
 export { MaskCard } from './MaskCard.js'
 export { MaskBlockQuote as MaskCodeBlock } from './BlockQuote.js'
@@ -15,7 +14,7 @@ function createNativeTagDelegate<T extends keyof HTMLElementTagNameMap>(
         [key in keyof HTMLElementTagNameMap[T]]?: boolean
     },
 ) {
-    const C: Component<{}> = () => {
+    function C() {
         // TODO: implement acceptProps
         if (acceptProps?.children === false) return createElement(tag)
         return createElement(tag, {}, <slot />)

@@ -1,4 +1,3 @@
-import type { Component } from './types.js'
 import { styled } from '@mui/material'
 
 const BlockQuote = styled('blockquote')`
@@ -9,7 +8,7 @@ const BlockQuote = styled('blockquote')`
     padding-bottom: 0.5em;
     opacity: 0.9;
 `
-export const MaskBlockQuote: Component<MaskCodeBlockProps> = (props) => {
+export function MaskBlockQuote() {
     return (
         <BlockQuote>
             <slot />

@@ -2,9 +2,10 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { usePortalShadowRoot } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { useEffect } from 'react'
-import { MaskMessages, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../utils/index.js'
 import { PluginLoader } from './PluginLoader.js'
 import { InjectedDialog } from '@masknet/shared'
+import { MaskMessages } from '@masknet/shared-base'
 
 export function ThirdPartyPluginCompositionEntry(props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
     const { t } = useI18N()
