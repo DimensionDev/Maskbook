@@ -371,7 +371,7 @@ export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     event_type: ActivityType
     transaction_link: string
     timestamp: number
-    nftscan_uri: string
+    imageURL: string
     trade_price?: number
     // The param `from` of the transaction
     from: string
@@ -381,7 +381,6 @@ export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     receive: string
     // The user address who sent the NFT
     send: string
-    cover: string
     contract_address: string
     token_id?: string
     trade_token?: FungibleToken<ChainId, SchemaType>

@@ -110,3 +110,31 @@ export interface CollectionOverview {
     '30_day_volume': number
     '90_day_volume': number
 }
+
+export enum ActivityType {
+    Transfer = 'transfer',
+    Mint = 'mint',
+    Sale = 'sale',
+    Burn = 'burn',
+}
+
+export interface Activity {
+    nft_id: string
+    chain: string
+    contract_address: string
+    token_id: string
+    event_type: ActivityType
+    from_address: string
+    to_address: string
+    quantity: number
+    timestamp: string
+    transaction: string
+    transaction_initiator: string
+    sale_details: {
+        marketplace_id: string
+        marketplace_name: string
+        payment_token: PaymentToken
+        unit_price: number
+        total_price: number
+    }
+}
