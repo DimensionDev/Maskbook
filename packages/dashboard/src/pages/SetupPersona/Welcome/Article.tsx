@@ -95,8 +95,7 @@ export function Article({ className, ...rest }: Props) {
                 We provide services for digital encrypted identity and crypto wallet.
             </Typography>
             <Typography className={classes.p}>
-                We are a browser extension that needs to request permission from certain websites in order to fulfill
-                our product's functions. For example,
+                The Mask is a browser extension that our product's functions. For example,
                 <ul>
                     <li>Setting an NFT avatar in social media,</li>
                     <li>Searching for cryptocurrency or artwork related to Twitter,</li>

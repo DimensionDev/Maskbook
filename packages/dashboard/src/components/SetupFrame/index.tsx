@@ -22,19 +22,23 @@ export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => 
                 <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative' }}>{children}</Box>
             </Grid>
             <Grid item xs={4} position="relative">
-                <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
-                    <Typography
-                        fontSize={36}
-                        fontWeight={700}
-                        lineHeight={1.2}
-                        color={theme.palette.maskColor.main}
-                        display="flex"
-                        width="70%"
-                        justifyContent="center">
-                        {t.persona_setup_identity_tips()}
-                    </Typography>
-                </Box>
-                {!hiddenSpline ? <Spline scene={Welcome.toString()} /> : null}
+                {!hiddenSpline ? (
+                    <>
+                        <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
+                            <Typography
+                                fontSize={36}
+                                fontWeight={700}
+                                lineHeight={1.2}
+                                color={theme.palette.maskColor.main}
+                                display="flex"
+                                width="70%"
+                                justifyContent="center">
+                                {t.persona_setup_identity_tips()}
+                            </Typography>
+                        </Box>{' '}
+                        <Spline scene={Welcome.toString()} />
+                    </>
+                ) : null}
             </Grid>
         </Grid>
     )

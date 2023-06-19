@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontSize: 14,
         color: theme.palette.maskColor.second,
-        fontFamily: 'PingFang SC',
         marginRight: 0,
         marginLeft: 0,
     },
