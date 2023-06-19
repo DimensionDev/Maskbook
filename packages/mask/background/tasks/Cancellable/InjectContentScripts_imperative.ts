@@ -1,15 +1,19 @@
+import { noop } from 'lodash-es'
+import { MaskMessages } from '../../../shared/messages.js'
 import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
 import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
 export const injectedScriptURL = '/injected-script.js'
+export const maskSDK_URL = '/mask-sdk.js'
 export const contentScriptURL = '/generated__content__script.html'
 
 if (typeof browser.scripting?.registerContentScripts === 'undefined') InjectContentScript(signal)
 
 function InjectContentScript(signal: AbortSignal) {
     const injectedScript = fetchUserScript(injectedScriptURL)
+    const maskSDK = fetchUserScript(maskSDK_URL)
     const injectContentScript = fetchInjectContentScript(contentScriptURL)
 
     async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): Promise<void> {
@@ -31,10 +35,28 @@ function InjectContentScript(signal: AbortSignal) {
         }
         // #endregion
 
+        // #region Mask SDK
+        if (Flags.mask_SDK_ready) {
+            const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
+            browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
+        }
+        // #endregion
         injectContentScript(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
     signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
+
+    if (process.env.NODE_ENV === 'development' && Flags.mask_SDK_ready) {
+        signal.addEventListener(
+            'abort',
+            MaskMessages.events.maskSDKHotModuleReload.on(async () => {
+                const code = (await fetchUserScript(maskSDK_URL)) + '\n;console.log("[@masknet/sdk] SDK reloaded.")'
+                for (const tab of await browser.tabs.query({})) {
+                    browser.tabs.executeScript(tab.id, { code }).then(noop)
+                }
+            }),
+        )
+    }
 }
 export async function fetchInjectContentScriptList(entryHTML: string) {
     const contentScripts: string[] = []

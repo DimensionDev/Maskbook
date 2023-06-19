@@ -25,6 +25,7 @@ const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/
 const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
+const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -60,6 +61,10 @@ export default function Popups() {
                                     <Route
                                         path={PopupRoutes.PermissionAwareRedirect}
                                         element={<PermissionAwareRedirect />}
+                                    />
+                                    <Route
+                                        path={PopupRoutes.ThirdPartyRequestPermission}
+                                        element={<ThirdPartyRequestPermission />}
                                     />
                                     <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
                                 </Routes>
