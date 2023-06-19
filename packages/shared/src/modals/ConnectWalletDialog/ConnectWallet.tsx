@@ -4,11 +4,7 @@ import { ConnectWalletDialog, InjectedDialog, useSharedI18N } from '@masknet/sha
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    getSiteType,
-    type NetworkPluginID,
-    pluginIDSettings,
-} from '@masknet/shared-base'
+import { getSiteType, type NetworkPluginID, pluginIDSettings } from '@masknet/shared-base'
 import { ConnectionProgress } from './ConnectionProgress.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,12 +59,12 @@ export function ConnectWallet({
 
         if (pluginID && site) {
             pluginIDSettings.value = {
-                ...pluginIDSettings?.value,
+                ...pluginIDSettings.value,
                 [site]: pluginID,
             }
         }
 
-        ConnectWalletDialog.open({ pluginIDSettings })
+        ConnectWalletDialog.open()
 
         walletConnectedCallback?.()
 
