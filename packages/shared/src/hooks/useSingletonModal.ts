@@ -4,8 +4,8 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 export function useSingletonModal<OpenProps, CloseProps>(
     ref: React.ForwardedRef<SingletonModalRefCreator<OpenProps, CloseProps>>,
     options?: {
-        onOpen?: (props?: OpenProps) => void
-        onClose?: (props?: CloseProps) => void
+        onOpen?: (props: OpenProps) => void
+        onClose?: (props: CloseProps) => void
         onAbort?: (error: Error) => void
     },
 ) {

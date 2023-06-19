@@ -1,8 +1,8 @@
 import { forwardRef, Fragment, useState } from 'react'
-import { useSingletonModal } from '@masknet/shared'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
+import { useSingletonModal } from '@masknet/shared'
+import type { SingletonModalRefCreator } from '@masknet/shared-base'
 
 export interface ExampleOpenProps {
     email: string
@@ -14,7 +14,7 @@ export const Example = forwardRef<SingletonModalRefCreator<ExampleOpenProps>, Ex
     const [email, setEmail] = useState('')
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setEmail(props?.email ?? '')
+            setEmail(props.email)
         },
     })
 
