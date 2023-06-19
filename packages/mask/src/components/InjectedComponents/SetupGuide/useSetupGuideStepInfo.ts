@@ -6,13 +6,13 @@ import {
     type PersonaIdentifier,
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
+    userPinExtension,
+    MaskMessages,
+    SetupGuideStep,
 } from '@masknet/shared-base'
 import { usePersonaProofs } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
-import { MaskMessages } from '../../../../shared/index.js'
 import Services from '../../../extension/service.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'

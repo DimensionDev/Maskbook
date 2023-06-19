@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { openWindow, useValueRef } from '@masknet/shared-base-ui'
-import { Button, Typography } from '@mui/material'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Button } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { ConnectPersonaBoundary, PluginWalletStatusBar } from '@masknet/shared'
+import { ConnectPersonaBoundary, LoadingStatus, PluginWalletStatusBar, ReloadStatus } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -29,12 +29,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             display: 'flex',
             flexDirection: 'column',
         },
-        loadingPlaceholder: {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-        },
         mediaBox: {
             width: 300,
         },
@@ -53,9 +47,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-        },
-        emptyText: {
-            color: theme.palette.text.secondary,
         },
         footer: {
             boxShadow:
@@ -116,25 +107,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
         }
     }, [asset.value?.link])
 
-    if (asset.loading)
-        return (
-            <div className={classes.contentWrapper}>
-                <div className={classes.loadingPlaceholder}>
-                    <LoadingBase />
-                </div>
-            </div>
-        )
-    if (!asset.value)
-        return (
-            <div className={classes.contentWrapper}>
-                <div className={classes.loadingPlaceholder}>
-                    <Typography className={classes.emptyText}>{t.load_failed()}</Typography>
-                    <Button variant="text" onClick={() => asset.retry()}>
-                        {t.retry()}
-                    </Button>
-                </div>
-            </div>
-        )
+    if (asset.loading) return <LoadingStatus height="100%" />
+    if (!asset.value) return <ReloadStatus height="100%" message={t.load_failed()} onRetry={asset.retry} />
 
     // Links of Solana NFTs might be incorrect, we discard them temporarily.
     const externalLink = pluginID !== NetworkPluginID.PLUGIN_SOLANA && asset.value.source ? asset.value.link : null

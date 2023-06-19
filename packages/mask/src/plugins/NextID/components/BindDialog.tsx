@@ -7,6 +7,7 @@ import {
     type PersonaInformation,
     NextIDAction,
     NextIDPlatform,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { delay } from '@masknet/kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -16,7 +17,6 @@ import { BindPanelUI } from './BindPanelUI.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
-import { MaskMessages } from '../../../../shared/index.js'
 import { useI18N } from '../locales/index.js'
 
 interface BindDialogProps {

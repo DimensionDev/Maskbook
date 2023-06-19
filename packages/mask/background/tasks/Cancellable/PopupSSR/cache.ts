@@ -1,10 +1,10 @@
 import { throttle } from 'lodash-es'
-import { MaskMessages } from '../../../../shared/messages.js'
+import type { Storage } from 'webextension-polyfill'
+import { MaskMessages } from '@masknet/shared-base'
 import { InternalStorageKeys } from '../../../services/settings/utils.js'
-import type { PopupSSR_Props } from './type.js'
 import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings/index.js'
 import { queryOwnedPersonaInformation } from '../../../services/identity/index.js'
-import type { Storage } from 'webextension-polyfill'
+import type { PopupSSR_Props } from './type.js'
 
 const CACHE_KEY = 'popup-ssr-cache'
 export let cache: {

@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { currentSetupGuideStatus, type SetupGuideContext } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { currentSetupGuideStatus } from '../../../shared/legacy-settings/settings.js'
-import type { SetupGuideContext } from '../../../shared/legacy-settings/types.js'
 
 export function useSetupGuideStatus() {
     const context = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])

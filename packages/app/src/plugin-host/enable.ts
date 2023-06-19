@@ -2,8 +2,9 @@ import './register.js'
 
 import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
-import { BooleanPreference, CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import {
+    BooleanPreference,
     createConstantSubscription,
     createI18NBundle,
     createKVStorageHost,

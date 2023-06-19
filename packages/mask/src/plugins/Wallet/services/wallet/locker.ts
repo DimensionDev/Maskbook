@@ -1,9 +1,6 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import {
-    currentMaskWalletLockStatusSettings,
-    LockStatus,
-} from '../../../../../shared/legacy-settings/wallet-settings.js'
 import * as password from './password.js'
+import { LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
 
 export async function isLocked() {
     return (await password.hasPassword()) && !(await password.INTERNAL_getPassword())

@@ -1,7 +1,6 @@
-import type { MaskSettingsEvents } from '@masknet/shared-base'
-import { ToBeListened } from '../../../shared/legacy-settings/listener.js'
-import { MaskMessages } from '../../../shared/messages.js'
+import { MaskMessages, type MaskSettingsEvents } from '@masknet/shared-base'
 import { hmr } from '../../../utils-pure/index.js'
+import { ToBeListened } from '../../../shared/legacy-settings/listener.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 const listeners = ToBeListened()

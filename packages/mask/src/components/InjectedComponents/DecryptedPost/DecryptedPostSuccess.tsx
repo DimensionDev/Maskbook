@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { MaskMessages, attachNextIDToProfile, useI18N } from '../../../utils/index.js'
+import { attachNextIDToProfile, useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
@@ -7,6 +7,7 @@ import { Typography, useTheme } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
 import {
     EMPTY_LIST,
+    MaskMessages,
     type ProfileIdentifier,
     type ProfileInformation,
     type ProfileInformationFromNextID,

@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
-import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
-import { MaskMessages } from '../../../shared/index.js'
+import { type DashboardRoutes, PopupRoutes, MaskMessages } from '@masknet/shared-base'
 
 let currentPopupWindowId = 0
 

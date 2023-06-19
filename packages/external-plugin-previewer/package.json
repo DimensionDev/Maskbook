@@ -1,0 +1,18 @@
+{
+  "name": "@masknet/external-plugin-previewer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "mask-src": "./src/index.tsx",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/theme": "workspace:^",
+    "ef.js": "^0.16.6"
+  }
+}

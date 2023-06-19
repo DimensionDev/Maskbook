@@ -1,9 +1,12 @@
+import { getEnumAsArray } from '@masknet/kit'
 import Chain from '@masknet/web3-constants/solana/chain.json'
-import Token from '@masknet/web3-constants/solana/token.json'
-import TokenList from '@masknet/web3-constants/solana/token-list.json'
 import CoinGecko from '@masknet/web3-constants/solana/coingecko.json'
-import { transformAllHook, transformHook, transformAll, transform } from '@masknet/web3-shared-base'
+import TokenList from '@masknet/web3-constants/solana/token-list.json'
+import Token from '@masknet/web3-constants/solana/token.json'
+import { transform, transformAll, transformAllHook, transformHook } from '@masknet/web3-shared-base'
 import { ChainId } from '../types.js'
+
+export const ChainIdList = getEnumAsArray(ChainId).map((x) => x.value)
 
 export const getTokenConstant = transform(ChainId, Token)
 export const getTokenConstants = transformAll(ChainId, Token)

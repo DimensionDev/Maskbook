@@ -1,10 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { createSubscriptionFromAsync, EMPTY_LIST } from '@masknet/shared-base'
+import { createSubscriptionFromAsync, EMPTY_LIST, MaskMessages } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletConnectQRCodeDialog } from '@masknet/shared'
 import Services from '../extension/service.js'
 import { WalletRPC } from '../plugins/Wallet/messages.js'
-import { MaskMessages } from './messages.js'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 
 export const RestPartOfPluginUIContextShared: Omit<

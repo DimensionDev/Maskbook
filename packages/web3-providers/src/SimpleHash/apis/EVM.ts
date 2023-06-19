@@ -14,6 +14,7 @@ import {
     SourceType,
     type NonFungibleAsset,
     type NonFungibleCollection,
+    type NonFungibleTokenActivity,
     TokenType,
     leftShift,
     type NonFungibleCollectionOverview,
@@ -23,7 +24,14 @@ import subSeconds from 'date-fns/subSeconds'
 import isAfter from 'date-fns/isAfter'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
-import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    isValidChainId,
+    explorerResolver,
+    ZERO_ADDRESS,
+    createNativeToken,
+} from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
     createNonFungibleAsset,
@@ -31,10 +39,19 @@ import {
     createNonFungibleCollection,
     resolveChainId,
     getAllChainNames,
+    resolveEventType,
     resolveSimpleHashRange,
     SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
 } from '../helpers.js'
-import { type Asset, type Collection, type PaymentToken, type PriceStat, type CollectionOverview } from '../type.js'
+import {
+    type Asset,
+    type Collection,
+    type PaymentToken,
+    type PriceStat,
+    type CollectionOverview,
+    type Activity,
+    ActivityType,
+} from '../type.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
@@ -312,6 +329,78 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         if (!response.collections.length) return []
         const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)
+    }
+
+    async getCoinActivities(
+        chainId: ChainId,
+        id: string,
+        cursor: string,
+    ): Promise<{ content: Array<NonFungibleTokenActivity<ChainId, SchemaType>>; cursor: string } | undefined> {
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
+
+        if (!chain || !isValidChainId(chainId) || !id) return
+
+        const path = urlcat('/api/v0/nfts/transfers/:chain/:id', {
+            id,
+            chain,
+            cursor: cursor ? cursor : undefined,
+            order_by: 'timestamp_desc',
+            limit: 50,
+        })
+        const response = await fetchFromSimpleHash<{
+            next_cursor: string
+            transfers: Activity[]
+        }>(path)
+
+        if (!response?.transfers?.length) return
+
+        const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+            nft_ids: response.transfers.map((x) => x.nft_id).join(','),
+        })
+
+        const batchAssetsResponse = await fetchFromSimpleHash<{
+            nfts: Asset[]
+        }>(batchAssetsPath)
+
+        return {
+            cursor: response.next_cursor,
+            content: response.transfers.map((x) => {
+                const trade_token = x.sale_details?.payment_token
+                    ? {
+                          ...x.sale_details?.payment_token,
+                          type: TokenType.Fungible,
+                          address: x.sale_details?.payment_token.payment_token_id.includes('native')
+                              ? ZERO_ADDRESS
+                              : x.sale_details?.payment_token.address ?? '',
+                          id: x.sale_details?.payment_token.payment_token_id.includes('native')
+                              ? ZERO_ADDRESS
+                              : x.sale_details?.payment_token.address ?? '',
+                          chainId,
+                          schema: SchemaType.ERC20,
+                      }
+                    : createNativeToken(chainId)
+                const imageURL = batchAssetsResponse.nfts.find((y) => y.nft_id === x.nft_id)?.image_url ?? ''
+                return {
+                    hash: x.transaction,
+                    from: x.from_address,
+                    token_id: x.token_id,
+                    transaction_link: explorerResolver.transactionLink(chainId, x.transaction),
+                    event_type: resolveEventType(x.event_type),
+                    send: x.from_address,
+                    receive: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
+                    to: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
+                    trade_token,
+                    timestamp: new Date(x.timestamp).getTime(),
+                    trade_price: x.sale_details?.total_price
+                        ? leftShift(x.sale_details?.total_price, trade_token.decimals).toNumber()
+                        : 0,
+                    imageURL,
+                    contract_address: x.contract_address,
+                    trade_symbol: trade_token.symbol ?? '',
+                    token_address: trade_token.address ?? '',
+                }
+            }),
+        }
     }
 
     async getCoinTrending(

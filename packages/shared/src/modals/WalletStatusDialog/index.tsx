@@ -1,14 +1,14 @@
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { forwardRef, useState } from 'react'
-import { useSingletonModal } from '../../index.js'
+import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { WalletStatus } from './WalletStatus.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export interface WalletStatusModalOpenProps {}
+export type WalletStatusModalOpenProps = void
 
 export interface WalletStatusModalProps {}
 
 export const WalletStatusModal = forwardRef<
-    SingletonModalRefCreator<WalletStatusModalOpenProps>,
+    SingletonModalRefCreator,
     WalletStatusModalProps
 >((props, ref) => {
     const [isHidden, setHidden] = useState(false)

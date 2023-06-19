@@ -1,5 +1,5 @@
 import { AvatarType, NFTAvatarMiniClip, NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
-import { MaskMessages } from '../../../../utils/messages.js'
+import { MaskMessages } from '@masknet/shared-base'
 
 interface MiniAvatarBorderProps {
     avatarType: AvatarType

@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { PluginCardFrameMini, useCurrentPersonaConnectStatus, usePersonaProofs } from '@masknet/shared'
 import Services from '../../../extension/service.js'
@@ -15,9 +15,7 @@ import {
 
 import { ThemeProvider } from '@mui/material'
 import { MaskLightTheme } from '@masknet/theme'
-import { MaskMessages } from '../../../utils/messages.js'
 import { useAllPersonas } from '@masknet/plugin-infra/content-script'
-import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 
 export const NextIdPage = memo(function NextIdPage() {

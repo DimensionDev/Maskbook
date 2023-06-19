@@ -1,10 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { useI18N } from '../../../utils/index.js'
 import { useFindUsernameStyles } from './FindUsername.js'
 import { WizardDialog } from './WizardDialog.js'
+import { SetupGuideStep } from '@masknet/shared-base'
 
 interface PinExtensionProps {
     onDone?: () => void

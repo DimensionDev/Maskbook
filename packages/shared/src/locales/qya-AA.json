@@ -254,5 +254,10 @@
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "crwdns8993:0{{limit}}crwdne8993:0",
     "popups_wallet_gas_price": "crwdns9003:0crwdne9003:0",
     "wallet_transfer_error_gas_price_absence": "crwdns9051:0crwdne9051:0",
+    "plugin_wallet_connect_with": "crwdns12981:0crwdne12981:0",
+    "plugin_wallet_connect_with_retry": "crwdns12983:0crwdne12983:0",
+    "plugin_wallet_connected_with": "crwdns12985:0crwdne12985:0",
+    "initializing": "crwdns10111:0crwdne10111:0",
+    "plugin_wallet_metamask_error_already_request": "crwdns12987:0crwdne12987:0",
     "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0"
 }

@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
-import { ObservableSet, type PluginID } from '@masknet/shared-base'
+import { BooleanPreference, ObservableSet, type PluginID } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
-import { BooleanPreference, type Plugin } from '../types.js'
+import { type Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
 import { timeout } from '@masknet/kit'
 

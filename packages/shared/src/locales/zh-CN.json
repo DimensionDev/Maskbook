@@ -231,5 +231,10 @@
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "Gas limit 必须至少 {{limit}}",
     "popups_wallet_gas_price": "Gas Price",
     "wallet_transfer_error_gas_price_absence": "输入 Gas 价格",
+    "plugin_wallet_connect_with": "连接到",
+    "plugin_wallet_connect_with_retry": "再试一次",
+    "plugin_wallet_connected_with": "连接到",
+    "initializing": "初始化中...",
+    "plugin_wallet_metamask_error_already_request": "您已打开弹出窗口，请确认。",
     "plugin_wallet_on_connect": "连接钱包"
 }
