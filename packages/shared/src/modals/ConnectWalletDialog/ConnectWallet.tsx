@@ -1,15 +1,11 @@
-import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent, dialogClasses } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
+import { ConnectWalletDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getSiteType, pluginIDSettings, type NetworkPluginID } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { getSiteType, type NetworkPluginID, pluginIDSettings } from '@masknet/shared-base'
 import { ConnectionProgress } from './ConnectionProgress.js'
-import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -23,26 +19,25 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ConnectWalletDialog() {
-    const { classes } = useStyles()
-    const { t } = useI18N()
-    const [pluginID, setPluginID] = useState<NetworkPluginID>()
-    const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
-    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
-    const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
+interface ConnectWalletProps {
+    pluginID?: NetworkPluginID
+    networkType?: Web3Helper.NetworkTypeAll
+    providerType?: Web3Helper.ProviderTypeAll
+    walletConnectedCallback?: () => void
+    open: boolean
+    onClose: () => void
+}
 
-    // #region remote controlled dialog
-    const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setPluginID(ev.network.networkSupporterPluginID)
-            setNetworkType(ev.network.type)
-            setProviderType(ev.provider.type)
-            setWalletConnectedCallback(() => ev.walletConnectedCallback)
-        },
-    )
-    // #endregion
+export function ConnectWallet({
+    pluginID,
+    networkType,
+    providerType,
+    walletConnectedCallback,
+    open,
+    onClose,
+}: ConnectWalletProps) {
+    const { classes } = useStyles()
+    const t = useSharedI18N()
 
     const Web3 = useWeb3Connection(pluginID, { providerType })
     const Others = useWeb3Others(pluginID)
@@ -69,22 +64,20 @@ export function ConnectWalletDialog() {
             }
         }
 
-        setConnectWalletDialog({
-            open: false,
-        })
+        ConnectWalletDialog.close()
 
         walletConnectedCallback?.()
 
         return true
-    }, [open, walletConnectedCallback, Others, Web3])
+    }, [open, walletConnectedCallback, Others, Web3, pluginIDSettings])
 
     if (!pluginID || !providerType || !networkType) return null
 
     return (
         <InjectedDialog
-            title={t('plugin_wallet_dialog_title')}
+            title={t.plugin_wallet_dialog_title()}
             open={open}
-            onClose={() => setConnectWalletDialog({ open: false })}
+            onClose={onClose}
             maxWidth="sm"
             className={classes.dialog}>
             <DialogContent className={classes.content}>

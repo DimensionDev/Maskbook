@@ -1,14 +1,13 @@
 import { Trans } from 'react-i18next'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Icons } from '@masknet/icons'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon, useSharedI18N } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -76,7 +75,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { pluginID, providerType, networkType, connection } = props
     const { value: connected, loading, error, retry } = connection
 
-    const { t } = useI18N()
+    const t = useSharedI18N()
 
     const Others = useWeb3Others(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
@@ -98,15 +97,17 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                             <Typography className={classes.connectWith}>
                                 {loading
-                                    ? t('plugin_wallet_connect_with')
-                                    : t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
+                                    ? t.plugin_wallet_connect_with()
+                                    : connected
+                                    ? t.plugin_wallet_connected_with()
+                                    : t.plugin_wallet_connect_with()}
                                 {Others.providerResolver.providerName(providerType)}
                             </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
                                     <LoadingBase className={classes.progressIcon} size={14} sx={{ marginRight: 1 }} />
                                     <Typography variant="body2" className={classes.progress}>
-                                        {t('initializing')}
+                                        {t.initializing()}
                                     </Typography>
                                 </Box>
                             ) : null}
@@ -116,7 +117,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                     error.message?.includes(
                                         "Request of type 'wallet_requestPermissions' already pending for origin",
                                     )
-                                        ? t('plugin_wallet_metamask_error_already_request')
+                                        ? t.plugin_wallet_metamask_error_already_request()
                                         : error.message ?? 'Something went wrong.'}
                                 </Typography>
                             ) : null}
@@ -128,7 +129,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                 onClick={retry}
                                 disabled={loading}
                                 className={classes.retryButton}>
-                                {t('plugin_wallet_connect_with_retry')}
+                                {t.plugin_wallet_connect_with_retry()}
                             </ActionButton>
                         ) : null}
                     </Box>
