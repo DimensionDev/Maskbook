@@ -1,7 +1,7 @@
 import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { forwardRef, useState } from 'react'
 import { useSingletonModal } from '../../index.js'
-import { Transaction } from './Trasnaction.js'
+import { Transaction } from './Transaction.js'
 
 export interface TransactionSnackbarOpenProps {
     pluginID?: NetworkPluginID
