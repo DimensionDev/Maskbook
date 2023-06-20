@@ -9,5 +9,15 @@
     "adjust_order": "调整顺序",
     "make_trade_anyway": "仍然交易",
     "swap_failed": "兑换失败",
-    "swap_failed_description": "网络或 Dex 提供方错误"
+    "swap_failed_description": "网络或 Dex 提供方错误",
+    "swap": "兑换",
+    "congratulations": "恭喜！",
+    "swap_successfully_description": "将 {{input}} 兑换为 {{output}}",
+    "plugin_wallet_snackbar_hash": "交易已提交",
+    "plugin_wallet_snackbar_confirmed": "交易已确认",
+    "plugin_wallet_snackbar_success": "交易成功",
+    "plugin_wallet_snackbar_failed": "交易失败",
+    "plugin_wallet_snackbar_swap_successful": "已成功兑换代币",
+    "plugin_wallet_snackbar_swap_token": "兑换代币",
+    "share": "分享"
 }
