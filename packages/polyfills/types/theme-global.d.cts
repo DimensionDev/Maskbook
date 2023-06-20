@@ -10,6 +10,7 @@ declare module '@mui/material/styles/createPalette.d' {
             thirdMain: string
             bg: string
             bottom: string
+            bottomBg: string
             secondaryBottom: string
             shadowBottom: string
             input: string
