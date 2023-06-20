@@ -19,8 +19,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
+import { useSharedI18N } from '../../index.js'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -87,9 +87,9 @@ const useStyles = makeStyles()((theme) => ({
 export const Prior1559GasSetting = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { classes } = useStyles()
-        const { t } = useI18N()
+        const t = useSharedI18N()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-        const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
+        const [selectedGasOption, setGasOptionType] = useState<GasOptionType>(gasOptionType)
 
         const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
@@ -100,17 +100,17 @@ export const Prior1559GasSetting = memo(
                 gasOptions
                     ? [
                           {
-                              title: t('popups_wallet_gas_fee_settings_low'),
+                              title: t.popups_wallet_gas_fee_settings_low(),
                               gasOption: GasOptionType.SLOW,
                               gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas ?? '0',
                           },
                           {
-                              title: t('popups_wallet_gas_fee_settings_medium'),
+                              title: t.popups_wallet_gas_fee_settings_medium(),
                               gasOption: GasOptionType.NORMAL,
                               gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? '0',
                           },
                           {
-                              title: t('popups_wallet_gas_fee_settings_high'),
+                              title: t.popups_wallet_gas_fee_settings_high(),
                               gasOption: GasOptionType.FAST,
                               gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
                           },
@@ -124,12 +124,12 @@ export const Prior1559GasSetting = memo(
             return zod.object({
                 gasLimit: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
+                    .min(1, t.wallet_transfer_error_gas_limit_absence())
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
-                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
+                        t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: minGasLimit.toFixed() }),
                     ),
-                gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+                gasPrice: zod.string().min(1, t.wallet_transfer_error_gas_price_absence()),
             })
         }, [minGasLimit])
 
@@ -207,21 +207,26 @@ export const Prior1559GasSetting = memo(
                 ) : null}
                 <form onSubmit={onSubmit}>
                     <Typography className={classes.label}>
-                        {t('popups_wallet_gas_fee_settings_gas_limit')}
+                        {t.popups_wallet_gas_fee_settings_gas_limit()}
                         <Typography component="span" className={classes.price}>
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
                     <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
                     <Typography className={classes.label}>
-                        {t('popups_wallet_gas_price')}
+                        {t.popups_wallet_gas_price()}
                         <Typography component="span" className={classes.price}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(gasPrice ?? 0)
-                                    .times(nativeTokenPrice)
-                                    .times(inputGasLimit || 1)
-                                    .toFixed(2),
-                            })}
+                            <Trans
+                                i18nKey="popups_wallet_gas_fee_settings_usd"
+                                values={{
+                                    usd: formatGweiToEther(gasPrice ?? 0)
+                                        .times(nativeTokenPrice)
+                                        .times(inputGasLimit || 1)
+                                        .toFixed(2),
+                                }}
+                                components={{ span: <span /> }}
+                                shouldUnescape
+                            />
                         </Typography>
                     </Typography>
                     <Controller control={control} render={({ field }) => <></>} name="gasPrice" />
@@ -232,7 +237,7 @@ export const Prior1559GasSetting = memo(
                     className={classes.button}
                     disabled={!isEmpty(errors)}
                     onClick={onSubmit}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             </>
         )

@@ -2898,6 +2898,9 @@ importers:
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
       webextension-polyfill:
         specifier: ^0.10.0
         version: 0.10.0
