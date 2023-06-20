@@ -17,7 +17,7 @@ export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError
     onRetry: () => void
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
-    const context = useContext(BuildInfo)
+    const context = useContext(BuildInfo)()
     const t = useSharedBaseI18N()
 
     const [showStack, setShowStack] = useState(false)

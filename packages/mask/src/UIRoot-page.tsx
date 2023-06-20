@@ -14,13 +14,13 @@ import {
     pluginIDSettings,
     queryClient,
 } from '@masknet/shared-base'
-import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
+import { useBuildInfo } from './utils/BuildInfoMarkdown.js'
 
 export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,
-        (children) => <BuildInfo.Provider value={buildInfoMarkdown} children={children} />,
+        (children) => <BuildInfo.Provider value={useBuildInfo} children={children} />,
 
         // Provide the minimal environment (i18n context) for CrashUI in page mode
         (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,

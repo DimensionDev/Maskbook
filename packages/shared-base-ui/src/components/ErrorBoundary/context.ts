@@ -10,5 +10,5 @@ export interface ErrorBoundaryError {
 /**
  * Provide the build info for CrashUI
  */
-export const BuildInfo = createContext('')
+export const BuildInfo = createContext<() => string>(() => '')
 BuildInfo.displayName = 'BuildInfo'
