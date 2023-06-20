@@ -3,14 +3,13 @@ import { mapKeys } from 'lodash-es'
 import { createIndicator, createPageable, type PageIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import type {
-    ChainId,
-    RedPacketJSONPayloadFromChain,
-    SchemaType,
-    CreateRedpacketParam,
-    NftRedPacketJSONPayload,
-    CreateNFTRedpacketParam,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    type RedPacketJSONPayloadFromChain,
+    type CreateRedpacketParam,
+    type NftRedPacketJSONPayload,
+    type CreateNFTRedpacketParam,
+} from './types.js'
 import { Interface } from '@ethersproject/abi'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'

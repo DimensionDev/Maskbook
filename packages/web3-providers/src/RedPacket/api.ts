@@ -1,12 +1,8 @@
-import {
-    type RedPacketJSONPayloadFromChain,
-    type ChainId,
-    type SchemaType,
-    chainResolver,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType, chainResolver } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import type { RedPacketBaseAPI } from '../entry-types.js'
+import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
 

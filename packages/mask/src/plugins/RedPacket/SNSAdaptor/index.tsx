@@ -11,7 +11,7 @@ import {
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers.js'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-shared-evm'
+import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { RedPacketInjection } from './RedPacketInjection.js'
 import RedPacketDialog from './RedPacketDialog.js'
 import { RedPacketInPost } from './RedPacketInPost.js'

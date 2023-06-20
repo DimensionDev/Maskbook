@@ -2,13 +2,12 @@ import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } fr
 import { useIntersectionObserver } from '@react-hookz/web'
 import { Box, Typography, Popper, useMediaQuery, type Theme, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import {
-    type ChainId,
-    type SchemaType,
     type RedPacketJSONPayload,
     type RedPacketJSONPayloadFromChain,
     RedPacketStatus,
-} from '@masknet/web3-shared-evm'
+} from '@masknet/web3-providers/types'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { Translate, useI18N } from '../locales/index.js'

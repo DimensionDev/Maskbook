@@ -1,13 +1,8 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
-import {
-    ChainId,
-    chainResolver,
-    networkResolver,
-    RedPacketStatus,
-    type RedPacketJSONPayload,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
+import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'

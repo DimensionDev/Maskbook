@@ -1,5 +1,5 @@
 import type { Pageable, PageIndicator } from '@masknet/shared-base'
-import type { NftRedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '@masknet/web3-shared-evm'
+import type { NftRedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '../RedPacket/types.js'
 import type { Transaction, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { HubOptions_Base } from '../entry-types.js'
 

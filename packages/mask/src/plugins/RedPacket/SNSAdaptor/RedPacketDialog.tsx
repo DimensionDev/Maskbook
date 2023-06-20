@@ -10,7 +10,8 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { ApplicationBoardDialog, InjectedDialog, NetworkTab } from '@masknet/shared'
-import { ChainId, type GasConfig, GasEditor, type RedPacketJSONPayload } from '@masknet/web3-shared-evm'
+import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
+import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'

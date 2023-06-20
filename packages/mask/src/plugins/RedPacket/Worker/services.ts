@@ -1,9 +1,9 @@
-import type {
-    ChainId,
-    RedPacketRecord,
-    RedPacketJSONPayloadFromChain,
-    NftRedPacketJSONPayload,
-} from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import {
+    type RedPacketRecord,
+    type RedPacketJSONPayloadFromChain,
+    type NftRedPacketJSONPayload,
+} from '@masknet/web3-providers/types'
 import * as database from './database.js'
 import * as nftDb from './databaseForNft.js'
 

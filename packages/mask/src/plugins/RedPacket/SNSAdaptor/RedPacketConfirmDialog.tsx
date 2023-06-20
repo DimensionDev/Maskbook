@@ -13,10 +13,9 @@ import {
     explorerResolver,
     type GasConfig,
     useRedPacketConstants,
-    type RedPacketRecord,
-    type RedPacketJSONPayload,
     createNativeToken,
 } from '@masknet/web3-shared-evm'
+import { type RedPacketRecord, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '@masknet/shared'

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
-import { networkResolver, type ChainId, type RedPacketNftJSONPayload } from '@masknet/web3-shared-evm'
+import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
+import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
 import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
