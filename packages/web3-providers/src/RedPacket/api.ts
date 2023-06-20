@@ -1,5 +1,4 @@
-import { type Transaction } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { RedPacketJSONPayloadFromChain, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { RedPacketBaseAPI } from '../entry-types.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
@@ -14,7 +13,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
         methodId: string,
         fromBlock: number,
         toBlock: number,
-    ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
+    ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
 
         const web3 = this.Web3.getWeb3({ chainId })

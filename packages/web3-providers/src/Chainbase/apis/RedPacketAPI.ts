@@ -14,13 +14,11 @@ import type { RedPacketBaseAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
 export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    async getHistories(
+    async getHistoryTransactions(
         chainId: ChainId,
         senderAddress: string,
         contractAddress: string,
         methodId: string,
-        startBlock?: number,
-        endBlock?: number,
     ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
         try {
             const txs = await asyncIteratorToArray(

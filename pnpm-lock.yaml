@@ -3357,6 +3357,9 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
+      '@ethersproject/abi':
+        specifier: ^5.4.0
+        version: 5.4.0
       '@ethersproject/address':
         specifier: ^5.4.0
         version: 5.4.0
@@ -33100,7 +33103,7 @@ packages:
     dev: false
 
   github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463(@swc/core@1.3.59)(webpack-cli@5.0.1):
-    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/dce45baa66911794145e1e943d2211dbb9661463}
+    resolution: {commit: dce45baa66911794145e1e943d2211dbb9661463, repo: git+ssh://git@github.com/Jack-Works/webpack.git, type: git}
     id: github.com/Jack-Works/webpack/dce45baa66911794145e1e943d2211dbb9661463
     name: webpack
     version: 5.85.0
@@ -33144,7 +33147,7 @@ packages:
     dev: true
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:

@@ -1,13 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useMemo } from 'react'
-import type { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import {
-    type ChainId,
-    getRedPacketConstants,
-    chainResolver,
-    type RedPacketJSONPayloadFromChain,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Interface } from '@ethersproject/abi'
@@ -36,7 +30,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
         }
 
         const blockNumber = await Web3.getBlockNumber({ chainId })
-        const historyTransactions = await RedPacket.getHistories(
+        const payloadList = await RedPacket.getHistories(
             chainId,
             address,
             HAPPY_RED_PACKET_ADDRESS_V4,
@@ -44,59 +38,8 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
             HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT ?? 0,
             blockNumber,
         )
-        if (!historyTransactions) return EMPTY_LIST
+        if (!payloadList) return EMPTY_LIST
 
-        type CreateRedpacketParam = {
-            _duration: BigNumber
-            _ifrandom: boolean
-            _message: string
-            _name: string
-            _number: BigNumber
-            _public_key: string
-            _seed: string
-            _token_addr: string
-            _token_type: BigNumber
-            _total_tokens: BigNumber
-        }
-
-        const payloadList: RedPacketJSONPayloadFromChain[] = historyTransactions.flatMap((tx) => {
-            try {
-                const decodedInputParam = redPacketInterFace.decodeFunctionData(
-                    'create_red_packet',
-                    tx.input ?? '',
-                ) as unknown as CreateRedpacketParam
-
-                const redpacketPayload: RedPacketJSONPayloadFromChain = {
-                    contract_address: tx.to,
-                    txid: tx.hash ?? '',
-                    chainId,
-                    shares: decodedInputParam._number.toNumber(),
-                    is_random: decodedInputParam._ifrandom,
-                    total: decodedInputParam._total_tokens.toString(),
-                    duration: decodedInputParam._duration.toNumber() * 1000,
-                    block_number: Number(tx.blockNumber),
-                    contract_version: 4,
-                    network: chainResolver.networkType(chainId),
-                    token_address: decodedInputParam._token_addr,
-                    sender: {
-                        address,
-                        name: decodedInputParam._name,
-                        message: decodedInputParam._message,
-                    },
-                    // #region Retrieve at RedPacketInHistoryList component
-                    rpid: '',
-                    creation_time: 0,
-                    total_remaining: '',
-                    // #endregion
-                    // #region Retrieve from database
-                    password: '',
-                    // #endregion
-                }
-                return redpacketPayload
-            } catch {
-                return []
-            }
-        })
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
     }, [address, chainId, wallet?.owner])
 
