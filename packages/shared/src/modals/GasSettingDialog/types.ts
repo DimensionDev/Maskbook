@@ -5,14 +5,14 @@ interface EIP1559ConfirmOptions {
     gasPrice?: string
     maxFee?: string
     priorityFee?: string
-    gasOption: GasOptionType | null
+    gasOption?: GasOptionType
 }
 
 export interface GasSettingProps {
     gasLimit?: number
     minGasLimit?: number
     onGasLimitChange?: (newGasLimit: number) => void
-    gasOptionType?: GasOptionType | null
+    gasOptionType?: GasOptionType
     onGasOptionChange?: (newOption: GasOptionType) => void
     onConfirm?: (options: EIP1559ConfirmOptions) => void
 }

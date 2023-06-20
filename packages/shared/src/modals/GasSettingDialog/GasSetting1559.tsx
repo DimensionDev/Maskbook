@@ -95,7 +95,7 @@ export const GasSetting1559 = memo(
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
 
-        const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
+        const [selectedGasOption, setGasOptionType] = useState<GasOptionType | undefined>(gasOptionType)
         const { value: nativeTokenPrice = 0 } = useFungibleTokenPrice(
             NetworkPluginID.PLUGIN_EVM,
             NATIVE_TOKEN_ADDRESS,

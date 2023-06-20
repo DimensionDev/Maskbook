@@ -5,14 +5,14 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { GasSetting } from './GasSettingModal.js'
 import { type BigNumber } from 'bignumber.js'
 
-export interface GasSettingDialogOpenOrCloseProps {
-    gasOption?: GasOptionType | null
+export type GasSettingDialogOpenOrCloseProps = {
+    gasOption?: GasOptionType
     gasLimit?: number
     minGasLimit?: number
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-}
+} | void
 
 export interface GasSettingDialogProps {}
 

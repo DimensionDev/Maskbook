@@ -8,7 +8,6 @@ import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
 import { GasSettingDialog, TokenPrice } from '@masknet/shared'
-import { WalletMessages } from '@masknet/plugin-wallet'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -46,19 +45,18 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     // set initial options
     useEffect(() => {
-        return WalletMessages.events.gasSettingUpdated.on((evt) => {
-            if (evt.open) return
-            if (evt.gasOption) setGasOptionType(evt.gasOption)
+        GasSettingDialog.emitter.on('close', (evt) => {
+            if (evt?.gasOption) setGasOptionType(evt.gasOption)
             onChange(
                 (chainResolver.isSupport(chainId, 'EIP1559')
                     ? {
-                          gas: evt.gasLimit,
-                          maxFeePerGas: evt.maxFee,
-                          maxPriorityFeePerGas: evt.priorityFee,
+                          gas: evt?.gasLimit,
+                          maxFeePerGas: evt?.maxFee,
+                          maxPriorityFeePerGas: evt?.priorityFee,
                       }
                     : {
-                          gas: evt.gasLimit,
-                          gasPrice: evt.gasPrice,
+                          gas: evt?.gasLimit,
+                          gasPrice: evt?.gasPrice,
                       }) as NonPayableTx,
             )
         })

@@ -1,7 +1,5 @@
 import { DialogContent } from '@mui/material'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { GasSettingDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { GasSettingSupported } from './GasSettingSupported.js'
@@ -16,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
 interface GasSettingProps {
     open: boolean
     onClose: () => void
-    gasOption?: GasOptionType | null
+    gasOption?: GasOptionType
     gasLimit?: number
     minGasLimit?: number
     gasPrice?: BigNumber.Value
@@ -39,8 +37,6 @@ export function GasSetting(props: GasSettingProps) {
         setGasOptionType,
     } = props
 
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingUpdated)
-
     return (
         <InjectedDialog title={t.popups_wallet_gas_fee_settings()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
@@ -52,14 +48,6 @@ export function GasSetting(props: GasSettingProps) {
                     onGasOptionChange={setGasOptionType}
                     onConfirm={({ gasPrice, gasLimit, maxFee, priorityFee, gasOption }) => {
                         GasSettingDialog.close({
-                            gasOption,
-                            gasPrice,
-                            gasLimit,
-                            priorityFee,
-                            maxFee,
-                        })
-                        setDialog({
-                            open: false,
                             gasOption,
                             gasPrice,
                             gasLimit,
