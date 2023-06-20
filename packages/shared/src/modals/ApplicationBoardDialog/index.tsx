@@ -1,8 +1,9 @@
 import { forwardRef, useState } from 'react'
 import type { DashboardRoutes, PersonaInformation, PluginID, SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal, type PersonaAgainstSNSConnectStatus } from '../../index.js'
 import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
+import type { PersonaAgainstSNSConnectStatus } from '../../types.js'
 
 export type ApplicationBoardDialogOpenProps = {
     openDashboard: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>

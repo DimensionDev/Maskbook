@@ -3,6 +3,7 @@ import { compact } from 'lodash-es'
 import { memo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation } from 'react-router-dom'
+import { PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
@@ -20,7 +21,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { ConnectedWalletsUI } from './UI.js'
 import type { ConnectedWalletInfo } from '../type.js'
 import Service from '../../../../service.js'
-import { PersonaContext } from '@masknet/shared'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()

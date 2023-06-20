@@ -1,11 +1,11 @@
+import { useCallback } from 'react'
+import type { PluginID } from '@masknet/shared-base'
+import { ApplicationBoardDialog } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
-import { ApplicationBoardDialog } from '@masknet/shared'
-import { useCallback } from 'react'
 import Services from '../../extension/service.js'
-import type { PluginID } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {

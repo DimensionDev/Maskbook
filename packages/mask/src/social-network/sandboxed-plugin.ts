@@ -1,11 +1,11 @@
 import { Children, createElement } from 'react'
 import { type SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
-import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
-import type { PluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
+import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
+import { ApplicationBoardDialog } from '@masknet/shared'
+import type { PluginID } from '@masknet/shared-base'
 import { hmr } from '../../utils-pure/index.js'
 import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api.js'
-import { ApplicationBoardDialog } from '@masknet/shared'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

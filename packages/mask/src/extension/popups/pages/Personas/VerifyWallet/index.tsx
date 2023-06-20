@@ -11,6 +11,7 @@ import {
     type Account,
     MaskMessages,
 } from '@masknet/shared-base'
+import { PersonaContext } from '@masknet/shared'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof, Others, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -22,7 +23,6 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
-import { PersonaContext } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

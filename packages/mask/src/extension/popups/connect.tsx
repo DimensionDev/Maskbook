@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { PersonaContext } from '@masknet/shared'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
@@ -12,7 +13,6 @@ import Services from '../service.js'
 import { PageTitleContext } from './context.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { NormalHeader } from './components/NormalHeader/index.js'
-import { PersonaContext } from '@masknet/shared'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))

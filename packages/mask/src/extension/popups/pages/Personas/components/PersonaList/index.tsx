@@ -1,5 +1,10 @@
 // ! We're going to SSR this UI, so DO NOT import anything new!
 import { memo, useCallback } from 'react'
+import { useHover } from 'react-use'
+import { Trash2 } from 'react-feather'
+import { useNavigate } from 'react-router-dom'
+import { ListItemButton, List, Typography } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import {
     formatPersonaFingerprint,
@@ -7,14 +12,9 @@ import {
     type ECKeyIdentifier,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { ListItemButton, List, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { useNavigate } from 'react-router-dom'
-import Services from '../../../../../service.js'
-import { useHover } from 'react-use'
-import { Trash2 } from 'react-feather'
-import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 import { PersonaContext } from '@masknet/shared'
+import Services from '../../../../../service.js'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
     list: {

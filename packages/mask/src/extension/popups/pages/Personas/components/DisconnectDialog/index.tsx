@@ -1,11 +1,11 @@
 import { memo } from 'react'
+import { Trans } from 'react-i18next'
+import { LoadingButton } from '@mui/lab'
 import { Button, Dialog, DialogActions, DialogContent, Typography, type DialogProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/shared-base'
-import { LoadingButton } from '@mui/lab'
-import { useI18N } from '../../../../../../utils/index.js'
-import { Trans } from 'react-i18next'
 import { PersonaContext } from '@masknet/shared'
+import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/shared-base'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

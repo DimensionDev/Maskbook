@@ -1,10 +1,10 @@
 import { lazy, memo, Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 
-import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { Route, Routes } from 'react-router-dom'
-import { PersonaHeader } from './components/PersonaHeader/index.js'
 import { PersonaContext } from '@masknet/shared'
+import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { PersonaHeader } from './components/PersonaHeader/index.js'
 import Services from '../../../service.js'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))

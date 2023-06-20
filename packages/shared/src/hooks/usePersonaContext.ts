@@ -15,7 +15,8 @@ import {
     type ProfileInformation,
     type NextIDPlatform,
 } from '@masknet/shared-base'
-import { usePersonaProofs } from '../usePersonaProofs.js'
+import { usePersonaProofs } from './usePersonaProofs.js'
+
 export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
 
 export interface Account extends ProfileInformation {
