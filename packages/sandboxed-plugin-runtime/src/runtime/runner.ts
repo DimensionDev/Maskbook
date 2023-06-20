@@ -1,4 +1,4 @@
-import type { EventBasedChannel } from 'async-call-rpc'
+import type { EventBasedChannel } from 'async-call-rpc/full'
 import type { PluginRuntime } from './runtime.js'
 import { combineAbortSignal } from '@masknet/kit'
 

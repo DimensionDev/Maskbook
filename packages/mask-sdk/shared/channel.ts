@@ -1,4 +1,4 @@
-import type { EventBasedChannel } from 'async-call-rpc'
+import type { EventBasedChannel } from 'async-call-rpc/full'
 
 const EVENT_UserScript = '@masknet/sdk-raw/us'
 const EVENT_ContentScript = '@masknet/sdk-raw/cs'

@@ -1,4 +1,4 @@
-import type { AsyncVersionOf } from 'async-call-rpc'
+import type { AsyncVersionOf } from 'async-call-rpc/full'
 import { createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_ID, WalletMessages } from '@masknet/plugin-wallet'
 

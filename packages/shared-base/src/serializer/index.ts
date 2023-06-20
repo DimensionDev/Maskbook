@@ -1,6 +1,6 @@
 /// <reference path="./typeson.d.ts" />
 import { Typeson, TypesonPromise } from 'typeson'
-import type { Serialization } from 'async-call-rpc'
+import type { Serialization } from 'async-call-rpc/full'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
 import { EncryptError, DecryptError } from '@masknet/encryption'
