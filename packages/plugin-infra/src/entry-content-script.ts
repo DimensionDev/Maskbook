@@ -1,4 +1,5 @@
 export * from './entry-dom.js'
+
 export {
     startPluginSNSAdaptor,
     useActivatedPluginSNSAdaptor,
@@ -20,7 +21,6 @@ export {
     usePostInfoDetails,
     type CompositionType,
     CompositionContext,
-    SNSAdaptorContext,
     Widget,
     type WidgetProps,
     getProfileCardTabContent,
@@ -38,7 +38,6 @@ export {
     useLastRecognizedIdentity,
     useLastRecognizedSocialIdentity,
     usePostLink,
-    useSNSAdaptorContext,
     useSocialIdentity,
     useThemeColor,
     useSNSThemeMode,

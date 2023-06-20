@@ -1,24 +1,24 @@
+import { uniqBy } from 'lodash-es'
+import { useCallback, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { useSubscription } from 'use-subscription'
 import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
-import { useSubscription } from 'use-subscription'
 import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
-import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import {
     useAllPersonas,
     useLastRecognizedSocialIdentity,
     useSNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
-import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
-import { uniqBy } from 'lodash-es'
 
 export function PersonaPage() {
     const t = useI18N()
