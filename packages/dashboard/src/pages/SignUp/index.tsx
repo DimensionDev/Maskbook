@@ -1,10 +1,10 @@
-import { RowLayout } from '../../components/RegisterFrame/RowLayout.js'
+import { SetupFrame } from '../../components/SetupFrame/index.js'
 import { SignUpRoutes } from './routes.js'
 
 export default function SignUp() {
     return (
-        <RowLayout>
+        <SetupFrame>
             <SignUpRoutes />
-        </RowLayout>
+        </SetupFrame>
     )
 }

@@ -9,14 +9,18 @@ import {
     formatTokenId,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
-import { AssetPreviewer, PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+import {
+    AssetPreviewer,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletConnectedBoundary,
+    ApplicationBoardDialog,
+} from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { Web3 } from '@masknet/web3-providers'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
@@ -138,10 +142,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
     const duration = 60 * 60 * 24
 
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-    )
-
     const tokenIdList = tokenList.map((value) => value.tokenId)
     const [{ loading: isSending }, createCallback] = useCreateNftRedpacketCallback(
         duration,
@@ -185,7 +185,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
-            closeApplicationBoardDialog()
+            ApplicationBoardDialog.close()
         },
         [duration, message, senderName, contract, privateKey, transactionId],
     )

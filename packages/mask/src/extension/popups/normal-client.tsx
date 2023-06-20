@@ -4,7 +4,6 @@ import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { Services } from '../service.js'
 import Popups from './UI.js'
-import { initialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import {
     MaskMessages,
@@ -12,6 +11,7 @@ import {
     currentPersonaIdentifier,
     pluginIDSettings,
 } from '@masknet/shared-base'
+import { initialPersonaInformation } from '@masknet/shared'
 
 if (location.hash === '#/personas') {
     async function hydrate() {

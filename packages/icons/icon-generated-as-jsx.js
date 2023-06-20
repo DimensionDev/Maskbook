@@ -292,6 +292,16 @@ export const MaskPlaceholder = /*#__PURE__*/ __createIcon('MaskPlaceholder', [
         u: () => new URL('./brands/MaskPlaceholder.light.svg', import.meta.url),
     },
 ])
+export const MaskSquare = /*#__PURE__*/ __createIcon('MaskSquare', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/MaskSquare.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/MaskSquare.light.svg', import.meta.url),
+    },
+])
 export const MaskText = /*#__PURE__*/ __createIcon('MaskText', [
     {
         u: () => new URL('./brands/MaskText.svg', import.meta.url),
@@ -804,6 +814,11 @@ export const BestTrade = /*#__PURE__*/ __createIcon('BestTrade', [
         u: () => new URL('./general/BestTrade.svg', import.meta.url),
     },
 ])
+export const BluePin = /*#__PURE__*/ __createIcon('BluePin', [
+    {
+        u: () => new URL('./general/BluePin.svg', import.meta.url),
+    },
+])
 export const BorderedSuccess = /*#__PURE__*/ __createIcon('BorderedSuccess', [
     {
         u: () => new URL('./general/BorderedSuccess.svg', import.meta.url),
@@ -1024,6 +1039,24 @@ export const Collectible = /*#__PURE__*/ __createIcon(
 export const Connect = /*#__PURE__*/ __createIcon('Connect', [
     {
         u: () => new URL('./general/Connect.svg', import.meta.url),
+    },
+])
+export const Contracts = /*#__PURE__*/ __createIcon('Contracts', [
+    {
+        u: () => new URL('./general/Contracts.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M17.294 7.291A5.274 5.274 0 0 1 12 12.583a5.275 5.275 0 0 1-5.294-5.292A5.274 5.274 0 0 1 12 2a5.273 5.273 0 0 1 5.294 5.291ZM12 22c-4.338 0-8-.705-8-3.425 0-2.721 3.685-3.401 8-3.401 4.339 0 8 .705 8 3.425 0 2.72-3.685 3.4-8 3.4Zm3.644-8.014a.8.8 0 0 1 .8-.8h5.112a.8.8 0 0 1 0 1.6h-5.112a.8.8 0 0 1-.8-.8Zm1.289-2.45a.8.8 0 0 1 .8-.8h3.823a.8.8 0 0 1 0 1.6h-3.823a.8.8 0 0 1-.8-.8Zm1.203-2.449a.8.8 0 0 1 .8-.8h2.62a.8.8 0 0 1 0 1.6h-2.62a.8.8 0 0 1-.8-.8Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
     },
 ])
 export const Copy = /*#__PURE__*/ __createIcon(
@@ -1633,6 +1666,24 @@ export const Masks = /*#__PURE__*/ __createIcon('Masks', [
         u: () => new URL('./general/Masks.svg', import.meta.url),
     },
 ])
+export const Me = /*#__PURE__*/ __createIcon('Me', [
+    {
+        u: () => new URL('./general/Me.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 25 25',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M17.794 7.397a5.274 5.274 0 0 1-5.294 5.292 5.275 5.275 0 0 1-5.294-5.292A5.274 5.274 0 0 1 12.5 2.105a5.273 5.273 0 0 1 5.294 5.292ZM12.5 22.105c-4.338 0-8-.705-8-3.425 0-2.72 3.685-3.4 8-3.4 4.339 0 8 .704 8 3.424 0 2.721-3.685 3.401-8 3.401Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Message = /*#__PURE__*/ __createIcon('Message', [
     {
         u: () => new URL('./general/Message.svg', import.meta.url),
@@ -1722,6 +1773,11 @@ export const Play = /*#__PURE__*/ __createIcon('Play', [
 export const Plugin = /*#__PURE__*/ __createIcon('Plugin', [
     {
         u: () => new URL('./general/Plugin.svg', import.meta.url),
+    },
+])
+export const Plugins = /*#__PURE__*/ __createIcon('Plugins', [
+    {
+        u: () => new URL('./general/Plugins.svg', import.meta.url),
     },
 ])
 export const Poll = /*#__PURE__*/ __createIcon('Poll', [
@@ -2156,6 +2212,24 @@ export const Settings = /*#__PURE__*/ __createIcon('Settings', [
         s: true,
     },
 ])
+export const Settings2 = /*#__PURE__*/ __createIcon('Settings2', [
+    {
+        u: () => new URL('./general/Settings2.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'm17.808 3.606 4.345 7.528c.31.537.31 1.205 0 1.744l-4.345 7.526c-.312.537-.89.872-1.512.872h-8.69c-.624 0-1.2-.333-1.512-.872l-4.346-7.526a1.743 1.743 0 0 1 0-1.744l4.299-7.441c.34-.59.977-.959 1.66-.959h8.59c.62 0 1.2.333 1.51.872Zm-9.415 8.4a3.562 3.562 0 0 1 3.557-3.559 3.564 3.564 0 0 1 3.558 3.56 3.56 3.56 0 0 1-3.558 3.556 3.562 3.562 0 0 1-3.557-3.558Zm1.64.001a1.92 1.92 0 0 0 1.917 1.918 1.92 1.92 0 0 0 1.918-1.918 1.92 1.92 0 0 0-1.918-1.917 1.92 1.92 0 0 0-1.917 1.917Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
     {
         u: () => new URL('./general/SharpMask.svg', import.meta.url),
@@ -2301,6 +2375,42 @@ export const Twitter = /*#__PURE__*/ __createIcon('Twitter', [
         s: true,
     },
 ])
+export const TwitterStroke = /*#__PURE__*/ __createIcon(
+    'TwitterStroke',
+    [
+        {
+            u: () => new URL('./general/TwitterStroke.svg', import.meta.url),
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 21 20',
+                    children: [
+                        /*#__PURE__*/ _jsx('g', {
+                            clipPath: 'url(#TwitterStroke_svg__a)',
+                            children: /*#__PURE__*/ _jsx('path', {
+                                fill: 'currentColor',
+                                fillRule: 'evenodd',
+                                d: 'M12.664 2.113a4.4 4.4 0 0 1 4.575.898 8.416 8.416 0 0 0 2.043-1.057.667.667 0 0 1 1.033.703 7.101 7.101 0 0 1-1.674 3.127c.017.154.025.308.026.463v.002c0 5.025-2.416 8.696-5.875 10.537-3.441 1.832-7.848 1.815-11.782-.37a.667.667 0 0 1 .35-1.25 9.034 9.034 0 0 0 4.42-.957c-1.371-.793-2.336-1.75-2.992-2.785-.817-1.291-1.127-2.66-1.183-3.894-.056-1.232.14-2.342.346-3.14a10.736 10.736 0 0 1 .396-1.223l.03-.074.01-.02.002-.007.015-.032.596.299.546-.384a8.217 8.217 0 0 0 6.287 3.483V6.28a4.4 4.4 0 0 1 2.831-4.166ZM3.248 4.7l-.006.023a9.42 9.42 0 0 0-.305 2.746c.048 1.058.311 2.188.978 3.241.664 1.049 1.754 2.06 3.523 2.847a.667.667 0 0 1 .103 1.16 10.365 10.365 0 0 1-3.547 1.537c2.875.896 5.804.615 8.172-.645 3-1.597 5.167-4.8 5.168-9.358a3.178 3.178 0 0 0-.055-.568.666.666 0 0 1 .186-.6c.326-.321.61-.678.85-1.063a9.753 9.753 0 0 1-1.073.393.667.667 0 0 1-.695-.201 3.066 3.066 0 0 0-5.38 2.053v.843a.667.667 0 0 1-.65.666A9.55 9.55 0 0 1 3.248 4.7Z',
+                                clipRule: 'evenodd',
+                            }),
+                        }),
+                        /*#__PURE__*/ _jsx('defs', {
+                            children: /*#__PURE__*/ _jsx('clipPath', {
+                                id: 'TwitterStroke_svg__a',
+                                children: /*#__PURE__*/ _jsx('path', {
+                                    fill: 'currentColor',
+                                    d: 'M.5 0h20v20H.5z',
+                                }),
+                            }),
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [21, 20],
+)
 export const TxIn = /*#__PURE__*/ __createIcon('TxIn', [
     {
         u: () => new URL('./general/TxIn.svg', import.meta.url),

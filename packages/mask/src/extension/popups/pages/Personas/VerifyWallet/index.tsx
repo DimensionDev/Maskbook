@@ -11,6 +11,7 @@ import {
     type Account,
     MaskMessages,
 } from '@masknet/shared-base'
+import { PersonaContext } from '@masknet/shared'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof, Others, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -18,7 +19,6 @@ import { useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { type ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps.js'
 import Services from '../../../../service.js'
-import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest.js'

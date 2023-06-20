@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, SocialIcon } from '@masknet/shared'
+import { ChainBoundary, LoadingStatus, ReloadStatus, SocialIcon } from '@masknet/shared'
 import { NetworkPluginID, purify } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, ShadowRootIsolation } from '@masknet/theme'
+import { makeStyles, ShadowRootIsolation } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
@@ -142,30 +142,8 @@ export function PreviewCard(props: PreviewCardProps) {
         return [grantDetailStyle, converter.convert()]
     }, [grant?.description_rich, grant?.description])
 
-    if (loading)
-        return (
-            <Box
-                flex={1}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-                padding={1}
-                minHeight={148}>
-                <LoadingBase />
-                <Typography>{t.loading()}</Typography>
-            </Box>
-        )
-    if (error)
-        return (
-            <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
-                <Typography color="textPrimary">{t.go_wrong()}</Typography>
-                <Button variant="roundedDark" onClick={retry}>
-                    {t.retry()}
-                </Button>
-            </Box>
-        )
+    if (loading) return <LoadingStatus height={148} p={1} />
+    if (error) return <ReloadStatus height={120} message={t.go_wrong()} onRetry={retry} />
     if (!grant) return null
 
     const tenant = grant.tenants[0]

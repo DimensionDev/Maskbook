@@ -1,10 +1,11 @@
+import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { PersonaAgainstSNSConnectStatus } from '@masknet/shared'
 import type { PersonaInformation } from '@masknet/shared-base'
 import Services from '../../extension/service.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
-import { useCallback } from 'react'
 
 export function usePersonaAgainstSNSConnectStatus() {
     const personas = usePersonasFromDB()
@@ -17,12 +18,13 @@ export function usePersonaAgainstSNSConnectStatus() {
         [username],
     )
 
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<PersonaAgainstSNSConnectStatus | undefined>(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = (await Services.Identity.queryOwnedPersonaInformation(true)).find(
             (x) => x.identifier === currentPersonaIdentifier,
         )
         const currentSNSConnectedPersona = personas.find(checkSNSConnectToCurrentPersona)
+        if (!currentPersona || !currentSNSConnectedPersona) return
         return {
             isSNSConnectToCurrentPersona: currentPersona ? checkSNSConnectToCurrentPersona(currentPersona) : false,
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,

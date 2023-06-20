@@ -1,26 +1,29 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useMatch, useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import { useEnterDashboard } from '../../hook/useEnterDashboard.js'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { NavLink } from 'react-router-dom'
+import { PopupRoutes } from '@masknet/shared-base'
 
-enum NavRouter {
-    Personas = 'Personas',
-    Wallet = 'Wallets',
-}
-
-const useStyle = makeStyles()(() => ({
-    label: {
-        fontSize: '12px !important',
-        color: '#ACB4C1',
+const useStyle = makeStyles()((theme) => ({
+    navigation: {
+        height: 72,
+        padding: '0 18px',
+        background: theme.palette.maskColor.secondaryBottom,
+        boxShadow: theme.palette.maskColor.bottomBg,
+        backdropFilter: 'blur(8px)',
+    },
+    iconOnly: {
+        color: theme.palette.maskColor.third,
+        height: '100%',
     },
     selected: {
-        color: '#1C68F3',
+        '& > button': {
+            color: theme.palette.maskColor.highlight,
+            filter: 'drop-shadow(0px 4px 10px rgba(0, 60, 216, 0.2))',
+        },
     },
     container: {
         backgroundColor: '#ffffff',
@@ -30,39 +33,54 @@ const useStyle = makeStyles()(() => ({
     },
 }))
 
-export const Navigator = memo(() => {
-    const { t } = useI18N()
-    const navigate = useNavigate()
+interface BottomNavLinkProps extends PropsWithChildren {
+    to: string
+}
+
+const BottomNavLink = memo<BottomNavLinkProps>(function BottomNavLink({ children, to }) {
     const { classes } = useStyle()
-    const matchPersona = useMatch(`${PopupRoutes.Personas}/*`)
-    const matchWallet = useMatch(`${PopupRoutes.Wallet}/*`)
-    const onEnter = useEnterDashboard()
+
+    return (
+        <NavLink to={to} className={({ isActive }) => (isActive ? classes.selected : undefined)}>
+            {children}
+        </NavLink>
+    )
+})
+
+export const Navigator = memo(() => {
+    const { classes } = useStyle()
 
     return (
         <Box className={classes.container}>
-            <BottomNavigation
-                showLabels
-                value={matchPersona ? NavRouter.Personas : matchWallet ? NavRouter.Wallet : null}>
-                <BottomNavigationAction
-                    label={t('persona')}
-                    icon={<Icons.Personas />}
-                    value={NavRouter.Personas}
-                    onClick={() => navigate(PopupRoutes.Personas, { replace: true })}
-                    classes={{ label: classes.label, selected: classes.selected }}
-                />
-                <BottomNavigationAction
-                    label={t('wallet')}
-                    icon={<Icons.WalletNav />}
-                    value={NavRouter.Wallet}
-                    onClick={() => navigate(PopupRoutes.Wallet, { replace: true })}
-                    classes={{ label: classes.label, selected: classes.selected }}
-                />
-                <BottomNavigationAction
-                    label={t('dashboard')}
-                    icon={<Icons.Dashboard />}
-                    onClick={onEnter}
-                    classes={{ label: classes.label, selected: classes.selected }}
-                />
+            <BottomNavigation classes={{ root: classes.navigation }}>
+                <BottomNavLink to={PopupRoutes.Personas}>
+                    <BottomNavigationAction
+                        showLabel={false}
+                        icon={<Icons.Me size={24} />}
+                        className={classes.iconOnly}
+                    />
+                </BottomNavLink>
+                <BottomNavLink to={PopupRoutes.Wallet}>
+                    <BottomNavigationAction
+                        showLabel={false}
+                        icon={<Icons.WalletNav size={24} />}
+                        className={classes.iconOnly}
+                    />
+                </BottomNavLink>
+                <BottomNavLink to={PopupRoutes.Contracts}>
+                    <BottomNavigationAction
+                        showLabel={false}
+                        icon={<Icons.Contracts size={24} />}
+                        className={classes.iconOnly}
+                    />
+                </BottomNavLink>
+                <BottomNavLink to={PopupRoutes.Settings}>
+                    <BottomNavigationAction
+                        showLabel={false}
+                        icon={<Icons.Settings2 size={24} />}
+                        className={classes.iconOnly}
+                    />
+                </BottomNavLink>
             </BottomNavigation>
         </Box>
     )

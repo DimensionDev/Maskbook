@@ -42,6 +42,8 @@
     "@masknet/web3-telemetry": "workspace:^",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@servie/events": "^3.0.0",
+    "@splinetool/react-spline": "^2.2.6",
+    "@splinetool/runtime": "^0.9.342",
     "@tanstack/react-query-devtools": "^4.29.7",
     "@types/color": "^3.0.3",
     "@types/react-avatar-editor": "^13.0.0",

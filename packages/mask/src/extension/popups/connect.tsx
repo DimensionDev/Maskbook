@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { PersonaContext } from '@masknet/shared'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
@@ -12,7 +13,6 @@ import Services from '../service.js'
 import { PageTitleContext } from './context.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { NormalHeader } from './components/NormalHeader/index.js'
-import { PersonaContext } from './pages/Personas/hooks/usePersonaContext.js'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -42,7 +42,10 @@ export default function PopupsConnect() {
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <PopupSnackbarProvider>
                 <PopupContext.Provider>
-                    <PersonaContext.Provider>
+                    <PersonaContext.Provider
+                        initialState={{
+                            queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
+                        }}>
                         <PageTitleContext.Provider value={{ title, setTitle }}>
                             <HashRouter>
                                 <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
