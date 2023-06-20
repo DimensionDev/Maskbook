@@ -2,10 +2,10 @@ import { memo } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, Typography, type DialogProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../../utils/index.js'
 import { Trans } from 'react-i18next'
+import { PersonaContext } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

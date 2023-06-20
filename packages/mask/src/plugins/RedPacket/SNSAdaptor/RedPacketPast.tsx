@@ -4,15 +4,13 @@ import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { RedPacketHistoryList } from './RedPacketHistoryList.js'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
 import type { RedPacketJSONPayload, NftRedPacketJSONPayload } from '../types.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { openComposition } from './openComposition.js'
-import { PluginWalletStatusBar } from '@masknet/shared'
+import { ApplicationBoardDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,9 +31,6 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-    )
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const handleSendNftRedpacket = useCallback(
@@ -53,7 +48,7 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
                 privateKey: password,
                 chainId,
             })
-            closeApplicationBoardDialog()
+            ApplicationBoardDialog.close()
             onClose?.()
         },
         [senderName],

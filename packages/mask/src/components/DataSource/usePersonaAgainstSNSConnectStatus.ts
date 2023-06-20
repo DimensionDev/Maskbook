@@ -5,6 +5,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
 import { useCallback } from 'react'
+import type { PersonaAgainstSNSConnectStatus } from '@masknet/shared'
 
 export function usePersonaAgainstSNSConnectStatus() {
     const personas = usePersonasFromDB()
@@ -27,6 +28,6 @@ export function usePersonaAgainstSNSConnectStatus() {
             isSNSConnectToCurrentPersona: currentPersona ? checkSNSConnectToCurrentPersona(currentPersona) : false,
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
-        }
+        } as PersonaAgainstSNSConnectStatus
     }, [checkSNSConnectToCurrentPersona, personas.map((x) => x.identifier.toText()).join(',')])
 }

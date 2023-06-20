@@ -18,11 +18,11 @@ import { useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { type ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps.js'
 import Services from '../../../../service.js'
-import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { PersonaContext } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

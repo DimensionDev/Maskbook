@@ -1,7 +1,5 @@
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { noop, omit } from 'lodash-es'
 import {
     createContext,
@@ -20,6 +18,7 @@ import { META_KEY_3, RoutePaths } from '../../../constants.js'
 import { digest, makeFileKey } from '../../../helpers.js'
 import type { FileInfo, Provider } from '../../../types.js'
 import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../../Worker/rpc.js'
+import { ApplicationBoardDialog } from '@masknet/shared'
 
 interface UploadState {
     progress: number
@@ -149,16 +148,13 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
         [refetchFiles],
     )
 
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-    )
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {
             openCompositionWithFiles(compositionType, Array.isArray(fileInfo) ? fileInfo : [fileInfo])
-            closeApplicationBoardDialog()
+            ApplicationBoardDialog.close()
             navigate(RoutePaths.Exit)
         },
-        [compositionType, closeApplicationBoardDialog, navigate],
+        [compositionType, navigate],
     )
 
     const contextValue: FileManagementContextOptions = useMemo(() => {

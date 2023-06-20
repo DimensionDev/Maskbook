@@ -11,19 +11,28 @@ import {
     NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP,
     MaskMessages,
     currentPersonaIdentifier,
+    ValueRef,
+    type ProfileInformation,
+    type NextIDPlatform,
 } from '@masknet/shared-base'
-import Services from '../../../../service.js'
-import type { Account } from '../type.js'
-import { initialPersonaInformation } from './PersonaContextInitialData.js'
-import { usePersonaProofs } from '@masknet/shared'
+import { usePersonaProofs } from '../usePersonaProofs.js'
+export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
 
-function useSSRPersonaInformation() {
+export interface Account extends ProfileInformation {
+    is_valid?: boolean
+    identity?: string
+    platform?: NextIDPlatform
+}
+
+function useSSRPersonaInformation(
+    queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
+) {
     const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))
     const revalidate = useCallback(() => {
-        Services.Identity.queryOwnedPersonaInformation(false)
-            .then(setPersonas)
+        queryOwnedPersonaInformation?.(false)
+            ?.then(setPersonas)
             .then(() => set(false))
-    }, [])
+    }, [queryOwnedPersonaInformation])
     const [useServerSnapshot, set] = useState(true)
     useEffect(() => {
         if (!initialPersonaInformation.value.length) {
@@ -37,12 +46,14 @@ function useSSRPersonaInformation() {
     }
 }
 
-function usePersonaContext() {
+function usePersonaContext(initialState?: {
+    queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
+}) {
     const [selectedAccount, setSelectedAccount] = useState<Account>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const { personas } = useSSRPersonaInformation()
+    const { personas } = useSSRPersonaInformation(initialState?.queryOwnedPersonaInformation)
 
     const currentPersona = personas?.find(
         (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),

@@ -1,11 +1,10 @@
 import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor, type Plugin } from '@masknet/plugin-infra/content-script'
-import type { PluginID } from '@masknet/shared-base'
+import { PersistentStorages, type PluginID } from '@masknet/shared-base'
 import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItemButton, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
-import { PersistentStorages } from '../../../shared/index.js'
-import { useI18N } from '../../utils/index.js'
+import { useSharedI18N } from '../../index.js'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
@@ -83,7 +82,7 @@ const useStyles = makeStyles<{
 
 export function ApplicationSettingPluginList() {
     const { classes } = useStyles({ iconFilterColor: undefined })
-    const { t } = useI18N()
+    const t = useSharedI18N()
 
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const applicationList = useMemo(() => {
@@ -109,9 +108,9 @@ export function ApplicationSettingPluginList() {
 
     return (
         <div>
-            <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-listed')}</Typography>
+            <Typography className={classes.unlisted}>{t.application_settings_tab_plug_app_list_listed()}</Typography>
             <AppList appList={listedEntries} isListing />
-            <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-unlisted')}</Typography>
+            <Typography className={classes.unlisted}>{t.application_settings_tab_plug_app_list_unlisted()}</Typography>
             <AppList appList={unlistedEntries} isListing={false} />
         </div>
     )
@@ -124,7 +123,7 @@ interface AppListProps {
 
 function AppList({ appList, isListing }: AppListProps) {
     const { classes } = useStyles({ iconFilterColor: undefined })
-    const { t } = useI18N()
+    const t = useSharedI18N()
 
     return appList.length > 0 ? (
         <Boundary>
@@ -143,8 +142,8 @@ function AppList({ appList, isListing }: AppListProps) {
         <div className={classes.placeholderWrapper}>
             <Typography className={classes.placeholder}>
                 {isListing
-                    ? t('application_settings_tab_plug_app-unlisted-placeholder')
-                    : t('application_settings_tab_plug_app-listed-placeholder')}
+                    ? t.application_settings_tab_plug_app_unlisted_placeholder()
+                    : t.application_settings_tab_plug_app_listed_placeholder()}
             </Typography>
         </div>
     )

@@ -1,23 +1,32 @@
 import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentPersonaConnectStatus, SelectProviderDialog } from '@masknet/shared'
+import {
+    CurrentSNSNetwork,
+    useActivatedPluginsSNSAdaptor,
+    type IdentityResolved,
+} from '@masknet/plugin-infra/content-script'
+import {
+    useCurrentPersonaConnectStatus,
+    SelectProviderDialog,
+    useSharedI18N,
+    PersonaContext,
+    type PersonaAgainstSNSConnectStatus,
+} from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
-import { currentPersonaIdentifier, MaskMessages, type NetworkPluginID } from '@masknet/shared-base'
+import {
+    currentPersonaIdentifier,
+    type DashboardRoutes,
+    MaskMessages,
+    type NetworkPluginID,
+    type PersonaInformation,
+} from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
-import { EventID } from '@masknet/web3-telemetry/types'
-import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
-import Services from '../../extension/service.js'
-import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { useI18N } from '../../utils/index.js'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
+import { EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -75,22 +84,50 @@ const useStyles = makeStyles<{
     }
 })
 
-export function ApplicationBoard() {
+interface ApplicationBoardContentProps {
+    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
+    currentSNSNetwork?: CurrentSNSNetwork
+    lastRecognized?: IdentityResolved
+    allPersonas: PersonaInformation[]
+    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
+    personaAgainstSNSConnectStatusLoading: boolean
+}
+
+export function ApplicationBoardContent({
+    openDashboard,
+    queryOwnedPersonaInformation,
+    currentSNSNetwork,
+    lastRecognized,
+    allPersonas,
+    applicationCurrentStatus,
+    personaAgainstSNSConnectStatusLoading,
+}: ApplicationBoardContentProps) {
     return (
-        <PersonaContext.Provider>
-            <ApplicationEntryStatusProvider>
-                <ApplicationBoardContent />
+        <PersonaContext.Provider initialState={{ queryOwnedPersonaInformation }}>
+            <ApplicationEntryStatusProvider
+                openDashboard={openDashboard}
+                lastRecognized={lastRecognized}
+                allPersonas={allPersonas}
+                applicationCurrentStatus={applicationCurrentStatus}
+                personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}>
+                <ApplicationBoardPluginsList currentSNSNetwork={currentSNSNetwork} />
             </ApplicationEntryStatusProvider>
         </PersonaContext.Provider>
     )
 }
 
-function ApplicationBoardContent() {
-    const { t } = useI18N()
+interface ApplicationBoardPluginsListProps {
+    currentSNSNetwork?: CurrentSNSNetwork
+}
+
+function ApplicationBoardPluginsList({
+    currentSNSNetwork = CurrentSNSNetwork.Twitter,
+}: ApplicationBoardPluginsListProps) {
+    const t = useSharedI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
-    const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
@@ -169,7 +206,7 @@ function ApplicationBoardContent() {
                             : '',
                     )}>
                     <Typography className={classes.placeholder}>
-                        {t('application_display_tab_plug_app-unlisted-placeholder')}
+                        {t.application_display_tab_plug_app_unlisted_placeholder()}
                     </Typography>
                 </div>
             )}
@@ -179,7 +216,7 @@ function ApplicationBoardContent() {
 
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
-    const { t } = useI18N()
+    const t = useSharedI18N()
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
@@ -208,13 +245,13 @@ function RenderEntryComponent({ application }: { application: Application }) {
     // #region tooltip hint
     const tooltipHint = (() => {
         if (ApplicationEntryStatus.isLoading) return
-        if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
+        if (application.isWalletConnectedRequired) return t.application_tooltip_hint_connect_wallet()
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
-            return t('application_tooltip_hint_create_persona')
+            return t.application_tooltip_hint_create_persona()
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
-            return t('application_tooltip_hint_connect_persona')
-        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
+            return t.application_tooltip_hint_connect_persona()
+        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t.application_tooltip_hint_verify()
         return
     })()
     // #endregion
@@ -249,22 +286,32 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
-function ApplicationEntryStatusProvider({ children }: PropsWithChildren<{}>) {
-    const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
+interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
+    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    lastRecognized?: IdentityResolved
+    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
+    personaAgainstSNSConnectStatusLoading: boolean
+    allPersonas: PersonaInformation[]
+}
+function ApplicationEntryStatusProvider({
+    children,
+    openDashboard,
+    lastRecognized,
+    applicationCurrentStatus,
+    personaAgainstSNSConnectStatusLoading,
+    allPersonas,
+}: ApplicationEntryStatusProviderProps) {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
         currentIdentifier,
-        Services.Helper.openDashboard,
+        openDashboard,
         lastRecognized,
         MaskMessages,
     )
-    const { value: ApplicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
-        usePersonaAgainstSNSConnectStatus()
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
-        ApplicationCurrentStatus ?? {}
+        applicationCurrentStatus ?? {}
 
     const Context = useMemo(
         () => ({
@@ -274,14 +321,14 @@ function ApplicationEntryStatusProvider({ children }: PropsWithChildren<{}>) {
             isNextIDVerify: personaConnectStatus.verified,
             isSNSConnectToCurrentPersona,
             shouldDisplayTooltipHint:
-                ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
-            shouldVerifyNextId: !!(!personaConnectStatus.verified && ApplicationCurrentStatus),
+                applicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+            shouldVerifyNextId: !!(!personaConnectStatus.verified && applicationCurrentStatus),
             currentPersonaPublicKey,
             currentSNSConnectedPersonaPublicKey,
             isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
         }),
         [
-            ApplicationCurrentStatus,
+            applicationCurrentStatus,
             personaStatusLoading,
             personaAgainstSNSConnectStatusLoading,
             personaConnectStatus.action,

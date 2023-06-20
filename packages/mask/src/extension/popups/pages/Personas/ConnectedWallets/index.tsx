@@ -18,9 +18,9 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { ConnectedWalletsUI } from './UI.js'
-import { PersonaContext } from '../hooks/usePersonaContext.js'
 import type { ConnectedWalletInfo } from '../type.js'
 import Service from '../../../../service.js'
+import { PersonaContext } from '@masknet/shared'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()

@@ -11,7 +11,7 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, PersonaContext, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { TelemetryProvider, EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -21,7 +21,6 @@ import '../utils/kv-storage.js'
 
 import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
-import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
@@ -54,7 +53,11 @@ export default function DashboardRoot() {
                             <StyledEngineProvider injectFirst>
                                 <ThemeProvider theme={theme}>
                                     <DialogStackingProvider>
-                                        <PersonaContext.Provider>
+                                        <PersonaContext.Provider
+                                            initialState={{
+                                                queryOwnedPersonaInformation:
+                                                    Services.Identity.queryOwnedPersonaInformation,
+                                            }}>
                                             <ErrorBoundary>
                                                 <CssBaseline />
                                                 <CustomSnackbarProvider>

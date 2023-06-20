@@ -12,7 +12,7 @@ import Services from '../service.js'
 import { PageTitleContext } from './context.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { NormalHeader } from './components/NormalHeader/index.js'
-import { PersonaContext } from './pages/Personas/hooks/usePersonaContext.js'
+import { PersonaContext } from '@masknet/shared'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -42,7 +42,10 @@ export default function PopupsConnect() {
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <PopupSnackbarProvider>
                 <PopupContext.Provider>
-                    <PersonaContext.Provider>
+                    <PersonaContext.Provider
+                        initialState={{
+                            queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
+                        }}>
                         <PageTitleContext.Provider value={{ title, setTitle }}>
                             <HashRouter>
                                 <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />

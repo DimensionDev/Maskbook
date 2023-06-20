@@ -12,10 +12,10 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '../../../../service.js'
 import { DisconnectDialog } from '../components/DisconnectDialog/index.js'
+import { PersonaContext } from '@masknet/shared'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()

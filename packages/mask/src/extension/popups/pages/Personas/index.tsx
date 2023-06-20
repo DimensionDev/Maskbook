@@ -1,10 +1,11 @@
 import { lazy, memo, Suspense } from 'react'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 
-import { PersonaContext } from './hooks/usePersonaContext.js'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { Route, Routes } from 'react-router-dom'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
+import { PersonaContext } from '@masknet/shared'
+import Services from '../../../service.js'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
@@ -19,7 +20,10 @@ const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
-            <PersonaContext.Provider>
+            <PersonaContext.Provider
+                initialState={{
+                    queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
+                }}>
                 <PersonaHeader />
                 <Routes>
                     <Route path={r(PopupRoutes.Logout)} element={<Logout />} />

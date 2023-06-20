@@ -1,16 +1,24 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { InjectedDialog, LeavePageConfirmDialog } from '@masknet/shared'
+import {
+    InjectedDialog,
+    LeavePageConfirmDialog,
+    useSharedI18N,
+    type PersonaAgainstSNSConnectStatus,
+} from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
-import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ApplicationBoard } from './ApplicationBoard.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useI18N } from '../../utils/index.js'
+import {
+    CrossIsolationMessages,
+    type DashboardRoutes,
+    type PersonaInformation,
+    type PluginID,
+} from '@masknet/shared-base'
+import { ApplicationBoardContent } from './ApplicationBoard.js'
+import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -32,34 +40,56 @@ export enum ApplicationSettingTabs {
     pluginSwitch = 'pluginSwitch',
 }
 
-export function ApplicationBoardDialog() {
+interface ApplicationBoardProps {
+    open: boolean
+    onClose: () => void
+
+    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
+    currentSNSNetwork?: CurrentSNSNetwork
+    allPersonas: PersonaInformation[]
+    lastRecognized?: IdentityResolved
+    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
+    personaAgainstSNSConnectStatusLoading: boolean
+    setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
+    getDecentralizedSearchSettings?: () => Promise<boolean>
+    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
+
+    focusPluginID?: PluginID
+    tab?: ApplicationSettingTabs
+    quickMode?: boolean
+}
+
+export function ApplicationBoard({
+    open,
+    onClose,
+    openDashboard,
+    queryOwnedPersonaInformation,
+    currentSNSNetwork,
+    allPersonas,
+    lastRecognized,
+    applicationCurrentStatus,
+    personaAgainstSNSConnectStatusLoading,
+    setPluginMinimalModeEnabled,
+    getDecentralizedSearchSettings,
+    setDecentralizedSearchSettings,
+    quickMode = false,
+    tab = ApplicationSettingTabs.pluginSwitch,
+    focusPluginID,
+}: ApplicationBoardProps) {
     const [openSettings, setOpenSettings] = useState(false)
     const { classes } = useStyles({ openSettings })
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const [currentTab, onChange, tabs, setTab] = useTabs(
         ApplicationSettingTabs.pluginList,
         ApplicationSettingTabs.pluginSwitch,
     )
 
-    const [focusPluginID, setFocusPluginID] = useState<PluginID>()
-    const [quickMode, setQuickMode] = useState(false)
-
-    const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-        (evt) => {
-            if (!evt.open || !evt.settings?.switchTab) return
-            setOpenSettings(true)
-            setQuickMode(evt.settings.quickMode ?? false)
-            setTab(ApplicationSettingTabs.pluginSwitch)
-            setFocusPluginID(evt.settings?.switchTab?.focusPluginID)
-        },
-    )
+    useEffect(() => setTab(tab), [tab])
 
     const reset = useCallback(() => {
         setOpenSettings(false)
-        setQuickMode(false)
         setTab(ApplicationSettingTabs.pluginList)
-        setFocusPluginID(undefined)
     }, [])
 
     const closeDialog = useCallback(() => {
@@ -67,7 +97,7 @@ export function ApplicationBoardDialog() {
             setOpenSettings(false)
             return
         }
-        closeBoard()
+        onClose()
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: 'timeline',
             open: false,
@@ -85,14 +115,14 @@ export function ApplicationBoardDialog() {
                 titleTabs={
                     openSettings ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                            <Tab label={t('application_settings_tab_app_list')} value={tabs.pluginList} />
-                            <Tab label={t('application_settings_tab_plug_in_switch')} value={tabs.pluginSwitch} />
+                            <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
+                            <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
                         </MaskTabList>
                     ) : null
                 }
                 titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
                 independent={LeavePageConfirmDialog.opened}
-                title={openSettings ? t('application_settings') : t('applications')}
+                title={openSettings ? t.application_settings() : t.applications()}
                 titleTail={
                     openSettings ? null : (
                         <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>
@@ -107,11 +137,24 @@ export function ApplicationBoardDialog() {
                                 <ApplicationSettingPluginList />
                             </TabPanel>
                             <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
-                                <ApplicationSettingPluginSwitch focusPluginID={focusPluginID} />
+                                <ApplicationSettingPluginSwitch
+                                    focusPluginID={focusPluginID}
+                                    setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
+                                    getDecentralizedSearchSettings={getDecentralizedSearchSettings}
+                                    setDecentralizedSearchSettings={setDecentralizedSearchSettings}
+                                />
                             </TabPanel>
                         </>
                     ) : (
-                        <ApplicationBoard />
+                        <ApplicationBoardContent
+                            openDashboard={openDashboard}
+                            queryOwnedPersonaInformation={queryOwnedPersonaInformation}
+                            currentSNSNetwork={currentSNSNetwork}
+                            lastRecognized={lastRecognized}
+                            allPersonas={allPersonas}
+                            applicationCurrentStatus={applicationCurrentStatus}
+                            personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}
+                        />
                     )}
                 </DialogContent>
             </InjectedDialog>
