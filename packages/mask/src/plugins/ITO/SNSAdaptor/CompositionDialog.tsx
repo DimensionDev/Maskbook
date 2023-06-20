@@ -2,10 +2,9 @@ import { omit, set } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, type InjectedDialogProps, NetworkTab } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, NetworkTab, ApplicationBoardDialog } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
@@ -17,7 +16,6 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
 import { PluginITO_RPC } from '../messages.js'
@@ -163,12 +161,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [ITO2_CONTRACT_ADDRESS, fillCallback])
     // #endregion
 
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-    )
-
     // #region tabs
-
     const currentIdentity = useCurrentIdentity()
     const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -212,7 +205,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
             else dropMetadata(ITO_MetaKey_2)
 
-            closeApplicationBoardDialog()
+            ApplicationBoardDialog.close()
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
             PluginITO_RPC.discoverPool('', payload)

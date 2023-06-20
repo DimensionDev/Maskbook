@@ -1,13 +1,12 @@
-import { memo, useEffect, useMemo, useRef } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
-import { Services } from '../../extension/service.js'
-import { useI18N } from '../../utils/index.js'
 import { useAsyncRetry } from 'react-use'
+import { useSharedI18N } from '../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -79,14 +78,17 @@ const DSearch_KEY = 'decentralized_search'
 
 interface Props {
     focusPluginID?: PluginID | typeof DSearch_KEY
+    setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
+    getDecentralizedSearchSettings?: () => Promise<boolean>
+    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 }
 
-async function onSwitch(id: string, checked: boolean) {
-    if (id === PluginID.GoPlusSecurity && checked === false)
-        return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
-    await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
-}
-export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPluginSwitch({ focusPluginID }: Props) {
+export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPluginSwitch({
+    focusPluginID,
+    setPluginMinimalModeEnabled,
+    getDecentralizedSearchSettings,
+    setDecentralizedSearchSettings,
+}: Props) {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
@@ -105,9 +107,20 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         targetPluginRef.current.scrollIntoView()
     }, [focusPluginID, noAvailablePlugins])
 
+    const onSwitch = useCallback(
+        async (id: string, checked: boolean) => {
+            if (id === PluginID.GoPlusSecurity && checked === false)
+                return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
+            await setPluginMinimalModeEnabled?.(id, !checked)
+        },
+        [setPluginMinimalModeEnabled],
+    )
+
     return (
         <List>
             <DSearchSetting
+                setDecentralizedSearchSettings={setDecentralizedSearchSettings}
+                getDecentralizedSearchSettings={getDecentralizedSearchSettings}
                 setRef={(element: HTMLLIElement | null) => {
                     if (DSearch_KEY === focusPluginID) {
                         targetPluginRef.current = element
@@ -183,16 +196,26 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
 interface DSearchSettingProps {
     focusPluginID?: string
     setRef(element: HTMLLIElement | null): void
+    getDecentralizedSearchSettings?: () => Promise<boolean>
+    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 }
 
-function DSearchSetting({ setRef, focusPluginID }: DSearchSettingProps) {
-    const { t } = useI18N()
+function DSearchSetting({
+    setRef,
+    focusPluginID,
+    getDecentralizedSearchSettings,
+    setDecentralizedSearchSettings,
+}: DSearchSettingProps) {
+    const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const { value: settings = true, retry } = useAsyncRetry(() => Services.Settings.getDecentralizedSearchSettings())
+    const { value: settings = true, retry } = useAsyncRetry(async () => {
+        const settings = await getDecentralizedSearchSettings?.()
+        return settings
+    })
 
     const handleSwitch = async (checked: boolean) => {
-        await Services.Settings.setDecentralizedSearchSettings(checked)
+        await setDecentralizedSearchSettings?.(checked)
         retry()
     }
 
@@ -208,9 +231,9 @@ function DSearchSetting({ setRef, focusPluginID }: DSearchSettingProps) {
                         </ListItemAvatar>
                         <Stack className={classes.info} flex={1}>
                             <div className={classes.headerWrapper}>
-                                <Typography className={classes.name}>{t('decentralized_search_name')}</Typography>
+                                <Typography className={classes.name}>{t.decentralized_search_name()}</Typography>
                             </div>
-                            <Typography className={classes.desc}>{t('decentralized_search_description')}</Typography>
+                            <Typography className={classes.desc}>{t.decentralized_search_description()}</Typography>
                         </Stack>
                     </section>
                     <Stack justifyContent="center">
@@ -222,26 +245,26 @@ function DSearchSetting({ setRef, focusPluginID }: DSearchSettingProps) {
                     <Stack spacing={1.25}>
                         <Stack>
                             <Typography className={classes.name} fontSize={14}>
-                                {t('decentralized_search_feature_token_name')}
+                                {t.decentralized_search_feature_token_name()}
                             </Typography>
                             <Typography className={classes.desc}>
-                                {t('decentralized_search_feature_token_description')}
+                                {t.decentralized_search_feature_token_description()}
                             </Typography>
                         </Stack>
                         <Stack>
                             <Typography className={classes.name} fontSize={14}>
-                                {t('decentralized_search_feature_nft_name')}
+                                {t.decentralized_search_feature_nft_name()}
                             </Typography>
                             <Typography className={classes.desc}>
-                                {t('decentralized_search_feature_nft_description')}
+                                {t.decentralized_search_feature_nft_description()}
                             </Typography>
                         </Stack>
                         <Stack>
                             <Typography className={classes.name} fontSize={14}>
-                                {t('decentralized_search_feature_wallet_name')}
+                                {t.decentralized_search_feature_wallet_name()}
                             </Typography>
                             <Typography className={classes.desc}>
-                                {t('decentralized_search_feature_wallet_description')}
+                                {t.decentralized_search_feature_wallet_description()}
                             </Typography>
                         </Stack>
                     </Stack>

@@ -3,7 +3,6 @@ import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import {
     CrossIsolationMessages,
     DashboardRoutes,
@@ -14,8 +13,7 @@ import {
     type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { LeavePageConfirmDialog } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ApplicationBoardDialog, LeavePageConfirmDialog } from '@masknet/shared'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
@@ -72,10 +70,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading, error, retry } = useConnectedPersonas()
-
-    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-    )
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -144,7 +138,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             }
             if (!isVerified && enableVerify) {
                 onClose?.()
-                closeApplicationBoard()
+                ApplicationBoardDialog.close()
                 if (finishTarget) {
                     CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                         open: false,

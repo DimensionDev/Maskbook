@@ -9,7 +9,7 @@ import {
     useGasPrice,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
-import { InjectedDialog, NetworkTab } from '@masknet/shared'
+import { ApplicationBoardDialog, InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
@@ -19,8 +19,6 @@ import {
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
@@ -108,9 +106,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props, state, step])
 
     const currentIdentity = useCurrentIdentity()
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.applicationDialogUpdated,
-    )
     const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const senderName =
@@ -135,7 +130,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
             senderName && (payload.sender.name = senderName)
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
-            closeApplicationBoardDialog()
+            ApplicationBoardDialog.close()
             onClose()
         },
         [chainId, senderName],

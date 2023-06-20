@@ -1,6 +1,10 @@
-import { setupLegacySettingsAtNonBackground, type KVStorageBackend, MaskMessages } from '@masknet/shared-base'
+import {
+    setupLegacySettingsAtNonBackground,
+    type KVStorageBackend,
+    MaskMessages,
+    setupMaskKVStorageBackend,
+} from '@masknet/shared-base'
 import { TelemetryID } from '@masknet/web3-telemetry'
-import { setupMaskKVStorageBackend } from '../shared/kv-storage.js'
 import Services from './extension/service.js'
 import { contentFetch } from './utils/fetcher.js'
 
