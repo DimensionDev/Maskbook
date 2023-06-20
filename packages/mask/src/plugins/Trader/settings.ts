@@ -1,4 +1,4 @@
-import { createGlobalSettings } from '../../../shared/legacy-settings/createSettings.js'
+import { createGlobalSettings } from '@masknet/shared-base'
 import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants/index.js'
 
 /**

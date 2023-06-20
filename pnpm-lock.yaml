@@ -309,6 +309,9 @@ importers:
       '@masknet/plugin-wallet':
         specifier: workspace:^
         version: link:../plugins/Wallet
+      '@masknet/public-api':
+        specifier: workspace:^
+        version: link:../public-api
       '@masknet/shared':
         specifier: workspace:^
         version: link:../shared
@@ -372,6 +375,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.22)
+      color:
+        specifier: ^4.2.3
+        version: 4.2.3
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -381,6 +387,9 @@ importers:
       cssnano:
         specifier: ^6.0.0
         version: 6.0.0(postcss@8.4.22)
+      date-fns:
+        specifier: 2.29.3
+        version: 2.29.3
       idb:
         specifier: ^7.1.1
         version: 7.1.1
@@ -393,6 +402,9 @@ importers:
       purgecss:
         specifier: ^5.0.0
         version: 5.0.0
+      react-router-dom:
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       stream-browserify:
         specifier: ^3.0.0
         version: 3.0.0
@@ -683,6 +695,15 @@ importers:
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
 
+  packages/external-plugin-previewer:
+    dependencies:
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../theme
+      ef.js:
+        specifier: ^0.16.6
+        version: 0.16.6
+
   packages/flags:
     devDependencies:
       urlcat:
@@ -754,6 +775,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/external-plugin-previewer':
+        specifier: workspace:^
+        version: link:../external-plugin-previewer
       '@masknet/flags':
         specifier: workspace:^
         version: link:../flags
@@ -847,6 +871,9 @@ importers:
       '@masknet/sandboxed-plugin-runtime':
         specifier: workspace:^
         version: link:../sandboxed-plugin-runtime
+      '@masknet/sdk':
+        specifier: workspace:^
+        version: link:../mask-sdk
       '@masknet/secp256k1-webcrypto':
         specifier: 1.0.0
         version: 1.0.0
@@ -1185,6 +1212,25 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4(webpack@5.85.0)
 
+  packages/mask-sdk:
+    dependencies:
+      async-call-rpc:
+        specifier: ^6.1.5
+        version: 6.1.5
+    devDependencies:
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.0.2
+        version: 15.0.2(rollup@3.20.6)
+      rollup:
+        specifier: ^3.20.6
+        version: 3.20.6
+      rollup-plugin-swc3:
+        specifier: ^0.8.1
+        version: 0.8.1(@swc/core@1.3.59)(rollup@3.20.6)
+      rollup-plugin-terser:
+        specifier: ^7.0.2
+        version: 7.0.2(rollup@3.20.6)
+
   packages/plugin-infra:
     dependencies:
       '@dimensiondev/mask-wallet-core':
@@ -1193,6 +1239,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/public-api':
+        specifier: workspace:^
+        version: link:../public-api
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
@@ -17982,6 +18031,21 @@ packages:
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
+  /ef-core@0.16.6:
+    resolution: {integrity: sha512-U+X9zMFu6DGkfsuP6ugpd3dUYxtezSWmEaJA83+eyyEGnyemajQ2kC6LOMyeI26el/Nyk8nkE7HbmMN1dsed7g==}
+    dev: false
+
+  /ef.js@0.16.6:
+    resolution: {integrity: sha512-cMDCl7ZgnfVB/IEUKz5atTNh/r/4NYxqAjstYSZme/Xh9mPHF6x7gS7EloHQz26sXZ+7IM9xJv8LpRiekeOhTg==}
+    dependencies:
+      ef-core: 0.16.6
+      eft-parser: 0.16.5
+    dev: false
+
+  /eft-parser@0.16.5:
+    resolution: {integrity: sha512-7fdg95/IOXs4nN8btfDorkkrY6N9vnC9y4V91bhnsNVHQSpeqQVA06EK12LrdpV5dYFTmCQMY0Gzzu9qSWsWXg==}
+    dev: false
+
   /electron-fetch@1.7.4:
     resolution: {integrity: sha512-+fBLXEy4CJWQ5bz8dyaeSG1hD6JJ15kBZyj3eh24pIVrd3hLM47H/umffrdQfS6GZ0falF0g9JT9f3Rs6AVUhw==}
     engines: {node: '>=6'}
@@ -33280,6 +33344,7 @@ time:
   /devtools-ignore-webpack-plugin@0.1.1: '2023-03-30T15:55:35.664Z'
   /dompurify@3.0.2: '2023-04-14T17:09:54.873Z'
   /dotenv@16.0.3: '2022-09-29T17:28:10.605Z'
+  /ef.js@0.16.6: '2023-03-22T19:54:19.613Z'
   /elliptic@6.5.4: '2021-02-02T18:22:21.969Z'
   /enquirer@2.3.6: '2020-07-02T13:00:19.453Z'
   /eslint-plugin-import@2.27.5: '2023-01-16T19:44:39.790Z'

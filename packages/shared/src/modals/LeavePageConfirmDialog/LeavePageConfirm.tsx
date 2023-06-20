@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { first } from 'lodash-es'
 
 type PositionStyle = {
     top?: number
@@ -60,7 +62,7 @@ export interface OpenPageConfirm {
 export interface LeavePageConfirmProps {
     open: boolean
     onClose: () => void
-    openDashboard?: () => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
     info?: OpenPageConfirm
 }
 
@@ -70,11 +72,13 @@ export function LeavePageConfirm(props: LeavePageConfirmProps) {
 
     const onClick = useCallback(() => {
         if (!info) return
-        if (info.target === 'dashboard') {
-            openDashboard?.()
-            onClose()
-            return
-        }
+        if (info.target !== 'dashboard') return
+        const isRoute = !!first(
+            Object.entries(DashboardRoutes).filter(([_, value]) => value.toLowerCase() === info.url.toLowerCase()),
+        )
+        if (!isRoute) return
+        openDashboard?.(info.url as DashboardRoutes)
+        onClose()
     }, [info, onClose, openDashboard])
 
     return open ? (

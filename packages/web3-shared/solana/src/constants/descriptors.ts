@@ -1,5 +1,4 @@
-import { getEnumAsArray } from '@masknet/kit'
-import { NetworkPluginID, EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { EnhanceableSiteList, ExtensionSiteList, NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainDescriptor,
     createFungibleToken,
@@ -7,7 +6,7 @@ import {
     type ProviderDescriptor,
 } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
-import { getTokenConstant } from './constants.js'
+import { ChainIdList, getTokenConstant } from './constants.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 
@@ -127,8 +126,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         shortenLink: 'phantom.app',
         downloadLink: 'https://phantom.app/download',
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: [],
         },
         iconFilterColor: 'rgba(85, 27, 249, 0.2)',
@@ -145,7 +144,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         shortenLink: 'solflare.com',
         downloadLink: 'https://solflare.com/download',
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
@@ -160,7 +159,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         shortenLink: 'solflare.com',
         downloadLink: 'https://coin98.com/wallet',
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
@@ -175,9 +174,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         shortenLink: 'sollet.io',
         downloadLink: 'https://www.sollet.io/',
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [],
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedExtensionSites: ExtensionSiteList,
         },
     },
 ]

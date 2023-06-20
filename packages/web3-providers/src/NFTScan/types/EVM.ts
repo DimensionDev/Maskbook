@@ -40,7 +40,7 @@ export namespace EVM {
         latest_trade_symbol: string | null
         latest_trade_timestamp: number | null
         nftscan_id: string | null
-        nftscan_uri: string | null
+        imageURL: string | null
     }
 
     export enum ErcType {

@@ -1,4 +1,3 @@
-import { getEnumAsArray } from '@masknet/kit'
 import { Flags } from '@masknet/flags'
 import {
     type ChainDescriptor,
@@ -6,10 +5,10 @@ import {
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSite, ExtensionSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EnhanceableSiteList, ExtensionSiteList, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
-import { getTokenConstant } from './constants.js'
+import { ChainIdList, getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
@@ -278,9 +277,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Mask Network',
         icon: new URL('../assets/maskwallet.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://mask.io',
         shortenLink: 'mask.io',
@@ -296,9 +295,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'MetaMask',
         icon: new URL('../assets/metamask.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://metamask.io',
         shortenLink: 'metamask.io',
@@ -315,9 +314,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/walletconnect.png', import.meta.url),
         enableRequirements: Flags.wc_v1_enabled
             ? {
-                  supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-                  supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-                  supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+                  supportedChainIds: ChainIdList,
+                  supportedEnhanceableSites: EnhanceableSiteList,
+                  supportedExtensionSites: ExtensionSiteList,
               }
             : undefined,
         homeLink: 'https://walletconnect.com',
@@ -335,9 +334,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/walletconnect.png', import.meta.url),
         enableRequirements: Flags.wc_v2_enabled
             ? {
-                  supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-                  supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-                  supportedExtensionSites: Flags.wc_v2_enabled ? getEnumAsArray(ExtensionSite).map((x) => x.value) : [],
+                  supportedChainIds: ChainIdList,
+                  supportedEnhanceableSites: EnhanceableSiteList,
+                  supportedExtensionSites: Flags.wc_v2_enabled ? ExtensionSiteList : [],
               }
             : undefined,
         homeLink: 'https://walletconnect.com',
@@ -354,7 +353,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Coin98',
         icon: new URL('../assets/coin98.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [],
         },
         homeLink: 'https://coin98.com',
@@ -368,7 +367,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Coinbase',
         icon: new URL('../assets/coinbase.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [],
         },
         homeLink: 'https://walletlink.org',
@@ -397,7 +396,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/opera.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
-            supportedEnhanceableSites: Sniffings.is_opera ? getEnumAsArray(EnhanceableSite).map((x) => x.value) : [],
+            supportedEnhanceableSites: Sniffings.is_opera ? EnhanceableSiteList : [],
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.opera.com/crypto/next',
@@ -415,8 +414,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         backgroundGradient:
             'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         enableRequirements: {
-            supportedChainIds: Sniffings.is_firefox ? [] : getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: Sniffings.is_firefox ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedChainIds: Sniffings.is_firefox ? [] : ChainIdList,
+            supportedEnhanceableSites: Sniffings.is_firefox ? [] : EnhanceableSiteList,
             supportedExtensionSites: [],
         },
         homeLink: 'https://clv.org',
@@ -431,8 +430,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/fortmatic.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: Sniffings.is_firefox ? [] : [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: Sniffings.is_firefox ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: Sniffings.is_firefox ? [] : getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedEnhanceableSites: Sniffings.is_firefox ? [] : EnhanceableSiteList,
+            supportedExtensionSites: Sniffings.is_firefox ? [] : ExtensionSiteList,
         },
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',

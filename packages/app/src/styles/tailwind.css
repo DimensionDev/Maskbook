@@ -1,5 +1,11 @@
 @tailwind base;
 
+html,
+body,
+body > main {
+    height: 100vh;
+}
+
 body {
     padding: 0;
     box-sizing: border-box;

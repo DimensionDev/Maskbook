@@ -1,10 +1,16 @@
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import { fromHex, NextIDAction, type PersonaInformation, SignType, toBase64 } from '@masknet/shared-base'
+import {
+    fromHex,
+    NextIDAction,
+    type PersonaInformation,
+    SignType,
+    toBase64,
+    languageSettings,
+    MaskMessages,
+} from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service.js'
-import { MaskMessages } from '../../utils/index.js'
-import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export function useNextIDVerify() {

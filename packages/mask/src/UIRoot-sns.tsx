@@ -7,10 +7,16 @@ import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } fr
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
-import { compose, getSiteType, i18NextInstance, NetworkPluginID, queryClient } from '@masknet/shared-base'
+import {
+    compose,
+    getSiteType,
+    i18NextInstance,
+    NetworkPluginID,
+    pluginIDSettings,
+    queryClient,
+} from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
-import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 

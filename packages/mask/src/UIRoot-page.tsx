@@ -6,9 +6,15 @@ import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } fr
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
-import { compose, getSiteType, i18NextInstance, NetworkPluginID, queryClient } from '@masknet/shared-base'
+import {
+    compose,
+    getSiteType,
+    i18NextInstance,
+    NetworkPluginID,
+    pluginIDSettings,
+    queryClient,
+} from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
-import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 
 export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(

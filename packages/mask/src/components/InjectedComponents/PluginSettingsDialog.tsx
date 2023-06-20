@@ -7,13 +7,13 @@ import {
     usePluginI18NField,
     getSettingsTabContent,
 } from '@masknet/plugin-infra/content-script'
-import { PluginID, NextIDPlatform, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, NextIDPlatform, EMPTY_LIST, CrossIsolationMessages, MaskMessages } from '@masknet/shared-base'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N, MaskMessages } from '../../utils/index.js'
+import { useI18N } from '../../utils/index.js'
 import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({

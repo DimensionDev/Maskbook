@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
-import { MaskMessages, useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import {
     toPNG,
@@ -16,7 +16,7 @@ import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 
-import { NetworkPluginID } from '@masknet/shared-base'
+import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({

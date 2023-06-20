@@ -1,7 +1,6 @@
 import type { Subscription } from 'use-subscription'
-import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ChainId, type Transaction } from '@masknet/web3-shared-evm'
+import { type ChainId, ChainIdList, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
@@ -15,16 +14,10 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
             transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
         },
     ) {
-        super(
-            context,
-            getEnumAsArray(ChainId).map((x) => x.value),
-            TransactionCheckers,
-            subscriptions,
-            {
-                defaultBlockDelay: 15,
-                getTransactionCreator: (tx) => tx.from ?? '',
-            },
-        )
+        super(context, ChainIdList, TransactionCheckers, subscriptions, {
+            defaultBlockDelay: 15,
+            getTransactionCreator: (tx) => tx.from ?? '',
+        })
     }
 
     override async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {

@@ -10,6 +10,7 @@ import {
     type PersonaInformation,
     NextIDAction,
     NextIDPlatform,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
@@ -17,7 +18,6 @@ import { useWalletSign } from '../hooks/useWalletSign.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { UnbindPanelUI } from './UnbindPanelUI.js'
 import { UnbindConfirm } from './UnbindConfirm.js'
-import { MaskMessages } from '../../../../shared/index.js'
 import { useI18N } from '../locales/index.js'
 
 interface VerifyWalletDialogProps {

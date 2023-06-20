@@ -3,8 +3,8 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, Markdown, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { EmptyStatus, LoadingStatus, Markdown, RetryHint } from '@masknet/shared'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import { CollectiblePaper } from './CollectiblePaper.js'
@@ -133,21 +133,7 @@ export function Collectible(props: CollectibleProps) {
         }
     }, [])
 
-    if (asset.loading)
-        return (
-            <Box
-                flex={1}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-                padding={1}
-                minHeight={148}>
-                <LoadingBase />
-                <Typography>{t.loading()}</Typography>
-            </Box>
-        )
+    if (asset.loading) return <LoadingStatus height={148} p={1} />
 
     if (!asset.value && !asset.error) {
         return <EmptyStatus className={classes.empty}>{t.nft_minted()}</EmptyStatus>

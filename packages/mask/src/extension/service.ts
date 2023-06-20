@@ -20,6 +20,7 @@ import type {
     IdentityService,
     SettingsService,
     SiteAdaptorService,
+    ThirdPartyPluginService,
     Services as ServicesType,
 } from '../../background/services/types.js'
 assertNotEnvironment(Environment.ManifestBackground)
@@ -39,6 +40,7 @@ export const Services: ServicesType = {
     SiteAdaptor: add<SiteAdaptorService>('SiteAdaptor'),
     SocialNetwork: add<SiteAdaptorService>('SiteAdaptor'),
     Settings: add<SettingsService>('Settings'),
+    ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
 }
 export default Services
 export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> = add('GeneratorServices', true) as any

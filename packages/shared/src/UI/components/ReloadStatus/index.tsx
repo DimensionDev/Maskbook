@@ -31,7 +31,7 @@ interface Props extends BoxProps {
     onRetry?(): void
 }
 
-export const ReloadStatus = memo(function LoadingStatus({
+export const ReloadStatus = memo(function ReloadStatus({
     className,
     children,
     message,

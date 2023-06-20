@@ -1,14 +1,14 @@
 import { forwardRef, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 import { SelectProvider } from './SelectProvider.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export interface SelectProviderDialogOpenProps {
+export type SelectProviderDialogOpenProps = {
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     walletConnectedCallback?: () => void
-}
+} | void
 
 export interface SelectProviderDialogProps {}
 

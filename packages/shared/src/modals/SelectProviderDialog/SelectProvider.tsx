@@ -2,12 +2,11 @@ import { memo, useCallback, useMemo } from 'react'
 import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { ConnectWalletDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginProviderRender } from './PluginProviderRender.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -41,12 +40,6 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const { classes } = useStyles()
     const { requiredSupportPluginID, requiredSupportChainIds, walletConnectedCallback, open, onClose } = props
 
-    // #region remote controlled dialog logic
-    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
-    )
-    // #endregion
-
     const onProviderIconClicked = useCallback(
         async (
             network: Web3Helper.NetworkDescriptorAll,
@@ -63,10 +56,9 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
 
             await delay(500)
 
-            setConnectWalletDialog({
-                open: true,
-                network,
-                provider,
+            ConnectWalletDialog.open({
+                networkType: network.type,
+                providerType: provider.type,
                 walletConnectedCallback,
             })
         },

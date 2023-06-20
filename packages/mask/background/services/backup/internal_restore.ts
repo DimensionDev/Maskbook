@@ -1,8 +1,7 @@
 import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
-import { type PluginID, type ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
-import { MaskMessages } from '../../../shared/messages.js'
+import { type PluginID, type ProfileIdentifier, RelationFavor, MaskMessages } from '@masknet/shared-base'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
