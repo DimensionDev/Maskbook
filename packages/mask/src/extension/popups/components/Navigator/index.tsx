@@ -26,10 +26,11 @@ const useStyle = makeStyles()((theme) => ({
         },
     },
     container: {
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.palette.maskColor.bottom,
         width: '100%',
         position: 'fixed',
         bottom: 0,
+        backdropFilter: 'blur(8px)',
     },
 }))
 
