@@ -292,6 +292,16 @@ export const MaskPlaceholder = /*#__PURE__*/ __createIcon('MaskPlaceholder', [
         u: () => new URL('./brands/MaskPlaceholder.light.svg', import.meta.url),
     },
 ])
+export const MaskSquare = /*#__PURE__*/ __createIcon('MaskSquare', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/MaskSquare.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/MaskSquare.light.svg', import.meta.url),
+    },
+])
 export const MaskText = /*#__PURE__*/ __createIcon('MaskText', [
     {
         u: () => new URL('./brands/MaskText.svg', import.meta.url),
@@ -802,6 +812,11 @@ export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
 export const BestTrade = /*#__PURE__*/ __createIcon('BestTrade', [
     {
         u: () => new URL('./general/BestTrade.svg', import.meta.url),
+    },
+])
+export const BluePin = /*#__PURE__*/ __createIcon('BluePin', [
+    {
+        u: () => new URL('./general/BluePin.svg', import.meta.url),
     },
 ])
 export const BorderedSuccess = /*#__PURE__*/ __createIcon('BorderedSuccess', [
@@ -1724,6 +1739,11 @@ export const Plugin = /*#__PURE__*/ __createIcon('Plugin', [
         u: () => new URL('./general/Plugin.svg', import.meta.url),
     },
 ])
+export const Plugins = /*#__PURE__*/ __createIcon('Plugins', [
+    {
+        u: () => new URL('./general/Plugins.svg', import.meta.url),
+    },
+])
 export const Poll = /*#__PURE__*/ __createIcon('Poll', [
     {
         u: () => new URL('./general/Poll.svg', import.meta.url),
@@ -2297,6 +2317,39 @@ export const Twitter = /*#__PURE__*/ __createIcon('Twitter', [
                     fill: 'currentColor',
                     d: 'M13.33 4.459a2.867 2.867 0 0 0 1.258-1.583 5.728 5.728 0 0 1-1.816.694 2.867 2.867 0 0 0-4.878 2.61 8.123 8.123 0 0 1-5.896-2.99 2.867 2.867 0 0 0 .886 3.82 2.85 2.85 0 0 1-1.296-.358v.036c0 1.362.96 2.535 2.296 2.805a2.867 2.867 0 0 1-1.292.05 2.867 2.867 0 0 0 2.672 1.986 5.74 5.74 0 0 1-3.553 1.225c-.228 0-.457-.013-.683-.04A8.099 8.099 0 0 0 5.414 14a8.085 8.085 0 0 0 8.13-8.51 5.812 5.812 0 0 0 1.429-1.482 5.72 5.72 0 0 1-1.643.45Z',
                 }),
+            }),
+        s: true,
+    },
+])
+export const TwitterStroke = /*#__PURE__*/ __createIcon('TwitterStroke', [
+    {
+        u: () => new URL('./general/TwitterStroke.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '21',
+                height: '20',
+                fill: 'none',
+                children: [
+                    /*#__PURE__*/ _jsx('g', {
+                        clipPath: 'url(#twitter-stroke)',
+                        children: /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M12.664 2.113a4.4 4.4 0 0 1 4.575.898 8.416 8.416 0 0 0 2.043-1.057.667.667 0 0 1 1.033.703 7.101 7.101 0 0 1-1.674 3.127c.017.154.025.308.026.463v.002c0 5.025-2.416 8.696-5.875 10.537-3.441 1.832-7.848 1.815-11.782-.37a.667.667 0 0 1 .35-1.25 9.034 9.034 0 0 0 4.42-.957c-1.371-.793-2.336-1.75-2.992-2.785-.817-1.291-1.127-2.66-1.183-3.894-.056-1.232.14-2.342.346-3.14a10.736 10.736 0 0 1 .396-1.223l.03-.074.01-.02.002-.007.015-.032.596.299.546-.384a8.217 8.217 0 0 0 6.287 3.483V6.28a4.4 4.4 0 0 1 2.831-4.166ZM3.248 4.7l-.006.023a9.42 9.42 0 0 0-.305 2.746c.048 1.058.311 2.188.978 3.241.664 1.049 1.754 2.06 3.523 2.847a.667.667 0 0 1 .103 1.16 10.365 10.365 0 0 1-3.547 1.537c2.875.896 5.804.615 8.172-.645 3-1.597 5.167-4.8 5.168-9.358-.001-.191-.02-.381-.055-.568a.666.666 0 0 1 .186-.6c.326-.321.61-.678.85-1.063a9.753 9.753 0 0 1-1.073.393.667.667 0 0 1-.695-.201 3.066 3.066 0 0 0-5.38 2.053v.843a.667.667 0 0 1-.65.666A9.55 9.55 0 0 1 3.248 4.7Z',
+                            clipRule: 'evenodd',
+                        }),
+                    }),
+                    /*#__PURE__*/ _jsx('defs', {
+                        children: /*#__PURE__*/ _jsx('clipPath', {
+                            id: 'twitter-stroke',
+                            children: /*#__PURE__*/ _jsx('path', {
+                                fill: 'currentColor',
+                                d: 'M.5 0h20v20H.5z',
+                            }),
+                        }),
+                    }),
+                ],
             }),
         s: true,
     },

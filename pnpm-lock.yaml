@@ -48,6 +48,9 @@ patchedDependencies:
   '@protobufjs/inquire@1.1.0':
     hash: cc6ztxhxwsg3dyqdzvftqua3dy
     path: patches/@protobufjs__inquire@1.1.0.patch
+  '@splinetool/runtime@0.9.342':
+    hash: pai5dnfr6cjujs6g7ajnubnady
+    path: patches/@splinetool__runtime@0.9.342.patch
   '@types/react-avatar-editor@13.0.0':
     hash: 6wzwgbn4gsisp2tjbg76iifhqq
     path: patches/@types__react-avatar-editor@13.0.0.patch
@@ -562,6 +565,12 @@ importers:
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
+      '@splinetool/react-spline':
+        specifier: ^2.2.6
+        version: 2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+      '@splinetool/runtime':
+        specifier: ^0.9.342
+        version: 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
       '@tanstack/react-query-devtools':
         specifier: ^4.29.7
         version: 4.29.7(@tanstack/react-query@4.29.7)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -10061,6 +10070,33 @@ packages:
       - supports-color
       - utf-8-validate
     dev: false
+
+  /@splinetool/react-spline@2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525):
+    resolution: {integrity: sha512-y9L2VEbnC6FNZZu8XMmWM9YTTTWal6kJVfP05Amf0QqDNzCSumKsJxZyGUODvuCmiAvy0PfIfEsiVKnSxvhsDw==}
+    peerDependencies:
+      '@splinetool/runtime': '*'
+      react: '>=17.0.0 || 0.0.0-experimental-21021fb0f-20230412 || 0.0.0-experimental-9a72e6227-20230525'
+      react-dom: '>=17.0.0 || 0.0.0-experimental-21021fb0f-20230412 || 0.0.0-experimental-9a72e6227-20230525'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      '@splinetool/runtime': 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
+      lodash.debounce: 4.0.8
+      react: 0.0.0-experimental-9a72e6227-20230525
+      react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
+      react-merge-refs: 2.0.2
+    dev: false
+
+  /@splinetool/runtime@0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady):
+    resolution: {integrity: sha512-umHOjVbg+7UYPtRLGNAQwwviz631SermH8WzQlGUBpPq1XDwTCcvz1kdNvQvA1NNan+AqnDEUspGhnc4nSp1rg==}
+    dependencies:
+      on-change: 4.0.2
+      semver-compare: 1.0.0
+    dev: false
+    patched: true
 
   /@stablelib/aead@1.0.1:
     resolution: {integrity: sha512-q39ik6sxGHewqtO0nP4BuSe3db5G1fEJE8ukvngS2gLkBXyy6E7pLubhbYgnkDFv6V8cWaxcE4Xn0t6LWcJkyg==}
@@ -25574,6 +25610,11 @@ packages:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
     dev: true
 
+  /on-change@4.0.2:
+    resolution: {integrity: sha512-cMtCyuJmTx/bg2HCpHo3ZLeF7FZnBOapLqZHr2AlLeJ5Ul0Zu2mUJJz051Fdwu/Et2YW04ZD+TtU+gVy0ACNCA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
   /on-exit-leak-free@0.2.0:
     resolution: {integrity: sha512-dqaz3u44QbRXQooZLTUKU41ZrzYrcvLISVgbrzbyCMxpmSLJvZ3ZamIJIZ29P6OhZIkNIQKosdeM6t1LYbA9hg==}
     dev: false
@@ -27577,6 +27618,10 @@ packages:
       - supports-color
     dev: false
 
+  /react-merge-refs@2.0.2:
+    resolution: {integrity: sha512-V5BGTwGa2r+/t0A/BZMS6L7VPXY0CU8xtAhkT3XUoI1WJJhhtvulvoiZkJ5Jt9YAW23m4xFWmhQ+C5HwjtTFhQ==}
+    dev: false
+
   /react-native-fetch-api@3.0.0:
     resolution: {integrity: sha512-g2rtqPjdroaboDKTsJCTlcmtw54E25OjyaunUP0anOZn4Fuo2IKs8BVfe02zVggA/UysbmfSnRJIqtNkAgggNA==}
     dependencies:
@@ -28761,6 +28806,10 @@ packages:
     dependencies:
       node-forge: 1.3.1
     dev: true
+
+  /semver-compare@1.0.0:
+    resolution: {integrity: sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==}
+    dev: false
 
   /semver-diff@4.0.0:
     resolution: {integrity: sha512-0Ju4+6A8iOnpL/Thra7dZsSlOHYAHIeMxfhWQRI1/VLcT3WDBZKKtQt/QkBOsiIN9ZpuvHE6cGZ0x4glCMmfiA==}
@@ -33261,6 +33310,7 @@ time:
   /@solana/buffer-layout@4.0.1: '2022-12-09T16:49:55.927Z'
   /@solana/spl-token@0.1.8: '2021-08-16T19:07:32.336Z'
   /@solana/web3.js@1.75.0: '2023-04-04T06:26:46.874Z'
+  /@splinetool/react-spline@2.2.6: '2023-02-24T14:10:59.598Z'
   /@storybook/addon-actions@6.5.13: '2022-10-24T04:02:38.942Z'
   /@storybook/addon-essentials@6.5.13: '2022-10-24T04:04:16.548Z'
   /@storybook/addon-links@6.5.13: '2022-10-24T04:02:53.198Z'

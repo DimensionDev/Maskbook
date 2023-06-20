@@ -4,23 +4,13 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 import { useAsync } from 'react-use'
-import { Services } from '../../API.js'
+import { Services } from '../../../API.js'
 
 const useStyles = makeStyles()((theme) => ({
-    article: {
-        width: 600,
-        margin: '0 auto',
-    },
-    h1: {
-        margin: theme.spacing(4.5, 0),
-        fontWeight: 500,
-        fontSize: 24,
-        lineHeight: '30px',
-        textAlign: 'center',
-    },
+    article: {},
     h2: {
         fontStyle: 'normal',
-        fontWeight: 600,
+        fontWeight: 400,
         fontSize: '14px',
         lineHeight: '20px',
         color: theme.palette.maskColor.main,
@@ -29,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '20px',
         color: theme.palette.maskColor.second,
+        marginTop: 24,
     },
     list: {
         marginTop: theme.spacing(2),
@@ -68,9 +59,8 @@ function Permissions() {
 
     return (
         <>
-            <Typography className={classes.h2} variant="h2" mt="16px">
-                Mask Network requires authorization for the following domains in order to provide comprehensive
-                services.
+            <Typography className={classes.h2} variant="h2" mt="24px">
+                Please grant us permission for these websites.
             </Typography>
 
             <ul className={classes.list}>
@@ -90,35 +80,29 @@ function Permissions() {
     )
 }
 
-export function Article(props: HTMLProps<HTMLElement>) {
+interface Props extends HTMLProps<HTMLDivElement> {}
+
+export function Article({ className, ...rest }: Props) {
     const { classes, cx } = useStyles()
 
     return (
-        <article {...props} className={cx(classes.article, props.className)}>
-            <Typography variant="h1" className={classes.h1}>
-                Help Us Improve Mask Network
-            </Typography>
-            <Typography className={classes.p} mt="35px">
+        <article className={cx(classes.article, className)} {...rest}>
+            <Typography className={classes.p}>
                 Mask Network aims to build an encrypted and decentralized social network, so you (all Internet users)
-                could send or browse encrypted posts with the 'Mask Network' extension or App. To improve our product,
-                we will need your help.
+                could send or browse encrypted posts with the 'Mask Network' extension or APP.
             </Typography>
-            <Typography variant="h2" className={classes.h2} mt="24px">
-                Mask Network never collects
+            <Typography className={classes.p}>
+                We provide services for digital encrypted identity and crypto wallet.
             </Typography>
-            <Typography className={classes.p} mt="24px">
-                Users' identity private keys, backup passwords, wallet payment passwords, wallet private keys, mnemonic
-                phrases, keystores.
-                <br />
-                Users' related information and browsing histories of their social accounts.
-                <br />
-                Users' addresses, balances, purchase histories, hash, or any personal information.
-                <br />
-                Users' complete IP address.
-                <br />
-                <br />
-                Mask Network keeps users' encrypted information in users'; browser, please keep it safe and make sure to
-                back up constantly.
+            <Typography className={classes.p} component="div">
+                The Mask is a browser extension that our product's functions. For example,
+                <ul>
+                    <li>Setting an NFT avatar in social media,</li>
+                    <li>Searching for cryptocurrency or artwork related to Twitter,</li>
+                    <li>Getting information enhancement on Twitter,</li>
+                    <li>Donating to Gitcoin and voting in Snapshot on the Twitter timeline,</li>
+                    <li>Viewing information about assets and artwork related to certain social accounts.</li>
+                </ul>
             </Typography>
             <Permissions />
         </article>
