@@ -1,6 +1,6 @@
+import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { DialogActions, DialogContent } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -65,7 +65,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         isLoading: loadingBinding,
         isFetched,
     } = usePersonaProofs(personaPublicKey, {
-        events: { ownProofChanged: ownProofChanged },
+        events: { ownProofChanged },
     } as WebExtensionMessage<MaskEvents>)
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST

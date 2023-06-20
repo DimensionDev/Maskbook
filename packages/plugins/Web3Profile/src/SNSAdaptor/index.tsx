@@ -1,6 +1,7 @@
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { Trans } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
 import { Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
@@ -13,7 +14,6 @@ import { base } from '../base.js'
 import { LensBadge } from './components/LensBadge.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
 import { setupStorage } from './context.js'
-import { useQuery } from '@tanstack/react-query'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
