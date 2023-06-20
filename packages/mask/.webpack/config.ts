@@ -13,10 +13,12 @@ import { emitManifestFile } from './manifest.js'
 import { emitGitInfo, getGitInfo } from './git-info.js'
 
 import { dirname, join } from 'node:path'
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { readFile } from 'node:fs/promises'
+import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+
+import { encodeArrayBuffer } from '@masknet/kit'
 
 import { nonNullable, type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
 import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
@@ -25,6 +27,7 @@ import './clean-hmr.js'
 
 const __dirname = fileURLToPath(dirname(import.meta.url))
 const require = createRequire(import.meta.url)
+const patchesDir = join(__dirname, '../../../patches')
 export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
     const VERSION = JSON.parse(await readFile(new URL('../src/manifest.json', import.meta.url), 'utf-8')).version
     const flags = normalizeBuildFlags(_inputFlags)
@@ -33,8 +36,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const polyfillFolder = join(flags.outputPath, './polyfill')
 
-    const patchesDir = join(__dirname, '../../../patches')
-    const pnpmPatches = readdirSync(patchesDir).map((x) => join(patchesDir, x))
+    const pnpmPatchHash = readdir(patchesDir).then((files) =>
+        Promise.all(
+            files.map(async (file) => {
+                return encodeArrayBuffer(await crypto.subtle.digest('SHA-256', await readFile(file)))
+            }),
+        ),
+    )
     const baseConfig: webpack.Configuration = {
         name: 'mask',
         // to set a correct base path for source map
@@ -49,7 +57,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             readonly: flags.readonlyCache,
             buildDependencies: {
                 config: [fileURLToPath(import.meta.url)],
-                patches: pnpmPatches,
+                patches: await pnpmPatchHash,
             },
             version: cacheKey,
         },
@@ -61,10 +69,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias: Record<string, string> = {
-                    // We want to always use the full version.
-                    'async-call-rpc$': require.resolve('async-call-rpc/full'),
-                    // It's a Node impl for xhr which is unnecessary
-                    'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.mjs'),
+                    // conflict with SES
                     'error-polyfill': require.resolve('./package-overrides/null.mjs'),
                 }
                 if (computedFlags.reactProductionProfiling) alias['react-dom$'] = require.resolve('react-dom/profiling')
