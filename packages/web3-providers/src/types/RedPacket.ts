@@ -1,5 +1,5 @@
 import type { Pageable, PageIndicator } from '@masknet/shared-base'
-import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-shared-evm'
+import type { NftRedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '@masknet/web3-shared-evm'
 import type { Transaction, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { HubOptions_Base } from '../entry-types.js'
 
@@ -13,6 +13,15 @@ export namespace RedPacketBaseAPI {
             startBlock: number,
             endBlock: number,
         ) => Promise<RedPacketJSONPayloadFromChain[] | undefined>
+
+        getNFTHistories?: (
+            chainId: ChainId,
+            senderAddress: string,
+            contractAddress: string,
+            methodId: string,
+            startBlock: number,
+            endBlock: number,
+        ) => Promise<NftRedPacketJSONPayload[] | undefined>
 
         getHistoryTransactions?: (
             chainId: ChainId,

@@ -115,3 +115,13 @@ export type CreateRedpacketParam = {
     _token_type: BigNumber
     _total_tokens: BigNumber
 }
+
+export type CreateNFTRedpacketParam = {
+    _public_key: string
+    _duration: BigNumber
+    _seed: string
+    _message: string
+    _name: string
+    _token_addr: string
+    _erc721_token_ids: BigNumber[]
+}

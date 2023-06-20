@@ -3,7 +3,14 @@ import { mapKeys } from 'lodash-es'
 import { createIndicator, createPageable, type PageIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import type { ChainId, RedPacketJSONPayloadFromChain, SchemaType, CreateRedpacketParam } from '@masknet/web3-shared-evm'
+import type {
+    ChainId,
+    RedPacketJSONPayloadFromChain,
+    SchemaType,
+    CreateRedpacketParam,
+    NftRedPacketJSONPayload,
+    CreateNFTRedpacketParam,
+} from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
@@ -25,7 +32,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         senderAddress: string,
         contractAddress: string,
         methodId: string,
-        startBlock: number,
+        fromBlock: number,
         endBlock: number,
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         return attemptUntil(
@@ -36,30 +43,66 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                 //         senderAddress,
                 //         contractAddress,
                 //         methodId,
-                //         startBlock,
+                //         fromBlock,
                 //         endBlock,
                 //     ),
                 async () =>
                     this.parseRedPacketCreationTransactions(
-                        await this.EtherscanRedPacket.getHistoryTransactions(
+                        await this.getHistoryTransactions(
                             chainId,
                             senderAddress,
                             contractAddress,
                             methodId,
-                            startBlock,
+                            fromBlock,
                             endBlock,
                         ),
                         senderAddress,
                     ),
+            ],
+            [],
+        )
+    }
+
+    async getNFTHistories(
+        chainId: ChainId,
+        senderAddress: string,
+        contractAddress: string,
+        methodId: string,
+        fromBlock: number,
+        endBlock: number,
+    ): Promise<NftRedPacketJSONPayload[] | undefined> {
+        return this.parseNFTRedPacketCreationTransactions(
+            await this.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId, fromBlock, endBlock),
+            senderAddress,
+        )
+    }
+
+    async getHistoryTransactions(
+        chainId: ChainId,
+        senderAddress: string,
+        contractAddress: string,
+        methodId: string,
+        fromBlock: number,
+        endBlock: number,
+    ) {
+        return attemptUntil(
+            [
                 async () =>
-                    this.parseRedPacketCreationTransactions(
-                        await this.ChainbaseRedPacket.getHistoryTransactions(
-                            chainId,
-                            senderAddress,
-                            contractAddress,
-                            methodId,
-                        ),
+                    await this.EtherscanRedPacket.getHistoryTransactions(
+                        chainId,
                         senderAddress,
+                        contractAddress,
+                        methodId,
+                        fromBlock,
+                        endBlock,
+                    ),
+
+                async () =>
+                    await this.ChainbaseRedPacket.getHistoryTransactions(
+                        chainId,
+                        senderAddress,
+                        contractAddress,
+                        methodId,
                     ),
             ],
             [],
@@ -77,6 +120,52 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
             (x) => x.chainId === chainId,
         )
         return createPageable(list, createIndicator(indicator))
+    }
+
+    private parseNFTRedPacketCreationTransactions(
+        transactions: Array<Transaction<ChainId, SchemaType>> | undefined,
+        senderAddress: string,
+    ): NftRedPacketJSONPayload[] {
+        if (!transactions) return EMPTY_LIST
+
+        transactions.flatMap((tx) => {
+            try {
+                const decodedInputParam = redPacketInterFace.decodeFunctionData(
+                    'create_red_packet',
+                    tx.input ?? '',
+                ) as unknown as CreateNFTRedpacketParam
+
+                const redpacketPayload: NftRedPacketJSONPayload = {
+                    contract_address: tx.to,
+                    txid: tx.hash ?? '',
+                    contract_version: 1,
+                    shares: decodedInputParam._erc721_token_ids.length,
+                    network: chainResolver.networkType(tx.chainId),
+                    token_address: decodedInputParam._token_addr,
+                    chainId: tx.chainId,
+                    sender: {
+                        address: senderAddress,
+                        name: decodedInputParam._name,
+                        message: decodedInputParam._message,
+                    },
+                    duration: decodedInputParam._duration.toNumber() * 1000,
+                    token_ids: decodedInputParam._erc721_token_ids.map((x) => x.toString()),
+                    // #region Retrieve at NFT History List Item.
+                    rpid: '',
+                    creation_time: 0,
+                    // #endregion
+                    // #region Retrieve from database
+                    password: '',
+                    // #endregion
+                }
+
+                return redpacketPayload
+            } catch {
+                return []
+            }
+        })
+
+        return EMPTY_LIST
     }
 
     private parseRedPacketCreationTransactions(
