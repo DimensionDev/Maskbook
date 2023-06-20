@@ -208,11 +208,11 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const entry = useIntersectionObserver(ref, {})
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const { value: receipt } = useCreateRedPacketReceipt(isViewed ? history.txid : '')
+    const { value: receipt } = useCreateRedPacketReceipt(isViewed && !history.rpid ? history.txid : '')
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const rpid = receipt?.rpid ?? ''
-    const creation_time = receipt?.creation_time ?? 0
+    const rpid = history.rpid ?? receipt?.rpid ?? ''
+    const creation_time = history.creation_time ?? receipt?.creation_time ?? 0
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,

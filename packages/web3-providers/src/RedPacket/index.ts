@@ -39,15 +39,15 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         return attemptUntil(
             [
-                // async () =>
-                //     this.ContractRedPacket.getHistories(
-                //         chainId,
-                //         senderAddress,
-                //         contractAddress,
-                //         methodId,
-                //         fromBlock,
-                //         endBlock,
-                //     ),
+                async () =>
+                    this.ContractRedPacket.getHistories(
+                        chainId,
+                        senderAddress,
+                        contractAddress,
+                        methodId,
+                        fromBlock,
+                        endBlock,
+                    ),
                 async () =>
                     this.parseRedPacketCreationTransactions(
                         await this.getHistoryTransactions(
