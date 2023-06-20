@@ -1,8 +1,8 @@
 import { startPluginWorker, type Plugin } from '@masknet/plugin-infra/background-worker'
 import { createPluginDatabase } from '../../database/plugin-db/index.js'
 import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
-import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor.js'
 import { hmr } from '../../../utils-pure/index.js'
+import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor.js'
 import { hasHostPermission } from '../../services/helper/request-permission.js'
 
 const { signal } = hmr(import.meta.webpackHot)

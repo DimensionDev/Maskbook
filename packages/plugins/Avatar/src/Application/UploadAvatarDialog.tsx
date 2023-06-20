@@ -1,18 +1,18 @@
+import { delay } from '@masknet/kit'
 import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AvatarEditor from 'react-avatar-editor'
 import { useSubscription } from 'use-subscription'
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { useI18N } from '../locales/i18n_generated.js'
-import { context } from '../context.js'
-import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
-import { delay } from '@masknet/kit'
 import { usePersonaConnectStatus } from '@masknet/shared'
-import { useAvatarManagement } from '../contexts/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useNavigate } from 'react-router-dom'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useI18N } from '../locales/i18n_generated.js'
+import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
+import { useAvatarManagement } from '../contexts/index.js'
 import { RoutePaths } from './Routes.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,7 +63,8 @@ export function UploadAvatarDialog() {
     const { image, account, token, pluginID } = selectedTokenInfo ?? {}
     const isBindAccount = proofs.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const identifier = useSubscription(context.currentVisitingProfile)
+    const { currentVisitingProfile } = useSNSAdaptorContext()
+    const identifier = useSubscription(currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()

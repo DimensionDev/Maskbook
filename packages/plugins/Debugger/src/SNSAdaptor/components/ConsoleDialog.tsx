@@ -1,4 +1,3 @@
-import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -17,11 +16,9 @@ export function ConsoleDialog(props: ConsoleDialogProps) {
     return (
         <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
-                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                        <ConsoleContent onClose={closeDialog} />
-                    </Web3ContextProvider>
-                </SNSAdaptorContext.Provider>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    <ConsoleContent onClose={closeDialog} />
+                </Web3ContextProvider>
             </DialogContent>
         </InjectedDialog>
     )
