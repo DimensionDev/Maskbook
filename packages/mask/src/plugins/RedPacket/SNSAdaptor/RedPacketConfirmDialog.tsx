@@ -13,6 +13,8 @@ import {
     explorerResolver,
     type GasConfig,
     useRedPacketConstants,
+    type RedPacketRecord,
+    type RedPacketJSONPayload,
     createNativeToken,
 } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
@@ -24,7 +26,6 @@ import { Launch as LaunchIcon } from '@mui/icons-material'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
-import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { useI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
 import { Icons } from '@masknet/icons'

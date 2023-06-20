@@ -1,12 +1,16 @@
 import { useAsyncRetry } from 'react-use'
 import type { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { type ChainId, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    getNftRedPacketConstants,
+    chainResolver,
+    type NftRedPacketJSONPayload,
+} from '@masknet/web3-shared-evm'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { Interface } from '@ethersproject/abi'
-import type { NftRedPacketJSONPayload } from '../../types.js'
 
 import { RedPacketRPC } from '../../messages.js'
 
@@ -36,7 +40,7 @@ export function useNftRedPacketHistory(address: string, chainId: ChainId) {
             address,
             RED_PACKET_NFT_ADDRESS,
             CREATE_RED_PACKET_METHOD_ID,
-            NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT,
+            NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT ?? 0,
             blockNumber,
         )
         if (!historyTransactions) return EMPTY_LIST

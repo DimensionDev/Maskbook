@@ -1,8 +1,7 @@
 import { Interface } from '@ethersproject/abi'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, RedpacketAvailability } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
-import type { RedpacketAvailability } from '../../types.js'
 
 const interFace = new Interface(REDPACKET_ABI)
 

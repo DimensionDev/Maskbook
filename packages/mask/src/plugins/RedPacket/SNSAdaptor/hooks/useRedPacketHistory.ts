@@ -2,12 +2,16 @@ import { useAsyncRetry } from 'react-use'
 import { useMemo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { type ChainId, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    getRedPacketConstants,
+    chainResolver,
+    type RedPacketJSONPayloadFromChain,
+} from '@masknet/web3-shared-evm'
 import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Interface } from '@ethersproject/abi'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { RedPacketJSONPayloadFromChain } from '../../types.js'
 import { RedPacketRPC } from '../../messages.js'
 
 const redPacketInterFace = new Interface(REDPACKET_ABI)
@@ -37,7 +41,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
             address,
             HAPPY_RED_PACKET_ADDRESS_V4,
             CREATE_RED_PACKET_METHOD_ID,
-            HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT,
+            HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT ?? 0,
             blockNumber,
         )
         if (!historyTransactions) return EMPTY_LIST

@@ -5,6 +5,7 @@ import { type Transaction, attemptUntil, type NonFungibleCollection } from '@mas
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
+import { ContractRedPacketAPI } from './api.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
 import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
@@ -12,19 +13,20 @@ import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
     private EtherscanRedPacket = new EtherscanRedPacketAPI()
+    private ContractRedPacket = new ContractRedPacketAPI()
 
     getHistories(
         chainId: ChainId,
         senderAddress: string,
         contractAddress: string,
         methodId: string,
-        startBlock?: number,
-        endBlock?: number,
+        startBlock: number,
+        endBlock: number,
     ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
         return attemptUntil(
             [
                 async () =>
-                    this.EtherscanRedPacket.getHistories(
+                    this.ContractRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -32,15 +34,24 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                         startBlock,
                         endBlock,
                     ),
-                async () =>
-                    this.ChainbaseRedPacket.getHistories(
-                        chainId,
-                        senderAddress,
-                        contractAddress,
-                        methodId,
-                        startBlock,
-                        endBlock,
-                    ),
+                // async () =>
+                //     this.EtherscanRedPacket.getHistories(
+                //         chainId,
+                //         senderAddress,
+                //         contractAddress,
+                //         methodId,
+                //         startBlock,
+                //         endBlock,
+                //     ),
+                // async () =>
+                //     this.ChainbaseRedPacket.getHistories(
+                //         chainId,
+                //         senderAddress,
+                //         contractAddress,
+                //         methodId,
+                //         startBlock,
+                //         endBlock,
+                //     ),
             ],
             [],
         )

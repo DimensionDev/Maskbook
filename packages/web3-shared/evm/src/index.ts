@@ -1,4 +1,5 @@
 export * from './types/index.js'
+export * from './types/RedPacket.js'
 export * from './constants/index.js'
 export * from './libs/index.js'
 export * from './helpers/address.js'

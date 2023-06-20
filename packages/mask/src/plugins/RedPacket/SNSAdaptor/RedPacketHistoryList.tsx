@@ -1,7 +1,7 @@
 import { Typography, List, Box } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
-import type { RedPacketJSONPayload } from '../types.js'
+import type { RedPacketJSONPayload } from '@masknet/web3-shared-evm'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
 import { useI18N } from '../locales/index.js'

@@ -3,8 +3,7 @@ import { compact } from 'lodash-es'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
-import { type NftRedPacketJSONPayload, RedPacketStatus } from '../../types.js'
+import { ChainId, chainResolver, type NftRedPacketJSONPayload, RedPacketStatus } from '@masknet/web3-shared-evm'
 import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket.js'
 
 /**

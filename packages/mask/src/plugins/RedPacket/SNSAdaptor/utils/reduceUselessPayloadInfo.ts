@@ -1,6 +1,5 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { RedPacketJSONPayload } from '../../types.js'
+import type { ChainId, SchemaType, RedPacketJSONPayload } from '@masknet/web3-shared-evm'
 import { pick, omit } from 'lodash-es'
 
 export function reduceUselessPayloadInfo(payload: RedPacketJSONPayload): RedPacketJSONPayload {
