@@ -77,7 +77,7 @@ export const Onboarding = memo(function Onboarding() {
         const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
         await delay(300)
-        browser.tabs.create({
+        await browser.tabs.create({
             active: true,
             url,
         })

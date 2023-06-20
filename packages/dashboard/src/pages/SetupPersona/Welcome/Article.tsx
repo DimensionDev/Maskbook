@@ -94,7 +94,7 @@ export function Article({ className, ...rest }: Props) {
             <Typography className={classes.p}>
                 We provide services for digital encrypted identity and crypto wallet.
             </Typography>
-            <Typography className={classes.p}>
+            <Typography className={classes.p} component="div">
                 The Mask is a browser extension that our product's functions. For example,
                 <ul>
                     <li>Setting an NFT avatar in social media,</li>

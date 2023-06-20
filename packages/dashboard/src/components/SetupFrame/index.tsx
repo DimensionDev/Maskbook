@@ -35,7 +35,7 @@ export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => 
                                 justifyContent="center">
                                 {t.persona_setup_identity_tips()}
                             </Typography>
-                        </Box>{' '}
+                        </Box>
                         <Spline scene={Welcome.toString()} />
                     </>
                 ) : null}
