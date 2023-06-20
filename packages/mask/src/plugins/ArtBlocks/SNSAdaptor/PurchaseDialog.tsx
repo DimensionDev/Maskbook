@@ -103,7 +103,7 @@ export function PurchaseDialog(props: ActionBarProps) {
         } catch (err: any) {
             showConfirm({
                 title: 'Error',
-                content: err.message,
+                children: err.message,
             })
         }
     }, [openShareTxDialog, onClose])

@@ -249,7 +249,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         await showConfirm({
             title: t.swap(),
-            content: (
+            children: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                     <ImageIcon icon={inputToken?.logoURL} size={90} />
                     <Typography

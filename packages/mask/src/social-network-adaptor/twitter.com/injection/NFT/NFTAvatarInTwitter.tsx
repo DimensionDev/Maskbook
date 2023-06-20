@@ -193,7 +193,7 @@ function useNFTCircleAvatar(size: number) {
 
         openConfirmDialog({
             title: t('plugin_avatar_setup_share_title'),
-            content: (
+            children: (
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <AssetPreviewer url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL} />
                     <Typography mt={3} fontSize="18px">

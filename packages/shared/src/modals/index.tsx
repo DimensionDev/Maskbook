@@ -8,6 +8,7 @@ import { WalletStatusModal } from './WalletStatusDialog/index.js'
 import { LeavePageConfirmModal, type LeavePageConfirmDialogOpenProps } from './LeavePageConfirmDialog/index.js'
 import { TransactionModal, type TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
 import { GasSettingModal, type GasSettingDialogOpenOrCloseProps } from './GasSettingDialog/index.js'
+import { type ConfirmDialogOpenProps, ConfirmModal } from './Confirm/index.js'
 
 export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
@@ -17,6 +18,7 @@ export const ConnectWalletDialog = new SingletonModal<ConnectWalletDialogOpenPro
 export const LeavePageConfirmDialog = new SingletonModal<LeavePageConfirmDialogOpenProps>()
 export const TransactionSnackbar = new SingletonModal<TransactionSnackbarOpenProps>()
 export const GasSettingDialog = new SingletonModal<GasSettingDialogOpenOrCloseProps, GasSettingDialogOpenOrCloseProps>()
+export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps>()
 
 export const Modals = memo(function Modals() {
     return (
@@ -29,6 +31,7 @@ export const Modals = memo(function Modals() {
             <LeavePageConfirmModal ref={LeavePageConfirmDialog.register} />
             <TransactionModal ref={TransactionSnackbar.register} />
             <GasSettingModal ref={GasSettingDialog.register} />
+            <ConfirmModal ref={ConfirmDialog.register} />
         </>
     )
 })

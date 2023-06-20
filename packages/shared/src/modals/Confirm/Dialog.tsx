@@ -1,8 +1,6 @@
-import type { ReactNode } from 'react'
-import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
-import { InjectedDialog, type InjectedDialogProps } from '../../components/index.js'
+import { InjectedDialog, useSharedI18N, type InjectedDialogProps } from '../../index.js'
+import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     dialog: {
@@ -24,30 +22,46 @@ const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     },
 }))
 
-export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
+export interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
+    open: boolean
+    onClose: () => void
+
     title?: string
-    content: ReactNode | string
-    confirmLabel?: string
+    confirmLabel?: React.ReactNode | string
     onSubmit?(result: boolean | null): void
     maxWidthOfContent?: number
+    cancelText?: React.ReactNode | string
+    confirmDisabled?: boolean
+    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl'
 }
 
-export function ConfirmDialog({
+export function Confirm({
     title,
     confirmLabel,
-    content,
+    children,
     onSubmit,
     maxWidthOfContent,
+    maxWidth,
+    cancelText,
+    confirmDisabled,
     ...rest
-}: ConfirmDialogProps) {
+}: ConfirmProps) {
     const t = useSharedI18N()
     const { classes } = useStyles(maxWidthOfContent)
 
     return (
-        <InjectedDialog title={title ?? t.dialog_confirm()} className={classes.dialog} {...rest}>
-            <DialogContent className={classes.content}>{content}</DialogContent>
+        <InjectedDialog title={title ?? t.dialog_confirm()} maxWidth={maxWidth} className={classes.dialog} {...rest}>
+            <DialogContent className={classes.content}>{children}</DialogContent>
             <DialogActions>
+                cancelText ??
                 <Button fullWidth className={classes.button} onClick={() => onSubmit?.(true)}>
+                    {cancelText}
+                </Button>
+                <Button
+                    fullWidth
+                    className={classes.button}
+                    onClick={() => onSubmit?.(true)}
+                    disabled={confirmDisabled}>
                     {confirmLabel ?? t.dialog_confirm()}
                 </Button>
             </DialogActions>

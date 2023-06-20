@@ -5,8 +5,8 @@ import { explorerResolver } from '@masknet/web3-shared-evm'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useShowConfirm } from '../contexts/common/index.js'
 import { useSharedI18N } from '../locales/index.js'
+import { useShowConfirm } from './useShowConfirm.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -80,7 +80,7 @@ export function useOpenShareTxDialog() {
         ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
             return showConfirm({
                 title: title ?? t.share_dialog_transaction(),
-                content: (
+                children: (
                     <ShareTransaction
                         message={message ?? t.share_dialog_transaction_confirmed()}
                         content={content}
