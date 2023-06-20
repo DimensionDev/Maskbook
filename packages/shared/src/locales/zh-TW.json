@@ -12,6 +12,11 @@
     "done": "完成！",
     "wallet_risk_confirm_confirming": "確認中",
     "wallet_risk_confirm_failed": "確認失敗",
+    "wallet_transfer_gwei": "GWEI",
+    "wallet_transfer_error_gas_limit_absence": "輸入礦工費上限",
+    "wallet_transfer_error_max_priority_fee_absence": "輸入優先交易費用",
+    "wallet_transfer_error_max_fee_absence": "輸入總交易費用",
+    "wallet_transfer_error_gas_price_absence": "輸入礦工費",
     "initializing": "初始化中...",
     "wallet_risk_warning_content": "尊敬的用户：<br/>在使用任何 Mask Network 内任何跟钱包相关的插件，请确认以下使用风险。<br/>Mask Network 提供非商业免费服务。接入的插件均为社区成员和其他优秀第三方DApps团队提供，由于去中心化网络的自由性和其他不确定风险因素，请用户妥善保护自己的钱包助记词、私钥等敏感信息，进行任何区块链合约交互，请谨慎操作。任何第三方 DApps 插件所带来的风险均由第三方 DApps 承担。点击确认按钮即代表同意承担以上可能带来的风险。",
     "plugin_wallet_on_connect": "連接錢包"

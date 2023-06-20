@@ -14,5 +14,12 @@
     "swap": "Swap",
     "congratulations": "Congratulations!",
     "swap_successfully_description": "Swap {{input}} for {{output}}",
+    "plugin_wallet_snackbar_wait_for_confirming": "Confirm this transaction in your wallet",
+    "plugin_wallet_snackbar_hash": "Transaction Submitted",
+    "plugin_wallet_snackbar_confirmed": "Transaction Confirmed",
+    "plugin_wallet_snackbar_success": "Transaction Succeed",
+    "plugin_wallet_snackbar_failed": "Transaction Failed",
+    "plugin_wallet_snackbar_swap_successful": "Successfully swapped Token",
+    "plugin_wallet_snackbar_swap_token": "Swap Token",
     "share": "Share"
 }
