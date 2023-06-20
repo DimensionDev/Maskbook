@@ -1,3 +1,4 @@
+/// <reference path="../../polyfills/types/dom.d.ts" />
 if (typeof trustedTypes === 'object' && location.protocol.includes('extension')) {
     // https://github.com/TanStack/query/issues/5417
     const ReactQueryStyle = `

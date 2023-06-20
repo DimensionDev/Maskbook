@@ -274,9 +274,11 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             globalObject: 'globalThis',
             publicPath: '/',
             clean: flags.mode === 'production',
-            trustedTypes: {
-                policyName: 'webpack',
-            },
+            trustedTypes: String(computedFlags.sourceMapKind).includes('eval')
+                ? {
+                      policyName: 'webpack',
+                  }
+                : undefined,
         },
         ignoreWarnings: [/Failed to parse source map/],
         devServer: {
