@@ -7,7 +7,6 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
-import { setupContext } from '../context.js'
 
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
@@ -16,9 +15,7 @@ function clickHandler() {
 }
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        setupContext(context)
-    },
+    init(signal, context) {},
     GlobalInjection() {
         const { pluginID } = useNetworkContext()
         const { chainId } = useChainContext()

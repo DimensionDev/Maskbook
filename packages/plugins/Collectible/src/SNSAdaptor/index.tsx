@@ -12,7 +12,6 @@ import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
-import { setupContext } from '../context.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
 import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
@@ -77,9 +76,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        setupContext(context)
-    },
+    init(signal, context) {},
     GlobalInjection() {
         return <DialogInspector />
     },

@@ -11,13 +11,10 @@ import { PluginClaimMessage } from '../message.js'
 import { ClaimDialog } from './components/ClaimDialog/index.js'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
-import { context, setupContext } from './context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        setupContext(context)
-    },
+    init(signal, context) {},
     GlobalInjection: function ClaimGlobalInjection() {
         const { open: claimOpen, closeDialog: closeClaimDialog } = useRemoteControlledDialog(
             PluginClaimMessage.claimDialogEvent,

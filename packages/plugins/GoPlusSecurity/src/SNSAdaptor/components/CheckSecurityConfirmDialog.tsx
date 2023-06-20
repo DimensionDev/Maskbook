@@ -1,9 +1,9 @@
+import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Button, DialogContent, Stack, Typography } from '@mui/material'
+import { SNSAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../locales/index.js'
-import { context } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function onConfirm() {
-    return context.setMinimalMode(PluginID.GoPlusSecurity, true)
+    return SNSAdaptorContextRef.value.setMinimalMode(PluginID.GoPlusSecurity, true)
 }
 interface Props {
     open: boolean

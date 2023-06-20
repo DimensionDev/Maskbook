@@ -1,20 +1,17 @@
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { base } from '../base.js'
-import { setupContext } from './context.js'
 import { PreviewCard } from './components/PreviewCard.js'
 import { Icons } from '@masknet/icons'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { base } from '../base.js'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
-import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        setupContext(context)
-    },
+    init(signal, context) {},
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Danger size={36} />

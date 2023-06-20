@@ -2,14 +2,14 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { DialogActions, DialogContent } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
-import { DialogActions, DialogContent } from '@mui/material'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../locales/index.js'
-import { context } from '../context.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
 
@@ -48,6 +48,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const { chainId } = useChainContext()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
+    const { getPersonaAvatar, openPopupWindow, ownProofChanged } = useSNSAdaptorContext()
 
     const [tipsVisible, setTipsVisible] = useState(true)
     const dismissTips = useCallback(() => setTipsVisible(false), [])
@@ -64,7 +65,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         isLoading: loadingBinding,
         isFetched,
     } = usePersonaProofs(personaPublicKey, {
-        events: { ownProofChanged: context?.ownProofChanged },
+        events: { ownProofChanged: ownProofChanged },
     } as WebExtensionMessage<MaskEvents>)
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST
@@ -134,10 +135,10 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         refetch()
     }, [pendingUnlistedConfig, t, updateConfig])
 
-    const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
+    const { value: avatar } = useAsyncRetry(async () => getPersonaAvatar(currentPersona?.identifier), [])
 
     const openPopupsWindow = useCallback(() => {
-        context.openPopupWindow(PopupRoutes.ConnectedWallets, {
+        openPopupWindow(PopupRoutes.ConnectedWallets, {
             chainId,
             internal: true,
         })
