@@ -7,10 +7,7 @@ export type WalletStatusModalOpenProps = void
 
 export interface WalletStatusModalProps {}
 
-export const WalletStatusModal = forwardRef<
-    SingletonModalRefCreator,
-    WalletStatusModalProps
->((props, ref) => {
+export const WalletStatusModal = forwardRef<SingletonModalRefCreator, WalletStatusModalProps>((props, ref) => {
     const [isHidden, setHidden] = useState(false)
 
     const [open, dispatch] = useSingletonModal(ref, {
