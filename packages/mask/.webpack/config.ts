@@ -304,15 +304,14 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown: computedFlags.lockdown }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown: computedFlags.lockdown }),
-        addHTMLEntry({ chunks: ['connect'], filename: 'popups-connect.html', lockdown: computedFlags.lockdown }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
+        addHTMLEntry({ chunks: ['connect'], filename: 'popups-connect.html' }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
-            lockdown: computedFlags.lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown: computedFlags.lockdown }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
@@ -335,7 +334,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 chunks: ['background'],
                 filename: 'background.html',
                 gun: true,
-                lockdown: computedFlags.lockdown,
             }),
         )
     }
@@ -352,22 +350,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         entry.import = joinEntryItem(join(__dirname, '../devtools/content-script/index.ts'), entry.import)
     }
 }
-function addHTMLEntry(
-    options: HTMLPlugin.Options & {
-        gun?: boolean
-        lockdown: boolean
-    },
-) {
+function addHTMLEntry(options: HTMLPlugin.Options & { gun?: boolean }) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
-    }
-    if (options.lockdown) {
-        templateContent = templateContent.replace(
-            `<!-- lockdown -->`,
-            `<script src="/polyfill/lockdown.js"></script>
-        <script src="/lockdown.js"></script>`,
-        )
     }
     return new HTMLPlugin({
         templateContent,

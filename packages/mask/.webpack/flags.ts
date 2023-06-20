@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url'
 const __dirname = fileURLToPath(dirname(import.meta.url))
 
 export interface BuildFlags {
-    engine: 'chromium' | 'firefox' | 'safari'
     /** @default 2 */
     manifest?: 2 | 3
     mode: 'development' | 'production'
@@ -35,7 +34,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     const {
         mode,
         profiling = false,
-        engine,
         manifest = 2,
         readonlyCache = false,
         channel = 'stable',
@@ -51,13 +49,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
-
-    // Firefox requires reproducible build when reviewing the uploaded source code.
-    if (engine === 'firefox' && mode === 'production') reproducibleBuild = true
-
-    // CSP of Twitter bans connection to the HMR server and blocks the app to start.
-    if (engine === 'firefox') hmr = false
-
     if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
 
@@ -67,7 +58,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         outputPath,
         // Runtime
         manifest,
-        engine,
         // DX
         hmr,
         reactRefresh,
@@ -83,14 +73,11 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
 }
 
 export interface ComputedFlags {
-    lockdown: boolean
     sourceMapKind: Configuration['devtool']
     reactProductionProfiling: boolean
 }
 
 export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
-    const lockdown = flags.engine === 'chromium'
-
     let sourceMapKind: Configuration['devtool'] = false
     if (flags.mode === 'production') sourceMapKind = 'source-map'
 
@@ -104,7 +91,7 @@ export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
     }
 
     const reactProductionProfiling = flags.mode === 'production' && flags.profiling
-    return { sourceMapKind, lockdown, reactProductionProfiling }
+    return { sourceMapKind, reactProductionProfiling }
 }
 
 export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: ComputedFlags) {
