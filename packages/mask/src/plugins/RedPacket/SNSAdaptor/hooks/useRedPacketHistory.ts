@@ -4,11 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { Interface } from '@ethersproject/abi'
-import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { RedPacketRPC } from '../../messages.js'
-
-const redPacketInterFace = new Interface(REDPACKET_ABI)
 
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 
