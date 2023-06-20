@@ -17,7 +17,7 @@ export const TransactionModal = forwardRef<
 
     const [open, _] = useSingletonModal(ref, {
         onOpen(props) {
-            setPluginID(props?.pluginID)
+            setPluginID(props.pluginID)
         },
     })
 
