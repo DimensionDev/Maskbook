@@ -14,5 +14,12 @@
     "swap": "crwdns20213:0crwdne20213:0",
     "congratulations": "crwdns20215:0crwdne20215:0",
     "swap_successfully_description": "crwdns20217:0{{input}}crwdnd20217:0{{output}}crwdne20217:0",
+    "plugin_wallet_snackbar_wait_for_confirming": "crwdns20437:0crwdne20437:0",
+    "plugin_wallet_snackbar_hash": "crwdns20439:0crwdne20439:0",
+    "plugin_wallet_snackbar_confirmed": "crwdns20441:0crwdne20441:0",
+    "plugin_wallet_snackbar_success": "crwdns20443:0crwdne20443:0",
+    "plugin_wallet_snackbar_failed": "crwdns20445:0crwdne20445:0",
+    "plugin_wallet_snackbar_swap_successful": "crwdns20447:0crwdne20447:0",
+    "plugin_wallet_snackbar_swap_token": "crwdns20449:0crwdne20449:0",
     "share": "crwdns20219:0crwdne20219:0"
 }
