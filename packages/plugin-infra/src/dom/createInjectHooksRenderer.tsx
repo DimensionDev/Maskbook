@@ -1,8 +1,12 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
-import { type PluginWrapperComponent, type PluginWrapperMethods, usePluginI18NField } from './index.js'
-import { PluginWrapperMethodsContext } from './usePluginWrapper.js'
+import {
+    PluginWrapperMethodsContext,
+    type PluginWrapperComponent,
+    type PluginWrapperMethods,
+} from './usePluginWrapper.js'
+import { usePluginI18NField } from './useI18N.js'
 import type { Plugin } from '../types.js'
 import { getAvailablePlugins } from '../utils/getAvailablePlugins.js'
 

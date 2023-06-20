@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { type Plugin, PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { type Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
-import { setupContext } from '../context.js'
 
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
@@ -17,11 +15,7 @@ function clickHandler() {
 }
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        SNSAdaptorPluginContext.setup(context)
-
-        setupContext(context)
-    },
+    init(signal, context) {},
     GlobalInjection() {
         const { pluginID } = useNetworkContext()
         const { chainId } = useChainContext()
@@ -36,11 +30,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!open) return null
 
         return (
-            <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
-                <Web3ContextProvider value={{ pluginID, chainId }}>
-                    <NFTAvatarDialog startPicking={!!picking} open={open} onClose={() => setOpen(false)} />
-                </Web3ContextProvider>
-            </SNSAdaptorContext.Provider>
+            <Web3ContextProvider value={{ pluginID, chainId }}>
+                <NFTAvatarDialog startPicking={!!picking} open={open} onClose={() => setOpen(false)} />
+            </Web3ContextProvider>
         )
     },
     ApplicationEntries: [

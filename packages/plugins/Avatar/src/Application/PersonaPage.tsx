@@ -1,24 +1,23 @@
+import { uniqBy } from 'lodash-es'
+import { useCallback, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { useSubscription } from 'use-subscription'
 import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
-import { useSubscription } from 'use-subscription'
-import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
-import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import {
     useAllPersonas,
     useLastRecognizedSocialIdentity,
     useSNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
-import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
-import { uniqBy } from 'lodash-es'
 
 export function PersonaPage() {
     const t = useI18N()
@@ -30,9 +29,9 @@ export function PersonaPage() {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
-    const { ownProofChanged } = useSNSAdaptorContext()
+    const { getPersonaAvatar, ownProofChanged, currentPersona: currentPersona_ } = useSNSAdaptorContext()
     const myPersonas = useAllPersonas()
-    const _persona = useSubscription(context.currentPersona)
+    const _persona = useSubscription(currentPersona_)
     const currentPersona = myPersonas?.find(
         (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )
@@ -64,7 +63,7 @@ export function PersonaPage() {
         },
         [navigate],
     )
-    const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
+    const { value: avatar } = useAsyncRetry(async () => getPersonaAvatar(currentPersona?.identifier), [])
 
     return (
         <>

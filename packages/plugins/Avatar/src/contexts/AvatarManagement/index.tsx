@@ -12,8 +12,8 @@ import {
 import { type BindingProof, EMPTY_LIST, NextIDPlatform, type SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
 import { isValidAddress } from '@masknet/web3-shared-evm'
+import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
 
 interface AvatarManagementContextOptions {
     targetAccount: string

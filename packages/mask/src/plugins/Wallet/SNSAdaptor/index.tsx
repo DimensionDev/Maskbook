@@ -1,6 +1,6 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '@masknet/plugin-wallet'
 import { Modals } from '@masknet/shared'
+import { base } from '@masknet/plugin-wallet'
+import type { Plugin } from '@masknet/plugin-infra'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

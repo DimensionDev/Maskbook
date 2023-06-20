@@ -4,9 +4,9 @@ import { ApplicationBoardDialog } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
 import Services from '../../extension/service.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
     const lastRecognized = useLastRecognizedIdentity()

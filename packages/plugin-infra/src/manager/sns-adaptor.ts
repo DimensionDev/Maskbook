@@ -1,11 +1,11 @@
+import { isEqual } from 'lodash-es'
 import { useMemo } from 'react'
 import { unreachable } from '@masknet/kit'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { type NetworkPluginID, ValueRefWithReady } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { CurrentSNSNetwork, Plugin } from '../types.js'
-import { isEqual } from 'lodash-es'
-import { useValueRef } from '@masknet/shared-base-ui'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
 

@@ -4,10 +4,10 @@ import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
 import Services from '../service.js'
 import { WalletRPC } from '../../plugins/Wallet/messages.js'
-import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
-import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { status } from '../../setup.ui.js'
+import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 
 setService(Services)
 setMessages(MaskMessages)

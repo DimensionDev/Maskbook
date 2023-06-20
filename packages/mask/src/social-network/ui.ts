@@ -3,7 +3,12 @@ import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetworkUI } from '@masknet/types'
-import { type IdentityResolved, type Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import {
+    type IdentityResolved,
+    type Plugin,
+    startPluginSNSAdaptor,
+    SNSAdaptorContextRef,
+} from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
@@ -185,32 +190,36 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         })
     }
 
+    SNSAdaptorContextRef.value = {
+        ...RestPartOfPluginUIContextShared,
+        lastRecognizedProfile: lastRecognizedSub,
+        currentVisitingProfile: currentVisitingSub,
+        NFTAvatarTimelineUpdated: MaskMessages.events.NFTAvatarTimelineUpdated,
+        allPersonas: allPersonaSub,
+        themeSettings: themeSettingsSub,
+        getThemeSettings: () => activatedSocialNetworkUI.configuration.themeSettings,
+        getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
+        getPersonaAvatar: Services.Identity.getPersonaAvatar,
+        getSocialIdentity: Services.Identity.querySocialIdentity,
+        ownProofChanged: MaskMessages.events.ownProofChanged,
+        setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
+        getPostURL: ui.utils.getPostURL,
+        share: ui.utils.share,
+        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
+        createPersona,
+        connectPersona,
+        ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
+        currentPersonaIdentifier,
+    }
+
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(
             signal,
-            (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
+            (id, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
                 return {
-                    ...createPartialSharedUIContext(pluginID, signal),
-                    ...RestPartOfPluginUIContextShared,
-                    lastRecognizedProfile: lastRecognizedSub,
-                    currentVisitingProfile: currentVisitingSub,
-                    NFTAvatarTimelineUpdated: MaskMessages.events.NFTAvatarTimelineUpdated,
-                    allPersonas: allPersonaSub,
-                    themeSettings: themeSettingsSub,
-                    getThemeSettings: () => activatedSocialNetworkUI.configuration.themeSettings,
-                    getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-                    getPersonaAvatar: Services.Identity.getPersonaAvatar,
-                    getSocialIdentity: Services.Identity.querySocialIdentity,
-                    ownProofChanged: MaskMessages.events.ownProofChanged,
-                    setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
-                    getPostURL: ui.utils.getPostURL,
-                    share: ui.utils.share,
-                    queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
-                    createPersona,
-                    connectPersona,
-                    ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
-                    currentPersonaIdentifier,
+                    ...createPartialSharedUIContext(id, signal),
+                    ...SNSAdaptorContextRef.value,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

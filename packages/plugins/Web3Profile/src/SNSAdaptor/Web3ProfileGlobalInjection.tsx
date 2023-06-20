@@ -1,5 +1,4 @@
 import { memo, useEffect, useState } from 'react'
-import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -9,7 +8,6 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { LensPopup } from './components/LensPopup.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
-import { context } from './context.js'
 
 export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjection() {
     const [profileOpen, setProfileOpen] = useState(false)
@@ -36,7 +34,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
     )
 
     return (
-        <SNSAdaptorContext.Provider value={context}>
+        <>
             {profileOpen ? <Web3ProfileDialog open onClose={() => setProfileOpen(false)} /> : null}
 
             {lensOpen && handle ? (
@@ -46,6 +44,6 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
             ) : null}
 
             <LensPopup />
-        </SNSAdaptorContext.Provider>
+        </>
     )
 })

@@ -1,12 +1,12 @@
-import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { memo, useMemo } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useManagers } from '../../hooks/useManagers.js'
 import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useManagers } from '../../hooks/useManagers.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
