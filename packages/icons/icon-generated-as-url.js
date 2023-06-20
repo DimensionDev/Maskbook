@@ -148,6 +148,7 @@ export function cloud_backup_url() { return new URL("./general/CloudBackup.png",
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url) }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url) }
 export function connect_url() { return new URL("./general/Connect.svg", import.meta.url) }
+export function contracts_url() { return new URL("./general/Contracts.svg", import.meta.url) }
 export function copy_url() { return new URL("./general/Copy.svg", import.meta.url) }
 export function cram_url() { return new URL("./general/Cram.svg", import.meta.url) }
 export function dashboard_url() { return new URL("./general/Dashboard.svg", import.meta.url) }
@@ -205,6 +206,7 @@ export function mask_avatar_dark_url() { return new URL("./general/MaskAvatar.da
 export function mask_avatar_light_url() { return new URL("./general/MaskAvatar.light.svg", import.meta.url) }
 export function mask_in_minds_url() { return new URL("./general/MaskInMinds.svg", import.meta.url) }
 export function masks_url() { return new URL("./general/Masks.svg", import.meta.url) }
+export function me_url() { return new URL("./general/Me.svg", import.meta.url) }
 export function message_url() { return new URL("./general/Message.svg", import.meta.url) }
 export function more_url() { return new URL("./general/More.svg", import.meta.url) }
 export function next_id_persona_warning_url() { return new URL("./general/NextIdPersonaWarning.svg", import.meta.url) }
@@ -253,6 +255,7 @@ export function send_url() { return new URL("./general/Send.svg", import.meta.ur
 export function send_colorful_url() { return new URL("./general/SendColorful.svg", import.meta.url) }
 export function setting_url() { return new URL("./general/Setting.svg", import.meta.url) }
 export function settings_url() { return new URL("./general/Settings.svg", import.meta.url) }
+export function settings_2_url() { return new URL("./general/Settings2.svg", import.meta.url) }
 export function sharp_mask_url() { return new URL("./general/SharpMask.svg", import.meta.url) }
 export function sign_in_account_url() { return new URL("./general/SignInAccount.svg", import.meta.url) }
 export function sign_up_account_url() { return new URL("./general/SignUpAccount.png", import.meta.url) }

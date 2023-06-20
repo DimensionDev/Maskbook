@@ -1026,6 +1026,24 @@ export const Connect = /*#__PURE__*/ __createIcon('Connect', [
         u: () => new URL('./general/Connect.svg', import.meta.url),
     },
 ])
+export const Contracts = /*#__PURE__*/ __createIcon('Contracts', [
+    {
+        u: () => new URL('./general/Contracts.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M17.294 7.291A5.274 5.274 0 0 1 12 12.583a5.275 5.275 0 0 1-5.294-5.292A5.274 5.274 0 0 1 12 2a5.273 5.273 0 0 1 5.294 5.291ZM12 22c-4.338 0-8-.705-8-3.425 0-2.721 3.685-3.401 8-3.401 4.339 0 8 .705 8 3.425 0 2.72-3.685 3.4-8 3.4Zm3.644-8.014a.8.8 0 0 1 .8-.8h5.112a.8.8 0 0 1 0 1.6h-5.112a.8.8 0 0 1-.8-.8Zm1.289-2.45a.8.8 0 0 1 .8-.8h3.823a.8.8 0 0 1 0 1.6h-3.823a.8.8 0 0 1-.8-.8Zm1.203-2.449a.8.8 0 0 1 .8-.8h2.62a.8.8 0 0 1 0 1.6h-2.62a.8.8 0 0 1-.8-.8Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Copy = /*#__PURE__*/ __createIcon(
     'Copy',
     [
@@ -1633,6 +1651,24 @@ export const Masks = /*#__PURE__*/ __createIcon('Masks', [
         u: () => new URL('./general/Masks.svg', import.meta.url),
     },
 ])
+export const Me = /*#__PURE__*/ __createIcon('Me', [
+    {
+        u: () => new URL('./general/Me.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 25 25',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M17.794 7.397a5.274 5.274 0 0 1-5.294 5.292 5.275 5.275 0 0 1-5.294-5.292A5.274 5.274 0 0 1 12.5 2.105a5.273 5.273 0 0 1 5.294 5.292ZM12.5 22.105c-4.338 0-8-.705-8-3.425 0-2.72 3.685-3.4 8-3.4 4.339 0 8 .704 8 3.424 0 2.721-3.685 3.401-8 3.401Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Message = /*#__PURE__*/ __createIcon('Message', [
     {
         u: () => new URL('./general/Message.svg', import.meta.url),
@@ -2151,6 +2187,24 @@ export const Settings = /*#__PURE__*/ __createIcon('Settings', [
                 children: /*#__PURE__*/ _jsx('path', {
                     fill: 'currentColor',
                     d: 'm12 23-9.5-5.5v-11L12 1l9.5 5.5v11L12 23zm0-19.688L4.5 7.653v8.694l7.5 4.342 7.5-4.342V7.653L12 3.311v.001zM12 16a4 4 0 1 1 2.828-1.172A4.027 4.027 0 0 1 12 16zm0-6a2 2 0 1 0-.001 4A2 2 0 0 0 12 10z',
+                }),
+            }),
+        s: true,
+    },
+])
+export const Settings2 = /*#__PURE__*/ __createIcon('Settings2', [
+    {
+        u: () => new URL('./general/Settings2.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'm17.808 3.606 4.345 7.528c.31.537.31 1.205 0 1.744l-4.345 7.526c-.312.537-.89.872-1.512.872h-8.69c-.624 0-1.2-.333-1.512-.872l-4.346-7.526a1.743 1.743 0 0 1 0-1.744l4.299-7.441c.34-.59.977-.959 1.66-.959h8.59c.62 0 1.2.333 1.51.872Zm-9.415 8.4a3.562 3.562 0 0 1 3.557-3.559 3.564 3.564 0 0 1 3.558 3.56 3.56 3.56 0 0 1-3.558 3.556 3.562 3.562 0 0 1-3.557-3.558Zm1.64.001a1.92 1.92 0 0 0 1.917 1.918 1.92 1.92 0 0 0 1.918-1.918 1.92 1.92 0 0 0-1.918-1.917 1.92 1.92 0 0 0-1.917 1.917Z',
+                    clipRule: 'evenodd',
                 }),
             }),
         s: true,

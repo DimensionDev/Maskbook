@@ -40,4 +40,6 @@ export enum PopupRoutes {
     ConnectWallet = '/wallet/connect',
     VerifyWallet = '/personas/verify',
     ChangeOwner = '/wallet/change-owner',
+    Contracts = '/contracts',
+    Settings = '/settings',
 }
