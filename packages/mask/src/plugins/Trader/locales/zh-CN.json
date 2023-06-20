@@ -13,6 +13,7 @@
     "swap": "兑换",
     "congratulations": "恭喜！",
     "swap_successfully_description": "将 {{input}} 兑换为 {{output}}",
+    "plugin_wallet_snackbar_wait_for_confirming": "请在您的钱包中确认这笔交易",
     "plugin_wallet_snackbar_hash": "交易已提交",
     "plugin_wallet_snackbar_confirmed": "交易已确认",
     "plugin_wallet_snackbar_success": "交易成功",
