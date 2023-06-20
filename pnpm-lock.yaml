@@ -2895,6 +2895,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-9a72e6227-20230525)
+      web3-core-helpers:
+        specifier: 1.8.0
+        version: 1.8.0
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0

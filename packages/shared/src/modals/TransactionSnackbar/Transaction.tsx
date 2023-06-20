@@ -14,7 +14,7 @@ import {
     type SnackbarMessage,
     useCustomSnackbar,
 } from '@masknet/theme'
-import { useI18N } from '../../../../utils/index.js'
+import { useSharedI18N } from '../../index.js'
 
 const useStyles = makeStyles()({
     link: {
@@ -22,12 +22,12 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
 })
-export interface TransactionSnackbarProps<T extends NetworkPluginID> {
+export interface TransactionProps<T extends NetworkPluginID> {
     pluginID: T
 }
-export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
+export function Transaction<T extends NetworkPluginID>({ pluginID }: TransactionProps<T>) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
 
@@ -86,17 +86,17 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             [TransactionStatusType.NOT_DEPEND]: {
                 processing: true,
                 variant: 'default',
-                message: t('plugin_wallet_snackbar_wait_for_confirming'),
+                message: t.plugin_wallet_snackbar_wait_for_confirming(),
             },
             [TransactionStatusType.SUCCEED]: {
                 processing: false,
                 variant: 'success',
-                message: t('plugin_wallet_snackbar_confirmed'),
+                message: t.plugin_wallet_snackbar_confirmed(),
             },
             [TransactionStatusType.FAILED]: {
                 processing: false,
                 variant: 'error',
-                message: t('plugin_wallet_snackbar_failed'),
+                message: t.plugin_wallet_snackbar_failed(),
             },
         },
         {},
