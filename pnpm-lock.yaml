@@ -1209,8 +1209,8 @@ importers:
         specifier: ^4.13.3
         version: 4.13.3(webpack-cli@5.0.1)(webpack@5.85.0)
       webpack-target-webextension:
-        specifier: ^1.0.4
-        version: 1.0.4(webpack@5.85.0)
+        specifier: ^1.1.0
+        version: 1.1.0(webpack@5.85.0)
 
   packages/mask-sdk:
     dependencies:
@@ -10075,8 +10075,8 @@ packages:
     resolution: {integrity: sha512-y9L2VEbnC6FNZZu8XMmWM9YTTTWal6kJVfP05Amf0QqDNzCSumKsJxZyGUODvuCmiAvy0PfIfEsiVKnSxvhsDw==}
     peerDependencies:
       '@splinetool/runtime': '*'
-      react: '>=17.0.0 || 0.0.0-experimental-21021fb0f-20230412 || 0.0.0-experimental-9a72e6227-20230525'
-      react-dom: '>=17.0.0 || 0.0.0-experimental-21021fb0f-20230412 || 0.0.0-experimental-9a72e6227-20230525'
+      react: '>=17.0.0 || 0.0.0-experimental-9a72e6227-20230525'
+      react-dom: '>=17.0.0 || 0.0.0-experimental-9a72e6227-20230525'
     peerDependenciesMeta:
       react:
         optional: true
@@ -32496,8 +32496,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack-target-webextension@1.0.4(webpack@5.85.0):
-    resolution: {integrity: sha512-bxvB7a+R587DY4V39RsmcA04hcBDQAVwNvAITIA5m02wnjwSymF+H1CpHmheSa0HTh3mAp0KPAt4AWzzoUvTkw==}
+  /webpack-target-webextension@1.1.0(webpack@5.85.0):
+    resolution: {integrity: sha512-ip7ljKtjRmXKjuLZLo8jzcQjV3nuVPI1U+AUcx6PGJXC/+7apt20wbSVfOKnXDhHhijzP44qe/1qSgR8C+HgZg==}
     engines: {node: '>=14.17.6'}
     peerDependencies:
       webpack: ^5.0.0
@@ -33510,7 +33510,7 @@ time:
   /webextension-polyfill@0.10.0: '2022-08-12T19:42:49.271Z'
   /webpack-cli@5.0.1: '2022-12-05T17:33:38.692Z'
   /webpack-dev-server@4.13.3: '2023-04-15T17:10:09.877Z'
-  /webpack-target-webextension@1.0.4: '2022-08-31T14:07:24.611Z'
+  /webpack-target-webextension@1.1.0: '2023-06-20T12:22:16.811Z'
   /yargs@17.7.1: '2023-02-21T15:44:58.643Z'
   /z-schema@6.0.1: '2023-04-13T12:31:24.670Z'
   /zod@3.21.4: '2023-03-07T04:39:36.379Z'

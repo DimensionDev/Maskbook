@@ -2,6 +2,7 @@
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
 import type { ComputedFlags, NormalizedFlags } from './flags.js'
 import { createRequire } from 'node:module'
+import { readFileSync } from 'node:fs'
 
 const cloneDeep = (x: any) => JSON.parse(JSON.stringify(x))
 const require = createRequire(import.meta.url)
@@ -12,48 +13,50 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
             const manifest = cloneDeep(
                 flags.manifest === 2 ? require('../src/manifest.json') : require('../src/manifest-v3.json'),
             )
-            modify(manifest, flags, computedFlags)
+            editManifest(manifest, flags, computedFlags)
             return JSON.stringify(manifest, null, 4)
         },
     })
 }
 
-function modify(manifest: any, flags: NormalizedFlags, computedFlags: ComputedFlags) {
-    if (flags.channel === 'beta') {
-        manifest.name += ' (Beta)'
-    } else if (flags.channel === 'insider') {
-        manifest.name += ' (Nightly)'
-    }
+function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags) {
+    const mv2Base = JSON.parse(readFileSync(new URL('./manifest/manifest.json'), 'utf-8'))
+    const mv3Base = JSON.parse(readFileSync(new URL('./manifest/manifest-mv3.json'), 'utf-8'))
 
-    if (flags.mode === 'development') {
-        manifest.name += ' (dev)'
-        stableDevelopmentExtensionID(manifest)
+    const manifestFlags = new Map<string, [flags: ModifyAcceptFlags, base: any, modify?: (manifest: any) => void]>([
+        ['manifest-chromium-mv2.json', [{ ...flags }, mv2Base]],
+        ['manifest-chromium-mv3.json', [{ ...flags }, mv3Base]],
+        ['manifest-firefox-mv2.json', [{ ...flags }, mv2Base, (manifest) => manifest.permissions.push('tabs')]],
+        ['manifest-firefox-mv3.json', [{ ...flags }, mv3Base]],
+        ['manifest-safari-mv3.json', [{ ...flags }, mv3Base]],
+    ])
+    const manifest = new Map<string, any>()
+    for (const [fileName, [flags, baseObject, modifier]] of manifestFlags) {
+        const fileContent = cloneDeep(baseObject)
+        editManifest(fileContent, flags, computedFlags)
+        modifier?.(fileContent)
+        manifest.set(fileName, fileContent)
     }
-
-    // TODO: remove this, Just for test
-    if (flags.mode === 'production') {
-        stableDevelopmentExtensionID(manifest)
-    }
-
-    if (flags.devtools) {
-        manifest.devtools_page = 'devtools-background.html'
-    }
-
-    if (process.env.npm_package_version) {
-        manifest.version = process.env.npm_package_version
-    }
-
-    if (manifest.manifest_version === 2) modify_2(manifest, flags, computedFlags)
-    else modify_3(manifest, flags)
 }
 
-function modify_2(manifest: any, flags: NormalizedFlags, computedFlags: ComputedFlags) {
-    if (flags.engine === 'firefox') {
-        // TODO: To make `browser.tabs.executeScript` run on Firefox, we need an extra permission "tabs".
-        // Switch to browser.userScripts (Firefox only) API can resolve the problem.
-        manifest.permissions.push('tabs')
-    }
+type ModifyAcceptFlags = Pick<NormalizedFlags, 'mode' | 'channel' | 'devtools' | 'hmr'>
+function editManifest(manifest: any, flags: ModifyAcceptFlags, computedFlags: ComputedFlags) {
+    if (flags.mode === 'development') manifest.name += ' (dev)'
+    else if (flags.channel === 'beta') manifest.name += ' (beta)'
+    else if (flags.channel === 'insider') manifest.name += ' (insider)'
 
+    if (flags.mode === 'development') fixTheExtensionID(manifest)
+    if (flags.mode === 'production' && flags.channel !== 'stable') fixTheExtensionID(manifest)
+    if (flags.devtools) manifest.devtools_page = 'devtools-background.html'
+
+    const topPackageJSON = JSON.parse(readFileSync(new URL('../../../package.json'), 'utf-8'))
+    manifest.version = topPackageJSON.version
+
+    if (manifest.manifest_version === 2) editManifestV2(manifest, flags, computedFlags)
+    else editManifestV3(manifest)
+}
+
+function editManifestV2(manifest: any, flags: ModifyAcceptFlags, computedFlags: ComputedFlags) {
     if (String(computedFlags.sourceMapKind).includes('eval')) {
         manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask ssr`
     }
@@ -64,12 +67,12 @@ function modify_2(manifest: any, flags: NormalizedFlags, computedFlags: Computed
 }
 
 // https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/
-function modify_3(manifest: any, flags: NormalizedFlags) {}
+function editManifestV3(manifest: any) {}
 
 // cspell: disable-next-line
 // ID: jkoeaghipilijlahjplgbfiocjhldnap
 // Note: with tihs key you cannot upload it to the extension store
-function stableDevelopmentExtensionID(manifest: any) {
+function fixTheExtensionID(manifest: any) {
     manifest.key =
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +
         '0EKZJEFJaSMkIcIj0qRadfi0tqcl5nbpuJAsafvLe3MaTbW9LhbixTg9' +

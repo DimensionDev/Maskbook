@@ -170,6 +170,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             ],
         },
         plugins: [
+            new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
             flags.sourceMapHideFrameworks !== false &&
                 new DevtoolsIgnorePlugin({
                     shouldIgnorePath: (path) => {
@@ -295,13 +296,17 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     }
     baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
-    const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         connect: normalizeEntryDescription(join(__dirname, '../src/extension/popups/renderConnect.tsx')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
+        background: normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts')),
+        backgroundWorker: {
+            import: join(__dirname, '../background/mv3-entry.ts'),
+            filename: 'js/background.js',
+        },
     })
     baseConfig.plugins!.push(
         addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
@@ -312,29 +317,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             filename: 'generated__content__script.html',
         }),
         addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
+        addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
         baseConfig.plugins!.push(
             addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', lockdown: false }),
-        )
-    }
-    // background
-    if (flags.manifest === 3) {
-        entries.background = {
-            import: join(__dirname, '../background/mv3-entry.ts'),
-            filename: 'js/background.js',
-        }
-        plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
-    } else {
-        entries.background = normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts'))
-        plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
-        plugins.push(
-            addHTMLEntry({
-                chunks: ['background'],
-                filename: 'background.html',
-                gun: true,
-            }),
         )
     }
     for (const entry in entries) {

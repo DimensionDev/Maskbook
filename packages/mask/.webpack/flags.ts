@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 const __dirname = fileURLToPath(dirname(import.meta.url))
 
 export interface BuildFlags {
+    /** If this field is set, manifest.json will copy the content of manifest-*.json */
+    mainManifestFile: 'chromium-mv2' | 'chromium-mv3' | 'firefox-mv2' | 'firefox-mv3' | 'safari-mv3'
     /** @default 2 */
     manifest?: 2 | 3
     mode: 'development' | 'production'
@@ -39,6 +41,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         channel = 'stable',
         devtoolsEditorURI = 'vscode://file/{path}:{line}',
         sourceMapHideFrameworks = true,
+        mainManifestFile,
     } = flags
     let {
         hmr = mode === 'development',
@@ -58,6 +61,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         outputPath,
         // Runtime
         manifest,
+        mainManifestFile,
         // DX
         hmr,
         reactRefresh,
@@ -77,7 +81,9 @@ export interface ComputedFlags {
     reactProductionProfiling: boolean
 }
 
-export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
+export function computedBuildFlags(
+    flags: Pick<Required<BuildFlags>, 'mode' | 'sourceMapPreference' | 'manifest' | 'profiling'>,
+): ComputedFlags {
     let sourceMapKind: Configuration['devtool'] = false
     if (flags.mode === 'production') sourceMapKind = 'source-map'
 

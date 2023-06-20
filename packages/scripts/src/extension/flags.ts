@@ -10,10 +10,10 @@ export interface BuildFlagsExtended extends BuildFlags {
     progress?: boolean
 }
 
-export function getPreset(preset: Preset | undefined): Pick<BuildFlagsExtended, 'manifest'> {
-    if (preset === Preset.Chromium || preset === undefined) return {}
-    else if (preset === Preset.Firefox) return { manifest: 2 }
-    else if (preset === Preset.Safari) return { manifest: 3 }
+export function getPreset(preset: Preset | undefined): Pick<BuildFlagsExtended, 'manifest' | 'mainManifestFile'> {
+    if (preset === Preset.Chromium || preset === undefined) return { mainManifestFile: 'chromium-mv2' }
+    else if (preset === Preset.Firefox) return { manifest: 2, mainManifestFile: 'firefox-mv2' }
+    else if (preset === Preset.Safari) return { manifest: 3, mainManifestFile: 'safari-mv3' }
     else throw new Error(`Unknown preset: ${preset}`)
 }
 
