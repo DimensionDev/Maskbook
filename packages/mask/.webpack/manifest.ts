@@ -55,7 +55,6 @@ function modify_2(manifest: any, flags: NormalizedFlags, computedFlags: Computed
     }
 
     if (String(computedFlags.sourceMapKind).includes('eval')) {
-        // TODO: enable TrustedTypes for production build.
         manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask ssr`
     }
 

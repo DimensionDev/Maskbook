@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N, useQueryNavigatorPermission } from '../../utils/index.js'
+import { useI18N } from '../../utils/index.js'
 import formatDateTime from 'date-fns/format'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
@@ -40,12 +40,11 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
-    const permission = useQueryNavigatorPermission(true, 'clipboard-write')
     const fileName = `masknetwork-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
 
     return (
         <DraggableDiv>
-            <Paper elevation={2} className={classes.paper} style={isMobile ? { width: '100vw' } : undefined}>
+            <Paper elevation={2} className={classes.paper} sx={isMobile ? { width: '100vw' } : undefined}>
                 <nav>
                     <DialogTitle>
                         <IconButton size="small" onClick={onClose}>
@@ -87,42 +86,30 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             </Button>
                         </>
                     ) : null}
-                    <Box
-                        sx={{
-                            marginBottom: 1,
-                        }}
-                    />
-                    <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
+                    <Box marginBottom={1} />
+                    <Box textAlign="left">
                         {data.image ? (
                             // It must be img
                             <Image src={URL.createObjectURL(data.image)} style={{ width: '100%' }} />
                         ) : null}
-                        <Box
-                            sx={{
-                                marginBottom: 1,
-                            }}
-                        />
-                        {permission === 'granted' ? (
-                            <Button
-                                className={classes.button}
-                                variant="contained"
-                                onClick={async () => {
-                                    if (!data.image) return
-                                    await navigator.clipboard.write([
-                                        new ClipboardItem({ [data.image.type]: data.image }),
-                                    ])
-                                    showSnackbar(t('copy_success_of_image'), {
-                                        variant: 'success',
-                                        preventDuplicate: true,
-                                        anchorOrigin: {
-                                            vertical: 'top',
-                                            horizontal: 'center',
-                                        },
-                                    })
-                                }}>
-                                {t('copy_image')}
-                            </Button>
-                        ) : null}
+                        <Box marginBottom={1} />
+                        <Button
+                            className={classes.button}
+                            variant="contained"
+                            onClick={async () => {
+                                if (!data.image) return
+                                await navigator.clipboard.write([new ClipboardItem({ [data.image.type]: data.image })])
+                                showSnackbar(t('copy_success_of_image'), {
+                                    variant: 'success',
+                                    preventDuplicate: true,
+                                    anchorOrigin: {
+                                        vertical: 'top',
+                                        horizontal: 'center',
+                                    },
+                                })
+                            }}>
+                            {t('copy_image')}
+                        </Button>
                         {url ? (
                             <Button
                                 className={classes.button}
@@ -143,7 +130,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 {t('auto_paste_failed_dialog_image_caption')}
                             </Button>
                         ) : null}
-                    </div>
+                    </Box>
                 </DialogContent>
                 {/* To leave some bottom padding */}
                 <DialogActions />

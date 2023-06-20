@@ -2,14 +2,12 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { chainResolver, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { Box, IconButton, Typography } from '@mui/material'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
-import { TokenPrice } from '@masknet/shared'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { GasSettingDialog, TokenPrice } from '@masknet/shared'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -27,19 +25,17 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const { value: gasPriceDefault = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [gasOption, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
-    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
+
     const onOpenGasSettingDialog = useCallback(() => {
-        setGasSettingDialog(
+        GasSettingDialog.open(
             chainResolver.isSupport(chainId, 'EIP1559')
                 ? {
-                      open: true,
                       gasLimit,
                       maxFee,
                       priorityFee,
                       gasOption,
                   }
                 : {
-                      open: true,
                       gasLimit,
                       gasPrice,
                       gasOption,
@@ -49,19 +45,18 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     // set initial options
     useEffect(() => {
-        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
-            if (evt.open) return
-            if (evt.gasOption) setGasOptionType(evt.gasOption)
+        GasSettingDialog.emitter.on('close', (evt) => {
+            if (evt?.gasOption) setGasOptionType(evt.gasOption)
             onChange(
                 (chainResolver.isSupport(chainId, 'EIP1559')
                     ? {
-                          gas: evt.gasLimit,
-                          maxFeePerGas: evt.maxFee,
-                          maxPriorityFeePerGas: evt.priorityFee,
+                          gas: evt?.gasLimit,
+                          maxFeePerGas: evt?.maxFee,
+                          maxPriorityFeePerGas: evt?.priorityFee,
                       }
                     : {
-                          gas: evt.gasLimit,
-                          gasPrice: evt.gasPrice,
+                          gas: evt?.gasLimit,
+                          gasPrice: evt?.gasPrice,
                       }) as NonPayableTx,
             )
         })

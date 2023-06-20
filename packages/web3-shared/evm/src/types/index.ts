@@ -96,6 +96,7 @@ export interface EIP1559GasConfig {
     gasCurrency?: string
     maxFeePerGas: string
     maxPriorityFeePerGas: string
+    gasPrice?: string
 }
 
 export interface PriorEIP1559GasConfig {

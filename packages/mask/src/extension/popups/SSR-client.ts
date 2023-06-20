@@ -4,8 +4,7 @@
 // If the current page is "", navigate to "#/personas", therefore we can avoid a Router skip when hydrating.
 if (location.hash === '') location.assign('#/personas')
 
-declare const trustedTypes: any
-let trustedHTML: (x: string) => string
+let trustedHTML: (x: string) => string | TrustedHTML
 {
     if (typeof trustedTypes === 'object') {
         const policy = trustedTypes.createPolicy('ssr', {
@@ -27,7 +26,7 @@ if (location.hash === '#/personas') {
         document.head.insertAdjacentHTML('beforeend', trustedHTML(css))
         // this is safe because it comes from SSR
         // eslint-disable-next-line @masknet/browser-no-set-html
-        document.body.innerHTML = trustedHTML('<div id="root-ssr">' + html + '</div>')
+        document.body.innerHTML = trustedHTML('<div id="root-ssr">' + html + '</div>') as string
         console.timeEnd('[SSR] Request')
 
         console.time('[SSR] Hydrate')
