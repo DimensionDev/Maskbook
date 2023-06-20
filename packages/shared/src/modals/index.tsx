@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { SingletonModal } from '@masknet/shared-base'
+import { NetworkPluginID, SingletonModal } from '@masknet/shared-base'
 import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
 import { WalletConnectQRCodeModal, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
@@ -9,6 +9,7 @@ import { LeavePageConfirmModal, type LeavePageConfirmDialogOpenProps } from './L
 import { type ApplicationBoardDialogOpenProps, ApplicationBoardModal } from './ApplicationBoardDialog/index.js'
 import { TransactionModal, type TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
 import { GasSettingModal, type GasSettingDialogOpenOrCloseProps } from './GasSettingDialog/index.js'
+import { getEnumAsArray } from '@masknet/kit'
 
 export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
@@ -32,6 +33,7 @@ export const Modals = memo(function Modals() {
             <ApplicationBoardModal ref={ApplicationBoardDialog.register} />
             <TransactionModal ref={TransactionSnackbar.register} />
             <GasSettingModal ref={GasSettingDialog.register} />
+            {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => TransactionSnackbar.open({ pluginID }))}
         </>
     )
 })
