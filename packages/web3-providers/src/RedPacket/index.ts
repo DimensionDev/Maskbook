@@ -13,6 +13,7 @@ import type {
 } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ContractRedPacketAPI } from './api.js'
@@ -21,6 +22,7 @@ import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
 import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 
 const redPacketInterFace = new Interface(REDPACKET_ABI)
+const nftRedPacketInterFace = new Interface(NFT_REDPACKET_ABI)
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
@@ -128,9 +130,9 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
     ): NftRedPacketJSONPayload[] {
         if (!transactions) return EMPTY_LIST
 
-        transactions.flatMap((tx) => {
+        return transactions.flatMap((tx) => {
             try {
-                const decodedInputParam = redPacketInterFace.decodeFunctionData(
+                const decodedInputParam = nftRedPacketInterFace.decodeFunctionData(
                     'create_red_packet',
                     tx.input ?? '',
                 ) as unknown as CreateNFTRedpacketParam
@@ -161,11 +163,9 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
 
                 return redpacketPayload
             } catch {
-                return []
+                return EMPTY_LIST
             }
         })
-
-        return EMPTY_LIST
     }
 
     private parseRedPacketCreationTransactions(

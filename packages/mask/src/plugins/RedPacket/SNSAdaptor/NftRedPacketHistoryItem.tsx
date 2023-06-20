@@ -187,8 +187,8 @@ export const NftRedPacketHistoryItem = memo(
         })
 
         useEffect(() => {
-            if (entry?.isIntersecting && rpid) setIsViewed(true)
-        }, [entry?.isIntersecting, rpid])
+            if (entry?.isIntersecting) setIsViewed(true)
+        }, [entry?.isIntersecting])
 
         const {
             computed: { canSend, isPasswordValid },
