@@ -3378,6 +3378,9 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
+      '@ethersproject/abi':
+        specifier: ^5.4.0
+        version: 5.4.0
       '@ethersproject/address':
         specifier: ^5.4.0
         version: 5.4.0

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { RedPacketRPC } from '../messages.js'
-import type { RedPacketNftJSONPayload } from '../types.js'
+import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { RedPacketNft } from './RedPacketNft.js'
 import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
 import { ChainContextProvider } from '@masknet/web3-hooks-base'

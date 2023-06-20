@@ -2,12 +2,16 @@ import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } fr
 import { useIntersectionObserver } from '@react-hookz/web'
 import { Box, Typography, Popper, useMediaQuery, type Theme, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import {
+    type RedPacketJSONPayload,
+    type RedPacketJSONPayloadFromChain,
+    RedPacketStatus,
+} from '@masknet/web3-providers/types'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { Translate, useI18N } from '../locales/index.js'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
-import { type RedPacketJSONPayload, type RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
@@ -203,11 +207,11 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const entry = useIntersectionObserver(ref, {})
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const { value: receipt } = useCreateRedPacketReceipt(isViewed ? history.txid : '')
+    const { value: receipt } = useCreateRedPacketReceipt(isViewed && !history.rpid ? history.txid : '')
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const rpid = receipt?.rpid ?? ''
-    const creation_time = receipt?.creation_time ?? 0
+    const rpid = history.rpid ?? receipt?.rpid ?? ''
+    const creation_time = history.creation_time ?? receipt?.creation_time ?? 0
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,

@@ -6,9 +6,9 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Box, ListItem, Typography } from '@mui/material'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
-import type { NftRedPacketJSONPayload } from '../types.js'
 import { Translate, useI18N } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
@@ -188,8 +188,8 @@ export const NftRedPacketHistoryItem = memo(
         })
 
         useEffect(() => {
-            if (entry?.isIntersecting && rpid) setIsViewed(true)
-        }, [entry?.isIntersecting, rpid])
+            if (entry?.isIntersecting) setIsViewed(true)
+        }, [entry?.isIntersecting])
 
         const {
             computed: { canSend, isPasswordValid },

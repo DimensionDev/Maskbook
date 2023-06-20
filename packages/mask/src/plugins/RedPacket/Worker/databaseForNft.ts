@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es'
-import type { RedPacketNftRecordInDatabase, RedPacketNftRecord } from '../types.js'
+import type { RedPacketNftRecordInDatabase, RedPacketNftRecord } from '@masknet/web3-providers/types'
 import { RedPacketDatabase } from './database.js'
 
 export async function getRedPacketNft(id: string) {
