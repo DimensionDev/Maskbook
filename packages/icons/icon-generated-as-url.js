@@ -151,7 +151,7 @@ export function cloud_backup_url() { return new URL("./general/CloudBackup.png",
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url) }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url) }
 export function connect_url() { return new URL("./general/Connect.svg", import.meta.url) }
-export function contracts_url() { return new URL("./general/Contracts.svg", import.meta.url) }
+export function contacts_url() { return new URL("./general/Contacts.svg", import.meta.url) }
 export function copy_url() { return new URL("./general/Copy.svg", import.meta.url) }
 export function cram_url() { return new URL("./general/Cram.svg", import.meta.url) }
 export function dashboard_url() { return new URL("./general/Dashboard.svg", import.meta.url) }

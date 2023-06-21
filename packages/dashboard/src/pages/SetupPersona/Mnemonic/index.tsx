@@ -1,8 +1,8 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MaskColorVar, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography, alpha } from '@mui/material'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard, useAsync, useAsyncFn } from 'react-use'
@@ -14,6 +14,7 @@ import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { toBlob } from 'html-to-image'
 import { Services } from '../../../API.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -72,6 +73,7 @@ const useStyles = makeStyles()((theme) => ({
 export const SignUpMnemonic = memo(function SignUpMnemonic() {
     const ref = useRef(null)
 
+    const navigate = useNavigate()
     const t = useDashboardI18N()
     const createPersona = useCreatePersonaV2()
     const { changeCurrentPersona } = PersonaContext.useContainer()
@@ -104,10 +106,15 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         try {
             const identifier = await createPersona(words.join(' '), state.personaName)
             await changeCurrentPersona(identifier)
+            navigate(DashboardRoutes.SignUpPersonaOnboarding)
         } catch (error) {
             showSnackbar((error as Error).message, { variant: 'error' })
         }
     }, [words])
+
+    const handleRecovery = useCallback(() => {
+        navigate(DashboardRoutes.SignIn)
+    }, [])
 
     const { value } = useAsync(async () => {
         if (!words.length) return
@@ -136,7 +143,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         <Box>
             <Box className={classes.header}>
                 <Typography className={classes.second}>{t.persona_create_step({ step: '2' })}</Typography>
-                <Button variant="text" className={classes.recovery}>
+                <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
                     {t.recovery()}
                 </Button>
             </Box>

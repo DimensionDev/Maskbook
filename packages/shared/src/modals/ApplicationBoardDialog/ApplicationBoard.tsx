@@ -234,9 +234,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
                 SelectProviderDialog.open({ walletConnectedCallback, requiredSupportPluginID })
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
-        if (ApplicationEntryStatus.shouldVerifyNextId)
-            return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
+        if (ApplicationEntryStatus.isPersonaCreated === false) return () => ApplicationEntryStatus.personaAction?.()
+        if (ApplicationEntryStatus.shouldVerifyNextId) return () => ApplicationEntryStatus.personaAction?.()
         return
     }, [ApplicationEntryStatus, application])
 
