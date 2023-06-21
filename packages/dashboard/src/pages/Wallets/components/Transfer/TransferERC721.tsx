@@ -212,13 +212,6 @@ export const TransferERC721 = memo(() => {
             })
             setContract(contract as NonFungibleTokenContract<ChainId, SchemaType>)
             setValue('tokenId', '')
-            // Update the previous location state.
-            navigate(DashboardRoutes.WalletsTransfer, {
-                state: {
-                    type: TransferTab.Collectibles,
-                    nonFungibleToken: contract,
-                },
-            })
         }
     }
 
