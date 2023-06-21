@@ -1,24 +1,24 @@
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useDashboardI18N } from '../../locales/index.js'
-import { Box } from '@mui/material'
-import { CodeValidation } from './CodeValidation.js'
-import { fetchBackupValue } from '../../pages/Settings/api.js'
-import { Messages, Services } from '../../API.js'
-import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard.js'
-import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
-import { useCustomSnackbar } from '@masknet/theme'
-import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
+import { decryptBackup, type BackupSummary } from '@masknet/backup-format'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { Step, Stepper } from '../Stepper/index.js'
-import { LoadingCard } from './steps/LoadingCard.js'
-import { type BackupPreview, decryptBackup } from '@masknet/backup-format'
+import { useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
+import { Box } from '@mui/material'
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import { Messages, Services } from '../../API.js'
+import { useDashboardI18N } from '../../locales/index.js'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
-import { AccountType } from '../../pages/Settings/type.js'
+import { fetchBackupValue } from '../../pages/Settings/api.js'
+import { BackupPreview } from '../../pages/Settings/components/BackupPreview.js'
 import { UserContext } from '../../pages/Settings/hooks/UserContext.js'
-import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog.js'
+import { AccountType } from '../../pages/Settings/type.js'
 import { LoadingButton } from '../LoadingButton/index.js'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
+import { Step, Stepper } from '../Stepper/index.js'
+import { CodeValidation } from './CodeValidation.js'
+import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog.js'
+import { LoadingCard } from './steps/LoadingCard.js'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -107,7 +107,7 @@ export const RestoreFromCloud = memo(() => {
     }, [currentPersona, account, user, toggleSynchronizePasswordDialog])
 
     const onRestore = useCallback(
-        async (backupInfo: { info: BackupPreview; id: string }) => {
+        async (backupInfo: { info: BackupSummary; id: string }) => {
             try {
                 if (backupInfo.info?.wallets) {
                     await Services.Backup.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'wallet' })
@@ -168,7 +168,7 @@ export const RestoreFromCloud = memo(() => {
                     {(_, { backupJson: backupBasicInfo, handleRestore }) => (
                         <>
                             <Box sx={{ width: '100%' }}>
-                                <BackupPreviewCard info={backupBasicInfo} />
+                                <BackupPreview info={backupBasicInfo} />
                             </Box>
                             <ButtonContainer>
                                 <LoadingButton size="large" variant="rounded" color="primary" onClick={handleRestore}>

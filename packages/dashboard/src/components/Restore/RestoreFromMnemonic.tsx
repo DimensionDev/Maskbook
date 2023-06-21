@@ -43,7 +43,7 @@ export function RestoreFromMnemonic() {
                 await changeCurrentPersona(persona)
                 // Waiting persona changed event notify
                 await delay(100)
-                navigate(DashboardRoutes.Personas, { replace: true })
+                navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
             } else {
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                     replace: false,

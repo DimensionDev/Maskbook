@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { alpha, Button, Typography } from '@mui/material'
-import { type HTMLProps, memo, useRef } from 'react'
+import { type HTMLProps, memo, useCallback } from 'react'
 import { useDropArea } from 'react-use'
 import { useSharedI18N } from '../../../index.js'
 
@@ -75,7 +75,6 @@ export const UploadDropArea = memo(
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
         const { showSnackbar } = useCustomSnackbar()
-        const inputRef = useRef<HTMLInputElement>(null)
         const handleFiles = (files: File[] | FileList | null) => {
             if (!files || files.length !== 1) {
                 showMessage(101)
@@ -85,6 +84,17 @@ export const UploadDropArea = memo(
                 onSelectFile(files[0])
             }
         }
+        const selectFile = useCallback(() => {
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.hidden = true
+            input.addEventListener('input', function onInput(event) {
+                handleFiles((event.currentTarget as any).files as FileList)
+                input.removeEventListener('input', onInput)
+            })
+            input.click()
+            document.body.append(input)
+        }, [])
         const [bond, { over }] = useDropArea({
             onFiles: handleFiles,
             onText: () => showMessage(101),
@@ -104,19 +114,13 @@ export const UploadDropArea = memo(
         }
         return (
             <div className={cx(classes.dropArea, { [classes.dragOver]: over }, className)} {...rest} {...bond}>
-                <input type="file" onInput={(event) => handleFiles(event.currentTarget.files)} hidden ref={inputRef} />
                 <div className={classes.uploadIcon}>
                     <Icons.Upload size={30} />
                 </div>
                 <Typography className={classes.tips}>{t.upload_drag_n_drop()}</Typography>
                 {omitSizeLimit ? null : <Typography className={classes.limit}>{t.upload_size_limit()}</Typography>}
                 <Typography className={classes.or}>{t.upload_or()}</Typography>
-                <Button
-                    className={classes.button}
-                    variant="contained"
-                    onClick={() => {
-                        inputRef.current?.click()
-                    }}>
+                <Button className={classes.button} variant="contained" onClick={selectFile}>
                     {t.upload_browse_files()}
                 </Button>
             </div>
