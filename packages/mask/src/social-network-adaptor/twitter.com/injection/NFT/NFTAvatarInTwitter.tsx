@@ -16,7 +16,7 @@ import {
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
-import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
+import { AssetPreviewer, ConfirmDialog } from '@masknet/shared'
 import { MaskMessages, NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
 import { Twitter, Hub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
@@ -150,7 +150,6 @@ function useNFTCircleAvatar(size: number) {
     }, [nftAvatar?.avatarId, identity.avatar])
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const openConfirmDialog = useShowConfirm()
     const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,
@@ -191,9 +190,9 @@ function useNFTCircleAvatar(size: number) {
             chainId: ChainId.Mainnet,
         })
 
-        openConfirmDialog({
+        ConfirmDialog.open({
             title: t('plugin_avatar_setup_share_title'),
-            children: (
+            content: (
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <AssetPreviewer url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL} />
                     <Typography mt={3} fontSize="18px">
@@ -220,7 +219,7 @@ function useNFTCircleAvatar(size: number) {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
+    }, [identity.avatar, t, saveNFTAvatar])
     useEffect(() => {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => setNFTEvent(data))
     }, [])

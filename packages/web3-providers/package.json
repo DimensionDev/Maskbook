@@ -75,6 +75,7 @@
     "buffer": "^6.0.3",
     "date-fns": "^2.29.3",
     "fortmatic": "^2.2.1",
+    "@ethersproject/abi": "^5.4.0",
     "fuse.js": "6.6.2",
     "graphql-request": "^6.0.0",
     "immer": "^10.0.1",

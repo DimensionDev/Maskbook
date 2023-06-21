@@ -1,6 +1,11 @@
 import { omit } from 'lodash-es'
-import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types.js'
+import type {
+    RedPacketRecord,
+    RedPacketRecordInDatabase,
+    RedPacketNftRecordInDatabase,
+} from '@masknet/web3-providers/types'
 import type { Plugin } from '@masknet/plugin-infra'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export let RedPacketDatabase: Plugin.Worker.DatabaseStorage<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>
 
@@ -9,7 +14,7 @@ export function setupDatabase(x: typeof RedPacketDatabase) {
 }
 
 export async function getAllRedpackets(ids: string[]) {
-    const records = []
+    const records: RedPacketRecord[] = EMPTY_LIST
     for await (const record of RedPacketDatabase.iterate('red-packet')) {
         if (ids.includes(record.value.id)) records.push(RedPacketRecordOutDB(record.value))
     }

@@ -28,40 +28,20 @@ export interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSub
 
     title?: string
     confirmLabel?: React.ReactNode | string
+    content: React.ReactNode | string
     onSubmit?(result: boolean | null): void
     maxWidthOfContent?: number
-    cancelText?: React.ReactNode | string
-    confirmDisabled?: boolean
-    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl'
 }
 
-export function Confirm({
-    title,
-    confirmLabel,
-    children,
-    onSubmit,
-    maxWidthOfContent,
-    maxWidth,
-    cancelText,
-    confirmDisabled,
-    ...rest
-}: ConfirmProps) {
+export function Confirm({ title, confirmLabel, content, onSubmit, maxWidthOfContent, ...rest }: ConfirmProps) {
     const t = useSharedI18N()
     const { classes } = useStyles(maxWidthOfContent)
 
     return (
-        <InjectedDialog title={title ?? t.dialog_confirm()} maxWidth={maxWidth} className={classes.dialog} {...rest}>
-            <DialogContent className={classes.content}>{children}</DialogContent>
+        <InjectedDialog title={title ?? t.dialog_confirm()} className={classes.dialog} {...rest}>
+            <DialogContent className={classes.content}>{content}</DialogContent>
             <DialogActions>
-                cancelText ??
                 <Button fullWidth className={classes.button} onClick={() => onSubmit?.(true)}>
-                    {cancelText}
-                </Button>
-                <Button
-                    fullWidth
-                    className={classes.button}
-                    onClick={() => onSubmit?.(true)}
-                    disabled={confirmDisabled}>
                     {confirmLabel ?? t.dialog_confirm()}
                 </Button>
             </DialogActions>

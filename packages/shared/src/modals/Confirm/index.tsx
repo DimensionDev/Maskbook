@@ -1,18 +1,14 @@
-import { type PropsWithChildren, forwardRef, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { Confirm } from './Dialog.js'
 import { useSingletonModal, type InjectedDialogProps } from '../../index.js'
 
-export interface ConfirmDialogOpenProps
-    extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content' | 'open'>,
-        PropsWithChildren<{}> {
+export interface ConfirmDialogOpenProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content' | 'open'> {
     title?: string
     confirmLabel?: React.ReactNode | string
+    content: React.ReactNode | string
     onSubmit?(result: boolean | null): void
     maxWidthOfContent?: number
-    cancelText?: React.ReactNode | string
-    confirmDisabled?: boolean
-    maxWidth?: false | 'sm' | 'xs' | 'md' | 'lg' | 'xl'
 }
 
 export type ConfirmDialogProps = {}
@@ -27,6 +23,6 @@ export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmDialogOpe
         })
 
         if (!open) return null
-        return <Confirm open onClose={() => dispatch?.close()} {...props_} />
+        return <Confirm open onClose={() => dispatch?.close()} {...props_} content={props_?.content} />
     },
 )

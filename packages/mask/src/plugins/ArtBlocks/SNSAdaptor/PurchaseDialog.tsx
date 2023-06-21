@@ -4,9 +4,9 @@ import {
     InjectedDialog,
     FungibleTokenInput,
     useOpenShareTxDialog,
-    useShowConfirm,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    ConfirmDialog,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
@@ -88,7 +88,6 @@ export function PurchaseDialog(props: ActionBarProps) {
         postLink,
     ].join('\n')
     const openShareTxDialog = useOpenShareTxDialog()
-    const showConfirm = useShowConfirm()
     const purchase = useCallback(async () => {
         try {
             const hash = await purchaseCallback()
@@ -101,9 +100,9 @@ export function PurchaseDialog(props: ActionBarProps) {
             })
             onClose()
         } catch (err: any) {
-            showConfirm({
+            ConfirmDialog.open({
                 title: 'Error',
-                children: err.message,
+                content: err.message,
             })
         }
     }, [openShareTxDialog, onClose])

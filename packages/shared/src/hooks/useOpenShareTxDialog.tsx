@@ -6,7 +6,7 @@ import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useSharedI18N } from '../locales/index.js'
-import { useShowConfirm } from './useShowConfirm.js'
+import { ConfirmDialog } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -73,14 +73,13 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
 })
 
 export function useOpenShareTxDialog() {
-    const showConfirm = useShowConfirm()
     const t = useSharedI18N()
 
     return useCallback(
         ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
-            return showConfirm({
+            return ConfirmDialog.open({
                 title: title ?? t.share_dialog_transaction(),
-                children: (
+                content: (
                     <ShareTransaction
                         message={message ?? t.share_dialog_transaction_confirmed()}
                         content={content}
@@ -93,6 +92,6 @@ export function useOpenShareTxDialog() {
                 },
             })
         },
-        [t, showConfirm],
+        [t],
     )
 }

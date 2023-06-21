@@ -4,7 +4,12 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, useSelectFungibleToken, useShowConfirm, SelectProviderDialog } from '@masknet/shared'
+import {
+    ImageIcon,
+    useSelectFungibleToken,
+    SelectProviderDialog,
+    ConfirmDialog as SharedConfirmDialog,
+} from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -40,11 +45,11 @@ import { PluginTraderMessages } from '../../messages.js'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeCallback } from '../../trader/useTradeCallback.js'
 import { TokenPanelType } from '../../types/index.js'
-import { ConfirmDialog } from './ConfirmDialog.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { TraderStateBar } from './TraderStateBar.js'
+import { ConfirmDialog } from './ConfirmDialog.js'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -74,7 +79,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const chainIdValid = useChainIdValid(pluginID, chainId)
-    const showConfirm = useShowConfirm()
     const Others = useWeb3Others()
 
     // #region trade state
@@ -247,9 +251,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         if (typeof hash !== 'string') return
 
-        await showConfirm({
+        await SharedConfirmDialog.openAndWaitForClose({
             title: t.swap(),
-            children: (
+            content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                     <ImageIcon icon={inputToken?.logoURL} size={90} />
                     <Typography
@@ -285,7 +289,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, showConfirm, telemetry, focusedTrade])
+    }, [tradeCallback, shareText, telemetry, focusedTrade])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
