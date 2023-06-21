@@ -47,7 +47,7 @@ export function useCurrentPersonaConnectStatus(
                 openDashboard,
                 info: {
                     target: 'dashboard',
-                    url: target ?? DashboardRoutes.Setup,
+                    url: target ?? DashboardRoutes.SignUpPersona,
                     text: t.applications_create_persona_hint(),
                     title: t.applications_create_persona_title(),
                     actionHint: t.applications_create_persona_action(),
