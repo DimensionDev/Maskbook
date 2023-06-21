@@ -27,13 +27,12 @@ import {
     useMountReport,
 } from '@masknet/web3-hooks-base'
 import { WalletIcon, SelectProviderDialog, WalletStatusDialog } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
+import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -74,12 +73,14 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
     } = props
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { openDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
+
+    const openApplicationBoardDialog = useOpenApplicationBoardDialog()
+
     useMountReport(EventID.AccessToolbox)
     return (
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
-                <ListItemButton onClick={openDialog}>
+                <ListItemButton onClick={openApplicationBoardDialog}>
                     <ListItemIcon>
                         <Icons.MaskBlue size={iconSize} />
                     </ListItemIcon>

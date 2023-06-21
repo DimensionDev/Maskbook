@@ -13,3 +13,9 @@ export interface PersonaConnectStatus {
     verified?: boolean
     proof?: BindingProof[]
 }
+
+export interface PersonaAgainstSNSConnectStatus {
+    isSNSConnectToCurrentPersona: boolean
+    currentPersonaPublicKey: string
+    currentSNSConnectedPersonaPublicKey: string
+}

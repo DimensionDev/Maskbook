@@ -1,9 +1,9 @@
 import { noop } from 'lodash-es'
-import { BooleanPreference, ObservableSet, type PluginID } from '@masknet/shared-base'
+import { timeout } from '@masknet/kit'
 import { Emitter } from '@servie/events'
+import { BooleanPreference, ObservableSet, type PluginID } from '@masknet/shared-base'
 import { type Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
-import { timeout } from '@masknet/kit'
 
 // Plugin state machine
 // not-loaded => loaded

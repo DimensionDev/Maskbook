@@ -5,10 +5,10 @@ import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { PersonaContext } from '../hooks/usePersonaContext.js'
 import Services from '../../../../service.js'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
+import { PersonaContext } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     content: {

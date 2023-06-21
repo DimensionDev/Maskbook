@@ -8,7 +8,6 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
-import { setupContext } from './context.js'
 import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
@@ -145,9 +144,7 @@ const SocialTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createS
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(_, context) {
-        setupContext(context)
-    },
+    init(_, context) {},
     ProfileTabs: [ActivitiesTabConfig, DonationTabConfig, SocialTabConfig],
     ProfileCardTabs: [ActivitiesTabConfigInProfileCard, DonationsTabConfigInProfileCard, SocialTabConfigInProfileCard],
     SearchResultTabs: [

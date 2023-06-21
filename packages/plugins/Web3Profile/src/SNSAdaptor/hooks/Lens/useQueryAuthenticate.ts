@@ -4,7 +4,7 @@ import add from 'date-fns/add'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens, Web3 } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
-import { context, lensTokenStorage as storage } from '../../context.js'
+import { lensTokenStorage as storage } from '../../context.js'
 
 export function useQueryAuthenticate(address: string) {
     const { chainId } = useChainContext()
@@ -56,5 +56,5 @@ export function useQueryAuthenticate(address: string) {
         })
 
         return authenticate.accessToken
-    }, [address, chainId, context.createKVStorage])
+    }, [address, chainId])
 }

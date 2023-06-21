@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network/index.js'
-import { SOCIAL_MEDIA_ICON_MAPPING, usePersonaProofs } from '@masknet/shared'
+import { PersonaContext, SOCIAL_MEDIA_ICON_MAPPING, usePersonaProofs } from '@masknet/shared'
 import {
     type ProfileIdentifier,
     type ProfileInformation,
@@ -19,7 +19,6 @@ import {
     MaskMessages,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import Services from '../../../../../service.js'
 import { DisconnectDialog } from '../DisconnectDialog/index.js'
 import { MethodAfterPersonaSign } from '../../../Wallet/type.js'

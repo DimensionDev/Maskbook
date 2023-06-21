@@ -1,23 +1,12 @@
-import { getEnumAsArray } from '@masknet/kit'
-import { NetworkPluginID } from '@masknet/shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
+import { Modals } from '@masknet/shared'
 import { base } from '@masknet/plugin-wallet'
-import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
-import { Modals, TransactionSnackbar } from '@masknet/shared'
+import type { Plugin } from '@masknet/plugin-infra'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection() {
-        return (
-            <>
-                <ApplicationBoardDialog />
-                {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) =>
-                    TransactionSnackbar.open({ pluginID }),
-                )}
-                <Modals />
-            </>
-        )
+        return <Modals />
     },
 }
 

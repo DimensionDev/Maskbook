@@ -1,9 +1,9 @@
 import { Children, createElement } from 'react'
 import { type SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
-import type { PluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
+import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
+import { ApplicationBoardDialog } from '@masknet/shared'
+import type { PluginID } from '@masknet/shared-base'
 import { hmr } from '../../utils-pure/index.js'
 import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api.js'
 
@@ -34,7 +34,7 @@ if (Flags.sandboxedPluginRuntime) {
             // TODO: implement this
             dropCompositionMetadata(plugin, id) {},
             closeApplicationBoardDialog() {
-                WalletMessages.events.applicationDialogUpdated.sendToLocal({ open: false })
+                ApplicationBoardDialog.close()
             },
         },
         process.env.NODE_ENV === 'development',

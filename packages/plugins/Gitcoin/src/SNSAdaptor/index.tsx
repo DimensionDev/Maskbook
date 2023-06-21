@@ -1,19 +1,13 @@
+import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import {
-    type Plugin,
-    SNSAdaptorContext,
-    usePluginWrapper,
-    usePostInfoDetails,
-} from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { parseURLs, PluginID } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { ThemeProvider } from '@mui/material'
-import { useMemo } from 'react'
-import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
-import { SharedContext } from '../settings.js'
 import { ResultModalProvider, DonateProvider } from './contexts/index.js'
 import { PreviewCard } from './PreviewCard.js'
 
@@ -23,23 +17,19 @@ function Renderer(props: { id: string }) {
     usePluginWrapper(true)
 
     return (
-        <SNSAdaptorContext.Provider value={SharedContext.value!}>
-            <ResultModalProvider>
-                <DonateProvider>
-                    <ThemeProvider theme={MaskLightTheme}>
-                        <PreviewCard grantId={props.id} />
-                    </ThemeProvider>
-                </DonateProvider>
-            </ResultModalProvider>
-        </SNSAdaptorContext.Provider>
+        <ResultModalProvider>
+            <DonateProvider>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <PreviewCard grantId={props.id} />
+                </ThemeProvider>
+            </DonateProvider>
+        </ResultModalProvider>
     )
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(_, context) {
-        SharedContext.value = context
-    },
+    init(_, context) {},
     DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
@@ -48,11 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         }, [props.message])
         const id = link?.match(/\d+/)?.[0]
         if (!id) return null
-        return (
-            <SNSAdaptorContext.Provider value={SharedContext.value!}>
-                <Renderer id={id} />
-            </SNSAdaptorContext.Provider>
-        )
+        return <Renderer id={id} />
     },
     CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
     PostInspector() {

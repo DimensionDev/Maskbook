@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
-import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
-import { useSNSAdaptorContext } from './SNSAdaptorContext.js'
 import type { Theme } from '@mui/material'
+import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
+import { useSNSAdaptorContext } from '../dom/useSNSAdaptorContext.js'
 import { getBackgroundColor } from '../utils/theme/color-tools.js'
 
 const defaults = {

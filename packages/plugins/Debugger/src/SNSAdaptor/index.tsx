@@ -3,7 +3,6 @@ import { SocialAddressType } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
-import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { TabContent } from './components/TabContent.js'
@@ -18,9 +17,7 @@ import { SearchResultInspector } from './components/SearchResultInspector.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        SNSAdaptorPluginContext.setup(context)
-    },
+    init(signal, context) {},
     ApplicationEntries: [
         {
             ApplicationEntryID: `${PLUGIN_ID}_Debugger`,

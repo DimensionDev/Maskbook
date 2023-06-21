@@ -5,8 +5,13 @@ import { DialogContent, alpha, DialogActions } from '@mui/material'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { InjectedDialog, PluginWalletStatusBar, ChainBoundary, WalletStatusDialog } from '@masknet/shared'
+import {
+    InjectedDialog,
+    PluginWalletStatusBar,
+    ChainBoundary,
+    WalletStatusDialog,
+    ApplicationBoardDialog,
+} from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
 import GameList from './GameList.js'
 import GameWindow from './GameWindow.js'
@@ -54,8 +59,6 @@ function WalletConnectDialog() {
         if (ev?.tokenProps) setTokenProps(ev.tokenProps)
     })
 
-    const { closeDialog: _closeDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
-
     const handleGameClose = () => {
         setGameShow(false)
         setGameInfo(undefined)
@@ -70,7 +73,7 @@ function WalletConnectDialog() {
             showSnackbar(t.game_list_play_error(), { variant: 'error' })
             return
         }
-        _closeDialog()
+        ApplicationBoardDialog.close()
         WalletStatusDialog.close()
         setGameInfo(gameInfo)
         setGameShow(true)

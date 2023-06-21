@@ -4,14 +4,11 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { type EnhanceableSite } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants.js'
-import { setupContext } from '../context.js'
 import { AvatarBadge } from '../../../components/shared/AvatarBadge/AvatarBadge.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        setupContext(context)
-    },
+    init(signal, context) {},
     ApplicationEntries: [
         {
             category: 'dapp',
