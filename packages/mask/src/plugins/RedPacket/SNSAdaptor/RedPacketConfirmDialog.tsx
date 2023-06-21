@@ -123,7 +123,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // #endregion
     const createRedpacket = useCallback(async () => {
         const result = await createCallback()
-
+        console.log({ result })
         const { hash, receipt, events } = result ?? {}
         if (typeof hash !== 'string') return
         if (typeof receipt?.transactionHash !== 'string') return
@@ -318,7 +318,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         fullWidth
                         onClick={createRedpacket}
                         disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
-                        {t.confirm()}
+                        {isCreating ? t.confirming() : t.confirm()}
                     </ActionButton>
                 </ChainBoundary>
             </PluginWalletStatusBar>
