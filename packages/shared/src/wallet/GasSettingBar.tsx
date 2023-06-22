@@ -7,7 +7,7 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
-import { GasSettingDialog, TokenPrice } from '@masknet/shared'
+import { GasSettingModal, TokenPrice } from '@masknet/shared'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -27,7 +27,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const [gasOption, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
 
     const onOpenGasSettingDialog = useCallback(() => {
-        GasSettingDialog.open(
+        GasSettingModal.open(
             chainResolver.isSupport(chainId, 'EIP1559')
                 ? {
                       gasLimit,
@@ -45,7 +45,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     // set initial options
     useEffect(() => {
-        GasSettingDialog.emitter.on('close', (evt) => {
+        GasSettingModal.emitter.on('close', (evt) => {
             if (evt?.gasOption) setGasOptionType(evt.gasOption)
             onChange(
                 (chainResolver.isSupport(chainId, 'EIP1559')

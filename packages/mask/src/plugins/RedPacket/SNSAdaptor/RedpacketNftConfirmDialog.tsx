@@ -14,7 +14,7 @@ import {
     PluginWalletStatusBar,
     ChainBoundary,
     WalletConnectedBoundary,
-    ApplicationBoardDialog,
+    ApplicationBoardModal,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
@@ -185,7 +185,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
-            ApplicationBoardDialog.close()
+            ApplicationBoardModal.close()
         },
         [duration, message, senderName, contract, privateKey, transactionId],
     )

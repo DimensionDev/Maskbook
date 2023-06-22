@@ -1,7 +1,7 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { GasSettingDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { GasSettingModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { GasSettingSupported } from './GasSettingSupported.js'
 import type { BigNumber } from 'bignumber.js'
 
@@ -47,7 +47,7 @@ export function GasSetting(props: GasSettingProps) {
                     gasOptionType={gasOption}
                     onGasOptionChange={setGasOptionType}
                     onConfirm={({ gasPrice, gasLimit, maxFee, priorityFee, gasOption }) => {
-                        GasSettingDialog.close({
+                        GasSettingModal.close({
                             gasOption,
                             gasPrice,
                             gasLimit,

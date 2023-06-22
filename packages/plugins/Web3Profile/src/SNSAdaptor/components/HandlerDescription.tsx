@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletIcon, SelectProviderDialog } from '@masknet/shared'
+import { WalletIcon, SelectProviderModal } from '@masknet/shared'
 import {
     useChainContext,
     useNetworkContext,
@@ -97,7 +97,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                     <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
-            <Button variant="text" onClick={props.profile ? handleDisconnect : () => SelectProviderDialog.open()}>
+            <Button variant="text" onClick={props.profile ? handleDisconnect : () => SelectProviderModal.open()}>
                 {props.profile ? t.plugin_wallet_disconnect() : t.wallet_status_button_change()}
             </Button>
         </Box>

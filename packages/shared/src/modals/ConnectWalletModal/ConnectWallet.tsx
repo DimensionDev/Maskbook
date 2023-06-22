@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { DialogContent, dialogClasses } from '@mui/material'
-import { ConnectWalletDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -64,7 +64,7 @@ export function ConnectWallet({
             }
         }
 
-        ConnectWalletDialog.close()
+        ConnectWalletModal.close()
 
         walletConnectedCallback?.()
 

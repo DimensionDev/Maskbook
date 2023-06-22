@@ -13,7 +13,7 @@ import {
 import { useAsyncRetry } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import { ApplicationBoardDialog } from '@masknet/shared'
+import { ApplicationBoardModal } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { META_KEY_3, RoutePaths } from '../../../constants.js'
 import { digest, makeFileKey } from '../../../helpers.js'
@@ -151,7 +151,7 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {
             openCompositionWithFiles(compositionType, Array.isArray(fileInfo) ? fileInfo : [fileInfo])
-            ApplicationBoardDialog.close()
+            ApplicationBoardModal.close()
             navigate(RoutePaths.Exit)
         },
         [compositionType, navigate],

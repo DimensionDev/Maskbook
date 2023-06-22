@@ -5,13 +5,13 @@ import { chainResolver, type GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { GasSettingDialog } from '@masknet/shared'
+import { GasSettingModal } from '@masknet/shared'
 
 interface GasConfigProps {
     gasConfig: GasConfig
     gasLimit: number
     maxFee: BigNumber.Value
-    onCustomGasSetting: () => ReturnType<typeof GasSettingDialog.openAndWaitForClose>
+    onCustomGasSetting: () => ReturnType<typeof GasSettingModal.openAndWaitForClose>
 }
 
 export function useGasConfig(gasLimit: number, minGasLimit: number): GasConfigProps {
@@ -28,7 +28,7 @@ export function useGasConfig(gasLimit: number, minGasLimit: number): GasConfigPr
     const gasPrice = customGasPrice || defaultGasPrice
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
-    useEffect(() => GasSettingDialog.close(), [])
+    useEffect(() => GasSettingModal.close(), [])
 
     useEffect(() => {
         setGasLimit_(gasLimit)
@@ -76,6 +76,6 @@ export function useGasConfig(gasLimit: number, minGasLimit: number): GasConfigPr
         gasLimit: gasLimit_,
         maxFee,
         onCustomGasSetting: async () =>
-            GasSettingDialog.openAndWaitForClose({ gasLimit: gasLimit_, gasOption, minGasLimit }),
+            GasSettingModal.openAndWaitForClose({ gasLimit: gasLimit_, gasOption, minGasLimit }),
     }
 }
