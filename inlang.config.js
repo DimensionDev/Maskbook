@@ -11,6 +11,7 @@ export async function defineConfig(env) {
 		plugins: [
 			i18nextPlugin({
 				pathPattern: "./packages/shared/src/locales/{language}.json",
+                ignore: ["qya-AA.json"]
 			}),
             standardLintRules(),
 		],
