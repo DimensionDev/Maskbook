@@ -15,12 +15,11 @@ export const TransactionModal = forwardRef<
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID | undefined>()
 
-    const [open, _] = useSingletonModal(ref, {
+    useSingletonModal(ref, {
         onOpen(props) {
             setPluginID(props.pluginID)
         },
     })
 
-    if (!open) return null
     return <Transaction pluginID={pluginID ?? NetworkPluginID.PLUGIN_EVM} />
 })
