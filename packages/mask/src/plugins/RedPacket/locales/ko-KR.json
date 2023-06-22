@@ -57,7 +57,6 @@
     "insufficient_balance": "잔액 부족",
     "back": "뒤로",
     "hint": "행운 드롭을 발송한 후 24시간 후에 남은 자금을 인출할 수 있습니다.",
-    "total_cost": "총액",
     "amount_per_share": "한 지분 금액",
     "estimate_gas_fee": "예상 가스비",
     "shares": "Shares",
