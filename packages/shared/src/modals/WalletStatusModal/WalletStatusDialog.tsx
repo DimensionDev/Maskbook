@@ -19,14 +19,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletStatusProps {
+export interface WalletStatusDialogProps {
     open: boolean
     onClose: () => void
     isHidden: boolean
     setHidden: (isHidden: boolean) => void
 }
 
-export function WalletStatus({ open, onClose, isHidden = false, setHidden }: WalletStatusProps) {
+export function WalletStatusDialog({ open, onClose, isHidden = false, setHidden }: WalletStatusDialogProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 

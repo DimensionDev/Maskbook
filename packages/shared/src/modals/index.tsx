@@ -1,24 +1,24 @@
 import { memo } from 'react'
 import { NetworkPluginID, SingletonModal } from '@masknet/shared-base'
-import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
-import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
-import { WalletConnectQRCodeModal, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
-import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
-import { ConnectWalletModal, type ConnectWalletDialogOpenProps } from './ConnectWalletDialog/index.js'
-import { LeavePageConfirmModal, type LeavePageConfirmDialogOpenProps } from './LeavePageConfirmDialog/index.js'
-import { ApplicationBoardModal, type ApplicationBoardDialogOpenProps } from './ApplicationBoardDialog/index.js'
+import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusModal/index.js'
+import { SelectProviderModal, type SelectProviderModalOpenProps } from './SelectProviderModal/index.js'
+import { WalletConnectQRCodeModal, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeModal/index.js'
+import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningModal/index.js'
+import { ConnectWalletModal, type ConnectWalletModalOpenProps } from './ConnectWalletModal/index.js'
+import { LeavePageConfirmModal, type LeavePageConfirmModalOpenProps } from './LeavePageConfirmModal/index.js'
+import { ApplicationBoardModal, type ApplicationBoardModalOpenProps } from './ApplicationBoardModal/index.js'
+import { GasSettingModal, type GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js'
 import { TransactionSnackbarModal, type TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
-import { GasSettingModal, type GasSettingDialogOpenOrCloseProps } from './GasSettingDialog/index.js'
 
 export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
-export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
+export const SelectProviderDialog = new SingletonModal<SelectProviderModalOpenProps>()
 export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>()
 export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>()
-export const ConnectWalletDialog = new SingletonModal<ConnectWalletDialogOpenProps>()
-export const LeavePageConfirmDialog = new SingletonModal<LeavePageConfirmDialogOpenProps>()
-export const ApplicationBoardDialog = new SingletonModal<ApplicationBoardDialogOpenProps>()
+export const ConnectWalletDialog = new SingletonModal<ConnectWalletModalOpenProps>()
+export const LeavePageConfirmDialog = new SingletonModal<LeavePageConfirmModalOpenProps>()
+export const ApplicationBoardDialog = new SingletonModal<ApplicationBoardModalOpenProps>()
+export const GasSettingDialog = new SingletonModal<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>()
 export const TransactionSnackbar = new SingletonModal<TransactionSnackbarOpenProps>()
-export const GasSettingDialog = new SingletonModal<GasSettingDialogOpenOrCloseProps, GasSettingDialogOpenOrCloseProps>()
 
 export const Modals = memo(function Modals() {
     return (
