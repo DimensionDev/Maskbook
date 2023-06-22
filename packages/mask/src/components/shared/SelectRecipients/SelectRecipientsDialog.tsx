@@ -238,12 +238,12 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                             {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
                                         </EmptyStatus>
                                     ) : (
-                                        results.map((item) => {
+                                        results.map((item, index) => {
                                             const pubkey = item.linkedPersona?.publicKeyAsHex as string
                                             const selected = selectedPubkeyList.includes(pubkey)
                                             return (
                                                 <ProfileInList
-                                                    key={pubkey}
+                                                    key={index}
                                                     profile={item as ProfileInformationFromNextID}
                                                     highlightText={keyword}
                                                     selected={selected}

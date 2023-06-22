@@ -1,8 +1,8 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import { useGasLimit } from '@masknet/web3-hooks-evm'
 import {
     useFungibleTokenBalance,
     useGasPrice,
@@ -13,6 +13,7 @@ import {
     useNativeTokenPrice,
     useMaskTokenAddress,
     useWallet,
+    useWeb3Connection,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
@@ -32,6 +33,7 @@ import {
     SchemaType,
     formatWeiToEther,
     type ChainId,
+    isValidDomain,
     isValidAddress,
     NetworkType,
     isNativeTokenAddress,
@@ -92,10 +94,14 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [selectedToken, setSelectedToken] = useState(token)
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
 
-    const { chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
+    const { account, chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
 
     const network = useNetworkDescriptor(pluginID, state?.token?.chainId)
     const Others = useWeb3Others()
+    const Web3 = useWeb3Connection(pluginID, {
+        account,
+        chainId,
+    })
 
     const is1559Supported = useMemo(() => Others?.chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
     useEffect(() => {
@@ -195,35 +201,27 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return BigNumber.max(0, amount_).toFixed()
     }, [actualBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
-    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
-        tokenType,
-        selectedToken.address,
-        chainId as ChainId,
-    )
+    const [{ loading: isTransferring }, transferCallback] = useAsyncFn(async () => {
+        if (!selectedToken.address) return
+        let recipient: string | undefined
+
+        if (isValidAddress(address)) recipient = address
+        else if (Others.isValidDomain(address)) recipient = registeredAddress
+        if (!recipient) return
+
+        const totalAmount = rightShift(amount, token.decimals).toFixed()
+        return Web3.transferFungibleToken(selectedToken.address, recipient, totalAmount, '')
+    }, [account, selectedToken.address, token?.decimals, amount, Web3, address, registeredAddress])
 
     const onTransfer = useCallback(async () => {
-        let hash: string | undefined
-        if (isValidAddress(address)) {
-            hash = await transferCallback(transferAmount, address, gasConfig, message)
-        } else if (Others.isValidDomain(address)) {
-            hash = await transferCallback(transferAmount, registeredAddress, gasConfig, message)
-        }
+        const hash = transferCallback()
         if (typeof hash === 'string') {
             setMessage('')
             setAddress('')
             setAmount('')
             tokenBalanceRetry()
         }
-    }, [
-        transferAmount,
-        address,
-        message,
-        selectedToken.decimals,
-        transferCallback,
-        gasConfig,
-        registeredAddress,
-        Others,
-    ])
+    }, [transferCallback])
 
     // #region validation
     const validationMessage = useMemo(() => {
@@ -231,9 +229,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!(isValidAddress(address) || Others.isValidDomain(address)))
-            return t.wallets_transfer_error_invalid_address()
-        if (Others.isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
+        if (!(isValidAddress(address) || isValidDomain(address))) return t.wallets_transfer_error_invalid_address()
+        if (isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
             if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()
         }

@@ -17,7 +17,7 @@ import { WalletStateBar } from './components/WalletStateBar/index.js'
 import { useIsMatched } from './hooks/index.js'
 import { Context } from './hooks/useContext.js'
 import { StartUp } from './StartUp.js'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const r = relativeRouteOf(DashboardRoutes.Wallets)
@@ -107,7 +107,14 @@ function Wallets() {
                         connectedChainId: chainId,
                     }}>
                     <Balance
-                        onSend={() => navigate(DashboardRoutes.WalletsTransfer)}
+                        onSend={() =>
+                            navigate(DashboardRoutes.WalletsTransfer, {
+                                state: {
+                                    type: TransferTab.Token,
+                                    token: createNativeToken((selectedNetwork?.chainId ?? chainId) as ChainId),
+                                },
+                            })
+                        }
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
