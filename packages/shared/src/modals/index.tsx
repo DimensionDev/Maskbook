@@ -1,19 +1,18 @@
 import { memo } from 'react'
 import { NetworkPluginID, SingletonModal } from '@masknet/shared-base'
+import { WalletStatusModal, type WalletStatusModalOpenProps } from './WalletStatusDialog/index.js'
 import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
 import { WalletConnectQRCodeModal, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
 import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
 import { ConnectWalletModal, type ConnectWalletDialogOpenProps } from './ConnectWalletDialog/index.js'
-import { WalletStatusModal } from './WalletStatusDialog/index.js'
 import { LeavePageConfirmModal, type LeavePageConfirmDialogOpenProps } from './LeavePageConfirmDialog/index.js'
-import { type ApplicationBoardDialogOpenProps, ApplicationBoardModal } from './ApplicationBoardDialog/index.js'
-import { TransactionModal, type TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
+import { ApplicationBoardModal, type ApplicationBoardDialogOpenProps } from './ApplicationBoardDialog/index.js'
+import { TransactionSnackbarModal, type TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
 import { GasSettingModal, type GasSettingDialogOpenOrCloseProps } from './GasSettingDialog/index.js'
-import { getEnumAsArray } from '@masknet/kit'
 
 export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
-export const WalletStatusDialog = new SingletonModal()
+export const WalletStatusDialog = new SingletonModal<WalletStatusModalOpenProps>()
 export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>()
 export const ConnectWalletDialog = new SingletonModal<ConnectWalletDialogOpenProps>()
 export const LeavePageConfirmDialog = new SingletonModal<LeavePageConfirmDialogOpenProps>()
@@ -31,9 +30,8 @@ export const Modals = memo(function Modals() {
             <WalletRiskWarningModal ref={WalletRiskWarningDialog.register} />
             <LeavePageConfirmModal ref={LeavePageConfirmDialog.register} />
             <ApplicationBoardModal ref={ApplicationBoardDialog.register} />
-            <TransactionModal ref={TransactionSnackbar.register} />
             <GasSettingModal ref={GasSettingDialog.register} />
-            {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => TransactionSnackbar.open({ pluginID }))}
+            <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={TransactionSnackbar.register} />
         </>
     )
 })
