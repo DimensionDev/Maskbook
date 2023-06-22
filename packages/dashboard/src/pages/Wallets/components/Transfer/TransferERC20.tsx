@@ -33,6 +33,7 @@ import {
     SchemaType,
     formatWeiToEther,
     type ChainId,
+    isValidDomain,
     isValidAddress,
     NetworkType,
     isNativeTokenAddress,
@@ -228,9 +229,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!(isValidAddress(address) || Others.isValidDomain(address)))
-            return t.wallets_transfer_error_invalid_address()
-        if (Others.isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
+        if (!(isValidAddress(address) || isValidDomain(address))) return t.wallets_transfer_error_invalid_address()
+        if (isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
             if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()
         }
