@@ -2,7 +2,7 @@ import { omit, set } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, type InjectedDialogProps, NetworkTab, ApplicationBoardDialog } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, NetworkTab, ApplicationBoardModal } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
@@ -205,7 +205,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
             else dropMetadata(ITO_MetaKey_2)
 
-            ApplicationBoardDialog.close()
+            ApplicationBoardModal.close()
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
             PluginITO_RPC.discoverPool('', payload)

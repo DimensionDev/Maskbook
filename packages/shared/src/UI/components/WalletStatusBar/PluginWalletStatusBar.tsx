@@ -21,7 +21,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
-import { SelectProviderDialog, WalletStatusDialog } from '../../../index.js'
+import { SelectProviderModal, WalletStatusModal } from '../../../index.js'
 
 export const useStyles = makeStyles()((theme) => ({
     root: {
@@ -82,7 +82,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const Others = useWeb3Others()
 
         const openSelectProviderDialog = useCallback(() => {
-            SelectProviderDialog.open({
+            SelectProviderModal.open({
                 requiredSupportChainIds,
                 requiredSupportPluginID,
             })
@@ -117,7 +117,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     formattedAddress={Others.formatAddress(account, 4)}
                     addressLink={Others.explorerResolver.addressLink(chainId, account)}
                     onClick={onClick ?? openSelectProviderDialog}
-                    onPendingClick={() => WalletStatusDialog.open()}
+                    onPendingClick={() => WalletStatusModal.open()}
                 />
                 <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
             </Box>

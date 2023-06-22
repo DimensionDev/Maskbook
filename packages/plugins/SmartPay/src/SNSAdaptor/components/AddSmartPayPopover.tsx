@@ -3,7 +3,7 @@ import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Icon, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
+import { Icon, LeavePageConfirmModal, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
@@ -84,7 +84,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
 
         // If there is no persona and no signer
         if (!personas.length && !qualifications.signPersona && !qualifications.signWallet) {
-            LeavePageConfirmDialog.open({
+            LeavePageConfirmModal.open({
                 openDashboard,
                 info: {
                     target: 'dashboard',

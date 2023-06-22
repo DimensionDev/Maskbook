@@ -3,10 +3,6 @@ import { useAsync } from 'react-use'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { type NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
-import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
-import { useWeb3State, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     makeStyles,
     type ShowSnackbarOptions,
@@ -14,6 +10,10 @@ import {
     type SnackbarMessage,
     useCustomSnackbar,
 } from '@masknet/theme'
+import { type NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
+import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
+import { useWeb3State, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '../../index.js'
 
 const useStyles = makeStyles()({
@@ -22,10 +22,10 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
 })
-export interface TransactionProps<T extends NetworkPluginID> {
+export interface TransactionSnackbarProps<T extends NetworkPluginID> {
     pluginID: T
 }
-export function Transaction<T extends NetworkPluginID>({ pluginID }: TransactionProps<T>) {
+export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
     const { classes } = useStyles()
     const t = useSharedI18N()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()

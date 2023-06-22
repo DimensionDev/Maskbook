@@ -18,9 +18,9 @@ import {
     FormattedAddress,
     useSnackbarCallback,
     WalletIcon,
-    SelectProviderDialog,
+    SelectProviderModal,
     useSharedI18N,
-    WalletStatusDialog,
+    WalletStatusModal,
 } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -160,7 +160,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     color="primary"
                     variant="contained"
                     size="small"
-                    onClick={() => SelectProviderDialog.open()}>
+                    onClick={() => SelectProviderModal.open()}>
                     {t.plugin_wallet_on_connect()}
                 </Button>
             </section>
@@ -234,7 +234,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 props.closeDialog?.()
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
-                                WalletStatusDialog.close()
+                                WalletStatusModal.close()
                                 await Web3.disconnect()
                             }}>
                             {t.plugin_wallet_disconnect()}
@@ -244,7 +244,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={() => {
-                                SelectProviderDialog.open()
+                                SelectProviderModal.open()
                                 props.closeDialog?.()
                             }}>
                             {t.wallet_status_button_change()}

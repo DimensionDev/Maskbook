@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { PluginID } from '@masknet/shared-base'
-import { ApplicationBoardDialog } from '@masknet/shared'
+import { ApplicationBoardModal } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
@@ -17,7 +17,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
 
     return useCallback(
         () =>
-            ApplicationBoardDialog.open({
+            ApplicationBoardModal.open({
                 allPersonas,
                 lastRecognized,
                 openDashboard: Services.Helper.openDashboard,

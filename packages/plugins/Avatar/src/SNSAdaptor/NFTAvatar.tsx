@@ -3,7 +3,7 @@ import {
     ElementAnchor,
     ReloadStatus,
     ReversedAddress,
-    SelectProviderDialog,
+    SelectProviderModal,
     isSameNFT,
     useAddCollectibles,
 } from '@masknet/shared'
@@ -174,7 +174,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         {!hideWallet ? (
                             <Button
                                 variant="text"
-                                onClick={() => SelectProviderDialog.open()}
+                                onClick={() => SelectProviderModal.open()}
                                 size="small"
                                 className={classes.changeButton}>
                                 {t.nft_wallet_change()}

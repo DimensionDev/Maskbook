@@ -3,16 +3,16 @@ import type { DashboardRoutes, SingletonModalRefCreator } from '@masknet/shared-
 import { LeavePageConfirm, type OpenPageConfirm } from './LeavePageConfirm.js'
 import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export interface LeavePageConfirmDialogOpenProps {
+export interface LeavePageConfirmModalOpenProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
     info?: OpenPageConfirm
 }
 
-export interface LeavePageConfirmDialogProps {}
+export interface LeavePageConfirmModalProps {}
 
 export const LeavePageConfirmModal = forwardRef<
-    SingletonModalRefCreator<LeavePageConfirmDialogOpenProps>,
-    LeavePageConfirmDialogProps
+    SingletonModalRefCreator<LeavePageConfirmModalOpenProps>,
+    LeavePageConfirmModalProps
 >((props, ref) => {
     const [openDashboard, setOpenDashboard] =
         useState<(route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>>()

@@ -1,11 +1,11 @@
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { forwardRef, useState } from 'react'
-import { useSingletonModal } from '../../index.js'
-import { GasOptionType } from '@masknet/web3-shared-base'
-import { GasSetting } from './GasSettingModal.js'
 import { type BigNumber } from 'bignumber.js'
+import { GasOptionType } from '@masknet/web3-shared-base'
+import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { GasSetting } from './GasSettingModal.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export type GasSettingDialogOpenOrCloseProps = {
+export type GasSettingModalOpenOrCloseProps = {
     gasOption?: GasOptionType
     gasLimit?: number
     minGasLimit?: number
@@ -14,13 +14,13 @@ export type GasSettingDialogOpenOrCloseProps = {
     priorityFee?: BigNumber.Value
 } | void
 
-export interface GasSettingDialogProps {}
+export interface GasSettingModalProps {}
 
 export const GasSettingModal = forwardRef<
-    SingletonModalRefCreator<GasSettingDialogOpenOrCloseProps, GasSettingDialogOpenOrCloseProps>,
-    GasSettingDialogProps
+    SingletonModalRefCreator<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>,
+    GasSettingModalProps
 >((props, ref) => {
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
+    const [gasOptionType, setGasOptionType] = useState(GasOptionType.NORMAL)
     const [gasLimit, setGasLimit] = useState(0)
     const [minGasLimit, setMinGasLimit] = useState(0)
     const [gasPrice, setGasPrice] = useState<BigNumber.Value>(0)

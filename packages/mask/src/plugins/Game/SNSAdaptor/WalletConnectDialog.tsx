@@ -9,8 +9,8 @@ import {
     InjectedDialog,
     PluginWalletStatusBar,
     ChainBoundary,
-    WalletStatusDialog,
-    ApplicationBoardDialog,
+    WalletStatusModal,
+    ApplicationBoardModal,
 } from '@masknet/shared'
 import { PluginGameMessages } from '../messages.js'
 import GameList from './GameList.js'
@@ -73,8 +73,8 @@ function WalletConnectDialog() {
             showSnackbar(t.game_list_play_error(), { variant: 'error' })
             return
         }
-        ApplicationBoardDialog.close()
-        WalletStatusDialog.close()
+        ApplicationBoardModal.close()
+        WalletStatusModal.close()
         setGameInfo(gameInfo)
         setGameShow(true)
     }

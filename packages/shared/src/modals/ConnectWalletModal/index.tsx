@@ -1,3 +1,4 @@
+import { forwardRef, useState } from 'react'
 import type {
     EnhanceableSite,
     ExtensionSite,
@@ -5,12 +6,11 @@ import type {
     SingletonModalRefCreator,
     ValueRefWithReady,
 } from '@masknet/shared-base'
-import { forwardRef, useState } from 'react'
-import { useSingletonModal } from '../../index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ConnectWallet } from './ConnectWallet.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export interface ConnectWalletDialogOpenProps {
+export interface ConnectWalletModalOpenProps {
     pluginIDSettings?: ValueRefWithReady<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
     pluginID?: NetworkPluginID
     networkType?: Web3Helper.NetworkTypeAll
@@ -18,16 +18,16 @@ export interface ConnectWalletDialogOpenProps {
     walletConnectedCallback?: () => void
 }
 
-export interface ConnectWalletDialogProps {}
+export interface ConnectWalletModalProps {}
 
 export const ConnectWalletModal = forwardRef<
-    SingletonModalRefCreator<ConnectWalletDialogOpenProps>,
-    ConnectWalletDialogProps
+    SingletonModalRefCreator<ConnectWalletModalOpenProps>,
+    ConnectWalletModalProps
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
-    const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
+    const [walletConnectedCallback, setWalletConnectedCallback] = useState<() => void>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {

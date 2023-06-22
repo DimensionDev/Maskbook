@@ -2,7 +2,7 @@ import { Children, createElement } from 'react'
 import { type SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
 import { Flags } from '@masknet/flags'
 import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
-import { ApplicationBoardDialog } from '@masknet/shared'
+import { ApplicationBoardModal } from '@masknet/shared'
 import type { PluginID } from '@masknet/shared-base'
 import { hmr } from '../../utils-pure/index.js'
 import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api.js'
@@ -34,7 +34,7 @@ if (Flags.sandboxedPluginRuntime) {
             // TODO: implement this
             dropCompositionMetadata(plugin, id) {},
             closeApplicationBoardDialog() {
-                ApplicationBoardDialog.close()
+                ApplicationBoardModal.close()
             },
         },
         process.env.NODE_ENV === 'development',

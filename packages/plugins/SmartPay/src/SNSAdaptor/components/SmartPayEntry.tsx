@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect } from 'react'
 import { Trans } from 'react-i18next'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
-import { ApplicationEntry, LeavePageConfirmDialog, useSharedI18N } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmModal, useSharedI18N } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
@@ -43,7 +43,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
         // If there is no persona and no signer
         if (!personas.length && !value.signPersona && !value.signWallet) {
-            LeavePageConfirmDialog.open({
+            LeavePageConfirmModal.open({
                 info: {
                     target: 'dashboard',
                     url: DashboardRoutes.Setup,

@@ -13,7 +13,7 @@ import {
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { LeavePageConfirmDialog } from '../modals/index.js'
+import { LeavePageConfirmModal } from '../modals/index.js'
 import { useSharedI18N } from '../locales/index.js'
 import type { PersonaConnectStatus } from '../types.js'
 
@@ -43,7 +43,7 @@ export function useCurrentPersonaConnectStatus(
         if (direct) {
             openDashboard?.(DashboardRoutes.Setup)
         } else {
-            LeavePageConfirmDialog.open({
+            LeavePageConfirmModal.open({
                 openDashboard,
                 info: {
                     target: 'dashboard',

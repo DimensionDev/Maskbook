@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
 import { Paper, Stack, Box } from '@mui/material'
 import { ActionCard } from '../../components/ActionCard/index.js'
-import { SelectProviderDialog } from '@masknet/shared'
+import { SelectProviderModal } from '@masknet/shared'
 
 const Container = styled('div')`
     display: flex;
@@ -28,7 +28,7 @@ export function StartUp() {
                             action={{
                                 type: 'primary',
                                 text: t.wallets_startup_connect_action(),
-                                handler: SelectProviderDialog.open,
+                                handler: SelectProviderModal.open,
                             }}
                         />
                     </Box>
