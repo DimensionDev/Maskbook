@@ -14,6 +14,7 @@ import {
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
+import { parseChainId } from '../helpers/parseChainId.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
@@ -68,10 +69,8 @@ export class PayloadEditor {
     }
 
     get chainId(): ChainId | undefined {
-        const chainId_ = this.config?.chainId
-        if (typeof chainId_ === 'string') return Number.parseInt(chainId_, 16) || this.options?.chainId
-        if (typeof chainId_ === 'number' && isValidChainId(chainId_)) return chainId_
-        return this.options?.chainId
+        const chainId_ = this.config?.chainId ? parseChainId(this.config.chainId) : undefined
+        return chainId_ ?? this.options?.chainId
     }
 
     private getRawConfig() {
