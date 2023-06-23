@@ -1,7 +1,6 @@
 import { memoize } from 'lodash-es'
 import { isAddress, toChecksumAddress } from 'web3-utils'
 import { getEnumAsArray } from '@masknet/kit'
-import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getArbConstants,
@@ -13,7 +12,7 @@ import {
     getTokenConstant,
     ZERO_ADDRESS,
 } from '../constants/index.js'
-import { ChainId, NetworkType, ProviderType } from '../types/index.js'
+import { ChainId } from '../types/index.js'
 
 export function checksumAddress(address: string) {
     return toChecksumAddress(address)
@@ -30,10 +29,6 @@ export function isZeroString(str?: string): str is undefined {
 export function isValidAddress(address?: string): address is string {
     if (!address) return false
     return isAddress(address)
-}
-
-export function isValidChainId(chainId?: ChainId): chainId is ChainId {
-    return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
 export function isZeroAddress(address?: string): address is string {
@@ -71,26 +66,6 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
                 isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
             )
     }
-}
-
-export function getNetworkPluginID() {
-    return NetworkPluginID.PLUGIN_EVM
-}
-
-export function getDefaultChainId() {
-    return ChainId.Mainnet
-}
-
-export function getInvalidChainId() {
-    return ChainId.Invalid
-}
-
-export function getDefaultNetworkType() {
-    return NetworkType.Ethereum
-}
-
-export function getDefaultProviderType() {
-    return Sniffings.is_popup_page ? ProviderType.MaskWallet : ProviderType.None
 }
 
 export function getZeroAddress() {
