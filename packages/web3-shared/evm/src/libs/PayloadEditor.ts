@@ -11,7 +11,7 @@ import {
     type UserOperation,
     EthereumMethodType,
 } from '../types/index.js'
-import { isValidChainId } from '../helpers/address.js'
+import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
