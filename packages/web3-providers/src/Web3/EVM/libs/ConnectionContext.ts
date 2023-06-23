@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit, omitBy, isUndefined } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
@@ -9,6 +9,7 @@ import {
     ProviderType,
     createJsonRpcPayload,
     createJsonRpcResponse,
+    parseChainId,
     type Transaction,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionOptions } from '../types/index.js'
@@ -83,19 +84,15 @@ export class ConnectionContext {
     }
 
     get config() {
-        const chainId_ =
-            typeof this._options?.overrides?.chainId === 'string'
-                ? Number.parseInt(this._options?.overrides?.chainId, 16)
-                : this.payloadEditor.config?.chainId
-
-        const chainId = typeof chainId_ === 'string' ? Number.parseInt(chainId_, 16) : chainId_
-
-        return {
-            ...this.payloadEditor.config,
-            ...this._options?.overrides,
-            from: this._options?.overrides?.from || this.payloadEditor.config?.from,
-            chainId,
-        }
+        return omitBy<Transaction>(
+            {
+                ...this.payloadEditor.config,
+                ...this._options?.overrides,
+                from: this._options?.overrides?.from || this.payloadEditor.config?.from,
+                chainId: parseChainId(this._options?.overrides?.chainId) ?? this.payloadEditor.config.chainId,
+            },
+            isUndefined,
+        )
     }
 
     set config(config: Transaction | undefined) {
