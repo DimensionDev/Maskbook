@@ -1,26 +1,19 @@
-import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
-import { forwardRef, useState } from 'react'
-import { useSingletonModal } from '../../index.js'
-import { Transaction } from './Transaction.js'
+import { forwardRef } from 'react'
+import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import { TransactionSnackbar } from './TransactionSnackbar.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export interface TransactionSnackbarOpenProps {
-    pluginID?: NetworkPluginID
+export type TransactionSnackbarOpenProps = void
+
+export interface TransactionSnackbarProps {
+    pluginID: NetworkPluginID
 }
 
-export interface TransactionSnackbarProps {}
-
-export const TransactionModal = forwardRef<
-    SingletonModalRefCreator<TransactionSnackbarOpenProps>,
+export const TransactionSnackbarModal = forwardRef<
+    SingletonModalRefCreator,
     TransactionSnackbarProps
 >((props, ref) => {
-    const [pluginID, setPluginID] = useState<NetworkPluginID | undefined>()
+    useSingletonModal(ref)
 
-    const [open, _] = useSingletonModal(ref, {
-        onOpen(props) {
-            setPluginID(props.pluginID)
-        },
-    })
-
-    if (!open) return null
-    return <Transaction pluginID={pluginID ?? NetworkPluginID.PLUGIN_EVM} />
+    return <TransactionSnackbar pluginID={props.pluginID} />
 })

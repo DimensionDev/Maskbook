@@ -1041,9 +1041,9 @@ export const Connect = /*#__PURE__*/ __createIcon('Connect', [
         u: () => new URL('./general/Connect.svg', import.meta.url),
     },
 ])
-export const Contracts = /*#__PURE__*/ __createIcon('Contracts', [
+export const Contacts = /*#__PURE__*/ __createIcon('Contacts', [
     {
-        u: () => new URL('./general/Contracts.svg', import.meta.url),
+        u: () => new URL('./general/Contacts.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',

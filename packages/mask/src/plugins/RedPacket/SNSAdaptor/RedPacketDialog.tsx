@@ -9,7 +9,7 @@ import {
     useGasPrice,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
-import { ApplicationBoardDialog, InjectedDialog, NetworkTab } from '@masknet/shared'
+import { ApplicationBoardModal, InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -131,7 +131,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
             senderName && (payload.sender.name = senderName)
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
-            ApplicationBoardDialog.close()
+            ApplicationBoardModal.close()
             onClose()
         },
         [chainId, senderName],

@@ -26,7 +26,7 @@ import {
     useRecentTransactions,
     useMountReport,
 } from '@masknet/web3-hooks-base'
-import { WalletIcon, SelectProviderDialog, WalletStatusDialog } from '@masknet/shared'
+import { WalletIcon, SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { EventID } from '@masknet/web3-telemetry/types'
@@ -197,7 +197,7 @@ function useToolbox() {
     }
 
     const openWallet = useCallback(() => {
-        return account ? WalletStatusDialog.open() : SelectProviderDialog.open()
+        return account ? WalletStatusModal.open() : SelectProviderModal.open()
     }, [account])
 
     const walletTitle = renderButtonText()

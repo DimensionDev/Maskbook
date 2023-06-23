@@ -1,9 +1,10 @@
-import { memo, type PropsWithChildren } from 'react'
+import { memo, useState, type PropsWithChildren } from 'react'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
 import { useDashboardI18N } from '../../locales/i18n_generated.js'
+import { LoadingBase } from '@masknet/theme'
 
 interface SetupFrameProps extends PropsWithChildren {
     hiddenSpline?: boolean
@@ -12,9 +13,11 @@ interface SetupFrameProps extends PropsWithChildren {
 export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => {
     const theme = useTheme()
     const t = useDashboardI18N()
+    const [loading, setLoading] = useState(true)
+
     return (
         <Grid container sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
-            <Grid item xs={8} paddingY={16} paddingLeft="20%" paddingRight={8}>
+            <Grid item xs={8} paddingY={16} paddingLeft="20%" paddingRight={8} minHeight="896px">
                 <header>
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
@@ -36,8 +39,13 @@ export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => 
                                 {t.persona_setup_identity_tips()}
                             </Typography>
                         </Box>
-                        <Spline scene={Welcome.toString()} />
+                        <Spline scene={Welcome.toString()} onLoad={() => setLoading(false)} />
                     </>
+                ) : null}
+                {loading ? (
+                    <Box position="absolute" top="calc(50% - 18px)" left="calc(50% - 18px)">
+                        <LoadingBase size={36} />
+                    </Box>
                 ) : null}
             </Grid>
         </Grid>

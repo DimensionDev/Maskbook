@@ -20,7 +20,7 @@ import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
-import { SelectProviderDialog } from '../../../index.js'
+import { SelectProviderModal } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -150,7 +150,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     <ActionButton
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
-                        onClick={() => SelectProviderDialog.open()}
+                        onClick={() => SelectProviderModal.open()}
                         {...props.ActionButtonPromiseProps}>
                         {t.plugin_wallet_wrong_network()}
                     </ActionButton>
@@ -167,7 +167,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                         className={classes.connectWallet}
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
-                        onClick={() => SelectProviderDialog.open()}
+                        onClick={() => SelectProviderModal.open()}
                         {...props.ActionButtonPromiseProps}>
                         {t.plugin_wallet_connect_a_wallet()}
                     </ActionButton>
@@ -189,7 +189,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     />
                 }
                 sx={props.ActionButtonPromiseProps?.sx}
-                onClick={() => SelectProviderDialog.open()}
+                onClick={() => SelectProviderModal.open()}
                 {...props.ActionButtonPromiseProps}>
                 {t.plugin_wallet_change_wallet()}
             </ActionButton>,

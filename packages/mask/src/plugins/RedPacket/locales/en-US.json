@@ -51,6 +51,8 @@
     "erc20_tab_title": "Tokens",
     "claimed": "Claimed {{- amount}}",
     "details": "Confirm the Lucky Drop",
+    "confirm": "Confirm",
+    "confirming": "Confirming",
     "enter_each_amount": "Enter Amount Each",
     "enter_total_amount": "Enter Total",
     "enter_shares": "Enter shares",

@@ -26,10 +26,11 @@ const useStyle = makeStyles()((theme) => ({
         },
     },
     container: {
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.palette.maskColor.bottom,
         width: '100%',
         position: 'fixed',
         bottom: 0,
+        backdropFilter: 'blur(8px)',
     },
 }))
 
@@ -70,7 +71,7 @@ export const Navigator = memo(() => {
                 <BottomNavLink to={PopupRoutes.Contracts}>
                     <BottomNavigationAction
                         showLabel={false}
-                        icon={<Icons.Contracts size={24} />}
+                        icon={<Icons.Contacts size={24} />}
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>

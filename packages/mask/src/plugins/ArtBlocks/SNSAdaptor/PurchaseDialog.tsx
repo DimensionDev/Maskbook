@@ -6,7 +6,7 @@ import {
     useOpenShareTxDialog,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
-    ConfirmDialog,
+    ConfirmModal,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
@@ -100,7 +100,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             })
             onClose()
         } catch (err: any) {
-            ConfirmDialog.open({
+            ConfirmModal.open({
                 title: 'Error',
                 content: err.message,
             })

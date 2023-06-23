@@ -13,7 +13,7 @@ import {
     type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { ApplicationBoardDialog, LeavePageConfirmDialog } from '@masknet/shared'
+import { ApplicationBoardModal, LeavePageConfirmModal } from '@masknet/shared'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import Services from '../../../extension/service.js'
 import { useI18N } from '../../../utils/index.js'
@@ -96,7 +96,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         if (personas.length || loading || error) return
 
         onClose?.()
-        LeavePageConfirmDialog.open({
+        LeavePageConfirmModal.open({
             openDashboard: Services.Helper.openDashboard,
             info: {
                 target: 'dashboard',
@@ -138,7 +138,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             }
             if (!isVerified && enableVerify) {
                 onClose?.()
-                ApplicationBoardDialog.close()
+                ApplicationBoardModal.close()
                 if (finishTarget) {
                     CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                         open: false,

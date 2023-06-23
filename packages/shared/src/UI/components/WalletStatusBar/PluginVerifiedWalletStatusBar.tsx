@@ -26,7 +26,7 @@ import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { SelectProviderDialog, WalletStatusDialog, useMenuConfig } from '../../../index.js'
+import { SelectProviderModal, WalletStatusModal, useMenuConfig } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -164,7 +164,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                     <WalletMenuItem
                         address={account}
                         verified={isVerifiedAccount}
-                        onChangeWallet={() => SelectProviderDialog.open()}
+                        onChangeWallet={() => SelectProviderModal.open()}
                         selected={isSameAddress(descriptionProps.address, account)}
                         onSelect={onSelect}
                         expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
@@ -174,7 +174,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         <Button
                             variant="roundedContained"
                             fullWidth
-                            onClick={() => SelectProviderDialog.open()}
+                            onClick={() => SelectProviderModal.open()}
                             sx={{ minWidth: 311 }}>
                             {t.connect_your_wallet()}
                         </Button>
@@ -212,7 +212,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         if (!account && verifiedWallets.length === 0) {
             return (
                 <Box className={cx(classes.root, className)}>
-                    <Button fullWidth onClick={() => SelectProviderDialog.open()}>
+                    <Button fullWidth onClick={() => SelectProviderModal.open()}>
                         <Icons.ConnectWallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
                     </Button>
                 </Box>
@@ -226,9 +226,9 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         {...omit(descriptionProps, 'address')}
                         onClick={openMenu}
                         pending={!!pendingTransactions.length}
-                        onPendingClick={() => WalletStatusDialog.open()}
+                        onPendingClick={() => WalletStatusModal.open()}
                     />
-                    <Action openSelectWalletDialog={() => SelectProviderDialog.open()}>{children}</Action>
+                    <Action openSelectWalletDialog={() => SelectProviderModal.open()}>{children}</Action>
                 </Box>
                 {menu}
             </>

@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 568,
         fontWeight: 300,
         borderRadius: 8,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.maskColor.bg,
         color: theme.palette.text.primary,
         padding: 12,
         marginTop: 0,
@@ -123,7 +123,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // #endregion
     const createRedpacket = useCallback(async () => {
         const result = await createCallback()
-
         const { hash, receipt, events } = result ?? {}
         if (typeof hash !== 'string') return
         if (typeof receipt?.transactionHash !== 'string') return
@@ -219,7 +218,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
-                        {t.shares()}
+                        {t.share()}
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -318,12 +317,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         fullWidth
                         onClick={createRedpacket}
                         disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
-                        {!isBalanceInsufficient
-                            ? t.token_send_symbol({
-                                  amount: formatTotal,
-                                  symbol: settings?.token?.symbol ?? '-',
-                              })
-                            : t.insufficient_balance()}
+                        {isCreating ? t.confirming() : t.confirm()}
                     </ActionButton>
                 </ChainBoundary>
             </PluginWalletStatusBar>

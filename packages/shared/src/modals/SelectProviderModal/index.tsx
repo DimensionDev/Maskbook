@@ -4,21 +4,21 @@ import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-
 import { SelectProvider } from './SelectProvider.js'
 import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export type SelectProviderDialogOpenProps = {
+export type SelectProviderModalOpenProps = {
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     walletConnectedCallback?: () => void
 } | void
 
-export interface SelectProviderDialogProps {}
+export interface SelectProviderModalProps {}
 
 export const SelectProviderModal = forwardRef<
-    SingletonModalRefCreator<SelectProviderDialogOpenProps>,
-    SelectProviderDialogProps
+    SingletonModalRefCreator<SelectProviderModalOpenProps>,
+    SelectProviderModalProps
 >((props, ref) => {
-    const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID | undefined>()
-    const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[] | undefined>()
-    const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
+    const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID>()
+    const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[]>()
+    const [walletConnectedCallback, setWalletConnectedCallback] = useState<() => void>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -35,10 +35,10 @@ export const SelectProviderModal = forwardRef<
     if (!open) return null
     return (
         <SelectProvider
+            open
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}
             walletConnectedCallback={walletConnectedCallback}
-            open
             onClose={() => dispatch?.close()}
         />
     )

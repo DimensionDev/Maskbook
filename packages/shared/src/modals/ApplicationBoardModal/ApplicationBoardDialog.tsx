@@ -4,7 +4,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
     InjectedDialog,
-    LeavePageConfirmDialog,
+    LeavePageConfirmModal,
     useSharedI18N,
     type PersonaAgainstSNSConnectStatus,
 } from '@masknet/shared'
@@ -121,7 +121,7 @@ export function ApplicationBoard({
                     ) : null
                 }
                 titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
-                independent={LeavePageConfirmDialog.opened}
+                independent={LeavePageConfirmModal.opened}
                 title={openSettings ? t.application_settings() : t.applications()}
                 titleTail={
                     openSettings ? null : (

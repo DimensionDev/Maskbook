@@ -2,10 +2,10 @@ import { forwardRef, useState } from 'react'
 import type { DashboardRoutes, PersonaInformation, PluginID, SingletonModalRefCreator } from '@masknet/shared-base'
 import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
-import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 import type { PersonaAgainstSNSConnectStatus } from '../../types.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
-export type ApplicationBoardDialogOpenProps = {
+export type ApplicationBoardModalOpenProps = {
     openDashboard: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSNSNetwork: CurrentSNSNetwork
@@ -22,11 +22,11 @@ export type ApplicationBoardDialogOpenProps = {
     focusPluginID?: PluginID
 }
 
-export interface ApplicationBoardDialogProps {}
+export interface ApplicationBoardModalProps {}
 
 export const ApplicationBoardModal = forwardRef<
-    SingletonModalRefCreator<ApplicationBoardDialogOpenProps>,
-    ApplicationBoardDialogProps
+    SingletonModalRefCreator<ApplicationBoardModalOpenProps>,
+    ApplicationBoardModalProps
 >((props, ref) => {
     const [openDashboard, setOpenDashboard] =
         useState<(route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>>()
@@ -35,9 +35,7 @@ export const ApplicationBoardModal = forwardRef<
     const [currentSNSNetwork, setCurrentSNSNetwork] = useState<CurrentSNSNetwork>()
     const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
     const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
-    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<
-        PersonaAgainstSNSConnectStatus | undefined
-    >()
+    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaAgainstSNSConnectStatus>()
     const [personaAgainstSNSConnectStatusLoading, setPersonaAgainstSNSConnectStatusLoading] = useState(false)
     const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
         useState<(id: string, checked: boolean) => Promise<void>>()

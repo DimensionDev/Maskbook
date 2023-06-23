@@ -15,7 +15,7 @@ export const WalletRiskWarningModal = forwardRef<
     WalletRiskWarningModalProps
 >((props, ref) => {
     const [account, setAccount] = useState('')
-    const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+    const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {

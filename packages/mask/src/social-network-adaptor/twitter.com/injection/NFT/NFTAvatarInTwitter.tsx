@@ -16,7 +16,7 @@ import {
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
-import { AssetPreviewer, ConfirmDialog } from '@masknet/shared'
+import { AssetPreviewer, ConfirmModal } from '@masknet/shared'
 import { MaskMessages, NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
 import { Twitter, Hub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
@@ -190,7 +190,7 @@ function useNFTCircleAvatar(size: number) {
             chainId: ChainId.Mainnet,
         })
 
-        ConfirmDialog.open({
+        ConfirmModal.open({
             title: t('plugin_avatar_setup_share_title'),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center">

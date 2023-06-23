@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { ConnectWalletDialog, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
@@ -56,7 +56,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
 
             await delay(500)
 
-            ConnectWalletDialog.open({
+            ConnectWalletModal.open({
                 networkType: network.type,
                 providerType: provider.type,
                 walletConnectedCallback,

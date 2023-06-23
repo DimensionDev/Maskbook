@@ -1,42 +1,32 @@
 import { memo } from 'react'
-import { NetworkPluginID, SingletonModal } from '@masknet/shared-base'
-import { SelectProviderModal, type SelectProviderDialogOpenProps } from './SelectProviderDialog/index.js'
-import { WalletConnectQRCodeModal, type WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeDialog/index.js'
-import { WalletRiskWarningModal, type WalletRiskWarningModalOpenProps } from './WalletRiskWarningDialog/index.js'
-import { ConnectWalletModal, type ConnectWalletDialogOpenProps } from './ConnectWalletDialog/index.js'
-import { WalletStatusModal } from './WalletStatusDialog/index.js'
-import { LeavePageConfirmModal, type LeavePageConfirmDialogOpenProps } from './LeavePageConfirmDialog/index.js'
-import { type ApplicationBoardDialogOpenProps, ApplicationBoardModal } from './ApplicationBoardDialog/index.js'
-import { TransactionModal, type TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
-import { GasSettingModal, type GasSettingDialogOpenOrCloseProps } from './GasSettingDialog/index.js'
-import { type ConfirmDialogOpenProps, ConfirmModal } from './Confirm/index.js'
-import { getEnumAsArray } from '@masknet/kit'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { WalletStatusModal } from './WalletStatusModal/index.js'
+import { SelectProviderModal } from './SelectProviderModal/index.js'
+import { WalletConnectQRCodeModal } from './WalletConnectQRCodeModal/index.js'
+import { WalletRiskWarningModal } from './WalletRiskWarningModal/index.js'
+import { ConnectWalletModal } from './ConnectWalletModal/index.js'
+import { LeavePageConfirmModal } from './LeavePageConfirmModal/index.js'
+import { ApplicationBoardModal } from './ApplicationBoardModal/index.js'
+import { GasSettingModal } from './GasSettingModal/index.js'
+import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
+import { ConfirmModal } from './Confirm/index.js'
 
-export const WalletConnectQRCodeDialog = new SingletonModal<WalletConnectQRCodeOpenProps>()
-export const SelectProviderDialog = new SingletonModal<SelectProviderDialogOpenProps>()
-export const WalletStatusDialog = new SingletonModal()
-export const WalletRiskWarningDialog = new SingletonModal<WalletRiskWarningModalOpenProps>()
-export const ConnectWalletDialog = new SingletonModal<ConnectWalletDialogOpenProps>()
-export const LeavePageConfirmDialog = new SingletonModal<LeavePageConfirmDialogOpenProps>()
-export const ApplicationBoardDialog = new SingletonModal<ApplicationBoardDialogOpenProps>()
-export const TransactionSnackbar = new SingletonModal<TransactionSnackbarOpenProps>()
-export const GasSettingDialog = new SingletonModal<GasSettingDialogOpenOrCloseProps, GasSettingDialogOpenOrCloseProps>()
-export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps>()
+import * as modals from './modals.js'
+export * from './modals.js'
 
 export const Modals = memo(function Modals() {
     return (
         <>
-            <ConnectWalletModal ref={ConnectWalletDialog.register} />
-            <WalletConnectQRCodeModal ref={WalletConnectQRCodeDialog.register} />
-            <SelectProviderModal ref={SelectProviderDialog.register} />
-            <WalletStatusModal ref={WalletStatusDialog.register} />
-            <WalletRiskWarningModal ref={WalletRiskWarningDialog.register} />
-            <LeavePageConfirmModal ref={LeavePageConfirmDialog.register} />
-            <ApplicationBoardModal ref={ApplicationBoardDialog.register} />
-            <TransactionModal ref={TransactionSnackbar.register} />
-            <GasSettingModal ref={GasSettingDialog.register} />
-            <ConfirmModal ref={ConfirmDialog.register} />
-            {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => TransactionSnackbar.open({ pluginID }))}
+            <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
+            <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
+            <SelectProviderModal ref={modals.SelectProviderModal.register} />
+            <WalletStatusModal ref={modals.WalletStatusModal.register} />
+            <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
+            <LeavePageConfirmModal ref={modals.LeavePageConfirmModal.register} />
+            <ApplicationBoardModal ref={modals.ApplicationBoardModal.register} />
+            <GasSettingModal ref={modals.GasSettingModal.register} />
+            <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={modals.TransactionSnackbar.register} />
+            <ConfirmModal ref={modals.ConfirmModal.register} />
         </>
     )
 })

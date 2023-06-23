@@ -8,7 +8,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import {
     useCurrentPersonaConnectStatus,
-    SelectProviderDialog,
+    SelectProviderModal,
     useSharedI18N,
     PersonaContext,
     type PersonaAgainstSNSConnectStatus,
@@ -231,12 +231,11 @@ function RenderEntryComponent({ application }: { application: Application }) {
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
             return (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) =>
-                SelectProviderDialog.open({ walletConnectedCallback, requiredSupportPluginID })
+                SelectProviderModal.open({ walletConnectedCallback, requiredSupportPluginID })
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
-        if (ApplicationEntryStatus.shouldVerifyNextId)
-            return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
+        if (ApplicationEntryStatus.isPersonaCreated === false) return () => ApplicationEntryStatus.personaAction?.()
+        if (ApplicationEntryStatus.shouldVerifyNextId) return () => ApplicationEntryStatus.personaAction?.()
         return
     }, [ApplicationEntryStatus, application])
 

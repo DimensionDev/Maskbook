@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
-import { WalletStatus } from './WalletStatus.js'
+import { WalletStatusDialog } from './WalletStatusDialog.js'
 import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
 export type WalletStatusModalOpenProps = void
@@ -17,5 +17,5 @@ export const WalletStatusModal = forwardRef<SingletonModalRefCreator, WalletStat
     })
 
     if (!open) return null
-    return <WalletStatus open setHidden={setHidden} onClose={() => dispatch?.close()} isHidden={isHidden} />
+    return <WalletStatusDialog open setHidden={setHidden} onClose={() => dispatch?.close()} isHidden={isHidden} />
 })

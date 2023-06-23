@@ -10,7 +10,7 @@ import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { openComposition } from './openComposition.js'
-import { ApplicationBoardDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { ApplicationBoardModal, PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -48,7 +48,7 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
                 privateKey: password,
                 chainId,
             })
-            ApplicationBoardDialog.close()
+            ApplicationBoardModal.close()
             onClose?.()
         },
         [senderName],

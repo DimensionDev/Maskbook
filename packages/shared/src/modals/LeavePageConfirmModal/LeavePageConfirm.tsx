@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
+import { first } from 'lodash-es'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { first } from 'lodash-es'
 
 type PositionStyle = {
     top?: number

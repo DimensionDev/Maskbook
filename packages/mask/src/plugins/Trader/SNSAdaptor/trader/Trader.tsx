@@ -4,12 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import {
-    ImageIcon,
-    useSelectFungibleToken,
-    SelectProviderDialog,
-    ConfirmDialog as SharedConfirmDialog,
-} from '@masknet/shared'
+import { ImageIcon, useSelectFungibleToken, ConfirmModal } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -190,7 +185,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
             if (!account) {
-                SelectProviderDialog.open()
+                ConfirmModal.open({ content: '' })
                 return
             }
             const picked = await selectFungibleToken({
@@ -251,7 +246,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         if (typeof hash !== 'string') return
 
-        await SharedConfirmDialog.openAndWaitForClose({
+        await ConfirmModal.openAndWaitForClose({
             title: t.swap(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
