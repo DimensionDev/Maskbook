@@ -213,7 +213,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         } else {
             queryClient.invalidateQueries(['savings', 'balance', chainId, protocol.bareToken.address, account])
         }
-        openShareTxDialog({
+        await openShareTxDialog({
             hash,
             onShare() {
                 activatedSocialNetworkUI.utils.share?.(shareText)
