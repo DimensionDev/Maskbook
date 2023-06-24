@@ -35,9 +35,9 @@ export function DecryptUI() {
 }
 
 function useDecrypt(text: string, version = '2') {
-    type Decrpytion = [DecryptError | null, boolean, TypedMessage | null]
-
-    const { value = [null, false, null] } = useAsyncRetry<Decrpytion>(async () => {
+    const { value = [null, false, null] } = useAsyncRetry<
+        [DecryptError | null, boolean, TypedMessage | null]
+    >(async () => {
         const result = await main(version, text)
 
         if (typeof result === 'boolean')
