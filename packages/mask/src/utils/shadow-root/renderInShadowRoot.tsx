@@ -6,8 +6,8 @@ import {
     usePortalShadowRoot,
 } from '@masknet/theme'
 import { Flags } from '@masknet/flags'
-import { MaskUIRootSNS } from '@masknet/shared'
-import { ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
+import { SNSUIProvider } from '@masknet/shared'
+import { ShadowRootAttachPointRoot } from '../../ShadowRootAttachPointRoot.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',
@@ -23,7 +23,7 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper(Flags.shadowRootInit, captureEvents, MaskUIRootSNS)
+    const shadow = setupReactShadowRootEnvironmentUpper(Flags.shadowRootInit, captureEvents, SNSUIProvider)
     // Inject variable for Portals
     attachReactTreeWithContainer(shadow, { key: 'css-vars' }).render(
         <>

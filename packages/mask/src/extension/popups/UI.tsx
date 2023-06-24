@@ -5,7 +5,7 @@ import { Web3ContextProvider, TelemetryProvider, useMountReport } from '@masknet
 import { NetworkPluginID, PopupRoutes, languageSettings, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { MaskUIRootPage } from '@masknet/shared'
+import { PageUIProvider } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
@@ -45,7 +45,7 @@ export default function Popups() {
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
     useMountReport(EventID.AccessPopups)
 
-    return MaskUIRootPage(
+    return PageUIProvider(
         usePopupTheme,
         <PopupSnackbarProvider>
             <Web3ContextProvider value={Web3ContextType}>

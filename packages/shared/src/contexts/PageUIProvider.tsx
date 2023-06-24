@@ -16,7 +16,7 @@ import {
 } from '@masknet/shared-base'
 import { buildInfoMarkdown } from '../utils/BuildInfoMarkdown.js'
 
-export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
+export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,

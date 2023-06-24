@@ -16,7 +16,7 @@ import {
 import { buildInfoMarkdown } from '../utils/BuildInfoMarkdown.js'
 import { I18NextProviderHMR } from '../UI/components/I18NextProviderHMR.jsx'
 
-export function MaskUIRootSNS(children: React.ReactNode) {
+export function SNSUIProvider(children: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,
