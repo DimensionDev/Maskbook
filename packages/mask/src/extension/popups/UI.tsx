@@ -3,12 +3,13 @@ import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { Web3ContextProvider, TelemetryProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, PopupRoutes, languageSettings, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { Appearance } from '@masknet/public-api'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { PageUIProvider } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EventID } from '@masknet/web3-telemetry/types'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
+import { useClassicMaskFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import '../../social-network-adaptor/browser-action/index.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
@@ -17,7 +18,8 @@ import { PageTitleContext } from './context.js'
 import Services from '../service.js'
 
 function usePopupTheme() {
-    return usePopupFullPageTheme(useValueRef(languageSettings))
+    const language = useValueRef(languageSettings)
+    return useClassicMaskFullPageTheme(Appearance.light, language)
 }
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))

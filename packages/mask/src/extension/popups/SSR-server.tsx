@@ -1,23 +1,24 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { Suspense } from 'react'
+import { initReactI18next } from 'react-i18next'
+import { renderToString } from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom/server.js'
 import { i18NextInstance, updateLanguage, PopupRoutes } from '@masknet/shared-base'
 import { once, noop } from 'lodash-es'
+import { Appearance } from '@masknet/public-api'
 import { DisableShadowRootContext, MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
-import { renderToString } from 'react-dom/server'
 import createCache from '@emotion/cache'
 import createEmotionServer from '@emotion/server/create-instance'
-import { initReactI18next } from 'react-i18next'
+import { addShareBaseI18N } from '@masknet/shared-base-ui'
 import { addMaskI18N } from '../../../shared-ui/locales/languages.js'
 import type { PopupSSR_Props } from '../../../background/tasks/Cancellable/PopupSSR/type.js'
-import { StaticRouter } from 'react-router-dom/server.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { PersonaHomeUI } from './pages/Personas/Home/UI.js'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
+import { useClassicMaskFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { PersonaHeaderUI } from './pages/Personas/components/PersonaHeader/UI.js'
 import { NormalHeader } from './components/NormalHeader/index.js'
-import { addShareBaseI18N } from '@masknet/shared-base-ui'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {
@@ -48,7 +49,7 @@ export async function render(props: PopupSSR_Props) {
 
 function PopupSSR(props: PopupSSR_Props) {
     function useTheme() {
-        return usePopupFullPageTheme(props.language)
+        return useClassicMaskFullPageTheme(Appearance.light, props.language)
     }
     return (
         // MaskUIRoot
