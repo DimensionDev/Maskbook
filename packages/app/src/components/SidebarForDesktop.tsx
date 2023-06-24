@@ -81,7 +81,7 @@ export function SidebarForDesktop(props: SidebarForDesktopProps) {
                                     alt=""
                                 />
                                 <span className="sr-only">Your profile</span>
-                                <span aria-hidden="true">Tom Cook</span>
+                                <span aria-hidden="true">Connect Wallet</span>
                             </a>
                         </li>
                     </ul>

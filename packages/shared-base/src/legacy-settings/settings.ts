@@ -9,7 +9,7 @@ import { BooleanPreference } from '../legacy-settings/types.js'
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
 
-export const pluginIDSettings = createGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
+export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
     'PluginIdBySite',
     {
         [EnhanceableSite.Twitter]: NetworkPluginID.PLUGIN_EVM,

@@ -1,12 +1,15 @@
 // @ts-check
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material'
-import { applyMaskColorVars, CustomSnackbarProvider, DashboardDarkTheme } from '@masknet/theme'
+import {
+    applyMaskColorVars,
+    CustomSnackbarProvider,
+    DashboardDarkTheme,
+    DisableShadowRootContext,
+} from '@masknet/theme'
 import { addSharedI18N, I18NextProviderHMR } from '@masknet/shared'
-// import { withMatrix } from 'storybook-addon-matrix'
-import { addDashboardI18N } from '../src/locales/languages'
 import { i18NextInstance } from '@masknet/shared-base'
-import { DisableShadowRootContext } from '@masknet/theme'
+import { addDashboardI18N } from '../src/locales/languages'
 
 addDashboardI18N(i18NextInstance)
 addSharedI18N(i18NextInstance)
