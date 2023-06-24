@@ -9,10 +9,7 @@ export interface TransactionSnackbarProps {
     pluginID: NetworkPluginID
 }
 
-export const TransactionSnackbarModal = forwardRef<
-    SingletonModalRefCreator,
-    TransactionSnackbarProps
->((props, ref) => {
+export const TransactionSnackbarModal = forwardRef<SingletonModalRefCreator, TransactionSnackbarProps>((props, ref) => {
     useSingletonModal(ref)
 
     return <TransactionSnackbar pluginID={props.pluginID} />
