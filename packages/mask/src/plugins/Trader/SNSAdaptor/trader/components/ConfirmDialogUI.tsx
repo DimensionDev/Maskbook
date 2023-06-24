@@ -205,7 +205,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         const { t } = useI18N()
         const { classes, cx } = useStyles()
 
-        const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>()
+        const [cacheTrade, setCacheTrade] = useState<TradeComputed>()
         const [priceUpdated, setPriceUpdated] = useState(false)
         const [priceReversed, setPriceReversed] = useState(false)
 

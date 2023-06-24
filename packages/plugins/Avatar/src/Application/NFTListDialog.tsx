@@ -80,7 +80,7 @@ export function NFTListDialog() {
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId, setAccount } = useChainContext()
-    const [assetChainId, setAssetChainId] = useState<ChainId | undefined>()
+    const [assetChainId, setAssetChainId] = useState<ChainId>()
     const wallets = useWallets(pluginID)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
     const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)

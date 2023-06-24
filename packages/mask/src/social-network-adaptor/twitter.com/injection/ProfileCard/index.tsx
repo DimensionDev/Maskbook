@@ -37,7 +37,7 @@ function ProfileCardHolder() {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
     const [twitterId, setTwitterId] = useState('')
-    const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
+    const [badgeBounding, setBadgeBounding] = useState<DOMRect>()
     const { active, placement } = useControlProfileCard(holderRef)
     const [address, setAddress] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)

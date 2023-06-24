@@ -1,8 +1,7 @@
-import type { ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
-import { InjectedDialog, type InjectedDialogProps } from '../../components/index.js'
+import { useSharedI18N } from '../../locales/index.js'
+import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
 
 const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     dialog: {
@@ -24,22 +23,18 @@ const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     },
 }))
 
-export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
+export interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
+    open: boolean
+    onClose: () => void
+
     title?: string
-    content: ReactNode | string
-    confirmLabel?: string
+    confirmLabel?: React.ReactNode | string
+    content: React.ReactNode | string
     onSubmit?(result: boolean | null): void
     maxWidthOfContent?: number
 }
 
-export function ConfirmDialog({
-    title,
-    confirmLabel,
-    content,
-    onSubmit,
-    maxWidthOfContent,
-    ...rest
-}: ConfirmDialogProps) {
+export function Confirm({ title, confirmLabel, content, onSubmit, maxWidthOfContent, ...rest }: ConfirmProps) {
     const t = useSharedI18N()
     const { classes } = useStyles(maxWidthOfContent)
 
