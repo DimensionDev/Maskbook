@@ -101,7 +101,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             onClose()
         } catch (err: unknown) {
             if (err instanceof Error) {
-                ConfirmModal.open({
+                await ConfirmModal.openAndWaitForClose({
                     title: 'Error',
                     content: err.message,
                 })
