@@ -6,7 +6,8 @@ import {
     usePortalShadowRoot,
 } from '@masknet/theme'
 import { Flags } from '@masknet/flags'
-import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
+import { MaskUIRootSNS } from '@masknet/shared'
+import { ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',

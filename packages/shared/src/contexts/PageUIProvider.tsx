@@ -35,6 +35,7 @@ interface MaskUIRootProps extends React.PropsWithChildren<{}> {
     useTheme(): Theme
     fallback?: React.ReactNode
 }
+
 function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDsSettings)
