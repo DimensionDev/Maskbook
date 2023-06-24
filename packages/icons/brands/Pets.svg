@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <g clip-path="url(#Pets_svg__a)">
+    <g clip-path="url('#Pets_svg__a')">
         <path fill="#25253D" d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12Z"/>
         <path fill="#E95287" d="M11.754 5.277H9.031V8h2.723V5.277Z"/>
         <path fill="#F58D4E" d="M6.271 5.25H5.25v1.02h1.021V5.25Z"/>
