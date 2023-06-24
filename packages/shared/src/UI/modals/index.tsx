@@ -9,7 +9,7 @@ import { LeavePageConfirmModal } from './LeavePageConfirmModal/index.js'
 import { ApplicationBoardModal } from './ApplicationBoardModal/index.js'
 import { GasSettingModal } from './GasSettingModal/index.js'
 import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
-import { ConfirmModal } from './Confirm/index.js'
+import { ConfirmModal } from './ConfirmModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'
