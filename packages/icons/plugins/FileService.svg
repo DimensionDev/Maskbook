@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 36">
     <path fill="#F7931E" d="M5 10a1 1 0 0 1 1-1h9.75a1 1 0 0 1 .8.4l5.25 7A1 1 0 0 1 21 18H6a1 1 0 0 1-1-1v-7Z"/>
-    <g filter="url(#FileService_svg__a)">
+    <g filter="url('#FileService_svg__a')">
         <rect width="22.5" height="15.75" x="7.25" y="11.004" fill="#fff" fill-opacity=".3" rx="1"/>
     </g>
     <path fill="#FFB110" fill-rule="evenodd" d="M6 11.736a1 1 0 0 0-1 1V28.25a1 1 0 0 0 1 1h25a1 1 0 0 0 1-1V14.5a1 1 0 0 0-1-1H17.573l-1.023-1.364a1 1 0 0 0-.8-.4H6Z" clip-rule="evenodd"/>

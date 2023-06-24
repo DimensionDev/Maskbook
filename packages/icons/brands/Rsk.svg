@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <g clip-path="url(#Rsk_svg__a)">
+    <g clip-path="url('#Rsk_svg__a')">
         <circle cx="12" cy="12" r="12" fill="#fff"/>
         <path fill="#008CFF" d="M10.984 9.91V3.386S8.683 4.437 8.683 6.674c0 2.238 2.301 3.237 2.301 3.237Z"/>
         <path fill="#0CBFE8" d="M10.984 3.385s2.302 1.052 2.302 3.289c0 2.238-2.302 3.237-2.302 3.237V3.385Z"/>
