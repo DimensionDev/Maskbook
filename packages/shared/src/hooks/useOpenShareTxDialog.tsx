@@ -6,7 +6,7 @@ import { explorerResolver } from '@masknet/web3-shared-evm'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
 import { useSharedI18N } from '../locales/index.js'
-import { ConfirmModal } from '../modals/index.js'
+import { ConfirmModal } from '../UI/modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

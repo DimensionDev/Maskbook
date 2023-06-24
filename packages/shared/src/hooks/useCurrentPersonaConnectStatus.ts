@@ -13,7 +13,7 @@ import {
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { LeavePageConfirmModal } from '../modals/index.js'
+import { LeavePageConfirmModal } from '../UI/modals/index.js'
 import { useSharedI18N } from '../locales/index.js'
 import type { PersonaConnectStatus } from '../types.js'
 
