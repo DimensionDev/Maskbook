@@ -20,7 +20,7 @@ import {
     NetworkPluginID,
     getSiteType,
     type SocialIdentity,
-    pluginIDSettings,
+    pluginIDsSettings,
 } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -153,7 +153,7 @@ export function TrendingView(props: TrendingViewProps) {
     })
 
     const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDSettings)
+    const pluginIDs = useValueRef(pluginIDsSettings)
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
     // #region merge trending

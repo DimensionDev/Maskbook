@@ -12,7 +12,7 @@ import {
     getSiteType,
     i18NextInstance,
     NetworkPluginID,
-    pluginIDSettings,
+    pluginIDsSettings,
     queryClient,
 } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
@@ -31,7 +31,7 @@ export function MaskUIRootSNS(children: React.ReactNode) {
 
 function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
     const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDSettings)
+    const pluginIDs = useValueRef(pluginIDsSettings)
 
     const context = useMemo(() => {
         return { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }

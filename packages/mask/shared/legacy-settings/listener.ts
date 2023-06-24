@@ -1,5 +1,5 @@
 import {
-    pluginIDSettings,
+    pluginIDsSettings,
     type MaskSettingsEvents,
     type ValueRefWithReady,
     languageSettings,
@@ -15,7 +15,7 @@ export function ToBeListened(): ToBeListedSettings {
     return {
         telemetrySettings,
         appearanceSettings,
-        pluginIDSettings,
+        pluginIDSettings: pluginIDsSettings,
         languageSettings,
         currentPersonaIdentifier,
     }

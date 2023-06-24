@@ -11,7 +11,7 @@ import {
     getSiteType,
     i18NextInstance,
     NetworkPluginID,
-    pluginIDSettings,
+    pluginIDsSettings,
     queryClient,
 } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
@@ -37,7 +37,7 @@ interface MaskUIRootProps extends React.PropsWithChildren<{}> {
 }
 function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
     const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDSettings)
+    const pluginIDs = useValueRef(pluginIDsSettings)
 
     const context = useMemo(() => {
         return { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }

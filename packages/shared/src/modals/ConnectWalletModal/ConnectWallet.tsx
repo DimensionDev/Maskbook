@@ -4,7 +4,7 @@ import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shar
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getSiteType, type NetworkPluginID, pluginIDSettings } from '@masknet/shared-base'
+import { getSiteType, type NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
 import { ConnectionProgress } from './ConnectionProgress.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,8 +58,8 @@ export function ConnectWallet({
         const site = getSiteType()
 
         if (pluginID && site) {
-            pluginIDSettings.value = {
-                ...pluginIDSettings.value,
+            pluginIDsSettings.value = {
+                ...pluginIDsSettings.value,
                 [site]: pluginID,
             }
         }
@@ -69,7 +69,7 @@ export function ConnectWallet({
         walletConnectedCallback?.()
 
         return true
-    }, [open, walletConnectedCallback, Others, Web3, pluginIDSettings])
+    }, [open, walletConnectedCallback, Others, Web3, pluginIDsSettings])
 
     if (!pluginID || !providerType || !networkType) return null
 
