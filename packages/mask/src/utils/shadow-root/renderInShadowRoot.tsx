@@ -1,12 +1,12 @@
+import { createPortal } from 'react-dom'
 import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
     usePortalShadowRoot,
 } from '@masknet/theme'
-import { createPortal } from 'react-dom'
-import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 import { Flags } from '@masknet/flags'
+import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',
