@@ -11,7 +11,7 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
-import { FormattedBalance } from '../../../wallet/index.js'
+import { FormattedBalance } from '../../wallet/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

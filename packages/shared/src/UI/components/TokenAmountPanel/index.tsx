@@ -7,7 +7,7 @@ import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SelectTokenChip, type SelectTokenChipProps } from '../SelectTokenChip/index.js'
 import { useSharedI18N } from '../../../locales/index.js'
-import { FormattedBalance } from '../../../wallet/index.js'
+import { FormattedBalance } from '../../wallet/index.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
