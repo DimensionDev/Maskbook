@@ -1,12 +1,12 @@
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
-import { memo, useCallback } from 'react'
 import { useSharedI18N } from '../locales/index.js'
-import { ConfirmModal } from '../index.js'
+import { ConfirmModal } from '../modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

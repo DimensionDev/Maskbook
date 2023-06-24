@@ -1,6 +1,7 @@
-import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
-import { InjectedDialog, useSharedI18N, type InjectedDialogProps } from '../../index.js'
 import { makeStyles } from '@masknet/theme'
+import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
+import { useSharedI18N } from '../../locales/index.js'
+import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
 
 const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     dialog: {
