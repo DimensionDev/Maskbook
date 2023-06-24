@@ -26,7 +26,7 @@ export function HubContent(props: HubContentProps) {
     const [keyword, setKeyword] = useState('PUNK')
     const [address, setAddress] = useState('0x932261f9fc8da46c4a22e31b45c4de60623848bf')
     const [tokenId, setTokenId] = useState('32342')
-    const [sourceType, setSourceType] = useState<SourceType | undefined>()
+    const [sourceType, setSourceType] = useState<SourceType>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     type HubAll = Required<Hub<NetworkPluginID>>

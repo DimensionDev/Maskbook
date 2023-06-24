@@ -172,7 +172,7 @@ function Content(props: ProfileTabContentProps) {
         error: loadSocialAccounts,
         retry: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
-    const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
+    const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string>()
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {

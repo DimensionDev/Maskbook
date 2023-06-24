@@ -16,7 +16,7 @@ export type ConfirmDialogProps = {}
 
 export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmDialogOpenProps>, ConfirmDialogProps>(
     (props, ref) => {
-        const [props_, setProps_] = useState<ConfirmDialogOpenProps | undefined>()
+        const [props_, setProps_] = useState<ConfirmDialogOpenProps>()
         const [open, dispatch] = useSingletonModal(ref, {
             onOpen(props) {
                 setProps_(props)

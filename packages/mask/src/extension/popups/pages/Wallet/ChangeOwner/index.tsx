@@ -144,7 +144,7 @@ export default function ChangeOwner() {
     const navigate = useNavigate()
     const location = useLocation()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [manageAccount, setManageAccount] = useState<ManagerAccount | undefined>()
+    const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
     const wallet = useWallet()

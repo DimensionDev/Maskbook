@@ -22,7 +22,7 @@ interface InitialState {
 
 function useContext(initialState?: InitialState) {
     const { parentPluginID, pluginID, chainId, tokenId, tokenAddress, ownerAddress, origin } = initialState ?? {}
-    const [sourceType, setSourceType] = useState<SourceType | undefined>()
+    const [sourceType, setSourceType] = useState<SourceType>()
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
         chainId,

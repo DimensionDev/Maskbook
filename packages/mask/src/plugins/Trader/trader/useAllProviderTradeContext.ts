@@ -108,7 +108,7 @@ export function useAllProviderTradeContext() {
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const [tradeStore, dispatchTradeStore] = useReducer(reducer, INITIAL_STATE)
     const [isSwapping, setIsSwapping] = useState(false)
-    const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
+    const [temporarySlippage, setTemporarySlippage] = useState<number>()
     const { inputAmount, inputToken, outputToken } = tradeStore
     const allTradeComputed: Array<AsyncStateRetry<TraderAPI.TradeInfo>> = useAllTradeComputed(
         inputAmount,

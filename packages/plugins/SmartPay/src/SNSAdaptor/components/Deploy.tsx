@@ -130,7 +130,7 @@ export function Deploy({ open }: { open: boolean }) {
     const currentPersona = useCurrentPersonaInformation()
     const [successDialogOpen, toggle] = useBoolean(false)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [manager, setManager] = useState<ManagerAccount | undefined>()
+    const [manager, setManager] = useState<ManagerAccount>()
 
     const { getPersonaAvatar } = useSNSAdaptorContext()
     const { personaManagers, walletManagers } = useManagers()

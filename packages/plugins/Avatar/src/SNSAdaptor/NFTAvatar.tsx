@@ -94,7 +94,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
-    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken>()
     const [customCollectibles, setCustomCollectibles] = useState<AllChainsNonFungibleToken[]>([])
     const t = useI18N()
     const {

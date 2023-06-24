@@ -65,7 +65,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
-    const [focusedTrade, setFocusTrade] = useState<AsyncStateRetry<TraderAPI.TradeInfo> | undefined>()
+    const [focusedTrade, setFocusTrade] = useState<AsyncStateRetry<TraderAPI.TradeInfo>>()
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
