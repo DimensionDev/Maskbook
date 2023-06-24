@@ -318,6 +318,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../theme
       '@masknet/typed-message':
         specifier: workspace:^
         version: link:../typed-message/base
@@ -351,6 +354,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../web3-telemetry
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0

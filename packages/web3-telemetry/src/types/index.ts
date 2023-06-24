@@ -45,6 +45,8 @@ export enum EventID {
     AccessToolbox = 'AccessToolbox',
     // Open the application board dialog
     AccessApplicationBoard = 'AccessApplicationBoard',
+    // Open the SAP
+    AccessSPA = 'AccessSPA',
     // Open the dashboard page
     AccessDashboard = 'AccessDashboard',
     // Open the popups page

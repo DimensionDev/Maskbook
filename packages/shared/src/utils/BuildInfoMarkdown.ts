@@ -1,4 +1,7 @@
-export const buildInfoMarkdown = `## Build info
+export const buildInfoMarkdown =
+    typeof process === 'undefined'
+        ? ''
+        : `## Build info
 - Version: ${process.env.VERSION}
 - NODE_ENV: ${process.env.NODE_ENV}
 - userAgent: ${navigator.userAgent}

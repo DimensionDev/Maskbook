@@ -34,6 +34,8 @@
         "@masknet/plugin-wallet": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",
+        "@masknet/theme": "workspace:^",
+        "@masknet/web3-telemetry": "workspace:^",
         "@masknet/typed-message": "workspace:^",
         "@masknet/typed-message-react": "workspace:^",
         "@masknet/web3-constants": "workspace:^",
