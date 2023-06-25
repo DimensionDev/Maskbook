@@ -409,9 +409,10 @@ const moduleSystemRules = {
         'error',
         {
             paths: [
-                { name: 'date-fns', message: 'Please use date-fns/{submodule} instead.' },
+                { name: 'date-fns', message: 'Please use date-fns/{submodule} instead.', allowTypeImports: true },
                 { name: 'date-fns/esm', message: 'Please use date-fns/{submodule} instead.' },
                 { name: 'idb/with-async-ittr-cjs', message: 'Please use idb/with-async-ittr instead.' },
+                { name: 'async-call-rpc', message: 'Please use async-call-rpc/full instead.', allowTypeImports: true },
                 { name: '@masknet/typed-message/base', message: 'Please use @masknet/typed-message instead.' },
                 {
                     name: '@dimensiondev/holoflows-kit/es',

@@ -61,8 +61,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias: Record<string, string> = {
-                    // We want to always use the full version.
-                    'async-call-rpc$': require.resolve('async-call-rpc/full'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.mjs'),
                     'error-polyfill': require.resolve('./package-overrides/null.mjs'),
