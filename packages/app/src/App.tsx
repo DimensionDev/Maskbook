@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { MaskLightTheme } from '@masknet/theme'
 import { useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { SortDropdown } from './components/SortDropdown.js'
@@ -8,10 +7,6 @@ import { SidebarForDesktop } from './components/SidebarForDesktop.js'
 import { SidebarForMobile } from './components/SidebarForMobile.js'
 import { ActivityFeed } from './components/ActivityFeed.js'
 import { DecryptUI } from './main/index.js'
-
-function useTheme() {
-    return MaskLightTheme
-}
 
 export function App() {
     useMountReport(EventID.AccessPopups)
