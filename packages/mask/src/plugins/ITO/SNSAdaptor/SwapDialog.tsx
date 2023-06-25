@@ -6,6 +6,7 @@ import {
     FungibleTokenInput,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    TransactionConfirmModal,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
@@ -24,7 +25,7 @@ import { useI18N } from '../../../utils/index.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
-import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
+import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
@@ -92,7 +93,6 @@ export function SwapDialog(props: SwapDialogProps) {
     } = props
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const openTransactionConfirmDialog = useTransactionConfirmDialog()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles(undefined, { props })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -169,15 +169,23 @@ export function SwapDialog(props: SwapDialogProps) {
     const onSwap = useCallback(async () => {
         const receipt = await swapCallback()
         if (typeof receipt?.transactionHash === 'string') {
-            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? {}) as {
+            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? { to_value: 0 }) as {
                 to_value: string
             }
-            openTransactionConfirmDialog({
+
+            TransactionConfirmModal.open({
                 shareText: successShareText ?? '',
                 amount: formatBalance(to_value, payload.token?.decimals, 2),
                 token: payload.token,
                 tokenType: TokenType.Fungible,
+                messageTextForFT: t('plugin_ito_your_claimed_amount', {
+                    amount: formatBalance(to_value, payload.token?.decimals, 2),
+                    symbol: `$${payload.token.symbol}`,
+                }),
+                title: t('plugin_ito_name'),
+                share: activatedSocialNetworkUI.utils.share,
             })
+
             setActualSwapAmount(to_value)
         }
         if (payload.token.schema !== SchemaType.ERC20) return

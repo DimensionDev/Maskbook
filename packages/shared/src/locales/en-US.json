@@ -287,5 +287,10 @@
     "decentralized_search_feature_nft_description": "Search with the name of an NFT collection or its symbol to get optimized results.",
     "decentralized_search_feature_wallet_name": "ENS or Wallet Address",
     "decentralized_search_feature_wallet_description": "Search with an ENS domain or wallet address to get optimized results.",
+    "claim_nft_successful": "Claimed 1 {{name}} successfully.",
+    "claim_token_successful": "You claimed {{- amount}} {{name}}.",
+    "lucky_drop": "Lucky Drop",
+    "share": "Share",
+    "ok": "OK",
     "plugin_wallet_on_connect": "Connect Wallet"
 }

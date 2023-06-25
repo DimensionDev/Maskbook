@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <g clip-path="url(#DecentralizedSearch_svg__a)">
+    <g clip-path="url('#DecentralizedSearch_svg__a')">
         <rect width="24" height="24" fill="url(#DecentralizedSearch_svg__b)" rx="6"/>
         <path fill="#fff" d="M17.836 18.408c-.3.3-.79.3-1.089 0l-1.605-1.605a.77.77 0 0 1 1.088-1.089l1.606 1.606a.766.766 0 0 1 0 1.088Z"/>
         <path fill="#fff" fill-opacity=".5" stroke="#fff" d="M7.267 15.796a6.031 6.031 0 1 1 8.53-8.53 6.031 6.031 0 0 1-8.53 8.53Z"/>

@@ -77,7 +77,7 @@ export function useOpenShareTxDialog() {
 
     return useCallback(
         ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
-            return ConfirmModal.open({
+            return ConfirmModal.openAndWaitForClose({
                 title: title ?? t.share_dialog_transaction(),
                 content: (
                     <ShareTransaction
