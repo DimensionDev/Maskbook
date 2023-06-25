@@ -3,9 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { Typography } from '@mui/material'
 import { DecryptError, DecryptErrorReasons } from '@masknet/encryption'
 import type { TypedMessage } from '@masknet/typed-message'
-import { RegistryContext, TypedMessageRender } from '@masknet/typed-message-react'
 import { decrypt, parsePayloadBinary, parsePayloadText } from './decrypt.js'
-import { registry } from '../typed-message-render/registry.js'
 import { text } from './mockData.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
@@ -17,16 +15,10 @@ export function DecryptUI() {
     if (error) return <Typography>We encountered an error when try to decrypt this message: {error.message}</Typography>
     if (!message) return <Typography>Decrypting...</Typography>
     return (
-        <>
-            <Typography>Decrypted message:</Typography>
-            <RegistryContext.Provider value={registry.getTypedMessageRender}>
-                <TypedMessageRender message={message} />
-            </RegistryContext.Provider>
-            <Suspense>
-                {/* Do not add React context here. Add it in ./plugin-render */}
-                <PluginRender message={message} />
-            </Suspense>
-        </>
+        <Suspense>
+            {/* Do not add React context here. Add it in ./plugin-render */}
+            <PluginRender message={message} />
+        </Suspense>
     )
 }
 

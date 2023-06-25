@@ -34,7 +34,11 @@ function MainUI() {
                     </header>
 
                     {/* <DevelopmentList /> */}
-                    <DecryptUI />
+                    <div className="bg-white p-5">
+                        <div className="border pt-3 rounded-lg">
+                            <DecryptUI />
+                        </div>
+                    </div>
                 </main>
 
                 <ActivityFeed />
