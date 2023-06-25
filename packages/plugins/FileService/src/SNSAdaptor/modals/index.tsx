@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { ConfirmModal } from './Confirm/index.js'
+import { ConfirmModal } from './ConfirmModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'

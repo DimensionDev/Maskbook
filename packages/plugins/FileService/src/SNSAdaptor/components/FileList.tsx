@@ -82,7 +82,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
 
     const handleDelete = useCallback(
         async (file: FileInfo) => {
-            const confirmed = await ConfirmModal.openAndWaitForClose({
+            await ConfirmModal.openAndWaitForClose({
                 title: t.delete_file(),
                 message: (
                     <Translate.delete_message
