@@ -14,12 +14,9 @@ import type { GasSettingProps } from './types.js'
 import {
     formatCurrency,
     GasOptionType,
-    isGreaterThan,
     isGreaterThanOrEqualTo,
-    isLessThan,
     isLessThanOrEqualTo,
     isPositive,
-    multipliedBy,
 } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
 import { Trans } from 'react-i18next'
@@ -215,42 +212,6 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             'maxFeePerGas',
             'gasLimit',
         ])
-
-        // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
-        const maxPriorFeeHelperText = useMemo(() => {
-            if (getGasOptionsLoading) return undefined
-            if (isLessThan(maxPriorityFeePerGas, gasOptions?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0))
-                return t('wallet_transfer_error_max_priority_gas_fee_too_low')
-            if (
-                isGreaterThan(
-                    maxPriorityFeePerGas,
-                    multipliedBy(
-                        gasOptions?.[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
-                        HIGH_FEE_WARNING_MULTIPLIER,
-                    ),
-                )
-            )
-                return t('wallet_transfer_error_max_priority_gas_fee_too_high')
-            return undefined
-        }, [maxPriorityFeePerGas, gasOptions, getGasOptionsLoading])
-
-        const maxFeeGasHelperText = useMemo(() => {
-            if (getGasOptionsLoading) return undefined
-            if (isLessThan(maxFeePerGas, gasOptions?.[GasOptionType.SLOW].estimatedBaseFee ?? 0))
-                return t('wallet_transfer_error_max_fee_too_low')
-            if (
-                isGreaterThan(
-                    maxFeePerGas,
-                    multipliedBy(
-                        gasOptions?.[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0,
-                        HIGH_FEE_WARNING_MULTIPLIER,
-                    ),
-                )
-            )
-                return t('wallet_transfer_error_max_fee_too_high')
-            return undefined
-        }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
-        // #endregion
 
         return (
             <>
