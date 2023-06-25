@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, ReloadStatus, useAddCollectibles, useSharedI18N } from '@masknet/shared'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -12,8 +11,12 @@ import { Box } from '@mui/system'
 import { compact } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
-import { InjectedDialog } from '../InjectedDialog.js'
 import { ContractItem } from './ContractItem.js'
+import { useSharedI18N } from '../../../locales/index.js'
+import { useAddCollectibles } from '../../contexts/common/index.js'
+import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
+import { ReloadStatus } from '../../components/ReloadStatus/index.js'
+import { EmptyStatus, LoadingStatus } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
