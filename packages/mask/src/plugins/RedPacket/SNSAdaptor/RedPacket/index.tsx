@@ -197,7 +197,7 @@ export function RedPacket(props: RedPacketProps) {
         payloadChainId,
     )
 
-    const openTransactinConfirmModal = useCallback(() => {
+    const openTransactionConfirmModal = useCallback(() => {
         if (isZero(availability?.claimed_amount ?? '0')) return
 
         TransactionConfirmModal.open({
@@ -221,14 +221,14 @@ export function RedPacket(props: RedPacketProps) {
         let hash: string | undefined
         if (canClaim) {
             hash = await claimCallback()
-            openTransactinConfirmModal()
+            openTransactionConfirmModal()
         } else if (canRefund) {
             hash = await refundCallback()
         }
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, openTransactinConfirmModal])
+    }, [canClaim, canRefund, claimCallback, openTransactionConfirmModal])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''
