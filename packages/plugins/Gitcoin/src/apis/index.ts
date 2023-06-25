@@ -1,6 +1,5 @@
-import urlcat from 'urlcat'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
-import { GITCOIN_API_GRANTS_V1, type TenantTypes } from '../constants.js'
+import { type TenantTypes } from '../constants.js'
+import MOCK_DATA from './mock.json'
 
 export interface Metadata {}
 
@@ -44,14 +43,16 @@ export interface GitcoinGrant {
 }
 
 export async function fetchGrant(id: string) {
-    if (!/\d+/.test(id)) return
+    const response = MOCK_DATA
+    return response.grants
+    // if (!/\d+/.test(id)) return
 
-    const { grants } = await fetchJSON<{
-        grants: GitcoinGrant
-        status: number
-    }>(urlcat(GITCOIN_API_GRANTS_V1, { id }), undefined, {
-        enableCache: true,
-        enableSquash: true,
-    })
-    return grants
+    // const { grants } = await fetchJSON<{
+    //     grants: GitcoinGrant
+    //     status: number
+    // }>(urlcat(GITCOIN_API_GRANTS_V1, { id }), undefined, {
+    //     enableCache: true,
+    //     enableSquash: true,
+    // })
+    // return grants
 }
