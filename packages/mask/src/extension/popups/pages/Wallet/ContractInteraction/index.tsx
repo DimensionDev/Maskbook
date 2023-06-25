@@ -371,15 +371,7 @@ const ContractInteraction = memo(() => {
         if (!request?.paymentToken || isNativeTokenAddress(request.paymentToken)) return result
         if (!currencyRatio) return ZERO
         return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
-    }, [
-        gas,
-        isSupport1559,
-        gasPriceEIP1559,
-        gasPricePriorEIP1559,
-        isNativeTokenAddress,
-        request?.paymentToken,
-        currencyRatio,
-    ])
+    }, [gas, isSupport1559, gasPriceEIP1559, gasPricePriorEIP1559, request?.paymentToken, currencyRatio])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee || gasFee.isZero()) return '0'
