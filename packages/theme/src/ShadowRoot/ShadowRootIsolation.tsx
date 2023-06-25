@@ -21,8 +21,8 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
     if (disabled) return <span {...props}>{children}</span>
 
     const [dom, setDOM] = useState<RootElement | null>()
-
     const container = useRef<RootElement>()
+
     if (!container.current) {
         container.current = typeof rootElement === 'function' ? rootElement() : document.createElement(rootElement)
     }
