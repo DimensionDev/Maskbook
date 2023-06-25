@@ -1,30 +1,29 @@
 import { ProfileIdentifier } from '@masknet/base'
 import { EnhanceableSite } from '../Site/types.js'
 import { NextIDPlatform, type BindingProof } from './types.js'
-import { createLookupTableResolver } from '../utils/index.js'
 
-export const resolveNextIDPlatformToNetwork = createLookupTableResolver<NextIDPlatform, EnhanceableSite | undefined>(
-    {
-        [NextIDPlatform.Ethereum]: undefined,
-        [NextIDPlatform.GitHub]: undefined,
-        [NextIDPlatform.Keybase]: undefined,
-        [NextIDPlatform.Twitter]: EnhanceableSite.Twitter,
-    } as Record<NextIDPlatform, EnhanceableSite | undefined>,
-    undefined,
-)
+const NextIDPlatformToNetwork = {
+    [NextIDPlatform.Ethereum]: undefined,
+    [NextIDPlatform.GitHub]: undefined,
+    [NextIDPlatform.Keybase]: undefined,
+    [NextIDPlatform.Twitter]: EnhanceableSite.Twitter,
+} as Record<NextIDPlatform, EnhanceableSite | undefined>
+export function resolveNextIDPlatformToNetwork(key: NextIDPlatform): EnhanceableSite | undefined {
+    return NextIDPlatformToNetwork[key]
+}
 
-export const resolveNetworkToNextIDPlatform = createLookupTableResolver<EnhanceableSite, NextIDPlatform | undefined>(
-    {
-        [EnhanceableSite.Facebook]: undefined,
-        [EnhanceableSite.Instagram]: undefined,
-        [EnhanceableSite.Minds]: undefined,
-        [EnhanceableSite.OpenSea]: undefined,
-        [EnhanceableSite.Localhost]: undefined,
-        [EnhanceableSite.Mirror]: undefined,
-        [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
-    },
-    undefined,
-)
+const NetworkToNextIDPlatform = {
+    [EnhanceableSite.Facebook]: undefined,
+    [EnhanceableSite.Instagram]: undefined,
+    [EnhanceableSite.Minds]: undefined,
+    [EnhanceableSite.OpenSea]: undefined,
+    [EnhanceableSite.Localhost]: undefined,
+    [EnhanceableSite.Mirror]: undefined,
+    [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
+}
+export function resolveNetworkToNextIDPlatform(key: EnhanceableSite): NextIDPlatform | undefined {
+    return NetworkToNextIDPlatform[key]
+}
 
 export function resolveNextIDIdentityToProfile(nextIDIdentity: string, platform: NextIDPlatform) {
     const network = resolveNextIDPlatformToNetwork(platform)

@@ -5,15 +5,8 @@ import { StyledEngineProvider, type Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
-import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
-import {
-    compose,
-    getSiteType,
-    i18NextInstance,
-    NetworkPluginID,
-    pluginIDsSettings,
-    queryClient,
-} from '@masknet/shared-base'
+import { ErrorBoundary, BuildInfo, useValueRef, queryClient } from '@masknet/shared-base-ui'
+import { compose, getSiteType, i18NextInstance, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
 import { buildInfoMarkdown } from '../../utils/BuildInfoMarkdown.js'
 
 export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
