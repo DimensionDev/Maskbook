@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { chainResolver } from '@masknet/web3-shared-evm'
+import { chainResolver, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useChainContext, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
@@ -38,7 +38,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
             if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit_(evt.gasLimit)
-            if (evt.maxFee) setMaxFee(evt.maxFee)
+            if (evt.maxFee) setMaxFee(formatWeiToGwei(evt.maxFee))
         })
     }, [])
 
