@@ -264,5 +264,10 @@
     "decentralized_search_feature_nft_description": "使用 NFT 集合的名称或符号搜索以获得最佳结果。",
     "decentralized_search_feature_wallet_name": "ENS 或钱包地址",
     "decentralized_search_feature_wallet_description": "使用ENS域名或钱包地址搜索以获得最优结果。",
+    "claim_token_successful": "你领取了{{- amount}} {{name}}。",
+    "claim_nft_successful": "成功领取了 1 {{name}}。",
+    "lucky_drop": "红包",
+    "share": "分享",
+    "ok": "确定",
     "plugin_wallet_on_connect": "连接钱包"
 }

@@ -7,7 +7,6 @@ import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useTransactionConfirmDialog } from '../context/TokenTransactionConfirmDialogContext.js'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
@@ -19,6 +18,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { TransactionConfirmModal } from '@masknet/shared'
 
 export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -203,8 +203,6 @@ export function RedPacket(props: RedPacketProps) {
         setIsClaimed(false)
     }, [account])
 
-    const openTransactionConfirmDialog = useTransactionConfirmDialog()
-
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
@@ -221,13 +219,22 @@ export function RedPacket(props: RedPacketProps) {
     useEffect(() => {
         if (!isClaimed || isZero(availability?.claimed_amount ?? '0')) return
 
-        openTransactionConfirmDialog({
+        TransactionConfirmModal.open({
             shareText,
             amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
             token,
             tokenType: TokenType.Fungible,
+            messageTextForNFT: t.claim_nft_successful({
+                name: 'NFT',
+            }),
+            messageTextForFT: t.claim_token_successful({
+                amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
+                name: token?.symbol ?? '',
+            }),
+            title: t.lucky_drop(),
+            share: activatedSocialNetworkUI.utils.share,
         })
-    }, [isClaimed, openTransactionConfirmDialog, JSON.stringify(token), availability?.claimed_amount])
+    }, [isClaimed, JSON.stringify(token), availability?.claimed_amount])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''

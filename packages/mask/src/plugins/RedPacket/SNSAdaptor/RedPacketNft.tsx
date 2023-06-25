@@ -3,8 +3,13 @@ import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, u
 import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
-import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
+import {
+    WalletConnectedBoundary,
+    ChainBoundary,
+    AssetPreviewer,
+    NFTFallbackImage,
+    TransactionConfirmModal,
+} from '@masknet/shared'
 import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
@@ -219,8 +224,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
     }, [claimCallback, retryAvailability])
 
-    const openTransactionConfirmDialog = useTransactionConfirmDialog()
-
     useEffect(() => {
         retryAvailability()
     }, [account])
@@ -252,17 +255,30 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [shareText])
     // #endregion
 
+    const { value: nonFungibleToken } = useNonFungibleAsset(
+        undefined,
+        availability?.token_address,
+        availability?.claimed_id,
+    )
+
     useEffect(() => {
         if (!isClaimed || !availability || availability?.claimed_id === '0' || !availability?.token_address) return
 
-        openTransactionConfirmDialog({
+        TransactionConfirmModal.open({
             shareText,
             amount: '1',
-            nonFungibleTokenId: availability?.claimed_id,
-            nonFungibleTokenAddress: availability?.token_address,
             tokenType: TokenType.NonFungible,
+            messageTextForNFT: t.claim_nft_successful({
+                name: nonFungibleToken?.contract?.name || 'NFT',
+            }),
+            messageTextForFT: t.claim_token_successful({
+                amount: '1',
+                name: '',
+            }),
+            title: t.lucky_drop(),
+            share: activatedSocialNetworkUI.utils.share,
         })
-    }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
+    }, [isClaimed, nonFungibleToken, availability?.claimed_id, availability?.token_address])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return

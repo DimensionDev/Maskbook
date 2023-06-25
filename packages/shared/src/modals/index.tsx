@@ -9,6 +9,7 @@ import { LeavePageConfirmModal } from './LeavePageConfirmModal/index.js'
 import { ApplicationBoardModal } from './ApplicationBoardModal/index.js'
 import { GasSettingModal } from './GasSettingModal/index.js'
 import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
+import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'
@@ -25,6 +26,7 @@ export const Modals = memo(function Modals() {
             <ApplicationBoardModal ref={modals.ApplicationBoardModal.register} />
             <GasSettingModal ref={modals.GasSettingModal.register} />
             <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={modals.TransactionSnackbar.register} />
+            <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
         </>
     )
 })
