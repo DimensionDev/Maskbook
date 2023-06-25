@@ -1,5 +1,11 @@
 /// <reference types="ses" />
-if (Object.isExtensible(Array.prototype)) {
+if (
+    Object.isExtensible(Array.prototype) &&
+    // https://github.com/facebook/react/issues/27005
+    (typeof location === 'object'
+        ? location.protocol.endsWith('extension:') && location.pathname !== '/devtools-background.html'
+        : true)
+) {
     try {
         // lockdown might fail when there is new well known Symbol
         lockdown({
