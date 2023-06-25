@@ -1,5 +1,5 @@
 import * as Service from './service.js'
-import { AsyncCall, type CallbackBasedChannel } from 'async-call-rpc'
+import { AsyncCall, type CallbackBasedChannel } from 'async-call-rpc/full'
 import { serializer } from '@masknet/shared-base'
 
 const livingPorts = new Set<MessagePort>()
