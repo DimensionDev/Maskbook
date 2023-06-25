@@ -11,7 +11,7 @@ import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { isEmpty } from 'lodash-es'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
-import { SIMPLE_HASH_URL } from './constants.js'
+import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { NetworkPluginID, createLookupTableResolver, queryClient } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -180,7 +180,9 @@ export function resolveChain(pluginId: NetworkPluginID, chainId: Web3Helper.Chai
     return ChainNameMap[pluginId][chainId]
 }
 
-export const SIMPLE_HASH_HISTORICAL_PRICE_START_TIME = 1669852800
+export function checkBlurToken(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll, address: string): boolean {
+    return `${resolveChain(pluginId, chainId)}.${address.toLowerCase()}` === `ethereum.${ETH_BLUR_TOKEN_ADDRESS}`
+}
 
 export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
     {
