@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { Typography } from '@mui/material'
 import { DecryptError, DecryptErrorReasons } from '@masknet/encryption'
 import type { TypedMessage } from '@masknet/typed-message'
 import { RegistryContext, TypedMessageRender } from '@masknet/typed-message-react'
@@ -12,17 +13,12 @@ const PluginRender = lazy(() => import('./plugin-render.js'))
 export function DecryptUI() {
     const [error, isE2E, message] = useDecrypt(text)
 
-    if (isE2E) {
-        return <>This message is a end-to-end encrypted message. We can not decrypt it here.</>
-    }
-    if (error) {
-        console.error(error)
-        return <>We encountered an error when try to decrypt this message: {error.message}</>
-    }
-    if (!message) return <>Decrypting...</>
+    if (isE2E) return <Typography>This message is a e2e encrypted message. We can not decrypt it here.</Typography>
+    if (error) return <Typography>We encountered an error when try to decrypt this message: {error.message}</Typography>
+    if (!message) return <Typography>Decrypting...</Typography>
     return (
         <>
-            Decrypted message:
+            <Typography>Decrypted message:</Typography>
             <RegistryContext.Provider value={registry.getTypedMessageRender}>
                 <TypedMessageRender message={message} />
             </RegistryContext.Provider>

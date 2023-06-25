@@ -2,7 +2,6 @@ import '../plugin-host/enable.js'
 
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
-import { PageUIProvider } from '@masknet/shared'
 import { MaskLightTheme } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 
@@ -16,5 +15,6 @@ const Decrypted = createInjectHooksRenderer(
 )
 
 export default function PluginRender(props: { message: TypedMessage }) {
-    return PageUIProvider(useTheme, <Decrypted message={props.message} />)
+    // return PageUIProvider(useTheme, <Decrypted message={props.message} />)
+    return <Decrypted message={props.message} />
 }

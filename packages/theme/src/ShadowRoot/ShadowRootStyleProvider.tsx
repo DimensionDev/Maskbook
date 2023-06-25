@@ -1,8 +1,8 @@
+import { useContext, useEffect } from 'react'
 import createEmotionCache, { type EmotionCache } from '@emotion/cache'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import { StyleSheet } from './ShadowRootStyleSheet.js'
 import { PreventShadowRootEventPropagationListContext, stopPropagation, StyleSheetsContext } from './Contexts.js'
-import { useContext, useEffect } from 'react'
 
 /** @internal */
 export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}> {

@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { MaskLightTheme } from '@masknet/theme'
-import { PageUIProvider } from '@masknet/shared'
 import { useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
-// import { ActivityFeed } from './components/ActivityFeed.js'
-import { DevelopmentList } from './components/DevelopmentList.js'
 import { SortDropdown } from './components/SortDropdown.js'
 import { StickySearchHeader } from './components/StickySearchBar.js'
 import { SidebarForDesktop } from './components/SidebarForDesktop.js'
 import { SidebarForMobile } from './components/SidebarForMobile.js'
+import { ActivityFeed } from './components/ActivityFeed.js'
 import { DecryptUI } from './main/index.js'
 
 function useTheme() {
@@ -16,12 +14,15 @@ function useTheme() {
 }
 
 export function App() {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
-
     useMountReport(EventID.AccessPopups)
 
-    return PageUIProvider(
-        useTheme,
+    return <MainUI />
+}
+
+function MainUI() {
+    const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    return (
         <div className="bg-zinc-900 h-full">
             <SidebarForMobile sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
@@ -37,13 +38,12 @@ export function App() {
                         <SortDropdown />
                     </header>
 
-                    <DevelopmentList />
+                    {/* <DevelopmentList /> */}
+                    <DecryptUI />
                 </main>
 
-                {/* <ActivityFeed /> */}
-
-                <DecryptUI />
+                <ActivityFeed />
             </div>
-        </div>,
+        </div>
     )
 }
