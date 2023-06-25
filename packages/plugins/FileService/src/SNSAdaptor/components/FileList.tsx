@@ -11,9 +11,10 @@ import {
     UploadingFile,
 } from './Files/index.js'
 import { Translate, useI18N } from '../../locales/index.js'
-import { useFileManagement, useShowConfirm, useShowRenameDialog } from '../contexts/index.js'
+import { useFileManagement, useShowRenameDialog } from '../contexts/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginFileServiceRPC } from '../../Worker/rpc.js'
+import { ConfirmModal } from '../modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -59,10 +60,29 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
     const { uploadStateMap, refetchFiles } = useFileManagement()
 
     const { showSnackbar } = useCustomSnackbar()
-    const showConfirm = useShowConfirm()
+
+    const deleteFile = useCallback(
+        async (file: FileInfo) => {
+            try {
+                await PluginFileServiceRPC.deleteFile(file.id)
+                refetchFiles()
+                showSnackbar(t.delete_file_title({ context: 'success' }), {
+                    variant: 'success',
+                    message: t.delete_file_message({ context: 'success', name: file.name }),
+                })
+            } catch (err) {
+                showSnackbar(t.delete_file_title({ context: 'failed' }), {
+                    variant: 'error',
+                    message: t.delete_file_message({ context: 'failed', name: file.name }),
+                })
+            }
+        },
+        [refetchFiles],
+    )
+
     const handleDelete = useCallback(
         async (file: FileInfo) => {
-            const confirmed = await showConfirm({
+            await ConfirmModal.openAndWaitForClose({
                 title: t.delete_file(),
                 message: (
                     <Translate.delete_message
@@ -82,24 +102,10 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                 ),
                 description: t.delete_description(),
                 confirmLabel: t.delete(),
+                onSubmit: () => deleteFile(file),
             })
-            if (confirmed) {
-                try {
-                    await PluginFileServiceRPC.deleteFile(file.id)
-                    refetchFiles()
-                    showSnackbar(t.delete_file_title({ context: 'success' }), {
-                        variant: 'success',
-                        message: t.delete_file_message({ context: 'success', name: file.name }),
-                    })
-                } catch (err) {
-                    showSnackbar(t.delete_file_title({ context: 'failed' }), {
-                        variant: 'error',
-                        message: t.delete_file_message({ context: 'failed', name: file.name }),
-                    })
-                }
-            }
         },
-        [showConfirm, refetchFiles, t],
+        [refetchFiles, t],
     )
     const showPrompt = useShowRenameDialog()
     const handleRename = useCallback(

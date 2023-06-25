@@ -17,6 +17,7 @@ import { FileServiceInjection } from './FileServiceInjection.js'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { formatFileSize } from '@masknet/kit'
 import { Trans } from 'react-i18next'
+import { Modals } from './modals/index.js'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 
@@ -42,7 +43,14 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
         [META_KEY_3, onAttachedMultipleFile],
     ]),
-    GlobalInjection: FileServiceInjection,
+    GlobalInjection() {
+        return (
+            <>
+                <Modals />
+                <FileServiceInjection />
+            </>
+        )
+    },
     CompositionDialogEntry: {
         label: (
             <>
