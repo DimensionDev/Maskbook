@@ -8,6 +8,7 @@ export interface BuildInfoFile {
     readonly BRANCH_NAME: string
     readonly DIRTY?: boolean
     readonly REACT_DEVTOOLS_EDITOR_URL?: string
+    readonly channel: 'stable' | 'beta' | 'insider'
 }
 
 async function getBuildInfoRaw(): Promise<BuildInfoFile> {
@@ -17,6 +18,7 @@ async function getBuildInfoRaw(): Promise<BuildInfoFile> {
         return env
     } catch {
         return {
+            channel: 'stable',
             BRANCH_NAME: 'missing',
             BUILD_DATE: 'missing',
             COMMIT_DATE: 'missing',

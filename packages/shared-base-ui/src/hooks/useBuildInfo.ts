@@ -16,7 +16,7 @@ ${env.COMMIT_HASH} (${env.BRANCH_NAME})`
 - Version: ${env.VERSION || 'unknown'}
 - NODE_ENV: ${process.env.NODE_ENV || 'unknown'}
 - userAgent: ${navigator.userAgent}
-- build: ${process.env.channel || 'unknown'}
+- build: ${env.channel || 'unknown'}
 - BUILD_DATE: ${env.BUILD_DATE || 'unknown'}
 ` + gitInfo
     return buildInfoMarkdown

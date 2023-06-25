@@ -1,3 +1,4 @@
+import { getBuildInfo } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '@masknet/types'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
@@ -17,9 +18,10 @@ export function activateSocialNetworkUI() {
             },
         )
 }
+const { channel } = await getBuildInfo()
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
     if (UI.notReadyForProduction) {
-        if (process.env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
+        if (channel === 'stable' && process.env.NODE_ENV === 'production') return UI
     }
     definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI

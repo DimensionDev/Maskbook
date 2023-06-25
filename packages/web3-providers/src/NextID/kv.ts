@@ -4,7 +4,7 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { Err, Ok, type Result } from 'ts-results-es'
-import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
+import { getBuildInfo, type NextIDPlatform, type NextIDStoragePayload } from '@masknet/shared-base'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
@@ -17,7 +17,9 @@ interface CreatePayloadResponse {
 }
 
 const BASE_URL =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? KV_BASE_URL_PROD : KV_BASE_URL_DEV
+    process.env.NODE_ENV === 'production' && (await getBuildInfo()).channel === 'stable'
+        ? KV_BASE_URL_PROD
+        : KV_BASE_URL_DEV
 
 function formatPatchData(pluginID: string, data: unknown) {
     return {

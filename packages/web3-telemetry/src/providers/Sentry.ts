@@ -112,8 +112,9 @@ export class SentryAPI implements Provider<Event, Event> {
             env = e
             Sentry.setTag('branch_name', env.BRANCH_NAME)
             Sentry.setTag('version', env.VERSION)
+            Sentry.setTag('channel', env.channel)
             release =
-                process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+                env.channel === 'stable' && process.env.NODE_ENV === 'production'
                     ? env.COMMIT_HASH === 'N/A'
                         ? `mask-${env.VERSION}-reproducible`
                         : `mask-${env.COMMIT_HASH}`
@@ -130,7 +131,6 @@ export class SentryAPI implements Provider<Event, Event> {
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
         Sentry.setTag('extension_id', getExtensionId())
-        Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('ua', navigator.userAgent)
         Sentry.setTag('device_ab', joinsABTest())
         Sentry.setTag('device_seed', getABTestSeed())

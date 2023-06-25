@@ -1,6 +1,6 @@
 import { memoize, uniqBy } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, getBuildInfo } from '@masknet/shared-base'
 import { type FungibleToken, type NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -37,11 +37,12 @@ async function fetchCommonERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<Array<FungibleToken<ChainId, SchemaType.ERC20>>> {
+    const channel = (await getBuildInfo()).channel
     return ((await fetchTokenList(url)) as TokenListAPI.TokenList<ChainId>).tokens
         .filter(
-            (x) =>
+            async (x) =>
                 x.chainId === chainId &&
-                (process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
+                (process.env.NODE_ENV === 'production' && channel === 'stable'
                     ? chainResolver.isMainnet(chainId)
                     : true),
         )
