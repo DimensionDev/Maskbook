@@ -14,7 +14,7 @@ export const usePageableAsync = <T>(
     deps: DependencyList = [],
     key?: string,
 ): AsyncStatePageable<T> => {
-    const [indicator, setIndicator] = useState<PageIndicator | undefined>()
+    const [indicator, setIndicator] = useState<PageIndicator>()
     const [list, { push, clear }] = useList<T>()
 
     useEffect(() => clear(), [key])

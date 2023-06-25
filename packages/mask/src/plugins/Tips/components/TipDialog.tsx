@@ -1,5 +1,5 @@
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
-import { NetworkPluginID, getSiteType, pluginIDSettings } from '@masknet/shared-base'
+import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
@@ -123,7 +123,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         : NetworkPluginID.PLUGIN_EVM
     const submitDisabled = !isValid || (isSending && !isDirty)
 
-    const pluginIDs = useValueRef(pluginIDSettings)
+    const pluginIDs = useValueRef(pluginIDsSettings)
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
 

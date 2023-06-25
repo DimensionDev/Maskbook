@@ -1,12 +1,12 @@
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
-import { memo, useCallback } from 'react'
-import { useShowConfirm } from '../contexts/common/index.js'
 import { useSharedI18N } from '../locales/index.js'
+import { ConfirmModal } from '../UI/modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -73,12 +73,11 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
 })
 
 export function useOpenShareTxDialog() {
-    const showConfirm = useShowConfirm()
     const t = useSharedI18N()
 
     return useCallback(
         ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
-            return showConfirm({
+            return ConfirmModal.openAndWaitForClose({
                 title: title ?? t.share_dialog_transaction(),
                 content: (
                     <ShareTransaction
@@ -93,6 +92,6 @@ export function useOpenShareTxDialog() {
                 },
             })
         },
-        [t, showConfirm],
+        [t],
     )
 }

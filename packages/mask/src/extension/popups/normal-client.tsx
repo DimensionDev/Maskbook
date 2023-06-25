@@ -9,7 +9,7 @@ import {
     MaskMessages,
     createSubscriptionFromAsync,
     currentPersonaIdentifier,
-    pluginIDSettings,
+    pluginIDsSettings,
 } from '@masknet/shared-base'
 import { initialPersonaInformation } from '@masknet/shared'
 
@@ -19,7 +19,7 @@ if (location.hash === '#/personas') {
         await Promise.all([
             status,
             currentPersonaIdentifier.readyPromise,
-            pluginIDSettings.readyPromise,
+            pluginIDsSettings.readyPromise,
             Services.Identity.queryOwnedPersonaInformation(false).then((value) =>
                 initialPersonaInformation.setServerSnapshot(value),
             ),

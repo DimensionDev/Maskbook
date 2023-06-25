@@ -1,12 +1,13 @@
+import { createPortal } from 'react-dom'
 import {
     attachReactTreeToMountedRoot_noHost,
     setupReactShadowRootEnvironment as setupReactShadowRootEnvironmentUpper,
     CSSVariableInjector,
     usePortalShadowRoot,
 } from '@masknet/theme'
-import { createPortal } from 'react-dom'
-import { MaskUIRootSNS, ShadowRootAttachPointRoot } from '../../UIRoot-sns.js'
 import { Flags } from '@masknet/flags'
+import { SNS_UIProvider } from '@masknet/shared'
+import { ShadowRootAttachPointRoot } from '../../ShadowRootAttachPointRoot.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',
@@ -22,7 +23,7 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper(Flags.shadowRootInit, captureEvents, MaskUIRootSNS)
+    const shadow = setupReactShadowRootEnvironmentUpper(Flags.shadowRootInit, captureEvents, SNS_UIProvider)
     // Inject variable for Portals
     attachReactTreeWithContainer(shadow, { key: 'css-vars' }).render(
         <>

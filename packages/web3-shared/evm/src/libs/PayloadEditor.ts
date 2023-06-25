@@ -4,16 +4,11 @@ import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import {
-    type ChainId,
-    type Transaction,
-    type TransactionOptions,
-    type UserOperation,
-    EthereumMethodType,
-} from '../types/index.js'
-import { isValidChainId } from '../helpers/address.js'
+import { type Transaction, type TransactionOptions, type UserOperation, EthereumMethodType } from '../types/index.js'
+import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
+import { parseChainId } from '../helpers/parseChainId.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
@@ -67,11 +62,8 @@ export class PayloadEditor {
         }
     }
 
-    get chainId(): ChainId | undefined {
-        const chainId_ = this.config?.chainId
-        if (typeof chainId_ === 'string') return Number.parseInt(chainId_, 16) || this.options?.chainId
-        if (typeof chainId_ === 'number' && isValidChainId(chainId_)) return chainId_
-        return this.options?.chainId
+    get chainId() {
+        return this.config.chainId ?? this.options?.chainId
     }
 
     private getRawConfig() {
@@ -128,11 +120,14 @@ export class PayloadEditor {
     get config() {
         const raw = this.getRawConfig()
 
-        return {
-            ...raw,
-            from: raw?.from ?? this.options?.account,
-            chainId: raw?.chainId ?? this.options?.chainId,
-        }
+        return omitBy<Transaction>(
+            {
+                ...raw,
+                from: raw?.from ?? this.options?.account,
+                chainId: parseChainId(raw?.chainId) ?? this.options?.chainId,
+            },
+            isUndefined,
+        )
     }
 
     get wallet() {

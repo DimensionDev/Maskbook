@@ -24,12 +24,12 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
     const [active, setActive] = useState(false)
     const [name, setName] = useState('')
     const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
-    const [identity, setIdentity] = useState<SocialIdentity | undefined>()
-    const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
+    const [identity, setIdentity] = useState<SocialIdentity>()
+    const [badgeBounding, setBadgeBounding] = useState<DOMRect>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [address, setAddress] = useState('')
     const [currentResult, setCurrentResult] = useState<Web3Helper.TokenResultAll>()
-    const [type, setType] = useState<TrendingAPI.TagType | undefined>()
+    const [type, setType] = useState<TrendingAPI.TagType>()
     const [initialOffsetY, setInitialOffsetY] = useState(0)
 
     // open popper from message center

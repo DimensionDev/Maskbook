@@ -4,9 +4,9 @@ import {
     InjectedDialog,
     FungibleTokenInput,
     useOpenShareTxDialog,
-    useShowConfirm,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    ConfirmModal,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
@@ -88,7 +88,6 @@ export function PurchaseDialog(props: ActionBarProps) {
         postLink,
     ].join('\n')
     const openShareTxDialog = useOpenShareTxDialog()
-    const showConfirm = useShowConfirm()
     const purchase = useCallback(async () => {
         try {
             const hash = await purchaseCallback()
@@ -100,11 +99,13 @@ export function PurchaseDialog(props: ActionBarProps) {
                 },
             })
             onClose()
-        } catch (err: any) {
-            showConfirm({
-                title: 'Error',
-                content: err.message,
-            })
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                await ConfirmModal.openAndWaitForClose({
+                    title: 'Error',
+                    content: err.message,
+                })
+            }
         }
     }, [openShareTxDialog, onClose])
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()

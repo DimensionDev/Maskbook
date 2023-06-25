@@ -4,9 +4,8 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { PersonaContext } from '@masknet/shared'
+import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import Services from '../service.js'
@@ -37,7 +36,7 @@ export default function PopupsConnect() {
     const [title, setTitle] = useState('')
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
-    return MaskUIRootPage(
+    return PageUIProvider(
         usePopupTheme,
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <PopupSnackbarProvider>
