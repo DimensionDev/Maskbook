@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
@@ -229,8 +229,6 @@ export function RedPacket(props: RedPacketProps) {
             revalidateAvailability()
         }
     }, [canClaim, canRefund, claimCallback, openTransactinConfirmModal])
-
-    useEffect(() => {}, [])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''

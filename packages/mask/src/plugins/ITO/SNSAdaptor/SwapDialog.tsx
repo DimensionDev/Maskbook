@@ -169,7 +169,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const onSwap = useCallback(async () => {
         const receipt = await swapCallback()
         if (typeof receipt?.transactionHash === 'string') {
-            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? {}) as {
+            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? { to_value: 0 }) as {
                 to_value: string
             }
 
