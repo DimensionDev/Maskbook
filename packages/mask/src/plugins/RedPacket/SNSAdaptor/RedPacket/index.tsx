@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo, useEffect } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
@@ -197,27 +197,8 @@ export function RedPacket(props: RedPacketProps) {
         payloadChainId,
     )
 
-    const [isClaimed, setIsClaimed] = useState(false)
-
-    useEffect(() => {
-        setIsClaimed(false)
-    }, [account])
-
-    const onClaimOrRefund = useCallback(async () => {
-        let hash: string | undefined
-        if (canClaim) {
-            hash = await claimCallback()
-            setIsClaimed(true)
-        } else if (canRefund) {
-            hash = await refundCallback()
-        }
-        if (typeof hash === 'string') {
-            revalidateAvailability()
-        }
-    }, [canClaim, canRefund, claimCallback])
-
-    useEffect(() => {
-        if (!isClaimed || isZero(availability?.claimed_amount ?? '0')) return
+    const openTransactinConfirmModal = useCallback(() => {
+        if (isZero(availability?.claimed_amount ?? '0')) return
 
         TransactionConfirmModal.open({
             shareText,
@@ -234,7 +215,22 @@ export function RedPacket(props: RedPacketProps) {
             title: t.lucky_drop(),
             share: activatedSocialNetworkUI.utils.share,
         })
-    }, [isClaimed, JSON.stringify(token), availability?.claimed_amount])
+    }, [JSON.stringify(token), availability?.claimed_amount])
+
+    const onClaimOrRefund = useCallback(async () => {
+        let hash: string | undefined
+        if (canClaim) {
+            hash = await claimCallback()
+            openTransactinConfirmModal()
+        } else if (canRefund) {
+            hash = await refundCallback()
+        }
+        if (typeof hash === 'string') {
+            revalidateAvailability()
+        }
+    }, [canClaim, canRefund, claimCallback, openTransactinConfirmModal])
+
+    useEffect(() => {}, [])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''

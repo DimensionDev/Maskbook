@@ -16,7 +16,7 @@ export function TransactionConfirm({ onSubmit, shareText, share, ...rest }: Tran
     const handleConfirm = useCallback(() => {
         share?.(shareText)
         onSubmit?.()
-    }, [shareText, onsubmit, share])
+    }, [shareText, onSubmit, share])
     return (
         <TokenTransactionConfirmModal
             {...rest}

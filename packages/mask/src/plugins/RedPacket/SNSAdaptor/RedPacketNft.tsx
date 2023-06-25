@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
 import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
@@ -210,19 +210,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         availability?.totalAmount,
         Web3.getWeb3().eth.accounts.sign(account, payload.privateKey).signature ?? '',
     )
-
-    const [isClaimed, setIsClaimed] = useState(false)
     const [showTooltip, textRef] = useDetectOverflow()
-    useEffect(() => {
-        setIsClaimed(false)
-    }, [account])
-    const claim = useCallback(async () => {
-        const hash = await claimCallback()
-        if (typeof hash === 'string') {
-            setIsClaimed(true)
-            retryAvailability()
-        }
-    }, [claimCallback, retryAvailability])
 
     useEffect(() => {
         retryAvailability()
@@ -261,8 +249,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         availability?.claimed_id,
     )
 
-    useEffect(() => {
-        if (!isClaimed || !availability || availability?.claimed_id === '0' || !availability?.token_address) return
+    const openTransactionConfirmModal = useCallback(() => {
+        if (!availability || availability?.claimed_id === '0' || !availability?.token_address) return
 
         TransactionConfirmModal.open({
             shareText,
@@ -278,7 +266,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             title: t.lucky_drop(),
             share: activatedSocialNetworkUI.utils.share,
         })
-    }, [isClaimed, nonFungibleToken, availability?.claimed_id, availability?.token_address])
+    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
@@ -299,6 +287,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             chainId: payload.chainId,
         },
     )
+
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash === 'string') {
+            openTransactionConfirmModal()
+            retryAvailability()
+        }
+    }, [claimCallback, retryAvailability, openTransactionConfirmModal])
 
     if (availabilityError)
         return (
