@@ -13,10 +13,11 @@ import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
-import { NetworkPluginID, createLookupTableResolver, queryClient } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingAPI } from '../entry-types.js'
 import { unreachable } from '@masknet/kit'
+import { queryClient } from '@masknet/shared-base-ui'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({

@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type Web3 from 'web3'
 import { numberToHex, toHex, toNumber } from 'web3-utils'
-import { type Account, type ECKeyIdentifier, type Proof, type Wallet, queryClient } from '@masknet/shared-base'
+import { type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
 import {
     AddressType,
     SchemaType,
@@ -50,6 +50,7 @@ import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 import { fetchJSON } from '../../../entry-helpers.js'
 import type { ConnectionOptions_Base } from '../../../entry-types.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
