@@ -11,6 +11,7 @@ export default defineConfig({
             '@masknet/base': createURL('./packages/base/src/index.ts'),
             '@masknet/flags': createURL('./packages/flags/src/index.ts'),
             '@masknet/shared-base': createURL('./packages/shared-base/src/index.ts'),
+            '@masknet/shared-base-ui': createURL('./packages/shared-base-ui/src/index.ts'),
             '@masknet/web3-helpers': createURL('./packages/web3-helpers/src/index.ts'),
             '@masknet/web3-providers/helpers': createURL('./packages/web3-providers/src/entry-helpers.ts'),
             '@masknet/web3-providers': createURL('./packages/web3-providers/src/entry.ts'),
