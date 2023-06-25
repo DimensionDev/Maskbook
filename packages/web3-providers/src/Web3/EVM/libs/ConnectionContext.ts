@@ -83,14 +83,18 @@ export class ConnectionContext {
     }
 
     get config() {
+        const chainId_ =
+            typeof this._options?.overrides?.chainId === 'string'
+                ? Number.parseInt(this._options?.overrides?.chainId, 16)
+                : this.payloadEditor.config?.chainId
+
+        const chainId = typeof chainId_ === 'string' ? Number.parseInt(chainId_, 16) : chainId_
+
         return {
             ...this.payloadEditor.config,
             ...this._options?.overrides,
             from: this._options?.overrides?.from || this.payloadEditor.config?.from,
-            chainId:
-                typeof this._options?.overrides?.chainId === 'string'
-                    ? Number.parseInt(this._options?.overrides?.chainId, 16)
-                    : this.payloadEditor.config?.chainId,
+            chainId,
         }
     }
 
