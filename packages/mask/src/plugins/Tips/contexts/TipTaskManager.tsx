@@ -6,7 +6,6 @@ import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
 import type { TipTask } from '../types/index.js'
 import { TipTaskProvider } from './Tip/TipTaskProvider.js'
-import { TipsTransactionProvider } from './TipsTransaction.js'
 import { TargetRuntimeContext, ChainRuntime } from './TargetRuntimeContext.js'
 
 let id = 0
@@ -50,9 +49,7 @@ export function TipTaskManager({ children }: PropsWithChildren<{}>) {
                     <TargetRuntimeContext.Provider key={task.id} initialState={pluginID}>
                         <ChainRuntime>
                             <TipTaskProvider task={task}>
-                                <TipsTransactionProvider>
-                                    <TipDialog open onClose={() => removeTask(task)} />
-                                </TipsTransactionProvider>
+                                <TipDialog open onClose={() => removeTask(task)} />
                             </TipTaskProvider>
                         </ChainRuntime>
                     </TargetRuntimeContext.Provider>

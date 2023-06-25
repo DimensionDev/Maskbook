@@ -11,7 +11,6 @@ import { useI18N } from '../../../utils/index.js'
 import { RemindDialog } from './RemindDialog.js'
 import { SwapDialog, type SwapDialogProps } from './SwapDialog.js'
 import { UnlockDialog } from './UnlockDialog.js'
-import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
 
 export enum SwapStatus {
     Remind = 0,
@@ -109,21 +108,19 @@ export function SwapGuide(props: SwapGuideProps) {
                             )
                         case SwapStatus.Swap:
                             return (
-                                <TransactionConfirmDialogProvider>
-                                    <SwapDialog
-                                        account={account}
-                                        initAmount={initAmount}
-                                        tokenAmount={tokenAmount}
-                                        maxSwapAmount={maxSwapAmount}
-                                        setTokenAmount={setTokenAmount}
-                                        successShareText={shareSuccessText}
-                                        setActualSwapAmount={setActualSwapAmount}
-                                        payload={payload}
-                                        token={payload.token}
-                                        exchangeTokens={exchangeTokens}
-                                        chainId={chainId}
-                                    />
-                                </TransactionConfirmDialogProvider>
+                                <SwapDialog
+                                    account={account}
+                                    initAmount={initAmount}
+                                    tokenAmount={tokenAmount}
+                                    maxSwapAmount={maxSwapAmount}
+                                    setTokenAmount={setTokenAmount}
+                                    successShareText={shareSuccessText}
+                                    setActualSwapAmount={setActualSwapAmount}
+                                    payload={payload}
+                                    token={payload.token}
+                                    exchangeTokens={exchangeTokens}
+                                    chainId={chainId}
+                                />
                             )
                         default:
                             return null

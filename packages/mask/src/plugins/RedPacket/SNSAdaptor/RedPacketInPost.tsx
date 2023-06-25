@@ -6,7 +6,6 @@ import { RedPacket } from './RedPacket/index.js'
 import { RedPacketRPC } from '../messages.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { RedPacketJSONPayload, RedPacketRecord } from '@masknet/web3-providers/types'
-import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
 
 export interface RedPacketInPostProps {
     payload: RedPacketJSONPayload
@@ -32,9 +31,5 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     }, [fromUrl, chainId])
     // #endregion
 
-    return (
-        <TransactionConfirmDialogProvider>
-            <RedPacket payload={payload} />
-        </TransactionConfirmDialogProvider>
-    )
+    return <RedPacket payload={payload} />
 }

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
@@ -7,7 +7,6 @@ import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useTransactionConfirmDialog } from '../context/TokenTransactionConfirmDialogContext.js'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
@@ -19,6 +18,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { TransactionConfirmModal } from '@masknet/shared'
 
 export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -197,37 +197,38 @@ export function RedPacket(props: RedPacketProps) {
         payloadChainId,
     )
 
-    const [isClaimed, setIsClaimed] = useState(false)
+    const openTransactionConfirmModal = useCallback(() => {
+        if (isZero(availability?.claimed_amount ?? '0')) return
 
-    useEffect(() => {
-        setIsClaimed(false)
-    }, [account])
-
-    const openTransactionConfirmDialog = useTransactionConfirmDialog()
+        TransactionConfirmModal.open({
+            shareText,
+            amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
+            token,
+            tokenType: TokenType.Fungible,
+            messageTextForNFT: t.claim_nft_successful({
+                name: 'NFT',
+            }),
+            messageTextForFT: t.claim_token_successful({
+                amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
+                name: `$${token?.symbol}`,
+            }),
+            title: t.lucky_drop(),
+            share: activatedSocialNetworkUI.utils.share,
+        })
+    }, [JSON.stringify(token), availability?.claimed_amount])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
             hash = await claimCallback()
-            setIsClaimed(true)
+            openTransactionConfirmModal()
         } else if (canRefund) {
             hash = await refundCallback()
         }
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback])
-
-    useEffect(() => {
-        if (!isClaimed || isZero(availability?.claimed_amount ?? '0')) return
-
-        openTransactionConfirmDialog({
-            shareText,
-            amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
-            token,
-            tokenType: TokenType.Fungible,
-        })
-    }, [isClaimed, openTransactionConfirmDialog, JSON.stringify(token), availability?.claimed_amount])
+    }, [canClaim, canRefund, claimCallback, openTransactionConfirmModal])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''
