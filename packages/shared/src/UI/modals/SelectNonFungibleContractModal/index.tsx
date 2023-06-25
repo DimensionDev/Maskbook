@@ -1,8 +1,8 @@
 import { forwardRef, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type SingletonModalRefCreator, NetworkPluginID } from '@masknet/shared-base'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 import { SelectNonFungibleContractDialog } from './SelectNonFungibleContractDialog.js'
 
 export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPluginID = NetworkPluginID> {
@@ -20,7 +20,7 @@ export const SelectNonFungibleContractModal = forwardRef<
     SingletonModalRefCreator<SelectNonFungibleContractModalOpenProps>,
     SelectNonFungibleContractModalProps
 >((props, ref) => {
-    const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+    const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [title, setTitle] = useState<string>()
     const [onSubmit, setOnSubmit] =
