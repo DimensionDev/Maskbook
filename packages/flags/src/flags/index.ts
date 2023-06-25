@@ -39,7 +39,7 @@ export const flags = {
 
     using_emoji_flag: true,
 
-    i18nTranslationHotUpdate: true,
+    i18nTranslationHotUpdate: false,
     sandboxedPluginRuntime: false,
 
     /** The earliest version for the sentry to watch events and exceptions. */
