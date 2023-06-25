@@ -229,7 +229,7 @@ export function RedPacket(props: RedPacketProps) {
             }),
             messageTextForFT: t.claim_token_successful({
                 amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
-                name: token?.symbol ?? '',
+                name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
             share: activatedSocialNetworkUI.utils.share,

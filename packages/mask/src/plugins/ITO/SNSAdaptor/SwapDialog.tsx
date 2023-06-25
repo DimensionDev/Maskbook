@@ -180,7 +180,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 tokenType: TokenType.Fungible,
                 messageTextForFT: t('plugin_ito_your_claimed_amount', {
                     amount: formatBalance(to_value, payload.token?.decimals, 2),
-                    symbol: payload.token.symbol,
+                    symbol: `$${payload.token.symbol}`,
                 }),
                 title: t('plugin_ito_name'),
                 share: activatedSocialNetworkUI.utils.share,

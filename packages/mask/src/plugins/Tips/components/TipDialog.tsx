@@ -1,8 +1,8 @@
-import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfirmModal } from '@masknet/shared'
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNonFungibleAsset, useWallet } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -10,12 +10,13 @@ import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useMemo } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
-import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
+import { useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
+import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -103,20 +104,35 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
-    const createTipsTx = useCreateTipsTransaction()
+    const { value: nonFungibleToken } = useNonFungibleAsset(
+        undefined,
+        nonFungibleTokenAddress,
+        nonFungibleTokenId ?? '',
+    )
+
     const send = useCallback(async () => {
         const hash = await sendTip()
         if (typeof hash !== 'string') return
-        await createTipsTx({
+
+        await TransactionConfirmModal.openAndWaitForClose({
             shareText,
             amount,
             tokenType: tipType,
             token,
-            nonFungibleTokenAddress,
-            nonFungibleTokenId,
+
+            messageTextForNFT: t.send_specific_tip_successfully({
+                amount: '1',
+                name: nonFungibleToken?.contract?.name || 'NFT',
+            }),
+            messageTextForFT: t.send_specific_tip_successfully({
+                amount,
+                name: `$${token?.symbol}`,
+            }),
+            title: t.tips(),
+            share: activatedSocialNetworkUI.utils.share,
         })
         onClose?.()
-    }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
+    }, [sendTip, nonFungibleToken, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
         ? pluginID
