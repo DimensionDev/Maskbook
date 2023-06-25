@@ -213,6 +213,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
                 balance: fungibleTokensBalance[x.address],
             }))
     }, [
+        mode,
         chainId,
         fungibleAssets,
         trustedFungibleTokens,
