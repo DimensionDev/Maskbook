@@ -11,10 +11,16 @@ import {
     type Account,
 } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { NextIDProof, Others, Web3 } from '@masknet/web3-providers'
+import { NextIDProof, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
-import { type ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    EthereumMethodType,
+    providerResolver,
+    ProviderType,
+    formatDomainName,
+} from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps.js'
 import Services from '../../../../service.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
@@ -61,7 +67,7 @@ const VerifyWallet = memo(() => {
     }, [wallet.account, currentPersona?.identifier.publicKeyAsHex])
 
     const walletName = () => {
-        if (domain) return Others.formatDomainName(domain)
+        if (domain) return formatDomainName(domain)
         if (wallet.providerType !== ProviderType.MaskWallet)
             return `${providerResolver.providerName(wallet.providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, wallet.account))?.name ?? 'Wallet'
