@@ -1,9 +1,9 @@
 import { forwardRef, useState } from 'react'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { TransactionConfirm } from './TokenTrasnactionConfirm.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import { useSingletonModal } from '../../../index.js'
+import { TransactionConfirm } from './TokenTransactionConfirm.js'
 
 export interface TransactionConfirmModalOpenProps {
     shareText: string
