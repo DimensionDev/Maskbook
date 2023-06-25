@@ -6,7 +6,7 @@ import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
-import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
+import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import {
     compose,
     getSiteType,
@@ -15,7 +15,6 @@ import {
     pluginIDSettings,
     queryClient,
 } from '@masknet/shared-base'
-import { useBuildInfo } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
@@ -24,7 +23,6 @@ export function MaskUIRootSNS(children: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,
-        (children) => <BuildInfo.Provider value={useBuildInfo} children={children} />,
         <MaskUIRoot children={children} />,
     )
 }

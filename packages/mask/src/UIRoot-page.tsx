@@ -5,7 +5,7 @@ import { StyledEngineProvider, type Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
-import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
+import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import {
     compose,
     getSiteType,
@@ -14,13 +14,11 @@ import {
     pluginIDSettings,
     queryClient,
 } from '@masknet/shared-base'
-import { useBuildInfo } from './utils/BuildInfoMarkdown.js'
 
 export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,
-        (children) => <BuildInfo.Provider value={useBuildInfo} children={children} />,
 
         // Provide the minimal environment (i18n context) for CrashUI in page mode
         (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,

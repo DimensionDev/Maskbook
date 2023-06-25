@@ -1,5 +1,5 @@
 import { useTimeoutFn } from 'react-use'
-import { useMemo, useState, useContext } from 'react'
+import { useMemo, useState, useContext, useRef } from 'react'
 import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { BuildInfo, type ErrorBoundaryError } from './context.js'
@@ -17,7 +17,7 @@ export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError
     onRetry: () => void
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
-    const context = useContext(BuildInfo)()
+    const context = useRef(useContext(BuildInfo)).current()
     const t = useSharedBaseI18N()
 
     const [showStack, setShowStack] = useState(false)

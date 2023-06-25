@@ -1,14 +1,14 @@
+// DO NOT ADD ANY IMPORT HERE
+// We need to avoid Top Level Await in this file.
 import type { Runtime } from 'webextension-polyfill'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { hmr } from '../../../utils-pure/index.js'
 
-function openWelcome() {
+async function openWelcome() {
+    const { DashboardRoutes } = await import('@masknet/shared-base')
     browser.tabs.create({
         url: browser.runtime.getURL(`dashboard.html#${DashboardRoutes.Welcome}`),
     })
 }
 
-const { signal } = hmr(import.meta.webpackHot)
 const onInstalled = async (detail: Runtime.OnInstalledDetailsType) => {
     if (detail.reason === 'install') openWelcome()
     else if (detail.reason === 'update') {
@@ -18,6 +18,3 @@ const onInstalled = async (detail: Runtime.OnInstalledDetailsType) => {
     }
 }
 browser.runtime.onInstalled.addListener(onInstalled)
-signal.addEventListener('abort', () => {
-    browser.runtime.onInstalled.removeListener(onInstalled)
-})

@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { MaskColorVar } from '@masknet/theme'
 import { styled } from '@mui/system'
 import { useDashboardI18N } from '../../locales/index.js'
+import { useBuildInfo } from '@masknet/shared-base-ui'
 
 const VersionContainer = styled('div')(() => ({
     color: MaskColorVar.textSecondary,
@@ -11,6 +12,7 @@ const VersionContainer = styled('div')(() => ({
 
 export const NavigationVersionFooter = memo(() => {
     const t = useDashboardI18N()
-    const version = process.env.VERSION
+    const env = useBuildInfo()
+    const version = env.VERSION
     return <VersionContainer>{version ? version : t.version_of_stable({ version })}</VersionContainer>
 })

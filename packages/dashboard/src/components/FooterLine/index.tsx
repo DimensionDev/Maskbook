@@ -1,7 +1,7 @@
 import { memo, useState, type HTMLProps } from 'react'
 import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
 import { Close } from '@mui/icons-material'
-import { openWindow } from '@masknet/shared-base-ui'
+import { openWindow, useBuildInfo } from '@masknet/shared-base-ui'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
 import { About } from './About.js'
@@ -68,7 +68,8 @@ export const FooterLine = memo((props: HTMLProps<HTMLDivElement>) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)
-    const version = process.env.VERSION
+    const env = useBuildInfo()
+    const version = env.VERSION
 
     const defaultVersionLink = `${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`
     const openVersionLink = (event: React.MouseEvent) => {
@@ -76,7 +77,7 @@ export const FooterLine = memo((props: HTMLProps<HTMLDivElement>) => {
         if (process.env.channel === 'stable' && !event.metaKey) {
             openWindow(defaultVersionLink)
         } else {
-            openWindow(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${process.env.COMMIT_HASH}`)
+            openWindow(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${env.COMMIT_HASH}`)
         }
     }
     return (
@@ -94,7 +95,7 @@ export const FooterLine = memo((props: HTMLProps<HTMLDivElement>) => {
                     }}>
                     {t.about()}
                 </FooterLinkItem>
-                <FooterLinkItem href={defaultVersionLink} onClick={openVersionLink} title={process.env.VERSION}>
+                <FooterLinkItem href={defaultVersionLink} onClick={openVersionLink} title={env.VERSION}>
                     <Version />
                 </FooterLinkItem>
                 <FooterLinkItem href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkItem>

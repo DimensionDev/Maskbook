@@ -51,7 +51,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true, deferImport: { asyncModule: 'error' } },
+        experiments: {
+            backCompat: false,
+            asyncWebAssembly: true,
+            topLevelAwait: true,
+            deferImport: { asyncModule: 'error' },
+        },
         cache: {
             type: 'filesystem',
             readonly: flags.readonlyCache,
@@ -183,27 +188,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 Buffer: [require.resolve('buffer'), 'Buffer'],
                 'process.nextTick': require.resolve('next-tick'),
             }),
-            (() => {
-                // In development mode, it will be shared across different target to speedup.
-                // This is a valuable trade-off.
-                const runtimeValues: Record<string, string | boolean> = {
-                    ...getGitInfo(flags.reproducibleBuild),
-                    channel: flags.channel,
-                }
-                if (flags.mode === 'development') runtimeValues.REACT_DEVTOOLS_EDITOR_URL = flags.devtoolsEditorURI
-                if (flags.mode === 'development') return EnvironmentPluginCache(runtimeValues)
-                return EnvironmentPluginNoCache(runtimeValues)
-            })(),
             new EnvironmentPlugin({
                 NODE_ENV: flags.mode,
                 NODE_DEBUG: false,
-                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
-                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
+                channel: flags.channel,
             }),
             new DefinePlugin({
-                'process.env.VERSION': `(typeof browser === 'object' && browser.runtime ? browser.runtime.getManifest().version : ${JSON.stringify(
-                    VERSION,
-                )})`,
                 'process.browser': 'true',
                 'process.version': JSON.stringify('v19.0.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout

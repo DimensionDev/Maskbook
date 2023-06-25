@@ -16,6 +16,7 @@ export interface InternalBackupOptions {
     noProfiles?: boolean
     onlyForPersona?: PersonaIdentifier
     allProfile?: boolean
+    maskVersion?: string
 }
 /**
  * @internal
@@ -28,7 +29,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
     const { meta, personas, posts, profiles, relations, settings } = file
 
     meta.version = 2
-    meta.maskVersion = Some(process.env.VERSION || '>=2.5.0')
+    meta.maskVersion = Some(options.maskVersion || '>=2.21.0')
     meta.createdAt = Some(new Date())
 
     settings.grantedHostPermissions = (await browser.permissions.getAll()).origins || []

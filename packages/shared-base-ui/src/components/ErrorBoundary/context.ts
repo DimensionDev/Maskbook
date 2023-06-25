@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import { useBuildInfoMarkdown } from '../../index.js'
 export interface ErrorBoundaryError {
     /** Type of the Error */
     type: string
@@ -10,5 +11,5 @@ export interface ErrorBoundaryError {
 /**
  * Provide the build info for CrashUI
  */
-export const BuildInfo = createContext<() => string>(() => '')
+export const BuildInfo = createContext<() => string>(useBuildInfoMarkdown)
 BuildInfo.displayName = 'BuildInfo'
