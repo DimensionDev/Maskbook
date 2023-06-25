@@ -41,7 +41,7 @@ import {
     getAllChainNames,
     resolveEventType,
     resolveSimpleHashRange,
-    SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
+    checkBlurToken,
 } from '../helpers.js'
 import {
     type Asset,
@@ -58,6 +58,7 @@ import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
+import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME } from '../constants.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private looksrare = new LooksRareAPI()
@@ -365,20 +366,22 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return {
             cursor: response.next_cursor,
             content: response.transfers.map((x) => {
-                const trade_token = x.sale_details?.payment_token
-                    ? {
-                          ...x.sale_details?.payment_token,
-                          type: TokenType.Fungible,
-                          address: x.sale_details?.payment_token.payment_token_id.includes('native')
-                              ? ZERO_ADDRESS
-                              : x.sale_details?.payment_token.address ?? '',
-                          id: x.sale_details?.payment_token.payment_token_id.includes('native')
-                              ? ZERO_ADDRESS
-                              : x.sale_details?.payment_token.address ?? '',
-                          chainId,
-                          schema: SchemaType.ERC20,
-                      }
-                    : createNativeToken(chainId)
+                const trade_token =
+                    !x.sale_details?.payment_token ||
+                    checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
+                        ? createNativeToken(chainId)
+                        : {
+                              ...x.sale_details?.payment_token,
+                              type: TokenType.Fungible,
+                              address: x.sale_details?.payment_token.payment_token_id.includes('native')
+                                  ? ZERO_ADDRESS
+                                  : x.sale_details?.payment_token.address ?? '',
+                              id: x.sale_details?.payment_token.payment_token_id.includes('native')
+                                  ? ZERO_ADDRESS
+                                  : x.sale_details?.payment_token.address ?? '',
+                              chainId,
+                              schema: SchemaType.ERC20,
+                          }
                 const imageURL = batchAssetsResponse.nfts.find((y) => y.nft_id === x.nft_id)?.image_url ?? ''
                 return {
                     hash: x.transaction,
