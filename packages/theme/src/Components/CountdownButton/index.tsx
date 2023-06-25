@@ -25,18 +25,17 @@ export const CountdownButton = forwardRef<HTMLButtonElement, CountdownButtonProp
     }, [countdown])
 
     useEffect(() => {
-        if (countdown) {
-            const timer = setTimeout(() => {
-                setCountdown(countdown - 1)
-            }, 1000)
-
-            return () => {
-                clearTimeout(timer)
-            }
-        }
-
-        return () => {}
-    }, [countdown])
+        if (!countdown) return
+        const timer = setInterval(() => {
+            setCountdown((val) => {
+                if (!val) {
+                    clearInterval(timer)
+                }
+                return val ? val - 1 : val
+            })
+        }, 1000)
+        return () => clearInterval(timer)
+    }, [!countdown])
 
     return (
         <Button ref={ref} {...others} onClick={handleClick} disabled={!!countdown || disabled}>
@@ -44,3 +43,5 @@ export const CountdownButton = forwardRef<HTMLButtonElement, CountdownButtonProp
         </Button>
     )
 })
+
+CountdownButton.displayName = 'CountdownButton'

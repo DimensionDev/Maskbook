@@ -91,6 +91,7 @@ export const UploadDropArea = memo(
             input.addEventListener('input', function onInput(event) {
                 handleFiles((event.currentTarget as any).files as FileList)
                 input.removeEventListener('input', onInput)
+                document.body.removeChild(input)
             })
             input.click()
             document.body.append(input)

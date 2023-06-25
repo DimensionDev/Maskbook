@@ -68,24 +68,13 @@ export function RestoreFromMnemonic() {
     }, [handleImport, values])
 
     return (
-        <>
-            <Box>
-                <DesktopMnemonicConfirm onChange={handleWordChange} puzzleWords={values} setAll={setMnemonic} />
-                {error ? (
-                    <Typography className={classes.error} variant="body2">
-                        {error}
-                    </Typography>
-                ) : null}
-            </Box>
-            {/* <ButtonContainer> */}
-            {/*     <LoadingButton */}
-            {/*         variant="rounded" */}
-            {/*         size="large" */}
-            {/*         onClick={handleImport} */}
-            {/*         disabled={some(values, (value) => !value)}> */}
-            {/*         {t.confirm()} */}
-            {/*     </LoadingButton> */}
-            {/* </ButtonContainer> */}
-        </>
+        <Box>
+            <DesktopMnemonicConfirm onChange={handleWordChange} puzzleWords={values} setAll={setMnemonic} />
+            {error ? (
+                <Typography className={classes.error} variant="body2">
+                    {error}
+                </Typography>
+            ) : null}
+        </Box>
     )
 }

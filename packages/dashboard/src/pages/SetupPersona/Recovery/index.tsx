@@ -1,20 +1,15 @@
-import { delay } from '@masknet/kit'
-import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Button, Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Services } from '../../../API.js'
-import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud.js'
-import { useList } from 'react-use'
 import { PersonaRecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 
@@ -51,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
                 ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
                 : 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%)',
         padding: theme.spacing('14px', 2, 0),
-        // borderRadius: theme.spacing(1, 1, 0, 0),
     },
     tab: {
         fontSize: 16,
@@ -79,45 +73,6 @@ export const Recovery = memo(function Recovery() {
     const { classes } = useStyles()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
-
-    const [personaName, setPersonaName] = useState('')
-    const [values, { updateAt, set: setMnemonic }] = useList(Array.from({ length: 12 }, () => ''))
-    const [error, setError] = useState('')
-    const handleWordChange = useCallback((word: string, index: number) => {
-        updateAt(index, word)
-        setError('')
-    }, [])
-
-    const [privateKey, setPrivateKey] = useState('')
-
-    const onNext = useCallback(async () => {
-        setError('')
-
-        const personas = await Services.Identity.queryOwnedPersonaInformation(true)
-        const existing = personas.some((x) => x.nickname === personaName)
-
-        if (existing) {
-            return setError(t.create_account_persona_exists())
-        }
-
-        navigate(DashboardRoutes.SignUpPersonaMnemonic, {
-            replace: true,
-            state: {
-                personaName,
-            },
-        })
-    }, [personaName])
-
-    const onSkip = useCallback(async () => {
-        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
-        if (!url) return
-        await delay(300)
-        browser.tabs.create({
-            active: true,
-            url,
-        })
-        window.close()
-    }, [])
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
 
@@ -171,20 +126,7 @@ export const Recovery = memo(function Recovery() {
                     {({ SubmitOutlet }) => {
                         return (
                             <SetupFrameController>
-                                <div className={classes.buttonGroup}>
-                                    <SecondaryButton width="125px" size="large" onClick={onSkip}>
-                                        {t.skip()}
-                                    </SecondaryButton>
-                                    <PrimaryButton
-                                        width="125px"
-                                        size="large"
-                                        color="primary"
-                                        onClick={onNext}
-                                        disabled={!personaName}>
-                                        {t.continue()}
-                                    </PrimaryButton>
-                                    {SubmitOutlet}
-                                </div>
+                                <div className={classes.buttonGroup}>{SubmitOutlet}</div>
                             </SetupFrameController>
                         )
                     }}

@@ -113,11 +113,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface Props extends BoxProps {
+export interface BackupPreviewProps extends BoxProps {
     info: BackupSummary
 }
 
-export function BackupPreview({ info, ...rest }: Props) {
+export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
     const t = useDashboardI18N()
     const { classes, theme, cx } = useStyles()
 
@@ -173,45 +173,49 @@ export function BackupPreview({ info, ...rest }: Props) {
                     </List>
                 </CardContent>
             </Card>
-            <Card className={classes.card}>
-                <CardHeader
-                    className={classes.cardHeader}
-                    avatar={
-                        <div className={cx(classes.cardIcon, classes.walletIcon)}>
-                            <Icons.ConnectWallet size={20} color="#fff" />
-                        </div>
-                    }
-                    title={
-                        <Typography className={classes.title}>{`${t.wallets()} (${info.wallets.length})`}</Typography>
-                    }
-                />
-                <CardContent className={classes.cardContent}>
-                    <List className={cx(classes.wallets, classes.list)}>
-                        {info.wallets.map((wallet) => (
-                            <ListItem key={wallet} className={classes.wallet}>
-                                <ListItemIcon className={classes.listItemIcon}>
-                                    <Icons.ConnectWallet size={20} />
-                                </ListItemIcon>
-                                <ListItemText className={classes.listText}>
-                                    <Link
-                                        className={classes.link}
-                                        fontSize={0}
-                                        href={explorerResolver.addressLink(ChainId.Mainnet, wallet)}
-                                        target="_blank">
-                                        <ReversedAddress
-                                            component="span"
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            address={wallet}
-                                            mr="10px"
-                                        />
-                                        <Icons.LinkOut size={18} color={theme.palette.maskColor.second} />
-                                    </Link>
-                                </ListItemText>
-                            </ListItem>
-                        ))}
-                    </List>
-                </CardContent>
-            </Card>
+            {info.wallets.length ? (
+                <Card className={classes.card}>
+                    <CardHeader
+                        className={classes.cardHeader}
+                        avatar={
+                            <div className={cx(classes.cardIcon, classes.walletIcon)}>
+                                <Icons.ConnectWallet size={20} color="#fff" />
+                            </div>
+                        }
+                        title={
+                            <Typography className={classes.title}>
+                                {`${t.wallets()} (${info.wallets.length})`}
+                            </Typography>
+                        }
+                    />
+                    <CardContent className={classes.cardContent}>
+                        <List className={cx(classes.wallets, classes.list)}>
+                            {info.wallets.map((wallet) => (
+                                <ListItem key={wallet} className={classes.wallet}>
+                                    <ListItemIcon className={classes.listItemIcon}>
+                                        <Icons.ConnectWallet size={20} />
+                                    </ListItemIcon>
+                                    <ListItemText className={classes.listText}>
+                                        <Link
+                                            className={classes.link}
+                                            fontSize={0}
+                                            href={explorerResolver.addressLink(ChainId.Mainnet, wallet)}
+                                            target="_blank">
+                                            <ReversedAddress
+                                                component="span"
+                                                pluginID={NetworkPluginID.PLUGIN_EVM}
+                                                address={wallet}
+                                                mr="10px"
+                                            />
+                                            <Icons.LinkOut size={18} color={theme.palette.maskColor.second} />
+                                        </Link>
+                                    </ListItemText>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </CardContent>
+                </Card>
+            ) : null}
         </Box>
     )
 }

@@ -139,3 +139,5 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
         </Box>
     )
 })
+
+MaskTextField.displayName = 'MaskTextField'

@@ -26,7 +26,7 @@ export const Step = memo(function Step({ children, toStep, params }: StepProps) 
     return <>{children(toStep!, params)}</>
 })
 
-interface StepperProps {
+export interface StepperProps {
     defaultStep: string
     step?: {
         name: string
@@ -39,9 +39,10 @@ interface StepperProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement[]
+    onChange?: (step: { name: string; params: any }) => void
 }
 export function Stepper(props: StepperProps) {
-    const { defaultStep, transition, step } = props
+    const { defaultStep, transition, step, onChange } = props
     const { classes } = useStyles()
     const [currentStep, setCurrentStep] = useState(defaultStep)
     const [currentTransition, setCurrentTransition] = useState(transition?.render)
@@ -53,6 +54,7 @@ export function Stepper(props: StepperProps) {
     const toStep = (stepName: string, params: any) => {
         setCurrentStep(stepName)
         setParam(stepName, params)
+        onChange?.({ name: stepName, params })
     }
 
     useEffect(() => {
@@ -79,7 +81,7 @@ export function Stepper(props: StepperProps) {
     useEffect(() => {
         if (!step) return
         toStep(step.name, step.params)
-    }, [step])
+    }, [step?.name, step?.params])
 
     return (
         <>

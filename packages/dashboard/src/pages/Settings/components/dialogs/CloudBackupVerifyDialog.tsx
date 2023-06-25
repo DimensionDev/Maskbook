@@ -31,7 +31,7 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     const params = useMemo(() => {
         return {
             account: mode,
-            type: mode.includes('@') ? AccountType.email : AccountType.phone,
+            type: mode.includes('@') ? AccountType.Email : AccountType.Phone,
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
             code,

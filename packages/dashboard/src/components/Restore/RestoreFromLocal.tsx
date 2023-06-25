@@ -6,7 +6,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { Messages, Services } from '../../API.js'
@@ -16,11 +16,12 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
 import { BackupPreview } from '../../pages/Settings/components/BackupPreview.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
+import { AccountStatusBar } from './AccountStatusBar.js'
 
 enum RestoreStatus {
     WaitingInput = 0,
-    Verified = 2,
-    Decrypting = 3,
+    Verified = 1,
+    Decrypting = 2,
 }
 
 const supportedFileType = {
@@ -52,7 +53,7 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
     const [summary, setSummary] = useState<BackupSummary | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [backupId, setBackupId] = useState('')
-    const [password, setPassword] = useState('123543Aa!')
+    const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
     const [readingFile, setReadingFile] = useState(false)
@@ -61,7 +62,7 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
         setFile(file)
         if (file.type === supportedFileType.json) {
             setReadingFile(true)
-            const [value] = await Promise.all([file.text(), delay(3000)])
+            const [value] = await Promise.all([file.text(), delay(1000)])
             setBackupValue(value)
             setReadingFile(false)
         } else if ([supportedFileType.octetStream, supportedFileType.macBinary].includes(file.type)) {
@@ -94,12 +95,11 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
 
     const decryptBackupFile = useCallback(async () => {
         if (!file) return
-
         try {
             setReadingFile(true)
             const [decrypted] = await Promise.all([
                 file.arrayBuffer().then((buffer) => decryptBackup(encode(password), buffer)),
-                delay(3000),
+                delay(1000),
             ])
             const decoded = decode(decrypted)
             setBackupValue(JSON.stringify(decoded))
@@ -138,7 +138,11 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
 
-    const disabled = readingFile || restoreStatus === RestoreStatus.Verified ? !summary : !file
+    const disabled = useMemo(() => {
+        if (!readingFile && restoreStatus === RestoreStatus.Verified) return !summary
+        if (restoreStatus === RestoreStatus.Decrypting) return !password
+        return readingFile || !file
+    }, [readingFile, !file, restoreStatus, summary, !password])
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
@@ -146,7 +150,7 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
                 color="primary"
                 onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                 disabled={disabled}>
-                {restoreStatus !== RestoreStatus.Verified ? t.next() : t.restore()}
+                {restoreStatus !== RestoreStatus.Verified ? t.continue() : t.restore()}
             </PrimaryButton>,
         )
     }, [restoreStatus, decryptBackupFile, restoreDB, disabled])
@@ -165,7 +169,9 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
                             <Icons.Clear size={24} color={theme.palette.maskColor.main} />
                         </Button>
                     }>
-                    <Typography className={classes.desc}>{readingFile ? 'Unpacking' : 'Completed'}</Typography>
+                    <Typography className={classes.desc}>
+                        {readingFile ? t.file_unpacking() : t.file_unpacking_completed()}
+                    </Typography>
                 </FileFrame>
             ) : null}
             {restoreStatus === RestoreStatus.Decrypting ? (
@@ -181,12 +187,7 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
             ) : restoreStatus === RestoreStatus.Verified ? (
                 summary ? (
                     <>
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Typography>{file?.name}</Typography>
-                            <Button variant="text" onClick={reset}>
-                                Reselect
-                            </Button>
-                        </Box>
+                        <AccountStatusBar label={file?.name} actionLabel={t.file_reselect()} onAction={reset} />
                         <BackupPreview mt={2} info={summary} />
                     </>
                 ) : null

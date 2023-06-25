@@ -48,7 +48,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey() {
                     await changeCurrentPersona(persona)
                     // Waiting persona changed event notify
                     await delay(100)
-                    navigate(DashboardRoutes.Personas)
+                    navigate(DashboardRoutes.SignUpPersonaOnboarding)
                 } else {
                     navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                         replace: false,
@@ -75,35 +75,21 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey() {
     }, [isSubmitting, isDirty, handleSubmit, onSubmit])
 
     return (
-        <>
-            <Box sx={{ width: '100%' }}>
-                <Box>
-                    <Controller
-                        control={control}
-                        render={({ field }) => (
-                            <MaskTextField
-                                {...field}
-                                sx={{ width: '100%' }}
-                                type="password"
-                                helperText={errors.privateKey?.message}
-                                error={!!errors.privateKey}
-                                placeholder={t.sign_in_account_private_key_placeholder()}
-                            />
-                        )}
-                        name="privateKey"
+        <Box width="100%">
+            <Controller
+                control={control}
+                render={({ field }) => (
+                    <MaskTextField
+                        {...field}
+                        sx={{ width: '100%' }}
+                        type="password"
+                        helperText={errors.privateKey?.message}
+                        error={!!errors.privateKey}
+                        placeholder={t.sign_in_account_private_key_placeholder()}
                     />
-                </Box>
-                {/* <ButtonContainer> */}
-                {/*     <Button */}
-                {/*         size="large" */}
-                {/*         variant="rounded" */}
-                {/*         color="primary" */}
-                {/*         type="submit" */}
-                {/*         disabled={isSubmitting || !isDirty}> */}
-                {/*         {t.confirm()} */}
-                {/*     </Button> */}
-                {/* </ButtonContainer> */}
-            </Box>
-        </>
+                )}
+                name="privateKey"
+            />
+        </Box>
     )
 })
