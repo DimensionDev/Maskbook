@@ -287,5 +287,10 @@
     "decentralized_search_feature_nft_description": "crwdns20541:0crwdne20541:0",
     "decentralized_search_feature_wallet_name": "crwdns20543:0crwdne20543:0",
     "decentralized_search_feature_wallet_description": "crwdns20545:0crwdne20545:0",
+    "claim_nft_successful": "crwdns20551:0{{name}}crwdne20551:0",
+    "claim_token_successful": "crwdns20553:0{{- amount}}crwdnd20553:0{{name}}crwdne20553:0",
+    "lucky_drop": "crwdns20555:0crwdne20555:0",
+    "share": "crwdns20557:0crwdne20557:0",
+    "ok": "crwdns20559:0crwdne20559:0",
     "plugin_wallet_on_connect": "crwdns20309:0crwdne20309:0"
 }
