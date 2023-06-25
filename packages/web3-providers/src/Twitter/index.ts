@@ -81,9 +81,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
-        const headers = await getHeaders({
-            referer: `https://twitter.com/${screenName}`,
-        })
+        const headers = await getHeaders()
 
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
