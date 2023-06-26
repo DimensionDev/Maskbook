@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, useSelectFungibleToken, ConfirmModal, SelectProviderModal } from '@masknet/shared'
+import { ImageIcon, ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -181,28 +181,26 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
 
-    const selectFungibleToken = useSelectFungibleToken()
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
             if (!account) {
                 SelectProviderModal.open()
                 return
             }
-            const picked = await selectFungibleToken({
+            const picked = await SelectFungibleTokenModal.openAndWaitForClose({
                 chainId,
                 disableNativeToken: false,
                 selectedTokens: excludeTokens,
             })
-            if (picked) {
-                dispatchTradeStore({
-                    type:
-                        panelType === TokenPanelType.Input
-                            ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-                            : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: picked,
-                    balance: '0',
-                })
-            }
+            if (!picked) return
+            dispatchTradeStore({
+                type:
+                    panelType === TokenPanelType.Input
+                        ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
+                        : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                token: picked,
+                balance: '0',
+            })
         },
         [excludeTokens.join(','), chainId, account],
     )

@@ -12,10 +12,10 @@ import {
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
 import {
-    useSelectFungibleToken,
     FungibleTokenInput,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    SelectFungibleTokenModal,
 } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
@@ -48,15 +48,16 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // #region select token
     const [token, setToken] = useState<FungibleToken<ChainId, SchemaType.ERC20>>(tokens[0])
-    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await selectFungibleToken({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: true,
             disableSearchBar: true,
             selectedTokens: token?.address ? [token.address] : [],
             whitelist: tokens.map((x) => x.address),
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (picked) setToken(picked as FungibleToken<ChainId, SchemaType.ERC20>)
+        if (!picked) return
+        setToken(picked as FungibleToken<ChainId, SchemaType.ERC20>)
     }, [tokens, token?.address])
     // #endregion
     // #region amount

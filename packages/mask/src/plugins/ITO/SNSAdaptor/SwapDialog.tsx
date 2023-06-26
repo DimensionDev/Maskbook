@@ -2,11 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    useSelectFungibleToken,
     FungibleTokenInput,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
     TransactionConfirmModal,
+    SelectFungibleTokenModal,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
@@ -112,18 +112,18 @@ export function SwapDialog(props: SwapDialogProps) {
         swapAmount.isZero() ? '' : leftShift(swapAmount, swapToken?.decimals).toFixed(),
     )
     // #region select token
-    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await selectFungibleToken({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         })
         if (!picked) return
         const at = exchangeTokens.findIndex(currySameAddress(picked.address))
         const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(payload.exchange_amounts[at * 2 + 1])
         setRatio(ratio)
-        setSwapToken(picked)
+        setSwapToken(picked as FungibleToken<ChainId, SchemaType>)
         setTokenAmount(initAmount)
         setSwapAmount(initAmount.multipliedBy(ratio))
         setInputAmountForUI(
@@ -132,7 +132,6 @@ export function SwapDialog(props: SwapDialogProps) {
     }, [
         initAmount,
         payload,
-        selectFungibleToken,
         exchangeTokens
             .map((x) => x.address)
             .sort((a, b) => a.localeCompare(b, 'en-US'))

@@ -10,6 +10,10 @@ import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmMod
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
 import type {
+    SelectFungibleTokenModalOpenProps,
+    SelectFungibleTokenModalCloseProps,
+} from './SelectFungibleTokenModal/index.js'
+import type {
     SelectGasSettingsModalCloseProps,
     SelectGasSettingsModalOpenProps,
 } from './SelectAdvancedSettingsDialog/index.js'
@@ -32,3 +36,7 @@ export const SelectGasSettingsModal = new SingletonModal<
     SelectGasSettingsModalCloseProps
 >()
 export const AddCollectiblesModal = new SingletonModal<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>()
+export const SelectFungibleTokenModal = new SingletonModal<
+    SelectFungibleTokenModalOpenProps,
+    SelectFungibleTokenModalCloseProps
+>()
