@@ -1,7 +1,9 @@
+import { type HTMLProps, useCallback, useRef } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
+import { EMPTY_LIST } from '@masknet/shared-base'
+
 import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
-import { type HTMLProps, useCallback, useRef } from 'react'
 import {
     DisplayingFile,
     type DisplayingFileProps,
@@ -11,10 +13,9 @@ import {
     UploadingFile,
 } from './Files/index.js'
 import { Translate, useI18N } from '../../locales/index.js'
-import { useFileManagement, useShowRenameDialog } from '../contexts/index.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../../Worker/rpc.js'
-import { ConfirmModal } from '../modals/index.js'
+import { ConfirmModal, RenameModal } from '../modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -107,19 +108,19 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
         },
         [refetchFiles, t],
     )
-    const showPrompt = useShowRenameDialog()
+
     const handleRename = useCallback(
         async (file: FileInfo) => {
-            const newName = await showPrompt({
+            const name = await RenameModal.openAndWaitForClose({
                 currentName: file.name,
                 message: t.rename_validation(),
             })
-            if (newName) {
-                await PluginFileServiceRPC.renameFile(file.id, newName)
-                refetchFiles()
-            }
+            if (!name) return
+
+            await PluginFileServiceRPC.renameFile(file.id, name)
+            refetchFiles()
         },
-        [showPrompt, refetchFiles, t],
+        [refetchFiles, t],
     )
 
     return (
