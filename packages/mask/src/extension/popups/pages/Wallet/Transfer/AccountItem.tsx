@@ -2,9 +2,9 @@ import { memo } from 'react'
 import { MenuItem, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useReverseAddress } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     menuItem: {
@@ -37,7 +37,6 @@ export interface AccountItemProps {
 
 export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
     const { classes } = useStyles()
-    const Others = useWeb3Others()
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account.address)
 
     return (
@@ -46,7 +45,7 @@ export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
                 {account.name}
                 {domain ? (
                     <Typography component="span" className={classes.domain}>
-                        {Others.formatDomainName(domain)}
+                        {formatDomainName(domain)}
                     </Typography>
                 ) : null}
             </Typography>

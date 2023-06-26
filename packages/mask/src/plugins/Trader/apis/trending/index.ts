@@ -108,11 +108,16 @@ export async function getOneDaySaleAmounts(id: string) {
 export async function getNonFungibleTokenActivities(
     pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
-    contractAddress: string,
+    address: string,
     cursor: string,
 ): Promise<{ content: Web3Helper.NonFungibleTokenActivityAll[]; cursor: string } | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCoinActivities(chainId as ChainIdSolana, contractAddress, cursor)
-        : NFTScanTrending_EVM.getCoinActivities(chainId as ChainIdEVM, contractAddress, cursor)
+        ? NFTScanTrending_Solana.getCoinActivities(chainId as ChainIdSolana, address, cursor)
+        : attemptUntil(
+              [SimpleHashEVM, NFTScanTrending_EVM].map(
+                  (x) => () => x.getCoinActivities(chainId as ChainIdEVM, address, cursor),
+              ),
+              undefined,
+          )
 }
 // #endregion

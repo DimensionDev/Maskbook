@@ -5,7 +5,7 @@ import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
 import { FuseNonFungibleCollection } from '@masknet/web3-providers'
-import { SourceType, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -60,6 +60,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     open: boolean
     pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    schemaType?: SchemaType
     title?: string
     onClose?(): void
     onSubmit?(
@@ -68,7 +69,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
 }
 
 export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialogProps> = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit }) => {
+    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
@@ -83,8 +84,7 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
             refetch,
         } = useNonFungibleCollections(pluginID, {
             chainId,
-            // TODO: remove this line, after SimpleHash can recognize ERC721 Collections.
-            sourceType: SourceType.NFTScan,
+            schemaType,
         })
 
         const { Token } = useWeb3State(pluginID)

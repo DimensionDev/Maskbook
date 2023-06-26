@@ -3,8 +3,6 @@ const prodOnly = process.env.NODE_ENV === 'production'
 const insiderOnly = process.env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
-// TODO: In future, we can turn this object into a Proxy to receive flags from remote
-
 export const flags = {
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
@@ -39,7 +37,6 @@ export const flags = {
 
     using_emoji_flag: true,
 
-    i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: false,
 
     /** The earliest version for the sentry to watch events and exceptions. */
@@ -52,9 +49,10 @@ export const flags = {
     sentry_async_transaction_enabled: devOnly,
 
     // wallet connect
-    wc_mode: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
-    wc_relay_url: 'wss://relay.walletconnect.com',
-    wc_project_id: '8f1769933420afe8873860925fcca14f',
+    wc_v1_bridge_url: 'https://bridge.walletconnect.org',
+    wc_v2_relay_url: 'wss://relay.walletconnect.com',
+    wc_v2_project_id: '8f1769933420afe8873860925fcca14f',
+    wc_v2_mode: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
     wc_v1_enabled: true,
     wc_v2_enabled: betaOrInsiderOnly,
 } as const

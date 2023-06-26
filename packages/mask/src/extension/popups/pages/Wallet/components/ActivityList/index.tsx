@@ -11,9 +11,8 @@ import {
     type TransactionDescriptor,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { Others } from '@masknet/web3-providers'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { explorerResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext.js'
@@ -90,7 +89,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
         <ActivityListUI
             dataSource={dataSource}
             chainId={chainId}
-            formatterTransactionLink={Others.explorerResolver.transactionLink}
+            formatterTransactionLink={explorerResolver.transactionLink}
         />
     )
 })

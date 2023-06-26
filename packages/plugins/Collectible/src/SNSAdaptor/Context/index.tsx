@@ -8,7 +8,7 @@ import {
     useNonFungibleRarity,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceType } from '@masknet/web3-shared-base'
+import type { SourceType } from '@masknet/web3-shared-base'
 
 interface InitialState {
     parentPluginID: NetworkPluginID
@@ -36,7 +36,6 @@ function useContext(initialState?: InitialState) {
     const events = useNonFungibleEvents(pluginID, tokenAddress, tokenId, {
         chainId,
         account: ownerAddress,
-        sourceType: SourceType.NFTScan,
     })
     const rarity = useNonFungibleRarity(pluginID, tokenAddress, tokenId, {
         chainId,
