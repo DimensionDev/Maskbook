@@ -13,7 +13,6 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSelectAdvancedSettings } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { currentSlippageSettings } from '../../settings.js'
@@ -22,6 +21,7 @@ import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
+import { SelectGasSettingsModal } from '@masknet/shared'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -64,10 +64,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)
 
-    // #region remote controlled swap settings dialog
-    const selectAdvancedSettings = useSelectAdvancedSettings()
-    // #endregion
-
     const lostTokenValue = multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0)
     // #region price impact dialog
     const lostToken = formatBalance(lostTokenValue, trade.inputToken?.decimals ?? 0, 6)
@@ -96,7 +92,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     // #endregion
 
     const [, openSettingDialog] = useAsyncFn(async () => {
-        const { slippageTolerance, transaction } = await selectAdvancedSettings({
+        SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: false,
@@ -105,13 +101,20 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 gas,
                 ...gasConfig,
             },
-        })
+            onSubmit: ({
+                slippageTolerance,
+                transaction,
+            }: {
+                slippageTolerance?: number
+                transaction?: Web3Helper.TransactionAll
+            }) => {
+                if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
-        if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
-
-        PluginTraderMessages.swapSettingsUpdated.sendToAll({
-            open: false,
-            gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+                PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                    open: false,
+                    gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+                })
+            },
         })
     }, [chainId, currentSlippageSettings.value, gas, gasConfig])
 

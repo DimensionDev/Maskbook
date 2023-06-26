@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { type ChainId, GasEditor, SchemaType, type Transaction } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
-import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
+import { InjectedDialog, NetworkTab, SelectGasSettingsModal } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -93,8 +93,6 @@ export function TraderDialog() {
 
     const [open, setOpen] = useState(false)
 
-    const selectAdvancedSettings = useSelectAdvancedSettings()
-
     const defaultInputCoin = defaultCoins?.defaultInputCoin
     const defaultOutputCoin = defaultCoins?.defaultOutputCoin
 
@@ -151,7 +149,7 @@ export function TraderDialog() {
     }, [chainIdValid])
 
     const [, openGasSettingDialog] = useAsyncFn(async () => {
-        const { slippageTolerance, transaction } = await selectAdvancedSettings({
+        SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: false,
@@ -160,13 +158,20 @@ export function TraderDialog() {
                 ...tradeRef.current?.gasConfig,
             },
             slippageTolerance: currentSlippageSettings.value / 100,
-        })
+            onSubmit: ({
+                slippageTolerance,
+                transaction,
+            }: {
+                slippageTolerance?: number
+                transaction?: Web3Helper.TransactionAll
+            }) => {
+                if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
-        if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
-
-        PluginTraderMessages.swapSettingsUpdated.sendToAll({
-            open: false,
-            gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+                PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                    open: false,
+                    gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+                })
+            },
         })
     }, [chainId, currentSlippageSettings.value])
 

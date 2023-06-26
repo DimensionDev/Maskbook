@@ -14,6 +14,7 @@ import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js
 import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
 
 import * as modals from './modals.js'
+import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
 export * from './modals.js'
 
 export const Modals = memo(function Modals() {
@@ -31,6 +32,7 @@ export const Modals = memo(function Modals() {
             <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
             <ConfirmModal ref={modals.ConfirmModal.register} />
             <SelectNonFungibleContractModal ref={modals.SelectNonFungibleContractModal.register} />
+            <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
         </>
     )
 })

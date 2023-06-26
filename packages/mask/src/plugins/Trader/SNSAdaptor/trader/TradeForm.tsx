@@ -4,7 +4,7 @@ import { first, noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
+import { SelectGasSettingsModal, SelectTokenChip, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
@@ -322,12 +322,11 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #endregion
 
         // #region gas settings
-        const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
         const openSwapSettingDialog = useCallback(async () => {
             PluginTraderMessages.swapSettingsUpdated.sendToAll({
                 open: true,
             })
-            const { slippageTolerance, transaction } = await selectAdvancedSettings({
+            SelectGasSettingsModal.openAndWaitForClose({
                 chainId,
                 disableGasLimit: true,
                 disableSlippageTolerance: false,
@@ -336,15 +335,25 @@ export const TradeForm = memo<AllTradeFormProps>(
                     gas: focusedTrade?.value?.gas ?? MIN_GAS_LIMIT,
                     ...gasConfig,
                 },
-            })
+                onSubmit: ({
+                    slippageTolerance,
+                    transaction,
+                }: {
+                    slippageTolerance?: number
+                    transaction?: Web3Helper.TransactionAll
+                }) => {
+                    if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
-            if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
-
-            PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                open: false,
-                gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+                    PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                        open: false,
+                        gasConfig: GasEditor.fromTransaction(
+                            chainId as ChainId,
+                            transaction as Transaction,
+                        ).getGasConfig(),
+                    })
+                },
             })
-        }, [chainId, focusedTrade?.value?.gas, selectAdvancedSettings, gasConfig])
+        }, [chainId, focusedTrade?.value?.gas, gasConfig])
         // #endregion
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(

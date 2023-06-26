@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSharedI18N } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from './index.js'
 import { SettingsBoard } from '../../components/SettingsBoard/index.js'
 import { SettingsContext } from '../../components/SettingsBoard/Context.js'
+import { InjectedDialog } from '../../contexts/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface StyleProps {
     compact: boolean
