@@ -2,10 +2,8 @@ import { omit } from 'lodash-es'
 import { useAsync, useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { sha3 } from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
-import { TransactionEventType, type ChainId, type SchemaType, FAKE_SIGN_PASSWORD } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType, FAKE_SIGN_PASSWORD, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
@@ -101,24 +99,20 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 })
                 .catch(() => {
                     return
-                })) as number | undefined,
+                })) as string | undefined,
+            chainId,
         }
 
-        // send transaction and wait for hash
-        return new Promise<{
-            receipt: TransactionReceipt
-            settings: PoolSettings
-        }>(async (resolve, reject) => {
-            ;(ITO_Contract as ITO2).methods
-                .fill_pool(...params)
-                .send(config as NonPayableTx)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve({ receipt, settings })
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    reject(error)
-                })
-        })
+        const tx = await new ContractTransaction(ITO_Contract as ITO2).fillAll(
+            (ITO_Contract as ITO2).methods.fill_pool(...params),
+            config,
+        )
+
+        const hash = await Web3.sendTransaction(tx, { chainId })
+
+        const receipt = await Web3.getTransactionReceipt(hash, { chainId })
+
+        return { hash, receipt, settings }
     }, [account, ITO_Contract, poolSettings, paramResult])
 
     return [state, fillCallback] as const
