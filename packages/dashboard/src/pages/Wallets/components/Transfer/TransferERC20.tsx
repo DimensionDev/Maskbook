@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit } from '@masknet/web3-hooks-evm'
@@ -15,7 +16,7 @@ import {
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
+import { FormattedAddress, SelectFungibleTokenModal, TokenAmountPanel } from '@masknet/shared'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import {
@@ -49,7 +50,6 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { Context } from '../../hooks/useContext.js'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { TransferTab } from './types.js'
 
 export interface TransferERC20Props {
@@ -92,7 +92,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
-    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
 
     const { account, chainId, pluginID, isWalletConnectNetworkNotMatch } = useContainer(Context)
 
@@ -357,17 +356,17 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             loading: false,
                             ChipProps: {
                                 onClick: async () => {
-                                    const pickedToken = await selectFungibleToken({
+                                    const picked = await SelectFungibleTokenModal.openAndWaitForClose({
                                         disableNativeToken: false,
                                         chainId,
+                                        pluginID: NetworkPluginID.PLUGIN_EVM,
                                     })
-                                    if (pickedToken) {
-                                        setSelectedToken(pickedToken)
-                                        // Update the previous location state of the token.
-                                        navigate(DashboardRoutes.WalletsTransfer, {
-                                            state: { type: TransferTab.Token, token: pickedToken },
-                                        })
-                                    }
+                                    if (!picked) return
+                                    setSelectedToken(picked as FungibleToken<ChainId, SchemaType>)
+                                    // Update the previous location state of the token.
+                                    navigate(DashboardRoutes.WalletsTransfer, {
+                                        state: { type: TransferTab.Token, token: picked },
+                                    })
                                 },
                             },
                         }}

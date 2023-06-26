@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
 import {
     useNetworkContext,
     useNativeTokenAddress,
@@ -6,15 +7,14 @@ import {
     useFungibleAssets,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { FungibleTokenList, LoadingStatus, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { useBaseUIRuntime } from '../base/index.js'
-import { InjectedDialog } from './InjectedDialog.js'
 import { useRowSize } from '../../../hooks/useRowSize.js'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
+import { useSharedI18N } from '../../../locales/index.js'
+import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
+import { FungibleTokenList, LoadingStatus } from '../../components/index.js'
 
 interface StyleProps {
     compact: boolean
@@ -59,8 +59,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedTokens?: string[]
-    onSubmit?(token: Web3Helper.FungibleTokenAll | null): void
-    onClose?(): void
+    onClose(token: Web3Helper.FungibleTokenAll | null): void
 }
 
 export function SelectFungibleTokenDialog({
@@ -73,10 +72,9 @@ export function SelectFungibleTokenDialog({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSubmit,
-    onClose,
     title,
     enableManage = true,
+    onClose,
 }: SelectFungibleTokenDialogProps) {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
@@ -107,7 +105,7 @@ export function SelectFungibleTokenDialog({
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)
+                mode === TokenListMode.List ? onClose(null) : setMode(TokenListMode.List)
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
@@ -129,7 +127,7 @@ export function SelectFungibleTokenDialog({
                         }
                         disableSearch={disableSearchBar}
                         selectedTokens={selectedTokens}
-                        onSelect={onSubmit}
+                        onSelect={onClose}
                         FixedSizeListProps={FixedSizeListProps}
                         SearchTextFieldProps={{
                             InputProps: { classes: { root: classes.search } },
