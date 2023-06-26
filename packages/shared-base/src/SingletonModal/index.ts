@@ -1,4 +1,4 @@
-import { defer, type DeferTuple } from '@masknet/kit'
+import { defer, delay, type DeferTuple } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 
 export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
@@ -79,7 +79,7 @@ export class SingletonModal<
      * Open the registered modal component with props
      * @param props
      */
-    open = (props: OpenProps) => {
+    open(props: OpenProps) {
         this.dispatchOpen?.(props)
     }
 
@@ -87,14 +87,14 @@ export class SingletonModal<
      * Close the registered modal component with props
      * @param props
      */
-    close = (props: CloseProps) => {
+    close(props: CloseProps) {
         this.dispatchClose?.(props)
     }
 
     /**
      * Abort the registered modal component with Error
      */
-    abort = (error: Error) => {
+    abort(error: Error) {
         this.dispatchAbort?.(error)
     }
 
@@ -102,7 +102,7 @@ export class SingletonModal<
      * Open the registered modal component and wait for it closes
      * @param props
      */
-    openAndWaitForClose = (props: OpenProps): Promise<CloseProps> => {
+    openAndWaitForClose(props: OpenProps): Promise<CloseProps> {
         return new Promise<CloseProps>((resolve, reject) => {
             this.open(props)
             this.onClose = (props) => resolve(props)
@@ -112,7 +112,7 @@ export class SingletonModal<
 }
 
 export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends SingletonModal<OpenProps, CloseProps> {
-    private state = false
+    private opened_ = false
     private tasks: Array<{
         props: OpenProps
         defer?: DeferTuple<CloseProps, Error>
@@ -122,53 +122,56 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
         super()
 
         this.emitter.on('open', () => {
-            this.state = true
+            this.opened_ = true
         })
         this.emitter.on('close', () => {
-            this.state = false
+            this.opened_ = false
+            this.cleanup()
+        })
+        this.emitter.on('abort', () => {
+            this.opened_ = false
+            this.cleanup()
         })
     }
 
-    override open = (props: OpenProps) => {
-        if (this.state) {
-            this.tasks.push({
-                props,
-            })
-        } else {
+    override open(props: OpenProps) {
+        if (!this.opened_) {
             super.open(props)
+            return
         }
+
+        this.tasks.push({
+            props,
+        })
     }
 
-    override close = (props: CloseProps) => {
+    override close(props: CloseProps) {
+        if (!this.opened_) return
+
         super.close(props)
-        this.cleanup()
     }
 
-    override openAndWaitForClose = (props: OpenProps) => {
-        if (this.state) {
-            const d = defer<CloseProps, Error>()
-            this.tasks.push({
-                props,
-                defer: d,
-            })
-            return d[0]
-        } else {
-            return super.openAndWaitForClose(props)
-        }
+    override openAndWaitForClose(props: OpenProps) {
+        if (!this.opened_) return super.openAndWaitForClose(props)
+
+        const d = defer<CloseProps, Error>()
+        this.tasks.push({
+            props,
+            defer: d,
+        })
+        return d[0]
     }
 
-    private cleanup() {
-        if (this.state) return
-        if (!this.tasks.length) return
+    private async cleanup() {
+        if (this.opened_ || !this.tasks.length) return
+
+        await delay(300)
 
         const { props, defer } = this.tasks.shift()!
 
-        if (!defer) {
-            super.open(props)
-        } else {
-            super.open(props)
-            super.onClose = (props) => defer[1](props)
-            super.onAbort = (error) => defer[2](error)
-        }
+        this.open(props)
+        if (!defer) return
+        this.onClose = (props) => defer[1](props)
+        this.onAbort = (error) => defer[2](error)
     }
 }
