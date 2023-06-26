@@ -181,7 +181,10 @@ export const SelectNonFungibleContractDialog = memo(
                                     className={classes.contractItem}
                                     pluginID={pluginID}
                                     collection={collection}
-                                    onSelect={onSubmit}
+                                    onSelect={(collection) => {
+                                        onSubmit?.(collection)
+                                        onClose?.()
+                                    }}
                                 />
                             ))}
                         </List>
