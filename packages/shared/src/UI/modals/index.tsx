@@ -12,7 +12,7 @@ import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
 import { ConfirmModal } from './ConfirmModal/index.js'
 import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
 import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
-import { SelectFungibleTokenModal } from './SelectFungibletokenModal/index.js'
+import { SelectFungibleTokenModal } from './SelectFungibleTokenModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'

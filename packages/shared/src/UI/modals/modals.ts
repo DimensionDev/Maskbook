@@ -9,7 +9,7 @@ import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js
 import type { ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
-import type { SelectFungibleTokenModalOpenProps } from './SelectFungibletokenModal/index.js'
+import type { SelectFungibleTokenModalOpenProps } from './SelectFungibleTokenModal/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps>()
