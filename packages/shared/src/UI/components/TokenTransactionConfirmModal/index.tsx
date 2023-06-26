@@ -125,6 +125,13 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                             className={classes.tokenIcon}
                             address={token?.address || ''}
                             logoURL={token?.logoURL}
+                            name={token?.symbol ?? token?.name}
+                            chainId={token?.chainId}
+                            AvatarProps={{
+                                sx: {
+                                    fontSize: '2.75rem',
+                                },
+                            }}
                             size={90}
                         />
                         <Typography className={classes.congratulation} mt="19.5px">
