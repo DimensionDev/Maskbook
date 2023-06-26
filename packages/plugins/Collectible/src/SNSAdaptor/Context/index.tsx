@@ -8,7 +8,7 @@ import {
     useNonFungibleRarity,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type SourceType } from '@masknet/web3-shared-base'
+import type { SourceType } from '@masknet/web3-shared-base'
 
 interface InitialState {
     parentPluginID: NetworkPluginID
