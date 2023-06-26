@@ -9,18 +9,24 @@ import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js
 import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
-import type { TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
-import type { WalletStatusModalOpenProps } from './WalletStatusModal/index.js'
+import type {
+    SelectGasSettingsModalCloseProps,
+    SelectGasSettingsModalOpenProps,
+} from './SelectAdvancedSettingsDialog/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps>()
-export const WalletStatusModal = new SingletonModal<WalletStatusModalOpenProps>()
+export const WalletStatusModal = new SingletonModal()
 export const WalletRiskWarningModal = new SingletonModal<WalletRiskWarningModalOpenProps>()
 export const ConnectWalletModal = new SingletonModal<ConnectWalletModalOpenProps>()
 export const LeavePageConfirmModal = new SingletonModal<LeavePageConfirmModalOpenProps>()
 export const ApplicationBoardModal = new SingletonModal<ApplicationBoardModalOpenProps>()
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
-export const TransactionSnackbar = new SingletonModal<TransactionSnackbarOpenProps>()
+export const TransactionSnackbar = new SingletonModal()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, ConfirmModalCloseProps>()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
+export const SelectGasSettingsModal = new SingletonModal<
+    SelectGasSettingsModalOpenProps,
+    SelectGasSettingsModalCloseProps
+>()
