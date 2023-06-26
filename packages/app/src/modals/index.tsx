@@ -6,7 +6,7 @@ export const ExampleDialog = new SingletonModal<ExampleOpenProps>()
 export function Modals() {
     return (
         <>
-            <Example ref={ExampleDialog.register.bind(ExampleDialog)} />
+            <Example ref={ExampleDialog.register} />
         </>
     )
 }
