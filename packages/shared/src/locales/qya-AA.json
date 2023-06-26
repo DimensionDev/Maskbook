@@ -292,5 +292,13 @@
     "lucky_drop": "crwdns20555:0crwdne20555:0",
     "share": "crwdns20557:0crwdne20557:0",
     "ok": "crwdns20559:0crwdne20559:0",
-    "plugin_wallet_on_connect": "crwdns20309:0crwdne20309:0"
+    "plugin_wallet_on_connect": "crwdns20309:0crwdne20309:0",
+    "upload_error$single": "crwdns20589:0crwdne20589:0",
+    "upload_error$oversized": "crwdns20591:0{{limit}}crwdne20591:0",
+    "upload_file_title$failed": "crwdns20593:0crwdne20593:0",
+    "upload_file_message$failed": "crwdns20595:0crwdne20595:0",
+    "upload_drag_n_drop": "crwdns20597:0crwdne20597:0",
+    "upload_size_limit": "crwdns20599:0crwdne20599:0",
+    "upload_or": "crwdns20601:0crwdne20601:0",
+    "upload_browse_files": "crwdns20603:0crwdne20603:0"
 }
