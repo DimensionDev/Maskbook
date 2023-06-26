@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
 import {
     useNetworkContext,
     useNativeTokenAddress,
@@ -8,7 +9,6 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { useRowSize } from '../../../hooks/useRowSize.js'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
@@ -59,7 +59,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedTokens?: string[]
-    onClose(token?: Web3Helper.FungibleTokenAll | null): void
+    onClose(token: Web3Helper.FungibleTokenAll | null): void
 }
 
 export function SelectFungibleTokenDialog({
@@ -72,9 +72,9 @@ export function SelectFungibleTokenDialog({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onClose,
     title,
     enableManage = true,
+    onClose,
 }: SelectFungibleTokenDialogProps) {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
@@ -105,7 +105,7 @@ export function SelectFungibleTokenDialog({
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                mode === TokenListMode.List ? onClose() : setMode(TokenListMode.List)
+                mode === TokenListMode.List ? onClose(null) : setMode(TokenListMode.List)
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>

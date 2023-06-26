@@ -1,9 +1,9 @@
 import { forwardRef, useState } from 'react'
 import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { SelectFungibleTokenDialog } from './SelectFungibleTokenDialog.js'
+import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export interface SelectFungibleTokenModalOpenProps {
     enableManage?: boolean
@@ -19,9 +19,7 @@ export interface SelectFungibleTokenModalOpenProps {
     selectedTokens?: string[]
 }
 
-export interface SelectFungibleTokenModalCloseProps {
-    token?: Web3Helper.FungibleTokenAll | null
-}
+export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
 
 export interface SelectFungibleTokenModalProps {}
 
@@ -59,7 +57,6 @@ export const SelectFungibleTokenModal = forwardRef<
     return (
         <SelectFungibleTokenDialog
             open
-            onClose={(token) => dispatch?.close({ token })}
             enableManage={enableManage}
             pluginID={pluginID}
             chainId={chainId}
@@ -70,6 +67,7 @@ export const SelectFungibleTokenModal = forwardRef<
             tokens={tokens}
             disableSearchBar={disableSearchBar}
             selectedTokens={selectedTokens}
+            onClose={(token) => dispatch?.close(token)}
         />
     )
 })

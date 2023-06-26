@@ -132,13 +132,14 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
 
     const onSelectTokenChipClick = useCallback(async () => {
-        const { token: picked } = await SelectFungibleTokenModal.openAndWaitForClose({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
             chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (picked) setToken(picked as FungibleToken<ChainId, SchemaType>)
+        if (!picked) return
+        setToken(picked as FungibleToken<ChainId, SchemaType>)
     }, [token?.address, chainId])
     // #endregion
 

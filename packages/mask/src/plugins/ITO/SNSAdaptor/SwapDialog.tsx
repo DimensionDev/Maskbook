@@ -113,21 +113,21 @@ export function SwapDialog(props: SwapDialogProps) {
     )
     // #region select token
     const onSelectTokenChipClick = useCallback(async () => {
-        const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (!token) return
-        const at = exchangeTokens.findIndex(currySameAddress(token.address))
+        if (!picked) return
+        const at = exchangeTokens.findIndex(currySameAddress(picked.address))
         const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(payload.exchange_amounts[at * 2 + 1])
         setRatio(ratio)
-        setSwapToken(token as FungibleToken<ChainId, SchemaType>)
+        setSwapToken(picked as FungibleToken<ChainId, SchemaType>)
         setTokenAmount(initAmount)
         setSwapAmount(initAmount.multipliedBy(ratio))
         setInputAmountForUI(
-            initAmount.isZero() ? '' : leftShift(initAmount.multipliedBy(ratio), token.decimals).toFixed(),
+            initAmount.isZero() ? '' : leftShift(initAmount.multipliedBy(ratio), picked.decimals).toFixed(),
         )
     }, [
         initAmount,

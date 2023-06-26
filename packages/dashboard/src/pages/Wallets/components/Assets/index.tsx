@@ -104,7 +104,7 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                                 className={classes.addCustomTokenButton}
                                 onClick={async () => {
                                     if (currentTab === AssetTab.Token) {
-                                        SelectFungibleTokenModal.openAndWaitForClose({
+                                        await SelectFungibleTokenModal.openAndWaitForClose({
                                             whitelist: [],
                                             title: t.wallets_add_token(),
                                             chainId: network?.chainId,

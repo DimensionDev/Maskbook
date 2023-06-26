@@ -10,8 +10,8 @@ import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmMod
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
 import type {
-    SelectFungibleTokenModalCloseProps,
     SelectFungibleTokenModalOpenProps,
+    SelectFungibleTokenModalCloseProps,
 } from './SelectFungibleTokenModal/index.js'
 import type {
     SelectGasSettingsModalCloseProps,

@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { FungibleTokenInput, SelectFungibleTokenModal, type FungibleTokenInputProps } from '@masknet/shared'
-import { useI18N } from '../../../utils/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useI18N } from '../../../utils/index.js'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: Web3Helper.ChainIdAll
@@ -45,14 +45,14 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
 
     // #region select token
     const onSelectTokenChipClick = useCallback(async () => {
-        const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken,
             disableSearchBar,
             pluginID: NetworkPluginID.PLUGIN_EVM,
             ...FungibleTokenListProps,
         })
-        if (!token) return
-        onTokenChange(token)
+        if (!picked) return
+        onTokenChange(picked)
     }, [disableNativeToken, disableSearchBar, FungibleTokenListProps])
     // #endregion
 

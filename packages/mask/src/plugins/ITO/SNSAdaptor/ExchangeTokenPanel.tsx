@@ -72,15 +72,15 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { classes } = useStyles()
     // #region select token dialog
     const onSelectTokenChipClick = useCallback(async () => {
-        const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: isSell,
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
             chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (!token) return
-        onExchangeTokenChange(token as FungibleToken<ChainId, SchemaType>, dataIndex)
+        if (!picked) return
+        onExchangeTokenChange(picked as FungibleToken<ChainId, SchemaType>, dataIndex)
     }, [
         isSell,
         dataIndex,

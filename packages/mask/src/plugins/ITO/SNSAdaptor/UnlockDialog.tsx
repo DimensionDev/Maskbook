@@ -49,14 +49,15 @@ export function UnlockDialog(props: UnlockDialogProps) {
     // #region select token
     const [token, setToken] = useState<FungibleToken<ChainId, SchemaType.ERC20>>(tokens[0])
     const onSelectTokenChipClick = useCallback(async () => {
-        const { token: picked } = await SelectFungibleTokenModal.openAndWaitForClose({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: true,
             disableSearchBar: true,
             selectedTokens: token?.address ? [token.address] : [],
             whitelist: tokens.map((x) => x.address),
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (picked) setToken(picked as FungibleToken<ChainId, SchemaType.ERC20>)
+        if (!picked) return
+        setToken(picked as FungibleToken<ChainId, SchemaType.ERC20>)
     }, [tokens, token?.address])
     // #endregion
     // #region amount

@@ -100,7 +100,7 @@ export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProp
 
     // #region select token dialog
     const onSelectTokenChipClick = useCallback(async () => {
-        const { token: pickedToken } = await SelectFungibleTokenModal.openAndWaitForClose({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
             whitelist: TOKEN_LIST,
@@ -108,7 +108,8 @@ export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProp
             selectedTokens: token?.address ? [token.address] : EMPTY_LIST,
             enableManage: false,
         })
-        if (pickedToken) setTokenMap((map) => ({ ...map, [chainId]: pickedToken }))
+        if (picked) return
+        setTokenMap((map) => ({ ...map, [chainId]: picked }))
     }, [token?.address, chainId, TOKEN_LIST])
     // #endregion
 

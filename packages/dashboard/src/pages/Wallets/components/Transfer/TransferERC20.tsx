@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit } from '@masknet/web3-hooks-evm'
@@ -49,7 +50,6 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { Context } from '../../hooks/useContext.js'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { TransferTab } from './types.js'
 
 export interface TransferERC20Props {
@@ -356,16 +356,16 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             loading: false,
                             ChipProps: {
                                 onClick: async () => {
-                                    const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
+                                    const picked = await SelectFungibleTokenModal.openAndWaitForClose({
                                         disableNativeToken: false,
                                         chainId,
                                         pluginID: NetworkPluginID.PLUGIN_EVM,
                                     })
-                                    if (!token) return
-                                    setSelectedToken(token as FungibleToken<ChainId, SchemaType>)
+                                    if (!picked) return
+                                    setSelectedToken(picked as FungibleToken<ChainId, SchemaType>)
                                     // Update the previous location state of the token.
                                     navigate(DashboardRoutes.WalletsTransfer, {
-                                        state: { type: TransferTab.Token, token },
+                                        state: { type: TransferTab.Token, token: picked },
                                     })
                                 },
                             },
