@@ -1,11 +1,11 @@
 import {
+    AddCollectiblesModal,
     ChainBoundary,
     ElementAnchor,
     ReloadStatus,
     ReversedAddress,
     SelectProviderModal,
     isSameNFT,
-    useAddCollectibles,
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -117,9 +117,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
-    const addCollectibles = useAddCollectibles()
     const handleAddCollectibles = useCallback(async () => {
-        const result = await addCollectibles({
+        const { results: result } = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId,
         })
@@ -150,7 +149,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         if (!tokens.length) return
         setSelectedToken(tokens[0])
         setCustomCollectibles((tokens) => uniqBy([...tokens, ...tokens], (x) => x.contract?.address && x.tokenId))
-    }, [addCollectibles, pluginID, chainId, account])
+    }, [pluginID, chainId, account])
 
     const loadingSkeletons = (
         <List className={classes.list}>

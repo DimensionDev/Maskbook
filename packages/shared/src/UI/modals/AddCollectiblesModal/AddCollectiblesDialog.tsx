@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, ReloadStatus, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -16,7 +15,9 @@ import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../components/AssetsManagement/CollectibleItem.js'
-import { InjectedDialog } from './InjectedDialog.js'
+import { useSharedI18N } from '../../../locales/index.js'
+import { InjectedDialog } from '../../contexts/components/index.js'
+import { EmptyStatus, LoadingStatus, ReloadStatus } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -108,9 +109,8 @@ export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkP
      * For example, in PFP, we can add collectibles from verified wallets if no wallet connected.
      */
     account?: string
-    onClose?(): void
-    onSubmit?(
-        result: [
+    onClose(
+        result?: [
             contract: NonFungibleTokenContract<
                 Web3Helper.Definition[T]['ChainId'],
                 Web3Helper.Definition[T]['SchemaType']
@@ -126,7 +126,6 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
     chainId,
     account: defaultAccount,
     onClose,
-    onSubmit,
 }: AddCollectiblesDialogProps) {
     const t = useSharedI18N()
     const walletAccount = useAccount()
@@ -211,13 +210,13 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
 
     const handleAdd = useCallback(() => {
         if (!contract) return
-        onSubmit?.([contract, selectedTokenIds])
-    }, [contract, selectedTokenIds, onSubmit])
+        onClose([contract, selectedTokenIds])
+    }, [contract, selectedTokenIds, onClose])
 
     const disabled = !selectedTokenIds.length || isLoadingContract || isValidating
 
     return (
-        <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={onClose} title={t.add_collectibles()}>
+        <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={() => onClose()} title={t.add_collectibles()}>
             <DialogContent classes={{ root: classes.content }}>
                 <form className={classes.form} onSubmit={handleFormSubmit}>
                     <Controller

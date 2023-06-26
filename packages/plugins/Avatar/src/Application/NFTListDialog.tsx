@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
+    AddCollectiblesModal,
     ChainBoundary,
     CollectionList,
     PluginVerifiedWalletStatusBar,
     UserAssetsProvider,
-    useAddCollectibles,
     useSharedI18N,
 } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -133,9 +133,8 @@ export function NFTListDialog() {
 
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
-    const addCollectibles = useAddCollectibles()
     const handleAddCollectibles = useCallback(async () => {
-        const result = await addCollectibles({
+        const { results: result } = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId: assetChainId,
             account: targetAccount,
@@ -170,7 +169,7 @@ export function NFTListDialog() {
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [addCollectibles, pluginID, assetChainId, targetAccount])
+    }, [pluginID, assetChainId, targetAccount])
 
     useEffect(() => {
         setSelectedPluginId(pluginID)

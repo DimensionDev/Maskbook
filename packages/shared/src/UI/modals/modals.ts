@@ -13,6 +13,7 @@ import type {
     SelectGasSettingsModalCloseProps,
     SelectGasSettingsModalOpenProps,
 } from './SelectAdvancedSettingsDialog/index.js'
+import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps>()
@@ -30,3 +31,4 @@ export const SelectGasSettingsModal = new SingletonModal<
     SelectGasSettingsModalOpenProps,
     SelectGasSettingsModalCloseProps
 >()
+export const AddCollectiblesModal = new SingletonModal<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>()

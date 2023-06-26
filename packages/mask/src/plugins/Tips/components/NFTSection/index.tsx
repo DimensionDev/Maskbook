@@ -3,7 +3,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { compact, uniqWith } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNonFungibleAssets, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { ElementAnchor, RetryHint, useAddCollectibles } from '@masknet/shared'
+import { AddCollectiblesModal, ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -122,10 +122,9 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         )
     }, [fetchedTokens, isEvm])
 
-    const addCollectibles = useAddCollectibles()
     const { Token } = useWeb3State(pluginID)
     const handleAddToken = useCallback(async () => {
-        const result = await addCollectibles({
+        const { results: result } = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId,
         })
