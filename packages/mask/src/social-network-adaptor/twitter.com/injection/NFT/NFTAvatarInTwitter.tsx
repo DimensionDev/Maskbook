@@ -190,7 +190,7 @@ function useNFTCircleAvatar(size: number) {
             chainId: ChainId.Mainnet,
         })
 
-        ConfirmModal.open({
+        const confirmed = await ConfirmModal.openAndWaitForClose({
             title: t('plugin_avatar_setup_share_title'),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center">
@@ -201,10 +201,8 @@ function useNFTCircleAvatar(size: number) {
                 </Box>
             ),
             confirmLabel: t('share'),
-            onSubmit() {
-                activatedSocialNetworkUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
-            },
         })
+        if (confirmed) activatedSocialNetworkUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
 
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
             (avatar ?? {

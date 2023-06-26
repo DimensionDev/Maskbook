@@ -76,8 +76,8 @@ export function useOpenShareTxDialog() {
     const t = useSharedI18N()
 
     return useCallback(
-        ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
-            return ConfirmModal.openAndWaitForClose({
+        async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
+            const confirmed = await ConfirmModal.openAndWaitForClose({
                 title: title ?? t.share_dialog_transaction(),
                 content: (
                     <ShareTransaction
@@ -87,10 +87,8 @@ export function useOpenShareTxDialog() {
                     />
                 ),
                 confirmLabel: onShare ? buttonLabel ?? t.dialog_share() : t.dialog_dismiss(),
-                onSubmit() {
-                    onShare?.()
-                },
             })
+            if (confirmed) onShare?.()
         },
         [t],
     )

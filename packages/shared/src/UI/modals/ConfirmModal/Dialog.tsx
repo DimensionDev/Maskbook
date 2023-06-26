@@ -25,13 +25,11 @@ const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
 
 export interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
     open: boolean
-    onClose: () => void
-
     title?: string
     confirmLabel?: React.ReactNode | string
     content: React.ReactNode | string
-    onSubmit?(result: boolean | null): void
     maxWidthOfContent?: number
+    onSubmit(): void
 }
 
 export function Confirm({ title, confirmLabel, content, onSubmit, maxWidthOfContent, ...rest }: ConfirmProps) {
@@ -42,7 +40,7 @@ export function Confirm({ title, confirmLabel, content, onSubmit, maxWidthOfCont
         <InjectedDialog title={title ?? t.dialog_confirm()} className={classes.dialog} {...rest}>
             <DialogContent className={classes.content}>{content}</DialogContent>
             <DialogActions>
-                <Button fullWidth className={classes.button} onClick={() => onSubmit?.(true)}>
+                <Button fullWidth className={classes.button} onClick={() => onSubmit()}>
                     {confirmLabel ?? t.dialog_confirm()}
                 </Button>
             </DialogActions>

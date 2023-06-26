@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { formatWeiToEther, type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, GasEditor, type GasConfig, type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import type { TradeComputed } from '../../types/index.js'
 import {
@@ -13,15 +13,15 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSelectAdvancedSettings } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { currentSlippageSettings } from '../../settings.js'
-import { PluginTraderMessages } from '../../messages.js'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
+import { SelectGasSettingsModal } from '@masknet/shared'
+import { PluginTraderMessages } from '../../messages.js'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -64,10 +64,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)
 
-    // #region remote controlled swap settings dialog
-    const selectAdvancedSettings = useSelectAdvancedSettings()
-    // #endregion
-
     const lostTokenValue = multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0)
     // #region price impact dialog
     const lostToken = formatBalance(lostTokenValue, trade.inputToken?.decimals ?? 0, 6)
@@ -96,7 +92,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     // #endregion
 
     const [, openSettingDialog] = useAsyncFn(async () => {
-        const { slippageTolerance, transaction } = await selectAdvancedSettings({
+        const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: false,
@@ -106,12 +102,14 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 ...gasConfig,
             },
         })
-
-        if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+        if (settings?.slippageTolerance) currentSlippageSettings.value = settings.slippageTolerance
 
         PluginTraderMessages.swapSettingsUpdated.sendToAll({
             open: false,
-            gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+            gasConfig: GasEditor.fromTransaction(
+                chainId as ChainId,
+                settings?.transaction as Transaction,
+            ).getGasConfig(),
         })
     }, [chainId, currentSlippageSettings.value, gas, gasConfig])
 
