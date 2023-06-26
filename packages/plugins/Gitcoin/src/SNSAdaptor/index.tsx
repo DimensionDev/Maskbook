@@ -8,8 +8,8 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { ThemeProvider } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
-import { ResultModalProvider, DonateProvider } from './contexts/index.js'
 import { PreviewCard } from './PreviewCard.js'
+import { Modals } from './modals/index.js'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -17,19 +17,18 @@ function Renderer(props: { id: string }) {
     usePluginWrapper(true)
 
     return (
-        <ResultModalProvider>
-            <DonateProvider>
-                <ThemeProvider theme={MaskLightTheme}>
-                    <PreviewCard grantId={props.id} />
-                </ThemeProvider>
-            </DonateProvider>
-        </ResultModalProvider>
+        <ThemeProvider theme={MaskLightTheme}>
+            <PreviewCard grantId={props.id} />
+        </ThemeProvider>
     )
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {},
+    GlobalInjection() {
+        return <Modals />
+    },
     DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)

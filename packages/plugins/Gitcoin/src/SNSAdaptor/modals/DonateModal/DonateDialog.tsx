@@ -26,8 +26,8 @@ import { useDonateCallback } from '../../hooks/useDonateCallback.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
 import type { GitcoinGrant } from '../../../apis/index.js'
 import { GiveBackSelect } from './GiveBackSelect.js'
-import { useShowResult } from '../ResultModal/index.js'
 import { getSupportedChainIds } from '../../../utils.js'
+import { ResultModal } from '../modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     banner: {},
@@ -70,11 +70,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonateDialogProps extends InjectedDialogProps {
-    onSubmit?(): void
     grant: GitcoinGrant
 }
 
-export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProps) => {
+export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
     const t = useI18N()
     const { classes, theme } = useStyles()
     const { title, admin_address: address, tenants } = grant
@@ -132,7 +131,6 @@ export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProp
     )
     // #endregion
 
-    const showConfirm = useShowResult()
     const donate = useCallback(async () => {
         if (!token) return
         const hash = await donateCallback()
@@ -144,7 +142,7 @@ export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProp
             symbol: `${cashTag}${token.symbol}`,
             grant_name: title,
         })
-        await showConfirm({
+        await ResultModal.openAndWaitForClose({
             token,
             uiAmount,
             onShare() {
@@ -154,7 +152,7 @@ export const DonateDialog = memo(({ onSubmit, grant, ...rest }: DonateDialogProp
 
         // clean up dialog
         setRawAmount('')
-    }, [showConfirm, amount, tipAmount, token, donateCallback, t, title])
+    }, [amount, tipAmount, token, donateCallback, t, title])
 
     const balance = new BigNumber(tokenBalance.value ?? '0')
     const availableBalance = useMemo(() => {

@@ -39,24 +39,23 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ResultModalProps extends PropsWithChildren<InjectedDialogProps> {
-    token: FungibleToken<ChainId, SchemaType>
+export interface ResultDialogProps extends PropsWithChildren<InjectedDialogProps> {
+    token?: FungibleToken<ChainId, SchemaType>
     uiAmount: string
     confirmLabel?: string
-    onSubmit?(): void
     onShare?(): void
 }
 
-export function ResultModal({
+export function ResultDialog({
     className,
     confirmLabel,
     children,
     uiAmount,
     token,
-    onSubmit,
+    onClose,
     onShare,
     ...rest
-}: ResultModalProps) {
+}: ResultDialogProps) {
     const { classes } = useStyles()
     const t = useI18N()
     return (
@@ -72,14 +71,14 @@ export function ResultModal({
             }}
             {...rest}>
             <DialogContent className={classes.content}>
-                <TokenIcon address={token.address} chainId={token.chainId} size={90} />
+                <TokenIcon address={token?.address || ''} chainId={token?.chainId} size={90} />
                 <Typography className={classes.amount}>
-                    {uiAmount} {token.symbol}
+                    {uiAmount} {token?.symbol}
                 </Typography>
                 <Typography className={classes.messageText} mt="41px">
                     {t.donate_successfully({
                         uiAmount,
-                        symbol: token.symbol,
+                        symbol: token?.symbol || '',
                     })}
                 </Typography>
             </DialogContent>
@@ -88,7 +87,7 @@ export function ResultModal({
                     fullWidth
                     onClick={() => {
                         onShare?.()
-                        onSubmit?.()
+                        onClose?.()
                     }}>
                     {confirmLabel || t.share()}
                 </Button>
