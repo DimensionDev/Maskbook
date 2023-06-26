@@ -37,13 +37,6 @@ export class SingletonModal<
     private dispatchAbort: ReturnType<T>['abort'] | undefined
 
     /**
-     * Peek the open state of the React modal component.
-     */
-    get opened() {
-        return this.dispatchPeek?.() ?? false
-    }
-
-    /**
      * Register a React modal component that implemented a forwarded ref.
      * The ref item should be fed with open and close methods.
      */
@@ -73,6 +66,13 @@ export class SingletonModal<
         this.dispatchOpen = ref.open
         this.dispatchClose = ref.close
         this.dispatchAbort = ref.abort
+    }
+
+    /**
+     * Peek the open state of the React modal component.
+     */
+    peek() {
+        return this.dispatchPeek?.() ?? false
     }
 
     /**
@@ -112,7 +112,7 @@ export class SingletonModal<
 }
 
 export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends SingletonModal<OpenProps, CloseProps> {
-    private opened_ = false
+    private opened = false
     private tasks: Array<{
         props: OpenProps
         defer?: DeferTuple<CloseProps, Error>
@@ -122,20 +122,20 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
         super()
 
         this.emitter.on('open', () => {
-            this.opened_ = true
+            this.opened = true
         })
         this.emitter.on('close', () => {
-            this.opened_ = false
+            this.opened = false
             this.cleanup()
         })
         this.emitter.on('abort', () => {
-            this.opened_ = false
+            this.opened = false
             this.cleanup()
         })
     }
 
     override open(props: OpenProps) {
-        if (!this.opened_) {
+        if (!this.opened) {
             super.open(props)
             return
         }
@@ -146,13 +146,13 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
     }
 
     override close(props: CloseProps) {
-        if (!this.opened_) return
+        if (!this.opened) return
 
         super.close(props)
     }
 
     override openAndWaitForClose(props: OpenProps) {
-        if (!this.opened_) return super.openAndWaitForClose(props)
+        if (!this.opened) return super.openAndWaitForClose(props)
 
         const d = defer<CloseProps, Error>()
         this.tasks.push({
@@ -163,7 +163,7 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
     }
 
     private async cleanup() {
-        if (this.opened_ || !this.tasks.length) return
+        if (this.opened || !this.tasks.length) return
 
         await delay(300)
 
