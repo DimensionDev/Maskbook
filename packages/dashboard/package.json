@@ -51,6 +51,7 @@
     "bignumber.js": "9.1.1",
     "color": "^4.2.3",
     "date-fns": "2.29.3",
+    "guess-calling-code": "^1.1.7",
     "html-to-image": "^1.11.11",
     "json-stable-stringify": "^1.0.2",
     "react-avatar-editor": "^13.0.0",

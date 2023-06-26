@@ -1,3 +1,5 @@
+import type { FileFrameProps } from '@masknet/shared'
+
 export enum Provider {
     Arweave = 'arweave',
     IPFS = 'ipfs',
@@ -53,6 +55,8 @@ export interface FileInfo {
     /** Doesn't exist in uploading file info */
     landingTxID?: string
 }
+
+export type FileBaseProps = Omit<FileFrameProps, 'fileName'>
 
 export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {
     type: 'arweave'

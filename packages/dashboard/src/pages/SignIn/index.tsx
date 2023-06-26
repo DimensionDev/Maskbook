@@ -16,20 +16,18 @@ export default function SignIn() {
     const state = _state as undefined | { from?: string }
 
     const from = new URLSearchParams(search).get('from')
-
-    const action = useMemo(
-        () =>
-            state?.from || from === 'popups'
-                ? {
-                      name: t.close(),
-                      callback: () => (state?.from ? navigate(state.from) : navigate(DashboardRoutes.Personas)),
-                  }
-                : {
-                      name: t.sign_in_account_sign_up_button(),
-                      callback: () => navigate(DashboardRoutes.SignUp),
-                  },
-        [state],
-    )
+    const isFromPopups = from === 'popups'
+    const action = useMemo(() => {
+        return state?.from || isFromPopups
+            ? {
+                  name: t.close(),
+                  callback: () => (state?.from ? navigate(state.from) : navigate(DashboardRoutes.Personas)),
+              }
+            : {
+                  name: t.sign_in_account_sign_up_button(),
+                  callback: () => navigate(DashboardRoutes.SignUp),
+              }
+    }, [state?.from, isFromPopups])
 
     return (
         <UserProvider>

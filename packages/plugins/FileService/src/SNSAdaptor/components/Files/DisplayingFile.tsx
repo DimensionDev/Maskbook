@@ -1,11 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
+import { FileFrame } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Translate } from '../../../locales/index.js'
-import type { FileInfo } from '../../../types.js'
-import { type FileBaseProps, FileFrame } from './FileFrame.js'
+import type { FileBaseProps, FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DisplayingFileProps extends FileBaseProps {
+    file: FileInfo
     onSave?(file: FileInfo): void
     onDownload?(file: FileInfo): void
 }
@@ -41,7 +42,7 @@ export const DisplayingFile = memo(({ file, onSave, onDownload, ...rest }: Displ
 
     return (
         <FileFrame
-            file={file}
+            fileName={file.name}
             {...rest}
             operations={
                 <div className={classes.operations}>

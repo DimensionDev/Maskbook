@@ -113,7 +113,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
     }, [words])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.SignIn)
+        navigate(DashboardRoutes.RecoveryPersona)
     }, [])
 
     const { value } = useAsync(async () => {

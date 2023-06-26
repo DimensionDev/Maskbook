@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from 'react'
-import { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
+import { Children, cloneElement, isValidElement, memo, useEffect, useState } from 'react'
 import { useMap } from 'react-use'
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -22,11 +22,11 @@ interface StepProps {
     children: (toNext: (stepName: string, callbackParams?: any) => void, params: any) => ReactNode
 }
 
-export function Step({ children, toStep, params }: StepProps) {
+export const Step = memo(function Step({ children, toStep, params }: StepProps) {
     return <>{children(toStep!, params)}</>
-}
+})
 
-interface StepperProps {
+export interface StepperProps {
     defaultStep: string
     step?: {
         name: string
@@ -39,9 +39,10 @@ interface StepperProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement[]
+    onChange?: (step: { name: string; params: any }) => void
 }
 export function Stepper(props: StepperProps) {
-    const { defaultStep, transition, step } = props
+    const { defaultStep, transition, step, onChange } = props
     const { classes } = useStyles()
     const [currentStep, setCurrentStep] = useState(defaultStep)
     const [currentTransition, setCurrentTransition] = useState(transition?.render)
@@ -53,6 +54,7 @@ export function Stepper(props: StepperProps) {
     const toStep = (stepName: string, params: any) => {
         setCurrentStep(stepName)
         setParam(stepName, params)
+        onChange?.({ name: stepName, params })
     }
 
     useEffect(() => {
@@ -74,12 +76,12 @@ export function Stepper(props: StepperProps) {
         } else {
             setCurrentTransition(null)
         }
-    }, [transition])
+    }, [transition?.render, transition?.trigger])
 
     useEffect(() => {
         if (!step) return
         toStep(step.name, step.params)
-    }, [step])
+    }, [step?.name, step?.params])
 
     return (
         <>

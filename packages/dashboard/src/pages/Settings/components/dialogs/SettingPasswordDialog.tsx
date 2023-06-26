@@ -1,5 +1,5 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog/index.js'
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -13,7 +13,11 @@ interface SettingPasswordDialogProps {
     onSet?: () => void
 }
 
-export default function SettingPasswordDialog({ open, onClose, onSet }: SettingPasswordDialogProps) {
+export const SettingPasswordDialog = memo(function SettingPasswordDialog({
+    open,
+    onClose,
+    onSet,
+}: SettingPasswordDialogProps) {
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = useContext(UserContext)
@@ -120,4 +124,4 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
             </Box>
         </ConfirmDialog>
     )
-}
+})

@@ -3,12 +3,7 @@ import { compact, omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import * as bip39 from 'bip39'
 import { decodeArrayBuffer, unreachable } from '@masknet/kit'
-import {
-    type BackupPreview,
-    getBackupPreviewInfo,
-    normalizeBackup,
-    type NormalizedBackup,
-} from '@masknet/backup-format'
+import { type BackupSummary, getBackupSummary, normalizeBackup, type NormalizedBackup } from '@masknet/backup-format'
 import {
     ECKeyIdentifierFromJsonWebKey,
     type EC_Private_JsonWebKey,
@@ -121,7 +116,7 @@ export async function addUnconfirmedPersonaRestore({
 export async function addUnconfirmedBackup(raw: string): Promise<
     Result<
         {
-            info: BackupPreview
+            info: BackupSummary
             id: string
         },
         unknown
@@ -130,10 +125,10 @@ export async function addUnconfirmedBackup(raw: string): Promise<
     return Result.wrapAsync(async () => {
         const backupObj: unknown = JSON.parse(raw)
         const backup = await normalizeBackup(backupObj)
-        const preview = getBackupPreviewInfo(backup)
+        const summary = getBackupSummary(backup)
         const id = uuid()
         unconfirmedBackup.set(id, backup)
-        return { info: preview, id }
+        return { info: summary, id }
     })
 }
 

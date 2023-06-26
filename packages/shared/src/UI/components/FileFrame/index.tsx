@@ -2,7 +2,6 @@ import { type HTMLProps, memo, type ReactNode, useEffect, useRef, useState } fro
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
-import type { FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     file: {
@@ -33,15 +32,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FileBaseProps extends HTMLProps<HTMLDivElement> {
-    file: FileInfo
-}
-
-interface FileFrameProps extends FileBaseProps {
+export interface FileFrameProps extends HTMLProps<HTMLDivElement> {
+    fileName?: string
     operations?: ReactNode
 }
 
-export const FileFrame = memo(function FileFrame({ className, children, file, operations, ...rest }: FileFrameProps) {
+export const FileFrame = memo(function FileFrame({
+    className,
+    children,
+    fileName,
+    operations,
+    ...rest
+}: FileFrameProps) {
     const { classes, cx } = useStyles()
 
     const rootRef = useRef<HTMLDivElement>(null)
@@ -73,12 +75,12 @@ export const FileFrame = memo(function FileFrame({ className, children, file, op
             <Icons.Message size={24} />
             <div className={classes.content}>
                 <ShadowRootTooltip
-                    title={showTooltip ? file.name : undefined}
+                    title={showTooltip ? fileName : undefined}
                     disableInteractive
                     arrow
                     PopperProps={tooltipPopperProps}>
                     <Typography className={classes.name} ref={nameRef}>
-                        {file.name}
+                        {fileName}
                     </Typography>
                 </ShadowRootTooltip>
                 {children}

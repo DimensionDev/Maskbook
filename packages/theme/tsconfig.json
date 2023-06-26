@@ -5,6 +5,6 @@
     "outDir": "./dist/src/",
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
-  "include": ["./src"],
+  "include": ["./src", "./src/**/*.json"],
   "references": [{ "path": "../shared-base" }, { "path": "../flags/" }]
 }

@@ -65,7 +65,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
         } else {
             const params = {
                 account: email,
-                type: AccountType.email,
+                type: AccountType.Email,
                 code,
             }
 
@@ -149,7 +149,7 @@ export default function SettingEmailDialog({ open, onClose }: SettingEmailDialog
     const sendValidationEmail = async () => {
         const res = await sendCode({
             account: email,
-            type: AccountType.email,
+            type: AccountType.Email,
             scenario: user.email ? Scenario.change : Scenario.create,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {

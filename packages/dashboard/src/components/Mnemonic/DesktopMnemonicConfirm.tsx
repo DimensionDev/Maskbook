@@ -15,7 +15,7 @@ const parserPastingAllMnemonic = (text: string) => {
     return result.length === 12 ? result : null
 }
 
-export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
+export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props: DesktopMnemonicConfirmProps) {
     const { puzzleWords, indexes, onChange, setAll } = props
     useDrop({ onText: (text) => handlePaster(text) })
 
