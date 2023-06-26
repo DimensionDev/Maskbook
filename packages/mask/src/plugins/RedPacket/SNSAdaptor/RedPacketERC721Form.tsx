@@ -296,7 +296,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index } as OrderedERC721Token))
 
-    const balance = tokenDetailedOwnerList.length
+    const balance = collection?.balance ?? tokenDetailedOwnerList.length
     const removeToken = useCallback(
         (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
             setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))

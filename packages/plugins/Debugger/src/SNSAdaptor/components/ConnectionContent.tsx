@@ -6,6 +6,7 @@ import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-te
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Web3, Contract } from '@masknet/web3-providers'
+import { ConfirmModal } from '@masknet/shared'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -455,6 +456,25 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                     }
                                 }}>
                                 Disconnect
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Modal
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    ConfirmModal.open({
+                                        title: 'Modal A',
+                                        content: 'This is Modal A',
+                                    })
+                                }}>
+                                Open Modal
                             </Button>
                         </TableCell>
                     </TableRow>

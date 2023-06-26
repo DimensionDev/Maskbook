@@ -8,22 +8,32 @@ export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'title'
     title?: string
     confirmLabel?: React.ReactNode | string
     content: React.ReactNode | string
-    onSubmit?(result: boolean | null): void
     maxWidthOfContent?: number
 }
 
+export type ConfirmModalCloseProps = boolean
+
 export interface ConfirmModalProps {}
 
-export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmModalOpenProps>, ConfirmModalProps>(
-    (props, ref) => {
-        const [props_, setProps_] = useState<ConfirmModalOpenProps>()
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
-                setProps_(props)
-            },
-        })
+export const ConfirmModal = forwardRef<
+    SingletonModalRefCreator<ConfirmModalOpenProps, ConfirmModalCloseProps>,
+    ConfirmModalProps
+>((props, ref) => {
+    const [props_, setProps_] = useState<ConfirmModalOpenProps>()
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setProps_(props)
+        },
+    })
 
-        if (!open) return null
-        return <Confirm open onClose={() => dispatch?.close()} {...props_} content={props_?.content} />
-    },
-)
+    if (!open) return null
+    return (
+        <Confirm
+            open
+            onSubmit={() => dispatch?.close(true)}
+            onClose={() => dispatch?.close(false)}
+            {...props_}
+            content={props_?.content}
+        />
+    )
+})
