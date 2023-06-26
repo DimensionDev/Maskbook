@@ -14,7 +14,6 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useNonFungibleCollections<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    isERC712Only = false,
     options?: HubOptions<T>,
 ) {
     const { account } = useChainContext({ account: options?.account, chainId: options?.chainId })
@@ -28,7 +27,7 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
             if (!account) return EMPTY_LIST
             return asyncIteratorToArray(
                 pageableToIterator(async (indicator?: PageIndicator) => {
-                    return Hub.getNonFungibleCollectionsByOwner(account, isERC712Only, {
+                    return Hub.getNonFungibleCollectionsByOwner(account, {
                         indicator,
                         size: 50,
                         networkPluginId: pluginID,

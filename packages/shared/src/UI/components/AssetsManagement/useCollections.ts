@@ -14,7 +14,7 @@ export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.Ch
         isLoading: loading,
         error,
         refetch: retry,
-    } = useNonFungibleCollections(pluginID, false, {
+    } = useNonFungibleCollections(pluginID, {
         account,
         allChains: true,
         sourceType: SourceType.SimpleHash,

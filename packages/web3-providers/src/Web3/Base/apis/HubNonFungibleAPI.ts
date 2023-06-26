@@ -198,13 +198,12 @@ export class HubNonFungibleAPI_Base<
 
     async getNonFungibleCollectionsByOwner(
         account: string,
-        isERC712Only = false,
         initial?: HubOptions_Base<ChainId>,
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill(initial)
         const providers = this.getProviders(initial)
         return attemptUntil(
-            providers.map((x) => () => x.getCollectionsByOwner?.(account, isERC712Only, options)),
+            providers.map((x) => () => x.getCollectionsByOwner?.(account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }

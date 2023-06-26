@@ -4,7 +4,7 @@ import { useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
 import type { NftRedPacketJSONPayload } from '../types.js'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
@@ -100,8 +100,9 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, true, {
+    const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
+        schemaType: SchemaType.ERC721,
     })
 
     const handleShowPopover = (anchor: HTMLElement, text: string) => {

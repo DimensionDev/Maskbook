@@ -48,7 +48,6 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
 
     async getCollectionsByOwner(
         account: string,
-        isERC712Only = false,
         { chainId, indicator }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const result = await fetchFromDSearch<{

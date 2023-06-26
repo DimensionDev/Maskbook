@@ -142,7 +142,6 @@ export namespace NonFungibleTokenAPI {
         /** Get non-fungible collections owned by the given account. */
         getCollectionsByOwner?: (
             account: string,
-            isERC712Only?: boolean,
             options?: HubOptions_Base<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
         /** Get collection verified-by by provider-defined id. */

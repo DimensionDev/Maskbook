@@ -270,10 +270,10 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
     async getCollectionsByOwner(
         account: string,
-        isERC712Only = false,
-        { chainId, indicator, allChains }: HubOptions_Base<ChainId> = {},
+        { chainId, indicator, allChains, schemaType }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const pluginId = NetworkPluginID.PLUGIN_EVM
+        const isERC712Only = schemaType === SchemaType.ERC721
         const chain = allChains || !chainId ? getAllChainNames(pluginId) : resolveChain(pluginId, chainId)
         if (!chain || !account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))

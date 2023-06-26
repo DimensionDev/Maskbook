@@ -85,7 +85,6 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
 
     async getCollectionsByOwner(
         account: string,
-        isERC712Only = false,
         { chainId, indicator }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!account || !isValidChainId(chainId)) {
