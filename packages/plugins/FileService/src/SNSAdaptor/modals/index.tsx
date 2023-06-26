@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { ConfirmModal } from './ConfirmModal/index.js'
-import { RenameModal } from './RenameDialog/index.js'
 
 import * as modals from './modals.js'
+import { RenameModal } from './RenameModal/index.js'
 export * from './modals.js'
 
 export const Modals = memo(function Modals() {

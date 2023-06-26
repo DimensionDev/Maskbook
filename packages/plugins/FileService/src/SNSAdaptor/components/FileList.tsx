@@ -110,15 +110,14 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
 
     const handleRename = useCallback(
         async (file: FileInfo) => {
-            RenameModal.openAndWaitForClose({
+            const { name } = await RenameModal.openAndWaitForClose({
                 currentName: file.name,
                 message: t.rename_validation(),
-                onSubmit: async (newName: string | null) => {
-                    if (!newName) return
-                    await PluginFileServiceRPC.renameFile(file.id, newName)
-                    refetchFiles()
-                },
             })
+
+            if (!name) return
+            await PluginFileServiceRPC.renameFile(file.id, name)
+            refetchFiles()
         },
         [refetchFiles, t],
     )
