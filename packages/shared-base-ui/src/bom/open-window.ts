@@ -1,4 +1,4 @@
-type WindowTarget = '_top' | '_self' | '_parent' | '_blank' | string
+type WindowTarget = LiteralUnion<'_top' | '_self' | '_parent' | '_blank'>
 
 interface BehaviorFlags {
     popup?: boolean

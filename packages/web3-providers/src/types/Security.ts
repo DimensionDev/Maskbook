@@ -62,7 +62,7 @@ export namespace SecurityAPI {
          * It describes the data source for this address information.
          * For example: GoPlus/SlowMist
          */
-        data_source: 'GoPlus' | 'SlowMist' | string
+        data_source: LiteralUnion<'GoPlus' | 'SlowMist'>
         /** It describes whether this address is related to honeypot tokens or has created scam tokens.  */
         honeypot_related_address: BooleanChar
         /** It describes whether this address has implemented phishing activities.  */
