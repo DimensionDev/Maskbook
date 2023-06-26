@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -14,6 +14,7 @@ import {
     SourceType,
     type NonFungibleAsset,
     type NonFungibleCollection,
+    type NonFungibleTokenActivity,
     TokenType,
     leftShift,
     type NonFungibleCollectionOverview,
@@ -23,7 +24,14 @@ import subSeconds from 'date-fns/subSeconds'
 import isAfter from 'date-fns/isAfter'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
-import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    isValidChainId,
+    explorerResolver,
+    ZERO_ADDRESS,
+    createNativeToken,
+} from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
     createNonFungibleAsset,
@@ -31,16 +39,27 @@ import {
     createNonFungibleCollection,
     resolveChainId,
     getAllChainNames,
+    resolveEventType,
     resolveSimpleHashRange,
-    SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
+    checkBlurToken,
+    checkLensFollower,
 } from '../helpers.js'
-import { type Asset, type Collection, type PaymentToken, type PriceStat, type CollectionOverview } from '../type.js'
+import {
+    type Asset,
+    type Collection,
+    type PaymentToken,
+    type PriceStat,
+    type CollectionOverview,
+    type Activity,
+    ActivityType,
+} from '../type.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
+import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME } from '../constants.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private looksrare = new LooksRareAPI()
@@ -262,13 +281,44 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         const path = urlcat('/api/v0/nfts/collections_by_wallets', {
             chains: chain,
             wallet_addresses: account,
+            nft_ids: 1,
         })
 
         const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
 
-        const collections = response.collections
+        const filteredCollections = uniqBy(response.collections, (x) => x.top_contracts?.[0])
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
+            .filter(
+                (x) =>
+                    x?.id &&
+                    isValidChainId(resolveChainId(x.chain)) &&
+                    x.spam_score !== 100 &&
+                    x.top_contracts.length > 0 &&
+                    !checkLensFollower(x.name),
+            )
+
+        const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
+
+        let erc721CollectionIdList: string[] = EMPTY_LIST
+
+        while (nftIdList.length) {
+            const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+                nft_ids: nftIdList.splice(0, 50).join(','),
+            })
+
+            const batchAssetsResponse = await fetchFromSimpleHash<{
+                nfts: Asset[]
+            }>(batchAssetsPath)
+
+            erc721CollectionIdList = erc721CollectionIdList.concat(
+                batchAssetsResponse.nfts
+                    .filter((x) => x.contract.type === 'ERC721')
+                    .map((x) => x.collection.collection_id),
+            )
+        }
+
+        const collections = filteredCollections
+            .filter((x) => erc721CollectionIdList.includes(x.id))
             .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
@@ -312,6 +362,80 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         if (!response.collections.length) return []
         const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)
+    }
+
+    async getCoinActivities(
+        chainId: ChainId,
+        id: string,
+        cursor: string,
+    ): Promise<{ content: Array<NonFungibleTokenActivity<ChainId, SchemaType>>; cursor: string } | undefined> {
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
+
+        if (!chain || !isValidChainId(chainId) || !id) return
+
+        const path = urlcat('/api/v0/nfts/transfers/:chain/:id', {
+            id,
+            chain,
+            cursor: cursor ? cursor : undefined,
+            order_by: 'timestamp_desc',
+            limit: 50,
+        })
+        const response = await fetchFromSimpleHash<{
+            next_cursor: string
+            transfers: Activity[]
+        }>(path)
+
+        if (!response?.transfers?.length) return
+
+        const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+            nft_ids: response.transfers.map((x) => x.nft_id).join(','),
+        })
+
+        const batchAssetsResponse = await fetchFromSimpleHash<{
+            nfts: Asset[]
+        }>(batchAssetsPath)
+
+        return {
+            cursor: response.next_cursor,
+            content: response.transfers.map((x) => {
+                const trade_token =
+                    !x.sale_details?.payment_token ||
+                    checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
+                        ? createNativeToken(chainId)
+                        : {
+                              ...x.sale_details?.payment_token,
+                              type: TokenType.Fungible,
+                              address: x.sale_details?.payment_token.payment_token_id.includes('native')
+                                  ? ZERO_ADDRESS
+                                  : x.sale_details?.payment_token.address ?? '',
+                              id: x.sale_details?.payment_token.payment_token_id.includes('native')
+                                  ? ZERO_ADDRESS
+                                  : x.sale_details?.payment_token.address ?? '',
+                              chainId,
+                              schema: SchemaType.ERC20,
+                          }
+                const imageURL = batchAssetsResponse.nfts.find((y) => y.nft_id === x.nft_id)?.image_url ?? ''
+                return {
+                    hash: x.transaction,
+                    from: x.from_address,
+                    token_id: x.token_id,
+                    transaction_link: explorerResolver.transactionLink(chainId, x.transaction),
+                    event_type: resolveEventType(x.event_type),
+                    send: x.from_address,
+                    receive: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
+                    to: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
+                    trade_token,
+                    timestamp: new Date(x.timestamp).getTime(),
+                    trade_price: x.sale_details?.total_price
+                        ? leftShift(x.sale_details?.total_price, trade_token.decimals).toNumber()
+                        : 0,
+                    imageURL,
+                    contract_address: x.contract_address,
+                    trade_symbol: trade_token.symbol ?? '',
+                    token_address: trade_token.address ?? '',
+                }
+            }),
+        }
     }
 
     async getCoinTrending(

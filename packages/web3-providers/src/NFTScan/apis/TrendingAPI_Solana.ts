@@ -50,7 +50,7 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
             content: response.data.content.map((x) => {
                 return {
                     ...x,
-                    nftscan_uri: '',
+                    imageURL: '',
                     transaction_link: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_SOLANA, chainId)}/${x.hash}`,
                 }
             }),

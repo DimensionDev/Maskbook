@@ -1,15 +1,22 @@
-import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import {
+    SourceType,
+    TokenType,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    ActivityType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { isEmpty } from 'lodash-es'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
-import { SIMPLE_HASH_URL } from './constants.js'
-import type { Asset, Collection } from './type.js'
+import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
+import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { NetworkPluginID, createLookupTableResolver, queryClient } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingAPI } from '../entry-types.js'
+import { unreachable } from '@masknet/kit'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
@@ -173,7 +180,13 @@ export function resolveChain(pluginId: NetworkPluginID, chainId: Web3Helper.Chai
     return ChainNameMap[pluginId][chainId]
 }
 
-export const SIMPLE_HASH_HISTORICAL_PRICE_START_TIME = 1669852800
+export function checkBlurToken(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll, address: string): boolean {
+    return `${resolveChain(pluginId, chainId)}.${address.toLowerCase()}` === `ethereum.${ETH_BLUR_TOKEN_ADDRESS}`
+}
+
+export function checkLensFollower(name: string) {
+    return name.endsWith('.lens-Follower')
+}
 
 export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
     {
@@ -186,3 +199,18 @@ export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days
     },
     () => 0,
 )
+
+export function resolveEventType(event: ActivityTypeSimpleHash) {
+    switch (event) {
+        case ActivityTypeSimpleHash.Sale:
+            return ActivityType.Sale
+        case ActivityTypeSimpleHash.Transfer:
+            return ActivityType.Transfer
+        case ActivityTypeSimpleHash.Burn:
+            return ActivityType.Burn
+        case ActivityTypeSimpleHash.Mint:
+            return ActivityType.Mint
+        default:
+            unreachable(event)
+    }
+}
