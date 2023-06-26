@@ -50,6 +50,8 @@
     "erc20_tab_title": "代币",
     "claimed": "已认领",
     "details": "红包详情",
+    "confirm": "确定",
+    "confirming": "确认中",
     "enter_each_amount": "输入每个金额",
     "enter_total_amount": "输入总数",
     "enter_shares": "输入份数",
