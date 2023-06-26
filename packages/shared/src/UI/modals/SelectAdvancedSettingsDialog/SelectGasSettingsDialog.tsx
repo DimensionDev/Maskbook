@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSharedI18N } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from './index.js'
 import { SettingsBoard } from '../../components/SettingsBoard/index.js'
 import { SettingsContext } from '../../components/SettingsBoard/Context.js'
+import { InjectedDialog } from '../../contexts/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface StyleProps {
     compact: boolean
@@ -24,6 +24,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     },
 }))
 
+export interface SelectGasSettings {
+    slippageTolerance?: number
+    transaction?: Web3Helper.TransactionAll
+}
+
 export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
@@ -34,13 +39,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
     disableGasLimit?: boolean
-    onSubmit?(
-        settings: {
-            slippageTolerance?: number
-            transaction?: Web3Helper.Definition[T]['Transaction']
-        } | null,
-    ): void
-    onClose?(): void
+    onClose(settings?: SelectGasSettings | null): void
 }
 
 export function SelectGasSettingsDialog({
@@ -52,7 +51,6 @@ export function SelectGasSettingsDialog({
     disableGasPrice,
     disableSlippageTolerance,
     disableGasLimit,
-    onSubmit,
     onClose,
     title,
 }: SelectGasSettingsDialogProps) {
@@ -60,10 +58,7 @@ export function SelectGasSettingsDialog({
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)
     const { chainId: chainId_ } = useChainContext({ chainId })
-    const [settings, setSettings] = useState<{
-        slippageTolerance?: number
-        transaction?: Web3Helper.TransactionAll
-    } | null>(null)
+    const [settings, setSettings] = useState<SelectGasSettings | null>(null)
 
     const initialState = useMemo(
         () => ({
@@ -84,10 +79,7 @@ export function SelectGasSettingsDialog({
             }}
             open={open}
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
-            onClose={() => {
-                onSubmit?.(settings)
-                onClose?.()
-            }}
+            onClose={() => onClose(settings)}
             title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>
                 <SettingsContext.Provider initialState={initialState}>

@@ -100,12 +100,12 @@ export function PurchaseDialog(props: ActionBarProps) {
             })
             onClose()
         } catch (err: unknown) {
-            if (err instanceof Error) {
-                await ConfirmModal.openAndWaitForClose({
-                    title: 'Error',
-                    content: err.message,
-                })
-            }
+            if (!(err instanceof Error)) return
+
+            await ConfirmModal.openAndWaitForClose({
+                title: 'Error',
+                content: err.message,
+            })
         }
     }, [openShareTxDialog, onClose])
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
