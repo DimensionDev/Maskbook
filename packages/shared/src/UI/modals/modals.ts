@@ -6,7 +6,7 @@ import type { ConnectWalletModalOpenProps } from './ConnectWalletModal/index.js'
 import type { LeavePageConfirmModalOpenProps } from './LeavePageConfirmModal/index.js'
 import type { ApplicationBoardModalOpenProps } from './ApplicationBoardModal/index.js'
 import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js'
-import type { ConfirmModalOpenProps } from './ConfirmModal/index.js'
+import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
 import type { TransactionSnackbarOpenProps } from './TransactionSnackbar/index.js'
@@ -22,5 +22,5 @@ export const ApplicationBoardModal = new SingletonModal<ApplicationBoardModalOpe
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const TransactionSnackbar = new SingletonModal<TransactionSnackbarOpenProps>()
-export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps>()
+export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, ConfirmModalCloseProps>()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()

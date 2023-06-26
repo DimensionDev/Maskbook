@@ -82,7 +82,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
 
     const handleDelete = useCallback(
         async (file: FileInfo) => {
-            await ConfirmModal.openAndWaitForClose({
+            const confirmed = await ConfirmModal.openAndWaitForClose({
                 title: t.delete_file(),
                 message: (
                     <Translate.delete_message
@@ -102,8 +102,8 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                 ),
                 description: t.delete_description(),
                 confirmLabel: t.delete(),
-                onSubmit: () => deleteFile(file),
             })
+            if (confirmed) await deleteFile(file)
         },
         [refetchFiles, t],
     )
