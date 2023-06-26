@@ -34,6 +34,7 @@ export interface Collection {
     name: string
     /** e.g ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"] */
     top_contracts: string[]
+    nft_ids?: string[]
     total_quantity: number
     /** twitter handler */
     twitter_username: string | null

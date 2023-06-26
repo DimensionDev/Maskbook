@@ -5,7 +5,7 @@ import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
 import { FuseNonFungibleCollection } from '@masknet/web3-providers'
-import { SourceType, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -83,8 +83,6 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
             refetch,
         } = useNonFungibleCollections(pluginID, {
             chainId,
-            // TODO: remove this line, after SimpleHash can recognize ERC721 Collections.
-            sourceType: SourceType.NFTScan,
         })
 
         const { Token } = useWeb3State(pluginID)
