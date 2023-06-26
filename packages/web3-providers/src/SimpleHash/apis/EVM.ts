@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -42,6 +42,7 @@ import {
     resolveEventType,
     resolveSimpleHashRange,
     checkBlurToken,
+    checkLensFollower,
 } from '../helpers.js'
 import {
     type Asset,
@@ -280,13 +281,44 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         const path = urlcat('/api/v0/nfts/collections_by_wallets', {
             chains: chain,
             wallet_addresses: account,
+            nft_ids: 1,
         })
 
         const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
 
-        const collections = response.collections
+        const filteredCollections = uniqBy(response.collections, (x) => x.top_contracts?.[0])
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
+            .filter(
+                (x) =>
+                    x?.id &&
+                    isValidChainId(resolveChainId(x.chain)) &&
+                    x.spam_score !== 100 &&
+                    x.top_contracts.length > 0 &&
+                    !checkLensFollower(x.name),
+            )
+
+        const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
+
+        let erc721CollectionIdList: string[] = EMPTY_LIST
+
+        while (nftIdList.length) {
+            const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+                nft_ids: nftIdList.splice(0, 50).join(','),
+            })
+
+            const batchAssetsResponse = await fetchFromSimpleHash<{
+                nfts: Asset[]
+            }>(batchAssetsPath)
+
+            erc721CollectionIdList = erc721CollectionIdList.concat(
+                batchAssetsResponse.nfts
+                    .filter((x) => x.contract.type === 'ERC721')
+                    .map((x) => x.collection.collection_id),
+            )
+        }
+
+        const collections = filteredCollections
+            .filter((x) => erc721CollectionIdList.includes(x.id))
             .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))

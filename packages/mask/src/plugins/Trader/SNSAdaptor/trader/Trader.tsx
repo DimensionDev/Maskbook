@@ -246,7 +246,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         if (typeof hash !== 'string') return
 
-        await ConfirmModal.openAndWaitForClose({
+        const confirmed = await ConfirmModal.openAndWaitForClose({
             title: t.swap(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -274,11 +274,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 </Box>
             ),
             confirmLabel: t.share(),
-            onSubmit: () => {
-                activatedSocialNetworkUI.utils.share?.(shareText)
-            },
             maxWidthOfContent: 420,
         })
+        if (confirmed) activatedSocialNetworkUI.utils.share?.(shareText)
         telemetry.captureEvent(EventType.Interact, EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,

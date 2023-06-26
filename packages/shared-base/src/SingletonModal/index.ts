@@ -55,9 +55,18 @@ export class SingletonModal<
         }
 
         const ref = creator(
-            (props) => this.onOpen?.(props),
-            (props) => this.onClose?.(props),
-            (error) => this.onAbort?.(error),
+            (props) => {
+                this.onOpen?.(props)
+                this.emitter.emit('open', props)
+            },
+            (props) => {
+                this.onClose?.(props)
+                this.emitter.emit('close', props)
+            },
+            (error) => {
+                this.onAbort?.(error)
+                this.emitter.emit('abort', error)
+            },
         )
         this.dispatchPeek = ref.peek
         this.dispatchOpen = ref.open
@@ -70,7 +79,6 @@ export class SingletonModal<
      * @param props
      */
     open = (props: OpenProps) => {
-        this.emitter.emit('open', props)
         this.dispatchOpen?.(props)
     }
 
@@ -79,7 +87,6 @@ export class SingletonModal<
      * @param props
      */
     close = (props: CloseProps) => {
-        this.emitter.emit('close', props)
         this.dispatchClose?.(props)
     }
 
@@ -87,7 +94,6 @@ export class SingletonModal<
      * Abort the registered modal component with Error
      */
     abort = (error: Error) => {
-        this.emitter.emit('abort', error)
         this.dispatchAbort?.(error)
     }
 
