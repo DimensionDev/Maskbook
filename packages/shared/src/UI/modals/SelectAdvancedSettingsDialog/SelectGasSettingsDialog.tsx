@@ -79,9 +79,7 @@ export function SelectGasSettingsDialog({
             }}
             open={open}
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
-            onClose={() => {
-                onClose(settings)
-            }}
+            onClose={() => onClose(settings)}
             title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>
                 <SettingsContext.Provider initialState={initialState}>
