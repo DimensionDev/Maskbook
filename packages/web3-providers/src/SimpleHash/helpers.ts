@@ -185,6 +185,10 @@ export function checkBlurToken(pluginId: NetworkPluginID, chainId: Web3Helper.Ch
     return `${resolveChain(pluginId, chainId)}.${address.toLowerCase()}` === `ethereum.${ETH_BLUR_TOKEN_ADDRESS}`
 }
 
+export function checkLensFollower(name: string) {
+    return name.endsWith('.lens-Follower')
+}
+
 export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
     {
         [TrendingAPI.Days.ONE_DAY]: 60 * 60 * 24,
