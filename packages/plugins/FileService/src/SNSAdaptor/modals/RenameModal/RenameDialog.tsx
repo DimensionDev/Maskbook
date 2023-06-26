@@ -1,8 +1,8 @@
+import { memo, type ReactNode, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { memo, type ReactNode, useState } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,11 +63,12 @@ export interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | '
     currentName: string
     message?: ReactNode | string
     description?: ReactNode | string
-    onClose(result?: string): void
+    onSubmit(name: string): void
+    onClose(): void
 }
 
 export const RenameDialog = memo(
-    ({ title, message, description, currentName, onClose, ...rest }: RenameDialogProps) => {
+    ({ title, message, description, currentName, onSubmit, onClose, ...rest }: RenameDialogProps) => {
         const { classes } = useStyles()
         const t = useI18N()
         const [name, setName] = useState(currentName)
@@ -97,7 +98,7 @@ export const RenameDialog = memo(
                         fullWidth
                         color="primary"
                         disabled={!isValid}
-                        onClick={() => onClose(name)}>
+                        onClick={() => onSubmit(name)}>
                         {t.confirm()}
                     </Button>
                     <Icons.Close className={classes.closeButton} size={24} onClick={() => onClose()} />

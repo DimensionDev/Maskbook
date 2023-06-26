@@ -1,7 +1,9 @@
+import { type HTMLProps, useCallback, useRef } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
+import { EMPTY_LIST } from '@masknet/shared-base'
+
 import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
-import { type HTMLProps, useCallback, useRef } from 'react'
 import {
     DisplayingFile,
     type DisplayingFileProps,
@@ -12,7 +14,6 @@ import {
 } from './Files/index.js'
 import { Translate, useI18N } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginFileServiceRPC } from '../../Worker/rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/index.js'
 
@@ -110,12 +111,12 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
 
     const handleRename = useCallback(
         async (file: FileInfo) => {
-            const { name } = await RenameModal.openAndWaitForClose({
+            const name = await RenameModal.openAndWaitForClose({
                 currentName: file.name,
                 message: t.rename_validation(),
             })
-
             if (!name) return
+
             await PluginFileServiceRPC.renameFile(file.id, name)
             refetchFiles()
         },

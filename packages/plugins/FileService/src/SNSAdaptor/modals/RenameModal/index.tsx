@@ -8,12 +8,9 @@ export interface RenameModalOpenProps extends Omit<InjectedDialogProps, 'title' 
     currentName?: string
     message?: React.ReactNode | string
     description?: React.ReactNode | string
-    onSubmit?(result: string | null): void
 }
 
-export interface RenameModalCloseProps {
-    name?: string
-}
+export type RenameModalCloseProps = string | void
 
 export interface RenameModalProps {}
 
@@ -33,7 +30,8 @@ export const RenameModal = forwardRef<
     return (
         <RenameDialog
             open
-            onClose={(name) => dispatch?.close({ name })}
+            onSubmit={(name) => dispatch?.close(name)}
+            onClose={() => dispatch?.close()}
             {...props_}
             currentName={props_?.currentName ?? ''}
         />
