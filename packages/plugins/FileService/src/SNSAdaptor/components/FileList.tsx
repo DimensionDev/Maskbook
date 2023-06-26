@@ -11,10 +11,10 @@ import {
     UploadingFile,
 } from './Files/index.js'
 import { Translate, useI18N } from '../../locales/index.js'
-import { useFileManagement, useShowRenameDialog } from '../contexts/index.js'
+import { useFileManagement } from '../contexts/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginFileServiceRPC } from '../../Worker/rpc.js'
-import { ConfirmModal } from '../modals/index.js'
+import { ConfirmModal, RenameModal } from '../modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -107,19 +107,20 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
         },
         [refetchFiles, t],
     )
-    const showPrompt = useShowRenameDialog()
+
     const handleRename = useCallback(
         async (file: FileInfo) => {
-            const newName = await showPrompt({
+            RenameModal.openAndWaitForClose({
                 currentName: file.name,
                 message: t.rename_validation(),
+                onSubmit: async (newName: string | null) => {
+                    if (!newName) return
+                    await PluginFileServiceRPC.renameFile(file.id, newName)
+                    refetchFiles()
+                },
             })
-            if (newName) {
-                await PluginFileServiceRPC.renameFile(file.id, newName)
-                refetchFiles()
-            }
         },
-        [showPrompt, refetchFiles, t],
+        [refetchFiles, t],
     )
 
     return (
