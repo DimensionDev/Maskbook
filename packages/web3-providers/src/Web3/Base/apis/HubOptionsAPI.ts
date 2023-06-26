@@ -1,6 +1,7 @@
 import { identity, pickBy } from 'lodash-es'
 import type { NetworkPluginID, PageIndicator, PartialRequired, ValueRefWithReady } from '@masknet/shared-base'
 import { CurrencyType, type SourceType, type Web3State } from '@masknet/web3-shared-base'
+import { type SchemaType } from '@masknet/web3-shared-evm'
 import type { OthersAPI_Base } from './OthersAPI.js'
 
 export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
@@ -12,6 +13,8 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     networkPluginId?: NetworkPluginID
     /** The id of data provider */
     sourceType?: SourceType
+    /** The schema type of filtered data */
+    schemaType?: SchemaType
     /** The currency type of data */
     currencyType?: CurrencyType
     /** The item size of each page. */

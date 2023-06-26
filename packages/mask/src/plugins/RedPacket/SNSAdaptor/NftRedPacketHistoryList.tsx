@@ -1,16 +1,16 @@
 import { useRef, useState } from 'react'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List, Popper, Typography, Box } from '@mui/material'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
 import { useI18N } from '../locales/index.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -102,6 +102,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
+        schemaType: SchemaType.ERC721,
     })
 
     const handleShowPopover = (anchor: HTMLElement, text: string) => {

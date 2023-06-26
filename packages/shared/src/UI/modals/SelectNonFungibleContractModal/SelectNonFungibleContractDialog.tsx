@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState, type FC } from 'react'
 import { compact } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
@@ -63,6 +63,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     open: boolean
     pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    schemaType?: SchemaType
     title?: string
     onClose?(): void
     onSubmit?(
@@ -70,8 +71,8 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     ): void
 }
 
-export const SelectNonFungibleContractDialog = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit }: SelectNonFungibleContractDialogProps) => {
+export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialogProps> = memo(
+    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
@@ -86,6 +87,7 @@ export const SelectNonFungibleContractDialog = memo(
             refetch,
         } = useNonFungibleCollections(pluginID, {
             chainId,
+            schemaType,
         })
 
         const { Token } = useWeb3State(pluginID)
