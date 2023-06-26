@@ -61,6 +61,10 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
+    controller: {
+        position: 'sticky',
+        bottom: 0,
+    },
 }))
 
 export interface ConfirmRedPacketFormProps {
@@ -302,7 +306,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     </Paper>
                 </Grid>
             </Grid>
-            <PluginWalletStatusBar>
+            <PluginWalletStatusBar className={classes.controller}>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                     <ActionButton
                         loading={isCreating || isWaitGasBeMinus}
