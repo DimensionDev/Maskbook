@@ -12,7 +12,7 @@ export interface RenameModalOpenProps extends Omit<InjectedDialogProps, 'title' 
 }
 
 export interface RenameModalCloseProps {
-    name: string
+    name?: string
 }
 
 export interface RenameModalProps {}
@@ -22,14 +22,10 @@ export const RenameModal = forwardRef<
     RenameModalProps
 >((props, ref) => {
     const [props_, setProps_] = useState<RenameModalOpenProps>()
-    const [name, setName] = useState<string>('')
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setProps_(props)
-        },
-        onClose(props) {
-            setName(props.name)
         },
     })
 
@@ -37,7 +33,7 @@ export const RenameModal = forwardRef<
     return (
         <RenameDialog
             open
-            onClose={() => dispatch?.close({ name })}
+            onClose={(name) => dispatch?.close({ name })}
             {...props_}
             currentName={props_?.currentName ?? ''}
         />

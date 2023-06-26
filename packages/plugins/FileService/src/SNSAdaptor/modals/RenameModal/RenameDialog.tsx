@@ -63,11 +63,11 @@ export interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | '
     currentName: string
     message?: ReactNode | string
     description?: ReactNode | string
-    onSubmit?(result: string | null): void
+    onClose(result?: string): void
 }
 
 export const RenameDialog = memo(
-    ({ title, message, description, currentName, onSubmit, onClose, ...rest }: RenameDialogProps) => {
+    ({ title, message, description, currentName, onClose, ...rest }: RenameDialogProps) => {
         const { classes } = useStyles()
         const t = useI18N()
         const [name, setName] = useState(currentName)
@@ -97,10 +97,10 @@ export const RenameDialog = memo(
                         fullWidth
                         color="primary"
                         disabled={!isValid}
-                        onClick={() => onSubmit?.(name)}>
+                        onClick={() => onClose(name)}>
                         {t.confirm()}
                     </Button>
-                    <Icons.Close className={classes.closeButton} size={24} onClick={onClose} />
+                    <Icons.Close className={classes.closeButton} size={24} onClick={() => onClose()} />
                 </DialogContent>
             </InjectedDialog>
         )
