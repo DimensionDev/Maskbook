@@ -14,11 +14,5 @@
     "signing_failed": "サービスが使用できません。今しばらくお待ちください。",
     "on_encrypt_it": "暗号化しましょう",
     "use_cdn": "Mesonを使用して加速する",
-    "legal_text": "このプラグインを使用することで<terms>利用規約</terms>並びに<policy>プライバシーポリシー</policy>に同意したこととなります。",
-    "drop_indicator": "ファイルをドラッグ＆ドロップしてアップロード！",
-    "drop_hint_1": "ファイル容量の超過：{{limit}}",
-    "drop_hint_2": "このファイルはすぐにアップロードされ、取り消すことはできません。",
-    "drop_here": "ファイルをここにドラッグ＆ドロップ",
-    "on_change_file": "ファイルの変更",
     "file_key": "ファイルキー："
 }
