@@ -270,6 +270,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
     async getCollectionsByOwner(
         account: string,
+        isERC712Only = false,
         { chainId, indicator, allChains }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const pluginId = NetworkPluginID.PLUGIN_EVM
@@ -294,31 +295,32 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                     isValidChainId(resolveChainId(x.chain)) &&
                     x.spam_score !== 100 &&
                     x.top_contracts.length > 0 &&
-                    !checkLensFollower(x.name),
+                    (!checkLensFollower(x.name ?? '') || !isERC712Only),
             )
-
-        const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
 
         let erc721CollectionIdList: string[] = EMPTY_LIST
 
-        while (nftIdList.length) {
-            const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
-                nft_ids: nftIdList.splice(0, 50).join(','),
-            })
+        if (isERC712Only) {
+            const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
+            while (nftIdList.length) {
+                const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+                    nft_ids: nftIdList.splice(0, 50).join(','),
+                })
 
-            const batchAssetsResponse = await fetchFromSimpleHash<{
-                nfts: Asset[]
-            }>(batchAssetsPath)
+                const batchAssetsResponse = await fetchFromSimpleHash<{
+                    nfts: Asset[]
+                }>(batchAssetsPath)
 
-            erc721CollectionIdList = erc721CollectionIdList.concat(
-                batchAssetsResponse.nfts
-                    .filter((x) => x.contract.type === 'ERC721')
-                    .map((x) => x.collection.collection_id),
-            )
+                erc721CollectionIdList = erc721CollectionIdList.concat(
+                    batchAssetsResponse.nfts
+                        .filter((x) => x.contract.type === 'ERC721')
+                        .map((x) => x.collection.collection_id),
+                )
+            }
         }
 
         const collections = filteredCollections
-            .filter((x) => erc721CollectionIdList.includes(x.id))
+            .filter((x) => !isERC712Only || erc721CollectionIdList.includes(x.id))
             .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))

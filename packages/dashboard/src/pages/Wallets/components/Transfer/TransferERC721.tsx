@@ -171,6 +171,7 @@ export const TransferERC721 = memo(() => {
     const handleSelectNFT = async () => {
         const contract = await selectNFTContract({
             pluginID: NetworkPluginID.PLUGIN_EVM,
+            isERC721Only: true,
             chainId,
         })
         if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {

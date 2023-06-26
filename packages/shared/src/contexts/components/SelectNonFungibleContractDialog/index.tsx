@@ -60,6 +60,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     open: boolean
     pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    isERC721Only?: boolean
     title?: string
     onClose?(): void
     onSubmit?(
@@ -68,7 +69,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
 }
 
 export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialogProps> = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit }) => {
+    ({ open, pluginID, chainId, onClose, onSubmit, isERC721Only }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
@@ -81,7 +82,7 @@ export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialog
             isLoading,
             isError,
             refetch,
-        } = useNonFungibleCollections(pluginID, {
+        } = useNonFungibleCollections(pluginID, isERC721Only, {
             chainId,
         })
 

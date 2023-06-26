@@ -76,6 +76,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const openDialog = useCallback(async () => {
         const contract = await selectNFTContract({
             pluginID: NetworkPluginID.PLUGIN_EVM,
+            isERC721Only: true,
             chainId,
         })
         if (contract) onContractChange(contract)

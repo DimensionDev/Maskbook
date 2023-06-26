@@ -100,7 +100,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+    const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, true, {
         chainId,
     })
 
