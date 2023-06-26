@@ -181,27 +181,19 @@ export function SelectGasSettingsToolbarUI({
 
     const openCustomGasSettingsDialog = useCallback(async () => {
         setIsCustomGas(true)
-        SelectGasSettingsModal.openAndWaitForClose({
+        const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: true,
             transaction: gasOption,
-            onSubmit: ({
-                slippageTolerance,
-                transaction,
-            }: {
-                slippageTolerance?: number
-                transaction?: Transaction
-            }) => {
-                if (!transaction) return
-
-                setGasConfigCallback(
-                    transaction.maxFeePerGas!,
-                    transaction.maxPriorityFeePerGas!,
-                    transaction.gasPrice!,
-                )
-            },
         })
+        if (!settings?.transaction) return
+
+        setGasConfigCallback(
+            (settings?.transaction as Transaction).maxFeePerGas!,
+            (settings?.transaction as Transaction).maxPriorityFeePerGas!,
+            (settings?.transaction as Transaction).gasPrice!,
+        )
     }, [chainId, gasOption, setGasConfigCallback])
 
     const currentGasOption = gasOptions?.[currentGasOptionType]

@@ -149,7 +149,7 @@ export function TraderDialog() {
     }, [chainIdValid])
 
     const [, openGasSettingDialog] = useAsyncFn(async () => {
-        SelectGasSettingsModal.openAndWaitForClose({
+        const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: false,
@@ -158,20 +158,15 @@ export function TraderDialog() {
                 ...tradeRef.current?.gasConfig,
             },
             slippageTolerance: currentSlippageSettings.value / 100,
-            onSubmit: ({
-                slippageTolerance,
-                transaction,
-            }: {
-                slippageTolerance?: number
-                transaction?: Web3Helper.TransactionAll
-            }) => {
-                if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+        })
+        if (settings?.slippageTolerance) currentSlippageSettings.value = settings.slippageTolerance
 
-                PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                    open: false,
-                    gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
-                })
-            },
+        PluginTraderMessages.swapSettingsUpdated.sendToAll({
+            open: false,
+            gasConfig: GasEditor.fromTransaction(
+                chainId as ChainId,
+                settings?.transaction as Transaction,
+            ).getGasConfig(),
         })
     }, [chainId, currentSlippageSettings.value])
 

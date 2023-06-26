@@ -24,6 +24,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     },
 }))
 
+export interface SelectGasSettings {
+    slippageTolerance?: number
+    transaction?: Web3Helper.TransactionAll
+}
+
 export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
@@ -34,13 +39,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
     disableGasLimit?: boolean
-    onSubmit?(
-        settings: {
-            slippageTolerance?: number
-            transaction?: Web3Helper.Definition[T]['Transaction']
-        } | null,
-    ): void
-    onClose?(): void
+    onClose(settings?: SelectGasSettings | null): void
 }
 
 export function SelectGasSettingsDialog({
@@ -52,7 +51,6 @@ export function SelectGasSettingsDialog({
     disableGasPrice,
     disableSlippageTolerance,
     disableGasLimit,
-    onSubmit,
     onClose,
     title,
 }: SelectGasSettingsDialogProps) {
@@ -60,10 +58,7 @@ export function SelectGasSettingsDialog({
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)
     const { chainId: chainId_ } = useChainContext({ chainId })
-    const [settings, setSettings] = useState<{
-        slippageTolerance?: number
-        transaction?: Web3Helper.TransactionAll
-    } | null>(null)
+    const [settings, setSettings] = useState<SelectGasSettings | null>(null)
 
     const initialState = useMemo(
         () => ({
@@ -85,8 +80,7 @@ export function SelectGasSettingsDialog({
             open={open}
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             onClose={() => {
-                onSubmit?.(settings)
-                onClose?.()
+                onClose(settings)
             }}
             title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>

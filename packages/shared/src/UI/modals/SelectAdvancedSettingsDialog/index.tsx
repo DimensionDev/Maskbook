@@ -2,7 +2,7 @@ import { forwardRef, useState } from 'react'
 import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SelectGasSettingsDialog } from './SelectGasSettingsDialog.js'
+import { SelectGasSettingsDialog, type SelectGasSettings } from './SelectGasSettingsDialog.js'
 
 export interface SelectGasSettingsModalOpenProps {
     pluginID?: NetworkPluginID
@@ -13,18 +13,15 @@ export interface SelectGasSettingsModalOpenProps {
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
     disableGasLimit?: boolean
-    onSubmit?(
-        settings: {
-            slippageTolerance?: number
-            transaction?: Web3Helper.TransactionAll
-        } | null,
-    ): void
+}
+export interface SelectGasSettingsModalCloseProps {
+    settings?: SelectGasSettings | null
 }
 
 export interface SelectGasSettingsModalProps {}
 
 export const SelectGasSettingsModal = forwardRef<
-    SingletonModalRefCreator<SelectGasSettingsModalOpenProps>,
+    SingletonModalRefCreator<SelectGasSettingsModalOpenProps, SelectGasSettingsModalCloseProps>,
     SelectGasSettingsModalProps
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
@@ -35,14 +32,6 @@ export const SelectGasSettingsModal = forwardRef<
     const [disableGasPrice, setDisableGasPrice] = useState<boolean>()
     const [disableSlippageTolerance, setDisableSlippageTolerance] = useState<boolean>()
     const [disableGasLimit, setDisableGasLimit] = useState<boolean>()
-    const [onSubmit, setOnSubmit] = useState<
-        (
-            settings: {
-                slippageTolerance?: number
-                transaction?: Web3Helper.TransactionAll
-            } | null,
-        ) => void
-    >()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -54,7 +43,6 @@ export const SelectGasSettingsModal = forwardRef<
             setDisableGasPrice(props.disableGasPrice)
             setDisableSlippageTolerance(props.disableSlippageTolerance)
             setDisableGasLimit(props.disableGasLimit)
-            setOnSubmit(() => props.onSubmit)
         },
     })
 
@@ -62,7 +50,7 @@ export const SelectGasSettingsModal = forwardRef<
     return (
         <SelectGasSettingsDialog
             open
-            onClose={() => dispatch?.close()}
+            onClose={(settings) => dispatch?.close({ settings })}
             pluginID={pluginID}
             chainId={chainId}
             slippageTolerance={slippageTolerance}
@@ -71,7 +59,6 @@ export const SelectGasSettingsModal = forwardRef<
             disableGasPrice={disableGasPrice}
             disableSlippageTolerance={disableSlippageTolerance}
             disableGasLimit={disableGasLimit}
-            onSubmit={onSubmit}
         />
     )
 })

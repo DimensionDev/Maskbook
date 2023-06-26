@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { formatWeiToEther, type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, GasEditor, type GasConfig, type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import type { TradeComputed } from '../../types/index.js'
 import {
@@ -16,12 +16,12 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { currentSlippageSettings } from '../../settings.js'
-import { PluginTraderMessages } from '../../messages.js'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { SelectGasSettingsModal } from '@masknet/shared'
+import { PluginTraderMessages } from '../../messages.js'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -92,7 +92,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     // #endregion
 
     const [, openSettingDialog] = useAsyncFn(async () => {
-        SelectGasSettingsModal.openAndWaitForClose({
+        const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: false,
@@ -101,20 +101,15 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 gas,
                 ...gasConfig,
             },
-            onSubmit: ({
-                slippageTolerance,
-                transaction,
-            }: {
-                slippageTolerance?: number
-                transaction?: Web3Helper.TransactionAll
-            }) => {
-                if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+        })
+        if (settings?.slippageTolerance) currentSlippageSettings.value = settings.slippageTolerance
 
-                PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                    open: false,
-                    gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
-                })
-            },
+        PluginTraderMessages.swapSettingsUpdated.sendToAll({
+            open: false,
+            gasConfig: GasEditor.fromTransaction(
+                chainId as ChainId,
+                settings?.transaction as Transaction,
+            ).getGasConfig(),
         })
     }, [chainId, currentSlippageSettings.value, gas, gasConfig])
 
