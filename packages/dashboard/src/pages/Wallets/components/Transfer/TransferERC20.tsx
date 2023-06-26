@@ -356,18 +356,16 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             loading: false,
                             ChipProps: {
                                 onClick: async () => {
-                                    SelectFungibleTokenModal.openAndWaitForClose({
+                                    const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
                                         disableNativeToken: false,
                                         chainId,
                                         pluginID: NetworkPluginID.PLUGIN_EVM,
-                                        onSubmit: (pickedToken: FungibleToken<ChainId, SchemaType>) => {
-                                            if (!pickedToken) return
-                                            setSelectedToken(pickedToken)
-                                            // Update the previous location state of the token.
-                                            navigate(DashboardRoutes.WalletsTransfer, {
-                                                state: { type: TransferTab.Token, token: pickedToken },
-                                            })
-                                        },
+                                    })
+                                    if (!token) return
+                                    setSelectedToken(token as FungibleToken<ChainId, SchemaType>)
+                                    // Update the previous location state of the token.
+                                    navigate(DashboardRoutes.WalletsTransfer, {
+                                        state: { type: TransferTab.Token, token },
                                     })
                                 },
                             },

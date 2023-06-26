@@ -17,13 +17,16 @@ export interface SelectFungibleTokenModalOpenProps {
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedTokens?: string[]
-    onSubmit?(token: Web3Helper.FungibleTokenAll | null): void
+}
+
+export interface SelectFungibleTokenModalCloseProps {
+    token?: Web3Helper.FungibleTokenAll | null
 }
 
 export interface SelectFungibleTokenModalProps {}
 
 export const SelectFungibleTokenModal = forwardRef<
-    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps>,
+    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>,
     SelectFungibleTokenModalProps
 >((props, ref) => {
     const [enableManage, setEnableManage] = useState<boolean>()
@@ -36,7 +39,6 @@ export const SelectFungibleTokenModal = forwardRef<
     const [tokens, setTokens] = useState<Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
     const [disableSearchBar, setDisableSearchBar] = useState<boolean>()
     const [selectedTokens, setSelectedTokens] = useState<string[]>()
-    const [onSubmit, setOnSubmit] = useState<(token: Web3Helper.FungibleTokenAll | null) => void>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -50,7 +52,6 @@ export const SelectFungibleTokenModal = forwardRef<
             setTokens(props.tokens)
             setDisableSearchBar(props.disableNativeToken)
             setSelectedTokens(props.selectedTokens)
-            setOnSubmit(() => props.onSubmit)
         },
     })
 
@@ -58,7 +59,7 @@ export const SelectFungibleTokenModal = forwardRef<
     return (
         <SelectFungibleTokenDialog
             open
-            onClose={() => dispatch?.close()}
+            onClose={(token) => dispatch?.close({ token })}
             enableManage={enableManage}
             pluginID={pluginID}
             chainId={chainId}
@@ -69,7 +70,6 @@ export const SelectFungibleTokenModal = forwardRef<
             tokens={tokens}
             disableSearchBar={disableSearchBar}
             selectedTokens={selectedTokens}
-            onSubmit={onSubmit}
         />
     )
 })

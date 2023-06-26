@@ -23,17 +23,15 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
     const { chainId } = useChainContext()
 
     const onSelectTokenChipClick = useCallback(async () => {
-        SelectFungibleTokenModal.openAndWaitForClose({
+        const { token: picked } = await SelectFungibleTokenModal.openAndWaitForClose({
             pluginID,
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
-            onSubmit: (picked) => {
-                if (picked) {
-                    setToken(picked)
-                }
-            },
         })
+        if (picked) {
+            setToken(picked)
+        }
     }, [token?.address, pluginID, chainId])
 
     return (

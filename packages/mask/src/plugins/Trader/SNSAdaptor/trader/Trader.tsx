@@ -187,23 +187,21 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 ConfirmModal.open({ content: '' })
                 return
             }
-            SelectFungibleTokenModal.openAndWaitForClose({
+            const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
                 chainId,
                 disableNativeToken: false,
                 selectedTokens: excludeTokens,
-                onSubmit: (picked) => {
-                    if (picked) {
-                        dispatchTradeStore({
-                            type:
-                                panelType === TokenPanelType.Input
-                                    ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-                                    : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                            token: picked,
-                            balance: '0',
-                        })
-                    }
-                },
             })
+            if (token) {
+                dispatchTradeStore({
+                    type:
+                        panelType === TokenPanelType.Input
+                            ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
+                            : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                    token,
+                    balance: '0',
+                })
+            }
         },
         [excludeTokens.join(','), chainId, account],
     )

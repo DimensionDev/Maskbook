@@ -59,8 +59,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedTokens?: string[]
-    onSubmit?(token: Web3Helper.FungibleTokenAll | null): void
-    onClose?(): void
+    onClose(token?: Web3Helper.FungibleTokenAll | null): void
 }
 
 export function SelectFungibleTokenDialog({
@@ -73,7 +72,6 @@ export function SelectFungibleTokenDialog({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSubmit,
     onClose,
     title,
     enableManage = true,
@@ -107,7 +105,7 @@ export function SelectFungibleTokenDialog({
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)
+                mode === TokenListMode.List ? onClose() : setMode(TokenListMode.List)
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
@@ -129,7 +127,7 @@ export function SelectFungibleTokenDialog({
                         }
                         disableSearch={disableSearchBar}
                         selectedTokens={selectedTokens}
-                        onSelect={onSubmit}
+                        onSelect={onClose}
                         FixedSizeListProps={FixedSizeListProps}
                         SearchTextFieldProps={{
                             InputProps: { classes: { root: classes.search } },

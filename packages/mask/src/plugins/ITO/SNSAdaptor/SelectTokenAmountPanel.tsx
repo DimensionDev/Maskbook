@@ -45,16 +45,14 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
 
     // #region select token
     const onSelectTokenChipClick = useCallback(async () => {
-        SelectFungibleTokenModal.openAndWaitForClose({
+        const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken,
             disableSearchBar,
             pluginID: NetworkPluginID.PLUGIN_EVM,
             ...FungibleTokenListProps,
-            onSubmit: (picked) => {
-                if (!picked) return
-                onTokenChange(picked)
-            },
         })
+        if (!token) return
+        onTokenChange(token)
     }, [disableNativeToken, disableSearchBar, FungibleTokenListProps])
     // #endregion
 
