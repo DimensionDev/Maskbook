@@ -1,13 +1,14 @@
 export interface BackupFileInfo {
     downloadURL: string
     size: number
+    /** Timestamp in milliseconds */
     uploadedAt: number
     abstract: string
 }
 
 export enum AccountType {
-    email = 'email',
-    phone = 'phone',
+    Email = 'email',
+    Phone = 'phone',
 }
 
 export enum Scenario {

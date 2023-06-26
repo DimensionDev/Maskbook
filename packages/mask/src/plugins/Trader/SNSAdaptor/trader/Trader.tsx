@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, ConfirmModal, SelectFungibleTokenModal } from '@masknet/shared'
+import { ImageIcon, ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
@@ -184,7 +184,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
             if (!account) {
-                ConfirmModal.open({ content: '' })
+                SelectProviderModal.open()
                 return
             }
             const { token } = await SelectFungibleTokenModal.openAndWaitForClose({
@@ -245,7 +245,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         if (typeof hash !== 'string') return
 
-        await ConfirmModal.openAndWaitForClose({
+        const confirmed = await ConfirmModal.openAndWaitForClose({
             title: t.swap(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -273,11 +273,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 </Box>
             ),
             confirmLabel: t.share(),
-            onSubmit: () => {
-                activatedSocialNetworkUI.utils.share?.(shareText)
-            },
             maxWidthOfContent: 420,
         })
+        if (confirmed) activatedSocialNetworkUI.utils.share?.(shareText)
         telemetry.captureEvent(EventType.Interact, EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,

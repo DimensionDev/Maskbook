@@ -2,6 +2,7 @@ export enum DashboardRoutes {
     Setup = '/setup',
     Welcome = '/setup/welcome',
     SignUpPersona = '/setup/sign-up',
+    RecoveryPersona = '/setup/recovery',
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
     SignUpPersonaOnboarding = '/setup/sign-up/onboarding',
     SignUp = '/sign-up',

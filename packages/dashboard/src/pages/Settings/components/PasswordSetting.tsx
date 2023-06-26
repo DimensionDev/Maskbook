@@ -1,5 +1,5 @@
 import SettingButton from './SettingButton.js'
-import SettingPasswordDialog from './dialogs/SettingPasswordDialog.js'
+import { SettingPasswordDialog } from './dialogs/SettingPasswordDialog.js'
 import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../hooks/UserContext.js'
 import { useDashboardI18N } from '../../../locales/index.js'

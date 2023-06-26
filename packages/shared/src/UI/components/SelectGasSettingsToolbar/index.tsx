@@ -5,8 +5,8 @@ import {
     useMenuConfig,
     FormattedBalance,
     useSharedI18N,
-    useSelectAdvancedSettings,
     ApproveMaskDialog,
+    SelectGasSettingsModal,
 } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -26,6 +26,7 @@ import {
     type GasConfig,
     GasEditor,
     formatGas,
+    type Transaction,
 } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box, Grid } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -158,8 +159,6 @@ export function SelectGasSettingsToolbarUI({
     const { chainId } = useChainContext()
     const Others = useWeb3Others()
 
-    const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
-
     const isSupportEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
@@ -182,17 +181,20 @@ export function SelectGasSettingsToolbarUI({
 
     const openCustomGasSettingsDialog = useCallback(async () => {
         setIsCustomGas(true)
-        const { transaction } = await selectAdvancedSettings({
+        const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: true,
             transaction: gasOption,
         })
+        if (!settings?.transaction) return
 
-        if (!transaction) return
-
-        setGasConfigCallback(transaction.maxFeePerGas!, transaction.maxPriorityFeePerGas!, transaction.gasPrice!)
-    }, [chainId, gasOption, selectAdvancedSettings, setGasConfigCallback])
+        setGasConfigCallback(
+            (settings?.transaction as Transaction).maxFeePerGas!,
+            (settings?.transaction as Transaction).maxPriorityFeePerGas!,
+            (settings?.transaction as Transaction).gasPrice!,
+        )
+    }, [chainId, gasOption, setGasConfigCallback])
 
     const currentGasOption = gasOptions?.[currentGasOptionType]
     useEffect(() => {

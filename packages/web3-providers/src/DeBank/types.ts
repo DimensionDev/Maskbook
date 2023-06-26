@@ -98,10 +98,10 @@ export interface HistoryRecord {
 
 export interface BalanceRecord {
     balance: number
-    chain: 'eth' | 'bsc' | string
+    chain: LiteralUnion<'eth' | 'bsc'>
     decimals: number
     display_symbol: null
-    id: 'eth' | string
+    id: LiteralUnion<'eth'>
     is_core: boolean
     is_swap_common: boolean
     is_swap_hot: null
@@ -115,11 +115,11 @@ export interface BalanceRecord {
 }
 
 export interface WalletTokenRecord {
-    id: 'eth' | string
+    id: LiteralUnion<'eth'>
     amount: string
     is_wallet: boolean
     protocol_id: string
-    chain: 'eth' | 'bsc' | string
+    chain: LiteralUnion<'eth' | 'bsc'>
     decimals: number
     display_symbol: null
     is_core: boolean

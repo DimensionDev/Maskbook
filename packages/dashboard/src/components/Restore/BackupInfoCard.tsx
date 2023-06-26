@@ -1,52 +1,44 @@
 import { memo } from 'react'
-import { Box, Card, Grid, Stack, Typography, Tooltip } from '@mui/material'
+import { Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import fromUnixTime from 'date-fns/fromUnixTime'
 import type { BackupFileInfo } from '../../pages/Settings/type.js'
 import { formatFileSize } from '@masknet/kit'
+import { FileFrame } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()((theme) => ({
+    file: {
+        border: `1px solid ${theme.palette.maskColor.highlight}`,
+    },
+    desc: {
+        fontSize: 12,
+        fontFamily: 'Helvetica',
+        fontWeight: 700,
+        lineHeight: '16px',
+    },
+}))
 
 interface BackupInfoProps {
     info: BackupFileInfo
 }
 
-export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
+const getFileName = (rawUrl: string) => {
+    const url = new URL(rawUrl)
+    return url.pathname.split('/').pop()
+}
+
+export const BackupInfoCard = memo(function BackupInfoCard({ info }: BackupInfoProps) {
+    const { classes } = useStyles()
     return (
-        <Card variant="background">
-            <Grid
-                container
-                spacing={2}
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ padding: '8px' }}>
-                <Grid item xs={10}>
-                    <Stack spacing={1}>
-                        <Typography variant="body2">{economizeAbstract(info.abstract)}</Typography>
-                        <Typography variant="body2">
-                            {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd HH:mm')}
-                        </Typography>
-                    </Stack>
-                </Grid>
-                <Grid item xs={2}>
-                    <Box>
-                        <Typography align="right" variant="body2">
-                            {formatFileSize(info.size, true)}
-                        </Typography>
-                    </Box>
-                </Grid>
-            </Grid>
-        </Card>
+        <FileFrame
+            fileName={getFileName(info.downloadURL)}
+            className={classes.file}
+            operations={<Typography className={classes.desc}>{formatFileSize(info.size, true)}</Typography>}>
+            {Number.isNaN(info.uploadedAt) ? null : (
+                <Typography fontSize={12} color="second">
+                    {formatDateTime(info.uploadedAt, 'yyyy-MM-dd hh:mm')}
+                </Typography>
+            )}
+        </FileFrame>
     )
 })
-
-function economizeAbstract(input: string) {
-    if (!input.length) return <div>error</div>
-    if (input.length < 30) return <div>{input}</div>
-    return (
-        <Tooltip title={input} placement="top" arrow>
-            <div>
-                {input.slice(0, 30)}...({input.split(',').length})
-            </div>
-        </Tooltip>
-    )
-}

@@ -72,7 +72,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
         } else {
             const params = {
                 account: countryCode + phone,
-                type: AccountType.phone,
+                type: AccountType.Phone,
                 code,
             }
 
@@ -95,7 +95,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
         }
     }
 
-    const originalPhoneVerified = () => {
+    const resetPhoneVerified = () => {
         setCountryCode('+1')
         setPhone('')
         setCode('')
@@ -116,12 +116,12 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
                 setInvalidCode(true)
             } else if (error.status === 404) {
                 // no cloud backup file
-                originalPhoneVerified()
+                resetPhoneVerified()
             }
         })
 
         if (res) {
-            originalPhoneVerified()
+            resetPhoneVerified()
             setBackupInfo({
                 url: res.downloadURL,
                 abstract: res.abstract,
@@ -157,7 +157,7 @@ export default function SettingPhoneNumberDialog({ open, onClose }: SettingPhone
     const sendValidationCode = () => {
         sendCode({
             account: countryCode + phone,
-            type: AccountType.phone,
+            type: AccountType.Phone,
             scenario: user.email ? Scenario.change : Scenario.create,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
