@@ -13,7 +13,7 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     networkPluginId?: NetworkPluginID
     /** The id of data provider */
     sourceType?: SourceType
-    /** The schema type to filter token list */
+    /** The schema type of filtered data */
     schemaType?: SchemaType
     /** The currency type of data */
     currencyType?: CurrencyType
