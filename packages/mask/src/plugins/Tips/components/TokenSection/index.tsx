@@ -1,6 +1,6 @@
 import { type HTMLProps, useCallback } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useSelectFungibleToken, FungibleTokenInput, TokenValue } from '@masknet/shared'
+import { FungibleTokenInput, SelectFungibleTokenModal, TokenValue } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useTip } from '../../contexts/index.js'
@@ -22,18 +22,19 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext()
 
-    const selectFungibleToken = useSelectFungibleToken()
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await selectFungibleToken({
+        SelectFungibleTokenModal.openAndWaitForClose({
             pluginID,
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
+            onSubmit: (picked) => {
+                if (picked) {
+                    setToken(picked)
+                }
+            },
         })
-        if (picked) {
-            setToken(picked)
-        }
-    }, [selectFungibleToken, token?.address, pluginID, chainId])
+    }, [token?.address, pluginID, chainId])
 
     return (
         <div {...props} className={cx(props.className, classes.container)}>

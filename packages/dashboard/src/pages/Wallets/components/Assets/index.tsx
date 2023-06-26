@@ -4,7 +4,12 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
-import { CollectionList, UserAssetsProvider, useSelectFungibleToken, type CollectibleGridProps } from '@masknet/shared'
+import {
+    CollectionList,
+    UserAssetsProvider,
+    type CollectibleGridProps,
+    SelectFungibleTokenModal,
+} from '@masknet/shared'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ContentContainer } from '../../../../components/ContentContainer/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -66,7 +71,6 @@ export const Assets = memo<AssetsProps>(({ network }) => {
     }, [pluginID])
 
     const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
-    const selectFungibleToken = useSelectFungibleToken()
     const handleActionClick = useCallback(
         (asset: Web3Helper.NonFungibleAssetAll) => {
             // Sending NFT is only available on EVM currently.
@@ -100,7 +104,7 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                                 className={classes.addCustomTokenButton}
                                 onClick={async () => {
                                     if (currentTab === AssetTab.Token) {
-                                        await selectFungibleToken({
+                                        SelectFungibleTokenModal.openAndWaitForClose({
                                             whitelist: [],
                                             title: t.wallets_add_token(),
                                             chainId: network?.chainId,

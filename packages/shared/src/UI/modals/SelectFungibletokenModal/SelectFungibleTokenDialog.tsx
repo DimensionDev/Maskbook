@@ -6,15 +6,15 @@ import {
     useFungibleAssets,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { FungibleTokenList, LoadingStatus, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { useBaseUIRuntime } from '../base/index.js'
-import { InjectedDialog } from './InjectedDialog.js'
 import { useRowSize } from '../../../hooks/useRowSize.js'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
+import { useSharedI18N } from '../../../locales/index.js'
+import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
+import { FungibleTokenList, LoadingStatus } from '../../components/index.js'
 
 interface StyleProps {
     compact: boolean
