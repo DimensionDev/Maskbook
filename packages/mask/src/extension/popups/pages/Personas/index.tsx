@@ -4,7 +4,6 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js
 
 import { PersonaContext } from '@masknet/shared'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { PersonaHeader } from './components/PersonaHeader/index.js'
 import Services from '../../../service.js'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
@@ -24,7 +23,7 @@ const Persona = memo(() => {
                 initialState={{
                     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
                 }}>
-                <PersonaHeader />
+                {/* <PersonaHeader /> */}
                 <Routes>
                     <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
                     <Route path={r(PopupRoutes.PersonaRename)} element={<PersonaRename />} />

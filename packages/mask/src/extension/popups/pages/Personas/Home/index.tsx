@@ -1,10 +1,11 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { PersonaHomeUI } from './UI.js'
-import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import Services from '../../../../service.js'
 import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
 import { PersonaContext } from '@masknet/shared'
+import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 
 const PersonaHome = memo(() => {
     const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =
@@ -12,14 +13,7 @@ const PersonaHome = memo(() => {
 
     useContext(HydrateFinished)()
 
-    const wallets = useMemo(() => {
-        if (!proofs) return []
-        return proofs.filter(({ platform }) => platform === NextIDPlatform.Ethereum)
-    }, [proofs])
-
-    const onEdit = useCallback(() => {
-        setSelectedPersona(currentPersona)
-    }, [currentPersona])
+    const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
     const onCreatePersona = useCallback(() => {
         browser.tabs.create({
@@ -43,20 +37,35 @@ const PersonaHome = memo(() => {
         Services.Helper.removePopupWindow()
     }, [])
 
+    const onConnect = useCallback(
+        async (networkIdentifier: EnhanceableSite) => {
+            if (currentPersona) {
+                await Services.SocialNetwork.connectSite(
+                    currentPersona.identifier,
+                    networkIdentifier,
+                    'local',
+                    undefined,
+                    false,
+                )
+            }
+        },
+        [currentPersona],
+    )
+
     useTitle('')
 
     return (
         <PersonaHomeUI
+            accounts={accounts}
+            networks={definedSocialNetworks}
             isEmpty={!personas?.length}
             avatar={avatar}
             fingerprint={currentPersona?.identifier.rawPublicKey}
+            publicKey={currentPersona?.identifier.publicKeyAsHex}
             nickname={currentPersona?.nickname}
-            accountsCount={accounts.length ?? 0}
-            walletsCount={wallets.length}
-            onEdit={onEdit}
-            fetchProofsLoading={fetchProofsLoading}
             onCreatePersona={onCreatePersona}
             onRestore={onRestore}
+            onConnect={onConnect}
         />
     )
 })

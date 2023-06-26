@@ -1439,6 +1439,45 @@ export const GrayMasks = /*#__PURE__*/ __createIcon('GrayMasks', [
         u: () => new URL('./general/GrayMasks.svg', import.meta.url),
     },
 ])
+export const HamburgeMenu = /*#__PURE__*/ __createIcon('HamburgeMenu', [
+    {
+        u: () => new URL('./general/HamburgeMenu.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '24',
+                height: '24',
+                fill: 'none',
+                children: /*#__PURE__*/ _jsxs('g', {
+                    fill: 'currentColor',
+                    children: [
+                        /*#__PURE__*/ _jsx('rect', {
+                            width: '15.383',
+                            height: '2',
+                            x: '4.309',
+                            y: '6.539',
+                            rx: '1',
+                        }),
+                        /*#__PURE__*/ _jsx('rect', {
+                            width: '15.383',
+                            height: '2',
+                            x: '4.309',
+                            y: '11',
+                            rx: '1',
+                        }),
+                        /*#__PURE__*/ _jsx('rect', {
+                            width: '15.383',
+                            height: '2',
+                            x: '4.309',
+                            y: '15.461',
+                            rx: '1',
+                        }),
+                    ],
+                }),
+            }),
+        s: true,
+    },
+])
 export const History = /*#__PURE__*/ __createIcon('History', [
     {
         c: ['dark'],

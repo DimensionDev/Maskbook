@@ -1,63 +1,31 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import urlcat from 'urlcat'
 import { Navigator } from '../../../components/Navigator/index.js'
-import { Avatar, Button, Typography } from '@mui/material'
+import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { Link } from 'react-router-dom'
+import { type EnhanceableSite, formatPersonaFingerprint } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { TabContext, TabPanel } from '@mui/lab'
+import type { Account } from '../type.js'
+import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
     },
-    item: {
-        padding: 16,
+    info: {
+        padding: theme.spacing(2),
         display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
-        marginBottom: 1,
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '18px',
-        color: '#15181B',
-        textDecoration: 'unset',
-        cursor: 'pointer',
-    },
-    content: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        flex: 1,
-    },
-    copy: {
-        width: 16,
-        height: 16,
-        color: '#767F8D',
-        cursor: 'pointer',
-        marginLeft: 4,
-    },
-    avatar: {
-        marginRight: 4,
-        width: 48,
-        height: 48,
-    },
-    arrow: {
-        color: '#7B8192',
-    },
-    placeholder: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 318,
+        position: 'relative',
     },
     controller: {
         display: 'flex',
@@ -65,29 +33,98 @@ const useStyles = makeStyles()({
         rowGap: 12,
         padding: '0 16px 16px 16px',
     },
-    button: {
-        padding: '11px 0',
-        borderRadius: 8,
-        fontWeight: 700,
-        fontSize: 14,
-        width: '100%',
-        '& > svg': {
-            marginLeft: 4,
-        },
+    emptyHeader: {
+        height: 140,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: theme.palette.maskColor.modalTitleBg,
     },
-})
+    placeholder: {
+        textAlign: 'center',
+        height: 233,
+        padding: theme.spacing(2, 2, 0, 2),
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    placeholderTitle: {
+        fontSize: 24,
+        lineHeight: 1.2,
+        fontWeight: 700,
+    },
+    placeholderDescription: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
+        color: theme.palette.maskColor.third,
+        marginTop: theme.spacing(1.5),
+    },
+    edit: {
+        position: 'absolute',
+        bottom: 6,
+        right: 6,
+        background: theme.palette.maskColor.bottom,
+        borderRadius: 99,
+        width: 18,
+        height: 18,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    icon: {
+        width: 12,
+        height: 12,
+        fontSize: 12,
+        color: theme.palette.maskColor.second,
+    },
+    settings: {
+        position: 'absolute',
+        top: 16,
+        right: 16,
+    },
+    header: {
+        padding: theme.spacing(2),
+        lineHeight: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+    },
+    logo: {
+        width: 100,
+        height: 28,
+    },
+    menu: {
+        color: theme.palette.maskColor.main,
+    },
+    tabs: {
+        paddingLeft: 16,
+        paddingRight: 16,
+    },
+    panel: {
+        padding: theme.spacing(2),
+        background: theme.palette.maskColor.bottom,
+        flex: 1,
+    },
+}))
+
+enum TabType {
+    SocialAccounts = 'Social Accounts',
+    ConnectedWallets = 'Connected Wallets',
+}
 
 export interface PersonaHomeUIProps {
     avatar?: string | null
     fingerprint?: string
+    publicKey?: string
     nickname?: string
-    accountsCount: number
-    walletsCount: number
-    onEdit: () => void
     onCreatePersona: () => void
     onRestore: () => void
-    fetchProofsLoading: boolean
     isEmpty?: boolean
+    accounts: Account[]
+    networks: EnhanceableSite[]
+    onConnect: (networkIdentifier: EnhanceableSite) => void
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -95,88 +132,106 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         avatar,
         fingerprint,
         nickname,
-        accountsCount,
-        walletsCount,
-        onEdit,
-        fetchProofsLoading,
-        isEmpty,
         onCreatePersona,
         onRestore,
+        isEmpty,
+        accounts,
+        networks,
+        onConnect,
+        publicKey,
     }) => {
+        const theme = useTheme()
         const { t } = useI18N()
         const { classes } = useStyles()
+
+        const [currentTab, onChange] = useTabs(TabType.SocialAccounts, TabType.ConnectedWallets)
 
         return (
             <>
                 <div className={classes.container}>
                     {!isEmpty ? (
-                        <>
-                            <div className={classes.item}>
-                                <Typography>{t('popups_profile_photo')}</Typography>
-                                {avatar ? (
-                                    <Avatar src={avatar} className={classes.avatar} />
-                                ) : (
-                                    <Icons.MenuPersonasActive
-                                        className={classes.avatar}
-                                        color="#f9fafa"
-                                        size={48}
-                                        style={{ backgroundColor: '#F9FAFA', borderRadius: 99 }}
-                                    />
-                                )}
-                            </div>
-                            <div className={classes.item}>
-                                <Typography>{t('popups_public_key')}</Typography>
-                                {fingerprint ? (
-                                    <Typography className={classes.content}>
-                                        {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyIconButton text={fingerprint} className={classes.copy} />
+                        <TabContext value={currentTab}>
+                            <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
+                                <Box className={classes.header}>
+                                    <Icons.MaskSquare className={classes.logo} />
+                                    <Icons.HamburgeMenu className={classes.menu} />
+                                </Box>
+                                <Box className={classes.info}>
+                                    <Box position="relative">
+                                        {avatar ? (
+                                            <Avatar src={avatar} style={{ width: 60, height: 60 }} />
+                                        ) : (
+                                            <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
+                                        )}
+                                        <Box className={classes.edit}>
+                                            <Icons.Edit size={12} />
+                                        </Box>
+                                    </Box>
+                                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                                        {nickname}
                                     </Typography>
-                                ) : null}
-                            </div>
-                            <Link className={classes.item} to={PopupRoutes.PersonaRename} onClick={onEdit}>
-                                <Typography>{t('popups_name')}</Typography>
-                                <Typography className={classes.content} onClick={onEdit}>
-                                    {formatPersonaName(nickname)}
-                                    <Icons.ArrowRightIos className={classes.arrow} />
-                                </Typography>
-                            </Link>
-                            <Link className={classes.item} to={PopupRoutes.SocialAccounts}>
-                                <Typography>{t('popups_social_account')}</Typography>
-                                <Typography className={classes.content}>
-                                    {!fetchProofsLoading ? accountsCount : '...'}
-                                    <Icons.ArrowRightIos className={classes.arrow} />
-                                </Typography>
-                            </Link>
-                            <Link className={classes.item} to={PopupRoutes.ConnectedWallets}>
-                                <Typography>{t('popups_connected_wallets')}</Typography>
-                                <Typography className={classes.content}>
-                                    {!fetchProofsLoading ? walletsCount : '...'}
-                                    <Icons.ArrowRightIos className={classes.arrow} />
-                                </Typography>
-                            </Link>
-                        </>
+                                    {fingerprint ? (
+                                        <Typography
+                                            fontSize={12}
+                                            color={theme.palette.maskColor.second}
+                                            lineHeight="16px"
+                                            display="flex"
+                                            alignItems="center"
+                                            columnGap="2px">
+                                            {formatPersonaFingerprint(fingerprint, 4)}
+                                            <CopyIconButton text={fingerprint} className={classes.icon} />
+                                            <Link
+                                                underline="none"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href={urlcat('https://web3.bio/', { s: publicKey })}
+                                                className={classes.icon}>
+                                                <Icons.LinkOut size={12} />
+                                            </Link>
+                                        </Typography>
+                                    ) : null}
+                                    <Icons.Settings2 size={20} className={classes.settings} />
+                                </Box>
+
+                                <MaskTabList
+                                    onChange={onChange}
+                                    aria-label="persona-tabs"
+                                    classes={{ root: classes.tabs }}>
+                                    <Tab label={t('popups_social_account')} value={TabType.SocialAccounts} />
+                                    <Tab label={t('popups_connected_wallets')} value={TabType.ConnectedWallets} />
+                                </MaskTabList>
+                            </Box>
+                            <TabPanel className={classes.panel} value={TabType.SocialAccounts}>
+                                <SocialAccounts accounts={accounts} networks={networks} onConnect={onConnect} />
+                            </TabPanel>
+                        </TabContext>
                     ) : (
-                        <>
-                            <div className={classes.placeholder}>
-                                <Icons.Empty size={60} />
-                            </div>
+                        <Box>
+                            <Box className={classes.emptyHeader}>
+                                <Icons.MaskSquare width={160} height={46} />
+                            </Box>
+                            <Box className={classes.placeholder}>
+                                <Typography className={classes.placeholderTitle}>
+                                    {t('popups_welcome_to_mask_network')}
+                                </Typography>
+                                <Typography className={classes.placeholderDescription}>
+                                    {t('popups_persona_description')}
+                                </Typography>
+                            </Box>
                             <div className={classes.controller}>
                                 <Button
-                                    className={classes.button}
-                                    style={{ backgroundColor: '#07101B', color: '#F2F5F6' }}
-                                    onClick={onCreatePersona}>
+                                    onClick={onCreatePersona}
+                                    startIcon={<Icons.AddUser color="#F2F5F6" size={18} />}>
                                     {t('popups_create_persona')}
-                                    <Icons.AddUser color="#F2F5F6" size={18} />
                                 </Button>
                                 <Button
-                                    className={classes.button}
-                                    style={{ backgroundColor: '#FFFFFF', color: '#07101B' }}
-                                    onClick={onRestore}>
+                                    onClick={onRestore}
+                                    variant="outlined"
+                                    startIcon={<Icons.PopupRestore color="#07101B" size={18} />}>
                                     {t('popups_restore_and_login')}
-                                    <Icons.PopupRestore color="#07101B" size={18} />
                                 </Button>
                             </div>
-                        </>
+                        </Box>
                     )}
                 </div>
                 <Navigator />

@@ -9,7 +9,7 @@ function GlobalCss() {
         <GlobalStyles
             styles={{
                 body: {
-                    minWidth: 350,
+                    minWidth: 400,
                     overflowX: 'hidden',
                     margin: '0 auto !important',
                     maxWidth: '100%',

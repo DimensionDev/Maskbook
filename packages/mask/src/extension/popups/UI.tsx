@@ -2,23 +2,18 @@ import { lazy, useEffect, useState, useMemo } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { Web3ContextProvider, TelemetryProvider, useMountReport } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, PopupRoutes, languageSettings, queryRemoteI18NBundle } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { PageUIProvider } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EventID } from '@masknet/web3-telemetry/types'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import '../../social-network-adaptor/browser-action/index.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import { PageTitleContext } from './context.js'
 import Services from '../service.js'
-
-function usePopupTheme() {
-    return usePopupFullPageTheme(useValueRef(languageSettings))
-}
+import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))

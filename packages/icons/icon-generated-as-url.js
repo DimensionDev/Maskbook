@@ -185,6 +185,7 @@ export function gear_light_url() { return new URL("./general/Gear.light.svg", im
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url) }
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url) }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url) }
+export function hamburge_menu_url() { return new URL("./general/HamburgeMenu.svg", import.meta.url) }
 export function history_dark_url() { return new URL("./general/History.dark.svg", import.meta.url) }
 export function history_light_url() { return new URL("./general/History.light.svg", import.meta.url) }
 export function identity_dark_url() { return new URL("./general/Identity.dark.svg", import.meta.url) }

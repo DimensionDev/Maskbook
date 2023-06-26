@@ -1,10 +1,11 @@
 import { throttle } from 'lodash-es'
 import type { Storage } from 'webextension-polyfill'
-import { MaskMessages } from '@masknet/shared-base'
+import { type EnhanceableSite, MaskMessages } from '@masknet/shared-base'
 import { InternalStorageKeys } from '../../../services/settings/utils.js'
 import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings/index.js'
 import { queryOwnedPersonaInformation } from '../../../services/identity/index.js'
 import type { PopupSSR_Props } from './type.js'
+import { getSupportedSites } from '../../../services/site-adaptors/connect.js'
 
 const CACHE_KEY = 'popup-ssr-cache'
 export let cache: {
@@ -52,7 +53,7 @@ async function prepareData(): Promise<PopupSSR_Props> {
     const id = await getCurrentPersonaIdentifier()
     const personas = await queryOwnedPersonaInformation(false)
     const currentPersona = personas.find((x) => x.identifier === id) || personas.at(0)
-
+    const networks = await getSupportedSites({ isSocialNetwork: true })
     return {
         language: await language,
         avatar: currentPersona?.avatar,
@@ -60,5 +61,6 @@ async function prepareData(): Promise<PopupSSR_Props> {
         hasPersona: !!currentPersona,
         linkedProfilesCount: currentPersona?.linkedProfiles.length ?? 0,
         nickname: currentPersona?.nickname,
+        networks: networks.map((x) => x.networkIdentifier as EnhanceableSite),
     }
 }
