@@ -1,3 +1,4 @@
+// TODO Generate from color scheme, and add real colors in JSdoc comment
 declare module '@mui/material/styles/createPalette.d' {
     export interface Palette {
         secondaryDivider: string

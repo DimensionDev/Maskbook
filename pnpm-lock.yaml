@@ -623,8 +623,8 @@ importers:
         specifier: ^7.43.9
         version: 7.43.9(react@0.0.0-experimental-9a72e6227-20230525)
       react-qrcode-logo:
-        specifier: ^2.7.0
-        version: 2.7.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+        specifier: ^2.9.0
+        version: 2.9.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       react-router-dom:
         specifier: ^6.10.0
         version: 6.10.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -1126,6 +1126,9 @@ importers:
       react-hook-form:
         specifier: 7.43.9
         version: 7.43.9(react@0.0.0-experimental-9a72e6227-20230525)
+      react-qrcode-logo:
+        specifier: ^2.9.0
+        version: 2.9.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       react-router-dom:
         specifier: ^6.10.0
         version: 6.10.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -9980,7 +9983,7 @@ packages:
       html-entities: 2.3.3
       loader-utils: 2.0.4
       react-refresh: 0.11.0
-      schema-utils: 3.1.1
+      schema-utils: 3.2.0
       source-map: 0.7.4
       webpack: 5.88.0(@swc/core@1.3.67)
     dev: true
@@ -28178,8 +28181,8 @@ packages:
       p-defer: 3.0.0
     dev: false
 
-  /react-qrcode-logo@2.7.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525):
-    resolution: {integrity: sha512-79Ce+1GlETAbu8fQGAoHczjvXjsm044+FeVAutu9lwJ/w0hRKRRPPHQRkPmXZK4aPi/H9Fqv+7P29VYQ9Yo2dA==}
+  /react-qrcode-logo@2.9.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525):
+    resolution: {integrity: sha512-x9uctB/8kuQ+x7p4V/BRv6qbQV4xYopLcitBuQT3925U/zVFb3bbDUsUZsi7hEKuAX/wRsfhs331FhlPSYCO9Q==}
     peerDependencies:
       react: '>=16.4.1 || 0.0.0-experimental-9a72e6227-20230525'
       react-dom: '>=16.4.1 || 0.0.0-experimental-9a72e6227-20230525'
@@ -34010,7 +34013,7 @@ time:
   /react-hook-form@7.43.9: '2023-03-30T21:17:53.721Z'
   /react-i18next@12.2.0: '2023-02-23T16:58:56.177Z'
   /react-markdown@8.0.7: '2023-04-12T10:09:37.701Z'
-  /react-qrcode-logo@2.7.0: '2022-03-29T20:53:55.986Z'
+  /react-qrcode-logo@2.9.0: '2023-02-25T14:35:39.109Z'
   /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
   /react-router-dom@6.10.0: '2023-03-29T20:04:49.830Z'
   /react-router-dom@6.4.3: '2022-11-01T15:08:22.965Z'

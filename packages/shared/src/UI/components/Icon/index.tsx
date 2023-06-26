@@ -15,6 +15,7 @@ const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
 }))
 
 export interface IconProps {
+    color?: string
     size?: number | string
     name?: string
     label?: string
@@ -24,7 +25,7 @@ export interface IconProps {
 }
 
 export const Icon = memo<IconProps>(function Icon(props) {
-    const { logoURL, AvatarProps, size, name, label, className } = props
+    const { logoURL, AvatarProps, size, color, name, label, className } = props
     const [failed, setFailed] = useState(false)
 
     const defaultBackgroundImage = name2Image(name)
@@ -46,7 +47,7 @@ export const Icon = memo<IconProps>(function Icon(props) {
             sx={{
                 ...AvatarProps?.sx,
                 backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
-                backgroundColor: showImage ? theme.palette.common.white : undefined,
+                backgroundColor: showImage ? color ?? theme.palette.common.white : undefined,
             }}>
             {label ?? name?.slice(0, 1).toUpperCase()}
         </Avatar>

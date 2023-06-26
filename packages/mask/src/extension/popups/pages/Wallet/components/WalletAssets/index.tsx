@@ -1,18 +1,18 @@
-import { memo, useState } from 'react'
-import { Button, Tab, Tabs, styled, tabClasses, tabsClasses } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { TabContext, TabPanel } from '@mui/lab'
-import { AssetsList } from '../AssetsList/index.js'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { ActivityList } from '../ActivityList/index.js'
-import { useI18N } from '../../../../../../utils/index.js'
-import { useContainer } from 'unstated-next'
-import { WalletContext } from '../../hooks/useWalletContext.js'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
-import { Navigator } from '../../../../components/Navigator/index.js'
+import { LoadingStatus } from '@masknet/shared'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Tab, Tabs, styled, tabClasses, tabsClasses } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useMount } from 'react-use'
+import { useContainer } from 'unstated-next'
+import { useI18N } from '../../../../../../utils/index.js'
+import { Navigator } from '../../../../components/Navigator/index.js'
+import { WalletContext } from '../../hooks/useWalletContext.js'
+import { ActivityList } from '../ActivityList/index.js'
+import { AssetsList } from '../AssetsList/index.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -20,18 +20,13 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     tabPanel: {
         padding: 0,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-    },
-    button: {
-        fontWeight: 600,
-        backgroundColor: '#ffffff',
-        padding: '9px 0',
-        borderRadius: 20,
     },
 })
 
@@ -71,7 +66,7 @@ enum WalletTabs {
     Activity = 'Activity',
 }
 
-export const WalletAssets = memo(() => {
+export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { refreshAssets } = useContainer(WalletContext)
@@ -79,14 +74,16 @@ export const WalletAssets = memo(() => {
     useMount(() => {
         refreshAssets()
     })
-    return wallet ? <WalletAssetsUI onAddTokenClick={() => navigate(PopupRoutes.AddToken)} /> : null
+    const handleAdd = useCallback(() => navigate(PopupRoutes.AddToken), [navigate])
+
+    return wallet ? <WalletAssetsUI onAddTokenClick={handleAdd} /> : null
 })
 
 export interface WalletAssetsUIProps {
     onAddTokenClick: () => void
 }
 
-export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
+export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddTokenClick }) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -94,12 +91,12 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
 
     return assetsLoading ? (
-        <LoadingPlaceholder />
+        <LoadingStatus height="100%" />
     ) : (
         <>
             <div className={classes.content}>
                 <TabContext value={currentTab}>
-                    <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>
+                    <StyledTabs value={currentTab} onChange={(_, tab) => setCurrentTab(tab)}>
                         <StyledTab label={t('popups_wallet_tab_assets')} value={WalletTabs.Assets} />
                         <StyledTab label={t('popups_wallet_tab_activity')} value={WalletTabs.Activity} />
                     </StyledTabs>
@@ -109,9 +106,9 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                         style={{ height: currentTab === WalletTabs.Assets ? 396 : 0 }}>
                         <AssetsList />
                         <div style={{ padding: 16 }}>
-                            <Button className={classes.button} fullWidth onClick={onAddTokenClick}>
+                            <ActionButton variant="roundedOutlined" fullWidth onClick={onAddTokenClick}>
                                 {t('add_token')}
-                            </Button>
+                            </ActionButton>
                         </div>
                     </TabPanel>
                     <TabPanel

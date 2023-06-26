@@ -1,11 +1,10 @@
-import { useContext } from 'react'
-import { useMount } from 'react-use'
+import { useContext, useLayoutEffect } from 'react'
 import { PageTitleContext } from '../context.js'
 
 export function useTitle(title: string) {
     const { setTitle } = useContext(PageTitleContext)
 
-    useMount(() => {
+    useLayoutEffect(() => {
         setTitle(title)
-    })
+    }, [title])
 }
