@@ -3,7 +3,13 @@ import { useAsync, useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { sha3 } from 'web3-utils'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
-import { type ChainId, type SchemaType, FAKE_SIGN_PASSWORD, ContractTransaction } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type SchemaType,
+    FAKE_SIGN_PASSWORD,
+    ContractTransaction,
+    decodeEvents,
+} from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
@@ -103,8 +109,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             chainId,
         }
 
-        const tx = await new ContractTransaction(ITO_Contract as ITO2).fillAll(
-            (ITO_Contract as ITO2).methods.fill_pool(...params),
+        const tx = await new ContractTransaction(ITO_Contract).fillAll(
+            ITO_Contract.methods.fill_pool(...params),
             config,
         )
 
@@ -112,7 +118,11 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const receipt = await Web3.getTransactionReceipt(hash, { chainId })
 
-        return { hash, receipt, settings }
+        const events = receipt
+            ? decodeEvents(Web3.getWeb3({ chainId }), ITO_Contract.options.jsonInterface, receipt)
+            : undefined
+
+        return { hash, receipt, settings, events }
     }, [account, ITO_Contract, poolSettings, paramResult])
 
     return [state, fillCallback] as const

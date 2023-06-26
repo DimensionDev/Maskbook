@@ -111,17 +111,18 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [{ loading: filling }, fillCallback] = useFillCallback(poolSettings)
     const fill = useCallback(async () => {
         const result = await fillCallback()
-        const { hash, receipt, settings } = result ?? {}
-        if (typeof hash !== 'string') return
-        if (typeof receipt?.transactionHash !== 'string') return
+        const { hash, receipt, settings, events } = result ?? {}
 
-        // no contract is available
-        if (!ITO2_CONTRACT_ADDRESS) return
+        if (
+            typeof hash !== 'string' ||
+            typeof receipt?.transactionHash !== 'string' ||
+            !events ||
+            !ITO2_CONTRACT_ADDRESS ||
+            !settings?.token
+        )
+            return
 
-        // the settings is not available
-        if (!settings?.token) return
-
-        const FillSuccess = (receipt.events?.FillSuccess?.returnValues ?? {}) as {
+        const FillSuccess = (events?.FillSuccess?.returnValues ?? {}) as {
             total: string
             id: string
             creator: string
@@ -201,8 +202,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 ],
             )
             payloadDetail.seller.name = senderName
-
-            openComposition(ITO_MetaKey_2, payload)
+            openComposition(ITO_MetaKey_2, payloadDetail)
             ApplicationBoardModal.close()
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later

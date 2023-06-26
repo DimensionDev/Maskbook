@@ -4,7 +4,7 @@ import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-scr
 import { makeStyles } from '@masknet/theme'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
-import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants.js'
+import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
 import type { JSON_PayloadComposeMask } from '../types.js'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
@@ -114,7 +114,7 @@ function Badge({ payload }: BadgeProps) {
     return (
         <div className={classes.root}>
             <Icons.ITOLabel size={14} />
-            <span className={classes.span}>{payload.message}</span>
+            <span className={classes.span}>{payload.message.split(MSG_DELIMITER)[1] || 'ITO'}</span>
         </div>
     )
 }
