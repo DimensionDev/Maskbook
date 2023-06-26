@@ -474,20 +474,22 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                         content: 'This is Modal A',
                                     })
 
-                                    ConfirmModal.open({
-                                        title: 'Modal B',
-                                        content: 'This is Modal B',
-                                    })
+                                    // setTimeout(() => {
+                                    //     ConfirmModal.open({
+                                    //         title: 'Modal B',
+                                    //         content: 'This is Modal B',
+                                    //     })
+                                    // }, 5000)
 
-                                    const result = await ConfirmModal.openAndWaitForClose({
-                                        title: 'Modal C',
-                                        content: 'This is Modal C',
-                                    })
+                                    // const result = await ConfirmModal.openAndWaitForClose({
+                                    //     title: 'Modal C',
+                                    //     content: 'This is Modal C',
+                                    // })
 
-                                    ConfirmModal.open({
-                                        title: 'Modal D',
-                                        content: 'This is Modal D',
-                                    })
+                                    // ConfirmModal.open({
+                                    //     title: 'Modal D',
+                                    //     content: 'This is Modal D',
+                                    // })
                                 }}>
                                 Open Modal
                             </Button>
