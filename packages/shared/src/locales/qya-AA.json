@@ -271,6 +271,7 @@
     "application_tooltip_hint_sns_persona_unmatched": "crwdns20509:0{{currentSNSConnectedPersonaPublicKey}}crwdnd20509:0{{currentPersonaPublicKey}}crwdnd20509:0{{currentSNSConnectedPersonaPublicKey}}crwdne20509:0",
     "application_tooltip_hint_verify": "crwdns20511:0crwdne20511:0",
     "application_tooltip_hint_create_persona": "crwdns20513:0crwdne20513:0",
+    "application_tooltip_hint_persona_accessing_dapp": "crwdns20625:0crwdne20625:0",
     "application_tooltip_hint_connect_persona": "crwdns20515:0crwdne20515:0",
     "application_tooltip_hint_connect_wallet": "crwdns20517:0crwdne20517:0",
     "application_settings_tab_app_list": "crwdns20519:0crwdne20519:0",
