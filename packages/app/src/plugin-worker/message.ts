@@ -43,7 +43,7 @@ globalThis.addEventListener('connect', (event) => {
 
 // normal worker
 globalThis.addEventListener('message', (event) => {
-    const [type, data] = event.data
+    const { type, data } = event.data
     const handler = messageHandlers.get(type)
     if (!handler?.size) return
     for (const h of handler) h(data, null)
