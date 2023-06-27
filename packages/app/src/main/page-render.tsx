@@ -4,17 +4,18 @@ import { PageUIProvider } from '@masknet/shared'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
 import { ShadowRootIsolation, MaskLightTheme } from '@masknet/theme'
-import type { TypedMessage } from '@masknet/typed-message'
 
 function useTheme() {
     return MaskLightTheme
 }
 
-const Decrypted = createInjectHooksRenderer(
+const GlobalInjection = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
-    (x) => x.DecryptedInspector,
+    (x) => x.GlobalInjection,
 )
 
-export default function PluginRender(props: { message: TypedMessage }) {
-    return <ShadowRootIsolation>{PageUIProvider(useTheme, <Decrypted message={props.message} />)}</ShadowRootIsolation>
+export interface PageInspectorProps {}
+
+export default function PageInspectorRender(props: PageInspectorProps) {
+    return <ShadowRootIsolation>{PageUIProvider(useTheme, <GlobalInjection />)}</ShadowRootIsolation>
 }

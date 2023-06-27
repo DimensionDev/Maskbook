@@ -13,6 +13,7 @@ const Decrypted = createInjectHooksRenderer(
     (x) => x.DecryptedInspector,
     MaskPostExtraPluginWrapperWithPermission,
 )
+
 export function DecryptedUI_PluginRendererWithSuggestion(props: MetadataRenderProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata)
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
