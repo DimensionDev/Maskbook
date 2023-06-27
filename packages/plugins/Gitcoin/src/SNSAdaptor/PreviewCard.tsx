@@ -14,7 +14,7 @@ import { SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
 import { useGrant } from './hooks/useGrant.js'
 import { DonateModal } from './modals/modals.js'
-  
+
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),
