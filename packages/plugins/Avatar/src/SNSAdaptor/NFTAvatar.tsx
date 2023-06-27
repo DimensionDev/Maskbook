@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react'
+import { compact, range, uniqBy } from 'lodash-es'
 import {
     AddCollectiblesModal,
     ChainBoundary,
@@ -18,8 +20,6 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
-import { compact, range, uniqBy } from 'lodash-es'
-import { useCallback, useState } from 'react'
 import { useI18N } from '../locales/i18n_generated.js'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import { NFTImage } from './NFTImage.js'
@@ -118,14 +118,14 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
     const handleAddCollectibles = useCallback(async () => {
-        const { results: result } = await AddCollectiblesModal.openAndWaitForClose({
+        const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId,
         })
-        if (!result || !chainId) return
-        const [contract, tokenIds] = result
+        if (!results || !chainId) return
+        const [contract, tokenIds] = results
         const address = contract.address
-        const results = await Promise.allSettled(
+        const allSettled = await Promise.allSettled(
             tokenIds.map(async (tokenId) => {
                 const [asset, token, isOwner] = await Promise.all([
                     Hub.getNonFungibleAsset(address, tokenId, {
@@ -145,7 +145,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 return { ...token, ...asset } as AllChainsNonFungibleToken
             }),
         )
-        const tokens = compact(results.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        const tokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
         if (!tokens.length) return
         setSelectedToken(tokens[0])
         setCustomCollectibles((tokens) => uniqBy([...tokens, ...tokens], (x) => x.contract?.address && x.tokenId))

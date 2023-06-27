@@ -135,7 +135,7 @@ export const SelectNonFungibleContractDialog = memo(
         }, [fuse, keyword, filteredCollections])
 
         const handleAddCollectibles = useCallback(async () => {
-            const { results } = await AddCollectiblesModal.openAndWaitForClose({
+            const results = await AddCollectiblesModal.openAndWaitForClose({
                 pluginID,
                 chainId,
             })
