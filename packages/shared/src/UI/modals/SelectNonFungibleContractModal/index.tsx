@@ -4,10 +4,12 @@ import { type SingletonModalRefCreator, NetworkPluginID } from '@masknet/shared-
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 import { SelectNonFungibleContractDialog } from './SelectNonFungibleContractDialog.js'
+import type { SchemaType } from '@masknet/web3-shared-evm'
 
 export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    schemaType?: SchemaType
     title?: string
     onSubmit?(
         collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
@@ -22,6 +24,7 @@ export const SelectNonFungibleContractModal = forwardRef<
 >((props, ref) => {
     const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
+    const [schemaType, setSchemaType] = useState<SchemaType>()
     const [title, setTitle] = useState<string>()
     const [onSubmit, setOnSubmit] =
         useState<(collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void>()
@@ -29,6 +32,7 @@ export const SelectNonFungibleContractModal = forwardRef<
         onOpen(props) {
             setPluginID(props.pluginID)
             setChainId(props.chainId)
+            setSchemaType(props.schemaType)
             setTitle(props.title)
             setOnSubmit(() => props.onSubmit)
         },
@@ -40,6 +44,7 @@ export const SelectNonFungibleContractModal = forwardRef<
             open
             onClose={() => dispatch?.close()}
             title={title}
+            schemaType={schemaType}
             chainId={chainId}
             pluginID={pluginID}
             onSubmit={onSubmit}

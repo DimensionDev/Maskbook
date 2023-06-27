@@ -2,13 +2,12 @@ import { memo, useCallback } from 'react'
 import { useHover } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { Others } from '@masknet/web3-providers'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 
@@ -100,7 +99,7 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                         {wallet.name}
                         {domain ? (
                             <Typography component="span" className={classes.domain}>
-                                ({Others.formatDomainName(domain)})
+                                ({formatDomainName(domain)})
                             </Typography>
                         ) : null}
                         {isHovering ? <Icons.Edit className={classes.edit} onClick={handleRename} /> : null}

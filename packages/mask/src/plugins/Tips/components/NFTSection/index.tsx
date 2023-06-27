@@ -1,14 +1,14 @@
 import { type HTMLProps, useCallback, useMemo } from 'react'
-import { Web3 } from '@masknet/web3-providers'
 import { compact, uniqWith } from 'lodash-es'
+import { FormControl, Typography } from '@mui/material'
+import { Web3 } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNonFungibleAssets, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { ElementAnchor, RetryHint, useAddCollectibles } from '@masknet/shared'
+import { AddCollectiblesModal, ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
-import { FormControl, Typography } from '@mui/material'
 import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { useI18N } from '../../locales/index.js'
 import { useTip } from '../../contexts/index.js'
@@ -122,16 +122,15 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         )
     }, [fetchedTokens, isEvm])
 
-    const addCollectibles = useAddCollectibles()
     const { Token } = useWeb3State(pluginID)
     const handleAddToken = useCallback(async () => {
-        const result = await addCollectibles({
+        const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId,
         })
-        if (!result || !chainId) return
-        const [contract, tokenIds] = result
-        const results = await Promise.allSettled(
+        if (!results || !chainId) return
+        const [contract, tokenIds] = results
+        const allSettled = await Promise.allSettled(
             tokenIds.map(async (tokenId) => {
                 const token = await Web3.getNonFungibleToken(contract.address, tokenId, SchemaType.ERC721, {
                     chainId: chainId as ChainId,
@@ -141,7 +140,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                 return token
             }),
         )
-        const tokens = compact(results.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        const tokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
         if (!tokens.length) return
 
         setNonFungibleTokenAddress(tokens[0].address)

@@ -198,6 +198,7 @@ export const TransferERC721 = memo(() => {
     const handleSelectNFT = () => {
         SelectNonFungibleContractModal.open({
             pluginID: NetworkPluginID.PLUGIN_EVM,
+            schemaType: SchemaType.ERC721,
             chainId,
             onSubmit: (contract) => {
                 setContractAddress(contract.address || '')

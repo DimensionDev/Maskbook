@@ -213,6 +213,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 balance: fungibleTokensBalance[x.address],
             }))
     }, [
+        mode,
         chainId,
         fungibleAssets,
         trustedFungibleTokens,

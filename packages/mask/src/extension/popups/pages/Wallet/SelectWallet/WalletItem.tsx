@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { Others } from '@masknet/web3-providers'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     item: {
@@ -63,12 +63,10 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                     <div>
                         <Typography className={classes.name}>
                             <Typography component="span"> {wallet.name}</Typography>
-                            {domain ? (
-                                <Typography component="span">{Others.formatDomainName(domain)}</Typography>
-                            ) : null}
+                            {domain ? <Typography component="span">{formatDomainName(domain)}</Typography> : null}
                         </Typography>
                         <Typography className={classes.address}>
-                            <FormattedAddress address={wallet.address} size={12} formatter={Others.formatAddress} />
+                            <FormattedAddress address={wallet.address} size={12} formatter={formatEthereumAddress} />
                             <CopyIconButton className={classes.copy} text={wallet.address} />
                         </Typography>
                     </div>

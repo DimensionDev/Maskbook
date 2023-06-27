@@ -13,10 +13,10 @@ import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { ContractItem } from './ContractItem.js'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useAddCollectibles } from '../../contexts/common/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
+import { AddCollectiblesModal } from '../modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -63,6 +63,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     open: boolean
     pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    schemaType?: SchemaType
     title?: string
     onClose?(): void
     onSubmit?(
@@ -71,7 +72,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
 }
 
 export const SelectNonFungibleContractDialog = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit }: SelectNonFungibleContractDialogProps) => {
+    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }: SelectNonFungibleContractDialogProps) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
@@ -86,6 +87,7 @@ export const SelectNonFungibleContractDialog = memo(
             refetch,
         } = useNonFungibleCollections(pluginID, {
             chainId,
+            schemaType,
         })
 
         const { Token } = useWeb3State(pluginID)
@@ -134,16 +136,15 @@ export const SelectNonFungibleContractDialog = memo(
             return fuse.search(keyword).map((x) => x.item)
         }, [fuse, keyword, filteredCollections])
 
-        const pickCollectibles = useAddCollectibles()
         const handleAddCollectibles = useCallback(async () => {
-            const result = await pickCollectibles({
+            const results = await AddCollectiblesModal.openAndWaitForClose({
                 pluginID,
                 chainId,
             })
-            if (!result) return
-            const [contract, tokenIds] = result
+            if (!results) return
+            const [contract, tokenIds] = results
             await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
-        }, [pickCollectibles, account, pluginID, chainId])
+        }, [account, pluginID, chainId])
 
         return (
             <InjectedDialog

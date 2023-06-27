@@ -3,7 +3,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { AddOutlined as AddIcon, RemoveOutlined as RemoveIcon } from '@mui/icons-material'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
+import { FungibleTokenInput, SelectFungibleTokenModal } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -71,15 +71,16 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
-    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await selectFungibleToken({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: isSell,
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
             chainId,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (picked) onExchangeTokenChange(picked, dataIndex)
+        if (!picked) return
+        onExchangeTokenChange(picked as FungibleToken<ChainId, SchemaType>, dataIndex)
     }, [
         isSell,
         dataIndex,

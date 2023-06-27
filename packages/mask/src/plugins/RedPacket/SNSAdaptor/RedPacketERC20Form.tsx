@@ -24,7 +24,6 @@ import {
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    useSelectFungibleToken,
     FungibleTokenInput,
     PluginWalletStatusBar,
     ChainBoundary,
@@ -33,6 +32,7 @@ import {
     useAvailableBalance,
     TokenValue,
     WalletConnectedBoundary,
+    SelectFungibleTokenModal,
 } from '@masknet/shared'
 import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
@@ -131,15 +131,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         origin?.token,
     )
 
-    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await selectFungibleToken({
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
             chainId,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (picked) setToken(picked)
-    }, [selectFungibleToken, token?.address, chainId])
+        if (!picked) return
+        setToken(picked as FungibleToken<ChainId, SchemaType>)
+    }, [token?.address, chainId])
     // #endregion
 
     // #region packet settings

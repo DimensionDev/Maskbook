@@ -38,9 +38,9 @@ class Client {
 
     async setup() {
         this.client = await SignClient.init({
-            projectId: Flags.wc_project_id,
-            logger: Flags.wc_mode,
-            relayUrl: Flags.wc_relay_url,
+            projectId: Flags.wc_v2_project_id,
+            logger: Flags.wc_v2_mode,
+            relayUrl: Flags.wc_v2_relay_url,
             metadata: {
                 name: 'Mask Network',
                 description: 'Your Portal To The New, Open Internet.',
