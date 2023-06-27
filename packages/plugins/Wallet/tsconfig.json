@@ -12,6 +12,7 @@
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-helpers" },
     { "path": "../../shared-base" },
-    { "path": "../../theme" }
+    { "path": "../../theme" },
+    { "path": "../../shared" }
   ]
 }
