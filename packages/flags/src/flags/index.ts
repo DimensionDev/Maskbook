@@ -49,7 +49,7 @@ export const flags = {
     sentry_async_transaction_enabled: devOnly,
 
     // wallet connect
-    wc_v1_bridge_url: 'https://bridge.walletconnect.org',
+    wc_v1_bridge_url: 'https://wc.firefly.land',
     wc_v2_relay_url: 'wss://relay.walletconnect.com',
     wc_v2_project_id: '8f1769933420afe8873860925fcca14f',
     wc_v2_mode: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
