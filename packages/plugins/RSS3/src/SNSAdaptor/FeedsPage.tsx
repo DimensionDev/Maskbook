@@ -7,7 +7,6 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, Skeleton } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
-import { FeedDetailsProvider } from './contexts/FeedDetails.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
 import { useFeeds } from './hooks/useFeeds.js'
 
@@ -73,17 +72,15 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
 
     return (
         <FeedOwnerContext.Provider value={feedOwner}>
-            <FeedDetailsProvider>
-                {/* padding for profile card footer */}
-                <Box paddingBottom="48px">
-                    {feeds.map((feed, index) => (
-                        <FeedCard key={index} className={classes.feedCard} feed={feed} />
-                    ))}
-                    <ElementAnchor callback={() => next()}>
-                        {loading ? <LoadingBase className={classes.loading} /> : null}
-                    </ElementAnchor>
-                </Box>
-            </FeedDetailsProvider>
+            {/* padding for profile card footer */}
+            <Box paddingBottom="48px">
+                {feeds.map((feed, index) => (
+                    <FeedCard key={index} className={classes.feedCard} feed={feed} />
+                ))}
+                <ElementAnchor callback={() => next()}>
+                    {loading ? <LoadingBase className={classes.loading} /> : null}
+                </ElementAnchor>
+            </Box>
         </FeedOwnerContext.Provider>
     )
 })

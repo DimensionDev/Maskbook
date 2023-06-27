@@ -80,7 +80,7 @@ export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) =>
         return {
             downloadURL: download_url,
             size,
-            uploadedAt: uploaded_at,
+            uploadedAt: uploaded_at * 1000,
             abstract,
         }
     })

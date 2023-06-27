@@ -17,7 +17,7 @@ interface ExternalMetadata {
     properties: {
         files: Array<{
             uri: string
-            type: 'image/jpeg' | string
+            type: LiteralUnion<'image/jpeg', 'image/png'>
         }>
         category: string
         creators: Array<{

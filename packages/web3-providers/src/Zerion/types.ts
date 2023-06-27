@@ -169,7 +169,7 @@ export interface ZerionNonFungibleTokenItem {
     id: string
     section: string
     section_tokens_count: number
-    standard: string
+    standard: LiteralUnion<'ERC1155' | 'ERC721'>
     value?: string
     displayed_on_chart: boolean
     amount: string

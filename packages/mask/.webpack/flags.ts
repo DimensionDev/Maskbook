@@ -1,6 +1,7 @@
 import type { Configuration } from 'webpack'
 import { join, isAbsolute, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
 const __dirname = fileURLToPath(dirname(import.meta.url))
 
 export interface BuildFlags {

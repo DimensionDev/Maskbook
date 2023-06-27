@@ -5,8 +5,8 @@ import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import type { HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
-import { useViewFeedDetails } from '../contexts/index.js'
 import { type CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
+import { FeedDetailsModal } from '../modals/modals.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -83,15 +83,13 @@ export function CardFrame({
     const PrimaryPlatformIcon = getPlatformIcon(feed.network)
     const ProviderPlatformIcon = getPlatformIcon(feed.platform)
 
-    const viewDetails = useViewFeedDetails()
-
     return (
         <article
             className={cx(className, verbose ? null : classes.inspectable)}
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                 onClick?.(event)
                 if (!verbose) {
-                    viewDetails({
+                    FeedDetailsModal.open({
                         type,
                         feed,
                         actionIndex,

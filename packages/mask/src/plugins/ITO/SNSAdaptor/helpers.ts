@@ -8,6 +8,7 @@ import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants.js'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types.js'
 import schemaV1 from '../schema-v1.json'
 import schemaV2 from '../schema-v2.json'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 // Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey_1, schemaV1)
@@ -131,4 +132,18 @@ export function payloadOutMaskCompact(payload: JSON_PayloadInMask) {
 
 export function isCompactPayload(payload: JSON_PayloadInMask) {
     return !payload.exchange_tokens.length
+}
+
+export function openComposition(metadataKey: string, payload: unknown) {
+    // Close the duplicated dialog if already opened by clicking the mask compose icon.
+    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason: 'popup', open: false })
+    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+        reason: 'timeline',
+        open: true,
+        options: {
+            initialMetas: {
+                [metadataKey]: payload,
+            },
+        },
+    })
 }

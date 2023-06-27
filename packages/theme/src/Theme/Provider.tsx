@@ -8,6 +8,7 @@ export interface MaskThemeProvider extends React.PropsWithChildren<{}> {
     useMaskIconPalette(theme: Theme): MaskIconPalette
     CustomSnackbarOffsetY?: number
 }
+
 export function MaskThemeProvider(props: MaskThemeProvider) {
     const { children, useTheme, useMaskIconPalette, CustomSnackbarOffsetY } = props
     const theme = useTheme()

@@ -1,10 +1,14 @@
 import '../plugin-host/enable.js'
 
+import { PageUIProvider } from '@masknet/shared'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { ShadowRootIsolation, MaskLightTheme } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
-import { NetworkContextProvider } from '@masknet/web3-hooks-base'
+
+function useTheme() {
+    return MaskLightTheme
+}
 
 const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
@@ -12,9 +16,5 @@ const Decrypted = createInjectHooksRenderer(
 )
 
 export default function PluginRender(props: { message: TypedMessage }) {
-    return (
-        <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-            <Decrypted message={props.message} />
-        </NetworkContextProvider>
-    )
+    return <ShadowRootIsolation>{PageUIProvider(useTheme, <Decrypted message={props.message} />)}</ShadowRootIsolation>
 }

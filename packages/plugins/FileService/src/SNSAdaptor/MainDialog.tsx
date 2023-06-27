@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../constants.js'
 import { RouterDialog } from './components/RouterDialog.js'
-import { FileManagementProvider, UIProvider } from './contexts/index.js'
+import { FileManagementProvider } from './contexts/index.js'
 import { FileRoutes } from './Routes.js'
 import { useTermsConfirmed } from './storage.js'
 
@@ -65,9 +65,7 @@ function FileServiceDialog({ onClose, selectMode, selectedFileIds, compositionTy
                     fullWidth
                     independent>
                     <DialogContent className={classes.content}>
-                        <UIProvider>
-                            <FileRoutes />
-                        </UIProvider>
+                        <FileRoutes />
                     </DialogContent>
                 </RouterDialog>
             </FileManagementProvider>

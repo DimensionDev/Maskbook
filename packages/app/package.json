@@ -34,6 +34,8 @@
         "@masknet/plugin-wallet": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",
+        "@masknet/theme": "workspace:^",
+        "@masknet/web3-telemetry": "workspace:^",
         "@masknet/typed-message": "workspace:^",
         "@masknet/typed-message-react": "workspace:^",
         "@masknet/web3-constants": "workspace:^",
@@ -63,6 +65,7 @@
         "postcss": "^8.4.22",
         "postcss-cli": "^10.1.0",
         "purgecss": "^5.0.0",
+        "react-use": "^17.4.0",
         "react-router-dom": "^6.10.0",
         "stream-browserify": "^3.0.0",
         "tailwindcss": "^3.3.1"

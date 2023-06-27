@@ -809,6 +809,38 @@ export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
         u: () => new URL('./general/BackUp.svg', import.meta.url),
     },
 ])
+export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
+    {
+        u: () => new URL('./general/BaseUser.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M6.786 21.02c.637.12 1.37.18 2.215.18h6c.844 0 1.577-.06 2.214-.18-.536-1.776-2.565-3.25-5.214-3.25-2.65 0-4.679 1.474-5.215 3.25Zm-1.723.532c.266-3.141 3.413-5.382 6.938-5.382 3.524 0 6.67 2.241 6.937 5.382a.8.8 0 0 1-.57.835c-.978.289-2.1.413-3.367.413H9c-1.268 0-2.39-.124-3.367-.413a.8.8 0 0 1-.57-.835Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M3.06 3.059C4.408 1.71 6.42 1.199 9 1.199h6c2.58 0 4.592.511 5.94 1.86 1.35 1.348 1.86 3.361 1.86 5.94v6c0 1.955-.292 3.578-1.016 4.838-.744 1.292-1.895 2.119-3.426 2.552a.8.8 0 0 1-1.015-.702c-.174-2.059-2.367-3.918-5.343-3.918-2.975 0-5.168 1.86-5.343 3.918a.8.8 0 0 1-1.015.702c-1.53-.433-2.682-1.26-3.425-2.552-.725-1.26-1.017-2.883-1.017-4.838V9c0-2.579.511-4.592 1.86-5.94Zm1.13 1.13C3.29 5.092 2.8 6.58 2.8 9v6c0 1.825.278 3.127.804 4.04a3.61 3.61 0 0 0 1.65 1.506C6.029 17.943 8.865 16.17 12 16.17c3.135 0 5.971 1.773 6.747 4.376a3.615 3.615 0 0 0 1.65-1.506c.525-.913.803-2.215.803-4.04V9c0-2.42-.489-3.908-1.39-4.81-.902-.9-2.389-1.39-4.81-1.39H9c-2.42 0-3.908.49-4.81 1.39ZM12 7.8a2.776 2.776 0 0 0-2.78 2.78A2.785 2.785 0 0 0 12 13.37a2.785 2.785 0 0 0 2.78-2.79A2.776 2.776 0 0 0 12 7.8Zm-4.38 2.78A4.376 4.376 0 0 1 12 6.2a4.376 4.376 0 0 1 4.38 4.38A4.385 4.385 0 0 1 12 14.97a4.385 4.385 0 0 1-4.38-4.39Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M12 7.8a2.776 2.776 0 0 0-2.78 2.78A2.785 2.785 0 0 0 12 13.37a2.785 2.785 0 0 0 2.78-2.79A2.776 2.776 0 0 0 12 7.8Zm-4.38 2.78A4.376 4.376 0 0 1 12 6.2a4.376 4.376 0 0 1 4.38 4.38A4.385 4.385 0 0 1 12 14.97a4.385 4.385 0 0 1-4.38-4.39Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const BestTrade = /*#__PURE__*/ __createIcon('BestTrade', [
     {
         u: () => new URL('./general/BestTrade.svg', import.meta.url),
@@ -1429,6 +1461,11 @@ export const FileMessage = /*#__PURE__*/ __createIcon('FileMessage', [
 export const FillSuccess = /*#__PURE__*/ __createIcon('FillSuccess', [
     {
         u: () => new URL('./general/FillSuccess.svg', import.meta.url),
+    },
+])
+export const Folder = /*#__PURE__*/ __createIcon('Folder', [
+    {
+        u: () => new URL('./general/Folder.svg', import.meta.url),
     },
 ])
 export const Gas = /*#__PURE__*/ __createIcon('Gas', [

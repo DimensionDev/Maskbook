@@ -6,8 +6,8 @@ import { MoreHoriz } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useReverseAddress, useWallet, useWeb3Others } from '@masknet/web3-hooks-base'
+import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useReverseAddress, useWallet } from '@masknet/web3-hooks-base'
 import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
@@ -61,7 +61,6 @@ export const WalletInfo = memo(() => {
     const navigate = useNavigate()
     const address = new URLSearchParams(useLocation().search).get('address')
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address ?? wallet?.address)
-    const Others = useWeb3Others()
 
     const excludePath = useMatch(PopupRoutes.WalletSettings)
 
@@ -75,7 +74,7 @@ export const WalletInfo = memo(() => {
             onSettingClick={() => navigate(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
             domain={domain}
-            formatDomainName={Others.formatDomainName}
+            formatDomainName={formatDomainName}
         />
     )
 })
@@ -87,7 +86,7 @@ export interface WalletInfoUIProps {
     onEditClick: () => void
     hideSettings: boolean
     domain?: string
-    formatDomainName?: (domain?: string, size?: number) => string | undefined
+    formatDomainName?: (domain: string, size?: number) => string | undefined
 }
 
 export const WalletInfoUI = memo<WalletInfoUIProps>(

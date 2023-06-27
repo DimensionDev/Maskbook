@@ -121,7 +121,7 @@ export function ApplicationBoard({
                     ) : null
                 }
                 titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
-                independent={LeavePageConfirmModal.opened}
+                independent={LeavePageConfirmModal.peek()}
                 title={openSettings ? t.application_settings() : t.applications()}
                 titleTail={
                     openSettings ? null : (

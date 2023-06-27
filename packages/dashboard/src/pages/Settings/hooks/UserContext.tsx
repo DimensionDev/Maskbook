@@ -1,5 +1,5 @@
 import { createContext, type PropsWithChildren, useState, useMemo, useCallback } from 'react'
-import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog.js'
+import { SettingPasswordDialog } from '../components/dialogs/SettingPasswordDialog.js'
 import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog/index.js'
 
 export interface User {
@@ -62,18 +62,17 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     const [confirmCallback, setConfirmCallback] = useState<[ConfirmPasswordCallback] | null>(null)
     const [confirmOption, setConfirmOption] = useState<ConfirmPasswordOption>()
 
-    const updateUser = useCallback(
-        (obj: Partial<User>) => {
-            const updated = { ...user, ...obj }
-            setUser(updated)
+    const updateUser = useCallback((obj: Partial<User>) => {
+        setUser((old) => {
+            const updated = { ...old, ...obj }
             localStorage.setItem('backupPassword', btoa(updated.backupPassword ?? ''))
             localStorage.setItem('email', updated.email || '')
             localStorage.setItem('phone', updated.phone || '')
             localStorage.setItem('backupMethod', updated.backupMethod || '')
             localStorage.setItem('backupAt', updated.backupAt || '')
-        },
-        [user],
-    )
+            return updated
+        })
+    }, [])
 
     const ensurePasswordSet = useCallback(
         (f: VerifyPasswordSet) => {
@@ -113,7 +112,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
             ensurePasswordSet,
             confirmPassword,
         }),
-        [user, updateUser, ensurePasswordSet, confirmPassword],
+        [user, ensurePasswordSet, confirmPassword],
     )
     return (
         <UserContext.Provider value={userContext}>

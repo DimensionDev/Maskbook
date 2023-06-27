@@ -43,3 +43,4 @@ function usePersonaContext() {
 }
 
 export const PersonaContext = createContainer(usePersonaContext)
+PersonaContext.Provider.displayName = 'PersonaProvider'

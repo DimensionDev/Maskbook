@@ -1,13 +1,13 @@
-import { TabList, TabPanel, TabContext, tabPanelClasses } from '@mui/lab'
-import { Tab, styled, tabClasses, tabsClasses, InputBase, inputBaseClasses } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { type BackupSummary } from '@masknet/backup-format'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
+import { TabContext, TabList, TabPanel, tabPanelClasses } from '@mui/lab'
+import { InputBase, Tab, inputBaseClasses, styled, tabClasses, tabsClasses } from '@mui/material'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
+import { Services } from '../../../../API.js'
 import ConfirmDialog from '../../../../components/ConfirmDialog/index.js'
 import FileUpload from '../../../../components/FileUpload/index.js'
-import { Services } from '../../../../API.js'
-import BackupPreviewCard from '../BackupPreviewCard.js'
-import type { BackupPreview } from '@masknet/backup-format'
+import { BackupPreview } from '../BackupPreview.js'
 
 const useStyles = makeStyles()(() => ({
     container: { flex: 1 },
@@ -70,7 +70,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const [text, setText] = useState('')
     // file content
     const [content, setContent] = useState('')
-    const [preview, setPreview] = useState<BackupPreview | null>(null)
+    const [preview, setPreview] = useState<BackupSummary | null>(null)
     // backup id
     const [id, setId] = useState('')
 
@@ -120,7 +120,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                         <div className={preview && content ? classes.hide : ''}>
                             <FileUpload height={180} readAsText onChange={(_, content) => setContent(content || '')} />
                         </div>
-                        {preview && content ? <BackupPreviewCard json={preview} /> : null}
+                        {preview && content ? <BackupPreview info={preview} /> : null}
                     </StyledTabPanel>
                     <StyledTabPanel value="text">
                         <div className={preview && text ? classes.hide : ''}>
@@ -133,7 +133,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                                 placeholder="Paste the database backup as text here..."
                             />
                         </div>
-                        {preview && text ? <BackupPreviewCard json={preview} /> : null}
+                        {preview && text ? <BackupPreview info={preview} /> : null}
                     </StyledTabPanel>
                 </TabContext>
             </div>
