@@ -229,8 +229,8 @@ const ContractInteraction = memo(() => {
     }, [request, t, transactionDescription])
 
     // token detailed
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, !isNativeTokenInteraction ? tokenAddress : '')
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, !isNativeTokenInteraction ? tokenAddress : '')
 
     // gas price
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
@@ -254,7 +254,7 @@ const ContractInteraction = memo(() => {
 
     // # region gas settings
     const maskAddress = useMaskTokenAddress()
-    const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
+    const { data: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
     const { value: currencyRatio } = useAsync(async () => {
         if (!smartPayChainId) return

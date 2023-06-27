@@ -262,7 +262,7 @@ export function SelectGasSettingsToolbarUI({
         () => setApproveDialogOpen(true),
     )
 
-    const { value: currencyToken = nativeToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, {
+    const { data: currencyToken = nativeToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, {
         chainId,
     })
     const { value: currencyTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, currentGasCurrency)

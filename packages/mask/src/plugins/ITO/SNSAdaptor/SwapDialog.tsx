@@ -18,7 +18,7 @@ import {
     formatBalance,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 import { type ChainId, SchemaType, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Slider, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
@@ -92,14 +92,13 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens,
     } = props
 
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles(undefined, { props })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
-    const { value: initToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, payload.exchange_tokens[0].address)
+    const { data: initToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, payload.exchange_tokens[0].address)
 
     const [swapToken, setSwapToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(undefined)
 

@@ -29,9 +29,9 @@ export function PostInspector(props: PostInspectorProps) {
     //  cut off some properties, such as save the token address string only.
     const token = _payload.token as unknown as string | FungibleToken<ChainId, SchemaType>
     const {
-        value: tokenDetailed,
-        loading: _loadingToken,
-        retry: retryToken,
+        data: tokenDetailed,
+        isLoading: _loadingToken,
+        refetch: retryToken,
     } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, typeof token === 'string' ? token : token.address, undefined, {
         chainId: _payload.chain_id,
     })

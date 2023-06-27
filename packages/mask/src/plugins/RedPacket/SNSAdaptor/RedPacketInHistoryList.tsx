@@ -245,7 +245,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         (patchedHistory as RedPacketJSONPayload).token?.address ??
         (patchedHistory as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '', undefined, {
+    const { data: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '', undefined, {
         chainId,
     })
 

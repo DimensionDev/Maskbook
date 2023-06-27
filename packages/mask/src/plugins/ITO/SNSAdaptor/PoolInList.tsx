@@ -132,7 +132,7 @@ export function PoolInList(props: PoolInListProps) {
 
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
-    const { value: _tokenDetailed } = useFungibleToken(
+    const { data: _tokenDetailed } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
     )

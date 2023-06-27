@@ -148,7 +148,7 @@ export function TrendingView(props: TrendingViewProps) {
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+    const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: result.chainId ?? chainId,
     })
 

@@ -90,7 +90,7 @@ export function useTrendingById(
         return PluginTraderRPC.getCoinTrending(result, currency)
     }, [chainId, JSON.stringify(result), currency?.id])
 
-    const { value: detailedToken } = useFungibleToken(result.pluginID, trending?.coin.contract_address, undefined, {
+    const { data: detailedToken } = useFungibleToken(result.pluginID, trending?.coin.contract_address, undefined, {
         chainId: trending?.coin.chainId as ChainId,
     })
 
