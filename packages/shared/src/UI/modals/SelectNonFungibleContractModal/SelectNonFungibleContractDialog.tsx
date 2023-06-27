@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState, type FC } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
@@ -71,8 +71,8 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
     ): void
 }
 
-export const SelectNonFungibleContractDialog: FC<SelectNonFungibleContractDialogProps> = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }) => {
+export const SelectNonFungibleContractDialog = memo(
+    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }: SelectNonFungibleContractDialogProps) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
