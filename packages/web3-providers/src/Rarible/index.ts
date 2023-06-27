@@ -309,14 +309,17 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const requestPath = urlcat('/v0.1/activities/byItem', {
-            type: [RaribleEventType.TRANSFER, RaribleEventType.MINT, RaribleEventType.BID, RaribleEventType.LIST],
-            itemId: `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`,
-            cursor: indicator?.id,
-            blockchains: [resolveRaribleBlockchain(chainId)],
-            size,
-            sort: 'LATEST_FIRST',
-        })
+        const params = new URLSearchParams()
+        params.append('type', RaribleEventType.TRANSFER)
+        params.append('type', RaribleEventType.MINT)
+        params.append('type', RaribleEventType.BID)
+        params.append('type', RaribleEventType.LIST)
+        params.append('itemId', `${resolveRaribleBlockchain(chainId)}:${tokenAddress}:${tokenId}`)
+        params.append('cursor', indicator?.id || '')
+        params.append('size', size.toString())
+        params.append('sort', 'LATEST_FIRST')
+
+        const requestPath = `/v0.1/activities/byItem?${params.toString()}`
         const response = await fetchFromRarible<{
             total: number
             cursor: string
