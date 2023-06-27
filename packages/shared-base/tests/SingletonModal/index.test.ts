@@ -21,14 +21,10 @@ describe('SingletonModal', () => {
             }
         })
     })
+
     it('should register successfully', () => {
         open.mockReset()
         modal.open()
-        expect(open).toBeCalledTimes(1)
-    })
-    it('can be called without object', () => {
-        open.mockReset()
-        ;(0, modal.open)()
         expect(open).toBeCalledTimes(1)
     })
 

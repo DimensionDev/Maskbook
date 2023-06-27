@@ -19,7 +19,6 @@ export const Example = forwardRef<SingletonModalRefCreator<ExampleOpenProps>, Ex
     })
 
     if (!open) return null
-
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog
