@@ -3,10 +3,10 @@ import { InjectedDialog, type InjectedDialogProps, Linking } from '@masknet/shar
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
+import type { FeedCardProps } from '../../components/base.js'
+import { hostIconMap, type CardType, hostNameMap } from '../../components/share.js'
 import { useI18N } from '../../../locales/index.js'
-import type { FeedCardProps } from '../base.js'
-import { FeedCard } from '../FeedCard/index.js'
-import { type CardType, hostIconMap, hostNameMap } from '../share.js'
+import { FeedCard } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {
@@ -59,10 +59,9 @@ export interface FeedDetailsDialogProps
     extends PropsWithChildren<InjectedDialogProps>,
         Pick<FeedCardProps, 'feed' | 'actionIndex'> {
     type: CardType
-    onSubmit?(): void
 }
 
-export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, ...rest }: FeedDetailsDialogProps) {
+export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }: FeedDetailsDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const links = feed.actions[0].related_urls
@@ -75,7 +74,6 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, onSubmit, 
             title={t.details()}
             onClose={() => {
                 onClose?.()
-                onSubmit?.()
             }}>
             <DialogContent className={classes.content}>
                 <div className={classes.details}>
