@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo } from 'react'
 import { DonateModal } from './DonateModal/index.js'
 import { ResultModal } from './ResultModal/index.js'
 
