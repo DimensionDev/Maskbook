@@ -3,8 +3,8 @@ import { createSubscriptionFromAsync, EMPTY_LIST, MaskMessages } from '@masknet/
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '../extension/service.js'
-import { WalletRPC } from '../plugins/Wallet/messages.js'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
+import { WalletRPC } from '../plugins/WalletService/messages.js'
 
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SNSAdaptor.SNSAdaptorContext,

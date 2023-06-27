@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
@@ -14,6 +13,7 @@ import formatDateTime from 'date-fns/format'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { encodeText } from '@masknet/kit'
 import { MimeType } from '@masknet/shared-base'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     content: {

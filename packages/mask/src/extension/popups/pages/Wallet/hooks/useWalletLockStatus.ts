@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useEffect } from 'react'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 export function useWalletLockStatus() {
     const {

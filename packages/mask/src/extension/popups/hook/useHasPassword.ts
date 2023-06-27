@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
-import { WalletRPC } from '../../../plugins/Wallet/messages.js'
 import { useEffect } from 'react'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletRPC } from '../../../plugins/WalletService/messages.js'
 
 export function useHasPassword() {
     const { value: hasPassword, loading, retry } = useAsyncRetry(WalletRPC.hasPassword, [])

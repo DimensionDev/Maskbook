@@ -46,11 +46,11 @@ import { Web3 } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

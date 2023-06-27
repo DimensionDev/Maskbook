@@ -6,7 +6,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 export const useUnconfirmedRequest = () => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

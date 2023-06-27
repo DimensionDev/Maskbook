@@ -19,7 +19,7 @@ import Services from '../../../../service.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

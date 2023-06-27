@@ -4,7 +4,7 @@
 import '@masknet/plugin-example'
 import '@masknet/plugin-debugger'
 
-import '../../src/plugins/Wallet/index.js'
+import '../../src/plugins/WalletService/index.js'
 import '../../src/plugins/RedPacket/index.js'
 import '../../src/plugins/ITO/index.js'
 import '../../src/plugins/Snapshot/index.js'

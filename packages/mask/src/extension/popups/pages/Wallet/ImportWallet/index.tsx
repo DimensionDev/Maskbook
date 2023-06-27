@@ -13,13 +13,12 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import { JsonFileBox } from '../components/JsonFileBox/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
-import { getDerivableAccounts } from '../../../../../plugins/Wallet/services/index.js'
 import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -135,7 +134,7 @@ const ImportWallet = memo(() => {
                 switch (currentTab) {
                     case tabs.mnemonic:
                         // valid the mnemonic
-                        await getDerivableAccounts(mnemonic, 0, 1)
+                        await WalletRPC.getDerivableAccounts(mnemonic, 0, 1)
                         const params = query({ name: data.name })
                         navigate(PopupRoutes.AddDeriveWallet + '?' + params, {
                             replace: true,

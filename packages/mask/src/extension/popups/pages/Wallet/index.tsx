@@ -15,7 +15,7 @@ import { WalletHeader } from './components/WalletHeader/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
+import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))

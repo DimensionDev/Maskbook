@@ -1,5 +1,5 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import { base } from '@masknet/plugin-wallet'
+import { base } from './base.js'
 
 registerPlugin({
     ...base,
