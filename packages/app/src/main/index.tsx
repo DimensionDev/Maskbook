@@ -7,6 +7,7 @@ import { decrypt, parsePayloadBinary, parsePayloadText } from './decrypt.js'
 import { text } from './mockData.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
+const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptUI() {
     const [error, isE2E, message] = useDecrypt(text)
@@ -18,6 +19,7 @@ export function DecryptUI() {
         <Suspense>
             {/* Do not add React context here. Add it in ./plugin-render */}
             <PluginRender message={message} />
+            <PageInspectorRender />
         </Suspense>
     )
 }

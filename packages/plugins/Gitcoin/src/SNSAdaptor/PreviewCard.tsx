@@ -258,7 +258,9 @@ export function PreviewCard(props: PreviewCardProps) {
                             <Button
                                 fullWidth
                                 variant="roundedDark"
-                                onClick={() => DonateModal.open({ grant })}
+                                onClick={() => {
+                                    DonateModal.open({ grant })
+                                }}
                                 startIcon={<Icons.ConnectWallet size={18} />}>
                                 {t.donate()}
                             </Button>

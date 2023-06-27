@@ -7,7 +7,7 @@ import { useMatchXS } from '@masknet/shared'
 import { MaskMessages } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 
-const PluginRender = createInjectHooksRenderer(
+const GlobalInjection = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
     (x) => x.GlobalInjection,
 )
@@ -62,7 +62,7 @@ export function PageInspector(props: PageInspectorProps) {
     return (
         <>
             {JSX}
-            <PluginRender />
+            <GlobalInjection />
         </>
     )
 }
