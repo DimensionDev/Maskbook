@@ -27,14 +27,14 @@ export function TradeView(props: TradeViewProps) {
     const { TraderProps } = props
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { value: inputToken } = useFungibleToken(
+    const { data: inputToken } = useFungibleToken(
         pluginID,
         TraderProps.defaultInputCoin?.address ?? '',
         TraderProps.defaultInputCoin,
         { chainId },
     )
 
-    const { value: outputToken } = useFungibleToken(
+    const { data: outputToken } = useFungibleToken(
         pluginID,
         TraderProps.defaultOutputCoin?.address ?? '',
         TraderProps.defaultOutputCoin,

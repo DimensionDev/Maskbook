@@ -84,7 +84,7 @@ export const ITOActivityItem = memo<ITOActivityItemProps>(({ swappedToken, chain
 
     const { classes, cx } = useStyles()
 
-    const { value: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, {
+    const { data: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, {
         chainId,
     })
     const token = _token ?? swappedToken.token

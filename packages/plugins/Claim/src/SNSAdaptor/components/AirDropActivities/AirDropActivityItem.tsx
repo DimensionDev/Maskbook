@@ -195,7 +195,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                                 <Box className={classes.actions}>
                                     <Box>
                                         <Typography className={classes.amount}>
-                                            {amount} {tokenDetail.value?.symbol}
+                                            {amount} {tokenDetail.data?.symbol}
                                         </Typography>
                                         <Typography className={classes.claimable}>
                                             {activityStatus === ActivityStatus.IN_PROGRESS

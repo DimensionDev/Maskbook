@@ -243,7 +243,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
     const wallet = useWallet()
-    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
