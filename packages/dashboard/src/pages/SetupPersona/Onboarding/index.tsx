@@ -110,8 +110,9 @@ export const Onboarding = memo(function Onboarding() {
             </Box>
             <SetupFrameController>
                 <PrimaryButton
+                    onClick={onSetupTwitter}
                     size="large"
-                    startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} onClick={onSetupTwitter} />}>
+                    startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
             </SetupFrameController>

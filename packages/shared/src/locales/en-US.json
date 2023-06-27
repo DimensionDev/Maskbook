@@ -271,6 +271,7 @@
     "application_tooltip_hint_sns_persona_unmatched": "Twitter ID verified persona({{currentSNSConnectedPersonaPublicKey}}) is not consistent with your current persona({{currentPersonaPublicKey}}). Please switch to persona({{currentSNSConnectedPersonaPublicKey}}) and try again.",
     "application_tooltip_hint_verify": "Please verify your social account",
     "application_tooltip_hint_create_persona": "Please create your persona and use it",
+    "application_tooltip_hint_persona_accessing_dapp": "Please create a persona for accessing Dapps.",
     "application_tooltip_hint_connect_persona": "Please connect your persona",
     "application_tooltip_hint_connect_wallet": "Please connect your wallet",
     "application_settings_tab_app_list": "APP list",

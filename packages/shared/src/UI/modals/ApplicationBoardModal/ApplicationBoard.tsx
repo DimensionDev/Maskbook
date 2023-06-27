@@ -247,7 +247,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (application.isWalletConnectedRequired) return t.application_tooltip_hint_connect_wallet()
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
-            return t.application_tooltip_hint_create_persona()
+            return t.application_tooltip_hint_persona_accessing_dapp()
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
             return t.application_tooltip_hint_connect_persona()
         if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t.application_tooltip_hint_verify()
