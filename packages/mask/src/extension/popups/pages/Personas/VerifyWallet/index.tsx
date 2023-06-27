@@ -8,8 +8,8 @@ import {
     PopupRoutes,
     NetworkPluginID,
     SignType,
-    type ProfileAccount,
     MaskMessages,
+    type Account,
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
@@ -47,7 +47,7 @@ const VerifyWallet = memo(() => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const wallet: ProfileAccount<ChainId> & {
+    const wallet: Account<ChainId> & {
         providerType: ProviderType
         address?: string
     } = location.state.usr

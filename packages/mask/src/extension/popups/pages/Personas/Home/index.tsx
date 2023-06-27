@@ -1,9 +1,15 @@
 import { memo, useCallback, useContext } from 'react'
 import { PersonaHomeUI } from './UI.js'
-import { DashboardRoutes, EMPTY_LIST, PopupRoutes, type EnhanceableSite } from '@masknet/shared-base'
+import {
+    DashboardRoutes,
+    EMPTY_LIST,
+    PopupRoutes,
+    type EnhanceableSite,
+    type ProfileAccount,
+} from '@masknet/shared-base'
 import Services from '../../../../service.js'
 import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
-import { PersonaContext, type ProfileAccount } from '@masknet/shared'
+import { PersonaContext } from '@masknet/shared'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 import { useNavigate } from 'react-router-dom'
 
