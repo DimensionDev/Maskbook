@@ -1,4 +1,4 @@
-import { SingletonModal, SingletonModalQueued } from '@masknet/shared-base'
+import { SingletonModal } from '@masknet/shared-base'
 import type { SelectProviderModalOpenProps } from './SelectProviderModal/index.js'
 import type { WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeModal/index.js'
 import type { WalletRiskWarningModalOpenProps } from './WalletRiskWarningModal/index.js'
@@ -29,7 +29,7 @@ export const ApplicationBoardModal = new SingletonModal<ApplicationBoardModalOpe
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const TransactionSnackbar = new SingletonModal()
-export const ConfirmModal = new SingletonModalQueued<ConfirmModalOpenProps, ConfirmModalCloseProps>()
+export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, ConfirmModalCloseProps>()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
 export const SelectGasSettingsModal = new SingletonModal<
     SelectGasSettingsModalOpenProps,
