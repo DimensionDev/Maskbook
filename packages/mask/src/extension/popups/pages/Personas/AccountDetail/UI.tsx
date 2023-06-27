@@ -1,134 +1,125 @@
-import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { LoadingButton } from '@mui/lab'
-import { Button, Typography } from '@mui/material'
-import type { Account } from '../type.js'
+import { memo, useCallback } from 'react'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Box, Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
 import { useI18N } from '../../../../../utils/index.js'
+import { useNavigate } from 'react-router-dom'
 import { Trans } from 'react-i18next'
-import { EnhanceableSite } from '@masknet/shared-base'
+import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
 
-const useStyles = makeStyles()(() => ({
-    container: {
-        padding: '8px 16px 0 16px',
+import { WalletList } from '../../../components/WalletSettingList/index.js'
+
+const useStyles = makeStyles()((theme) => ({
+    avatar: {
+        boxShadow: '0px 6px 12px 0px rgba(120, 120, 120, 0.20)',
+        backdropFilter: 'blur(8px)',
+    },
+    account: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        rowGap: 12,
-        backgroundColor: '#F7F9FA',
-        flex: 1,
     },
-    name: {
-        fontWeight: 700,
-        lineHeight: '18px',
-        color: '#07101B',
-    },
-    warning: {
-        padding: '6px 12px',
-        background: 'rgba(255, 185, 21, 0.1)',
-        color: '#FFB915',
-        fontSize: 12,
-        lineHeight: '16px',
-    },
-    tip: {
-        fontSize: 12,
-        lineHeight: '16px',
-        marginTop: 16,
-    },
-    controller: {
-        position: 'fixed',
-        left: 16,
-        right: 16,
-        bottom: 16,
-
-        display: 'flex',
-        justifyContent: 'space-between',
-        columnGap: 12,
-    },
-    button: {
-        padding: '10px 0',
-        display: 'flex',
-        justifyContent: 'center',
+    identity: {
         fontSize: 14,
-        lineHeight: '20px',
-        fontWeight: 600,
-        color: '#ffffff',
-        borderRadius: 99,
-        flex: 1,
+        fontWeight: 700,
+        marginTop: theme.spacing(1.5),
+        lineHeight: '18px',
+    },
+    tips: {
+        fontSize: 14,
+        lineHeight: '18px',
+        marginTop: theme.spacing(2),
+    },
+    bottom: {
+        position: 'fixed',
+        bottom: 0,
+        background: theme.palette.maskColor.secondaryBottom,
+        padding: theme.spacing(2),
+        boxShadow: theme.palette.maskColor.bottomBg,
+        width: '100%',
+        display: 'flex',
+        columnGap: theme.spacing(2),
     },
 }))
 
 interface AccountDetailUIProps {
-    account: Account
-    personaName?: string
+    account: ProfileAccount
     onVerify: () => void
-    onDisconnect: () => void
-    disconnectLoading: boolean
     isSupportNextDotID: boolean
+    walletProofs?: BindingProof[]
+    listingAddresses: string[]
+    isClean: boolean
+    toggleUnlisted: (identity: string, address: string) => void
+    loading: boolean
+    onSubmit: () => void
+    submitting: boolean
 }
 
 export const AccountDetailUI = memo<AccountDetailUIProps>(
-    ({ account, personaName, onVerify, onDisconnect, disconnectLoading, isSupportNextDotID }) => {
+    ({
+        account,
+        onVerify,
+        isSupportNextDotID,
+        walletProofs,
+        isClean,
+        toggleUnlisted,
+        listingAddresses,
+        loading,
+        onSubmit,
+        submitting,
+    }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
+        const navigate = useNavigate()
+        const handleBack = useCallback(() => navigate(-1), [])
 
         return (
-            <div className={classes.container}>
-                <AccountAvatar
-                    avatar={account.avatar}
-                    network={account.identifier.network}
-                    isValid={account.is_valid}
-                />
-                <Typography className={classes.name}>@{account.identifier.userId}</Typography>
-                <Typography className={classes.warning}>
-                    {account.is_valid || account.identifier.network !== EnhanceableSite.Twitter ? (
-                        <Trans
-                            i18nKey="popups_new_verify_warning_alert"
-                            components={{ strong: <strong /> }}
-                            values={{ account: account.identifier.userId, persona: personaName }}
+            <Box height="100%" pb={9}>
+                <Box pt={2} px={2} display="flex" flexDirection="column" height="100%">
+                    <Box className={classes.account}>
+                        <AccountAvatar
+                            avatar={account.avatar}
+                            network={account.identifier.network}
+                            isValid={account.is_valid}
+                            classes={{ avatar: classes.avatar }}
                         />
-                    ) : (
-                        <Trans
-                            i18nKey="popups_new_disconnect_warning_alert"
-                            components={{ strong: <strong /> }}
-                            values={{ account: account.identifier.userId }}
-                        />
-                    )}
+                        <Typography className={classes.identity}>@{account.identity}</Typography>
+                    </Box>
+                    <Typography className={classes.tips}>
+                        {account.is_valid ? (
+                            t('popups_display_web3_address_tips')
+                        ) : isSupportNextDotID ? (
+                            t('popups_verify_account_tips')
+                        ) : (
+                            <Trans i18nKey="popups_other_social_accounts_tips" components={{ strong: <strong /> }} />
+                        )}
+                    </Typography>
 
-                    {account.identifier.network !== EnhanceableSite.Twitter ? (
-                        <Typography className={classes.tip}>{t('popups_disconnect_other_warning_alert')}</Typography>
-                    ) : null}
-                </Typography>
-                <div className={classes.controller}>
-                    {account.is_valid ? (
-                        <LoadingButton
-                            className={classes.button}
-                            style={{ background: '#FFB915' }}
-                            loading={disconnectLoading}
-                            onClick={onDisconnect}>
-                            {t('popups_persona_disconnect')}
-                        </LoadingButton>
-                    ) : (
-                        <>
-                            <LoadingButton
-                                className={classes.button}
-                                style={{ background: '#FFB915' }}
-                                loading={disconnectLoading}
-                                onClick={onDisconnect}>
-                                {t('popups_persona_disconnect')}
-                            </LoadingButton>
-                            {isSupportNextDotID ? (
-                                <Button
-                                    className={classes.button}
-                                    style={{ background: '#1C68F3' }}
-                                    onClick={() => onVerify()}>
-                                    {t('popups_verify_account')}
-                                </Button>
-                            ) : null}
-                        </>
-                    )}
-                </div>
-            </div>
+                    <WalletList
+                        loading={loading}
+                        walletProofs={walletProofs}
+                        listingAddresses={listingAddresses}
+                        toggleUnlisted={toggleUnlisted}
+                        isValid={isSupportNextDotID ? account.is_valid : false}
+                        identity={account.identity}
+                    />
+                </Box>
+
+                {isSupportNextDotID ? (
+                    <Box className={classes.bottom}>
+                        <Button variant="outlined" fullWidth onClick={handleBack}>
+                            {t('back')}
+                        </Button>
+                        <ActionButton
+                            loading={submitting}
+                            fullWidth
+                            onClick={account.is_valid ? onSubmit : onVerify}
+                            disabled={account.is_valid ? isClean || loading : submitting}>
+                            {t(account.is_valid ? 'save' : 'popups_verify_account')}
+                        </ActionButton>
+                    </Box>
+                ) : null}
+            </Box>
         )
     },
 )
