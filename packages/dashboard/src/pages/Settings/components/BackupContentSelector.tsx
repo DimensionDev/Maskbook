@@ -2,7 +2,7 @@ import { Box, Checkbox, Typography, experimentalStyled as styled } from '@mui/ma
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { useState, useEffect } from 'react'
-import type { BackupPreview } from '@masknet/backup-format'
+import type { BackupSummary } from '@masknet/backup-format'
 
 const SelectItem = styled('div')(({ theme }) => ({
     borderRadius: 8,
@@ -32,7 +32,7 @@ export interface BackupContentCheckedStatus {
 }
 
 export interface BackupContentSelectorProps {
-    json: BackupPreview
+    json: BackupSummary
     onChange(data: BackupContentCheckedStatus): void
 }
 

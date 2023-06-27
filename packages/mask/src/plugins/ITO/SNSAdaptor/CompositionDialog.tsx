@@ -1,7 +1,7 @@
 import { omit, set } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, type InjectedDialogProps, NetworkTab, ApplicationBoardModal } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -22,7 +22,7 @@ import { PluginITO_RPC } from '../messages.js'
 import { DialogTabs, type JSON_PayloadInMask } from '../types.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
-import { payloadOutMask } from './helpers.js'
+import { openComposition, payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
 import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
 
@@ -74,7 +74,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
         chainId: chainIdValid ? undefined : ChainId.Mainnet,
     })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
-    const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList =
@@ -112,16 +111,18 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [{ loading: filling }, fillCallback] = useFillCallback(poolSettings)
     const fill = useCallback(async () => {
         const result = await fillCallback()
-        if (!result || result instanceof Error) return
-        const { receipt, settings } = result
-        if (!receipt.transactionHash) return
-        // no contract is available
-        if (!ITO2_CONTRACT_ADDRESS) return
+        const { hash, receipt, settings, events } = result ?? {}
 
-        // the settings is not available
-        if (!settings?.token) return
+        if (
+            typeof hash !== 'string' ||
+            typeof receipt?.transactionHash !== 'string' ||
+            !events ||
+            !ITO2_CONTRACT_ADDRESS ||
+            !settings?.token
+        )
+            return
 
-        const FillSuccess = (receipt.events?.FillSuccess?.returnValues ?? {}) as {
+        const FillSuccess = (events?.FillSuccess?.returnValues ?? {}) as {
             total: string
             id: string
             creator: string
@@ -157,7 +158,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
         setPoolSettings(undefined)
         onCreateOrSelect(payload)
-        onClose()
     }, [ITO2_CONTRACT_ADDRESS, fillCallback])
     // #endregion
 
@@ -202,9 +202,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 ],
             )
             payloadDetail.seller.name = senderName
-            if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
-            else dropMetadata(ITO_MetaKey_2)
-
+            openComposition(ITO_MetaKey_2, payloadDetail)
             ApplicationBoardModal.close()
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later

@@ -1,5 +1,6 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { buttonClasses, type ButtonProps } from '@mui/material/Button'
+import { memo } from 'react'
 
 export interface ActionButtonProps extends ButtonProps {
     width?: number | string
@@ -26,9 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function PrimaryButton<T extends React.ComponentType<any> = React.ComponentType>(
-    props: ActionButtonProps & PropsOf<T>,
-) {
+export const PrimaryButton = memo<ActionButtonProps>(function PrimaryButton(props) {
     const { width, loading, children, className, style, ...rest } = props
     const { classes } = useStyles(undefined, { props: { classes: rest.classes } })
     return (
@@ -36,4 +35,4 @@ export function PrimaryButton<T extends React.ComponentType<any> = React.Compone
             {children}
         </ActionButton>
     )
-}
+})

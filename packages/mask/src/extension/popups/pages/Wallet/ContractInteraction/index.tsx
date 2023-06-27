@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import {
     DepositPaymaster,
+    formatDomainName,
     formatGweiToWei,
     formatWeiToEther,
     isNativeTokenAddress,
@@ -41,7 +42,7 @@ import {
     ZERO,
 } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { Others, Web3 } from '@masknet/web3-providers'
+import { Web3 } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -370,15 +371,7 @@ const ContractInteraction = memo(() => {
         if (!request?.paymentToken || isNativeTokenAddress(request.paymentToken)) return result
         if (!currencyRatio) return ZERO
         return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
-    }, [
-        gas,
-        isSupport1559,
-        gasPriceEIP1559,
-        gasPricePriorEIP1559,
-        Others.isNativeTokenAddress,
-        request?.paymentToken,
-        currencyRatio,
-    ])
+    }, [gas, isSupport1559, gasPriceEIP1559, gasPricePriorEIP1559, request?.paymentToken, currencyRatio])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee || gasFee.isZero()) return '0'
@@ -403,9 +396,7 @@ const ContractInteraction = memo(() => {
             <main className={classes.container}>
                 <div className={classes.info} style={{ marginBottom: 20 }}>
                     <Typography className={classes.title}>{typeName}</Typography>
-                    {domain ? (
-                        <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
-                    ) : null}
+                    {domain ? <Typography className={classes.domain}>{formatDomainName(domain)}</Typography> : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                         {request?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
@@ -454,13 +445,13 @@ const ContractInteraction = memo(() => {
                             <FormattedBalance
                                 value={gasFee}
                                 decimals={
-                                    request?.paymentToken && !Others.isNativeTokenAddress(request?.paymentToken)
+                                    request?.paymentToken && !isNativeTokenAddress(request?.paymentToken)
                                         ? maskToken?.decimals
                                         : nativeToken?.decimals
                                 }
                                 significant={4}
                                 symbol={
-                                    request?.paymentToken && !Others.isNativeTokenAddress(request?.paymentToken)
+                                    request?.paymentToken && !isNativeTokenAddress(request?.paymentToken)
                                         ? maskToken?.symbol
                                         : nativeToken?.symbol
                                 }

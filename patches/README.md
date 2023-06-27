@@ -32,6 +32,7 @@
 - @chainsafe/as-sha256: currently we cannot load WebAssembly modules in the content script. compiled into JS by <https://github.com/WebAssembly/binaryen/tree/main>.
 - @mui/base: <https://github.com/mui/material-ui/issues/25077>
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>
+- guess-calling-code: <https://github.com/AstraSurge/guess-calling-code/pull/3>
 
 ## CSP
 

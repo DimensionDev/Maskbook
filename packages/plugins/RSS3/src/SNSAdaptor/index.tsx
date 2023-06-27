@@ -9,6 +9,7 @@ import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
+import { Modals } from './modals/index.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -145,6 +146,9 @@ const SocialTabConfigInSearchResult: Plugin.SNSAdaptor.SearchResultTab = createS
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {},
+    GlobalInjection() {
+        return <Modals />
+    },
     ProfileTabs: [ActivitiesTabConfig, DonationTabConfig, SocialTabConfig],
     ProfileCardTabs: [ActivitiesTabConfigInProfileCard, DonationsTabConfigInProfileCard, SocialTabConfigInProfileCard],
     SearchResultTabs: [

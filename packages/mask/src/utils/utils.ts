@@ -6,7 +6,7 @@ import { isNull } from 'lodash-es'
 import { pasteImage } from '@masknet/injected-script'
 import Services from '../extension/service.js'
 import { ProfileIdentifier, type ProfileInformationFromNextID } from '@masknet/shared-base'
-import { batch, notify } from 'async-call-rpc'
+import { batch, notify } from 'async-call-rpc/full'
 /**
  * Download given url return as Blob
  */

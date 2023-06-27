@@ -6,8 +6,18 @@ import type { ConnectWalletModalOpenProps } from './ConnectWalletModal/index.js'
 import type { LeavePageConfirmModalOpenProps } from './LeavePageConfirmModal/index.js'
 import type { ApplicationBoardModalOpenProps } from './ApplicationBoardModal/index.js'
 import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js'
-import type { ConfirmModalOpenProps } from './ConfirmModal/index.js'
+import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
+import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
+import type {
+    SelectFungibleTokenModalOpenProps,
+    SelectFungibleTokenModalCloseProps,
+} from './SelectFungibleTokenModal/index.js'
+import type {
+    SelectGasSettingsModalCloseProps,
+    SelectGasSettingsModalOpenProps,
+} from './SelectAdvancedSettingsDialog/index.js'
+import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps>()
@@ -19,4 +29,14 @@ export const ApplicationBoardModal = new SingletonModal<ApplicationBoardModalOpe
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const TransactionSnackbar = new SingletonModal()
-export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps>()
+export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, ConfirmModalCloseProps>()
+export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
+export const SelectGasSettingsModal = new SingletonModal<
+    SelectGasSettingsModalOpenProps,
+    SelectGasSettingsModalCloseProps
+>()
+export const AddCollectiblesModal = new SingletonModal<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>()
+export const SelectFungibleTokenModal = new SingletonModal<
+    SelectFungibleTokenModalOpenProps,
+    SelectFungibleTokenModalCloseProps
+>()

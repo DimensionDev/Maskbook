@@ -75,6 +75,9 @@ patchedDependencies:
   fuse.js@6.6.2:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
+  guess-calling-code@1.1.7:
+    hash: ei2t5rxej4o7ihqzxjp5seoenm
+    path: patches/guess-calling-code@1.1.7.patch
   gulp@4.0.2:
     hash: tfijye3fclipdzo6an37r223ay
     path: patches/gulp@4.0.2.patch
@@ -601,6 +604,9 @@ importers:
       date-fns:
         specifier: 2.29.3
         version: 2.29.3
+      guess-calling-code:
+        specifier: ^1.1.7
+        version: 1.1.7(patch_hash=ei2t5rxej4o7ihqzxjp5seoenm)
       html-to-image:
         specifier: ^1.11.11
         version: 1.11.11
@@ -3094,6 +3100,9 @@ importers:
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
+      guess-calling-code:
+        specifier: ^1.1.7
+        version: 1.1.7(patch_hash=ei2t5rxej4o7ihqzxjp5seoenm)
       notistack:
         specifier: 2.0.8
         version: 2.0.8(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@mui/material@5.10.8)(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -3420,6 +3429,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../shared-base-ui
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../web3-constants
@@ -20507,6 +20519,11 @@ packages:
   /growly@1.3.0:
     resolution: {integrity: sha512-+xGQY0YyAWCnqy7Cd++hc2JqMYzlm0dG30Jd0beaA64sROr8C4nt8Yc9V5Ro3avlSUDTN0ulqP/VBKi1/lLygw==}
     dev: true
+
+  /guess-calling-code@1.1.7(patch_hash=ei2t5rxej4o7ihqzxjp5seoenm):
+    resolution: {integrity: sha512-P0oXx8ww5u2GRvrgaqRHaPs1kB1pTs69OcclKoTSZfWHxw/b5+YZ8WFJVBeG7RbOpBPQ4sWFj0/Zko7HqtBAuw==}
+    dev: false
+    patched: true
 
   /gulp-cli@2.3.0:
     resolution: {integrity: sha512-zzGBl5fHo0EKSXsHzjspp3y5CONegCm8ErO5Qh0UzFzk2y4tMvzLWhoDokADbarfZRL2pGpRp7yt6gfJX4ph7A==}

@@ -84,14 +84,11 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
 }
 
 export interface ComputedFlags {
-    lockdown: boolean
     sourceMapKind: Configuration['devtool']
     reactProductionProfiling: boolean
 }
 
 export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
-    const lockdown = flags.engine === 'chromium'
-
     let sourceMapKind: Configuration['devtool'] = false
     if (flags.mode === 'production') sourceMapKind = 'source-map'
 
@@ -105,7 +102,7 @@ export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
     }
 
     const reactProductionProfiling = flags.mode === 'production' && flags.profiling
-    return { sourceMapKind, lockdown, reactProductionProfiling }
+    return { sourceMapKind, reactProductionProfiling }
 }
 
 export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: ComputedFlags) {

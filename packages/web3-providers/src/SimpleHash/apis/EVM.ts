@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -41,7 +41,8 @@ import {
     getAllChainNames,
     resolveEventType,
     resolveSimpleHashRange,
-    SIMPLE_HASH_HISTORICAL_PRICE_START_TIME,
+    checkBlurToken,
+    checkLensFollower,
 } from '../helpers.js'
 import {
     type Asset,
@@ -58,6 +59,7 @@ import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
+import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME } from '../constants.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private looksrare = new LooksRareAPI()
@@ -268,9 +270,10 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator, allChains }: HubOptions_Base<ChainId> = {},
+        { chainId, indicator, allChains, schemaType }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const pluginId = NetworkPluginID.PLUGIN_EVM
+        const isERC712Only = schemaType === SchemaType.ERC721
         const chain = allChains || !chainId ? getAllChainNames(pluginId) : resolveChain(pluginId, chainId)
         if (!chain || !account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -279,13 +282,45 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         const path = urlcat('/api/v0/nfts/collections_by_wallets', {
             chains: chain,
             wallet_addresses: account,
+            nft_ids: 1,
         })
 
         const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
 
-        const collections = response.collections
+        const filteredCollections = uniqBy(response.collections, (x) => x.top_contracts?.[0])
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveChainId(x.chain)) && x.spam_score !== 100)
+            .filter(
+                (x) =>
+                    x?.id &&
+                    isValidChainId(resolveChainId(x.chain)) &&
+                    x.spam_score !== 100 &&
+                    x.top_contracts.length > 0 &&
+                    (!checkLensFollower(x.name ?? '') || !isERC712Only),
+            )
+
+        let erc721CollectionIdList: string[] = EMPTY_LIST
+
+        if (isERC712Only) {
+            const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
+            while (nftIdList.length) {
+                const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+                    nft_ids: nftIdList.splice(0, 50).join(','),
+                })
+
+                const batchAssetsResponse = await fetchFromSimpleHash<{
+                    nfts: Asset[]
+                }>(batchAssetsPath)
+
+                erc721CollectionIdList = erc721CollectionIdList.concat(
+                    batchAssetsResponse.nfts
+                        .filter((x) => x.contract.type === 'ERC721')
+                        .map((x) => x.collection.collection_id),
+                )
+            }
+        }
+
+        const collections = filteredCollections
+            .filter((x) => !isERC712Only || erc721CollectionIdList.includes(x.id))
             .map((x) => createNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
@@ -365,20 +400,22 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return {
             cursor: response.next_cursor,
             content: response.transfers.map((x) => {
-                const trade_token = x.sale_details?.payment_token
-                    ? {
-                          ...x.sale_details?.payment_token,
-                          type: TokenType.Fungible,
-                          address: x.sale_details?.payment_token.payment_token_id.includes('native')
-                              ? ZERO_ADDRESS
-                              : x.sale_details?.payment_token.address ?? '',
-                          id: x.sale_details?.payment_token.payment_token_id.includes('native')
-                              ? ZERO_ADDRESS
-                              : x.sale_details?.payment_token.address ?? '',
-                          chainId,
-                          schema: SchemaType.ERC20,
-                      }
-                    : createNativeToken(chainId)
+                const trade_token =
+                    !x.sale_details?.payment_token ||
+                    checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
+                        ? createNativeToken(chainId)
+                        : {
+                              ...x.sale_details?.payment_token,
+                              type: TokenType.Fungible,
+                              address: x.sale_details?.payment_token.payment_token_id.includes('native')
+                                  ? ZERO_ADDRESS
+                                  : x.sale_details?.payment_token.address ?? '',
+                              id: x.sale_details?.payment_token.payment_token_id.includes('native')
+                                  ? ZERO_ADDRESS
+                                  : x.sale_details?.payment_token.address ?? '',
+                              chainId,
+                              schema: SchemaType.ERC20,
+                          }
                 const imageURL = batchAssetsResponse.nfts.find((y) => y.nft_id === x.nft_id)?.image_url ?? ''
                 return {
                     hash: x.transaction,

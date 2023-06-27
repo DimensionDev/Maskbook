@@ -1,18 +1,18 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { flatten, sumBy } from 'lodash-es'
+import { compact, flatten, sumBy } from 'lodash-es'
 
-export interface BackupPreview {
-    personas: number
+export interface BackupSummary {
+    personas: string[]
     accounts: number
     posts: number
     contacts: number
     relations: number
     files: number
-    wallets: number
+    wallets: string[]
     createdAt: number
 }
 
-export function getBackupPreviewInfo(json: NormalizedBackup.Data): BackupPreview {
+export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
     let files = 0
 
     try {
@@ -24,15 +24,18 @@ export function getBackupPreviewInfo(json: NormalizedBackup.Data): BackupPreview
         item.toText(),
     )
 
+    const personas = compact(
+        Array.from(json.personas.values()).map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey)),
+    )
     return {
-        personas: json.personas.size,
+        personas,
         accounts: sumBy(ownerPersonas, (persona) => persona.linkedProfiles.size),
         posts: json.posts.size,
         contacts: [...json.profiles.values()].filter((profile) => !ownerProfiles.includes(profile.identifier.toText()))
             .length,
         relations: json.relations.length,
         files,
-        wallets: json.wallets.length,
+        wallets: json.wallets.map((wallet) => wallet.address),
         createdAt: Number(json.meta.createdAt),
     }
 }

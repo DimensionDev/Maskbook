@@ -58,7 +58,7 @@ import {
     useMaskTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
-import { Others, Web3 } from '@masknet/web3-providers'
+import { Web3 } from '@masknet/web3-providers'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
@@ -339,7 +339,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
 
         // The input is ens domain but the binding address cannot be found
-        if (Others.isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
+        if (isValidDomain(address) && (resolveDomainError || !registeredAddress)) {
             setAddressTip({
                 type: TransferAddressError.RESOLVE_FAILED,
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
@@ -370,7 +370,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, pluginID, registeredAddress, methods.clearErrors, wallet?.address, resolveDomainError, Others])
+    }, [address, pluginID, registeredAddress, methods.clearErrors, wallet?.address, resolveDomainError])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address
@@ -469,7 +469,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
 
             // If input address is ens domain, use registeredAddress to transfer
-            if (Others.isValidDomain(data.address)) {
+            if (isValidDomain(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
@@ -484,7 +484,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 gas: data.gasLimit,
             })
         },
-        [selectedAsset, transferCallback, registeredAddress, Others],
+        [selectedAsset, transferCallback, registeredAddress],
     )
 
     const handleCancel = useCallback(() => {

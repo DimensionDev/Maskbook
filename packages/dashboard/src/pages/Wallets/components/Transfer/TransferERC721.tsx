@@ -23,7 +23,7 @@ import {
     isValidAddress,
     formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
-import { FormattedAddress, useSelectNonFungibleContract } from '@masknet/shared'
+import { FormattedAddress, SelectNonFungibleContractModal } from '@masknet/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { KeyboardArrowDown as KeyboardArrowDownIcon, Tune as TuneIcon } from '@mui/icons-material'
 import {
@@ -89,7 +89,6 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType>>()
-    const selectNFTContract = useSelectNonFungibleContract<NetworkPluginID.PLUGIN_EVM>()
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
 
@@ -196,23 +195,25 @@ export const TransferERC721 = memo(() => {
         return Web3.transferNonFungibleToken(contractAddress, allFormFields.tokenId ?? '', allFormFields.recipient, '1')
     }, [account, allFormFields.tokenId, pluginID, contractAddress, allFormFields.recipient, Web3])
 
-    const handleSelectNFT = async () => {
-        const contract = await selectNFTContract({
+    const handleSelectNFT = () => {
+        SelectNonFungibleContractModal.open({
             pluginID: NetworkPluginID.PLUGIN_EVM,
+            schemaType: SchemaType.ERC721,
             chainId,
+            onSubmit: (contract) => {
+                setContractAddress(contract.address || '')
+                if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
+                    setDefaultToken(null)
+                }
+                if (contract) {
+                    setValue('contract', contract.name || contract.address || '', {
+                        shouldValidate: true,
+                    })
+                    setContract(contract as NonFungibleTokenContract<ChainId, SchemaType>)
+                    setValue('tokenId', '')
+                }
+            },
         })
-
-        setContractAddress(contract.address || '')
-        if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
-            setDefaultToken(null)
-        }
-        if (contract) {
-            setValue('contract', contract.name || contract.address || '', {
-                shouldValidate: true,
-            })
-            setContract(contract as NonFungibleTokenContract<ChainId, SchemaType>)
-            setValue('tokenId', '')
-        }
     }
 
     // gas price

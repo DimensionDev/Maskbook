@@ -9,9 +9,14 @@ import {
     TransactionDescriptorType,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
+import {
+    formatDomainName,
+    type ChainId,
+    type Transaction,
+    type TransactionParameter,
+    formatEthereumAddress,
+} from '@masknet/web3-shared-evm'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
-import { Others } from '@masknet/web3-providers'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils/index.js'
 
@@ -93,7 +98,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                             {transaction.createdAt ? `${formatDateTime(transaction.createdAt, 'MMM dd')}.  ` : null}
                             {toAddress
                                 ? t('popups_wallet_activity_to_address', {
-                                      address: Others.formatDomainName(domain) || Others.formatAddress(toAddress, 4),
+                                      address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
                                   })
                                 : null}
                         </Typography>

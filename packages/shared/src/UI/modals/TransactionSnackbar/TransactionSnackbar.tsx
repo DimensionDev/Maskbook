@@ -22,9 +22,11 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
 })
+
 export interface TransactionSnackbarProps<T extends NetworkPluginID> {
     pluginID: T
 }
+
 export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
     const { classes } = useStyles()
     const t = useSharedI18N()

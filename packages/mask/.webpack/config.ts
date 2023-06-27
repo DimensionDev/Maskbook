@@ -61,8 +61,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias: Record<string, string> = {
-                    // We want to always use the full version.
-                    'async-call-rpc$': require.resolve('async-call-rpc/full'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.mjs'),
                     'error-polyfill': require.resolve('./package-overrides/null.mjs'),
@@ -299,21 +297,15 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown: computedFlags.lockdown }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown: computedFlags.lockdown }),
-        addHTMLEntry({ chunks: ['connect'], filename: 'popups-connect.html', lockdown: computedFlags.lockdown }),
-        addHTMLEntry({
-            chunks: ['contentScript'],
-            filename: 'generated__content__script.html',
-            lockdown: computedFlags.lockdown,
-        }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown: computedFlags.lockdown }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
+        addHTMLEntry({ chunks: ['connect'], filename: 'popups-connect.html' }),
+        addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
-        baseConfig.plugins!.push(
-            addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', lockdown: false }),
-        )
+        baseConfig.plugins!.push(addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html' }))
     }
     // background
     if (flags.manifest === 3) {
@@ -330,7 +322,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 chunks: ['background'],
                 filename: 'background.html',
                 gun: true,
-                lockdown: computedFlags.lockdown,
             }),
         )
     }
@@ -350,19 +341,11 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 function addHTMLEntry(
     options: HTMLPlugin.Options & {
         gun?: boolean
-        lockdown: boolean
     },
 ) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
-    }
-    if (options.lockdown) {
-        templateContent = templateContent.replace(
-            `<!-- lockdown -->`,
-            `<script src="/polyfill/lockdown.js"></script>
-        <script src="/lockdown.js"></script>`,
-        )
     }
     return new HTMLPlugin({
         templateContent,

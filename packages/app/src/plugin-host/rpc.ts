@@ -1,4 +1,4 @@
-import { AsyncCall, type EventBasedChannel } from 'async-call-rpc'
+import { AsyncCall, type EventBasedChannel } from 'async-call-rpc/full'
 import { serializer } from '@masknet/shared-base'
 import { addListener, postMessage } from './message.js'
 

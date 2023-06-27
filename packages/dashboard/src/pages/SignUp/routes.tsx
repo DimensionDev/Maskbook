@@ -3,10 +3,7 @@ import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate, PersonaRecovery 
 import { SignUpRoutePath } from './routePath.js'
 
 function Actions() {
-    const { action } = useParams() as {
-        action: string
-    }
-
+    const { action } = useParams<{ action: string }>()
     switch (action) {
         case SignUpRoutePath.MnemonicReveal:
             return <MnemonicRevealForm />

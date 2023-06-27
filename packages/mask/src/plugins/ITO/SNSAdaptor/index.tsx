@@ -2,7 +2,6 @@ import { Trans } from 'react-i18next'
 import { set } from 'lodash-es'
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
@@ -11,20 +10,16 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { NetworkPluginID, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
-import { useFungibleToken } from '@masknet/web3-hooks-base'
+import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { formatBalance } from '@masknet/web3-shared-base'
 import { ITOInjection } from './ITOInjection.js'
 import { openDialog } from './emitter.js'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
-    },
-    span: {
-        paddingLeft: theme.spacing(1),
     },
 }))
 
@@ -114,18 +109,19 @@ interface BadgeProps {
 }
 function Badge({ payload }: BadgeProps) {
     const { classes } = useStyles()
-    const { value: tokenDetailed, loading: loadingToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, payload.token)
-    const balance = formatBalance(payload.total, tokenDetailed?.decimals)
-    const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
-    const sellerName = payload.seller.name
-        ? payload.seller.name
-        : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
-    return loadingToken ? null : (
+    return (
         <div className={classes.root}>
             <Icons.ITOLabel size={14} />
-            <span className={classes.span}>
-                A ITO with {balance} ${symbol} from {sellerName}
-            </span>
+            <Typography
+                fontSize="12px"
+                lineHeight="16px"
+                fontFamily="Helvetica"
+                marginLeft="8px"
+                maxWidth="450px"
+                overflow="hidden"
+                textOverflow="ellipsis">
+                {payload.message.split(MSG_DELIMITER)[1] || 'ITO'}
+            </Typography>
         </div>
     )
 }

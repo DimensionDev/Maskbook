@@ -31,11 +31,9 @@ const useStyles = makeStyles()((theme) => ({
     field: {
         width: '100%',
         [`& > .${formHelperTextClasses.root}`]: {
-            marginTop: theme.spacing(0.8),
-            paddingLeft: theme.spacing(0.5),
-            borderLeft: 'solid 2px',
+            paddingTop: theme.spacing(1),
             borderRadius: '2px',
-            fontSize: 12,
+            fontSize: 14,
             lineHeight: '16px',
         },
         '& input[type=number]': {
@@ -141,3 +139,5 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
         </Box>
     )
 })
+
+MaskTextField.displayName = 'MaskTextField'

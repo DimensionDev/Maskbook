@@ -95,7 +95,7 @@ export namespace RSS3BaseAPI {
         collection?: string
         description?: string
         contract_address: string
-        standard: 'ERC-20' | 'ERC-721' | 'ERC-1155' | 'Native' | string
+        standard: LiteralUnion<'ERC-20' | 'ERC-721' | 'ERC-1155' | 'Native'>
     }
     interface SwapMetadata {
         /**
@@ -147,7 +147,7 @@ export namespace RSS3BaseAPI {
         value: string
         value_display: string
         contract_address: string
-        standard: 'ERC-721' | string
+        standard: LiteralUnion<'ERC-721'>
         name: string
         symbol: string
         /** URL */
@@ -168,7 +168,7 @@ export namespace RSS3BaseAPI {
         /** URL */
         image: string
         symbol: string
-        standard: 'ERC-721' | string
+        standard: LiteralUnion<'ERC-721'>
         attributes: Attribute[]
         description: string
         contract_address: string
@@ -209,7 +209,7 @@ export namespace RSS3BaseAPI {
         media: Array<{
             /** URL or IPFS */
             address: string
-            mime_type: 'image/png' | string
+            mime_type: LiteralUnion<'image/png'>
         }>
         type_on_platform: Type[]
     }
@@ -225,8 +225,8 @@ export namespace RSS3BaseAPI {
     interface ProfileMetadata {
         address: string
         network: Network
-        platform: 'ENS' | 'Lens' | string
-        source: 'ENS' | 'Lens' | string
+        platform: LiteralUnion<'ENS' | 'Lens'>
+        source: LiteralUnion<'ENS' | 'Lens'>
         /** @example 'vitalik.eth' */
         name: string
         /** @example 'vitalik.eth' */

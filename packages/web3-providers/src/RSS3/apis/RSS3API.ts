@@ -2,13 +2,14 @@ import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import { Sentry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
-import { createIndicator, createNextIndicator, createPageable, queryClient } from '@masknet/shared-base'
+import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_ENDPOINT } from '../constants.js'
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { RSS3BaseAPI, type HubOptions_Base } from '../../entry-types.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 interface RSS3Result<T> {
     cursor?: string

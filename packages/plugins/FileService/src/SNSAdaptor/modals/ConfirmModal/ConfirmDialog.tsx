@@ -56,7 +56,7 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
     message?: ReactNode | string
     description?: ReactNode | string
     confirmLabel?: string
-    onSubmit?(result: boolean | null): void
+    onSubmit(): void
 }
 
 // Yet, another Confirm Dialog
@@ -76,7 +76,7 @@ export const ConfirmDialog = memo(
                     <Typography className={classes.desc} component="div">
                         {description}
                     </Typography>
-                    <Button fullWidth color="error" onClick={() => onSubmit?.(true)}>
+                    <Button fullWidth color="error" onClick={() => onSubmit()}>
                         {confirmLabel}
                     </Button>
                     <Icons.Close className={classes.closeButton} size={24} onClick={onClose} />

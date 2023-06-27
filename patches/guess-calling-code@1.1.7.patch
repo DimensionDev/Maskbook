@@ -1,0 +1,24 @@
+diff --git a/package.json b/package.json
+index b98cf14b95fc3b9c8ba28ba7c2a1ca63a0140b72..b548f4a50fd33ddedf5b4ddb774966df658bd8de 100644
+--- a/package.json
++++ b/package.json
+@@ -20,6 +20,19 @@
+   "module": "dist/index.esm.js",
+   "browser": "dist/index.umd.js",
+   "types": "dist/index.d.ts",
++  "type": "module",
++  "exports": {
++    ".": {
++      "import": {
++        "types": "./dist/index.d.ts",
++        "default": "./dist/index.esm.js"
++      },
++      "require":  {
++        "types": "./dist/index.d.ts",
++        "default": "./dist/index.cjs.js"
++      }
++    }
++  },  
+   "files": [
+     "dist"
+   ],

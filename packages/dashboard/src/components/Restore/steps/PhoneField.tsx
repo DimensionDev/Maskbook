@@ -1,52 +1,104 @@
+import {
+    PhoneNumberField,
+    SendingCodeField,
+    useCustomSnackbar,
+    type PhoneNumberFieldValue as PhoneConfig,
+} from '@masknet/theme'
+import { Box } from '@mui/material'
+import { memo, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import guessCallingCode from 'guess-calling-code'
+import { usePersonaRecovery } from '../../../contexts/index.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { memo, useCallback, useState } from 'react'
-import { PhoneNumberField } from '@masknet/theme'
-import { ButtonContainer } from '../../RegisterFrame/ButtonContainer.js'
-import { Button } from '@mui/material'
-import { Label, ValidationCodeStep } from './common.js'
-import type { StepCommonProps } from '../../Stepper/index.js'
-import { AccountType } from '../../../pages/Settings/type.js'
+import { useLanguage } from '../../../pages/Personas/api.js'
+import { sendCode } from '../../../pages/Settings/api.js'
 import { phoneRegexp } from '../../../pages/Settings/regexp.js'
+import { AccountType, Locale, Scenario, type BackupFileInfo } from '../../../pages/Settings/type.js'
+import { PrimaryButton } from '../../PrimaryButton/index.js'
+import type { StepCommonProps } from '../../Stepper/index.js'
+import { ValidationCodeStep } from './common.js'
 
-export const PhoneField = memo(({ toStep }: StepCommonProps) => {
+interface Props extends StepCommonProps {
+    onNext(
+        account: string,
+        type: AccountType,
+        code: string,
+    ): Promise<
+        | BackupFileInfo
+        | {
+              message: string
+          }
+    >
+}
+
+export const PhoneField = memo(function PhoneField({ toStep, onNext }: Props) {
+    const language = useLanguage()
     const t = useDashboardI18N()
-    const [account, setAccount] = useState<string>('')
     const [invalidPhone, setInvalidPhone] = useState(false)
+    const { showSnackbar } = useCustomSnackbar()
+    const [otp, setOTP] = useState('')
+    const [error, setError] = useState('')
+
+    const [phoneConfig, setPhoneConfig] = useState<PhoneConfig>({ phone: '' })
+    const account = useMemo(() => {
+        const code = phoneConfig.dialingCode || guessCallingCode()
+        return `+${code} ${phoneConfig.phone}`
+    }, [phoneConfig.dialingCode, phoneConfig.phone])
 
     const validCheck = () => {
         if (!account) return
-
         const isValid = phoneRegexp.test(account)
         setInvalidPhone(!isValid)
     }
+    const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
+        const type = AccountType.Phone
+        showSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
+        await sendCode({
+            account,
+            type,
+            scenario: Scenario.backup,
+            locale: language.includes('zh') ? Locale.zh : Locale.en,
+        })
+    }, [account, language])
 
-    const handleClick = useCallback(() => {
-        if (!phoneRegexp.test(account)) return
-        toStep(ValidationCodeStep.AccountValidation, { account, type: AccountType.phone })
-    }, [account])
+    const { fillSubmitOutlet } = usePersonaRecovery()
+    const disabled = !account || invalidPhone || !phoneRegexp.test(account) || !otp || !!error
+    useLayoutEffect(() => {
+        return fillSubmitOutlet(
+            <PrimaryButton
+                color="primary"
+                size="large"
+                onClick={async () => {
+                    const backupInfo = await onNext(account, AccountType.Phone, otp)
+                    if ('downloadURL' in backupInfo) {
+                        toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo, account, type: AccountType.Phone })
+                    } else {
+                        setError(backupInfo.message)
+                    }
+                }}
+                disabled={disabled}>
+                {t.continue()}
+            </PrimaryButton>,
+        )
+    }, [account, otp, disabled])
 
     return (
         <>
             <PhoneNumberField
                 onBlur={validCheck}
-                label={<Label onModeChange={() => toStep(ValidationCodeStep.EmailInput)} mode={AccountType.phone} />}
-                onChange={({ country, phone }) => setAccount(country + ' ' + phone)}
-                error={invalidPhone ? t.sign_in_account_cloud_backup_phone_format_error() : ''}
-                value={{
-                    country: '+1',
-                    phone: '',
-                }}
+                onChange={(newConfig) => setPhoneConfig(newConfig)}
+                error={invalidPhone ? t.sign_in_account_cloud_backup_phone_format_error() : error || ''}
+                value={phoneConfig}
+                placeholder={t.mobile_number()}
             />
-            <ButtonContainer>
-                <Button
-                    variant="rounded"
-                    color="primary"
-                    size="large"
-                    onClick={() => handleClick()}
-                    disabled={!account || invalidPhone}>
-                    {t.next()}
-                </Button>
-            </ButtonContainer>
+            <Box mt={1.5}>
+                <SendingCodeField
+                    onChange={(c) => setOTP(c)}
+                    errorMessage={sendCodeError?.message}
+                    onSend={handleSendCodeFn}
+                    placeholder={t.data_recovery_mobile_code()}
+                />
+            </Box>
         </>
     )
 })

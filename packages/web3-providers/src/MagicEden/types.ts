@@ -10,12 +10,12 @@ interface Attribute {
 }
 interface File {
     uri: string
-    type: 'image/png' | 'video/mp4' | 'image/jpeg' | string
+    type: LiteralUnion<'image/png' | 'video/mp4' | 'image/jpeg'>
 }
 
 interface Properties {
     files: File[]
-    category: 'image' | string
+    category: LiteralUnion<'image'>
     creators: Creator[]
 }
 
@@ -105,7 +105,7 @@ export interface TokenOffer {
  */
 export interface TokenActivity {
     signature: string
-    source: 'magiceden' | 'magiceden_v2' | string
+    source: LiteralUnion<'magiceden' | 'magiceden_v2'>
     /** address */
     tokenMint: string
     collectionSymbol: string
@@ -133,7 +133,7 @@ export interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {
  * /wallets/:wallet_address/activities
  */
 export interface WalletActivity extends Omit<TokenActivity, 'collectionSymbol'> {
-    type: 'buyNow' | string
+    type: LiteralUnion<'buyNow'>
     collection: string
     /** address */
     buyer: string
@@ -200,7 +200,7 @@ export interface MagicEdenNFT {
     title: string
     content: string
     externalURL: string
-    propertyCategory: 'image' | string
+    propertyCategory: LiteralUnion<'image'>
     creators: Creator[]
     sellerFeeBasisPoints: number
     mintAddress: string

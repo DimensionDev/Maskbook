@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useSelectNonFungibleContract } from '../../../index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { SelectNonFungibleContractModal } from '../../modals/index.js'
 
 interface StyleProps {
     hasIcon: boolean
@@ -72,14 +72,21 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
     const Others = useWeb3Others()
 
-    const selectNFTContract = useSelectNonFungibleContract<NetworkPluginID.PLUGIN_EVM>()
-    const openDialog = useCallback(async () => {
-        const contract = await selectNFTContract({
+    const onCollectionChange = useCallback(
+        (contract: NonFungibleCollection<ChainId, SchemaType>) => {
+            onContractChange(contract)
+        },
+        [onContractChange],
+    )
+
+    const openDialog = useCallback(() => {
+        SelectNonFungibleContractModal.open({
             pluginID: NetworkPluginID.PLUGIN_EVM,
+            schemaType: SchemaType.ERC721,
             chainId,
+            onSubmit: onCollectionChange,
         })
-        if (contract) onContractChange(contract)
-    }, [chainId, selectNFTContract])
+    }, [chainId, onCollectionChange])
     // #endregion
 
     return (

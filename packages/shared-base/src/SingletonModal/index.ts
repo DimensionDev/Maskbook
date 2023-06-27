@@ -1,3 +1,4 @@
+import { defer, delay, type DeferTuple } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 
 export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
@@ -26,21 +27,14 @@ export class SingletonModal<
         abort: [Error]
     }>()
 
-    private onOpen: ReturnType<T>['open'] | undefined
-    private onClose: ReturnType<T>['close'] | undefined
-    private onAbort: ReturnType<T>['abort'] | undefined
+    protected onOpen: ReturnType<T>['open'] | undefined
+    protected onClose: ReturnType<T>['close'] | undefined
+    protected onAbort: ReturnType<T>['abort'] | undefined
 
     private dispatchPeek: ReturnType<T>['peek'] | undefined
     private dispatchOpen: ReturnType<T>['open'] | undefined
     private dispatchClose: ReturnType<T>['close'] | undefined
     private dispatchAbort: ReturnType<T>['abort'] | undefined
-
-    /**
-     * Peek the open state of the React modal component.
-     */
-    get opened() {
-        return this.dispatchPeek?.() ?? false
-    }
 
     /**
      * Register a React modal component that implemented a forwarded ref.
@@ -55,9 +49,18 @@ export class SingletonModal<
         }
 
         const ref = creator(
-            (props) => this.onOpen?.(props),
-            (props) => this.onClose?.(props),
-            (error) => this.onAbort?.(error),
+            (props) => {
+                this.onOpen?.(props)
+                this.emitter.emit('open', props)
+            },
+            (props) => {
+                this.onClose?.(props)
+                this.emitter.emit('close', props)
+            },
+            (error) => {
+                this.onAbort?.(error)
+                this.emitter.emit('abort', error)
+            },
         )
         this.dispatchPeek = ref.peek
         this.dispatchOpen = ref.open
@@ -66,11 +69,17 @@ export class SingletonModal<
     }
 
     /**
+     * Peek the open state of the React modal component.
+     */
+    peek() {
+        return this.dispatchPeek?.() ?? false
+    }
+
+    /**
      * Open the registered modal component with props
      * @param props
      */
-    open = (props: OpenProps) => {
-        this.emitter.emit('open', props)
+    open(props: OpenProps) {
         this.dispatchOpen?.(props)
     }
 
@@ -78,16 +87,14 @@ export class SingletonModal<
      * Close the registered modal component with props
      * @param props
      */
-    close = (props: CloseProps) => {
-        this.emitter.emit('close', props)
+    close(props: CloseProps) {
         this.dispatchClose?.(props)
     }
 
     /**
      * Abort the registered modal component with Error
      */
-    abort = (error: Error) => {
-        this.emitter.emit('abort', error)
+    abort(error: Error) {
         this.dispatchAbort?.(error)
     }
 
@@ -95,12 +102,76 @@ export class SingletonModal<
      * Open the registered modal component and wait for it closes
      * @param props
      */
-    openAndWaitForClose = (props: OpenProps): Promise<CloseProps> => {
+    openAndWaitForClose(props: OpenProps): Promise<CloseProps> {
         return new Promise<CloseProps>((resolve, reject) => {
             this.open(props)
-
             this.onClose = (props) => resolve(props)
             this.onAbort = (error) => reject(error)
         })
+    }
+}
+
+export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends SingletonModal<OpenProps, CloseProps> {
+    private opened = false
+    private tasks: Array<{
+        props: OpenProps
+        defer?: DeferTuple<CloseProps, Error>
+    }> = []
+
+    constructor() {
+        super()
+
+        this.emitter.on('open', () => {
+            this.opened = true
+        })
+        this.emitter.on('close', () => {
+            this.opened = false
+            this.cleanup()
+        })
+        this.emitter.on('abort', () => {
+            this.opened = false
+            this.cleanup()
+        })
+    }
+
+    override open(props: OpenProps) {
+        if (!this.opened) {
+            super.open(props)
+            return
+        }
+
+        this.tasks.push({
+            props,
+        })
+    }
+
+    override close(props: CloseProps) {
+        if (!this.opened) return
+
+        super.close(props)
+    }
+
+    override openAndWaitForClose(props: OpenProps) {
+        if (!this.opened) return super.openAndWaitForClose(props)
+
+        const d = defer<CloseProps, Error>()
+        this.tasks.push({
+            props,
+            defer: d,
+        })
+        return d[0]
+    }
+
+    private async cleanup() {
+        if (this.opened || !this.tasks.length) return
+
+        await delay(300)
+
+        const { props, defer } = this.tasks.shift()!
+
+        this.open(props)
+        if (!defer) return
+        this.onClose = (props) => defer[1](props)
+        this.onAbort = (error) => defer[2](error)
     }
 }

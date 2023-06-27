@@ -154,7 +154,8 @@
       "@chainsafe/as-sha256@0.3.1": "patches/@chainsafe__as-sha256@0.3.1.patch",
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
-      "react-devtools-inline@4.27.8": "patches/react-devtools-inline@4.27.8.patch"
+      "react-devtools-inline@4.27.8": "patches/react-devtools-inline@4.27.8.patch",
+      "guess-calling-code@1.1.7": "patches/guess-calling-code@1.1.7.patch"
     }
   }
 }

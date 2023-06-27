@@ -77,7 +77,7 @@ export const SignUp = memo(function SignUp() {
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.SignIn)
+        navigate(DashboardRoutes.RecoveryPersona)
     }, [])
 
     return (

@@ -6,4 +6,4 @@ export {
     createEmptyNormalizedBackup,
     generateBackupRAW,
 } from './normalize/index.js'
-export { getBackupPreviewInfo, type BackupPreview } from './utils/backupPreview.js'
+export { getBackupSummary, type BackupSummary } from './utils/backupPreview.js'
