@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo } from 'react'
-import { Box, Button, formHelperTextClasses, lighten, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
+import { Box, formHelperTextClasses, Typography } from '@mui/material'
+import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,30 +12,32 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API.js'
 import urlcat from 'urlcat'
 import PasswordField from '../../../../components/PasswordField/index.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        minHeight: '100vh',
+        width: '100%',
+        display: 'flex',
+    },
     container: {
-        padding: '120px 18%',
+        minHeight: '100vh',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
         flexDirection: 'column',
-        height: '100%',
     },
     title: {
-        fontSize: 24,
-        lineHeight: 1.25,
-        fontWeight: 500,
+        fontSize: 30,
+        margin: '12px 0',
+        lineHeight: '120%',
+        color: theme.palette.maskColor.main,
     },
     form: {
-        marginTop: 70,
-        width: '100%',
-    },
-    label: {
-        fontSize: 12,
-        lineHeight: '16px',
-        color: MaskColorVar.main,
+        height: 480,
+        marginTop: 24,
+        width: '90%',
+        maxWidth: 720,
     },
     input: {
         width: '100%',
@@ -53,38 +55,57 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     tips: {
-        fontSize: 12,
-        lineHeight: '16px',
-        color: '#7B8192',
-        marginTop: 10,
+        fontSize: 14,
+        lineHeight: '18px',
+        fontFamily: 'Helvetica',
+        color: theme.palette.maskColor.second,
     },
-    controller: {
-        marginTop: 24,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 33%)',
-        justifyContent: 'center',
-        gridColumnGap: 10,
-        padding: '27px 0',
+    tipsBottom: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontFamily: 'Helvetica',
+        marginTop: 8,
+        marginBottom: 24,
+        color: theme.palette.maskColor.main,
     },
+
     button: {
-        height: 48,
-        borderRadius: 24,
-        fontSize: 18,
-    },
-    cancelButton: {
-        height: 48,
-        borderRadius: 24,
-        fontSize: 18,
-        background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
-        '&:hover': {
-            background: `${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important`,
+        marginTop: 36,
+        padding: '14px 20px',
+        borderRadius: 10,
+        width: 125,
+        fontSize: 16,
+        lineHeight: '20px',
+        color: theme.palette.maskColor.bottom,
+        background: theme.palette.maskColor.main,
+        '&[disabled]': {
+            opacity: 0.5,
+            color: theme.palette.maskColor.bottom,
+            background: theme.palette.maskColor.main,
         },
+    },
+    rightSide: {
+        width: 457,
+        height: '100vh',
+        background: theme.palette.maskColor.primary,
+    },
+    maskBanner: {
+        marginBottom: 36,
+    },
+    second: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
+    helveticaBold: {
+        fontWeight: 700,
+        fontFamily: 'Helvetica',
     },
 }))
 
 const CreateWalletForm = memo(() => {
     const t = useDashboardI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
@@ -143,72 +164,60 @@ const CreateWalletForm = memo(() => {
     })
 
     return (
-        <div className={classes.container}>
-            <Typography className={classes.title}>{t.create_wallet_form_title()}</Typography>
-            <form className={classes.form} onSubmit={onSubmit}>
-                <Box>
-                    <Typography className={classes.label}>{t.create_wallet_wallet_name()}</Typography>
-                    <Controller
-                        render={({ field }) => (
-                            <MaskTextField
-                                {...field}
-                                className={classes.input}
-                                error={!!errors.name?.message}
-                                helperText={errors.name?.message}
-                                placeholder={t.create_wallet_name_placeholder()}
-                                inputProps={{ autoComplete: 'off' }}
-                                InputProps={{ className: classes.textField }}
-                            />
-                        )}
-                        control={control}
-                        name="name"
-                    />
-                </Box>
-                {!loading && !hasPassword ? (
-                    <>
-                        <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
-                            <Typography className={classes.label}>{t.create_wallet_payment_password()}</Typography>
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        className={classes.input}
-                                        placeholder={t.create_wallet_payment_password()}
-                                        error={!isValid && !!errors.password?.message}
-                                        helperText={!isValid ? errors.password?.message : ''}
-                                        InputProps={{ className: classes.textField }}
-                                    />
-                                )}
-                                name="password"
-                            />
-                            <Controller
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        className={classes.input}
-                                        error={!isValid && !!errors.confirm?.message}
-                                        helperText={!isValid ? errors.confirm?.message : ''}
-                                        placeholder={t.create_wallet_re_enter_payment_password()}
-                                        InputProps={{ className: classes.textField }}
-                                    />
-                                )}
-                                name="confirm"
-                                control={control}
-                            />
-                        </Box>
-                        <Typography className={classes.tips}>{t.create_wallet_payment_password_tip()}</Typography>
-                    </>
-                ) : null}
-                <Box className={classes.controller}>
-                    <Button color="secondary" className={classes.cancelButton} onClick={() => navigate(-1)}>
-                        {t.cancel()}
-                    </Button>
-                    <Button className={classes.button} onClick={onSubmit} disabled={!isValid}>
-                        {t.next()}
-                    </Button>
-                </Box>
-            </form>
+        <div className={classes.root}>
+            <div className={classes.container}>
+                <Icons.MaskBanner width={166} height={48} className={classes.maskBanner} />
+                <Typography className={cx(classes.second, classes.helveticaBold)}>
+                    {t.create_step({ step: '1' })}
+                </Typography>
+                <Typography className={cx(classes.title, classes.helveticaBold)}>{t.set_payment_password()}</Typography>
+                <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
+                <form className={classes.form} onSubmit={onSubmit}>
+                    {!loading && !hasPassword ? (
+                        <>
+                            <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
+                                <Controller
+                                    control={control}
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            className={classes.input}
+                                            placeholder={t.create_wallet_payment_password_place_holder()}
+                                            error={!isValid && !!errors.password?.message}
+                                            helperText={!isValid ? errors.password?.message : ''}
+                                            InputProps={{ className: classes.textField }}
+                                        />
+                                    )}
+                                    name="password"
+                                />
+                                <Controller
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            className={classes.input}
+                                            error={!isValid && !!errors.confirm?.message}
+                                            helperText={!isValid ? errors.confirm?.message : ''}
+                                            placeholder={t.create_wallet_re_enter_payment_password()}
+                                            InputProps={{ className: classes.textField }}
+                                        />
+                                    )}
+                                    name="confirm"
+                                    control={control}
+                                />
+                            </Box>
+                        </>
+                    ) : null}
+                    <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_2()}</Typography>
+                    <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_3()}</Typography>
+                </form>
+                <ActionButton
+                    className={cx(classes.button, classes.helveticaBold)}
+                    onClick={onSubmit}
+                    disabled={!isValid}>
+                    {t.continue()}
+                </ActionButton>
+            </div>
+            <div className={classes.rightSide} />
         </div>
     )
 })

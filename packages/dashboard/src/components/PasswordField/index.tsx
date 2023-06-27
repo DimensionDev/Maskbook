@@ -7,6 +7,7 @@ export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'> & { show?: 
 
 const PasswordField = forwardRef(({ show = true, ...props }: PasswordFieldProps, ref: ForwardedRef<any>) => {
     const [showPassword, setShowPassword] = useState(false)
+
     return (
         <MaskTextField
             {...props}

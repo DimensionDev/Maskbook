@@ -3,15 +3,12 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 const useStyles = makeStyles()({
     root: {
-        padding: '3vw',
         minHeight: '100vh',
         backgroundColor: MaskColorVar.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
     container: {
-        backgroundColor: MaskColorVar.background,
-        borderRadius: 24,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
