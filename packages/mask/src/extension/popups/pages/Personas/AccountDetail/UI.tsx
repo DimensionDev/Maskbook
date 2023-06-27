@@ -5,10 +5,9 @@ import { AccountAvatar } from '../components/AccountAvatar/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
 import { Trans } from 'react-i18next'
-import type { BindingProof } from '@masknet/shared-base'
+import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
 
 import { WalletList } from '../../../components/WalletSettingList/index.js'
-import type { Account } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {
@@ -44,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface AccountDetailUIProps {
-    account: Account
+    account: ProfileAccount
     onVerify: () => void
     isSupportNextDotID: boolean
     walletProofs?: BindingProof[]

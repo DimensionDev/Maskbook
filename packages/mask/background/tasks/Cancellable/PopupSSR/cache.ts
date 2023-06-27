@@ -1,7 +1,6 @@
 import { throttle } from 'lodash-es'
 import type { Storage } from 'webextension-polyfill'
-import { type Account } from '@masknet/shared'
-import { type EnhanceableSite, MaskMessages } from '@masknet/shared-base'
+import { type EnhanceableSite, MaskMessages, type ProfileAccount } from '@masknet/shared-base'
 import { InternalStorageKeys } from '../../../services/settings/utils.js'
 import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings/index.js'
 import { queryOwnedPersonaInformation } from '../../../services/identity/index.js'
@@ -60,7 +59,7 @@ async function prepareData(): Promise<PopupSSR_Props> {
 
     return {
         language: await language,
-        accounts: currentPersona?.linkedProfiles.map<Account>((profile) => ({
+        accounts: currentPersona?.linkedProfiles.map<ProfileAccount>((profile) => ({
             ...profile,
             identity: profile.identifier.userId,
         })),

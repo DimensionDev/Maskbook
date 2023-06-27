@@ -1,4 +1,4 @@
-import { type EnhanceableSite } from '@masknet/shared-base'
+import { type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -7,7 +7,6 @@ import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/ind
 import { Icons } from '@masknet/icons'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
 import { ConnectSocialAccountModal } from '../../modals/modals.js'
-import type { Account } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     tips: {
@@ -62,10 +61,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface SocialAccountsProps {
-    accounts: Account[]
+    accounts: ProfileAccount[]
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void
-    onAccountClick: (account: Account) => void
+    onAccountClick: (account: ProfileAccount) => void
 }
 
 export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts({

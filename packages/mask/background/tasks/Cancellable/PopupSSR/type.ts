@@ -1,6 +1,5 @@
 import type { LanguageOptions } from '@masknet/public-api'
-import type { Account } from '@masknet/shared'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import type { ProfileAccount, EnhanceableSite } from '@masknet/shared-base'
 
 export interface PopupSSR_Props {
     language: LanguageOptions
@@ -10,5 +9,5 @@ export interface PopupSSR_Props {
     nickname: string | undefined
     linkedProfilesCount: number
     networks: EnhanceableSite[]
-    accounts: Account[] | undefined
+    accounts: ProfileAccount[] | undefined
 }

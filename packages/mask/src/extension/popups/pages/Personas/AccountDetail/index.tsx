@@ -98,7 +98,7 @@ const AccountDetail = memo(() => {
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {
             await updateConfig(pendingUnlistedConfig)
-            showSnackbar(t('popups_save_sucessfully'), {
+            showSnackbar(t('popups_save_successfully'), {
                 variant: 'success',
                 autoHideDuration: 2000,
             })

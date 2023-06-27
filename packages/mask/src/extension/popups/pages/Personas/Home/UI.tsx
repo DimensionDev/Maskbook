@@ -7,11 +7,10 @@ import { Navigator } from '../../../components/Navigator/index.js'
 import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { type EnhanceableSite, formatPersonaFingerprint } from '@masknet/shared-base'
+import { type EnhanceableSite, formatPersonaFingerprint, type ProfileAccount } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
-import type { Account } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -122,10 +121,10 @@ export interface PersonaHomeUIProps {
     onCreatePersona: () => void
     onRestore: () => void
     isEmpty?: boolean
-    accounts: Account[]
+    accounts: ProfileAccount[]
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void
-    onAccountClick: (account: Account) => void
+    onAccountClick: (account: ProfileAccount) => void
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(

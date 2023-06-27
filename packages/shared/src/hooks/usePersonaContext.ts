@@ -12,18 +12,12 @@ import {
     MaskMessages,
     currentPersonaIdentifier,
     ValueRef,
-    type ProfileInformation,
     NextIDPlatform,
+    type ProfileAccount,
 } from '@masknet/shared-base'
 import { usePersonaProofs } from './usePersonaProofs.js'
 
 export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
-
-export interface Account extends ProfileInformation {
-    is_valid?: boolean
-    identity?: string
-    platform?: NextIDPlatform
-}
 
 function useSSRPersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
@@ -50,7 +44,7 @@ function useSSRPersonaInformation(
 function usePersonaContext(initialState?: {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
 }) {
-    const [selectedAccount, setSelectedAccount] = useState<Account>()
+    const [selectedAccount, setSelectedAccount] = useState<ProfileAccount>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
@@ -69,7 +63,7 @@ function usePersonaContext(initialState?: {
     const accounts = useMemo(() => {
         if (!currentPersona) return EMPTY_LIST
 
-        const localProfiles = currentPersona.linkedProfiles.map<Account>((profile) => ({
+        const localProfiles = currentPersona.linkedProfiles.map<ProfileAccount>((profile) => ({
             ...profile,
             identity: profile.identifier.userId,
         }))
@@ -78,7 +72,7 @@ function usePersonaContext(initialState?: {
 
         const remoteProfiles = proofs
             .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform])
-            .map<Account>((x) => {
+            .map<ProfileAccount>((x) => {
                 const network = NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform]
                 return {
                     ...x,
