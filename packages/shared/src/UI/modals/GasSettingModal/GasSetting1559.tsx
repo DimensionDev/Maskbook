@@ -14,12 +14,9 @@ import type { GasSettingProps } from './types.js'
 import {
     formatCurrency,
     GasOptionType,
-    isGreaterThan,
     isGreaterThanOrEqualTo,
-    isLessThan,
     isLessThanOrEqualTo,
     isPositive,
-    multipliedBy,
 } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../index.js'
