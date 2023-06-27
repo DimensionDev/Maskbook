@@ -1,6 +1,5 @@
 import { ArrowPathRoundedSquareIcon, Cog6ToothIcon, RocketLaunchIcon, HeartIcon } from '@heroicons/react/24/outline'
-import { ConnectWalletModal } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { SelectProviderModal } from '@masknet/shared'
 import { classNames } from '../helpers/classNames.js'
 
 const navigation = [
@@ -80,9 +79,7 @@ export function SidebarForDesktop(props: SidebarForDesktopProps) {
                                 onClick={() => {
                                     console.log('DEBUG: open')
 
-                                    ConnectWalletModal.open({
-                                        pluginID: NetworkPluginID.PLUGIN_EVM,
-                                    })
+                                    SelectProviderModal.open()
                                 }}>
                                 <img
                                     className="h-8 w-8 rounded-full bg-gray-800"

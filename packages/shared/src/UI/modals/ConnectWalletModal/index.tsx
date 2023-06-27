@@ -15,26 +15,25 @@ export interface ConnectWalletModalOpenProps {
     pluginID?: NetworkPluginID
     networkType?: Web3Helper.NetworkTypeAll
     providerType?: Web3Helper.ProviderTypeAll
-    walletConnectedCallback?: () => void
 }
+
+export type ConnectWalletModalCloseProps = boolean
 
 export interface ConnectWalletModalProps {}
 
 export const ConnectWalletModal = forwardRef<
-    SingletonModalRefCreator<ConnectWalletModalOpenProps>,
+    SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>,
     ConnectWalletModalProps
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
-    const [walletConnectedCallback, setWalletConnectedCallback] = useState<() => void>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setPluginID(props?.pluginID)
             setProviderType(props?.providerType)
             setNetworkType(props?.networkType)
-            setWalletConnectedCallback(() => props?.walletConnectedCallback)
         },
     })
 
@@ -45,8 +44,8 @@ export const ConnectWalletModal = forwardRef<
             pluginID={pluginID}
             providerType={providerType}
             networkType={networkType}
-            walletConnectedCallback={walletConnectedCallback}
-            onClose={() => dispatch?.close()}
+            onConnect={() => dispatch?.close(true)}
+            onClose={() => dispatch?.close(false)}
         />
     )
 })

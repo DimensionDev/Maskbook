@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
+import { Trans } from 'react-i18next'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
 import { PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginClaimMessage } from '../../../message.js'

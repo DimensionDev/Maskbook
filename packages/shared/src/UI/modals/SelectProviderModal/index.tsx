@@ -7,22 +7,21 @@ import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 export type SelectProviderModalOpenProps = {
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
-    walletConnectedCallback?: () => void
 } | void
+
+export type SelectProviderModalCloseProps = boolean
 
 export interface SelectProviderModalProps {}
 
 export const SelectProviderModal = forwardRef<
-    SingletonModalRefCreator<SelectProviderModalOpenProps>,
+    SingletonModalRefCreator<SelectProviderModalOpenProps, SelectProviderModalCloseProps>,
     SelectProviderModalProps
 >((props, ref) => {
     const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID>()
     const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[]>()
-    const [walletConnectedCallback, setWalletConnectedCallback] = useState<() => void>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setWalletConnectedCallback(() => props?.walletConnectedCallback)
             setRequiredSupportChainIds(props?.requiredSupportChainIds)
             setRequiredSupportPluginID(props?.requiredSupportPluginID)
         },
@@ -38,8 +37,8 @@ export const SelectProviderModal = forwardRef<
             open
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}
-            walletConnectedCallback={walletConnectedCallback}
-            onClose={() => dispatch?.close()}
+            onConnect={() => dispatch?.close(true)}
+            onClose={() => dispatch?.close(false)}
         />
     )
 })

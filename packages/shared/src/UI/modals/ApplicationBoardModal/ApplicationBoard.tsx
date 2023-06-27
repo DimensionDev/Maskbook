@@ -230,8 +230,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired) {
-            return (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) =>
-                SelectProviderModal.open({ walletConnectedCallback, requiredSupportPluginID })
+            return async (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) => {
+                const connected = await SelectProviderModal.openAndWaitForClose({ requiredSupportPluginID })
+                if (connected) walletConnectedCallback?.()
+            }
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false) return () => ApplicationEntryStatus.personaAction?.()
