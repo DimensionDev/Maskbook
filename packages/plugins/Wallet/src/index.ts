@@ -1,10 +1,6 @@
 // Do not export JSX from this file. It might break some runtime that does not have DOM.
 import { registerPlugin } from '@masknet/plugin-infra'
-import { base } from '@masknet/plugin-wallet'
-
-export { base } from './base.js'
-export * from './messages.js'
-export * from './constants.js'
+import { base } from './base.js'
 
 registerPlugin({
     ...base,

@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { createSubscriptionFromAsync, EMPTY_LIST, MaskMessages } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { createSubscriptionFromAsync, CrossIsolationMessages, EMPTY_LIST, MaskMessages } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '../extension/service.js'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
@@ -52,7 +51,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     wallets: createSubscriptionFromAsync(
         () => WalletRPC.getWallets(),
         EMPTY_LIST,
-        WalletMessages.events.walletsUpdated.on,
+        CrossIsolationMessages.events.walletsUpdated.on,
     ),
 
     selectAccount: WalletRPC.selectMaskAccount,

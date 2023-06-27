@@ -1,10 +1,10 @@
 import { first } from 'lodash-es'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
 import { createTransaction } from '../../../../background/database/utils/openDB.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
 import type { RequestPayload } from '../database/types.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
@@ -50,7 +50,7 @@ export async function pushUnconfirmedRequest(payload: RequestPayload) {
               requests: [payload],
           }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: true })
+    CrossIsolationMessages.events.requestsUpdated.sendToAll({ hasRequest: true })
     return payload
 }
 
@@ -75,7 +75,7 @@ export async function updateUnconfirmedRequest(payload: RequestPayload) {
     }
 
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: true })
+    CrossIsolationMessages.events.requestsUpdated.sendToAll({ hasRequest: true })
     return payload
 }
 
@@ -93,6 +93,6 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
         requests,
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
+    CrossIsolationMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
     return payload
 }

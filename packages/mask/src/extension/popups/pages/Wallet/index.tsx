@@ -2,9 +2,8 @@ import urlcat from 'urlcat'
 import { lazy, Suspense, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
-import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletContext } from './hooks/useWalletContext.js'
@@ -106,7 +105,7 @@ export default function Wallet() {
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+        return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
     }, [retry])

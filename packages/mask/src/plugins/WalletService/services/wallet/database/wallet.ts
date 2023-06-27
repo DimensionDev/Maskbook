@@ -1,7 +1,6 @@
 import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { asyncIteratorToArray } from '@masknet/shared-base'
+import { CrossIsolationMessages, asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db.js'
 import type { WalletRecord } from '../type.js'
@@ -87,7 +86,7 @@ export async function addWallet(
         createdAt: now,
         updatedAt: now,
     })
-    WalletMessages.events.walletsUpdated.sendToAll(undefined)
+    CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     return address_
 }
 
@@ -108,10 +107,10 @@ export async function updateWallet(
         createdAt: wallet?.createdAt ?? now,
         updatedAt: now,
     })
-    WalletMessages.events.walletsUpdated.sendToAll(undefined)
+    CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export async function deleteWallet(address: string) {
     await PluginDB.remove('wallet', address)
-    WalletMessages.events.walletsUpdated.sendToAll(undefined)
+    CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 }
