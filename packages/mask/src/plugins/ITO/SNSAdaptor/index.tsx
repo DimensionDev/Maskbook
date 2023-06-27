@@ -14,14 +14,12 @@ import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { ITOInjection } from './ITOInjection.js'
 import { openDialog } from './emitter.js'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
-    },
-    span: {
-        paddingLeft: theme.spacing(1),
     },
 }))
 
@@ -114,7 +112,16 @@ function Badge({ payload }: BadgeProps) {
     return (
         <div className={classes.root}>
             <Icons.ITOLabel size={14} />
-            <span className={classes.span}>{payload.message.split(MSG_DELIMITER)[1] || 'ITO'}</span>
+            <Typography
+                fontSize="12px"
+                lineHeight="16px"
+                fontFamily="Helvetica"
+                marginLeft="8px"
+                maxWidth="450px"
+                overflow="hidden"
+                textOverflow="ellipsis">
+                {payload.message.split(MSG_DELIMITER)[1] || 'ITO'}
+            </Typography>
         </div>
     )
 }
