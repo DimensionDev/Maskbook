@@ -16,7 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 40,
         fontSize: 60,
         borderRadius: 99,
-        boxShadow: '0px 6px 12px 0px rgba(28, 104, 243, 0.20)',
     },
     network: {
         height: 14,
@@ -41,14 +40,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AccountAvatar {
+export interface AccountAvatar extends withClasses<'avatar'> {
     avatar?: string | null
     network?: string
     isValid?: boolean
 }
 
-export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid }) => {
-    const { classes } = useStyles()
+export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid, ...props }) => {
+    const { classes } = useStyles(undefined, { props })
 
     const Icon = network ? SOCIAL_MEDIA_ROUND_ICON_MAPPING[network] : null
 

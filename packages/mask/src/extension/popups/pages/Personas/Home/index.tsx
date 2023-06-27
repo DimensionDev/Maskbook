@@ -1,15 +1,16 @@
 import { memo, useCallback, useContext } from 'react'
 import { PersonaHomeUI } from './UI.js'
-import { DashboardRoutes, EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
-import { useTitle } from '../../../hook/useTitle.js'
+import { DashboardRoutes, EMPTY_LIST, PopupRoutes, type EnhanceableSite } from '@masknet/shared-base'
 import Services from '../../../../service.js'
 import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
-import { PersonaContext } from '@masknet/shared'
+import { PersonaContext, type Account } from '@masknet/shared'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
+import { useNavigate } from 'react-router-dom'
 
 const PersonaHome = memo(() => {
-    const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =
-        PersonaContext.useContainer()
+    const navigate = useNavigate()
+
+    const { avatar, currentPersona, setSelectedAccount, personas, accounts } = PersonaContext.useContainer()
 
     useContext(HydrateFinished)()
 
@@ -37,7 +38,7 @@ const PersonaHome = memo(() => {
         Services.Helper.removePopupWindow()
     }, [])
 
-    const onConnect = useCallback(
+    const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
                 await Services.SocialNetwork.connectSite(
@@ -52,7 +53,10 @@ const PersonaHome = memo(() => {
         [currentPersona],
     )
 
-    useTitle('')
+    const handleAccountClick = useCallback((account: Account) => {
+        setSelectedAccount(account)
+        navigate(PopupRoutes.AccountDetail)
+    }, [])
 
     return (
         <PersonaHomeUI
@@ -65,7 +69,8 @@ const PersonaHome = memo(() => {
             nickname={currentPersona?.nickname}
             onCreatePersona={onCreatePersona}
             onRestore={onRestore}
-            onConnect={onConnect}
+            onConnect={handleConnect}
+            onAccountClick={handleAccountClick}
         />
     )
 })

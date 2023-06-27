@@ -1,22 +1,21 @@
-import { memo } from 'react'
-import { useMatch, useNavigate } from 'react-router-dom'
-import { PersonaContext } from '@masknet/shared'
+import { memo, useContext } from 'react'
+import { useLocation, useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { PersonaHeaderUI } from './UI.js'
 import { NormalHeader } from '../../../../components/NormalHeader/index.js'
 import Services from '../../../../../service.js'
+import { PageTitleContext } from '../../../../context.js'
+import { useUpdateEffect } from '@react-hookz/web'
 
 export const PersonaHeader = memo(() => {
-    const navigate = useNavigate()
-    const matchSelectPersona = useMatch(PopupRoutes.SelectPersona)
-    const matchPersona = useMatch(PopupRoutes.Personas)
-    const { currentPersona, personas } = PersonaContext.useContainer()
+    const location = useLocation()
+    const { extension, setExtension } = useContext(PageTitleContext)
+    const matchHome = useMatch(PopupRoutes.Personas)
 
-    if (!personas.length) return null
+    useUpdateEffect(() => {
+        setExtension(undefined)
+    }, [location.pathname, setExtension])
 
-    return (matchPersona || matchSelectPersona) && currentPersona ? (
-        <PersonaHeaderUI />
-    ) : (
-        <NormalHeader onClose={Services.Helper.removePopupWindow} />
-    )
+    if (matchHome) return null
+
+    return <NormalHeader onClose={Services.Helper.removePopupWindow} extension={extension} />
 })

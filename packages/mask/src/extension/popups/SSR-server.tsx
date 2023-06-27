@@ -48,6 +48,7 @@ function PopupSSR(props: PopupSSR_Props) {
     function useTheme() {
         return usePopupFullPageTheme(props.language)
     }
+
     return (
         // MaskUIRoot
         <DisableShadowRootContext.Provider value>
@@ -62,11 +63,12 @@ function PopupSSR(props: PopupSSR_Props) {
                                 {/* Persona */}
                                 <Suspense fallback={null}>
                                     <PersonaHomeUI
-                                        accounts={EMPTY_LIST}
+                                        accounts={props.accounts ?? EMPTY_LIST}
                                         networks={props.networks}
                                         onRestore={noop}
                                         onCreatePersona={noop}
                                         onConnect={noop}
+                                        onAccountClick={noop}
                                         avatar={props.avatar}
                                         fingerprint={props.currentFingerPrint || ''}
                                         isEmpty={!props.hasPersona}

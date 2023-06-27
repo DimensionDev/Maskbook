@@ -1036,9 +1036,42 @@ export const Collectible = /*#__PURE__*/ __createIcon(
     ],
     [13, 12],
 )
+export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
+    {
+        u: () => new URL('./general/Comeback.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'M20 11H7.414l4.293-4.293a1 1 0 0 0-1.414-1.414l-6 6a1 1 0 0 0 0 1.414l6 6a.996.996 0 0 0 1.415 0 1 1 0 0 0 0-1.414L7.413 13H20a1 1 0 1 0 0-2Z',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Connect = /*#__PURE__*/ __createIcon('Connect', [
     {
         u: () => new URL('./general/Connect.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                viewBox: '0 0 20 20',
+                children: /*#__PURE__*/ _jsxs('g', {
+                    fill: 'currentColor',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            d: 'M6.39 8.988a.6.6 0 0 1 .6-.6h4.02a.6.6 0 1 1 0 1.2H6.99a.6.6 0 0 1-.6-.6Z',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            d: 'M1.986 9a3.961 3.961 0 0 1 3.96-3.96h2.015v1.2H5.947a2.761 2.761 0 1 0 0 5.521H7.96v1.2H5.947a3.961 3.961 0 0 1-3.961-3.96Zm14.028 0a3.961 3.961 0 0 0-3.96-3.96H9.288v1.2h2.764a2.761 2.761 0 0 1 0 5.521H9.29v1.2h2.764a3.961 3.961 0 0 0 3.961-3.96Z',
+                        }),
+                    ],
+                }),
+            }),
+        s: true,
     },
 ])
 export const Contacts = /*#__PURE__*/ __createIcon('Contacts', [
@@ -1142,6 +1175,32 @@ export const Delete = /*#__PURE__*/ __createIcon('Delete', [
                     strokeWidth: '1.25',
                     d: 'M2 4h12M5.333 4V2.667a1.333 1.333 0 0 1 1.334-1.334h2.666a1.334 1.334 0 0 1 1.334 1.334V4m2 0v9.333a1.334 1.334 0 0 1-1.334 1.334H4.667a1.333 1.333 0 0 1-1.334-1.334V4h9.334zm-6 3.333v4m2.666-4v4',
                 }),
+            }),
+        s: true,
+    },
+])
+export const Disconnect = /*#__PURE__*/ __createIcon('Disconnect', [
+    {
+        u: () => new URL('./general/Disconnect.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M16.348 4.455a.8.8 0 0 1 .293 1.093L8.746 19.223a.8.8 0 0 1-1.386-.8l7.895-13.675a.8.8 0 0 1 1.093-.293Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M2.647 12A5.281 5.281 0 0 1 7.93 6.72h3.316v1.6H7.929a3.681 3.681 0 1 0 0 7.362h1.163v1.6H7.93a5.281 5.281 0 0 1-5.282-5.28Zm18.705 0a5.281 5.281 0 0 0-5.28-5.281h-1.66v1.6h1.66a3.681 3.681 0 0 1 0 7.362H12.35v1.6h3.72a5.281 5.281 0 0 0 5.281-5.28Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
             }),
         s: true,
     },
@@ -1439,15 +1498,14 @@ export const GrayMasks = /*#__PURE__*/ __createIcon('GrayMasks', [
         u: () => new URL('./general/GrayMasks.svg', import.meta.url),
     },
 ])
-export const HamburgeMenu = /*#__PURE__*/ __createIcon('HamburgeMenu', [
+export const HamburgerMenu = /*#__PURE__*/ __createIcon('HamburgerMenu', [
     {
-        u: () => new URL('./general/HamburgeMenu.svg', import.meta.url),
+        u: () => new URL('./general/HamburgerMenu.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
-                width: '24',
-                height: '24',
                 fill: 'none',
+                viewBox: '0 0 24 24',
                 children: /*#__PURE__*/ _jsxs('g', {
                     fill: 'currentColor',
                     children: [
@@ -1827,6 +1885,19 @@ export const Poll = /*#__PURE__*/ __createIcon('Poll', [
 export const PopupClose = /*#__PURE__*/ __createIcon('PopupClose', [
     {
         u: () => new URL('./general/PopupClose.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    stroke: 'currentColor',
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    strokeWidth: '1.25',
+                    d: 'm6 6 12 12M6 18 18 6',
+                }),
+            }),
+        s: true,
     },
 ])
 export const PopupCopy = /*#__PURE__*/ __createIcon('PopupCopy', [
@@ -2369,11 +2440,42 @@ export const TransactionFailed = /*#__PURE__*/ __createIcon('TransactionFailed',
         u: () => new URL('./general/TransactionFailed.svg', import.meta.url),
     },
 ])
-export const Trash = /*#__PURE__*/ __createIcon('Trash', [
-    {
-        u: () => new URL('./general/Trash.svg', import.meta.url),
-    },
-])
+export const Trash = /*#__PURE__*/ __createIcon(
+    'Trash',
+    [
+        {
+            u: () => new URL('./general/Trash.svg', import.meta.url),
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 25 24',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M2.5 6a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2h-18a1 1 0 0 1-1-1Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M10.5 3a1 1 0 0 0-1 1v1h6V4a1 1 0 0 0-1-1h-4Zm7 2V4a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3v1h-2a1 1 0 0 0-1 1v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V6a1 1 0 0 0-1-1h-2Zm-11 2v13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7h-12Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M10.5 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Z',
+                            clipRule: 'evenodd',
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [25, 24],
+)
 export const TrashLine = /*#__PURE__*/ __createIcon('TrashLine', [
     {
         u: () => new URL('./general/TrashLine.svg', import.meta.url),

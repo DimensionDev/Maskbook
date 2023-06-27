@@ -150,6 +150,7 @@ export function close_url() { return new URL("./general/Close.svg", import.meta.
 export function cloud_backup_url() { return new URL("./general/CloudBackup.png", import.meta.url) }
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url) }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url) }
+export function comeback_url() { return new URL("./general/Comeback.svg", import.meta.url) }
 export function connect_url() { return new URL("./general/Connect.svg", import.meta.url) }
 export function contacts_url() { return new URL("./general/Contacts.svg", import.meta.url) }
 export function copy_url() { return new URL("./general/Copy.svg", import.meta.url) }
@@ -159,6 +160,7 @@ export function default_token_dark_url() { return new URL("./general/DefaultToke
 export function default_token_dim_url() { return new URL("./general/DefaultToken.dim.svg", import.meta.url) }
 export function default_token_light_url() { return new URL("./general/DefaultToken.light.svg", import.meta.url) }
 export function delete_url() { return new URL("./general/Delete.svg", import.meta.url) }
+export function disconnect_url() { return new URL("./general/Disconnect.svg", import.meta.url) }
 export function document_url() { return new URL("./general/Document.svg", import.meta.url) }
 export function double_arrow_up_url() { return new URL("./general/DoubleArrowUp.svg", import.meta.url) }
 export function download_url() { return new URL("./general/Download.svg", import.meta.url) }
@@ -185,7 +187,7 @@ export function gear_light_url() { return new URL("./general/Gear.light.svg", im
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url) }
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url) }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url) }
-export function hamburge_menu_url() { return new URL("./general/HamburgeMenu.svg", import.meta.url) }
+export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.svg", import.meta.url) }
 export function history_dark_url() { return new URL("./general/History.dark.svg", import.meta.url) }
 export function history_light_url() { return new URL("./general/History.light.svg", import.meta.url) }
 export function identity_dark_url() { return new URL("./general/Identity.dark.svg", import.meta.url) }

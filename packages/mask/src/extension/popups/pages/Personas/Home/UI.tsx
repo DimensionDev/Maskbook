@@ -10,8 +10,8 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { type EnhanceableSite, formatPersonaFingerprint } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
-import type { Account } from '../type.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
+import type { Account } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -125,6 +125,7 @@ export interface PersonaHomeUIProps {
     accounts: Account[]
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void
+    onAccountClick: (account: Account) => void
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -139,6 +140,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         networks,
         onConnect,
         publicKey,
+        onAccountClick,
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
@@ -154,7 +156,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
                                 <Box className={classes.header}>
                                     <Icons.MaskSquare className={classes.logo} />
-                                    <Icons.HamburgeMenu className={classes.menu} />
+                                    <Icons.HamburgerMenu className={classes.menu} />
                                 </Box>
                                 <Box className={classes.info}>
                                     <Box position="relative">
@@ -202,7 +204,12 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 </MaskTabList>
                             </Box>
                             <TabPanel className={classes.panel} value={TabType.SocialAccounts}>
-                                <SocialAccounts accounts={accounts} networks={networks} onConnect={onConnect} />
+                                <SocialAccounts
+                                    accounts={accounts}
+                                    networks={networks}
+                                    onConnect={onConnect}
+                                    onAccountClick={onAccountClick}
+                                />
                             </TabPanel>
                         </TabContext>
                     ) : (

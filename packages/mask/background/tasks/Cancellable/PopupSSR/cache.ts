@@ -1,5 +1,6 @@
 import { throttle } from 'lodash-es'
 import type { Storage } from 'webextension-polyfill'
+import { type Account } from '@masknet/shared'
 import { type EnhanceableSite, MaskMessages } from '@masknet/shared-base'
 import { InternalStorageKeys } from '../../../services/settings/utils.js'
 import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings/index.js'
@@ -50,12 +51,19 @@ export function startListen(
 
 async function prepareData(): Promise<PopupSSR_Props> {
     const language = getLanguage()
-    const id = await getCurrentPersonaIdentifier()
-    const personas = await queryOwnedPersonaInformation(false)
+    const [id, personas, networks] = await Promise.all([
+        getCurrentPersonaIdentifier(),
+        queryOwnedPersonaInformation(false),
+        getSupportedSites({ isSocialNetwork: true }),
+    ])
     const currentPersona = personas.find((x) => x.identifier === id) || personas.at(0)
-    const networks = await getSupportedSites({ isSocialNetwork: true })
+
     return {
         language: await language,
+        accounts: currentPersona?.linkedProfiles.map<Account>((profile) => ({
+            ...profile,
+            identity: profile.identifier.userId,
+        })),
         avatar: currentPersona?.avatar,
         currentFingerPrint: id?.rawPublicKey,
         hasPersona: !!currentPersona,

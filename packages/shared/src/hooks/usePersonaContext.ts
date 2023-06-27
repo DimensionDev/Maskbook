@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { head, unionWith } from 'lodash-es'
+import { head, unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -13,7 +13,7 @@ import {
     currentPersonaIdentifier,
     ValueRef,
     type ProfileInformation,
-    type NextIDPlatform,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import { usePersonaProofs } from './usePersonaProofs.js'
 
@@ -98,6 +98,14 @@ function usePersonaContext(initialState?: {
         })
     }, [proofs, currentPersona])
 
+    const walletProofs = useMemo(() => {
+        if (!proofs?.length) return EMPTY_LIST
+        return uniqBy(
+            proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum),
+            (x) => x.identity,
+        )
+    }, [proofs])
+
     return {
         accounts,
         selectedAccount,
@@ -109,6 +117,7 @@ function usePersonaContext(initialState?: {
         setSelectedPersona,
         proofs,
         fetchProofsLoading,
+        walletProofs,
     }
 }
 

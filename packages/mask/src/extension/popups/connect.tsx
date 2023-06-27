@@ -1,5 +1,5 @@
 import { NetworkPluginID, PopupRoutes, languageSettings, queryRemoteI18NBundle } from '@masknet/shared-base'
-import { lazy, useEffect, useState } from 'react'
+import { lazy, useEffect, useState, type ReactNode } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -34,6 +34,7 @@ function PluginRenderDelayed() {
 
 export default function PopupsConnect() {
     const [title, setTitle] = useState('')
+    const [extension, setExtension] = useState<ReactNode | undefined>()
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     return PageUIProvider(
@@ -45,7 +46,7 @@ export default function PopupsConnect() {
                         initialState={{
                             queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
                         }}>
-                        <PageTitleContext.Provider value={{ title, setTitle }}>
+                        <PageTitleContext.Provider value={{ title, setTitle, extension, setExtension }}>
                             <HashRouter>
                                 <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
                                 <Routes>
