@@ -19,6 +19,9 @@ import type {
     SmartPayDialogEvent,
     RenameWalletEvent,
     FollowLensDialogEvent,
+    WalletsUpdatedEvent,
+    RequestsUpdatedEvent,
+    WalletLockStatusUpdatedEvent,
 } from './Events.js'
 
 /**
@@ -58,4 +61,8 @@ export interface CrossIsolationEvents {
      * Application Persona List dialog
      */
     PersonaSelectPanelDialogUpdated: PersonaSelectPanelDialogEvent
+
+    walletsUpdated: WalletsUpdatedEvent
+    requestsUpdated: RequestsUpdatedEvent
+    walletLockStatusUpdated: WalletLockStatusUpdatedEvent
 }

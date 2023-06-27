@@ -11,12 +11,12 @@ import { useChainIdValid, useWallets, useChainContext } from '@masknet/web3-hook
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { WalletItem } from './WalletItem.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletStartUp } from '../components/StartUp/index.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     content: {

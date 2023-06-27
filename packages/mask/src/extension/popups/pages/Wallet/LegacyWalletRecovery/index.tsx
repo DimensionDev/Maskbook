@@ -15,9 +15,9 @@ import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index
 import { useHasPassword } from '../../../hook/useHasPassword.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     container: {

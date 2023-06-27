@@ -1,13 +1,13 @@
-import { setService, setPluginMessages, setMessages, setPluginServices, IntegratedDashboard } from '@masknet/dashboard'
+import { IntegratedDashboard, setMessages, setPluginMessages, setPluginServices, setService } from '@masknet/dashboard'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
-import Services from '../service.js'
-import { WalletRPC } from '../../plugins/Wallet/messages.js'
+import { createPartialSharedUIContext, createPluginHost } from '../../../shared/plugin-infra/host.js'
+import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { status } from '../../setup.ui.js'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
-import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
+import Services from '../service.js'
 
 setService(Services)
 setMessages(MaskMessages)

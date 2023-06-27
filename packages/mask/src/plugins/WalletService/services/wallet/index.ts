@@ -5,10 +5,10 @@ import { Signer } from '@masknet/web3-providers'
 import type { SignType, Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { MAX_DERIVE_COUNT } from '@masknet/plugin-wallet'
 import * as database from './database/index.js'
 import * as password from './password.js'
 import * as Mask from '../maskwallet/index.js'
+import { MAX_DERIVE_COUNT } from '../../constants.js'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
