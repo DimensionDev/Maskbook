@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
+    AddCollectiblesModal,
     ChainBoundary,
     CollectionList,
     PluginVerifiedWalletStatusBar,
     UserAssetsProvider,
-    useAddCollectibles,
     useSharedI18N,
 } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -133,18 +133,17 @@ export function NFTListDialog() {
 
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
-    const addCollectibles = useAddCollectibles()
     const handleAddCollectibles = useCallback(async () => {
-        const result = await addCollectibles({
+        const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId: assetChainId,
             account: targetAccount,
         })
-        if (!result || !assetChainId) return
-        const [contract, tokenIds] = result
+        if (!results || !assetChainId) return
+        const [contract, tokenIds] = results
         const address = contract.address
         setPendingTokenCount((count) => count + tokenIds.length)
-        const results = await Promise.allSettled(
+        const allSettled = await Promise.allSettled(
             tokenIds.map(async (tokenId) => {
                 const [asset, token, isOwner] = await Promise.all([
                     Hub.getNonFungibleAsset(address, tokenId, {
@@ -165,12 +164,12 @@ export function NFTListDialog() {
             }),
         )
         setPendingTokenCount((count) => Math.max(count - tokenIds.length, 0))
-        const tokens = compact(results.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        const tokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
         if (!tokens.length) return
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [addCollectibles, pluginID, assetChainId, targetAccount])
+    }, [pluginID, assetChainId, targetAccount])
 
     useEffect(() => {
         setSelectedPluginId(pluginID)
