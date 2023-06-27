@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo, useContext } from 'react'
+import { memo, useContext, type ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -8,22 +8,19 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { PageTitleContext } from '../../context.js'
 import { PopupRoutes } from '@masknet/shared-base'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
-        padding: 17,
+        background: theme.palette.maskColor.modalTitleBg,
+        padding: theme.spacing(2),
         lineHeight: 0,
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '24px auto 24px',
         alignItems: 'center',
-        position: 'relative',
     },
     back: {
-        position: 'absolute',
-        left: 16,
-        top: 16,
         fontSize: 24,
         cursor: 'pointer',
+        color: theme.palette.maskColor.main,
     },
     close: {
         position: 'absolute',
@@ -31,13 +28,15 @@ const useStyles = makeStyles()(() => ({
         top: 16,
         fontSize: 24,
         cursor: 'pointer',
+        color: theme.palette.maskColor.main,
     },
     title: {
         fontSize: 14,
-        lineHeight: '24px',
-        color: '#15181B',
+        lineHeight: '22px',
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
-        minHeight: 24,
+        minHeight: 22,
+        textAlign: 'center',
     },
     logo: {
         width: 96,
@@ -48,6 +47,7 @@ const useStyles = makeStyles()(() => ({
 interface NormalHeaderProps {
     onlyTitle?: boolean
     onClose(): void
+    extension?: ReactNode
 }
 
 function canNavBack() {
@@ -56,7 +56,7 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose }) => {
+export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose, extension }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
@@ -85,19 +85,16 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose }) => 
     }
 
     return (
-        <Box
-            className={classes.container}
-            style={{
-                justifyContent: showTitle ? 'center' : 'flex-start',
-            }}>
+        <Box className={classes.container}>
             {showTitle ? (
                 <>
-                    <Icons.SquareBack className={classes.back} onClick={() => navigate(-1)} />
+                    <Icons.Comeback className={classes.back} onClick={() => navigate(-1)} />
                     <Typography className={classes.title}>{title}</Typography>
                 </>
             ) : (
                 <Icons.Mask className={classes.logo} />
             )}
+            {extension}
         </Box>
     )
 })

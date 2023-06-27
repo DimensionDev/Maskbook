@@ -8,8 +8,8 @@ import {
     PopupRoutes,
     NetworkPluginID,
     SignType,
-    type Account,
     MaskMessages,
+    type Account,
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'

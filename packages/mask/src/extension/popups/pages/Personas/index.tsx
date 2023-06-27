@@ -4,15 +4,14 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js
 
 import { PersonaContext } from '@masknet/shared'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { PersonaHeader } from './components/PersonaHeader/index.js'
 import Services from '../../../service.js'
+import { PersonaHeader } from './components/PersonaHeader/index.js'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
 const PersonaRename = lazy(() => import('./Rename/index.js'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest/index.js'))
 const SelectPersona = lazy(() => import('./SelectPersona/index.js'))
-const Accounts = lazy(() => import('./Accounts/index.js'))
 const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
 const ConnectedWallets = lazy(() => import('./ConnectedWallets/index.js'))
 
@@ -30,7 +29,6 @@ const Persona = memo(() => {
                     <Route path={r(PopupRoutes.PersonaRename)} element={<PersonaRename />} />
                     <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
                     <Route path={r(PopupRoutes.SelectPersona)} element={<SelectPersona />} />
-                    <Route path={r(PopupRoutes.SocialAccounts)} element={<Accounts />} />
                     <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
                     <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
                     <Route path="*" element={<Home />} />

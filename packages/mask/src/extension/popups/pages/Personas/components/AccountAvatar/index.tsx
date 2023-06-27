@@ -5,50 +5,49 @@ import { Icons } from '@masknet/icons'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { EnhanceableSite } from '@masknet/shared-base'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'relative',
-        width: 60,
-        height: 60,
+        width: 40,
+        height: 40,
     },
     avatar: {
-        width: 60,
-        height: 60,
+        width: 40,
+        height: 40,
         fontSize: 60,
         borderRadius: 99,
-        border: '1px solid #e6e7e8',
     },
     network: {
-        height: 24,
-        width: 24,
+        height: 14,
+        width: 14,
         borderRadius: 99,
         position: 'absolute',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        right: -10,
-        bottom: 2,
+        right: -7,
+        bottom: 0,
     },
     valid: {
-        width: 10,
-        height: 10,
+        width: 6,
+        height: 6,
         borderRadius: 99,
-        border: '1px solid #ffffff',
+        border: `1px solid ${theme.palette.maskColor.bottom}`,
         position: 'absolute',
         top: 3,
-        right: -3,
-        backgroundColor: '#FFB100',
+        right: 2,
+        backgroundColor: theme.palette.maskColor.warn,
     },
 }))
 
-export interface AccountAvatar {
+export interface AccountAvatar extends withClasses<'avatar'> {
     avatar?: string | null
     network?: string
     isValid?: boolean
 }
 
-export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid }) => {
-    const { classes } = useStyles()
+export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid, ...props }) => {
+    const { classes } = useStyles(undefined, { props })
 
     const Icon = network ? SOCIAL_MEDIA_ROUND_ICON_MAPPING[network] : null
 
@@ -61,7 +60,7 @@ export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid }) 
             )}
             {Icon ? (
                 <div className={classes.network}>
-                    <Icon size={24} />
+                    <Icon size={14} />
                 </div>
             ) : null}
             {!isValid && network === EnhanceableSite.Twitter ? <div className={classes.valid} /> : null}

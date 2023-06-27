@@ -1,5 +1,5 @@
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/base'
-import type { NextIDPersonaBindings } from '../NextID/types.js'
+import type { NextIDPersonaBindings, NextIDPlatform } from '../NextID/types.js'
 /**
  * This interface contains the minimal information for UI display
  */
@@ -19,6 +19,12 @@ export interface ProfileInformation {
     avatar?: string
     identifier: ProfileIdentifier
     linkedPersona?: PersonaIdentifier
+}
+
+export interface ProfileAccount extends ProfileInformation {
+    is_valid?: boolean
+    identity?: string
+    platform?: NextIDPlatform
 }
 
 export interface ProfileInformationFromNextID extends ProfileInformation {

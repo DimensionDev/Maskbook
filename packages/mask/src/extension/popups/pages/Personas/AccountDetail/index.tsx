@@ -1,27 +1,37 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import {
     type EnhanceableSite,
-    NextIDAction,
     PopupRoutes,
-    SignType,
     SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID,
+    PluginID,
+    EMPTY_LIST,
+    EMPTY_OBJECT,
+    NextIDAction,
+    SignType,
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
-import { NextIDProof } from '@masknet/web3-providers'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '../../../../service.js'
-import { DisconnectDialog } from '../components/DisconnectDialog/index.js'
+import { PageTitleContext } from '../../../context.js'
+import { Icons } from '@masknet/icons'
+import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
+import { useUpdateEffect } from '@react-hookz/web'
+import { isEqualWith, uniq, sortBy, isEqual } from 'lodash-es'
+import { DisconnectModal } from '../../../modals/modals.js'
+import { NextIDProof } from '@masknet/web3-providers'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const { selectedAccount, currentPersona } = PersonaContext.useContainer()
-    const [open, setOpen] = useState(false)
+    const { selectedAccount, currentPersona, walletProofs } = PersonaContext.useContainer()
+    const { setExtension } = useContext(PageTitleContext)
+
+    const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -29,14 +39,50 @@ const AccountDetail = memo(() => {
         ? SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite)
         : false
 
-    const [disconnectState, onDisconnect] = useAsyncFn(async () => {
+    const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
+        useUnlistedAddressConfig({
+            identifier: currentPersona?.identifier,
+            pluginID: PluginID.Web3Profile,
+            socialIds:
+                isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
+                    ? [selectedAccount.identity]
+                    : EMPTY_LIST,
+        })
+
+    const isClean = useMemo(() => {
+        if (!selectedAccount?.is_valid) return true
+
+        return isEqualWith(unlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
+            // Some identities might only in pendingUnlistedConfig but not in migratedUnlistedAddressConfig,
+            // so we merged all the identities
+            const keys = uniq([...Object.keys(config1), ...Object.keys(config2)])
+            for (const key of keys) {
+                if (!isEqual(sortBy(config1[key] || []), sortBy(config2[key] || []))) return false
+            }
+            return true
+        })
+    }, [unlistedAddressConfig, pendingUnlistedConfig, selectedAccount])
+
+    const listingAddresses = useMemo(() => {
+        if (!selectedAccount?.identity) return EMPTY_LIST
+        const pendingUnlistedAddresses = pendingUnlistedConfig[selectedAccount.identity] ?? EMPTY_LIST
+        const addresses = walletProofs.map((x) => x.identity)
+        return addresses.filter((x) => !pendingUnlistedAddresses.includes(x))
+    }, [pendingUnlistedConfig, selectedAccount])
+
+    const toggleUnlisted = useCallback((identity: string, address: string) => {
+        setPendingUnlistedConfig((config) => {
+            const list = config[identity] ?? []
+            return {
+                ...config,
+                [identity]: list.includes(address) ? list.filter((x) => x !== address) : [...list, address],
+            }
+        })
+    }, [])
+
+    const handleDetachProfile = useCallback(async () => {
         try {
             if (!selectedAccount?.identifier) return
-
-            if (isSupportNextDotID && selectedAccount.is_valid) {
-                setOpen(true)
-                return
-            }
             await Service.Identity.detachProfile(selectedAccount.identifier)
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
@@ -49,7 +95,23 @@ const AccountDetail = memo(() => {
         }
     }, [selectedAccount])
 
-    const [confirmState, onConfirmReleaseBind] = useAsyncFn(async () => {
+    const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
+        try {
+            await updateConfig(pendingUnlistedConfig)
+            showSnackbar(t('popups_save_successfully'), {
+                variant: 'success',
+                autoHideDuration: 2000,
+            })
+        } catch {
+            showSnackbar(t('popups_save_failed'), {
+                variant: 'error',
+            })
+        }
+
+        refetch()
+    }, [pendingUnlistedConfig, t, updateConfig])
+
+    const handleConfirmReleaseBind = useCallback(async () => {
         try {
             if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
                 return
@@ -108,7 +170,28 @@ const AccountDetail = memo(() => {
 
     useEffect(() => {
         if (!selectedAccount) navigate(PopupRoutes.Personas, { replace: true })
-    }, [selectedAccount])
+        setExtension(
+            !selectedAccount?.is_valid ? (
+                <Icons.Trash size={24} onClick={handleDetachProfile} />
+            ) : (
+                <Icons.Disconnect
+                    size={24}
+                    onClick={() => {
+                        if (!currentPersona) return
+                        DisconnectModal.open({
+                            currentPersona,
+                            unbundledIdentity: selectedAccount.identifier,
+                            onSubmit: handleConfirmReleaseBind,
+                        })
+                    }}
+                />
+            ),
+        )
+    }, [selectedAccount, handleDetachProfile, currentPersona, handleConfirmReleaseBind])
+
+    useUpdateEffect(() => {
+        setPendingUnlistedConfig(unlistedAddressConfig)
+    }, [JSON.stringify(unlistedAddressConfig)])
 
     if (!selectedAccount) return null
 
@@ -116,18 +199,15 @@ const AccountDetail = memo(() => {
         <>
             <AccountDetailUI
                 account={selectedAccount}
-                personaName={currentPersona?.nickname}
                 onVerify={onVerify}
-                onDisconnect={onDisconnect}
-                disconnectLoading={disconnectState.loading}
                 isSupportNextDotID={isSupportNextDotID}
-            />
-            <DisconnectDialog
-                unbundledIdentity={selectedAccount.identifier}
-                onConfirmDisconnect={onConfirmReleaseBind}
-                confirmLoading={confirmState.loading}
-                onClose={() => setOpen(false)}
-                open={open}
+                walletProofs={walletProofs}
+                isClean={isClean}
+                toggleUnlisted={toggleUnlisted}
+                listingAddresses={listingAddresses}
+                loading={isInitialLoading}
+                onSubmit={handleSubmit}
+                submitting={submitting}
             />
         </>
     )
