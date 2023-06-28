@@ -1260,9 +1260,6 @@ importers:
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../shared
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
@@ -1413,6 +1410,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
       '@masknet/theme':
         specifier: workspace:^
         version: link:../../theme
@@ -2280,6 +2280,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
       '@masknet/theme':
         specifier: workspace:^
         version: link:../../theme
@@ -2871,6 +2874,9 @@ importers:
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../plugin-infra
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api
