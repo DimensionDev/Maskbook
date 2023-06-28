@@ -1,7 +1,6 @@
 import { parseURLs } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { artBlocksHostnames, artBlocksPathnameRegex } from './constants.js'
-import { useState } from 'react'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -34,16 +33,6 @@ export function getAssetInfoFromURL(url?: string) {
 
 export function buildTokenId(projectId: number, invocation: number) {
     return projectId * 1000000 + invocation
-}
-
-export function useControlledDialog() {
-    const [open, setOpen] = useState(false)
-    return {
-        open,
-        setOpen,
-        onClose: () => setOpen(false),
-        onOpen: () => setOpen(true),
-    }
 }
 
 export function isTwitter() {
