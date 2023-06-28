@@ -1,7 +1,11 @@
-import { defer } from '@masknet/kit'
-import { isEqual } from 'lodash-es'
-import { EMPTY_LIST, EMPTY_OBJECT } from '../Pure/index.js'
-import stringify from 'json-stable-stringify'
+// All imports must be deferred. This file loads in the very early stage.
+
+import * as kit /* webpackDefer: true */ from '@masknet/kit'
+// false positive. we're not using lodash.get
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import * as lodash /* webpackDefer: true */ from 'lodash-es'
+import * as pure /* webpackDefer: true */ from '../Pure/index.js'
+import * as stringify /* webpackDefer: true */ from 'json-stable-stringify'
 
 export type ValueComparer<T> = (a: T, b: T) => boolean
 const defaultComparer: ValueComparer<any> = (a, b) => a === b
@@ -52,7 +56,7 @@ export class ValueRefWithReady<T> extends ValueRef<T> {
     constructor(value?: T | undefined, isEqual: ValueComparer<T> = defaultComparer) {
         // this is unsafe. we assigned T | undefined to T
         super(value!, isEqual)
-        const [promise, resolve] = defer<void>()
+        const [promise, resolve] = kit.defer<void>()
         this.readyPromise = promise.then(() => this.value)
         this.nowReady = resolve
     }
@@ -78,7 +82,7 @@ export class ValueRefWithReady<T> extends ValueRef<T> {
  */
 export class ValueRefJSON<T extends object> extends ValueRefWithReady<string> {
     constructor(defaultValue: T) {
-        super(stringify(defaultValue), isEqual)
+        super(stringify.default(defaultValue), lodash.isEqual)
     }
     override get value(): string {
         return super.value
@@ -88,15 +92,15 @@ export class ValueRefJSON<T extends object> extends ValueRefWithReady<string> {
             super.value = value
             return
         }
-        if (isEqual(this.asJSON, value)) return
+        if (lodash.isEqual(this.asJSON, value)) return
         this.json = value
-        super.value = stringify(value)
+        super.value = stringify.default(value)
     }
     private json: Readonly<T> | undefined
     get asJSON(): Readonly<T> {
         if (this.json) return this.json
-        if (this.value === '[]') return (this.json = EMPTY_LIST as any)
-        if (this.value === '{}') return (this.json = EMPTY_OBJECT as any)
+        if (this.value === '[]') return (this.json = pure.EMPTY_LIST as any)
+        if (this.value === '{}') return (this.json = pure.EMPTY_OBJECT as any)
         return (this.json = JSON.parse(this.value))
     }
 }

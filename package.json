@@ -102,7 +102,7 @@
       "@ethersproject/providers": "5.7.2",
       "reflect-metadata": "0.1.13",
       "@storybook/react-docgen-typescript-plugin": "npm:react-docgen-typescript-plugin@1.0.2",
-      "webpack@5": "Jack-Works/webpack#lazy-import"
+      "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770"
     },
     "override comments": {
       "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit",
