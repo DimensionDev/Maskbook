@@ -1,11 +1,10 @@
-import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
+import { InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ConsoleContent } from './ConsoleContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
-import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks/index.js'
 
 export interface ConsoleDialogProps {}
 

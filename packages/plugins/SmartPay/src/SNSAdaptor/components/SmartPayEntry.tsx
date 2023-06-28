@@ -1,11 +1,10 @@
 import { memo, useCallback, useEffect } from 'react'
 import { Trans } from 'react-i18next'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
-import { ApplicationEntry, LeavePageConfirmModal, useSharedI18N } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmModal, useSharedI18N, useRemoteControlledDialog } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 export interface SmartPayEntryProps {

@@ -1,5 +1,5 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { memo } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginPetMessages } from '../messages.js'
 import AnimatePic from './Animate.js'
 import { PetDialog } from './PetDialog.js'

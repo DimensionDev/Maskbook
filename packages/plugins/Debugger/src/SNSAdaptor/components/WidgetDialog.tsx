@@ -1,10 +1,9 @@
-import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
+import { InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { WidgetContent } from './WidgetContent.js'
-import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks/index.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
 export interface WidgetDialogProps {}

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, alpha, DialogActions } from '@mui/material'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
+    useRemoteControlledDialog,
     InjectedDialog,
     PluginWalletStatusBar,
     ChainBoundary,

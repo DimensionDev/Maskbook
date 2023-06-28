@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     CrossIsolationMessages,
     DashboardRoutes,

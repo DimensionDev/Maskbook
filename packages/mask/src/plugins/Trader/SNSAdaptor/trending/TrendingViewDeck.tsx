@@ -10,6 +10,7 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     useTokenMenuCollectionList,
+    useRemoteControlledDialog,
 } from '@masknet/shared'
 import {
     type NetworkPluginID,
@@ -19,7 +20,7 @@ import {
     CrossIsolationMessages,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useAnchor } from '@masknet/shared-base-ui'
 import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'

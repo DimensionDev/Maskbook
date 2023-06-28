@@ -12,7 +12,7 @@ import {
     FormattedCurrency,
 } from '@masknet/shared'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
     useChainContext,

@@ -1,8 +1,8 @@
 import { ActionButton } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginGoPlusSecurityMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 interface Token {
     contract: string

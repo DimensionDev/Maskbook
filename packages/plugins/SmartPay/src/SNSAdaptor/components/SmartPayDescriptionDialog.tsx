@@ -1,9 +1,8 @@
-import { InjectedDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { Box, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
+import { Box, DialogContent, Typography } from '@mui/material'
+import { InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
 
 const useStyles = makeStyles()((theme) => ({

@@ -1,5 +1,7 @@
+import type { HTMLProps } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
-import { SocialAccountList, useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { SocialAccountList, useCurrentPersonaConnectStatus, useRemoteControlledDialog } from '@masknet/shared'
 import {
     CrossIsolationMessages,
     EMPTY_LIST,
@@ -7,12 +9,9 @@ import {
     type SocialAccount,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useQuery } from '@tanstack/react-query'
-import type { HTMLProps } from 'react'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'

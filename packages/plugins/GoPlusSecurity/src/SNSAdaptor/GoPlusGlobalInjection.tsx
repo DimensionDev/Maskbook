@@ -1,10 +1,10 @@
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { memo, useEffect, useState } from 'react'
-import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog.js'
-import { CheckSecurityDialog } from './CheckSecurityDialog.js'
-import { RiskWarningDialog, type Token } from './components/RiskWarningDialog.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog.js'
+import { RiskWarningDialog, type Token } from './components/RiskWarningDialog.js'
+import { CheckSecurityDialog } from './CheckSecurityDialog.js'
 import { PluginGoPlusSecurityMessages } from '../messages.js'
 
 export const GoPlusGlobalInjection = memo(function GoPlusGlobalInjection() {

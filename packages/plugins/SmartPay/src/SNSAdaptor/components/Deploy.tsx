@@ -2,11 +2,17 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
+import { Typography, alpha, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
+import {
+    ImageIcon,
+    PersonaAction,
+    useSnackbarCallback,
+    WalletDescription,
+    useRemoteControlledDialog,
+} from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { Typography, alpha, Box } from '@mui/material'
 import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayOwner, Web3 } from '@masknet/web3-providers'
 import {
@@ -16,7 +22,6 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 import { type ManagerAccount, ManagerAccountType } from '../../type.js'
