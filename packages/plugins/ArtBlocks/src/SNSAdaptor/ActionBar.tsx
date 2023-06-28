@@ -3,7 +3,8 @@ import { Box } from '@mui/material'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PurchaseDialog } from './PurchaseDialog.js'
 import type { Project } from '../types.js'
-import { useControlledDialog, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
+import { useControlledDialog } from '../utils.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -19,19 +20,19 @@ export interface ActionBarProps {
 }
 
 export function ActionBar(props: ActionBarProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { project, chainId } = props
 
     const { open: openMintDialog, onClose: onCloseMintDialog, onOpen: onOpenMintDialog } = useControlledDialog()
 
     const status = !project.active
-        ? t('plugin_artblocks_not_active')
+        ? t.plugin_artblocks_not_active()
         : project.complete
-        ? t('plugin_artblocks_completed')
+        ? t.plugin_artblocks_completed()
         : project.paused
-        ? t('plugin_artblocks_paused')
-        : t('plugin_artblocks_purchase')
+        ? t.plugin_artblocks_paused()
+        : t.plugin_artblocks_purchase()
 
     return (
         <Box className={classes.root} display="flex" justifyContent="center">

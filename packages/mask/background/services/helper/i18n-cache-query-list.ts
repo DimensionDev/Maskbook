@@ -38,4 +38,5 @@ export default {
     'plugins/VCent/src/locales/%locale%.json': 'com.maskbook.tweet',
     'plugins/Transak/src/locales/%locale%.json': 'com.maskbook.transak',
     'plugins/Collectible/src/locales/%locale%.json': 'com.maskbook.collectibles',
+    'plugins/ArtBlocks/src/locales/%locale%.json': 'io.artblocks',
 }
