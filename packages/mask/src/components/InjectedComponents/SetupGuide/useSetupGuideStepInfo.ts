@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { usePersonaProofs } from '@masknet/shared'
 import {
     EnhanceableSite,
     isSameProfile,

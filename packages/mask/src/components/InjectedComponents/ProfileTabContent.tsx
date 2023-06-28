@@ -20,7 +20,6 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     SocialAccountList,
-    useLocationChange,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -31,7 +30,7 @@ import {
     ProfileTabs,
     currentPersonaIdentifier,
 } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'

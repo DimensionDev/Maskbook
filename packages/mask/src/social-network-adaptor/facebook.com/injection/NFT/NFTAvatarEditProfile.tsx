@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useLocationChange } from '@masknet/shared'
+import { useLocationChange } from '@masknet/shared-base-ui'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'

@@ -11,7 +11,8 @@ import {
     getProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { useSocialAccountsBySettings, useLocationChange } from '@masknet/shared'
+import { useSocialAccountsBySettings } from '@masknet/shared'
+import { useLocationChange } from '@masknet/shared-base-ui'
 import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, MaskMessages } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'

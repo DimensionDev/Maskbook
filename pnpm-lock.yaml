@@ -321,6 +321,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../shared-base-ui
       '@masknet/theme':
         specifier: workspace:^
         version: link:../theme
