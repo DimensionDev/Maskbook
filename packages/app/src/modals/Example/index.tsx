@@ -1,8 +1,8 @@
 import { forwardRef, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
-import { useSingletonModal } from '@masknet/shared'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 
 export interface ExampleOpenProps {
     email: string

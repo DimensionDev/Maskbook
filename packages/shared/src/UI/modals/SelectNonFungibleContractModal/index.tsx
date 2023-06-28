@@ -1,10 +1,10 @@
 import { forwardRef, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type SingletonModalRefCreator, NetworkPluginID } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
-import { SelectNonFungibleContractDialog } from './SelectNonFungibleContractDialog.js'
 import type { SchemaType } from '@masknet/web3-shared-evm'
+import { SelectNonFungibleContractDialog } from './SelectNonFungibleContractDialog.js'
 
 export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T

@@ -1,5 +1,5 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { memo, useState } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTransakMessages } from '../messages.js'
 import { BuyTokenDialog } from './BuyTokenDialog.js'
 

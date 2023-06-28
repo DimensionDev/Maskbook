@@ -6,9 +6,9 @@ import type {
     SingletonModalRefCreator,
     ValueRefWithReady,
 } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ConnectWallet } from './ConnectWallet.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export interface ConnectWalletModalOpenProps {
     pluginIDSettings?: ValueRefWithReady<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>

@@ -1,6 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal, type InjectedDialogProps } from '@masknet/shared'
+import { useSingletonModal } from '@masknet/shared-base-ui'
+import { type InjectedDialogProps } from '@masknet/shared'
 import { ConfirmDialog } from './ConfirmDialog.js'
 
 export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content' | 'open'> {

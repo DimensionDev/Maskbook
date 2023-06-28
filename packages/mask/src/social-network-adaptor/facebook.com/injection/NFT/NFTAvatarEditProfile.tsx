@@ -1,9 +1,10 @@
 import { useLayoutEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector.js'
-import { attachReactTreeWithContainer, startWatch, useLocationChange } from '../../../../utils/index.js'
+import { useLocationChange } from '@masknet/shared-base-ui'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector.js'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileSettingButtonSelector())

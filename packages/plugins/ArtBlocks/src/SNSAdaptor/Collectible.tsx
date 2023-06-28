@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../utils/index.js'
 import { CollectionView } from './CollectionView.js'
 import { DetailsView } from './DetailsView.js'
 import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
@@ -12,6 +11,7 @@ import { ActionBar } from './ActionBar.js'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import { ArtBlocksLogoUrl } from '../constants.js'
 import { ChainBoundary } from '@masknet/shared'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -38,7 +38,7 @@ interface CollectibleProps {
 }
 
 export function Collectible({ projectId, chainId: projectChainId }: CollectibleProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: projectChainId })
     const [tabIndex, setTabIndex] = useState(0)
@@ -46,18 +46,18 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
     const { value, loading, error } = useFetchProject(projectId, chainId)
     const project = value?.projects[0]
 
-    if (loading) return <Typography align="center">{t('loading')}</Typography>
+    if (loading) return <LoadingBase />
 
     if (error || !project)
         return (
             <Typography align="center" color="textPrimary">
-                {t('plugin_artblocks_smt_wrong')}
+                {t.plugin_artblocks_smt_wrong()}
             </Typography>
         )
 
     const tabs = [
-        <Tab className={classes.tab} key="collection" label={t('plugin_artblocks_collection')} />,
-        <Tab className={classes.tab} key="details" label={t('plugin_artblocks_details')} />,
+        <Tab className={classes.tab} key="collection" label={t.plugin_artblocks_collection()} />,
+        <Tab className={classes.tab} key="details" label={t.plugin_artblocks_details()} />,
     ]
     const pages = [<CollectionView key="project" project={project} />, <DetailsView key="details" project={project} />]
 

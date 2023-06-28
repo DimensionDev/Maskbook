@@ -132,6 +132,8 @@
       "@masknet/plugin-vcent": ["./packages/plugins/VCent/src"],
       "@masknet/plugin-collectible": ["./packages/plugins/Collectible/src"],
       "@masknet/plugin-claim": ["./packages/plugins/Claim/src"],
+      "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src"],
+
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     }

@@ -1,6 +1,8 @@
 import { useLayoutEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
+import { TabContext } from '@mui/lab'
+import { Stack, Tab } from '@mui/material'
 import {
     getSearchResultContent,
     getSearchResultContentForProfileTab,
@@ -22,8 +24,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
-import { TabContext } from '@mui/lab'
-import { Stack, Tab } from '@mui/material'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
 const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResultType }>()(

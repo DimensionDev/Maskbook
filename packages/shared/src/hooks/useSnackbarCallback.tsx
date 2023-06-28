@@ -1,5 +1,5 @@
-import { useCustomSnackbar, usePopupCustomSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
+import { useCustomSnackbar, usePopupCustomSnackbar } from '@masknet/theme'
 import { useSharedI18N } from '../locales/index.js'
 
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(options: SnackbarCallback<P, T>): P

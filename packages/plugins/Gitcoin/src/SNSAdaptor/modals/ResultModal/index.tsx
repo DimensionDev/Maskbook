@@ -1,7 +1,8 @@
 import { forwardRef, useState, type PropsWithChildren } from 'react'
+import type { InjectedDialogProps } from '@masknet/shared'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal, type InjectedDialogProps } from '@masknet/shared'
 import type { FungibleToken } from '@masknet/web3-shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { ResultDialog } from './ResultDialog.js'
 

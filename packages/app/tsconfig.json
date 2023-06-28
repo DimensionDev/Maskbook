@@ -9,6 +9,9 @@
   "references": [
     { "path": "./tsconfig.worker.json" },
     { "path": "../base" },
+    { "path": "../shared" },
+    { "path": "../shared-base" },
+    { "path": "../shared-base-ui" },
     { "path": "../shared-base" },
     { "path": "../encryption" },
     { "path": "../plugin-infra" },
@@ -17,7 +20,6 @@
     { "path": "../web3-helpers" },
     { "path": "../web3-hooks/base" },
     { "path": "../web3-providers" },
-    { "path": "../web3-shared/base" },
-    { "path": "../shared" }
+    { "path": "../web3-shared/base" }
   ]
 }

@@ -1,6 +1,7 @@
 import { forwardRef, useState } from 'react'
+import type { InjectedDialogProps } from '@masknet/shared'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal, type InjectedDialogProps } from '@masknet/shared'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { RenameDialog } from './RenameDialog.js'
 
 export interface RenameModalOpenProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'open'> {

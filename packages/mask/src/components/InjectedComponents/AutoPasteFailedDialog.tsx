@@ -16,11 +16,12 @@ import {
     Button,
     Typography,
 } from '@mui/material'
+import { Image } from '@masknet/shared'
 import type { AutoPasteFailedEvent } from '@masknet/shared-base'
+import { useMatchXS } from '@masknet/shared-base-ui'
 import { DraggableDiv } from '../shared/DraggableDiv.js'
 import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material'
 import { saveFileFromUrl } from '../../../shared/index.js'
-import { Image, useMatchXS } from '@masknet/shared'
 
 export interface AutoPasteFailedDialogProps {
     onClose: () => void
