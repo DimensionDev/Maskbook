@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
+import { TabContext } from '@mui/lab'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
     useActivatedPluginsSNSAdaptor,
@@ -9,7 +11,6 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
     AddressItem,
     ConnectPersonaBoundary,
@@ -19,6 +20,8 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     SocialAccountList,
+    useLocationChange,
+    useValueRef,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -30,14 +33,12 @@ import {
     currentPersonaIdentifier,
 } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { TabContext } from '@mui/lab'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
+import { addressSorter, useI18N } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
