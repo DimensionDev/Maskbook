@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { BigNumber } from 'bignumber.js'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef } from '@masknet/shared'
 import { multipliedBy, isGreaterThan } from '@masknet/web3-shared-base'
 import { currentSlippageSettings } from '../../../settings.js'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'

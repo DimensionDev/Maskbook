@@ -1,10 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef, SelectGasSettingsModal } from '@masknet/shared'
 import { formatWeiToEther, GasEditor, type GasConfig, type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import type { TradeComputed } from '../../types/index.js'
 import {
     useNativeTokenPrice,
     useFungibleTokenPrice,
@@ -20,8 +19,8 @@ import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { SelectGasSettingsModal } from '@masknet/shared'
 import { PluginTraderMessages } from '../../messages.js'
+import type { TradeComputed } from '../../types/index.js'
 
 export interface ConfirmDialogProps {
     open: boolean

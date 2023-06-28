@@ -1,8 +1,8 @@
 /// <reference types="react/next" />
 import { use, cache } from 'react'
 import { noop } from 'lodash-es'
+import { useValueRef } from '@masknet/shared'
 import { ValueRef } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
 
 export type SocialNetwork = {

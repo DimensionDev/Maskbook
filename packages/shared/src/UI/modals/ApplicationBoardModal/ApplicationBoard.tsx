@@ -7,13 +7,13 @@ import {
     type IdentityResolved,
 } from '@masknet/plugin-infra/content-script'
 import {
+    useValueRef,
     useCurrentPersonaConnectStatus,
     SelectProviderModal,
     useSharedI18N,
     PersonaContext,
     type PersonaAgainstSNSConnectStatus,
 } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import {
     currentPersonaIdentifier,

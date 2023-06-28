@@ -1,11 +1,11 @@
+import { useEffect } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { ConnectPersonaBoundary } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
 import { CrossIsolationMessages, MaskMessages, PluginID, currentPersonaIdentifier } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { useEffect } from 'react'
 
 import {
     useCurrentVisitingIdentity,

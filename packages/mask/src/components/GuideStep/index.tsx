@@ -1,7 +1,7 @@
 import { cloneElement, useRef, useState, useLayoutEffect, type ReactElement } from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef } from '@masknet/shared'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'

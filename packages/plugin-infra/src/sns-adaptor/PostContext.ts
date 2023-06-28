@@ -1,6 +1,7 @@
 import { createContext, createElement, useContext } from 'react'
 import { type Subscription, useSubscription } from 'use-subscription'
 import type { Some } from 'ts-results-es'
+import type { LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import {
     ObservableMap,
     ObservableSet,
@@ -9,10 +10,10 @@ import {
     type PostIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
-import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
+import { useObservableValues, useValueRef } from '@masknet/shared'
 import type { TypedMessageTuple } from '@masknet/typed-message'
-import type { LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
+
 export interface PostContextSNSActions {
     hasPayloadLike(content: string): boolean
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null

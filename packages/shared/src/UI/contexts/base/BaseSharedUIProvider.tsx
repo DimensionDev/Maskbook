@@ -1,6 +1,6 @@
 import { createContext, type PropsWithChildren, useContext, useMemo } from 'react'
+import { useValueRef } from '@masknet/shared'
 import { EnhanceableSite, ValueRef } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import type { SharedComponentOverwrite } from './types.js'
 
 export const sharedUINetworkIdentifier = new ValueRef<EnhanceableSite>(EnhanceableSite.Localhost)

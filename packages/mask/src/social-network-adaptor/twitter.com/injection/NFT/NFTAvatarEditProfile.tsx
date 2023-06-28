@@ -1,17 +1,16 @@
+import { useEffect } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { useValueRef, ConnectPersonaBoundary } from '@masknet/shared'
+import { PluginID, CrossIsolationMessages, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
 import { startWatch, attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
-import { PluginID, CrossIsolationMessages, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 import { ButtonStyle, type ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
-import { ConnectPersonaBoundary } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../../../extension/service.js'
-import { useEffect } from 'react'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)

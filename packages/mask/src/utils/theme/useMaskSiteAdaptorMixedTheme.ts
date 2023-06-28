@@ -1,12 +1,12 @@
 import { useRef } from 'react'
 import { type Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef } from '@masknet/shared'
 import { MaskDarkTheme, MaskLightTheme } from '@masknet/theme'
+import { languageSettings } from '@masknet/shared-base'
 import { ThemeMode } from '@masknet/web3-shared-base'
 import { useThemeLanguage } from './useThemeLanguage.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useThemeSettings } from '../../components/DataSource/useActivatedUI.js'
-import { languageSettings } from '@masknet/shared-base'
 
 const defaultUseTheme = (t: Theme) => t
 

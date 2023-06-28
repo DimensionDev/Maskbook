@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef } from '@masknet/shared'
 import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks/index.js'
 import { ModelNFT } from './ModelNFT.js'
 import { NormalNFT } from './NormalNFT.js'

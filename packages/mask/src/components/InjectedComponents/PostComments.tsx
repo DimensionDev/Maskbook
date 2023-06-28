@@ -1,11 +1,11 @@
-import type { ValueRef } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { Chip } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import type { ChipProps } from '@mui/material/Chip'
-import { Lock } from '@mui/icons-material'
 import { useEffect } from 'react'
 import { useAsync } from 'react-use'
+import { Chip } from '@mui/material'
+import type { ChipProps } from '@mui/material/Chip'
+import { Lock } from '@mui/icons-material'
+import type { ValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 
 const useStyle = makeStyles()({

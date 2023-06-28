@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { head, unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef } from '@masknet/shared'
 import {
     ECKeyIdentifier,
     EMPTY_LIST,

@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
+import { useValueRef } from '@masknet/shared'
 import {
     DashboardRoutes,
     SetupGuideStep,
     currentPersonaIdentifier,
     currentSetupGuideStatus,
 } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'

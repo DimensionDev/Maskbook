@@ -9,13 +9,12 @@ import {
     type SvgIconProps,
     type IconButtonProps,
 } from '@mui/material'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { type Theme, type ThemeOptions, ThemeProvider } from '@mui/material/styles'
-import { Close as CloseIcon } from '@mui/icons-material'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
-import { useMatchXS } from '@masknet/shared'
+import { useMatchXS, useValueRef } from '@masknet/shared'
 import { appearanceSettings, languageSettings } from '@masknet/shared-base'
+import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

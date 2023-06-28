@@ -1,14 +1,19 @@
-import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfirmModal } from '@masknet/shared'
+import { useCallback, useMemo } from 'react'
+import { useAsync, useUpdateEffect } from 'react-use'
+import { TabContext, TabPanel } from '@mui/lab'
+import { DialogContent, Tab } from '@mui/material'
+import {
+    useValueRef,
+    ChainBoundary,
+    InjectedDialog,
+    PluginWalletStatusBar,
+    TransactionConfirmModal,
+} from '@masknet/shared'
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useNonFungibleAsset, useWallet } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
-import { TabContext, TabPanel } from '@mui/lab'
-import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useMemo } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'

@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash-es'
 import { ALL_EVENTS } from '@servie/events'
+import { useValueRef } from '@masknet/shared'
 import { ValueRefWithReady } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import type { Plugin } from '../types.js'
 

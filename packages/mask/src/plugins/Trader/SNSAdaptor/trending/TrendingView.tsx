@@ -13,7 +13,7 @@ import {
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NFTList, PluginCardFrameMini } from '@masknet/shared'
+import { NFTList, PluginCardFrameMini, useValueRef } from '@masknet/shared'
 import {
     EMPTY_LIST,
     PluginID,
@@ -24,7 +24,6 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../../../utils/index.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'

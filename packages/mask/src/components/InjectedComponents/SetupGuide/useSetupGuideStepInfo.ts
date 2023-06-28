@@ -10,10 +10,9 @@ import {
     MaskMessages,
     SetupGuideStep,
 } from '@masknet/shared-base'
-import { usePersonaProofs } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { usePersonaProofs, useValueRef } from '@masknet/shared'
 import Services from '../../../extension/service.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 

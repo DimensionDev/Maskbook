@@ -1,12 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-hooks-base'
-import type { Constant } from '@masknet/web3-shared-base'
 import {
     Autocomplete,
     Box,
@@ -20,6 +13,12 @@ import {
     inputBaseClasses,
     useTheme,
 } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { PluginWalletStatusBar, useSharedI18N, useValueRef } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { useWallet } from '@masknet/web3-hooks-base'
+import type { Constant } from '@masknet/web3-shared-base'
 import { Web3Storage } from '@masknet/web3-providers'
 import { GLB3DIcon, PetsPluginID, initCollection, initMeta } from '../constants.js'
 import { useNFTs, useUser } from '../hooks/index.js'
