@@ -33,11 +33,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     publicKeyTitle: {
         fontSize: 14,
+        color: theme.palette.maskColor.publicMain,
         lineHeight: '18px',
         fontWeight: 700,
     },
     publicKey: {
         fontSize: 10,
+        color: theme.palette.maskColor.publicMain,
         lineHeight: '10px',
     },
     title: {
@@ -55,6 +57,17 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         columnGap: 12,
+    },
+    wordCard: {
+        backgroundColor: theme.palette.maskColor.publicBg,
+        color: theme.palette.maskColor.publicThird,
+        '&::marker': {
+            backgroundColor: theme.palette.maskColor.publicBg,
+            color: theme.palette.maskColor.publicThird,
+        },
+    },
+    text: {
+        color: theme.palette.maskColor.publicMain,
     },
 }))
 
@@ -81,9 +94,9 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
                 <QRCode value={qrValue} ecLevel="L" size={136} quietZone={6} />
             </Box>
             <Typography className={classes.title}>{t.wallets_mnemonic_word()}</Typography>
-            <MnemonicReveal words={words} indexed />
+            <MnemonicReveal words={words} indexed classes={{ wordCard: classes.wordCard, text: classes.text }} />
             <Typography className={classes.tips}>
-                <Icons.Info color="light" size={20} />
+                <Icons.Info variant="light" size={20} />
                 {t.wallets_print_tips()}
             </Typography>
         </Box>

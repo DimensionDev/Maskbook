@@ -105,7 +105,7 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
             <Typography className={classes.title}>{t.create_account_identity_id()}</Typography>
             <Words words={words} classes={{ text: classes.text, wordCard: classes.wordCard }} />
             <Typography className={classes.tips}>
-                <Icons.Info color="light" size={20} />
+                <Icons.Info variant="light" size={20} />
                 {t.print_tips()}
             </Typography>
         </Box>

@@ -142,10 +142,11 @@ const CreateWalletForm = memo(() => {
         control,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<{ password?: string; confirm?: string }>({
+    } = useForm<{ name?: string; password?: string; confirm?: string }>({
         mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
+            name: 'mask-wallet',
             password: '',
             confirm: '',
         },
@@ -153,7 +154,10 @@ const CreateWalletForm = memo(() => {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { chainId: searchParams.get('chainId') }),
+            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, {
+                name: 'mask-wallet',
+                chainId: searchParams.get('chainId'),
+            }),
             data.password
                 ? {
                       state: { password: data.password },

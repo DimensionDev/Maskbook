@@ -188,7 +188,12 @@ const CreateMnemonic = memo(() => {
 
     return (
         <>
-            <CreateMnemonicUI words={words} onRefreshWords={refreshCallback} onVerifyClick={onVerifyClick} />
+            <CreateMnemonicUI
+                hasPassword={hasPassword}
+                words={words}
+                onRefreshWords={refreshCallback}
+                onVerifyClick={onVerifyClick}
+            />
             <VerifyMnemonicDialog
                 matched={words.join(' ') === puzzleWords.join(' ')}
                 onUpdateAnswerWords={answerCallback}
@@ -206,15 +211,18 @@ const CreateMnemonic = memo(() => {
 
 export interface CreateMnemonicUIProps {
     words: string[]
+    hasPassword?: boolean
     onRefreshWords: () => void
     onVerifyClick: () => void
 }
 
-export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick }) => {
+export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, hasPassword, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
     const ref = useRef(null)
+    const location = useLocation()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const theme = useTheme()
     const [copyState, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
@@ -231,16 +239,27 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
     }, [])
 
     const { value: address } = useAsync(async () => {
+        const name = new URLSearchParams(location.search).get('name')
+        const password = location.state?.password
+        // if the name doesn't exist, navigate to form page
+        if (!name) {
+            return
+        }
+
+        if (!hasPassword) {
+            await PluginServices.Wallet.setPassword(password)
+        }
+
         if (!words.length) return
 
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
-            '',
+            'mask-wallet',
             words.join(' '),
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
         )
 
         return address
-    }, [words.join('')])
+    }, [location.search, words, hasPassword, searchParams])
 
     console.log({ address })
 
