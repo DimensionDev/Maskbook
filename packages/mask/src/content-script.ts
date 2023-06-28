@@ -6,3 +6,4 @@ if (!Reflect.get(globalThis, loaded)) {
     Reflect.set(globalThis, loaded, true)
     await import(/* webpackMode: 'eager' */ './setup.ui.js')
 }
+export {}

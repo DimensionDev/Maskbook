@@ -46,7 +46,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         experiments: {
             backCompat: false,
             asyncWebAssembly: true,
-            topLevelAwait: true,
             syncImportAssertion: true,
             deferImport: { asyncModule: 'error' },
         },
