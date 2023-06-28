@@ -154,7 +154,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             listCursor || !options?.indicator?.index
                 ? fetchFromX2Y2<Event[]>(
                       urlcat('/v1/events', {
-                          cursor: listCursor,
+                          cursor: listCursor ?? '',
                           contract: address,
                           token_id: tokenId,
                           // list, sale, cancel_listing
@@ -165,7 +165,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             saleCursor || !options?.indicator?.index
                 ? fetchFromX2Y2<Event[]>(
                       urlcat('/v1/events', {
-                          cursor: saleCursor,
+                          cursor: saleCursor ?? '',
                           contract: address,
                           token_id: tokenId,
                           // list, sale, cancel_listing
