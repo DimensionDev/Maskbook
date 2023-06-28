@@ -14,6 +14,3 @@ export type EntryDescription = Exclude<
     Exclude<NonNullable<Configuration['entry']>, string | string[] | Function>[string],
     string | string[]
 >
-export function nonNullable<T>(x: T | false | undefined | null): x is T {
-    return !!x
-}
