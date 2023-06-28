@@ -154,7 +154,7 @@ const CreateWalletForm = memo(() => {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { name: '', chainId: searchParams.get('chainId') }),
+            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { chainId: searchParams.get('chainId') }),
             data.password
                 ? {
                       state: { password: data.password },
@@ -173,7 +173,7 @@ const CreateWalletForm = memo(() => {
                 <Typography className={cx(classes.title, classes.helveticaBold)}>{t.set_payment_password()}</Typography>
                 <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
                 <form className={classes.form} onSubmit={onSubmit}>
-                    {!loading && !hasPassword ? (
+                    {!loading ? (
                         <>
                             <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
                                 <Controller

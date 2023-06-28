@@ -1,8 +1,8 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Alert, alpha, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -214,6 +214,20 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const theme = useTheme()
+    const [copyState, copyToClipboard] = useCopyToClipboard()
+    const { showSnackbar } = useCustomSnackbar()
+
+    useEffect(() => {
+        if (copyState.value) {
+            showSnackbar(t.personas_export_persona_copy_success(), {
+                variant: 'success',
+                message: t.persona_phrase_copy_description(),
+            })
+        }
+        if (copyState.error?.message) {
+            showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
+        }
+    }, [copyState.value, copyState.error?.message])
 
     return (
         <div className={classes.root}>
@@ -246,7 +260,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                         <div className={classes.storeIcon}>
                             <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                         </div>
-                        <div className={classes.storeIcon}>
+                        <div className={classes.storeIcon} onClick={() => copyToClipboard(words.join(' '))}>
                             <Icons.Copy color={theme.palette.maskColor.main} size={18} />
                         </div>
                     </div>
