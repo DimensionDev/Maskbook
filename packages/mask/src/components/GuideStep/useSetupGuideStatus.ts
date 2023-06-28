@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { currentSetupGuideStatus, type SetupGuideContext } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export function useSetupGuideStatus() {

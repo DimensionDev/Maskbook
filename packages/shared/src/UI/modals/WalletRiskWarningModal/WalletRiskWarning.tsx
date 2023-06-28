@@ -3,8 +3,9 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedI18N, useMatchXS } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedI18N } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({

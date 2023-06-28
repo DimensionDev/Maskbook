@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { usePersonaProofs } from '@masknet/shared'
 import {
     EnhanceableSite,
     isSameProfile,
@@ -10,10 +11,9 @@ import {
     MaskMessages,
     SetupGuideStep,
 } from '@masknet/shared-base'
-import { usePersonaProofs } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import Services from '../../../extension/service.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 

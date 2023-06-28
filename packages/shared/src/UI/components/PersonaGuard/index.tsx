@@ -1,12 +1,12 @@
 import { memo, type PropsWithChildren, useCallback, useLayoutEffect } from 'react'
-import { useCurrentPersonaConnectStatus } from '../../../hooks/useCurrentPersonaConnectStatus.js'
 import {
     CrossIsolationMessages,
     type PersonaInformation,
     type PersonaSelectPanelDialogEvent,
 } from '@masknet/shared-base'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import { useCurrentPersonaConnectStatus } from '../../../hooks/useCurrentPersonaConnectStatus.js'
 
 interface Props {
     personas: PersonaInformation[]

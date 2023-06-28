@@ -1,8 +1,8 @@
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { EMPTY_LIST, type BindingProof, type MaskEvents } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { NextIDProof } from '@masknet/web3-providers'
+import { EMPTY_LIST, type BindingProof, type MaskEvents } from '@masknet/shared-base'
 
 export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessage<MaskEvents>) {
     const result = useQuery<BindingProof[], Error>({

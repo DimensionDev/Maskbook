@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { SelectGasSettingsDialog, type SelectGasSettings } from './SelectGasSettingsDialog.js'
 
 export interface SelectGasSettingsModalOpenProps {

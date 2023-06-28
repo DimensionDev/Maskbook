@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, type ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,
@@ -23,13 +23,10 @@ import {
     Typography,
 } from '@mui/material'
 import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
-import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { useI18N } from '../../../utils/index.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,9 +48,10 @@ export interface ActionBarProps {
 }
 
 export function PurchaseDialog(props: ActionBarProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
+    const { share } = useSNSAdaptorContext()
 
     const {
         token: { data: token },
@@ -74,16 +72,17 @@ export function PurchaseDialog(props: ActionBarProps) {
     const postLink = usePostLink()
 
     const shareText = [
-        t(
-            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? 'plugin_artblocks_share'
-                : 'plugin_artblocks_share_no_official_account',
-            {
-                name: project.name,
-                price,
-                symbol: token?.symbol,
-            },
-        ),
+        isTwitter() || isFacebook()
+            ? t.plugin_artblocks_share({
+                  name: project.name,
+                  price: price.toFixed(),
+                  symbol: token?.symbol || '',
+              })
+            : t.plugin_artblocks_share_no_official_account({
+                  name: project.name,
+                  price: price.toFixed(),
+                  symbol: token?.symbol || '',
+              }),
         '#mask_io #artblocks_io #nft',
         postLink,
     ].join('\n')
@@ -95,7 +94,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             await openShareTxDialog({
                 hash,
                 onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
+                    share?.(shareText)
                 },
             })
             onClose()
@@ -113,8 +112,8 @@ export function PurchaseDialog(props: ActionBarProps) {
     const validationMessage = useMemo(() => {
         const balance_ = leftShift(balance ?? '0', token?.decimals)
 
-        if (balance_.isZero() || price.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
-        if (!ToS_Checked) return t('plugin_artblocks_check_tos_document')
+        if (balance_.isZero() || price.isGreaterThan(balance_)) return t.plugin_collectible_insufficient_balance()
+        if (!ToS_Checked) return t.plugin_artblocks_check_tos_document()
 
         return ''
     }, [price, balance, token?.decimals, ToS_Checked])
@@ -127,17 +126,17 @@ export function PurchaseDialog(props: ActionBarProps) {
             color="primary"
             onClick={purchase}
             fullWidth>
-            {validationMessage || (isPurchasing ? t('plugin_artblocks_purchasing') : t('plugin_artblocks_purchase'))}
+            {validationMessage || (isPurchasing ? t.plugin_artblocks_purchasing() : t.plugin_artblocks_purchase())}
         </ActionButton>
     )
 
     return (
-        <InjectedDialog title={t('plugin_artblocks_purchase')} open={open} onClose={onClose}>
+        <InjectedDialog title={t.plugin_artblocks_purchase()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
                         <FungibleTokenInput
-                            label={t('plugin_artblocks_price_per_mint')}
+                            label={t.plugin_artblocks_price_per_mint()}
                             amount={price.toString()}
                             balance={balance ?? '0'}
                             token={token as FungibleToken<ChainId, SchemaType>}

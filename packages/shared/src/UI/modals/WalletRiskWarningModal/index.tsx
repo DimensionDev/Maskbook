@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { WalletRiskWarning } from './WalletRiskWarning.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export interface WalletRiskWarningModalOpenProps {
     pluginID: NetworkPluginID

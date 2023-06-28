@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState, type PropsWithChildren } from 'react'
 import { useMount } from 'react-use'
 import { Typography } from '@mui/material'
-import { useLocationChange } from '../../utils/index.js'
+import { MaskMessages, ProfileTabs } from '@masknet/shared-base'
+import { useMatchXS, useLocationChange } from '@masknet/shared-base-ui'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { MaskMessages, ProfileTabs } from '@masknet/shared-base'
-import { useMatchXS } from '@masknet/shared'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren<{}> {
     clear(): void

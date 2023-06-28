@@ -63,6 +63,17 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         columnGap: 12,
     },
+    wordCard: {
+        backgroundColor: theme.palette.maskColor.publicBg,
+        color: theme.palette.maskColor.publicThird,
+        '&::marker': {
+            backgroundColor: theme.palette.maskColor.publicBg,
+            color: theme.palette.maskColor.publicThird,
+        },
+    },
+    text: {
+        color: theme.palette.maskColor.publicMain,
+    },
 }))
 
 export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: ForwardedRef<any>) => {
@@ -92,7 +103,7 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
                 <QRCode value={qrValue} ecLevel="L" size={136} quietZone={6} />
             </Box>
             <Typography className={classes.title}>{t.create_account_identity_id()}</Typography>
-            <Words words={words} />
+            <Words words={words} classes={{ text: classes.text, wordCard: classes.wordCard }} />
             <Typography className={classes.tips}>
                 <Icons.Info color="light" size={20} />
                 {t.print_tips()}
