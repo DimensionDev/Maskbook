@@ -1,10 +1,11 @@
 import { cache, use } from 'react'
-import Services from '../../extension/service.js'
+import { fetchBlob } from '@masknet/web3-providers/helpers'
 
 const Request = cache(async function (url: string) {
-    const blob = await Services.Helper.fetchBlob(url)
+    const blob = await fetchBlob(url)
     return URL.createObjectURL(blob)
 })
+
 export function useAssetAsBlobURL(url: string | URL) {
     return use(Request(url.toString()))
 }

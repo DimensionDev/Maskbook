@@ -1,10 +1,10 @@
-import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
+import { makeStyles, ActionButton } from '@masknet/theme'
+import { useControlledDialog } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PurchaseDialog } from './PurchaseDialog.js'
 import type { Project } from '../types.js'
 import { useI18N } from '../locales/index.js'
-import { useControlledDialog } from '../utils.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

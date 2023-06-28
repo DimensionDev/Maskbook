@@ -22,9 +22,9 @@ import {
     type SocialIdentity,
     pluginIDsSettings,
 } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../../../utils/index.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'

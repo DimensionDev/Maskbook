@@ -1,8 +1,10 @@
+import { useLayoutEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-use'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useLayoutEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-use'
+import { MaskMessages } from '@masknet/shared-base'
+import { useMatchXS } from '@masknet/shared-base-ui'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
 import {
@@ -11,8 +13,6 @@ import {
     searchProfileTabPageSelector,
     searchProfileTabSelector,
 } from '../utils/selector.js'
-import { useMatchXS } from '@masknet/shared'
-import { MaskMessages } from '@masknet/shared-base'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false

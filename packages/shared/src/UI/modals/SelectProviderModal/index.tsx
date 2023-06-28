@@ -1,8 +1,8 @@
 import { forwardRef, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { SelectProvider } from './SelectProvider.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export type SelectProviderModalOpenProps = {
     requiredSupportPluginID?: NetworkPluginID

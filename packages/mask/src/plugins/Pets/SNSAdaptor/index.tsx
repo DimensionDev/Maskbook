@@ -1,10 +1,10 @@
+import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
+import { ApplicationEntry } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PluginPetMessages } from '../messages.js'
-import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ApplicationEntry } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {

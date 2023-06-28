@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { WalletStatusDialog } from './WalletStatusDialog.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export type WalletStatusModalOpenProps = void
 

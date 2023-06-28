@@ -1,6 +1,7 @@
 import { forwardRef, useState, type PropsWithChildren } from 'react'
+import { type InjectedDialogProps } from '@masknet/shared'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal, type InjectedDialogProps } from '@masknet/shared'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { FeedCardProps } from '../../components/base.js'
 import { CardType } from '../../components/share.js'
 import { FeedDetailsDialog } from './DetailDialog.js'

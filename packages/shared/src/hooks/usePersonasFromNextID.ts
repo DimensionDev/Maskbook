@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { EMPTY_LIST, type NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 /**
  * Get all personas bound with the given identity from NextID service

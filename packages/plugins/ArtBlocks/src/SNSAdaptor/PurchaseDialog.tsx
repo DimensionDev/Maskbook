@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, type ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,
@@ -27,7 +27,6 @@ import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
 import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../locales/index.js'
-import { isFacebook, isTwitter } from '../utils.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
