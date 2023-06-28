@@ -43,7 +43,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true, deferImport: { asyncModule: 'error' } },
+        experiments: {
+            backCompat: false,
+            asyncWebAssembly: true,
+            syncImportAssertion: true,
+            deferImport: { asyncModule: 'error' },
+        },
         cache: {
             type: 'filesystem',
             readonly: flags.readonlyCache,

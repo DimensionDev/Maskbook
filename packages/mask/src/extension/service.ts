@@ -11,7 +11,7 @@ import {
     type AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { WebExtensionMessage, MessageTarget, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { serializer } from '@masknet/shared-base'
+import { serializer } from '../../../shared-base/src/serializer/index.js'
 import type {
     BackupService,
     CryptoService,

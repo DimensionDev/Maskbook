@@ -1,4 +1,4 @@
-import { TelemetryID } from '../constants/index.js'
+import { TelemetryID } from '@masknet/shared-base'
 
 /**
  * Return a seed (0~maximum) based on the TelemetryID.
