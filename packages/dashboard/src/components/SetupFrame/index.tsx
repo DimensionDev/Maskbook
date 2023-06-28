@@ -32,7 +32,7 @@ export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => 
                                 fontSize={36}
                                 fontWeight={700}
                                 lineHeight={1.2}
-                                color={theme.palette.maskColor.main}
+                                color={theme.palette.maskColor.publicMain}
                                 display="flex"
                                 width="70%"
                                 justifyContent="center">
