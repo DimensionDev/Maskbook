@@ -42,7 +42,12 @@ function canAccessAsContent(url: string) {
     )
         return true
 
-    if (location.origin.endsWith('mirror.xyz') && target.origin.endsWith('mirror-api.com')) return true
+    if (isHostName(location, 'mirror.xyz') && isHostName(target, 'mirror-api.com')) return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin
+}
+
+function isHostName(url: URL | Location, domain: string) {
+    // either example.com or *.example.com
+    return url.hostname === domain || url.hostname.endsWith('.' + domain)
 }
