@@ -199,7 +199,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { pluginID } = useNetworkContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const navigate = useNavigate()
     const location = useLocation()

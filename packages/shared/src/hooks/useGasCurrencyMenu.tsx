@@ -42,9 +42,9 @@ export function useGasCurrencyMenu(
     const { classes } = useStyles()
     const { chainId } = useChainContext()
     const [current, setCurrent] = useState('')
-    const { value: nativeToken } = useNativeToken(pluginId)
+    const { data: nativeToken } = useNativeToken(pluginId)
     const maskAddress = useMaskTokenAddress(pluginId)
-    const { value: maskToken } = useFungibleToken(pluginId, maskAddress)
+    const { data: maskToken } = useFungibleToken(pluginId, maskAddress)
 
     const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
     const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)

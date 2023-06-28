@@ -2,11 +2,10 @@ import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
-import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 export const useUnconfirmedRequest = () => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -33,7 +32,7 @@ export const useUnconfirmedRequest = () => {
     }, [chainId, TransactionFormatter, nativeTokenAddress])
 
     useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(result.retry)
+        return CrossIsolationMessages.events.requestsUpdated.on(result.retry)
     }, [result.retry])
 
     return result

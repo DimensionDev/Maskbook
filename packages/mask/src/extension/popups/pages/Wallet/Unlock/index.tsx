@@ -7,11 +7,11 @@ import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
 import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {

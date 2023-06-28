@@ -111,7 +111,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const isNativeToken = isNativeTokenAddress(selectedToken.address)
     const tokenType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
 
-    const nativeToken = useNativeToken(pluginID, { chainId })
+    const { data: nativeToken } = useNativeToken(pluginID, { chainId })
     const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
 
     // balance
@@ -133,7 +133,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
     const erc20GasLimit = useGasLimit(
         selectedToken.type === TokenType.Fungible
-            ? selectedToken.symbol === nativeToken.value?.symbol
+            ? selectedToken.symbol === nativeToken?.symbol
                 ? SchemaType.Native
                 : SchemaType.ERC20
             : selectedToken.schema,
@@ -380,7 +380,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         <Typography fontSize="14px" title={`$${gasFeeInUsd.toString()}`}>
                             {t.transfer_cost({
                                 gasFee: formatWeiToEther(gasFee).toFixed(6),
-                                symbol: nativeToken.value?.symbol ?? '',
+                                symbol: nativeToken?.symbol ?? '',
                                 usd: gasFeeInUsd.toFixed(2),
                             })}
                         </Typography>

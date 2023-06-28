@@ -6,12 +6,12 @@ import { Controller } from 'react-hook-form'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { makeStyles } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     container: {

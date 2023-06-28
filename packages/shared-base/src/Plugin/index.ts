@@ -47,4 +47,5 @@ export enum PluginID {
     ScamWarning = 'com.mask.scam-warning',
     SmartPay = 'com.mask.smart-pay',
     Claim = 'com.mask.claim',
+    WalletService = 'com.mask.WalletService',
 }

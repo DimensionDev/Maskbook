@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { head, unionWith } from 'lodash-es'
+import { head, unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -12,18 +12,12 @@ import {
     MaskMessages,
     currentPersonaIdentifier,
     ValueRef,
-    type ProfileInformation,
-    type NextIDPlatform,
+    NextIDPlatform,
+    type ProfileAccount,
 } from '@masknet/shared-base'
 import { usePersonaProofs } from './usePersonaProofs.js'
 
 export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
-
-export interface Account extends ProfileInformation {
-    is_valid?: boolean
-    identity?: string
-    platform?: NextIDPlatform
-}
 
 function useSSRPersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
@@ -50,7 +44,7 @@ function useSSRPersonaInformation(
 function usePersonaContext(initialState?: {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
 }) {
-    const [selectedAccount, setSelectedAccount] = useState<Account>()
+    const [selectedAccount, setSelectedAccount] = useState<ProfileAccount>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
@@ -69,7 +63,7 @@ function usePersonaContext(initialState?: {
     const accounts = useMemo(() => {
         if (!currentPersona) return EMPTY_LIST
 
-        const localProfiles = currentPersona.linkedProfiles.map<Account>((profile) => ({
+        const localProfiles = currentPersona.linkedProfiles.map<ProfileAccount>((profile) => ({
             ...profile,
             identity: profile.identifier.userId,
         }))
@@ -78,7 +72,7 @@ function usePersonaContext(initialState?: {
 
         const remoteProfiles = proofs
             .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform])
-            .map<Account>((x) => {
+            .map<ProfileAccount>((x) => {
                 const network = NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform]
                 return {
                     ...x,
@@ -98,6 +92,14 @@ function usePersonaContext(initialState?: {
         })
     }, [proofs, currentPersona])
 
+    const walletProofs = useMemo(() => {
+        if (!proofs?.length) return EMPTY_LIST
+        return uniqBy(
+            proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum),
+            (x) => x.identity,
+        )
+    }, [proofs])
+
     return {
         accounts,
         selectedAccount,
@@ -109,6 +111,7 @@ function usePersonaContext(initialState?: {
         setSelectedPersona,
         proofs,
         fetchProofsLoading,
+        walletProofs,
     }
 }
 

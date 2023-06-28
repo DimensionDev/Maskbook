@@ -4,8 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Alert, alpha, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
@@ -139,7 +138,7 @@ const CreateMnemonic = memo(() => {
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     useEffect(() => {
-        WalletMessages.events.walletLockStatusUpdated.on(retry)
+        CrossIsolationMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
 
     const onVerifyClick = useCallback(() => {

@@ -4,11 +4,14 @@
  */
 
 import { fileURLToPath } from 'url'
+import { readFileSync } from 'fs'
+import { dirname, join } from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import { createRequire } from 'module'
 
 const require = createRequire(import.meta.url)
+const __dirname = fileURLToPath(dirname(import.meta.url))
 
 /**
  * @param {*} env
@@ -73,7 +76,12 @@ function Configuration(env, argv) {
                 // Polyfill for Node global "Buffer" variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
             }),
-            new HtmlWebpackPlugin(),
+            new HtmlWebpackPlugin({
+                templateContent: readFileSync(join(__dirname, './.webpack/template.html'), 'utf8'),
+                inject: 'body',
+                scriptLoading: 'defer',
+                minify: false,
+            }),
             new webpack.DefinePlugin({
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.env.VERSION': JSON.stringify('v19.0.0'),

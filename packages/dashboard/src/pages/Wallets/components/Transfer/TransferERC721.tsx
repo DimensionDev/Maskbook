@@ -92,7 +92,7 @@ export const TransferERC721 = memo(() => {
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
 
-    const nativeToken = useNativeToken(pluginID, { chainId })
+    const { data: nativeToken } = useNativeToken(pluginID, { chainId })
     const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
     // form
     const schema = z.object({
@@ -419,7 +419,7 @@ export const TransferERC721 = memo(() => {
                             <Typography fontSize="14px">
                                 {t.transfer_cost({
                                     gasFee: formatWeiToEther(gasFee).toFixed(6),
-                                    symbol: nativeToken.value?.symbol ?? '',
+                                    symbol: nativeToken?.symbol ?? '',
                                     usd: gasFeeInUsd.toFixed(2),
                                 })}
                             </Typography>

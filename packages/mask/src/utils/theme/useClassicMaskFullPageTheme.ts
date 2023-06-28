@@ -1,11 +1,10 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
-
+import { produce, setAutoFreeze } from 'immer'
 import { Appearance, type LanguageOptions } from '@masknet/public-api'
 import { MaskColors } from '@masknet/theme'
 import { type PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { MaskDarkTheme, MaskLightTheme } from './MaskTheme.js'
 import { useThemeLanguage } from './useThemeLanguage.js'
-import { produce, setAutoFreeze } from 'immer'
 
 /**
  * @deprecated Should migrate to \@masknet/theme
@@ -23,11 +22,4 @@ export function useClassicMaskFullPageTheme(userPreference: Appearance, language
     })
     setAutoFreeze(true)
     return unstable_createMuiStrictModeTheme(maskTheme, useThemeLanguage(language))
-}
-
-/**
- * @deprecated Should migrate to \@masknet/theme
- */
-export function usePopupFullPageTheme(language: LanguageOptions) {
-    return useClassicMaskFullPageTheme(Appearance.light, language)
 }

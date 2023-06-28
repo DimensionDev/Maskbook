@@ -1,12 +1,20 @@
 import { useState } from 'react'
-import { ActivityFeed } from './components/ActivityFeed.js'
-import { DevelopmentList } from './components/DevelopmentList.js'
+import { useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
 import { SortDropdown } from './components/SortDropdown.js'
 import { StickySearchHeader } from './components/StickySearchBar.js'
 import { SidebarForDesktop } from './components/SidebarForDesktop.js'
 import { SidebarForMobile } from './components/SidebarForMobile.js'
+import { ActivityFeed } from './components/ActivityFeed.js'
+import { DecryptUI } from './main/index.js'
 
 export function App() {
+    useMountReport(EventID.AccessPopups)
+
+    return <MainUI />
+}
+
+function MainUI() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return (
@@ -25,7 +33,12 @@ export function App() {
                         <SortDropdown />
                     </header>
 
-                    <DevelopmentList />
+                    {/* <DevelopmentList /> */}
+                    <div className="bg-white p-5">
+                        <div className="border pt-3 rounded-lg">
+                            <DecryptUI />
+                        </div>
+                    </div>
                 </main>
 
                 <ActivityFeed />

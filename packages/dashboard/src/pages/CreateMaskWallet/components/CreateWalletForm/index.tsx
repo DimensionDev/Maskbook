@@ -5,10 +5,9 @@ import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAsyncRetry } from 'react-use'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API.js'
 import urlcat from 'urlcat'
 import PasswordField from '../../../../components/PasswordField/index.js'
@@ -117,7 +116,7 @@ const CreateWalletForm = memo(() => {
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     useEffect(() => {
-        return WalletMessages.events.walletLockStatusUpdated.on(retry)
+        return CrossIsolationMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
 
     const schema = useMemo(() => {

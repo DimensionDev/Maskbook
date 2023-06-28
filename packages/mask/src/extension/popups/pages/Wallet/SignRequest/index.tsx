@@ -12,7 +12,7 @@ import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

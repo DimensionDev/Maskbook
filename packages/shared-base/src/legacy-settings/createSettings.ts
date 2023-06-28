@@ -3,8 +3,7 @@ import { MaskMessages } from '../Messages/index.js'
 import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '../utils/index.js'
 
 let getValue: (key: string) => Promise<Option<any>> = async () => {
-    if (process.env.NODE_ENV === 'test') return None
-    throw new Error('No storage.')
+    return None
 }
 export function setupLegacySettingsAtBackground(
     getStorage: (key: string) => Promise<any>,

@@ -28,9 +28,9 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -111,7 +111,7 @@ export const GasSetting1559 = memo(() => {
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const [getGasLimitError, setGetGasLimitError] = useState(false)
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })

@@ -1,20 +1,21 @@
 import { NetworkPluginID, PopupRoutes, languageSettings, queryRemoteI18NBundle } from '@masknet/shared-base'
-import { lazy, useEffect, useState } from 'react'
+import { lazy, useEffect, useState, type ReactNode } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PopupSnackbarProvider } from '@masknet/theme'
+import { Appearance } from '@masknet/public-api'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import Services from '../service.js'
 import { PageTitleContext } from './context.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { NormalHeader } from './components/NormalHeader/index.js'
+import { useClassicMaskFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 
 function usePopupTheme() {
-    return usePopupFullPageTheme(useValueRef(languageSettings))
+    return useClassicMaskFullPageTheme(Appearance.light, useValueRef(languageSettings))
 }
 
 const ConnectWallet = lazy(() => import('./pages/Wallet/ConnectWallet/index.js'))
@@ -34,6 +35,7 @@ function PluginRenderDelayed() {
 
 export default function PopupsConnect() {
     const [title, setTitle] = useState('')
+    const [extension, setExtension] = useState<ReactNode | undefined>()
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     return PageUIProvider(
@@ -45,7 +47,7 @@ export default function PopupsConnect() {
                         initialState={{
                             queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
                         }}>
-                        <PageTitleContext.Provider value={{ title, setTitle }}>
+                        <PageTitleContext.Provider value={{ title, setTitle, extension, setExtension }}>
                             <HashRouter>
                                 <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
                                 <Routes>

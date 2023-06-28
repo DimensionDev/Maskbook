@@ -281,7 +281,7 @@ interface TransactionValueProps {
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {
     const { classes } = useStyles({ isPopper: false })
     const chain = useNetworkDescriptor(result.pluginID, chainId)
-    const { value: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
+    const { data: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
         chainId: result.chainId,
     })
 

@@ -1,8 +1,9 @@
-import { useLocation } from 'react-router-dom'
-import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
 
 export function SwapBox() {
@@ -14,18 +15,16 @@ export function SwapBox() {
     const symbol = params.get('symbol')
     const decimals = params.get('decimals')
 
-    const { value: coin } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        address ?? '',
-        createERC20Token(
+    const fallbackToken = useMemo(() => {
+        return createERC20Token(
             chainId,
             address ?? '',
             name ? name : undefined,
             symbol ? symbol : undefined,
             Number.parseInt(decimals ?? '0', 10),
-        ),
-        { chainId },
-    )
+        )
+    }, [chainId, address, name, symbol, decimals])
+    const { data: coin } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address ?? '', fallbackToken, { chainId })
 
     return (
         <Trader

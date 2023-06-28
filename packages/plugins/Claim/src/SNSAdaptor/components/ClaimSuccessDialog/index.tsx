@@ -75,13 +75,13 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
 
     const { share } = useSNSAdaptorContext()
 
-    const tokenDetail = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
+    const { data: tokenDetail } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
 
     const onShare = useCallback(() => {
-        if (!amount || !tokenDetail.value) return
+        if (!amount || !tokenDetail) return
 
-        share?.(t.share_text({ amount, symbol: tokenDetail.value?.symbol }))
-    }, [share, amount, tokenDetail.value?.symbol])
+        share?.(t.share_text({ amount, symbol: tokenDetail.symbol }))
+    }, [share, amount, tokenDetail?.symbol])
 
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
@@ -90,14 +90,14 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
                 {t.claim()}
             </DialogTitle>
             <DialogContent className={classes.content} style={{ paddingTop: 34 }}>
-                <ImageIcon icon={tokenDetail.value?.logoURL} size={90} classes={{ icon: classes.icon }} />
+                <ImageIcon icon={tokenDetail?.logoURL} size={90} classes={{ icon: classes.icon }} />
                 <Typography className={classes.symbol}>
-                    {amount} {tokenDetail.value?.symbol}
+                    {amount} {tokenDetail?.symbol}
                 </Typography>
                 <Typography className={classes.congratulations}>{t.congratulations()}</Typography>
-                {amount && tokenDetail.value ? (
+                {amount && tokenDetail ? (
                     <Typography className={classes.tips}>
-                        {t.claim_successfully_tips({ amount, symbol: tokenDetail.value.symbol })}
+                        {t.claim_successfully_tips({ amount, symbol: tokenDetail.symbol })}
                     </Typography>
                 ) : null}
             </DialogContent>

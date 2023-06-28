@@ -23,9 +23,9 @@ import { makeStyles } from '@masknet/theme'
 import { Web3 } from '@masknet/web3-providers'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -98,7 +98,7 @@ export const Prior1559GasSetting = memo(() => {
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })

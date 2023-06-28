@@ -96,14 +96,14 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             if (!status.connected)
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
-                        <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                        <Icons.Connect size={18} sx={{ marginRight: '8px', color: '#fff' }} />
                         {t.persona_boundary_connect_persona()}
                     </Button>
                 )
             if (!status.verified)
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
-                        <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                        <Icons.Connect size={18} sx={{ marginRight: '8px', color: '#fff' }} />
                         {t.persona_boundary_verify_persona()}
                     </Button>
                 )

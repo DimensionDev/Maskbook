@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import type { z as zod } from 'zod'
@@ -11,6 +10,7 @@ import { Controller } from 'react-hook-form'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { LoadingButton } from '@mui/lab'
 import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
