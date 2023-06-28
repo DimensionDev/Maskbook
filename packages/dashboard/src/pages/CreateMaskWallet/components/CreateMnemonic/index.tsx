@@ -1,8 +1,8 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, Box, Button, lighten, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Alert, alpha, Typography, useTheme } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -12,66 +12,121 @@ import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog/index.js'
 import { PluginServices } from '../../../../API.js'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle.js'
+import { HeaderLine } from '../../../../components/HeaderLine/index.js'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        minHeight: '100vh',
+        width: '100%',
+        display: 'flex',
+    },
     container: {
-        padding: '120px 18%',
+        minHeight: '100vh',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
         flexDirection: 'column',
+        paddingLeft: 200,
     },
     title: {
-        fontSize: 24,
-        lineHeight: 1.25,
-        fontWeight: 500,
+        fontSize: 30,
+        margin: '12px 0',
+        lineHeight: '120%',
+        color: theme.palette.maskColor.main,
+    },
+    tips: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontFamily: 'Helvetica',
+        color: theme.palette.maskColor.second,
     },
     refresh: {
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
+        width: 88,
         marginTop: 24,
-        fontSize: 14,
-        lineHeight: '20px',
-        width: '100%',
-        color: MaskColorVar.linkText,
+        padding: '8px 12px',
+        float: 'right',
+        cursor: 'pointer',
+        fontSize: 12,
+        color: theme.palette.maskColor.main,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '4px',
     },
     words: {
-        marginTop: 24,
-        backgroundColor: MaskColorVar.bottom,
-        padding: 30,
-        width: '100%',
-        borderRadius: 8,
-    },
-    controller: {
-        marginTop: 24,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 33%)',
-        justifyContent: 'center',
-        gridColumnGap: 10,
-        padding: '27px 0',
+        marginTop: 12,
         width: '100%',
     },
     button: {
-        height: 48,
-        borderRadius: 24,
-        fontSize: 18,
-    },
-    cancelButton: {
-        height: 48,
-        borderRadius: 24,
-        fontSize: 18,
-        background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
+        marginTop: 36,
+        padding: '14px 20px',
+        borderRadius: 10,
+        width: 126,
+        whiteSpace: 'nowrap',
+        fontSize: 16,
+        lineHeight: '20px',
+        color: theme.palette.maskColor.bottom,
+        background: theme.palette.maskColor.main,
         '&:hover': {
-            background: `${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important`,
+            boxShadow: `0 0 5px ${theme.palette.maskColor.main}`,
+            color: theme.palette.maskColor.bottom,
+            background: theme.palette.maskColor.main,
         },
+    },
+    maskBanner: {
+        marginBottom: 36,
+    },
+    leftSide: {
+        width: '90%',
+        maxWidth: 948,
+        marginBottom: 160,
+    },
+    rightSide: {
+        width: 457,
+        height: '100vh',
+        background: theme.palette.maskColor.primary,
+    },
+    import: {
+        fontSize: 14,
+        cursor: 'pointer',
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
+    second: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
+    helveticaBold: {
+        fontWeight: 700,
+        fontFamily: 'Helvetica',
     },
     alert: {
         marginTop: 24,
-        padding: 24,
-        backgroundColor: MaskColorVar.errorBackground,
-        color: MaskColorVar.redMain,
+        padding: 12,
+        color: theme.palette.maskColor.warn,
+        background: alpha(theme.palette.maskColor.warn, 0.1),
+        backdropFilter: 'blur(5px)',
+    },
+    storeWords: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        marginTop: 12,
+        gap: '12px',
+    },
+    storeIcon: {
+        height: 40,
+        width: 40,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '8px',
+        border: `1px solid ${theme.palette.maskColor.line}`,
+    },
+    between: {
+        display: 'flex',
+        justifyContent: 'space-between',
     },
 }))
 
@@ -156,35 +211,54 @@ export interface CreateMnemonicUIProps {
 
 export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const [open, setOpen] = useState(true)
+    const theme = useTheme()
 
     return (
-        <div className={classes.container}>
-            <Typography className={classes.title}>Create a wallet</Typography>
-            <div className={classes.refresh}>
-                <Box style={{ display: 'flex', cursor: 'pointer' }} onClick={onRefreshWords}>
-                    <Icons.Refresh color="#1C68F3" />
-                    <Typography>{t.wallets_create_wallet_refresh()}</Typography>
-                </Box>
+        <div className={classes.root}>
+            <div className={classes.container}>
+                <div className={classes.leftSide}>
+                    <HeaderLine width={166} height={48} className={classes.maskBanner} />
+                    <div className={classes.between}>
+                        <Typography className={cx(classes.second, classes.helveticaBold)}>
+                            {t.create_step({ step: '2', total: '3' })}
+                        </Typography>
+                        <Typography className={cx(classes.import, classes.helveticaBold)}>
+                            {t.wallets_import_wallet_import()}
+                        </Typography>
+                    </div>
+
+                    <Typography className={cx(classes.title, classes.helveticaBold)}>
+                        {t.write_down_recovery_phrase()}
+                    </Typography>
+                    <Typography className={classes.tips}>{t.store_recovery_phrase_tip()}</Typography>
+                    <div className={cx(classes.helveticaBold, classes.refresh)} onClick={onRefreshWords}>
+                        <Icons.Refresh color={theme.palette.maskColor.main} size={16} />
+                        <Typography className={classes.helveticaBold} fontSize={12}>
+                            {t.wallets_create_wallet_refresh()}
+                        </Typography>
+                    </div>
+                    <div className={classes.words}>
+                        <MnemonicReveal words={words} indexed />
+                    </div>
+                    <div className={classes.storeWords}>
+                        <div className={classes.storeIcon}>
+                            <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
+                        </div>
+                        <div className={classes.storeIcon}>
+                            <Icons.Copy color={theme.palette.maskColor.main} size={18} />
+                        </div>
+                    </div>
+                    <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
+                        {t.create_wallet_mnemonic_tip()}
+                    </Alert>
+                </div>
+                <ActionButton className={cx(classes.button, classes.helveticaBold)} onClick={onVerifyClick}>
+                    {t.create_wallet_mnemonic_keep_safe()}
+                </ActionButton>
             </div>
-            <div className={classes.words}>
-                <MnemonicReveal words={words} />
-            </div>
-            <Box className={classes.controller}>
-                <Button color="secondary" className={classes.cancelButton} onClick={() => navigate(-1)}>
-                    {t.cancel()}
-                </Button>
-                <Button className={classes.button} onClick={onVerifyClick}>
-                    {t.verify()}
-                </Button>
-            </Box>
-            {open ? (
-                <Alert icon={<Icons.Info />} severity="error" onClose={() => setOpen(false)} className={classes.alert}>
-                    {t.create_wallet_mnemonic_tip()}
-                </Alert>
-            ) : null}
+            <div className={classes.rightSide} />
         </div>
     )
 })

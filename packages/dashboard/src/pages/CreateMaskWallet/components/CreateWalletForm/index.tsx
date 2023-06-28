@@ -12,7 +12,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API.js'
 import urlcat from 'urlcat'
 import PasswordField from '../../../../components/PasswordField/index.js'
-import { Icons } from '@masknet/icons'
+import { HeaderLine } from '../../../../components/HeaderLine/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
+        paddingLeft: 200,
     },
     title: {
         fontSize: 30,
@@ -83,6 +84,11 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.bottom,
             background: theme.palette.maskColor.main,
         },
+        '&:hover': {
+            boxShadow: `0 0 5px ${theme.palette.maskColor.main}`,
+            color: theme.palette.maskColor.bottom,
+            background: theme.palette.maskColor.main,
+        },
     },
     rightSide: {
         width: 457,
@@ -119,16 +125,11 @@ const CreateWalletForm = memo(() => {
             .string()
             .min(8, t.create_wallet_password_length_error())
             .max(20, t.create_wallet_password_length_error())
-            .refine(
-                (input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
-                t.create_wallet_password_satisfied_requirement(),
-            )
 
         return hasPassword
-            ? zod.object({ name: zod.string().min(1).max(12) })
+            ? zod.object({})
             : zod
                   .object({
-                      name: zod.string().min(1).max(12),
                       password: passwordRule,
                       confirm: zod.string().optional(),
                   })
@@ -142,11 +143,10 @@ const CreateWalletForm = memo(() => {
         control,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<{ name: string; password?: string; confirm?: string }>({
+    } = useForm<{ password?: string; confirm?: string }>({
         mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
-            name: '',
             password: '',
             confirm: '',
         },
@@ -154,7 +154,7 @@ const CreateWalletForm = memo(() => {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { name: data.name, chainId: searchParams.get('chainId') }),
+            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { name: '', chainId: searchParams.get('chainId') }),
             data.password
                 ? {
                       state: { password: data.password },
@@ -166,9 +166,9 @@ const CreateWalletForm = memo(() => {
     return (
         <div className={classes.root}>
             <div className={classes.container}>
-                <Icons.MaskBanner width={166} height={48} className={classes.maskBanner} />
+                <HeaderLine width={166} height={48} className={classes.maskBanner} />
                 <Typography className={cx(classes.second, classes.helveticaBold)}>
-                    {t.create_step({ step: '1' })}
+                    {t.create_step({ step: '1', total: '3' })}
                 </Typography>
                 <Typography className={cx(classes.title, classes.helveticaBold)}>{t.set_payment_password()}</Typography>
                 <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
