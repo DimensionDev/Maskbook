@@ -13,7 +13,7 @@ const WordCard = styled(Typography)(
 `,
 )
 
-export interface MnemonicRevealProps {
+export interface MnemonicRevealProps extends withClasses<'container' | 'wordCard' | 'text'> {
     words: string[]
     indexed?: boolean
     wordClass?: string

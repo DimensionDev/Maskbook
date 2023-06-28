@@ -1,7 +1,7 @@
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useAsync, useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, alpha, Typography, useTheme } from '@mui/material'
+import { Alert, alpha, Box, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
@@ -12,6 +12,8 @@ import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog/index.js'
 import { PluginServices } from '../../../../API.js'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle.js'
 import { HeaderLine } from '../../../../components/HeaderLine/index.js'
+import { ComponentToPrint } from './ComponentToPrint.js'
+import { toBlob } from 'html-to-image'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -210,11 +212,37 @@ export interface CreateMnemonicUIProps {
 
 export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
+    const ref = useRef(null)
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const theme = useTheme()
     const [copyState, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
+
+    const [, handleDownload] = useAsyncFn(async () => {
+        if (!ref.current) return
+        const dataUrl = await toBlob(ref.current, { quality: 0.95 })
+        if (!dataUrl) return
+
+        const link = document.createElement('a')
+        link.download = 'mask-wallet-mnemonic.jpeg'
+        link.href = URL.createObjectURL(dataUrl)
+        link.click()
+    }, [])
+
+    const { value: address } = useAsync(async () => {
+        if (!words.length) return
+
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
+            '',
+            words.join(' '),
+            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+        )
+
+        return address
+    }, [words.join('')])
+
+    console.log({ address })
 
     useEffect(() => {
         if (copyState.value) {
@@ -256,7 +284,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                         <MnemonicReveal words={words} indexed />
                     </div>
                     <div className={classes.storeWords}>
-                        <div className={classes.storeIcon}>
+                        <div className={classes.storeIcon} onClick={handleDownload}>
                             <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                         </div>
                         <div className={classes.storeIcon} onClick={() => copyToClipboard(words.join(' '))}>
@@ -270,6 +298,10 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 <ActionButton className={cx(classes.button, classes.helveticaBold)} onClick={onVerifyClick}>
                     {t.create_wallet_mnemonic_keep_safe()}
                 </ActionButton>
+
+                <Box sx={{ position: 'absolute', top: -9999 }}>
+                    <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
+                </Box>
             </div>
             <div className={classes.rightSide} />
         </div>

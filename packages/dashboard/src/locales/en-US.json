@@ -1,4 +1,5 @@
 {
+    "address": "Address",
     "about": "About",
     "continue": "Continue",
     "wallets": "Wallets",
@@ -96,6 +97,8 @@
     "wallets_transfer_memo": "Memo",
     "wallets_transfer_amount": "Amount",
     "wallets_transfer_to_address": "To Address",
+    "wallets_print_tips": "This QR saves your mnemonic, please keep it safely.",
+    "wallets_mnemonic_word": "Mnemonic word",
     "wallets_transfer_error_amount_absence": "Enter an amount",
     "wallets_transfer_error_address_absence": "Enter recipient address",
     "wallets_transfer_error_contract": "Select NFT contract",
