@@ -12,7 +12,7 @@ export const MindsAdaptor: SiteAdaptor.Definition = {
     declarativePermissions: { origins },
     homepage: 'https://www.minds.com',
     isSocialNetwork: true,
-
+    sortIndex: 4,
     getProfilePage: () => new URL('https://www.minds.com'),
     getShareLinkURL(message) {
         const url = urlcat('https://www.minds.com/newsfeed/subscriptions', {
