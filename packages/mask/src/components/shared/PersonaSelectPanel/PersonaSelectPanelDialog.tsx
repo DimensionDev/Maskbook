@@ -1,11 +1,11 @@
+import { useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { useState } from 'react'
-import { useI18N } from '../../../utils/index.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../utils/index.js'
 import { PersonaSelectPanel, type PositionOption } from './PersonaSelectPanel.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 
 type PositionStyle = {
     top?: number

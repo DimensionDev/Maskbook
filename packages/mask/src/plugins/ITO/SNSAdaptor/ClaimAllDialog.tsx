@@ -283,7 +283,7 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes, cx } = useStyles({ shortITOwrapper: false })
-    const { value: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, {
+    const { data: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, {
         chainId,
     })
     const token = _token ?? swappedToken.token

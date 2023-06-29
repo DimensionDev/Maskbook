@@ -13,7 +13,6 @@ import {
     PersonaContext,
     type PersonaAgainstSNSConnectStatus,
 } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import {
     currentPersonaIdentifier,
@@ -22,11 +21,11 @@ import {
     type NetworkPluginID,
     type PersonaInformation,
 } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { EventID } from '@masknet/web3-telemetry/types'
 import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
-
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
-import { EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography } from '@mui/material'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginPetMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
 import { PluginGameMessages } from '../../Game/messages.js'

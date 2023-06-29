@@ -61,7 +61,7 @@ export interface FungibleTokenTableProps {
 export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
     const [isExpand, setIsExpand] = useState(false)
-    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+    const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: selectedChainId,
     })
     const { fungibleAssets } = useContainer(Context)

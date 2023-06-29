@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
+import { Typography } from '@mui/material'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
     type NetworkPluginID,
@@ -10,13 +11,12 @@ import {
     SignType,
     type Wallet,
 } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
 import { type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { Web3 } from '@masknet/web3-providers'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
 import { PluginSmartPayMessages } from '../message.js'

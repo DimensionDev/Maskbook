@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url'
 import { readFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 
-import { nonNullable, type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
+import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
 import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
 
 import './clean-hmr.js'
@@ -43,7 +43,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true, deferImport: { asyncModule: 'error' } },
+        experiments: {
+            backCompat: false,
+            asyncWebAssembly: true,
+            syncImportAssertion: true,
+            deferImport: { asyncModule: 'error' },
+        },
         cache: {
             type: 'filesystem',
             readonly: flags.readonlyCache,
@@ -96,7 +101,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 // Source map for libraries
                 computedFlags.sourceMapKind
                     ? { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
-                    : null!,
+                    : null,
                 // Patch old regenerator-runtime
                 {
                     test: /\..?js$/,
@@ -159,7 +164,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                           },
                           type: 'asset/resource',
                       }
-                    : null!,
+                    : null,
             ],
         },
         plugins: [
@@ -230,7 +235,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             }),
             emitManifestFile(flags, computedFlags),
             emitGitInfo(flags.reproducibleBuild),
-        ].filter(nonNullable),
+        ],
         optimization: {
             minimize: false,
             runtimeChunk: false,
@@ -286,7 +291,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         } as DevServerConfiguration,
         stats: flags.mode === 'production' ? 'errors-only' : undefined,
     }
-    baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {

@@ -197,10 +197,10 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 collection: address,
                 tokenId,
                 pagination: indicator
-                    ? JSON.stringify({
+                    ? {
                           first: indicator.index * LOOKSRARE_PAGE_SIZE,
                           cursor: indicator.id,
-                      })
+                      }
                     : undefined,
             }),
         )

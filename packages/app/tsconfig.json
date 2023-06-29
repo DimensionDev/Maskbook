@@ -11,6 +11,8 @@
     { "path": "../base" },
     { "path": "../shared" },
     { "path": "../shared-base" },
+    { "path": "../shared-base-ui" },
+    { "path": "../shared-base" },
     { "path": "../encryption" },
     { "path": "../plugin-infra" },
     { "path": "../typed-message/base" },

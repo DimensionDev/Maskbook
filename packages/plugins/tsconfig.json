@@ -7,7 +7,6 @@
     { "path": "./EVM/" },
     { "path": "./Flow/" },
     { "path": "./Solana/" },
-    { "path": "./Wallet/" },
     { "path": "./FileService/" },
     { "path": "./RSS3/" },
     { "path": "./CyberConnect/" },
@@ -17,6 +16,7 @@
     { "path": "./SmartPay/" },
     { "path": "./Transak/" },
     { "path": "./Avatar" },
-    { "path": "./Claim/" }
+    { "path": "./Claim/" },
+    { "path": "./Wallet" }
   ]
 }

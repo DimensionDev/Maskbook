@@ -1,12 +1,12 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
-import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
-import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { useSmartPayConstants } from '@masknet/web3-shared-evm'
-import { Button, MenuItem, Radio as MuiRadio, type RadioProps, Typography } from '@mui/material'
 import { compact, noop } from 'lodash-es'
 import { useCallback, useState } from 'react'
+import { Button, MenuItem, Radio as MuiRadio, type RadioProps, Typography } from '@mui/material'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
+import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
+import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
+import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { TokenIcon, useSharedI18N } from '../index.js'
 import { useMenuConfig } from './useMenu.js'
 
@@ -42,9 +42,9 @@ export function useGasCurrencyMenu(
     const { classes } = useStyles()
     const { chainId } = useChainContext()
     const [current, setCurrent] = useState('')
-    const { value: nativeToken } = useNativeToken(pluginId)
+    const { data: nativeToken } = useNativeToken(pluginId)
     const maskAddress = useMaskTokenAddress(pluginId)
-    const { value: maskToken } = useFungibleToken(pluginId, maskAddress)
+    const { data: maskToken } = useFungibleToken(pluginId, maskAddress)
 
     const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
     const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)

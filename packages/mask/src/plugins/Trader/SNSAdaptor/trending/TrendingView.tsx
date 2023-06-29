@@ -22,9 +22,9 @@ import {
     type SocialIdentity,
     pluginIDsSettings,
 } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../../../utils/index.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
@@ -148,7 +148,7 @@ export function TrendingView(props: TrendingViewProps) {
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+    const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: result.chainId ?? chainId,
     })
 

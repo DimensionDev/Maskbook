@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, type ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,
@@ -23,13 +23,10 @@ import {
     Typography,
 } from '@mui/material'
 import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
-import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { useI18N } from '../../../utils/index.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,39 +48,41 @@ export interface ActionBarProps {
 }
 
 export function PurchaseDialog(props: ActionBarProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
+    const { share } = useSNSAdaptorContext()
 
-    const { token, balance } = useFungibleTokenWatched(
-        NetworkPluginID.PLUGIN_EVM,
-        project.currencyAddress ? project.currencyAddress : '',
-    )
+    const {
+        token: { data: token },
+        balance: { value: balance },
+    } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, project.currencyAddress ? project.currencyAddress : '')
 
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
         chainId,
         project.projectId,
         project.pricePerTokenInWei,
-        token.value?.schema,
+        token?.schema,
     )
     const price = useMemo(
-        () => leftShift(project.pricePerTokenInWei, token.value?.decimals),
-        [project.pricePerTokenInWei, token.value?.decimals],
+        () => leftShift(project.pricePerTokenInWei, token?.decimals),
+        [project.pricePerTokenInWei, token?.decimals],
     )
     const postLink = usePostLink()
 
     const shareText = [
-        t(
-            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? 'plugin_artblocks_share'
-                : 'plugin_artblocks_share_no_official_account',
-            {
-                name: project.name,
-                price,
-                symbol: token.value?.symbol,
-            },
-        ),
+        isTwitter() || isFacebook()
+            ? t.plugin_artblocks_share({
+                  name: project.name,
+                  price: price.toFixed(),
+                  symbol: token?.symbol || '',
+              })
+            : t.plugin_artblocks_share_no_official_account({
+                  name: project.name,
+                  price: price.toFixed(),
+                  symbol: token?.symbol || '',
+              }),
         '#mask_io #artblocks_io #nft',
         postLink,
     ].join('\n')
@@ -95,7 +94,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             await openShareTxDialog({
                 hash,
                 onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
+                    share?.(shareText)
                 },
             })
             onClose()
@@ -111,13 +110,13 @@ export function PurchaseDialog(props: ActionBarProps) {
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
 
     const validationMessage = useMemo(() => {
-        const balance_ = leftShift(balance.value ?? '0', token.value?.decimals)
+        const balance_ = leftShift(balance ?? '0', token?.decimals)
 
-        if (balance_.isZero() || price.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
-        if (!ToS_Checked) return t('plugin_artblocks_check_tos_document')
+        if (balance_.isZero() || price.isGreaterThan(balance_)) return t.plugin_collectible_insufficient_balance()
+        if (!ToS_Checked) return t.plugin_artblocks_check_tos_document()
 
         return ''
-    }, [price, balance.value, token.value?.decimals, ToS_Checked])
+    }, [price, balance, token?.decimals, ToS_Checked])
 
     const actionButton = (
         <ActionButton
@@ -127,20 +126,20 @@ export function PurchaseDialog(props: ActionBarProps) {
             color="primary"
             onClick={purchase}
             fullWidth>
-            {validationMessage || (isPurchasing ? t('plugin_artblocks_purchasing') : t('plugin_artblocks_purchase'))}
+            {validationMessage || (isPurchasing ? t.plugin_artblocks_purchasing() : t.plugin_artblocks_purchase())}
         </ActionButton>
     )
 
     return (
-        <InjectedDialog title={t('plugin_artblocks_purchase')} open={open} onClose={onClose}>
+        <InjectedDialog title={t.plugin_artblocks_purchase()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
                         <FungibleTokenInput
-                            label={t('plugin_artblocks_price_per_mint')}
+                            label={t.plugin_artblocks_price_per_mint()}
                             amount={price.toString()}
-                            balance={balance.value ?? '0'}
-                            token={token.value as FungibleToken<ChainId, SchemaType>}
+                            balance={balance ?? '0'}
+                            token={token as FungibleToken<ChainId, SchemaType>}
                             onAmountChange={() => {}}
                         />
                         <FormControlLabel
@@ -172,12 +171,12 @@ export function PurchaseDialog(props: ActionBarProps) {
                     </CardContent>
                     <CardActions>
                         <WalletConnectedBoundary expectedChainId={chainId}>
-                            {token.value?.schema === SchemaType.Native ? actionButton : null}
-                            {token.value?.schema === SchemaType.ERC20 ? (
+                            {token?.schema === SchemaType.Native ? actionButton : null}
+                            {token?.schema === SchemaType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}
-                                    token={token.value}>
+                                    token={token}>
                                     {actionButton}
                                 </EthereumERC20TokenApprovedBoundary>
                             ) : null}

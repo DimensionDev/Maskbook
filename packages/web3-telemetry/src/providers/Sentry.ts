@@ -1,7 +1,7 @@
 import '@sentry/tracing'
 import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import { Flags } from '@masknet/flags'
-import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
+import { getSiteType, getAgentType, getExtensionId, TelemetryID } from '@masknet/shared-base'
 import { joinsABTest } from '../helpers/joinsABTest.js'
 import { getABTestSeed } from '../helpers/getABTestSeed.js'
 import { isNewerThan } from '../helpers/isNewerThan.js'
@@ -21,7 +21,6 @@ import {
     type ExceptionID,
     GroupID,
 } from '../types/index.js'
-import { TelemetryID } from '../constants/index.js'
 import { telemetrySettings } from '../settings/index.js'
 
 const IGNORE_ERRORS = [

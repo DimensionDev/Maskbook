@@ -111,7 +111,7 @@ export const GasSetting1559 = memo(() => {
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const [getGasLimitError, setGetGasLimitError] = useState(false)
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })

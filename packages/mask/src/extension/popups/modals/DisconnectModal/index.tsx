@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import type { PersonaInformation, ProfileIdentifier, SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '@masknet/shared'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { DisconnectDialog } from './DisconnectDialog.js'
 
 export interface DisconnectModalOpenProps {

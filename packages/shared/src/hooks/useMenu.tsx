@@ -7,9 +7,9 @@ import {
     type MutableRefObject,
     createElement,
 } from 'react'
+import { useUpdate } from 'react-use'
 import { Menu, type MenuProps } from '@mui/material'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { useUpdate } from 'react-use'
 
 /**
  * A util hooks for easier to use `<Menu>`s.

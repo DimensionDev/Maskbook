@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { TransactionSnackbar } from './TransactionSnackbar.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export type TransactionSnackbarOpenProps = void
 

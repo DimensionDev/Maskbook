@@ -13,7 +13,6 @@
     { "path": "../../shared-base-ui" },
     { "path": "../../typed-message/base" },
     { "path": "../../typed-message/react" },
-    { "path": "../../shared" },
-    { "path": "../Wallet" }
+    { "path": "../../shared" }
   ]
 }

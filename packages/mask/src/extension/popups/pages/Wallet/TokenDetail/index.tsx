@@ -65,7 +65,7 @@ const TokenDetail = memo(() => {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const { currentToken } = useContainer(WalletContext)
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
 
     const { value: isActiveSocialNetwork } = useAsync(async () => {
         const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))

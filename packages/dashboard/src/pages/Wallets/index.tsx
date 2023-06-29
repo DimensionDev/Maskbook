@@ -5,6 +5,8 @@ import { useChainContext, useNetworkDescriptor, useNetworkContext, useWallets } 
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
+import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 import { PluginMessages } from '../../API.js'
 import { PageFrame } from '../../components/PageFrame/index.js'
 import { useDashboardI18N } from '../../locales/index.js'
@@ -17,8 +19,6 @@ import { WalletStateBar } from './components/WalletStateBar/index.js'
 import { useIsMatched } from './hooks/index.js'
 import { Context } from './hooks/useContext.js'
 import { StartUp } from './StartUp.js'
-import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
-import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const r = relativeRouteOf(DashboardRoutes.Wallets)
 

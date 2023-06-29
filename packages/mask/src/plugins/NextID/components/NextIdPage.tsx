@@ -1,22 +1,21 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { ThemeProvider } from '@mui/material'
+import { MaskLightTheme } from '@masknet/theme'
+import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { PluginCardFrameMini, useCurrentPersonaConnectStatus, usePersonaProofs } from '@masknet/shared'
+import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../../extension/service.js'
 import { BindDialog } from './BindDialog.js'
 import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import {
     AddWalletPersonaAction,
     CreatePersonaAction,
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
-
-import { ThemeProvider } from '@mui/material'
-import { MaskLightTheme } from '@masknet/theme'
-import { useAllPersonas } from '@masknet/plugin-infra/content-script'
-import { useValueRef } from '@masknet/shared-base-ui'
 
 export const NextIdPage = memo(function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()

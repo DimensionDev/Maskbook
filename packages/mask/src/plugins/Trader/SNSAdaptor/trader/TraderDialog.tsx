@@ -123,8 +123,8 @@ export function TraderDialog() {
     )
 
     // TODO: Other network schema support
-    const { value: inputToken } = useFungibleToken(pluginID, defaultInputCoin?.address, inputFungibleToken, { chainId })
-    const { value: outputToken } = useFungibleToken(pluginID, defaultOutputCoin?.address, outputFungibleToken, {
+    const { data: inputToken } = useFungibleToken(pluginID, defaultInputCoin?.address, inputFungibleToken, { chainId })
+    const { data: outputToken } = useFungibleToken(pluginID, defaultOutputCoin?.address, outputFungibleToken, {
         chainId,
     })
     // #region update default input or output token

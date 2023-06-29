@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { DashboardRoutes, SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import { LeavePageConfirm, type OpenPageConfirm } from './LeavePageConfirm.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export interface LeavePageConfirmModalOpenProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>

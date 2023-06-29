@@ -12,7 +12,7 @@ export function useFungibleTokenWatched<T extends NetworkPluginID>(pluginID?: T,
     return {
         amount,
         setAmount,
-        address: token.value?.address ?? address,
+        address: token.data?.address ?? address,
         setAddress,
         token,
         balance,

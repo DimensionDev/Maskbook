@@ -1,15 +1,9 @@
 import {
     setupLegacySettingsAtNonBackground,
-    type KVStorageBackend,
-    MaskMessages,
     setupMaskKVStorageBackend,
+    type KVStorageBackend,
 } from '@masknet/shared-base'
-import { TelemetryID } from '@masknet/web3-telemetry'
-import Services from './extension/service.js'
-import { contentFetch } from './utils/fetcher.js'
-
-Services.Helper.getTelemetryID().then((id) => (TelemetryID.value = id))
-MaskMessages.events.telemetryIDReset.on((id) => (TelemetryID.value = id))
+import Services from '../extension/service.js'
 
 const memory: KVStorageBackend = {
     beforeAutoSync: Promise.resolve(),
@@ -31,5 +25,3 @@ const indexedDB: KVStorageBackend = {
 }
 setupMaskKVStorageBackend(indexedDB, memory)
 setupLegacySettingsAtNonBackground(Services.Settings.getLegacySettingsInitialValue)
-
-Reflect.set(globalThis, 'fetch', contentFetch)

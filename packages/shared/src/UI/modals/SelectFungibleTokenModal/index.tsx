@@ -1,9 +1,9 @@
 import { forwardRef, useState } from 'react'
 import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { SelectFungibleTokenDialog } from './SelectFungibleTokenDialog.js'
-import { useSingletonModal } from '../../../hooks/useSingletonModal.js'
 
 export interface SelectFungibleTokenModalOpenProps {
     enableManage?: boolean

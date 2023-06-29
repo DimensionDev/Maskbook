@@ -4,6 +4,7 @@ import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useRowSize } from '@masknet/shared-base-ui'
 import {
     useFungibleTokensFromTokenList,
     useFungibleAssets,
@@ -13,7 +14,6 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useRowSize } from '../../../../../../../shared/src/hooks/useRowSize.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

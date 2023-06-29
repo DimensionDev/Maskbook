@@ -1,10 +1,10 @@
-import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { InjectedDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { HubContent } from './HubContent.js'
-import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks/index.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
 export interface HubDialogProps {}

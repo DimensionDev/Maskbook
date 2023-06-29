@@ -58,7 +58,7 @@ const AddDeriveWallet = memo(() => {
     const indexes = useRef(new Set<number>())
     const navigate = useNavigate()
     const location = useLocation()
-    const { value: nativeToken } = useNativeToken()
+    const { data: nativeToken } = useNativeToken()
     const state = location.state as
         | {
               mnemonic?: string

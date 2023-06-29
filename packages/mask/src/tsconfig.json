@@ -26,7 +26,6 @@
     { "path": "../../web3-telemetry" },
     { "path": "../../theme" },
     { "path": "../../plugin-infra" },
-    { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/GoPlusSecurity" },
     { "path": "../../plugins/EVM" },
     { "path": "../../plugins/Flow" },

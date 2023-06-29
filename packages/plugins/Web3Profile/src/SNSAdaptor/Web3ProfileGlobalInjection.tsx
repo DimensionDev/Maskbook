@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { ChainContextProvider } from '@masknet/web3-hooks-base'
 import { Sentry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'

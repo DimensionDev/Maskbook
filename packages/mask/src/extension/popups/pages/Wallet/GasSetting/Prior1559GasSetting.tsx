@@ -98,7 +98,7 @@ export const Prior1559GasSetting = memo(() => {
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })
