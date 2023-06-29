@@ -1,12 +1,12 @@
+import { useEffect, useMemo, useState } from 'react'
+import { styled, ListItemButton, Typography, ListItemIcon, Box, useMediaQuery } from '@mui/material'
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
-import { styled, ListItemButton, Typography, ListItemIcon, Box, useMediaQuery } from '@mui/material'
 import GuideStep from '../../../components/GuideStep/index.js'
 import { useI18N } from '../../../utils/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
-import { ButtonStyle } from '../constant.js'
-import { useEffect, useMemo, useState } from 'react'
 import { searchHomeLinkName } from '../utils/selector.js'
+import { ButtonStyle } from '../constant.js'
 
 const TWITTER_BREAKPOINT = 1265
 

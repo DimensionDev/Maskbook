@@ -16,6 +16,7 @@ import '../../src/plugins/ProfileCard/index.js'
 import '../../src/plugins/Game/index.js'
 import '../../src/plugins/Tips/index.js'
 
+import '@masknet/plugin-wallet'
 import '@masknet/plugin-evm'
 import '@masknet/plugin-flow'
 import '@masknet/plugin-solana'
