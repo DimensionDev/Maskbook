@@ -1,0 +1,17 @@
+{
+    "plugin_external_unknown_plugin": "新しい不明なMaskプラグインが見つかりました。読み込みますか？",
+    "plugin_external_loader_search_holder": "外部プラグインを検索",
+    "plugin_external_loader_search_button": "プラグインを検索",
+    "plugin_external_loader_search_sub_title": "すべての外部プラグインは、URL でホストされていなければなりません。",
+    "plugin_external_loader_alert": "それは変更されます。それで公式製品を構築しないでください。",
+    "plugin_external_loader_example_github": "公式のプラグインの例は、 <terms>GitHub</terms> で見つけられます。",
+    "plugin_external_loader_intro": "Mask外部プラグインは、誰でも外部マスクプラグインを開発することができるMask Networkの初期段階の機能です。",
+    "plugin_external_loader_alert_title": "外部プラグイン: Mask Networkの実験的機能!",
+    "plugin_external_plugin_url": "プラグイン URL:",
+    "plugin_external_unverified_publisher": "発行元: {{publisher}} (未確認)",
+    "plugin_external_entry_title": "🧩 外部プラグインを読み込む(ナイトリー機能)",
+    "plugin_external_name": "外部プラグイン",
+    "load": "読み込み",
+    "load_all": "すべて読み込む",
+    "plugin_external_get_started": "さあ、始めましょう"
+}

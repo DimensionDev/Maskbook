@@ -21,9 +21,9 @@ import { Result } from 'ts-results-es'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest } from '../loader/index.js'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
-import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { Trans } from 'react-i18next'
 import { LoadingBase } from '@masknet/theme'
+import { useI18N } from '../locales/index.js'
 
 export function PluginLoader() {
     const [input, setInput] = useState(
@@ -33,13 +33,13 @@ export function PluginLoader() {
     )
     const [url, setURL] = useState<null | string>(null)
     const invalidURL = Result.wrap(() => new URL(input)).err
-    const { t } = useI18N()
+    const t = useI18N()
 
     return (
         <Stack sx={{ minHeight: 400 }} spacing={2}>
             <Alert severity="warning">
-                <AlertTitle>{t('plugin_external_loader_alert_title')}</AlertTitle>
-                <Typography variant="body1">{t('plugin_external_loader_intro')}</Typography>
+                <AlertTitle>{t.plugin_external_loader_alert_title()}</AlertTitle>
+                <Typography variant="body1">{t.plugin_external_loader_intro()}</Typography>
                 <Typography variant="body1">
                     <Trans
                         i18nKey="plugin_external_loader_example_github"
@@ -48,12 +48,12 @@ export function PluginLoader() {
                         }}
                     />
                 </Typography>
-                <Typography variant="body1">{t('plugin_external_loader_alert')}</Typography>
+                <Typography variant="body1">{t.plugin_external_loader_alert()}</Typography>
             </Alert>
             {url ? <Loader url={url} /> : null}
             <article>
-                <Typography variant="h6">{t('plugin_external_loader_search_holder')}</Typography>
-                <Typography variant="body1">{t('plugin_external_loader_search_sub_title')}</Typography>
+                <Typography variant="h6">{t.plugin_external_loader_search_holder()}</Typography>
+                <Typography variant="body1">{t.plugin_external_loader_search_sub_title()}</Typography>
             </article>
             <Autocomplete
                 disablePortal
@@ -75,7 +75,7 @@ export function PluginLoader() {
             />
             <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                 <Button disabled={invalidURL} onClick={() => setURL(input)}>
-                    {t('plugin_external_loader_search_button')}
+                    {t.plugin_external_loader_search_button()}
                 </Button>
             </Box>
         </Stack>
@@ -83,7 +83,7 @@ export function PluginLoader() {
 }
 
 function Loader(props: { url: string }) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { loading, retry, error, value } = useExternalPluginManifest(props.url)
     if (error) return <SnackbarContent message={'Failed to load the plugin from ' + props.url} />
     const skeleton = <Skeleton variant="text" sx={{ display: 'inline-block' }} width={150} />
@@ -93,10 +93,10 @@ function Loader(props: { url: string }) {
         <Box>
             <Typography variant="h6">
                 {loading ? <LoadingBase sx={{ marginRight: 1 }} size={16} /> : null}
-                {t('plugin_external_name')}: {loading ? skeleton : value?.name ?? 'Unknown name'}
+                {t.plugin_external_name()}: {loading ? skeleton : value?.name ?? 'Unknown name'}
             </Typography>
             <List dense>
-                <ListItem secondaryAction={<Button onClick={retry}>{t('reload')}</Button>}>
+                <ListItem secondaryAction={<Button onClick={retry}>{t.reload()}</Button>}>
                     <ListItemAvatar>
                         <Avatar>
                             <LinkIcon />
@@ -140,7 +140,7 @@ function Loader(props: { url: string }) {
                                 ),
                             )
                         }}>
-                        {t('plugin_external_get_started')}
+                        {t.plugin_external_get_started(s)}
                     </Button>
                 ) : null}
             </Box> */}

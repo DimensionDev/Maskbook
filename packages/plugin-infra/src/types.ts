@@ -344,6 +344,8 @@ export namespace Plugin.SNSAdaptor {
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
+
+        fetchManifest?: (addr: string) => Promise<any>
     }
 
     export type SelectProviderDialogEvent =

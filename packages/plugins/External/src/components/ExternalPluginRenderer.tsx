@@ -2,10 +2,10 @@ import type { ExternalPluginLoadDetails } from '../types.js'
 import { Card, CardHeader, Typography, Link, Button } from '@mui/material'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader/index.js'
-import { useI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
 
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
-    const { t } = useI18N()
+    const t = useI18N()
     const manifest = useExternalPluginManifest(props.url)
     const template = useExternalPluginTemplate(props.url, manifest.value, props.metaKey)
     const retry = (
@@ -25,17 +25,17 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
             <CardHeader
                 title={
                     <>
-                        {t('plugin_external_name')}: {manifest.value.name}
+                        {t.plugin_external_name()}: {manifest.value.name}
                         {retry}
                     </>
                 }
                 subheader={
                     <>
                         <Typography variant="caption" sx={{ display: 'block' }}>
-                            {t('plugin_external_unverified_publisher', { publisher: manifest.value.publisher })}
+                            {t.plugin_external_unverified_publisher({ publisher: manifest.value.publisher })}
                         </Typography>
                         <Typography variant="caption" sx={{ display: 'block' }}>
-                            {t('plugin_external_plugin_url')}
+                            {t.plugin_external_plugin_url()}
                             <Link href={props.url} target="_blank">
                                 {props.url}
                             </Link>
