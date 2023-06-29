@@ -89,7 +89,6 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             wallets: createConstantSubscription([]),
             addWallet: reject,
             closePopupWindow: reject,
-            closeWalletConnectDialog: reject,
             confirmRequest: reject,
             connectPersona: reject,
             createLogger: () => undefined,
@@ -111,6 +110,9 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
                 await WalletConnectQRCodeModal.openAndWaitForClose({
                     uri,
                 })
+            },
+            closeWalletConnectDialog: () => {
+                WalletConnectQRCodeModal.close()
             },
             ownPersonaChanged: emptyEventRegistry,
             ownProofChanged: emptyEventRegistry,

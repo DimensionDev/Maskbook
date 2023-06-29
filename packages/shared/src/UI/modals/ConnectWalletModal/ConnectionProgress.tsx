@@ -80,8 +80,8 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const Others = useWeb3Others(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
+
     const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
-    if (!Others) return null
 
     return (
         <>
@@ -100,7 +100,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                     ? t.plugin_wallet_connect_with()
                                     : connected
                                     ? t.plugin_wallet_connected_with()
-                                    : t.plugin_wallet_connect_with()}
+                                    : t.plugin_wallet_connect_with()}{' '}
                                 {Others.providerResolver.providerName(providerType)}
                             </Typography>
                             {loading ? (

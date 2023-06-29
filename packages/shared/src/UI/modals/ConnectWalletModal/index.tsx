@@ -1,20 +1,13 @@
 import { forwardRef, useState } from 'react'
-import type {
-    EnhanceableSite,
-    ExtensionSite,
-    NetworkPluginID,
-    SingletonModalRefCreator,
-    ValueRefWithReady,
-} from '@masknet/shared-base'
+import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ConnectWallet } from './ConnectWallet.js'
 
 export interface ConnectWalletModalOpenProps {
-    pluginIDSettings?: ValueRefWithReady<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
-    pluginID?: NetworkPluginID
-    networkType?: Web3Helper.NetworkTypeAll
-    providerType?: Web3Helper.ProviderTypeAll
+    pluginID: NetworkPluginID
+    networkType: Web3Helper.NetworkTypeAll
+    providerType: Web3Helper.ProviderTypeAll
 }
 
 export type ConnectWalletModalCloseProps = boolean
@@ -31,9 +24,9 @@ export const ConnectWalletModal = forwardRef<
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setPluginID(props?.pluginID)
-            setProviderType(props?.providerType)
-            setNetworkType(props?.networkType)
+            setPluginID(props.pluginID ?? NetworkPluginID.PLUGIN_EVM)
+            setProviderType(props.providerType)
+            setNetworkType(props.networkType)
         },
     })
 

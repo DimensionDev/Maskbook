@@ -57,6 +57,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             await delay(500)
 
             const connected = await ConnectWalletModal.openAndWaitForClose({
+                pluginID: network.networkSupporterPluginID,
                 networkType: network.type,
                 providerType: provider.type,
             })
