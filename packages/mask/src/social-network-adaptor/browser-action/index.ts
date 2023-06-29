@@ -1,9 +1,9 @@
 import type { SocialNetwork, SocialNetworkUI } from '@masknet/types'
-import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
-import { EnhanceableSite, ValueRef } from '@masknet/shared-base'
+import { EnhanceableSite, ValueRef, type ProfileInformation } from '@masknet/shared-base'
 import { useThemePopupVariant } from './customization/custom.js'
+import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
 
 const base: SocialNetwork.Base = {
     encryptionNetwork: SocialNetworkEnum.Unknown,
@@ -26,7 +26,7 @@ const define: SocialNetworkUI.Definition = {
     utils: { createPostContext: null! },
     async init(signal) {
         const state: Readonly<SocialNetworkUI.AutonomousState> = {
-            profiles: new ValueRef([]),
+            profiles: new ValueRef<ProfileInformation[]>([]),
         }
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
         if (activeTab === undefined) return state
