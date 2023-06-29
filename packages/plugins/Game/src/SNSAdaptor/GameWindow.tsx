@@ -112,7 +112,6 @@ function GameWindow(props: Props) {
 
     const { currentVisitingProfile } = useSNSAdaptorContext()
     const profile = useSubscription(currentVisitingProfile)
-    //  const profile = useMemo(() => getCurrentIdentifier(), [location])
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',
