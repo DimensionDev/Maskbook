@@ -52,3 +52,9 @@ export const IdentityProviderMinds: Next.CollectingCapabilities.IdentityResolveP
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
     },
 }
+
+export const CurrentVisitingIdentityProviderMinds: Next.CollectingCapabilities.IdentityResolveProvider = {
+    hasDeprecatedPlaceholderName: false,
+    recognized: creator.EmptyIdentityResolveProviderState(),
+    start(cancel) {},
+}

@@ -1,5 +1,6 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import type { SocialNetworkUI } from '@masknet/types'
+import { makeStyles } from '@masknet/theme'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState, stateCreator } from '../../social-network/index.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/index.js'
@@ -13,7 +14,7 @@ import { openComposeBoxMinds } from './automation/openComposeBox.js'
 import { pasteTextToCompositionMinds } from './automation/pasteTextToComposition.js'
 import { mindsBase } from './base.js'
 import getSearchedKeywordAtMinds from './collecting/getSearchedKeyword.js'
-import { IdentityProviderMinds } from './collecting/identity.js'
+import { CurrentVisitingIdentityProviderMinds, IdentityProviderMinds } from './collecting/identity.js'
 import { ThemeSettingsProviderMinds } from './collecting/theme.js'
 import { PostProviderMinds } from './collecting/post.js'
 import { useThemeMindsVariant } from './customization/custom.js'
@@ -25,7 +26,6 @@ import { injectSearchResultInspectorAtMinds } from './injection/SearchResultInsp
 import { injectBannerAtMinds } from './injection/Banner.js'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint.js'
 import { mindsShared } from './shared.js'
-import { makeStyles } from '@masknet/theme'
 import { MindsRenderFragments } from './customization/render-fragments.js'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer.js'
 import { injectMindsProfileCover } from './injection/ProfileCover.js'
@@ -134,6 +134,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
         themeSettingsProvider: ThemeSettingsProviderMinds,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderMinds,
         getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {

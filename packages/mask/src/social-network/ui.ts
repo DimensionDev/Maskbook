@@ -1,14 +1,8 @@
 import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
-import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetworkUI } from '@masknet/types'
-import {
-    type IdentityResolved,
-    type Plugin,
-    startPluginSNSAdaptor,
-    SNSAdaptorContextRef,
-} from '@masknet/plugin-infra/content-script'
+import { type Plugin, startPluginSNSAdaptor, SNSAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
@@ -17,15 +11,12 @@ import {
     currentSetupGuideStatus,
     DashboardRoutes,
     ECKeyIdentifier,
-    EnhanceableSite,
     i18NextInstance,
     MaskMessages,
     queryRemoteI18NBundle,
-    ValueRef,
     type SetupGuideContext,
     SetupGuideStep,
 } from '@masknet/shared-base'
-import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '@masknet/flags'
 import { Sentry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
@@ -38,22 +29,8 @@ import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-
 import { definedSocialNetworkUIs } from './define.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
-export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
-    automation: {},
-    collecting: {},
-    customization: {},
-    configuration: {},
-    init: () => {
-        throw new Error()
-    },
-    injection: {},
-    encryptionNetwork: SocialNetworkEnum.Unknown,
-    networkIdentifier: EnhanceableSite.Localhost,
-    shouldActivate: () => false,
-    utils: { createPostContext: null! },
-    notReadyForProduction: true,
-    declarativePermissions: { origins: [] },
-}
+
+export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {} as any
 export let globalUIState: Readonly<SocialNetworkUI.AutonomousState> = {} as any
 
 export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
@@ -162,21 +139,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         signal,
     )
 
-    const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-    const lastRecognizedSub = createSubscriptionFromValueRef(
-        ui.collecting.identityProvider?.recognized || empty,
-        signal,
-    )
+    const lastRecognizedSub = createSubscriptionFromValueRef(ui.collecting.identityProvider.recognized, signal)
     const currentVisitingSub = createSubscriptionFromValueRef(
-        ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+        ui.collecting.currentVisitingIdentityProvider.recognized,
         signal,
     )
-
-    const defaults = new ValueRef<ThemeSettings | undefined>(activatedSocialNetworkUI.configuration.themeSettings)
-    const themeSettingsSub = createSubscriptionFromValueRef(
-        ui.collecting.themeSettingsProvider?.recognized || defaults,
-        signal,
-    )
+    const themeSettingsSub = createSubscriptionFromValueRef(ui.collecting.themeSettingsProvider.recognized, signal)
 
     const createPersona = () => {
         Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -189,6 +157,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             persona: currentPersonaIdentifier?.toText(),
         })
     }
+
+    console.log('DEBUG: SNSAdaptorContextRef')
 
     SNSAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,

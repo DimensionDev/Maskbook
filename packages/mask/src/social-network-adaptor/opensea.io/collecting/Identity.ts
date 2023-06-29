@@ -1,9 +1,10 @@
-import type { SocialNetworkUI } from '@masknet/types'
-import { creator } from '../../../social-network/index.js'
+import type { SocialNetworkUI as Next } from '@masknet/types'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { openseaBase } from '../base.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+import { creator } from '../../../social-network/index.js'
+import { openseaBase } from '../base.js'
+
+export const IdentityProviderOpensea: Next.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
         update()
@@ -56,4 +57,10 @@ async function query(): Promise<null | IdentityResolved> {
         avatar: detail.profilePictureUrl,
         nickname: detail.nickname,
     }
+}
+
+export const CurrentVisitingIdentityProviderOpenSea: Next.CollectingCapabilities.IdentityResolveProvider = {
+    hasDeprecatedPlaceholderName: false,
+    recognized: creator.EmptyIdentityResolveProviderState(),
+    start(cancel) {},
 }
