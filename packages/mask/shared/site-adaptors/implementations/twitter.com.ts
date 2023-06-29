@@ -12,7 +12,7 @@ export const TwitterAdaptor: SiteAdaptor.Definition = {
     declarativePermissions: { origins },
     homepage: 'https://twitter.com',
     isSocialNetwork: true,
-
+    sortIndex: 0,
     getProfilePage: (userId) => new URL(`https://twitter.com/${userId.userId}`),
     getShareLinkURL(message) {
         const url = urlcat('https://twitter.com/intent/tweet', { text: message })

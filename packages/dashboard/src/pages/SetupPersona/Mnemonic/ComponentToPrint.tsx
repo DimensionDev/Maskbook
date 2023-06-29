@@ -3,7 +3,7 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
-import { PrintBackground } from '../../../assets/index.js'
+import { MaskWallet, PrintBackground } from '../../../assets/index.js'
 import { Words } from './Words.js'
 import { Icons } from '@masknet/icons'
 
@@ -100,7 +100,15 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
                         </Typography>
                     </Typography>
                 </Box>
-                <QRCode value={qrValue} ecLevel="L" size={136} quietZone={6} />
+                <QRCode
+                    value={qrValue}
+                    ecLevel="L"
+                    size={136}
+                    quietZone={6}
+                    logoImage={MaskWallet.toString()}
+                    logoWidth={28}
+                    logoHeight={28}
+                />
             </Box>
             <Typography className={classes.title}>{t.create_account_identity_id()}</Typography>
             <Words words={words} classes={{ text: classes.text, wordCard: classes.wordCard }} />

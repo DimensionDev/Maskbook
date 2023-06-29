@@ -15,5 +15,6 @@ export declare namespace SiteAdaptor {
         notReadyForProduction?: boolean
         /** Whether this provider need to connect persona */
         isSocialNetwork?: boolean
+        sortIndex?: number
     }
 }

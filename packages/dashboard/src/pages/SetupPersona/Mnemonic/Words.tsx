@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 8,
         display: 'flex',
         justifyContent: 'center',
+        fontSize: 14,
     },
 }))
 

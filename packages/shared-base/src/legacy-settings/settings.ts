@@ -19,6 +19,7 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
         [EnhanceableSite.Minds]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Localhost]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Mirror]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Mask]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.PopupConnect]: NetworkPluginID.PLUGIN_EVM,
