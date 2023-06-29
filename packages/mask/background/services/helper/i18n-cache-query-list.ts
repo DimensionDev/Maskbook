@@ -26,7 +26,7 @@ export default {
     'mask/src/plugins/Trader/locales/%locale%.json': 'com.maskbook.trader',
     'plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
     'plugins/MaskBox/src/locales/%locale%.json': 'com.maskbook.box',
-    'mask/src/plugins/Game/locales/%locale%.json': 'com.maskbook.game',
+    'plugins/Game/src/locales/%locale%.json': 'com.maskbook.game',
     'plugins/Pets/src/locales/%locale%.json': 'com.maskbook.pets',
     'plugins/Web3Profile/src/locales/%locale%.json': 'io.mask.web3-profile',
     'mask/src/plugins/ProfileCard/locales/%locale%.json': 'io.mask.web3-profile-card',
