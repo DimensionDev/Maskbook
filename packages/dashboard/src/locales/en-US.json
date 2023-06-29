@@ -403,7 +403,7 @@
     "create_wallet_payment_password_tip_3": "The payment password is securely stored on your device. We do not have the capability to retrieve it, so it is essential that you remember it.",
     "create_wallet_your_wallet_address": "Your wallet address",
     "create_wallet_done": "Done",
-    "create_wallet_verify_words": "Verify mnemonic words",
+    "create_wallet_verify_words": "Please select the correct words based on the order of the recovery phases.",
     "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect",
     "recovery_smart_pay_wallet_title": "SmartPay Wallet Recovery",
     "recovery_smart_pay_wallet_description_one": "{{count}} local SmartPay wallet has been detected and successfully recovered.",

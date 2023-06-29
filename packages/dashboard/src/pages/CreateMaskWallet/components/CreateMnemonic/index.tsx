@@ -1,19 +1,20 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, alpha, Box, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
-import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog/index.js'
 import { PluginServices } from '../../../../API.js'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle.js'
 import { HeaderLine } from '../../../../components/HeaderLine/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { toBlob } from 'html-to-image'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { SecondaryButton } from '../../../../components/SecondaryButton/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -59,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     button: {
-        marginTop: 36,
         padding: '14px 20px',
         borderRadius: 10,
         width: 126,
@@ -74,13 +74,13 @@ const useStyles = makeStyles()((theme) => ({
             background: theme.palette.maskColor.main,
         },
     },
+    cancelButton: {},
     maskBanner: {
         marginBottom: 36,
     },
     leftSide: {
         width: '90%',
         maxWidth: 948,
-        marginBottom: 160,
     },
     rightSide: {
         width: 457,
@@ -104,6 +104,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     alert: {
         marginTop: 24,
+        marginBottom: 160,
         padding: 12,
         color: theme.palette.maskColor.warn,
         background: alpha(theme.palette.maskColor.warn, 0.1),
@@ -125,6 +126,10 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '8px',
         border: `1px solid ${theme.palette.maskColor.line}`,
     },
+    buttonGroup: {
+        display: 'flex',
+        columnGap: 12,
+    },
     between: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -134,7 +139,9 @@ const useStyles = makeStyles()((theme) => ({
 const CreateMnemonic = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
-    const [open, setOpen] = useState(false)
+    const t = useDashboardI18N()
+    const { classes, cx } = useStyles()
+    const [isVerify, setIsVerify] = useState(true)
     const { words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback } = useMnemonicWordsPuzzle()
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
@@ -144,7 +151,11 @@ const CreateMnemonic = memo(() => {
     }, [retry])
 
     const onVerifyClick = useCallback(() => {
-        setOpen(true)
+        setIsVerify(true)
+    }, [])
+
+    const onBackClick = useCallback(() => {
+        setIsVerify(false)
     }, [])
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
@@ -179,7 +190,7 @@ const CreateMnemonic = memo(() => {
     const onClose = useCallback(() => {
         refreshCallback()
         resetCallback()
-        setOpen(false)
+        setIsVerify(false)
     }, [refreshCallback, resetCallback])
 
     useEffect(() => {
@@ -187,36 +198,98 @@ const CreateMnemonic = memo(() => {
     }, [location.state, hasPassword, loading])
 
     return (
-        <>
-            <CreateMnemonicUI
-                hasPassword={hasPassword}
-                words={words}
-                onRefreshWords={refreshCallback}
-                onVerifyClick={onVerifyClick}
-            />
-            <VerifyMnemonicDialog
+        <div className={classes.root}>
+            <div className={classes.container}>
+                <div className={classes.leftSide}>
+                    <HeaderLine width={166} height={48} className={classes.maskBanner} />
+                    <div className={classes.between}>
+                        <Typography className={cx(classes.second, classes.helveticaBold)}>
+                            {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
+                        </Typography>
+                        <Typography className={cx(classes.import, classes.helveticaBold)}>
+                            {t.wallets_import_wallet_import()}
+                        </Typography>
+                    </div>
+                    {isVerify ? (
+                        <VerifyMnemonicUI
+                            setIsVerify={setIsVerify}
+                            hasPassword={hasPassword}
+                            words={words}
+                            onSubmit={onSubmit}
+                        />
+                    ) : (
+                        <CreateMnemonicUI
+                            hasPassword={hasPassword}
+                            words={words}
+                            onRefreshWords={refreshCallback}
+                            onVerifyClick={onVerifyClick}
+                        />
+                    )}
+                </div>
+            </div>
+            {/* <VerifyMnemonicDialog
                 matched={words.join(' ') === puzzleWords.join(' ')}
                 onUpdateAnswerWords={answerCallback}
                 indexes={indexes}
                 puzzleWords={puzzleWords}
-                open={open}
+                open={isVerify}
                 onClose={onClose}
                 onSubmit={onSubmit}
                 loading={walletState.loading}
                 address={walletState.value}
-            />
-        </>
+            /> */}
+            <div className={classes.rightSide} />
+        </div>
     )
 })
 
-export interface CreateMnemonicUIProps {
+interface CreateMnemonicUIProps {
     words: string[]
     hasPassword?: boolean
     onRefreshWords: () => void
     onVerifyClick: () => void
 }
 
-export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, hasPassword, onRefreshWords, onVerifyClick }) => {
+interface VerifyMnemonicUIProps {
+    words: string[]
+    hasPassword?: boolean
+    setIsVerify: (isVerify: boolean) => void
+    onSubmit: () => void
+}
+
+const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(({ words, hasPassword, setIsVerify, onSubmit }) => {
+    const t = useDashboardI18N()
+    const { classes, cx } = useStyles()
+
+    return (
+        <>
+            <Typography className={cx(classes.title, classes.helveticaBold)}>
+                {t.wallets_create_wallet_verification()}
+            </Typography>
+            <Typography className={classes.tips}>{t.create_wallet_verify_words()}</Typography>
+
+            <div className={classes.buttonGroup}>
+                <SecondaryButton
+                    className={classes.helveticaBold}
+                    width="125px"
+                    size="large"
+                    onClick={() => setIsVerify(false)}>
+                    {t.back()}
+                </SecondaryButton>
+                <PrimaryButton
+                    className={classes.helveticaBold}
+                    width="125px"
+                    size="large"
+                    color="primary"
+                    onClick={onSubmit}>
+                    {t.verify()}
+                </PrimaryButton>
+            </div>
+        </>
+    )
+})
+
+const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, hasPassword, onRefreshWords, onVerifyClick }) => {
     const t = useDashboardI18N()
     const ref = useRef(null)
     const location = useLocation()
@@ -261,8 +334,6 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, hasPasswor
         return address
     }, [location.search, words, hasPassword, searchParams])
 
-    console.log({ address })
-
     useEffect(() => {
         if (copyState.value) {
             showSnackbar(t.personas_export_persona_copy_success(), {
@@ -276,54 +347,45 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, hasPasswor
     }, [copyState.value, copyState.error?.message])
 
     return (
-        <div className={classes.root}>
-            <div className={classes.container}>
-                <div className={classes.leftSide}>
-                    <HeaderLine width={166} height={48} className={classes.maskBanner} />
-                    <div className={classes.between}>
-                        <Typography className={cx(classes.second, classes.helveticaBold)}>
-                            {t.create_step({ step: '2', total: '3' })}
-                        </Typography>
-                        <Typography className={cx(classes.import, classes.helveticaBold)}>
-                            {t.wallets_import_wallet_import()}
-                        </Typography>
-                    </div>
-
-                    <Typography className={cx(classes.title, classes.helveticaBold)}>
-                        {t.write_down_recovery_phrase()}
-                    </Typography>
-                    <Typography className={classes.tips}>{t.store_recovery_phrase_tip()}</Typography>
-                    <div className={cx(classes.helveticaBold, classes.refresh)} onClick={onRefreshWords}>
-                        <Icons.Refresh color={theme.palette.maskColor.main} size={16} />
-                        <Typography className={classes.helveticaBold} fontSize={12}>
-                            {t.wallets_create_wallet_refresh()}
-                        </Typography>
-                    </div>
-                    <div className={classes.words}>
-                        <MnemonicReveal words={words} indexed />
-                    </div>
-                    <div className={classes.storeWords}>
-                        <div className={classes.storeIcon} onClick={handleDownload}>
-                            <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
-                        </div>
-                        <div className={classes.storeIcon} onClick={() => copyToClipboard(words.join(' '))}>
-                            <Icons.Copy color={theme.palette.maskColor.main} size={18} />
-                        </div>
-                    </div>
-                    <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
-                        {t.create_wallet_mnemonic_tip()}
-                    </Alert>
-                </div>
-                <ActionButton className={cx(classes.button, classes.helveticaBold)} onClick={onVerifyClick}>
-                    {t.create_wallet_mnemonic_keep_safe()}
-                </ActionButton>
-
-                <Box sx={{ position: 'absolute', top: -9999 }}>
-                    <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
-                </Box>
+        <>
+            <Typography className={cx(classes.title, classes.helveticaBold)}>
+                {t.write_down_recovery_phrase()}
+            </Typography>
+            <Typography className={classes.tips}>{t.store_recovery_phrase_tip()}</Typography>
+            <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
+                <Button className={classes.refresh} variant="text" onClick={onRefreshWords}>
+                    <Icons.Refresh size={16} />
+                    {t.refresh()}
+                </Button>
+            </Stack>
+            <div className={classes.words}>
+                <MnemonicReveal words={words} indexed />
             </div>
-            <div className={classes.rightSide} />
-        </div>
+            <div className={classes.storeWords}>
+                <div className={classes.storeIcon} onClick={handleDownload}>
+                    <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
+                </div>
+                <div className={classes.storeIcon} onClick={() => copyToClipboard(words.join(' '))}>
+                    <Icons.Copy color={theme.palette.maskColor.main} size={18} />
+                </div>
+            </div>
+            <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
+                {t.create_wallet_mnemonic_tip()}
+            </Alert>
+
+            <PrimaryButton
+                className={classes.helveticaBold}
+                width="125px"
+                size="large"
+                color="primary"
+                onClick={onVerifyClick}>
+                {t.create_wallet_mnemonic_keep_safe()}
+            </PrimaryButton>
+
+            <Box sx={{ position: 'absolute', top: -9999 }}>
+                <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
+            </Box>
+        </>
     )
 })
 

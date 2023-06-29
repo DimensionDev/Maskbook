@@ -6,6 +6,7 @@ import { QRCode } from 'react-qrcode-logo'
 import { PrintBackground } from '../../../../assets/index.js'
 import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
+import { NetworkType, networkResolver } from '@masknet/web3-shared-evm'
 
 interface ComponentToPrintProps {
     words: string[]
@@ -33,13 +34,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     publicKeyTitle: {
         fontSize: 14,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
         lineHeight: '18px',
         fontWeight: 700,
     },
     publicKey: {
         fontSize: 10,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
         lineHeight: '10px',
     },
     title: {
@@ -91,7 +92,13 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
                         </Typography>
                     </Typography>
                 </Box>
-                <QRCode value={qrValue} ecLevel="L" size={136} quietZone={6} />
+                <QRCode
+                    value={qrValue}
+                    ecLevel="L"
+                    size={136}
+                    quietZone={6}
+                    logoImage={networkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
+                />
             </Box>
             <Typography className={classes.title}>{t.wallets_mnemonic_word()}</Typography>
             <MnemonicReveal words={words} indexed classes={{ wordCard: classes.wordCard, text: classes.text }} />
