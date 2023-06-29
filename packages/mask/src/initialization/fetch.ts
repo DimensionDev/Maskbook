@@ -1,4 +1,4 @@
-import * as fetch /* webpackDefer: true */ from '../utils/fetcher.js'
+import { contentFetch } from '../utils/fetcher.js'
 
 Reflect.defineProperty(globalThis, 'fetch', {
     configurable: true,
@@ -7,9 +7,9 @@ Reflect.defineProperty(globalThis, 'fetch', {
             writable: true,
             configurable: true,
             enumerable: true,
-            value: fetch.contentFetch,
+            value: contentFetch,
         })
-        return fetch.contentFetch
+        return contentFetch
     },
     set(value) {
         Reflect.defineProperty(globalThis, 'fetch', {

@@ -77,7 +77,7 @@ export namespace SocialNetworkUI {
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** My profiles at current network */
-        readonly profiles: ValueRef<readonly ProfileInformation[]>
+        readonly profiles: ValueRef<ProfileInformation[]>
     }
     export interface DeclarativePermission {
         origins: readonly string[]
@@ -192,13 +192,13 @@ export namespace SocialNetworkUI {
     export namespace CollectingCapabilities {
         export interface Define {
             /** Resolve the information of who am I on the current network. */
-            identityProvider?: IdentityResolveProvider
+            identityProvider: IdentityResolveProvider
             /** Resolve the information of identity on the current page which has been browsing. */
-            currentVisitingIdentityProvider?: IdentityResolveProvider
+            currentVisitingIdentityProvider: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Resolve the user settings of site theme. */
-            themeSettingsProvider?: ThemeSettingsProvider
+            themeSettingsProvider: ThemeSettingsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }

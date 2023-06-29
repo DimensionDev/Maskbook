@@ -105,7 +105,7 @@ export const Welcome = memo(function Welcome() {
                     </PrimaryButton>
                 </div>
                 <Typography className={classes.policy}>
-                    <DashboardTrans.welcome_agreement_policy
+                    <DashboardTrans.welcome_new_agreement_policy
                         components={{
                             agreement: (
                                 <a

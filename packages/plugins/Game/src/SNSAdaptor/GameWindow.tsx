@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react'
-import { useLocation } from 'react-use'
 import urlcat from 'urlcat'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@masknet/theme'
 import { IconClose, IconFull, IconShare } from '../constants.js'
-import { getCurrentIdentifier } from '../../../social-network-adaptor/utils.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
 import { type NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -110,8 +110,8 @@ function GameWindow(props: Props) {
         }
     }, [gameInfo?.width, gameInfo?.height])
 
-    const location = useLocation()
-    const profile = useMemo(() => getCurrentIdentifier(), [location])
+    const { currentVisitingProfile } = useSNSAdaptorContext()
+    const profile = useSubscription(currentVisitingProfile)
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',

@@ -1,7 +1,7 @@
 import type { SocialNetworkUI as Next } from '@masknet/types'
+import { fromRGB, getBackgroundColor, isDark } from '@masknet/plugin-infra/content-script'
 import { ThemeMode } from '@masknet/web3-shared-base'
 import { creator } from '../../../social-network/utils.js'
-import { fromRGB, getBackgroundColor, isDark } from '@masknet/plugin-infra/content-script'
 
 function resolveThemeSettingsInner(
     ref: Next.CollectingCapabilities.ThemeSettingsProvider['recognized'],

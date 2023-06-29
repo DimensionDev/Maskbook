@@ -133,6 +133,8 @@
       "@masknet/plugin-collectible": ["./packages/plugins/Collectible/src"],
       "@masknet/plugin-claim": ["./packages/plugins/Claim/src"],
       "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src"],
+      "@masknet/plugin-pets": ["./packages/plugins/Pets/src"],
+      "@masknet/plugin-game": ["./packages/plugins/Game/src"],
 
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
