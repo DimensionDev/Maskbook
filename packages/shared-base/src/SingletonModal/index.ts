@@ -71,7 +71,7 @@ export class SingletonModal<
     /**
      * Peek the open state of the React modal component.
      */
-    peek() {
+    peek = () => {
         return this.dispatchPeek?.() ?? false
     }
 
@@ -79,7 +79,7 @@ export class SingletonModal<
      * Open the registered modal component with props
      * @param props
      */
-    open(props: OpenProps) {
+    open = (props: OpenProps) => {
         this.dispatchOpen?.(props)
     }
 
@@ -87,14 +87,14 @@ export class SingletonModal<
      * Close the registered modal component with props
      * @param props
      */
-    close(props: CloseProps) {
+    close = (props: CloseProps) => {
         this.dispatchClose?.(props)
     }
 
     /**
      * Abort the registered modal component with Error
      */
-    abort(error: Error) {
+    abort = (error: Error) => {
         this.dispatchAbort?.(error)
     }
 
@@ -102,7 +102,7 @@ export class SingletonModal<
      * Open the registered modal component and wait for it closes
      * @param props
      */
-    openAndWaitForClose(props: OpenProps): Promise<CloseProps> {
+    openAndWaitForClose = (props: OpenProps): Promise<CloseProps> => {
         return new Promise<CloseProps>((resolve, reject) => {
             this.open(props)
             this.onClose = (props) => resolve(props)
@@ -134,7 +134,7 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
         })
     }
 
-    override open(props: OpenProps) {
+    override open = (props: OpenProps) => {
         if (!this.opened) {
             super.open(props)
             return
@@ -145,13 +145,13 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
         })
     }
 
-    override close(props: CloseProps) {
+    override close = (props: CloseProps) => {
         if (!this.opened) return
 
         super.close(props)
     }
 
-    override openAndWaitForClose(props: OpenProps) {
+    override openAndWaitForClose = (props: OpenProps) => {
         if (!this.opened) return super.openAndWaitForClose(props)
 
         const d = defer<CloseProps, Error>()
@@ -162,7 +162,7 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
         return d[0]
     }
 
-    private async cleanup() {
+    private cleanup = async () => {
         if (this.opened || !this.tasks.length) return
 
         await delay(300)

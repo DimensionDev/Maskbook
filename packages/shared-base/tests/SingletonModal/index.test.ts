@@ -21,11 +21,22 @@ describe('SingletonModal', () => {
             }
         })
     })
-
     it('should register successfully', () => {
         open.mockReset()
         modal.open()
         expect(open).toBeCalledTimes(1)
+    })
+    it('can be called without object', () => {
+        open.mockReset()
+        ;(0, modal.peek)()
+        ;(0, modal.open)()
+        ;(0, modal.close)({ closeProp: 1 })
+        ;(0, modal.abort)(new Error('Abort'))
+
+        expect(peek).toBeCalledTimes(1)
+        expect(open).toBeCalledTimes(1)
+        expect(close).toBeCalledTimes(1)
+        expect(abort).toBeCalledTimes(1)
     })
 
     it('opens and waits for closing', async () => {
