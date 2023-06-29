@@ -1,0 +1,15 @@
+{
+    "game_dialog_menu_change": "변경",
+    "game_dialog_menu_ski": "스키",
+    "game_dialog_menu_about": "정보",
+    "game_dialog_unverified": " (인증되지 않음)",
+    "game_name": "게임",
+    "game_list_title": "게임 리스트",
+    "game_list_rank": "랭크",
+    "game_list_play": "플레이",
+    "game_list_play_error": "월렛을 연결하세요",
+    "game_list_play_evm_error": "EVM 월렛을 연결하세요",
+    "game_share_btn": "공유",
+    "game_share_title": "공유",
+    "game_dialog_info": "이 게임을 트위터에서 공유하기"
+}
