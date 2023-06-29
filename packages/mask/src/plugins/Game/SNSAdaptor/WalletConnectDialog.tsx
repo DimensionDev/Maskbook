@@ -9,10 +9,9 @@ import {
     WalletStatusModal,
     ApplicationBoardModal,
 } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { PluginGameMessages } from '../messages.js'
 import GameList from './GameList.js'
 import GameWindow from './GameWindow.js'
 import GameShareDialog from './GameShareDialog.js'
@@ -55,7 +54,7 @@ function WalletConnectDialog() {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
+    const { open, closeDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.gameDialogUpdated, (ev) => {
         if (ev?.tokenProps) setTokenProps(ev.tokenProps)
     })
 

@@ -4,7 +4,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PetsPluginID } from '../constants.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 export function useUser() {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -24,8 +24,8 @@ const DEFAULT_USER = { userId: '', address: '' }
 export function useCurrentVisitingUser(flag?: number) {
     const identity = useCurrentVisitingIdentity()
     const { value: user = DEFAULT_USER } = useAsync(async () => {
-        const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
-            ? identity.identifier?.userId ?? ''
+        const userId = location.href?.endsWith(identity?.identifier?.userId ?? '')
+            ? identity?.identifier?.userId ?? ''
             : ''
         try {
             if (!userId || userId === '$unknown') return DEFAULT_USER

@@ -4,11 +4,9 @@ import { Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginPetMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
-import { PluginGameMessages } from '../../Game/messages.js'
 import { NFF_TWITTER } from '../constants.js'
 import { type ShowMeta, MenuType } from '../types.js'
-import { useCurrentVisitingUser } from '../hooks/index.js'
-import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 type Props = {
     isShow: boolean
@@ -68,14 +66,12 @@ function RightMenu(props: Props) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const refMenuDom = useRef<HTMLDivElement>(null)
-    const visitor = useCurrentVisitingUser(0)
-    const whoAmI = useLastRecognizedIdentity()
 
     const [isLeft, setIsLeft] = useState(false)
     const [isTop, setIsTop] = useState(false)
 
     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
-    const { setDialog: openGameDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
+    const { setDialog: openGameDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.gameDialogUpdated)
 
     useEffect(() => {
         if (props.isShow) {
