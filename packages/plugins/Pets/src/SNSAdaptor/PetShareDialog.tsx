@@ -1,8 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { useCallback } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useI18N } from '../locales/index.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -38,11 +38,12 @@ interface PetSetDialogProps {
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
+    const { share } = useSNSAdaptorContext()
 
     const onShareClick = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(t.share_twitter())
+        share?.(t.share_twitter())
         onClose()
-    }, [onClose])
+    }, [onClose, share])
 
     return (
         <Box className={classes.root}>
