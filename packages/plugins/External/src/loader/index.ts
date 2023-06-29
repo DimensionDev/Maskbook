@@ -1,10 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service.js'
 import type { Manifest } from '../types.js'
+import { fetchBlob } from '@masknet/web3-providers/helpers'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 
 // TODO: support suspense
 export function useExternalPluginManifest(url: string) {
-    return useAsyncRetry(() => Services.ThirdPartyPlugin.fetchManifest(url), [url])
+    const { fetchManifest } = useSNSAdaptorContext()
+    return useAsyncRetry(async () => fetchManifest?.(url), [url, fetchManifest])
 }
 
 export function useExternalPluginTemplate(url: string, manifest: Manifest | undefined, metaKey: string) {
@@ -17,7 +19,7 @@ export function useExternalPluginTemplate(url: string, manifest: Manifest | unde
 // TODO: support suspense, cache
 async function fetchTemplate(url: string | null) {
     if (!url) return
-    const blob = await Services.Helper.fetchBlob(url)
+    const blob = await fetchBlob(url)
     const text = await blob.text()
     // TODO: support TrustedTypes
     const parser = new DOMParser()

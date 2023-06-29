@@ -506,6 +506,18 @@
                 "trans": "Translate",
                 "emitTS": true
             }
+        },
+        {
+            "input": "./packages/plugins/External/src/locales/en-US.json",
+            "output": "./packages/plugins/External/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "io.mask.external",
+                "trans": "Translate",
+                "emitTS": true
+            }
         }
     ]
 }

@@ -838,6 +838,9 @@ importers:
       '@masknet/plugin-example':
         specifier: workspace:^
         version: link:../plugins/Example
+      '@masknet/plugin-external':
+        specifier: workspace:^
+        version: link:../plugins/External
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -1906,6 +1909,36 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
+
+  packages/plugins/External:
+    dependencies:
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../../flags
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/typed-message':
+        specifier: workspace:^
+        version: link:../../typed-message/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       ts-results:
         specifier: ^3.3.0
         version: 3.3.0

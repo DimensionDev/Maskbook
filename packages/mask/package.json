@@ -34,6 +34,7 @@
     "@masknet/plugin-debugger": "workspace:^",
     "@masknet/plugin-evm": "workspace:^",
     "@masknet/plugin-example": "workspace:^",
+    "@masknet/plugin-external": "workspace:^",
     "@masknet/plugin-file-service": "workspace:^",
     "@masknet/plugin-flow": "workspace:^",
     "@masknet/plugin-game": "workspace:^",
