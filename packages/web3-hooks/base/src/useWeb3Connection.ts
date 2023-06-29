@@ -9,5 +9,5 @@ export function useWeb3Connection<T extends NetworkPluginID = NetworkPluginID>(
     options?: ConnectionOptions<T>,
 ) {
     const { pluginID } = useNetworkContext(expectedPluginID)
-    return useMemo(() => Web3All.use(pluginID, options) as Connection<T>, [pluginID])
+    return useMemo(() => Web3All.use(pluginID, options) as Connection<T>, [pluginID, JSON.stringify(options)])
 }
