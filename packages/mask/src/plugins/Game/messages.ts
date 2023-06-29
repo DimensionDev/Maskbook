@@ -1,12 +1,10 @@
 import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { serializer } from '@masknet/shared-base'
 import { GamePluginID } from './constants.js'
-import type { GameDialogEvent } from './types.js'
 export interface GameMessage {
     /**
      * Pets essay set dialog
      */
-    gameDialogUpdated: GameDialogEvent
     setResult: number
     rpc: unknown
 }

@@ -1,5 +1,6 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import type { SocialNetworkUI } from '@masknet/types'
+import { makeStyles } from '@masknet/theme'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState, stateCreator } from '../../social-network/index.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/index.js'
@@ -24,12 +25,12 @@ import { injectPostReplacerAtMinds } from './injection/PostReplacer.js'
 import { injectSearchResultInspectorAtMinds } from './injection/SearchResultInspector.js'
 import { injectBannerAtMinds } from './injection/Banner.js'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint.js'
-import { mindsShared } from './shared.js'
-import { makeStyles } from '@masknet/theme'
+import { CurrentVisitingIdentityProviderDefault } from '../browser-action/collecting/identity.js'
 import { MindsRenderFragments } from './customization/render-fragments.js'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer.js'
 import { injectMindsProfileCover } from './injection/ProfileCover.js'
 import { injectAvatar } from './injection/Avatar/index.js'
+import { mindsShared } from './shared.js'
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -134,6 +135,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
         themeSettingsProvider: ThemeSettingsProviderMinds,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderDefault,
         getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {

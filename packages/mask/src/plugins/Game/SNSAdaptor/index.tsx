@@ -4,8 +4,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
-import { PluginGameMessages } from '../messages.js'
 import WalletConnectDialog, { ConnectContext } from './WalletConnectDialog.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -24,7 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled, ...props }) {
-                    const { openDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
+                    const { openDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.gameDialogUpdated)
 
                     return (
                         <ApplicationEntry

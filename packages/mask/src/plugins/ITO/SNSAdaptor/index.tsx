@@ -120,7 +120,7 @@ function Badge({ payload }: BadgeProps) {
                 maxWidth="450px"
                 overflow="hidden"
                 textOverflow="ellipsis">
-                {payload.message.split(MSG_DELIMITER)[1] || 'ITO'}
+                {payload.message.split(MSG_DELIMITER)[1] || payload.message || 'ITO'}
             </Typography>
         </div>
     )

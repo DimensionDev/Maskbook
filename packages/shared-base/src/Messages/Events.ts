@@ -264,3 +264,8 @@ export interface RequestsUpdatedEvent {
 }
 
 export type WalletLockStatusUpdatedEvent = boolean
+
+export interface GameDialogEvent {
+    open: boolean
+    tokenProps?: { tokenId?: string; contract?: string; chainId?: number }
+}

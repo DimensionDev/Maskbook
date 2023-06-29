@@ -50,6 +50,7 @@
     "@masknet/plugin-vcent": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
     "@masknet/plugin-web3-profile": "workspace:^",
+    "@masknet/plugin-pets": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/sandboxed-plugin-runtime": "workspace:^",
     "@masknet/sdk": "workspace:^",
