@@ -158,6 +158,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         })
     }
 
+    console.log('DEBUG: SNSAdaptorContextRef')
+
     SNSAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
         lastRecognizedProfile: lastRecognizedSub,
