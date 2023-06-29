@@ -33,6 +33,6 @@ export const WalletBalance = memo(function WalletBalance({
     }
     if (!nativeToken) return null
 
-    const uiBalance = `${formatBalance(balance, nativeToken.decimals || 18)} ${nativeToken.symbol}`
+    const uiBalance = `${formatBalance(balance, nativeToken.decimals)} ${nativeToken.symbol}`
     return <Typography {...props}>{uiBalance}</Typography>
 })

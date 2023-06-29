@@ -8,7 +8,8 @@ import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletActions } from './WalletActions.js'
-import { CopyIconButton, WalletBalance } from '../../../../components/index.js'
+import { CopyIconButton } from '../../../../components/index.js'
+import { WalletAssetsValue } from './WalletAssetsValue.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -191,7 +192,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
                 </div>
             </div>
-            <WalletBalance className={classes.balance} skeletonWidth={200} skeletonHeight="2em" />
+            <WalletAssetsValue className={classes.balance} skeletonWidth={200} skeletonHeight="2em" />
             <WalletActions mt={2} />
         </Box>
     )
