@@ -6,6 +6,7 @@ enum SiteType {
 const isChromium =
     typeof navigator === 'object' &&
     (navigator.userAgent.includes('Chrome') || navigator.userAgent.includes('Chromium'))
+
 export const Sniffings = {
     is_dashboard_page:
         typeof location === 'object' &&

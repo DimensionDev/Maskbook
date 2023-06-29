@@ -74,6 +74,10 @@ export function isExtensionSiteType() {
 }
 
 export function isEthereumInjected() {
+    return typeof Reflect.get(window, 'ethereum') !== 'undefined'
+}
+
+export function isInPageEthereumInjected() {
     return !isExtensionSiteType() && !Sniffings.is_firefox
 }
 
