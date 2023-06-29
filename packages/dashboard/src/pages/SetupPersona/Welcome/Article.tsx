@@ -56,7 +56,6 @@ function Permissions() {
         return Services.SiteAdaptor.getSitesWithoutPermission()
     }, [])
 
-    console.log(sites)
     if (!sites.length) return null
 
     return (
