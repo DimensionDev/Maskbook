@@ -14,7 +14,7 @@ import { openComposeBoxMinds } from './automation/openComposeBox.js'
 import { pasteTextToCompositionMinds } from './automation/pasteTextToComposition.js'
 import { mindsBase } from './base.js'
 import getSearchedKeywordAtMinds from './collecting/getSearchedKeyword.js'
-import { CurrentVisitingIdentityProviderMinds, IdentityProviderMinds } from './collecting/identity.js'
+import { IdentityProviderMinds } from './collecting/identity.js'
 import { ThemeSettingsProviderMinds } from './collecting/theme.js'
 import { PostProviderMinds } from './collecting/post.js'
 import { useThemeMindsVariant } from './customization/custom.js'
@@ -25,11 +25,12 @@ import { injectPostReplacerAtMinds } from './injection/PostReplacer.js'
 import { injectSearchResultInspectorAtMinds } from './injection/SearchResultInspector.js'
 import { injectBannerAtMinds } from './injection/Banner.js'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint.js'
-import { mindsShared } from './shared.js'
+import { CurrentVisitingIdentityProviderDefault } from '../browser-action/collecting/identity.js'
 import { MindsRenderFragments } from './customization/render-fragments.js'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer.js'
 import { injectMindsProfileCover } from './injection/ProfileCover.js'
 import { injectAvatar } from './injection/Avatar/index.js'
+import { mindsShared } from './shared.js'
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -134,7 +135,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderMinds,
         postsProvider: PostProviderMinds,
         themeSettingsProvider: ThemeSettingsProviderMinds,
-        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderMinds,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderDefault,
         getSearchedKeyword: getSearchedKeywordAtMinds,
     },
     customization: {

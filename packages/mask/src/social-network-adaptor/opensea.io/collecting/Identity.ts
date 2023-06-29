@@ -58,9 +58,3 @@ async function query(): Promise<null | IdentityResolved> {
         nickname: detail.nickname,
     }
 }
-
-export const CurrentVisitingIdentityProviderOpenSea: Next.CollectingCapabilities.IdentityResolveProvider = {
-    hasDeprecatedPlaceholderName: false,
-    recognized: creator.EmptyIdentityResolveProviderState(),
-    start(cancel) {},
-}

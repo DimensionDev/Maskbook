@@ -4,6 +4,8 @@ import { SocialNetworkEnum } from '@masknet/encryption'
 import { EnhanceableSite, ValueRef, type ProfileInformation } from '@masknet/shared-base'
 import { useThemePopupVariant } from './customization/custom.js'
 import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
+import { CurrentVisitingIdentityProviderDefault, IdentityProviderDefault } from './collecting/identity.js'
+import { ThemeSettingsProviderDefault } from './collecting/theme.js'
 
 const base: SocialNetwork.Base = {
     encryptionNetwork: SocialNetworkEnum.Unknown,
@@ -16,8 +18,11 @@ const base: SocialNetwork.Base = {
 const define: SocialNetworkUI.Definition = {
     ...base,
     automation: {},
-    // @ts-ignore
-    collecting: {},
+    collecting: {
+        identityProvider: IdentityProviderDefault,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderDefault,
+        themeSettingsProvider: ThemeSettingsProviderDefault,
+    },
     configuration: {},
     customization: {
         useTheme: useThemePopupVariant,
