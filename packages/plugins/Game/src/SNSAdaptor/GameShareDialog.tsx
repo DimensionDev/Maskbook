@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useI18N } from '../locales/index.js'
 import type { GameInfo } from '../types.js'
 import { Share_Twitter } from '../constants.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -32,9 +32,10 @@ interface PetSetDialogProps {
 export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
+    const { share } = useSNSAdaptorContext()
 
     const onShareClick = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(
+        share?.(
             t.game_share_text({
                 name: gameInfo?.name ?? '',
                 snsId: gameInfo?.snsId ?? '',
@@ -42,7 +43,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
             }),
         )
         onClose()
-    }, [gameInfo?.name, gameInfo?.snsId, onClose])
+    }, [gameInfo?.name, gameInfo?.snsId, onClose, share])
 
     return (
         <Box className={classes.root}>

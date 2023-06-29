@@ -5,6 +5,7 @@ import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 import { useAsync } from 'react-use'
 import { Services } from '../../../API.js'
+import { sortBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     article: {},
@@ -64,7 +65,7 @@ function Permissions() {
             </Typography>
 
             <ul className={classes.list}>
-                {sites.map(({ networkIdentifier, name }) => {
+                {sortBy(sites, (x) => x.sortIndex).map(({ networkIdentifier, name }) => {
                     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier] ?? Icons.Globe
                     return (
                         <li className={classes.listItem} key={networkIdentifier}>

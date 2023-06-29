@@ -36,6 +36,7 @@
     { "path": "../../plugins/Tips" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
+    { "path": "../../plugins/External" },
     { "path": "../../sandboxed-plugin-runtime/src/site-adaptor" },
     { "path": "../web-workers" },
     { "path": "../utils-pure" },

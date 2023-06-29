@@ -7,3 +7,4 @@ export const WatermarkURL = new URL('./images/MaskWatermark.png', import.meta.ur
 export const Welcome = new URL('./Welcome.splinecode', import.meta.url)
 export const PrintBackground = new URL('./images/PrintBackground.png', import.meta.url)
 export const Trend = new URL('./images/Trend.png', import.meta.url)
+export const MaskWallet = new URL('./images/MaskWallet.png', import.meta.url)

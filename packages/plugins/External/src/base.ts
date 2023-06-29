@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.External,
@@ -12,4 +13,5 @@ export const base: Plugin.Shared.Definition = {
         target: Flags.mask_SDK_ready ? 'stable' : 'insider',
     },
     experimentalMark: true,
+    i18n: languages,
 }
