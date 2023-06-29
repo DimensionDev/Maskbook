@@ -16,6 +16,7 @@ const base: SocialNetwork.Base = {
 const define: SocialNetworkUI.Definition = {
     ...base,
     automation: {},
+    // @ts-ignore
     collecting: {},
     configuration: {},
     customization: {
