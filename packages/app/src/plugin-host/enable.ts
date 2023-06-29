@@ -3,6 +3,7 @@ import './register.js'
 import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
 import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { WalletConnectQRCodeModal } from '@masknet/shared'
 import {
     BooleanPreference,
     createConstantSubscription,
@@ -106,7 +107,11 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             openPopupConnectWindow: reject,
             openPopupWindow: reject,
             fetchJSON: reject,
-            openWalletConnectDialog: reject,
+            openWalletConnectDialog: async (uri: string) => {
+                await WalletConnectQRCodeModal.openAndWaitForClose({
+                    uri,
+                })
+            },
             ownPersonaChanged: emptyEventRegistry,
             ownProofChanged: emptyEventRegistry,
             queryPersonaByProfile: reject,
