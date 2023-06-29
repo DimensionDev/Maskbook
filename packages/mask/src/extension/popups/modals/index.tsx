@@ -4,7 +4,6 @@ import { ConnectSocialAccountModal } from './ConnectSocialAccountModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'
-export * from './ChooseNetworkModal/index.js'
 
 export const Modals = memo(function Modals() {
     return (

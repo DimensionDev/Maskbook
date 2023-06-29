@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
         qrcode: {
             width: 250,
             height: 250,
-            boxShadow: `0px 0px 20px 0px ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`,
+            boxShadow: theme.palette.maskColor.bottomBg,
             borderRadius: theme.spacing(2),
             overflow: 'hidden',
         },

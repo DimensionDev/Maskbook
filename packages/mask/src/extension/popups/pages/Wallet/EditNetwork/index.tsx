@@ -1,21 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { Button, Typography, alpha } from '@mui/material'
-import { memo, useContext, useEffect, useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { z } from 'zod'
-import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
-import { StyledInput } from '../../../components/StyledInput/index.js'
-import { useTitle } from '../../../hook/index.js'
-import { PageTitleContext } from '../../../context.js'
 import { Icons } from '@masknet/icons'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-shared-evm'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { queryClient } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'
+import { PopupRoutes } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-shared-evm'
+import { Button, Input, Typography, alpha } from '@mui/material'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { omit } from 'lodash-es'
+import { memo, useContext, useEffect, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import { type ZodCustomIssue, type z } from 'zod'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { createSchema, getEvmNetworks, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { PageTitleContext } from '../../../context.js'
+import { useTitle } from '../../../hook/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         borderRadius: 12,
         background: alpha(theme.palette.maskColor.bottom, 0.8),
-        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        boxShadow: theme.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
@@ -52,44 +52,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.danger,
         marginTop: theme.spacing(0.5),
     },
+    warn: {
+        color: theme.palette.maskColor.main,
+        marginTop: theme.spacing(0.5),
+    },
 }))
 
 const QUERY_KEY = ['system', 'wallet', 'networks']
-
-/**
- * Check if network exists by chain id.
- * Including both builtin networks and additional networks
- */
-async function checkChainId(chainId: number) {
-    const builtInNetworks = getEvmNetworks(true)
-    if (builtInNetworks.find((x) => x.chainId === chainId)) return false
-    const storedNetworks = await queryClient.fetchQuery(QUERY_KEY, () => WalletRPC.getNetworks())
-    return !storedNetworks.find((x) => x.chainId === chainId)
-}
-
-const createSchema = function createSchema(t: ReturnType<typeof useI18N>['t'], isEditing: boolean) {
-    const schema = z.object({
-        name: z.string().nonempty(),
-        rpc: z.string().trim().url(t('incorrect_rpc_url')),
-        chainId: z
-            .union([
-                z
-                    .string()
-                    .trim()
-                    .regex(/^\d+$/, t('incorrect_chain_id'))
-                    .transform((v) => Number.parseInt(v, 10)),
-                z.number(),
-            ])
-            .refine(async (v) => {
-                if (isEditing) return true
-                return checkChainId(v)
-            }, t('adding_network_exists')),
-        currencySymbol: z.string().optional(),
-        explorer: z.string().url(t('incorrect_explorer_url')).optional(),
-    })
-    return schema
-}
-
 export const EditNetwork = memo(function EditNetwork() {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -103,17 +72,14 @@ export const EditNetwork = memo(function EditNetwork() {
     const builtInNetwork = useMemo(() => {
         if (!paramChainId) return null
         const network = networks.find((x) => x.chainId === chainId)
-        if (network) {
-            const chainId = network.chainId
-            return {
-                name: network.name,
-                chainId,
-                rpc: getRPCConstant(chainId, 'RPC_URLS')?.[0],
-                currencySymbol: chainResolver.nativeCurrency(chainId)?.symbol,
-                explorer: explorerResolver.explorerURL(chainId).url,
-            }
+        if (!network) return null
+        return {
+            name: network.name,
+            chainId,
+            rpc: getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
+            currencySymbol: chainResolver.nativeCurrency(network.chainId)?.symbol,
+            explorer: explorerResolver.explorerURL(network.chainId).url,
         }
-        return null
     }, [chainId, networks])
     const { data: storedNetworks = [] } = useQuery({
         enabled: !builtInNetwork && !!chainId,
@@ -121,7 +87,6 @@ export const EditNetwork = memo(function EditNetwork() {
         queryFn: () => WalletRPC.getNetworks(),
     })
     const storedNetwork = storedNetworks.find((x) => x.chainId === chainId)
-
     const network = builtInNetwork || storedNetwork
     // #endregion
 
@@ -137,6 +102,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 className={classes.iconButton}
                 onClick={async () => {
                     await WalletRPC.deleteNetwork(chainId)
+                    // Trigger UI update.
                     queryClient.invalidateQueries(QUERY_KEY)
                     navigate(-1)
                 }}>
@@ -146,80 +112,91 @@ export const EditNetwork = memo(function EditNetwork() {
         return () => setExtension(undefined)
     }, [isBuiltIn, chainId, classes.iconButton])
 
-    const schema = useMemo(() => createSchema(t, isEditing), [t, isEditing])
+    const schema = useMemo(() => createSchema(t), [t])
 
     type FormInputs = z.infer<typeof schema>
     const {
-        control,
         handleSubmit,
-        formState: { errors, isValid, isValidating, isSubmitting },
+        register,
+        setError,
+        formState: { errors, isValidating, isSubmitting, isValid: isFormValid },
     } = useForm<FormInputs>({
         mode: 'all',
         resolver: zodResolver(schema),
-        defaultValues: {
-            ...network,
-            chainId: network?.chainId,
-        },
+        defaultValues: network,
     })
+    const { showSnackbar } = usePopupCustomSnackbar()
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
-            if (isEditing) {
-                if (data.chainId !== chainId) {
-                    await WalletRPC.deleteNetwork(chainId)
-                    await delay(100)
-                    await WalletRPC.addNetwork(data)
+            try {
+                if (isEditing) {
+                    if (data.chainId !== chainId) {
+                        await WalletRPC.deleteNetwork(chainId)
+                        await delay(100)
+                        await WalletRPC.addNetwork(data)
+                    } else {
+                        await WalletRPC.updateNetwork(chainId, data)
+                    }
                 } else {
-                    await WalletRPC.updateNetwork(chainId, data)
+                    await WalletRPC.addNetwork(data)
                 }
-            } else {
-                await WalletRPC.addNetwork(data)
+                navigate(-1)
+                queryClient.invalidateQueries(QUERY_KEY)
+            } catch (err) {
+                try {
+                    // Set background validation errors to fields
+                    const issuesJson = (err as Error).message
+                    const issues = JSON.parse(issuesJson) as ZodCustomIssue[]
+                    issues.forEach((issue) => {
+                        // We assume there is no multiple paths.
+                        setError(issue.path[0] as keyof FormInputs, {
+                            message: t(issue.message as AvailableLocaleKeys, issue.params),
+                        })
+                    })
+                } catch {}
+                showSnackbar(t('failed_to_save_network'))
             }
-            navigate(-1)
-            queryClient.invalidateQueries(QUERY_KEY)
         },
     })
 
+    // Discard currencySymbol warning
+    const isValid = errors.currencySymbol ? Object.keys(omit(errors, 'currencySymbol')).length === 0 : isFormValid
     const isNotReady = isValidating || (!isValidating && !isValid)
-    const disabled = Object.keys(errors).length > 0 || isSubmitting || isNotReady || isMutating
+    const disabled = isNotReady || isSubmitting || isMutating
 
     return (
         <main className={classes.main}>
             <form className={classes.form}>
                 <Typography className={classes.label}>{t('network_name')}</Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => <StyledInput {...field} placeholder="Cel" disabled={isBuiltIn} />}
-                    name="name"
-                />
+                <Input fullWidth disableUnderline {...register('name')} placeholder="Cel" disabled={isBuiltIn} />
 
                 <Typography className={classes.label}>{t('new_rpc_url')}</Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => <StyledInput {...field} placeholder="https://" disabled={isBuiltIn} />}
-                    name="rpc"
-                />
+                <Input fullWidth disableUnderline {...register('rpc')} placeholder="https://" disabled={isBuiltIn} />
                 {errors.rpc ? <Typography className={classes.error}>{errors.rpc.message}</Typography> : null}
 
                 <Typography className={classes.label}>{t('chain_id')}</Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => <StyledInput {...field} placeholder="eg. 2" disabled={isBuiltIn} />}
-                    name="chainId"
-                />
+                <Input fullWidth disableUnderline {...register('chainId')} placeholder="eg. 2" disabled={isBuiltIn} />
                 {errors.chainId ? <Typography className={classes.error}>{errors.chainId.message}</Typography> : null}
 
                 <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => <StyledInput {...field} placeholder="eg. ETH" disabled={isBuiltIn} />}
-                    name="currencySymbol"
+                <Input
+                    fullWidth
+                    disableUnderline
+                    {...register('currencySymbol')}
+                    placeholder="eg. ETH"
+                    disabled={isBuiltIn}
                 />
+                {errors.currencySymbol ? (
+                    <Typography className={classes.warn}>{errors.currencySymbol.message}</Typography>
+                ) : null}
 
                 <Typography className={classes.label}>{t('optional_block_explorer_url')}</Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => <StyledInput {...field} placeholder="https://" disabled={isBuiltIn} />}
-                    name="explorer"
+                <Input
+                    fullWidth
+                    disableUnderline
+                    {...register('explorer')}
+                    placeholder="https://"
+                    disabled={isBuiltIn}
                 />
                 {errors.explorer ? <Typography className={classes.error}>{errors.explorer.message}</Typography> : null}
             </form>

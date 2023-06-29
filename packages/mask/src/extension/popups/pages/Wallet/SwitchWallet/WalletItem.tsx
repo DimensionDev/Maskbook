@@ -26,22 +26,23 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    domain: {
-        marginLeft: 4,
-    },
-    name: {
+    mainLine: {
         color: theme.palette.primary.main,
         fontWeight: 500,
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    name: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
     text: {
         marginLeft: 6,
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-start',
         gap: 6,
     },
     badge: {
@@ -54,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         lineHeight: '16px',
         height: 20,
-        backgroundColor: alpha(theme.palette.maskColor.primary, 0.18),
+        backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
         marginLeft: theme.spacing(1),
         color: theme.palette.maskColor.highlight,
     },
@@ -63,9 +64,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'flex-end',
         fontSize: 12,
-        flexGrow: 1,
-        width: '50%',
+        marginLeft: theme.spacing(2),
     },
 }))
 
@@ -104,21 +105,16 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
             {...rest}>
             {wallet.owner ? <Icons.SmartPay size={24} /> : <Icons.MaskBlue size={24} />}
             <Box className={classes.text}>
-                <Box width="50%">
-                    <Typography className={classes.name}>
-                        <Typography component="span" display="flex" alignItems="center">
-                            {wallet.name}
-                            {domain ? (
-                                <Typography component="span" className={classes.domain}>
-                                    ({formatDomainName(domain)})
-                                </Typography>
-                            ) : null}
-                            {wallet.hasDerivationPath ? null : (
-                                <Typography component="span" className={classes.badge}>
-                                    {t('wallet_imported')}
-                                </Typography>
-                            )}
+                <Box width={180} overflow="auto">
+                    <Typography className={classes.mainLine} component="div">
+                        <Typography className={classes.name}>
+                            {`${wallet.name}${domain ? ` (${formatDomainName(domain)})` : ''}`}
                         </Typography>
+                        {wallet.hasDerivationPath ? null : (
+                            <Typography component="span" className={classes.badge}>
+                                {t('wallet_imported')}
+                            </Typography>
+                        )}
                     </Typography>
                     <Typography className={classes.address}>
                         <Tooltip title={wallet.address} placement="right">
@@ -128,7 +124,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         </Tooltip>
                     </Typography>
                 </Box>
-                <WalletBalance className={classes.balance} skeletonWidth={100} account={wallet.address} />
+                <WalletBalance className={classes.balance} skeletonWidth={60} account={wallet.address} />
             </Box>
         </ListItem>
     )

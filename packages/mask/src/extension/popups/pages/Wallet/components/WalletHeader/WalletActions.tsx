@@ -6,43 +6,46 @@ import { useI18N } from '../../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 
-const useStyles = makeStyles()((theme) => ({
-    container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 68,
-        gap: theme.spacing(2),
-    },
-    button: {
-        color: theme.palette.maskColor.second,
-        width: 112,
-        height: theme.spacing(4.5),
-        boxSizing: 'border-box',
-        backgroundColor: theme.palette.maskColor.bottom,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 8,
-        border: 'none',
-        boxShadow: '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
-        cursor: 'pointer',
-        transition: 'transform 0.1s ease',
-        '&:hover': {
-            transform: 'scale(1.05)',
+const useStyles = makeStyles()((theme) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        container: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 68,
+            gap: theme.spacing(2),
         },
-        '&:active': {
-            transform: 'scale(0.95)',
+        button: {
+            color: theme.palette.maskColor.second,
+            width: 112,
+            height: theme.spacing(4.5),
+            boxSizing: 'border-box',
+            backgroundColor: theme.palette.maskColor.bottom,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 8,
+            border: 'none',
+            boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+            cursor: 'pointer',
+            transition: 'transform 0.1s ease',
+            '&:hover': {
+                transform: 'scale(1.05)',
+            },
+            '&:active': {
+                transform: 'scale(0.95)',
+            },
         },
-    },
-    label: {
-        color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1),
-        fontFamily: 'Helvetica',
-        fontWeight: 700,
-        fontSize: 14,
-    },
-}))
+        label: {
+            color: theme.palette.maskColor.main,
+            marginLeft: theme.spacing(1),
+            fontFamily: 'Helvetica',
+            fontWeight: 700,
+            fontSize: 14,
+        },
+    }
+})
 
 export const WalletActions = memo(function WalletActions(props: BoxProps) {
     const { classes, cx, theme } = useStyles()

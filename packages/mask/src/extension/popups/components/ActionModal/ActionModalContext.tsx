@@ -45,7 +45,11 @@ export function useModalNavigate() {
     const navigate = useNavigate()
     const openModal = useCallback(
         (path: PopupModalRoutes) => {
-            navigate(path, { state: { mainLocation: location } })
+            navigate(path, {
+                state: {
+                    mainLocation: location.state?.mainLocation ?? location,
+                },
+            })
         },
         [location, navigate],
     )

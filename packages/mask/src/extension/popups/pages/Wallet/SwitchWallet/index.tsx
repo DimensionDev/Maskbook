@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     actionButton: {
         display: 'flex',
+        justifyContent: 'flex-start',
     },
     actionLabel: {
         marginLeft: theme.spacing(0.5),
@@ -91,7 +92,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 className={classes.actionButton}
                 fullWidth
                 size="small"
-                variant="roundedOutlined"
+                variant="outlined"
                 disabled={wallets.length >= MAX_WALLET_LIMIT}
                 onClick={handleClickCreate}>
                 <Icons.ConnectWallet size={20} color={theme.palette.maskColor.second} />
@@ -103,20 +104,20 @@ const SwitchWallet = memo(function SwitchWallet() {
                 className={classes.actionButton}
                 fullWidth
                 size="small"
-                variant="roundedOutlined"
+                variant="outlined"
                 onClick={handleImport}>
                 <Icons.Download2 size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_import_wallet')}
                 </Typography>
             </ActionButton>
-            <ActionButton className={classes.actionButton} fullWidth size="small" variant="roundedOutlined">
+            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
                 <Icons.Lock size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_lock_wallet')}
                 </Typography>
             </ActionButton>
-            <ActionButton className={classes.actionButton} fullWidth size="small" variant="roundedOutlined">
+            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
                 <Icons.WalletSetting size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_wallet_settings')}
