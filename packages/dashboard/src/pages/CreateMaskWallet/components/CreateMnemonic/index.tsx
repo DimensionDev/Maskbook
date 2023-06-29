@@ -60,21 +60,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     button: {
-        padding: '14px 20px',
-        borderRadius: 10,
-        width: 126,
         whiteSpace: 'nowrap',
-        fontSize: 16,
-        lineHeight: '20px',
-        color: theme.palette.maskColor.bottom,
-        background: theme.palette.maskColor.main,
-        '&:hover': {
-            boxShadow: `0 0 5px ${theme.palette.maskColor.main}`,
-            color: theme.palette.maskColor.bottom,
-            background: theme.palette.maskColor.main,
-        },
     },
-    cancelButton: {},
     maskBanner: {
         marginBottom: 36,
     },
@@ -374,7 +361,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, hasPassword, onRe
             </Alert>
 
             <PrimaryButton
-                className={classes.helveticaBold}
+                className={cx(classes.helveticaBold, classes.button)}
                 width="125px"
                 size="large"
                 color="primary"
