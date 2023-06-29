@@ -12,8 +12,6 @@ import '../../src/plugins/Savings/index.js'
 import '../../src/plugins/Trader/index.js'
 import '../../src/plugins/NextID/index.js'
 import '../../src/plugins/ProfileCard/index.js'
-import '../../src/plugins/Game/index.js'
-import '../../src/plugins/Tips/index.js'
 
 import '@masknet/plugin-wallet'
 import '@masknet/plugin-evm'
