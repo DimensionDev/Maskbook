@@ -55,6 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     menuItem: {
         width: '100%',
+        color: theme.palette.maskColor.main,
     },
     btn: {
         margin: 0,
@@ -229,7 +230,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const nftsRender = useMemo(() => {
         return (
             <Autocomplete
-                disablePortal
                 id="collection-box"
                 options={nfts}
                 onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
@@ -273,7 +273,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const tokensRender = useMemo(() => {
         return (
             <Autocomplete
-                disablePortal
                 id="token-box"
                 options={collection.tokens}
                 inputValue={inputTokenName}
@@ -286,7 +285,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {!option.glbSupport ? (
                             <img className={classes.thumbnail} src={option.metadata?.imageURL} />
                         ) : null}
-                        <Typography>{option?.metadata?.name}</Typography>
+                        <Typography color={(theme) => theme.palette.maskColor.main}>
+                            {option?.metadata?.name}
+                        </Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                     </Box>
                 )}

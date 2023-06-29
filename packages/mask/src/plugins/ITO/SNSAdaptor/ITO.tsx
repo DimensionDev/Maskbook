@@ -19,7 +19,7 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
-import { TokenIcon, ChainBoundary, WalletConnectedBoundary, useAssetAsBlobURL } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { EnhanceableSite, NetworkPluginID, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
@@ -222,7 +222,7 @@ export function ITO(props: ITO_Props) {
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
     // assets
-    const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
+    const PoolBackground = new URL('../assets/pool-background.jpg', import.meta.url).toString()
 
     const { pid, payload } = props
     const { regions: defaultRegions = '-' } = props.payload
@@ -786,14 +786,18 @@ export function ITO(props: ITO_Props) {
 
 export function ITO_Loading() {
     const { t } = useI18N()
-    const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const { classes, cx } = useStyles({})
     return (
         <div style={{ width: '100%' }}>
             <Card
                 className={cx(classes.root, classes.loadingWrap)}
                 elevation={0}
-                style={{ backgroundImage: `url(${PoolBackground})` }}>
+                style={{
+                    backgroundImage: `url(${new URL(
+                        '../assets/pool-loading-background.jpg',
+                        import.meta.url,
+                    ).toString()})`,
+                }}>
                 <Typography variant="body1" className={classes.loadingITO}>
                     {t('plugin_ito_loading')}
                 </Typography>
@@ -805,7 +809,7 @@ export function ITO_Loading() {
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({})
-    const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const PoolBackground = new URL('../assets/pool-loading-background.jpg', import.meta.url).toString()
     return (
         <Card
             className={cx(classes.root, classes.loadingWrap)}

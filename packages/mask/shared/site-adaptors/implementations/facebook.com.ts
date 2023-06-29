@@ -12,7 +12,7 @@ export const FacebookAdaptor: SiteAdaptor.Definition = {
     declarativePermissions: { origins },
     homepage: 'https://www.facebook.com',
     isSocialNetwork: true,
-
+    sortIndex: 1,
     getProfilePage: () => new URL('https://www.facebook.com'),
     getShareLinkURL(message) {
         const url = urlcat('https://www.facebook.com/sharer/sharer.php', {

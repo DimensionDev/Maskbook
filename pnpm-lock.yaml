@@ -847,6 +847,9 @@ importers:
       '@masknet/plugin-flow':
         specifier: workspace:^
         version: link:../plugins/Flow
+      '@masknet/plugin-game':
+        specifier: workspace:^
+        version: link:../plugins/Game
       '@masknet/plugin-gitcoin':
         specifier: workspace:^
         version: link:../plugins/Gitcoin
@@ -2067,6 +2070,54 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
+
+  packages/plugins/Game:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../../web3-shared/evm
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
+      urlcat:
+        specifier: ^3.1.0
+        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-9a72e6227-20230525)
 
   packages/plugins/Gitcoin:
     dependencies:

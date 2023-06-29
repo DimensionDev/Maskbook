@@ -3,14 +3,19 @@ import { stateCreator } from '../../social-network/utils.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
 import { IdentityProviderOpensea } from './collecting/Identity.js'
+import { CurrentVisitingIdentityProviderDefault } from '../browser-action/collecting/identity.js'
+import { ThemeSettingsProviderDefault } from '../browser-action/collecting/theme.js'
 import { openseaBase } from './base.js'
 import { openseaShared } from './shared.js'
+
 const define: SocialNetworkUI.Definition = {
     ...openseaShared,
     ...openseaBase,
     automation: {},
     collecting: {
         identityProvider: IdentityProviderOpensea,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderDefault,
+        themeSettingsProvider: ThemeSettingsProviderDefault,
     },
     configuration: {},
     customization: {},
