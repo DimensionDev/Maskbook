@@ -10,13 +10,11 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
-import {
-    useCurrentVisitingIdentity,
-    useSocialIdentityByUserId,
-} from '../../../../components/DataSource/useActivatedUI.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
+import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
+import { useSocialIdentityByUserId } from '../../hooks/useSocialIdentityByUserId.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
@@ -63,7 +61,7 @@ export function TipButton(props: Props) {
     const visitingIdentity = useCurrentVisitingIdentity()
     const { value: identity } = useSocialIdentityByUserId(receiverUserId)
 
-    const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
+    const isVisitingUser = visitingIdentity?.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {
         switch (pluginID) {
             case NetworkPluginID.PLUGIN_EVM:

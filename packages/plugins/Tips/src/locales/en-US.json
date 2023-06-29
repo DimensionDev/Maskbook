@@ -49,5 +49,8 @@
     "wallet_set_up_failed": "Tips Wallet set up failed, please try again.",
     "view_on_explorer": "View on Explorer",
     "tips_guide_description": "Send authors tips by using Mask Network’s Tips function.",
-    "tips_guide_action": "Close"
+    "tips_guide_action": "Close",
+
+    "tips_no_collectible_found": "No collectible found.",
+    "retry": "Retry"
 }

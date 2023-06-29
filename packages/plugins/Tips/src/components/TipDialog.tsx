@@ -16,7 +16,7 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -109,6 +109,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         nonFungibleTokenAddress,
         nonFungibleTokenId ?? '',
     )
+    const { share } = useSNSAdaptorContext()
 
     const send = useCallback(async () => {
         const hash = await sendTip()
@@ -129,10 +130,20 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 name: `$${token?.symbol}`,
             }),
             title: t.tips(),
-            share: activatedSocialNetworkUI.utils.share,
+            share,
         })
         onClose?.()
-    }, [sendTip, nonFungibleToken, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
+    }, [
+        sendTip,
+        nonFungibleToken,
+        shareText,
+        amount,
+        tipType,
+        token,
+        nonFungibleTokenAddress,
+        nonFungibleTokenId,
+        share,
+    ])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
         ? pluginID

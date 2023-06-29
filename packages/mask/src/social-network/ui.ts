@@ -178,6 +178,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         connectPersona,
         ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
         currentPersonaIdentifier,
+        getUserIdentity: activatedSocialNetworkUI.utils.getUserIdentity,
     }
 
     startPluginSNSAdaptor(

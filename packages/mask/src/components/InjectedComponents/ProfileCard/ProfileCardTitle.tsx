@@ -13,11 +13,11 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
-import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { ProfileBar } from './ProfileBar.js'
 import { usePersonasFromDB } from '../../DataSource/usePersonasFromDB.js'
+import { TipButton } from '@masknet/plugin-tips'
 
 const useStyles = makeStyles()((theme) => {
     return {

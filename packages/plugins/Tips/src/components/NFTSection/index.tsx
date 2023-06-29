@@ -9,9 +9,9 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
-import { CollectibleList } from '../../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 import { useI18N } from '../../locales/index.js'
 import { useTip } from '../../contexts/index.js'
+import { CollectibleList } from '../CollectibleList/index.js'
 
 export * from './NFTList.js'
 

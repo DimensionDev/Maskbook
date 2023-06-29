@@ -17,3 +17,5 @@ registerPlugin({
             import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker/index.js'))),
     },
 })
+
+export * from './components/TipsButton/index.js'
