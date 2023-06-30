@@ -179,7 +179,7 @@ export function CreateForm(props: CreateFormProps) {
     const inputTokenAmount = formatAmount(tokenAndAmount?.amount || '0', tokenAndAmount?.token?.decimals)
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+    const { data: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         tokenAndAmount?.token?.address ?? '',
     )

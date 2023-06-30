@@ -109,13 +109,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     // workaround: transferERC20 should support non-evm network
     const isNativeToken = isNativeTokenAddress(selectedToken.address)
-    const tokenType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
 
     const { data: nativeToken } = useNativeToken(pluginID, { chainId })
     const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
 
     // balance
-    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
+    const { data: tokenBalance = '0', refetch: tokenBalanceRetry } = useFungibleTokenBalance(
         pluginID,
         selectedToken?.address ?? '',
         { chainId },

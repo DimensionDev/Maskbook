@@ -110,12 +110,12 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
-    const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
+    const { data: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
         chainId,
     })
 
     // #region form variables
-    const { value: inputTokenBalance } = useFungibleTokenBalance(
+    const { data: inputTokenBalance } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         protocol.bareToken.address,
         { chainId },

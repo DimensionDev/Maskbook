@@ -114,7 +114,7 @@ interface Props {
     protocolBalance: BigNumber
 }
 function FungibleTokenBalance({ protocol, isDeposit, protocolBalance }: Props) {
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+    const { data: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         isDeposit ? protocol.bareToken.address : '',
     )
