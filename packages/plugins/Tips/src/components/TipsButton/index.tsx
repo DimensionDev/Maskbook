@@ -13,8 +13,7 @@ import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
-import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
-import { useSocialIdentityByUserId } from '../../hooks/useSocialIdentityByUserId.js'
+import { useCurrentVisitingIdentity, useSocialIdentityByUserId } from '@masknet/plugin-infra/content-script'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.

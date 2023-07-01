@@ -1,6 +1,6 @@
-import { useSocialIdentity } from '@masknet/plugin-infra/content-script'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 import { useAsync } from 'react-use'
+import { useSNSAdaptorContext } from '../dom/useSNSAdaptorContext.js'
+import { useSocialIdentity } from './index.js'
 
 export function useSocialIdentityByUserId(userId?: string) {
     const { getUserIdentity } = useSNSAdaptorContext()
