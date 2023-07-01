@@ -33,27 +33,16 @@ export const PersonaGuard = memo(function PersonaGuard({
     )
 
     const connectedAndVerified = status.connected && status.verified
-    /*
-    const handleEvent = useCallback(
-        (event: PersonaSelectPanelDialogEvent) => {
-            if (!event.open && !connectedAndVerified) {
-                onDiscard?.()
-            }
-        },
-        [connectedAndVerified, onDiscard],
-    )
-    const { setDialog: setPersonaSelectPanelDialog, closeDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-        handleEvent,
-    )
-    */
 
     useEffect(() => {
-        PersonaSelectPanelModal.emitter.on('close', () => {
+        const off = PersonaSelectPanelModal.emitter.on('close', () => {
             if (!connectedAndVerified) {
                 onDiscard?.()
             }
         })
+        return () => {
+            off()
+        }
     }, [connectedAndVerified])
 
     useLayoutEffect(() => {

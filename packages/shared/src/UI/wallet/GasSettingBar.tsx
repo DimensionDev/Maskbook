@@ -45,7 +45,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     // set initial options
     useEffect(() => {
-        GasSettingModal.emitter.on('close', (evt) => {
+        const off = GasSettingModal.emitter.on('close', (evt) => {
             if (evt?.gasOption) setGasOptionType(evt.gasOption)
             onChange(
                 (chainResolver.isSupport(chainId, 'EIP1559')
@@ -60,6 +60,9 @@ export function GasSettingBar(props: GasSettingBarProps) {
                       }) as NonPayableTx,
             )
         })
+        return () => {
+            off()
+        }
     }, [])
 
     const gasFee = useMemo(() => {

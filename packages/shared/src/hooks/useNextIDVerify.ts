@@ -58,7 +58,6 @@ export function useNextIDVerify() {
 
                 setTimeout(() => {
                     clearInterval(verifyPostCollectTimer.current!)
-                    // reject({ message: t('setup_guide_verify_post_not_found') })
                     reject()
                 }, 1000 * 20)
             })
