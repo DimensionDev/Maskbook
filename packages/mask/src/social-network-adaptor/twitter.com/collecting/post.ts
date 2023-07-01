@@ -185,13 +185,13 @@ export function collectVerificationPost(keyword: string) {
                 if (isTypedMessageText(x)) return x.content ?? ''
                 if (isTypedMessageAnchor(x) && x.category === 'user') return x.content ?? ''
                 if (isTypedMessageAnchor(x) && x.category === 'normal')
-                    return (x.content ?? '').replace(/http(.*)\/\//g, '')
+                    return (x.content ?? '').replaceAll(/http(.*)\/\//g, '')
                 return ''
             })
             .join('')
         const isVerified =
             postId &&
-            content.toLowerCase().replace(/\r\n|\n|\r/gm, '') === keyword.toLowerCase().replace(/\r\n|\n|\r/gm, '')
+            content.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') === keyword.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '')
 
         if (isVerified && userId) {
             return new PostIdentifier(userId, postId)

@@ -57,6 +57,6 @@ function getCurrencySymbol(currency: string) {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
         })
-        .replace(/\d/g, '')
+        .replaceAll(/\d/g, '')
         .trim()
 }

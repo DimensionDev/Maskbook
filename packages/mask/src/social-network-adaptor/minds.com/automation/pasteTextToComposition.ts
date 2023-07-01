@@ -47,7 +47,7 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             SimulateTextareaInput(textarea.id)
 
             await delay(interval)
-            if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
+            if (!getEditorContent().replaceAll('\n', '').includes(text.replaceAll('\n', ''))) {
                 fail(new Error('Unable to paste text automatically'))
             }
         }

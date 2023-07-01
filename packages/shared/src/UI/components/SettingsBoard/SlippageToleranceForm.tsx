@@ -122,7 +122,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                 <MaskAlert icon={<Icons.WarningTriangle color="warning" />} severity="warning">
                     {t.gas_settings_alert_low_slippage_tolerance()}
                 </MaskAlert>
-            ) : tolerance > slippageTolerances[slippageTolerances.length - 1] ? (
+            ) : tolerance > slippageTolerances.at(-1)! ? (
                 <MaskAlert icon={<Icons.Warning />} severity="error">
                     {t.gas_settings_alert_high_slippage_tolerance({
                         percentage: tolerance.toString(),

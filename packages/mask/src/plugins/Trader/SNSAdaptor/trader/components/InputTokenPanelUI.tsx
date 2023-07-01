@@ -171,7 +171,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
 
         const onChange = useCallback(
             (ev: ChangeEvent<HTMLInputElement>) => {
-                const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+                const amount_ = ev.currentTarget.value.replaceAll(',', '.')
                 if (amount_ && !new RegExp(NUMERIC_INPUT_REGEXP_PATTERN).test(amount_)) return
                 if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) onAmountChange(`0${amount_}`)
                 else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)

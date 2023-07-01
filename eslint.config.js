@@ -258,7 +258,8 @@ const codeStyleRules = {
     // 'unicorn/prefer-array-flat-map': 'warn',
     'unicorn/prefer-array-index-of': 'warn',
     // 'unicorn/prefer-array-some': 'warn',
-    // 'unicorn/prefer-at': 'warn',
+    'unicorn/prefer-at': 'warn',
+    'unicorn/prefer-blob-reading-methods': 'warn',
     'unicorn/prefer-date-now': 'warn',
     // 'unicorn/prefer-dom-node-append': 'warn',
     'unicorn/prefer-dom-node-dataset': 'warn',
@@ -275,7 +276,7 @@ const codeStyleRules = {
     // 'unicorn/prefer-set-has': 'warn',
     'unicorn/prefer-set-size': 'warn',
     // 'unicorn/prefer-spread': 'warn', // prefer [...] than Array.from
-    // 'unicorn/prefer-string-replace-all': 'warn', // str.replaceAll(...)
+    'unicorn/prefer-string-replace-all': 'warn', // str.replaceAll(...)
     'unicorn/prefer-string-slice': 'warn',
     'unicorn/prefer-string-trim-start-end': 'warn', // str.trimStart(...)
     '@typescript-eslint/no-this-alias': 'warn',

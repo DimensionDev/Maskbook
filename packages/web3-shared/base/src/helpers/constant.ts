@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import type { ChainIdEnum, Constants, Primitive } from './types.js'
 
 function replaceAll(input: string, values: Record<string, string>) {
-    return input.replace(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
+    return input.replaceAll(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
 }
 
 export function transformAll<ChainId extends number, T extends Constants>(

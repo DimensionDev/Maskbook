@@ -51,7 +51,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             pasteText(text)
             await delay(interval)
 
-            if (!getEditorContent().replace(/\n/g, '').includes(text.replace(/\n/g, ''))) {
+            if (!getEditorContent().replaceAll('\n', '').includes(text.replaceAll('\n', ''))) {
                 fail(new Error('Unable to paste text automatically'))
             }
         }
