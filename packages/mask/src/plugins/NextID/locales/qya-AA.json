@@ -57,5 +57,18 @@
     "create_persona_intro": "crwdns18270:0crwdne18270:0",
     "add_wallet_intro": "crwdns18272:0crwdne18272:0",
     "others_lack_wallet": "crwdns18274:0crwdne18274:0",
+    "reload": "crwdns20719:0crwdne20719:0",
+    "persona_load_failed": "crwdns20721:0crwdne20721:0",
+    "applications_create_persona_title": "crwdns20723:0crwdne20723:0",
+    "applications_create_persona_hint": "crwdns20725:0crwdne20725:0",
+    "applications_create_persona_action": "crwdns20727:0crwdne20727:0",
+    "applications_persona_title": "crwdns20729:0crwdne20729:0",
+    "applications_persona_copy": "crwdns20731:0crwdne20731:0",
+    "applications_persona_connect": "crwdns20733:0{{-nickname}}crwdne20733:0",
+    "applications_persona_connect_hint": "crwdns20735:0{{-nickname}}crwdne20735:0",
+    "applications_persona_verify": "crwdns20737:0{{-nickname}}crwdne20737:0",
+    "applications_persona_verify_hint": "crwdns20739:0crwdne20739:0",
+    "applications_persona_verify_connect": "crwdns20741:0{{-nickname}}crwdne20741:0",
+    "applications_persona_verify_connect_hint": "crwdns20743:0{{-nickname}}crwdne20743:0",
     "enable_plugin": "crwdns18118:0crwdne18118:0"
 }
