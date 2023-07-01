@@ -75,5 +75,5 @@ export const LinkifyOptions: Opts = {
 
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
-    return htmlString.trimStart().replace(/<[^>]+>/g, '')
+    return htmlString.trimStart().replaceAll(/<[^>]+>/g, '')
 }

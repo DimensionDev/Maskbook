@@ -62,7 +62,7 @@ export interface HistoryTableRowProps {
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
     const { data: domain } = useReverseAddress(undefined, transaction.to)
-    const transactionType = (transaction.type ?? '').replace(/_/g, ' ')
+    const transactionType = (transaction.type ?? '').replaceAll('_', ' ')
 
     return (
         <HistoryTableRowUI

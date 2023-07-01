@@ -14,10 +14,10 @@ const cache = new Map<string, AESCryptoKey>()
 export async function parsePayloadText(encoded: string): Promise<PayloadParseResult.Payload | null> {
     let payload = TwitterDecoder(
         'https://mask.io/?PostData_v1=' +
-            encodeURI(encoded).replace(/@$/g, '%40').replace(/%2F/g, '/').replace(/%3D/g, '='),
+            encodeURI(encoded).replaceAll(/@$/g, '%40').replaceAll('%2F', '/').replaceAll('%3D', '='),
     ).unwrapOr('')
     if (typeof payload === 'string') {
-        payload = payload.replace(/%20/g, '+')
+        payload = payload.replaceAll('%20', '+')
     }
     return (await parsePayload(payload)).unwrapOr(null)
 }

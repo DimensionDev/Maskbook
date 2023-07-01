@@ -67,8 +67,8 @@ export async function fetchInjectContentScriptList(entryHTML: string) {
     )
 
     const body = html.match(/<body>(.+)<\/body>/)![1]
-    body.replace(/<script defer src="/g, '')
-        .replace(/><\/script>/g, '')
+    body.replaceAll('<script defer src="', '')
+        .replaceAll('></script>', '')
         .split('"')
         .forEach((script) => {
             if (!script) return

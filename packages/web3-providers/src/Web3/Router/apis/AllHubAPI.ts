@@ -52,6 +52,6 @@ export class AllHubAPI {
     }
 
     use<T extends NetworkPluginID>(pluginID: T, initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>) {
-        return (this.creators[pluginID] as HubCreatorAPI_Base<T>).create(initial)
+        return (this.creators[pluginID] as unknown as HubCreatorAPI_Base<T>).create(initial)
     }
 }
