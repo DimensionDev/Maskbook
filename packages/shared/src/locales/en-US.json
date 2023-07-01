@@ -311,5 +311,7 @@
     "applications_persona_verify": "Verify {{-nickname}}",
     "applications_persona_verify_hint": "Please verify current persona with social media account before using dApps.",
     "applications_persona_verify_connect": "Connect and Verify {{-nickname}}",
+    "enable_plugin_boundary": "Enable plugin",
+    "enable_plugin_boundary_description": "This function has been turned off in the App settings. Enable plug-ins to fully access.",
     "applications_persona_verify_connect_hint": "Please connect {{-nickname}} and send proof post before using dApps."
 }

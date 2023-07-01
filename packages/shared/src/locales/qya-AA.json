@@ -303,5 +303,7 @@
     "applications_persona_verify_hint": "crwdns18506:0crwdne18506:0",
     "applications_persona_verify_connect": "crwdns18508:0{{-nickname}}crwdne18508:0",
     "applications_persona_verify_connect_hint": "crwdns18510:0{{-nickname}}crwdne18510:0",
-    "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0"
+    "plugin_wallet_on_connect": "crwdns4629:0crwdne4629:0",
+    "enable_plugin_boundary": "crwdns18602:0crwdne18602:0",
+    "enable_plugin_boundary_description": "crwdns19131:0crwdne19131:0"
 }

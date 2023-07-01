@@ -27,6 +27,7 @@
     "@masknet/plugin-approval": "workspace:^",
     "@masknet/plugin-artblocks": "workspace:^",
     "@masknet/plugin-avatar": "workspace:^",
+    "@masknet/plugin-nextid": "workspace:^",
     "@masknet/plugin-claim": "workspace:^",
     "@masknet/plugin-collectible": "workspace:^",
     "@masknet/plugin-cross-chain-bridge": "workspace:^",

@@ -39,7 +39,7 @@ export interface AbstractTabProps
     scrollable?: boolean
 }
 
-export default function AbstractTab(props: AbstractTabProps) {
+export function AbstractTab(props: AbstractTabProps) {
     const { tabs, state, index, height = 200, hasOnlyOneChild = false, scrollable = false } = props
     const { classes, cx } = useStyles(undefined, { props })
     const [value, setValue] = state ?? [undefined, undefined]
