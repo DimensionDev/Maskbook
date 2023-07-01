@@ -47,7 +47,7 @@ export function MnemonicReveal(props: MnemonicRevealProps) {
         <Box component="ul" className={classes.container}>
             {words.map((item, index) => (
                 <Box className={classes.wordCard} component="li" key={index}>
-                    <Typography className={classes.text} fontWeight={700} textAlign={'center'} flex={'1 0 0'}>
+                    <Typography className={classes.text} fontWeight={700} textAlign="center" flex="1 0 0">
                         {item}
                     </Typography>
                 </Box>
