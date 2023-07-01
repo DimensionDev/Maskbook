@@ -22,6 +22,12 @@ export interface PluginServices {
             derivationPath?: string,
             initialPassword?: string | undefined,
         ): Promise<string>
+        generateAddressFromMnemonic(
+            name: string,
+            mnemonic: string,
+            derivationPath?: string,
+            initialPassword?: string | undefined,
+        ): Promise<string | null | undefined>
         resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }

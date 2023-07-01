@@ -1,51 +1,77 @@
-import { range, shuffle } from 'lodash-es'
-import { useCallback, useMemo, useState } from 'react'
+import { range, shuffle, remove, clone } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { PluginServices } from '../API.js'
+import { useCallback, useMemo, useState } from 'react'
+import { produce } from 'immer'
 
-// How many fields should be filled by the user?
-const PUZZLE_SIZE = 5
+const PUZZLE_SIZE = 3
 
-// The total count of mnemonic words.
 const TOTAL_SIZE = 12
 
+export interface PuzzleWord {
+    index: number
+    rightAnswer: string
+    options: string[]
+}
+
 export function useMnemonicWordsPuzzle() {
-    const [answerWords, setAnswerWords] = useState<string[]>([])
     const { value: words = [], retry: wordsRetry } = useAsyncRetry(
         () => PluginServices.Wallet.createMnemonicWords(),
         [],
     )
 
-    // #region generate some mask indexes randomly which should be filled by the user
-    const [tick, setTick] = useState(0)
-    const indexes = useMemo(() => shuffle(range(TOTAL_SIZE)).slice(0, PUZZLE_SIZE), [tick, words])
-    // #endregion
-
-    // #region a serial of words and the user gonna complete those empty ones
-    const puzzleWords = useMemo(() => {
-        const words_ = words.slice(0)
-        for (let i = 0; i < indexes.length; i += 1) words_[indexes[i]] = answerWords[i] ?? ''
-        return words_
-    }, [answerWords, indexes, words])
-    // #endregion
-
-    const answerCallback = useCallback(
-        (word: string, index: number) => {
-            setAnswerWords((x) => {
-                const words_ = x.slice(0)
-                words_[index] = word
-                return words_
-            })
-        },
-        [answerWords],
+    const indexes = useMemo(
+        () =>
+            shuffle(range(TOTAL_SIZE))
+                .slice(0, PUZZLE_SIZE)
+                .sort((a, b) => a - b),
+        [words],
     )
 
-    const resetCallback = useCallback(() => {
-        setAnswerWords([])
-        setTick((x) => x + 1)
-    }, [])
+    const [puzzleAnswer, setPuzzleAnswer] = useState<{ [key: number]: string }>({})
 
-    const refreshCallback = wordsRetry
+    const [isMatched, setIsMatch] = useState<boolean | undefined>()
 
-    return { words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback } as const
+    const puzzleWordList: PuzzleWord[] = useMemo(() => {
+        const restWords = remove(clone(words), (_word, index) => !indexes.includes(index))
+
+        return indexes.map((index) => ({
+            index,
+            rightAnswer: words[index],
+            options: shuffle(shuffle(restWords).slice(0, 2).concat(words[index])),
+        }))
+    }, [words, indexes])
+
+    const answerCallback = useCallback(
+        (index: number, word: string) => {
+            setPuzzleAnswer(
+                produce((draft) => {
+                    draft[index] = word
+                }),
+            )
+        },
+        [setPuzzleAnswer],
+    )
+
+    const verifyAnswerCallback = useCallback(
+        (callback?: () => void) => {
+            const matched = Object.entries(puzzleAnswer).every((entry) => {
+                return words[Number(entry[0])] === entry[1]
+            })
+            setIsMatch(matched)
+
+            if (matched) callback?.()
+        },
+        [puzzleAnswer, words, setIsMatch],
+    )
+
+    return {
+        words,
+        refreshCallback: wordsRetry,
+        puzzleWordList,
+        answerCallback,
+        puzzleAnswer,
+        verifyAnswerCallback,
+        isMatched,
+    } as const
 }

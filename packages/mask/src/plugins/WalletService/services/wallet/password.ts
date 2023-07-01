@@ -21,6 +21,7 @@ export function INTERNAL_setPassword(newPassword: string) {
 
 export async function setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
+    console.log({ newPassword })
     await database.encryptSecret(newPassword)
     INTERNAL_setPassword(newPassword)
 }

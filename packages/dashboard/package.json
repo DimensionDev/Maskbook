@@ -62,6 +62,7 @@
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
     "urlcat": "^3.1.0",
+    "immer": "^10.0.1",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "wallet.ts": "^1.0.1",

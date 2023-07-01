@@ -1,10 +1,10 @@
 import { forwardRef, type ForwardedRef, useMemo } from 'react'
-import { useDashboardI18N } from '../../../../locales/i18n_generated.js'
+import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
-import { PrintBackground } from '../../../../assets/index.js'
-import { MnemonicReveal } from '../../../../components/Mnemonic/index.js'
+import { PrintBackground } from '../../../assets/index.js'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
 import { NetworkType, networkResolver } from '@masknet/web3-shared-evm'
 

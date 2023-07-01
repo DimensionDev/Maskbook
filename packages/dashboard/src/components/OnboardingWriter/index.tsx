@@ -1,7 +1,6 @@
-import { Typography } from '@mui/material'
 import { isArray, sum } from 'lodash-es'
 import { useState, useMemo, useEffect, cloneElement } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardI18N } from '../../locales/i18n_generated.js'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,31 +17,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function OnboardingWriter() {
+interface OnboardingWriterProps {
+    words: JSX.Element[]
+}
+
+export function OnboardingWriter({ words }: OnboardingWriterProps) {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
 
     const [index, setIndex] = useState(0)
-    const words = useMemo(() => {
-        return [
-            <Typography key="identity">
-                {t.persona_onboarding_creating_identity()}
-                {t.identity()}
-            </Typography>,
-            <Typography key="account">
-                {t.persona_onboarding_generating_accounts()}
-                {t.accounts()}
-            </Typography>,
-            <Typography key="data">
-                {t.persona_onboarding_encrypting_data()}
-                {t.data()}
-            </Typography>,
-            <Typography key="ready">
-                {t.persona_onboarding_ready()}
-                {t.ready()}
-            </Typography>,
-        ]
-    }, [])
 
     const charSize = useMemo(() => {
         return words.reduce((prev, current) => {

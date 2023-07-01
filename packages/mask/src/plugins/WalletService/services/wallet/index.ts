@@ -264,6 +264,32 @@ export async function recoverWalletFromMnemonic(
     }
 }
 
+export async function generateAddressFromMnemonic(
+    name: string,
+    mnemonic: string,
+    derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+    initialPassword?: string,
+) {
+    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
+
+    const imported = await Mask.importMnemonic({
+        mnemonic,
+        password: password_,
+    })
+
+    if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
+
+    const created = await Mask.createAccountOfCoinAtPath({
+        coin: api.Coin.Ethereum,
+        name,
+        password: password_,
+        derivationPath,
+        StoredKeyData: imported.StoredKey.data,
+    })
+
+    return created?.account?.address
+}
+
 export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string) {
     const password_ = initialPassword_ ?? (await password.INTERNAL_getPasswordRequired())
     const imported = await Mask.importPrivateKey({
