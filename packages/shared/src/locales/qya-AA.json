@@ -301,5 +301,15 @@
     "upload_drag_n_drop": "crwdns20597:0crwdne20597:0",
     "upload_size_limit": "crwdns20599:0crwdne20599:0",
     "upload_or": "crwdns20601:0crwdne20601:0",
-    "upload_browse_files": "crwdns20603:0crwdne20603:0"
+    "upload_browse_files": "crwdns20603:0crwdne20603:0",
+    "reload": "crwdns20745:0crwdne20745:0",
+    "persona_load_failed": "crwdns20747:0crwdne20747:0",
+    "applications_persona_title": "crwdns20749:0crwdne20749:0",
+    "applications_persona_copy": "crwdns20751:0crwdne20751:0",
+    "applications_persona_connect": "crwdns20753:0{{-nickname}}crwdne20753:0",
+    "applications_persona_connect_hint": "crwdns20755:0{{-nickname}}crwdne20755:0",
+    "applications_persona_verify": "crwdns20757:0{{-nickname}}crwdne20757:0",
+    "applications_persona_verify_hint": "crwdns20759:0crwdne20759:0",
+    "applications_persona_verify_connect": "crwdns20761:0{{-nickname}}crwdne20761:0",
+    "applications_persona_verify_connect_hint": "crwdns20763:0{{-nickname}}crwdne20763:0"
 }
