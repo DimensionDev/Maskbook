@@ -15,6 +15,7 @@ import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal
 import { SelectFungibleTokenModal } from './SelectFungibleTokenModal/index.js'
 import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
 import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
+import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'
@@ -37,6 +38,7 @@ export const Modals = memo(function Modals() {
             <SelectFungibleTokenModal ref={modals.SelectFungibleTokenModal.register} />
             <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
             <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
+            <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
         </>
     )
 })

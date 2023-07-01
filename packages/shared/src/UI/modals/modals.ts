@@ -18,6 +18,7 @@ import type {
     SelectGasSettingsModalOpenProps,
 } from './SelectAdvancedSettingsDialog/index.js'
 import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
+import type { PersonaSelectPanelModalOpenProps } from './PersonaSelectPanelModal/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps>()
@@ -40,3 +41,5 @@ export const SelectFungibleTokenModal = new SingletonModal<
     SelectFungibleTokenModalOpenProps,
     SelectFungibleTokenModalCloseProps
 >()
+
+export const PersonaSelectPanelModal = new SingletonModal<PersonaSelectPanelModalOpenProps>()

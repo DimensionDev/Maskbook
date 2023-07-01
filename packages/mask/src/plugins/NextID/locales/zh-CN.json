@@ -57,5 +57,18 @@
     "create_persona_intro": "请创建您的身份以使用 Web3 个人资料。",
     "add_wallet_intro": "在 Web3 中，您可以给已安装Mask Network的好友展示接收小费的地址，NFT 收藏品，捐赠记录和其他链上信息。",
     "others_lack_wallet": "用户尚未设置此项。",
+    "persona_load_failed": "加载失败",
+    "reload": "重新加载",
+    "applications_create_persona_hint": "使用此功能需要先创建一个身份并验证您的社交媒体账号。",
+    "applications_create_persona_title": "身份",
+    "applications_create_persona_action": "创建身份",
+    "applications_persona_title": "身份",
+    "applications_persona_copy": "复制成功",
+    "applications_persona_connect": "连接到 {{nickname}}",
+    "applications_persona_connect_hint": "请在使用 dApp之前连接到 {{nickname}} 。",
+    "applications_persona_verify": "验证 {{nickname}}",
+    "applications_persona_verify_hint": "进入应用前请使用当前身份验证当前社交媒体账号。",
+    "applications_persona_verify_connect": "连接到 {{nickname}} 并进行验证",
+    "applications_persona_verify_connect_hint": "请在使用 dApp之前连接到 {{nickname}} 并发送验证推文。",
     "enable_plugin": "开启插件"
 }

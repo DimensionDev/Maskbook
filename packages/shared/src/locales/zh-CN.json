@@ -269,5 +269,15 @@
     "lucky_drop": "红包",
     "share": "分享",
     "ok": "确定",
+    "persona_load_failed": "加载失败",
+    "reload": "重新加载",
+    "applications_persona_title": "身份",
+    "applications_persona_copy": "复制成功",
+    "applications_persona_connect": "连接到 {{nickname}}",
+    "applications_persona_connect_hint": "请在使用 dApp之前连接到 {{nickname}} 。",
+    "applications_persona_verify": "验证 {{nickname}}",
+    "applications_persona_verify_hint": "进入应用前请使用当前身份验证当前社交媒体账号。",
+    "applications_persona_verify_connect": "连接到 {{nickname}} 并进行验证",
+    "applications_persona_verify_connect_hint": "请在使用 dApp之前连接到 {{nickname}} 并发送验证推文。",
     "plugin_wallet_on_connect": "连接钱包"
 }

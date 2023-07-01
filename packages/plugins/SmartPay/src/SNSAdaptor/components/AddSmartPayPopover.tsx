@@ -3,7 +3,7 @@ import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Icon, LeavePageConfirmModal, useSharedI18N } from '@masknet/shared'
+import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
@@ -73,10 +73,6 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
 
     const { value: qualifications, loading } = useQueryQualifications()
 
-    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
     const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     const handleCreate = useCallback(() => {
@@ -104,8 +100,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             !qualifications.signPersona &&
             !qualifications.signWallet
         ) {
-            setPersonaSelectPanelDialog({
-                open: true,
+            PersonaSelectPanelModal.open({
                 enableVerify: true,
                 target: PluginID.SmartPay,
             })

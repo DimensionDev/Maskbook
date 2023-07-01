@@ -11,7 +11,6 @@ import type {
     SettingsDialogEvent,
     NonFungibleTokenDialogEvent,
     WalletSettingsDialogEvent,
-    PersonaSelectPanelDialogEvent,
     AvatarSettingDialogEvent,
     redpacketDialogEvent,
     ITODialogEvent,
@@ -58,10 +57,6 @@ export interface CrossIsolationEvents {
     ITODialogEvent: ITODialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent
-    /**
-     * Application Persona List dialog
-     */
-    PersonaSelectPanelDialogUpdated: PersonaSelectPanelDialogEvent
 
     walletsUpdated: WalletsUpdatedEvent
     requestsUpdated: RequestsUpdatedEvent

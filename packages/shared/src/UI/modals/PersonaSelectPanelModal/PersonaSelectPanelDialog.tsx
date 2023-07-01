@@ -1,11 +1,8 @@
-import { useState } from 'react'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/index.js'
-import { PersonaSelectPanel, type PositionOption } from './PersonaSelectPanel.js'
+import { PersonaSelectPanel, type PositionOption } from '../../components/PersonaSelectPanel/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
+import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 
 type PositionStyle = {
     top?: number
@@ -48,26 +45,23 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
     },
 }
 
-export function PersonaSelectPanelDialog() {
-    const { t } = useI18N()
+interface PersonaSelectPanelDialogProps {
+    finishTarget?: string
+    enableVerify?: boolean
+    position?: PositionOption
+    open: boolean
+    onClose: () => void
+}
+export function PersonaSelectPanelDialog({
+    open,
+    enableVerify = true,
+    position = 'center',
+    finishTarget,
+    onClose,
+}: PersonaSelectPanelDialogProps) {
+    const t = useSharedI18N()
 
-    const [finishTarget, setFinishTarget] = useState<string>()
-    const [position, setPosition] = useState<PositionOption>('center')
-    const [enableVerify, setEnableVerify] = useState(true)
     const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
-
-    const { open, closeDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-        (ev) => {
-            if (!ev.open) {
-                setFinishTarget(undefined)
-            } else {
-                setFinishTarget(ev.target)
-                setEnableVerify(ev.enableVerify)
-                setPosition(ev.position ?? 'center')
-            }
-        },
-    )
 
     return open ? (
         <InjectedDialog
@@ -78,11 +72,11 @@ export function PersonaSelectPanelDialog() {
                 dialogTitle: classes.header,
             }}
             maxWidth="sm"
-            onClose={closeDialog}
-            title={t('applications_persona_title')}
+            onClose={onClose}
+            title={t.applications_persona_title()}
             titleBarIconStyle="close">
             <DialogContent classes={{ root: classes.content }}>
-                <PersonaSelectPanel enableVerify={enableVerify} finishTarget={finishTarget} onClose={closeDialog} />
+                <PersonaSelectPanel enableVerify={enableVerify} finishTarget={finishTarget} onClose={onClose} />
             </DialogContent>
         </InjectedDialog>
     ) : null
