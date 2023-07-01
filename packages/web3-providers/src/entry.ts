@@ -80,12 +80,14 @@ import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
 import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
 import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 import { Web3StorageAPI } from './Storage/apis/Storage.js'
+
 export { UniSwapV2Like } from './Trader/UniSwapV2.js'
 export { UniSwapV3Like } from './Trader/UniSwapV3.js'
 export { Balancer } from './Trader/Balancer.js'
 export { Zrx } from './Trader/Zrx.js'
 export { Bancor } from './Trader/Bancor.js'
 export { OpenOcean } from './Trader/OpenOcean.js'
+export * from './Trending/helpers.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()

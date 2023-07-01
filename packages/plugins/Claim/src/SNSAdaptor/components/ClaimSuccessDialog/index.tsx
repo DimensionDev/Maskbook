@@ -90,7 +90,7 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
                 {t.claim()}
             </DialogTitle>
             <DialogContent className={classes.content} style={{ paddingTop: 34 }}>
-                <ImageIcon icon={tokenDetail?.logoURL} size={90} classes={{ icon: classes.icon }} />
+                <ImageIcon icon={tokenDetail?.logoURL} size={90} className={classes.icon} />
                 <Typography className={classes.symbol}>
                     {amount} {tokenDetail?.symbol}
                 </Typography>

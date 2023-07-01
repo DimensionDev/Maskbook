@@ -1,5 +1,8 @@
-import MIRRORED_TOKENS from './mirrored_tokens.json'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { SourceType } from '@masknet/web3-shared-base'
 import type { TrendingAPI } from '../entry-types.js'
+import { CURRENCIES_MAP } from './constants.js'
+import MIRRORED_TOKENS from './mirrored_tokens.json'
 
 export function isMirroredKeyword(symbol: string) {
     return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())
@@ -14,4 +17,13 @@ export function getCommunityLink(links: string[]): TrendingAPI.CommunityUrls {
         if (x.includes('reddit')) return { type: 'reddit', link: x }
         return { type: 'other', link: x }
     })
+}
+
+export function getCurrency(chainId: Web3Helper.ChainIdAll, dataProvider: SourceType | undefined) {
+    if (!dataProvider) return undefined
+    const currencies = CURRENCIES_MAP[dataProvider]
+    if (!currencies) return
+    return chainId && dataProvider === SourceType.NFTScan
+        ? currencies.find((x) => x.chainId === chainId)
+        : CURRENCIES_MAP[dataProvider]?.[0]
 }

@@ -25,6 +25,9 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
             symbol: token.symbol,
             decimals: token.decimals,
             balance: token.balance,
+            value: {
+                usd: token.current_usd_price.toString(),
+            },
         }
     }
 
@@ -49,7 +52,7 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
             urlcat('/v1/account/tokens', {
                 chain_id: chainId,
                 address,
-                page: (indicator?.index ?? 0) + 1,
+                page: (indicator?.index || 0) + 1,
             }),
         )
 

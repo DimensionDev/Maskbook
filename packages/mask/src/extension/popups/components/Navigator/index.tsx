@@ -1,10 +1,10 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo, type PropsWithChildren } from 'react'
-import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
+import { memo } from 'react'
+import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { NavLink } from 'react-router-dom'
+import { NavLink, type LinkProps } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyle = makeStyles()((theme) => ({
@@ -28,17 +28,11 @@ const useStyle = makeStyles()((theme) => ({
     container: {
         backgroundColor: theme.palette.maskColor.bottom,
         width: '100%',
-        position: 'fixed',
-        bottom: 0,
         backdropFilter: 'blur(8px)',
     },
 }))
 
-interface BottomNavLinkProps extends PropsWithChildren {
-    to: string
-}
-
-const BottomNavLink = memo<BottomNavLinkProps>(function BottomNavLink({ children, to }) {
+const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
     const { classes } = useStyle()
 
     return (
@@ -48,11 +42,11 @@ const BottomNavLink = memo<BottomNavLinkProps>(function BottomNavLink({ children
     )
 })
 
-export const Navigator = memo(() => {
-    const { classes } = useStyle()
+export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
+    const { classes, cx } = useStyle()
 
     return (
-        <Box className={classes.container}>
+        <Box className={cx(classes.container, className)} {...rest}>
             <BottomNavigation classes={{ root: classes.navigation }}>
                 <BottomNavLink to={PopupRoutes.Personas}>
                     <BottomNavigationAction

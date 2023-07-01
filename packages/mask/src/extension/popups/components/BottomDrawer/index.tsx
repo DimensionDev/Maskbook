@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     header: {
         display: 'flex',
         width: '100%',
+        textAlign: 'center',
     },
     title: {
         fontSize: 24,
@@ -25,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface BottomDrawerProps extends PropsWithChildren {
     open: boolean
     title: string
-    onClose: () => void
+    onClose?: () => void
 }
 
 export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open, onClose, children, title }) {

@@ -175,7 +175,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
 
         return (
             <Box className={classes.container}>
-                <ImageIcon icon={networkDescriptor?.icon} size={24} classes={{ icon: classes.badge }} />
+                <ImageIcon icon={networkDescriptor?.icon} size={24} className={classes.badge} />
                 <Box className={classes.content}>
                     <Typography className={classes.title}>{t.airdrop_title({ symbol: 'ARB' })}</Typography>
                     <Typography className={classes.timeTips}>{timeTips}</Typography>

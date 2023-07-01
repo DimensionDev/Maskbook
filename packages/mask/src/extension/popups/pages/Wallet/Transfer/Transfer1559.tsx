@@ -192,7 +192,11 @@ export interface Transfer1559Props {
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
-export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetMenu, otherWallets }) => {
+export const Transfer1559 = memo<Transfer1559Props>(function Transfer1559({
+    selectedAsset,
+    openAssetMenu,
+    otherWallets,
+}) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -329,7 +333,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         loading: resolveDomainLoading,
     } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, address)
     // #endregion
-
     // #region check address or registered address type
     useAsync(async () => {
         // Only ethereum currently supports ens
@@ -375,7 +378,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
     }, [address, pluginID, registeredAddress, methods.clearErrors, wallet?.address, resolveDomainError])
     // #endregion
-
     // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.schema,
@@ -384,7 +386,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         isValidAddress(address) ? address : registeredAddress,
     )
     // #endregion
-
     // #region hack for smartPay, will be removed
     const maskTokenAddress = useMaskTokenAddress()
     const { value: ratio } = useAsync(async () => {
@@ -394,7 +395,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     }, [smartPayChainId])
 
     const actualSelected = useMemo(() => {
-        if (!selectedAsset) return
+        if (!selectedAsset || !maxFeePerGas) return
         if (isNativeTokenAddress(selectedAsset.address)) {
             return {
                 ...selectedAsset,
@@ -402,7 +403,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     BigNumber.max(
                         0,
                         minus(
-                            selectedAsset?.balance,
+                            selectedAsset.balance,
                             new BigNumber(formatGweiToWei(maxFeePerGas)).multipliedBy('210000').integerValue(),
                         ),
                     ),
@@ -433,7 +434,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
     }, [gasLimit, maxFeePerGas, selectedAsset, maskTokenAddress, smartPayChainId, chainId, wallet?.owner, ratio])
     // #endregion
-
     const maxAmount = useMemo(() => {
         const gasFee = formatGweiToWei(maxFeePerGas || 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(actualSelected?.balance ?? 0)
@@ -448,7 +448,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
     // #endregion
-
     // #region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
         if (!estimateGasFees) return
@@ -457,7 +456,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         methods.setValue('maxPriorityFeePerGas', new BigNumber(normal?.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
     // #endregion
-
     const [_, transferCallback] = useTokenTransferCallback(
         selectedAsset?.schema ?? SchemaType.Native,
         selectedAsset?.address ?? '',
@@ -467,7 +465,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         methods.setValue('amount', maxAmount)
     }, [methods.setValue, maxAmount])
 
-    const [{ loading, error }, onSubmit] = useAsyncFn(
+    const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
 

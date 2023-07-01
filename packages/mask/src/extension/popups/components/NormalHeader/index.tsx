@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'grid',
         gridTemplateColumns: '24px auto 24px',
         alignItems: 'center',
+        flexShrink: 0,
     },
     back: {
         fontSize: 24,

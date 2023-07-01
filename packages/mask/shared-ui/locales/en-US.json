@@ -1065,5 +1065,8 @@
     "wallet_swap": "Swap",
     "wallet_account": "Wallet Account",
     "wallet_imported": "Imported",
-    "scan_address_to_payment": "Scan address to receive payment"
+    "scan_address_to_payment": "Scan address to receive payment",
+    "empty": "Empty",
+    "hide_token_symbol": "Hide {{- symbol}}",
+    "hide_token_description": "Confirm to hide {{- asset.symbol}}  You can redisplay it by re-adding this token at any time."
 }

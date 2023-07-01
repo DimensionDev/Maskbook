@@ -7,7 +7,7 @@ import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
-import { WalletActions } from './WalletActions.js'
+import { ActionGroup } from '../ActionGroup/index.js'
 import { CopyIconButton } from '../../../../components/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
 
@@ -15,7 +15,9 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
-        padding: '11px 16px',
+        padding: '16px',
+        // padding bottom space for assets tabs
+        paddingBottom: 34,
         lineHeight: 0,
     },
     topbar: {
@@ -192,8 +194,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
                 </div>
             </div>
-            <WalletAssetsValue className={classes.balance} skeletonWidth={200} skeletonHeight="2em" />
-            <WalletActions mt={2} />
+            <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
+            <ActionGroup mt={2} />
         </Box>
     )
 })

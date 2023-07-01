@@ -1,15 +1,16 @@
+import { Flags } from '@masknet/flags'
+import { ChainIcon, FormattedAddress, TokenIcon, WalletIcon } from '@masknet/shared'
+import { type NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
-import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
-import { Flags } from '@masknet/flags'
-import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { QRCode } from 'react-qrcode-logo'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useParams } from 'react-router-dom'
+import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
 import { CopyIconButton } from '../../../components/index.js'
-import { makeStyles } from '@masknet/theme'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hook/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -90,6 +91,7 @@ export default memo(function Receive() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { address } = useParams()
     const networks = useMemo(() => {
         return getEvmNetworks(Flags.support_testnet_switch).filter((x) =>
             Flags.support_testnet_switch ? true : x.isMainnet,
@@ -102,7 +104,9 @@ export default memo(function Receive() {
     return (
         <Box>
             <Box className={classes.header}>
-                {currentNetwork.isMainnet ? (
+                {address && !isNativeTokenAddress(address) ? (
+                    <TokenIcon address={address} />
+                ) : currentNetwork.isMainnet ? (
                     <WalletIcon size={60} mainIcon={currentNetwork.icon} />
                 ) : (
                     <ChainIcon size={60} name={currentNetwork.name} />

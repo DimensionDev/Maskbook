@@ -54,3 +54,4 @@ function useContext(initialState?: {
 }
 
 export const Context = createContainer(useContext)
+Context.Provider.displayName = 'FungibleAssetsProvider'

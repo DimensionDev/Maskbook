@@ -255,7 +255,7 @@ export const SmartPayContent = memo(() => {
                     sx={{ cursor: 'pointer' }}>
                     <Box position="relative" width={30} height={30}>
                         <Icons.SmartPay size={30} />
-                        <ImageIcon classes={{ icon: classes.badge }} size={12} icon={polygonDescriptor?.icon} />
+                        <ImageIcon className={classes.badge} size={12} icon={polygonDescriptor?.icon} />
                     </Box>
                     <Box display="flex" flexDirection="column" justifyContent="space-between" minWidth={150}>
                         <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
@@ -358,7 +358,7 @@ export const SmartPayContent = memo(() => {
                     <Box display="flex" alignItems="center" columnGap={1.5}>
                         <Box position="relative" width={30} height={30}>
                             <Icons.SmartPay size={30} />
-                            <ImageIcon classes={{ icon: classes.badge }} size={12} icon={polygonDescriptor?.icon} />
+                            <ImageIcon className={classes.badge} size={12} icon={polygonDescriptor?.icon} />
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Box display="flex" onClick={openMenu} sx={{ cursor: 'pointer' }}>

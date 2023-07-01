@@ -9,7 +9,7 @@ import { lazy, useEffect, useState, type ReactNode } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { useClassicMaskFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import Services from '../service.js'
-import { PopupFrame } from './components/PopupFrame/index.js'
+import { PopupLayout } from './components/PopupLayout/index.js'
 import { NormalHeader } from './components/index.js'
 import { PageTitleContext } from './context.js'
 import { PopupContext } from './hook/usePopupContext.js'
@@ -68,5 +68,5 @@ export default function PopupsConnect() {
 }
 
 function frame(x: React.ReactNode) {
-    return <PopupFrame children={x} />
+    return <PopupLayout children={x} />
 }

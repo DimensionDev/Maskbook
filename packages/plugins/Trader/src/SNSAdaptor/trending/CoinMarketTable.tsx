@@ -1,38 +1,15 @@
-import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography, Grid } from '@mui/material'
+import { Stack, Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { TokenIcon, WalletIcon } from '@masknet/shared'
-import { type SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
+import { TokenIcon, WalletIcon, FungibleCoinMarketTable } from '@masknet/shared'
+import { formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useHighestFloorPrice, useNFT_TrendingOverview, useOneDaySaleAmounts } from '../../trending/useTrending.js'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        borderRadius: 0,
-        boxSizing: 'border-box',
-        backgroundColor: 'transparent',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    head: {
-        padding: 0,
-        fontSize: 14,
-        border: 'none',
-    },
-    cell: {
-        whiteSpace: 'nowrap',
-        border: 'none',
-        fontSize: 14,
-        textAlign: 'right',
-        fontWeight: 700,
-    },
-    label: {
-        fontSize: 14,
-    },
     gridContainer: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
@@ -68,82 +45,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CoinMarketTableProps {
-    dataProvider: SourceType
     result: Web3Helper.TokenResultAll
     trending: Trending
 }
 
-export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const {
-        trending: { market },
-        dataProvider,
-    } = props
-    const t = useI18N()
-
-    const { classes } = useStyles()
-
-    return (
-        <Stack>
-            <Stack>
-                <Typography fontSize={14} fontWeight={700} component="h3">
-                    {t.plugin_trader_usdc_price_statistic()}
-                </Typography>
-            </Stack>
-            <TableContainer className={classes.container} component={Paper} elevation={0}>
-                <Table size="small">
-                    <TableBody>
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.plugin_trader_market_cap()}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>
-                                {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
-                            </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.plugin_trader_circulating_supply()}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>
-                                {formatSupply(market?.circulating_supply, '--')}
-                            </TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.plugin_trader_volume_24()}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>
-                                {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.plugin_trader_total_supply()}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>{formatSupply(market?.total_supply, '--')}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Stack>
-    )
-}
-
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const t = useI18N()
-    const { trending } = props
-    const chainId = props.result.chainId ?? trending.coin.chainId
-    const { value: overview } = useNFT_TrendingOverview(props.result.pluginID, trending.coin.id, chainId)
+    const { trending, result } = props
+    const chainId = result.chainId ?? trending.coin.chainId
+    const { value: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)
     const { value: highestPrice_ } = useHighestFloorPrice(
         overview?.highest_price ?? trending.market?.highest_price ? '' : trending.coin.id,
     )
@@ -154,7 +64,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const highestPrice = highestPrice_ ?? overview?.highest_price ?? trending.market?.highest_price
 
     const { classes, cx } = useStyles()
-    const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
+    const chain = useNetworkDescriptor(result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
     const PaymentIcon = trending.market?.price_token_address ? (
         <TokenIcon address={trending.market?.price_token_address} chainId={chainId} size={14} />
     ) : (

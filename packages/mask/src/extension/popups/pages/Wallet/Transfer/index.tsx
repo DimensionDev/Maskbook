@@ -1,19 +1,26 @@
-import { memo, useEffect, useMemo, useState } from 'react'
-import { MenuItem, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { chainResolver } from '@masknet/web3-shared-evm'
 import { FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
-import { useContainer } from 'unstated-next'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { Transfer1559 } from './Transfer1559.js'
-import { Prior1559Transfer } from './Prior1559Transfer.js'
-import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import {
+    useAccount,
+    useBalance,
+    useChainContext,
+    useFungibleTokenBalance,
+    useNativeTokenAddress,
+    useWallets,
+} from '@masknet/web3-hooks-base'
+import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { chainResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { MenuItem, Typography } from '@mui/material'
+import { first } from 'lodash-es'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
+import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { first } from 'lodash-es'
-import { useLocation } from 'react-router-dom'
+import { WalletContext, useAsset } from '../hooks/index.js'
+import { Prior1559Transfer } from './Prior1559Transfer.js'
+import { Transfer1559 } from './Transfer1559.js'
 
 const useStyles = makeStyles()({
     assetItem: {
@@ -30,14 +37,22 @@ const useStyles = makeStyles()({
     },
 })
 
-const Transfer = memo(() => {
+const Transfer = memo(function Transfer() {
     const location = useLocation()
     const { t } = useI18N()
     const { classes } = useStyles()
+    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
+    const address = useParams().address || nativeTokenAddress
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const isNativeToken = !address || isNativeTokenAddress(address)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { assets, currentToken } = useContainer(WalletContext)
-    const [selectedAsset, setSelectedAsset] = useState(currentToken ?? first(assets))
+    const { assets } = useContainer(WalletContext)
+    const { data: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { data: erc20Balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
+    const balance = isNativeToken ? nativeTokenBalance : erc20Balance
+    const currentAsset = useAsset(address, account)
+    const [selectedAsset, setSelectedAsset] = useState(currentAsset ?? first(assets))
 
     const otherWallets = useMemo(
         () => wallets.map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
@@ -59,7 +74,7 @@ const Transfer = memo(() => {
                     </div>
                     <Typography>
                         <FormattedBalance
-                            value={asset.balance}
+                            value={balance}
                             decimals={asset.decimals}
                             significant={4}
                             formatter={formatBalance}

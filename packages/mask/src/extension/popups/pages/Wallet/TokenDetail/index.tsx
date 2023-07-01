@@ -1,158 +1,287 @@
-import { memo, useCallback } from 'react'
-import { useAsync } from 'react-use'
-import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
-import { useNavigate } from 'react-router-dom'
-import { compact, intersectionWith } from 'lodash-es'
-import urlcat from 'urlcat'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useContainer } from 'unstated-next'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../../utils/index.js'
-import { PluginTransakMessages } from '@masknet/plugin-transak'
-import Services from '../../../../service.js'
-import { ActivityList } from '../components/ActivityList/index.js'
-import { openWindow } from '@masknet/shared-base-ui'
-import { useTitle } from '../../../hook/useTitle.js'
-import { formatBalance, formatCurrency, getTokenUSDValue, isSameAddress } from '@masknet/web3-shared-base'
-import { useNativeToken, useWallet } from '@masknet/web3-hooks-base'
+import {
+    CoinMetadataTable,
+    CoinMetadataTableSkeleton,
+    FormattedBalance,
+    FormattedCurrency,
+    FungibleCoinMarketTable,
+    FungibleCoinMarketTableSkeleton,
+    PriceChange,
+    PriceChartRange,
+    TokenIcon,
+    useDimension,
+    usePriceLineChart,
+    type Dimension,
+} from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { openWindow, queryClient } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import { useAccount, useChainId, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
+import { TrendingAPI } from '@masknet/web3-providers/types'
+import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
+import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { Box, Button, Typography } from '@mui/material'
+import { first, last } from 'lodash-es'
+import { memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { PageTitleContext } from '../../../context.js'
+import { useTitle } from '../../../hook/index.js'
+import { ActionGroup } from '../components/index.js'
+import { useAsset } from '../hooks/index.js'
+import { useCoinStats } from './useCoinStats.js'
+import { useTrending } from './useTrending.js'
+import { useCoinGeckoCoinId } from './useCoinGeckoCoinId.js'
+import { ConfirmModal } from '../../../modals/modals.js'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
-const useStyles = makeStyles()({
-    content: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 18,
-    },
-    tokenIcon: {
-        width: 24,
-        height: 24,
-        marginBottom: 4,
-    },
-    balance: {
-        lineHeight: '20px',
-        color: '#1C68F3',
-        fontWeight: 600,
-    },
-    text: {
-        fontSize: 12,
-        lineHeight: 1,
-        color: '#7B8192',
-    },
-    controller: {
-        display: 'grid',
-        justifyContent: 'center',
-        gap: 20,
-        gridTemplateColumns: 'repeat(3,1fr)',
-        marginTop: 20,
-        '& > *': {
-            textAlign: 'center',
-            cursor: 'pointer',
+const useStyles = makeStyles()((theme) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        page: {
+            position: 'relative',
+            height: '100%',
+            overflow: 'auto',
+            zIndex: 3,
         },
-    },
-    icon: {
-        color: '#1C68F3',
-        fill: 'none',
-    },
+        deleteButton: {
+            padding: 0,
+            minWidth: 'auto',
+            width: 'auto',
+        },
+        assetValue: {
+            fontSize: 24,
+            fontFamily: 'Helvetica',
+            fontWeight: 700,
+            textAlign: 'center',
+        },
+        tokenIcon: {
+            marginRight: 4,
+        },
+        label: {
+            fontSize: 14,
+            fontWeight: 700,
+            color: theme.palette.maskColor.second,
+        },
+        value: {
+            fontSize: 14,
+            fontWeight: 700,
+            color: theme.palette.maskColor.main,
+            marginTop: 2,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        actions: {
+            position: 'fixed',
+            bottom: 0,
+            right: 0,
+            left: 0,
+        },
+        svg: {
+            display: 'block',
+            margin: theme.spacing(2, 'auto', 0),
+        },
+        info: {
+            backgroundColor: theme.palette.maskColor.bottom,
+            borderRadius: '20px 20px 0 0',
+            padding: theme.spacing(2),
+            boxShadow: theme.palette.maskColor.bottomBg,
+            backdropFilter: 'blur(8px)',
+        },
+        halo: {
+            position: 'relative',
+            zIndex: 1,
+            overflowX: 'hidden',
+            height: '100%',
+            '&:before': {
+                position: 'absolute',
+                left: '-10%',
+                top: 240,
+                zIndex: 1,
+                content: '""',
+                height: 256,
+                width: 256,
+                backgroundImage: isDark
+                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
+                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+            },
+            '&:after': {
+                position: 'absolute',
+                left: '70%',
+                top: 240,
+                zIndex: 1,
+                content: '""',
+                height: 256,
+                width: 256,
+                backgroundImage: isDark
+                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
+                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+            },
+        },
+    }
 })
 
-const TokenDetail = memo(() => {
+const DEFAULT_DIMENSION: Dimension = {
+    top: 32,
+    right: 16,
+    bottom: 32,
+    left: 16,
+    width: 368,
+    height: 174,
+}
+
+const TokenDetail = memo(function TokenDetail() {
+    const { classes, theme } = useStyles()
     const { t } = useI18N()
-    const { classes } = useStyles()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const { address } = useParams()
     const navigate = useNavigate()
-    const { currentToken } = useContainer(WalletContext)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const isNativeToken = isNativeTokenAddress(address)
+    const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
+    const asset = useAsset(address, account)
+    const coinId = useCoinGeckoCoinId(chainId, address)
+    const tokenValue = useMemo(() => {
+        if (!asset?.decimals || !asset?.value?.usd || !balance) return 0
+        return leftShift(balance, asset.decimals).times(asset.value.usd)
+    }, [balance, asset?.decimals, asset?.value?.usd])
 
-    const { value: isActiveSocialNetwork } = useAsync(async () => {
-        const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))
-        const definedSocialNetworkUrls = (await Services.SocialNetwork.getSupportedSites()).map(
-            ({ networkIdentifier }) => networkIdentifier,
-        )
-
-        return !!intersectionWith(urls, definedSocialNetworkUrls, (a, b) => a.includes(b)).length
-    }, [])
-
-    const openBuyDialog = useCallback(async () => {
-        if (isActiveSocialNetwork) {
-            PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
-                open: true,
-                address: wallet?.address ?? '',
-                code: currentToken?.symbol ?? currentToken?.name,
-            })
-        } else {
-            const url = urlcat('dashboard.html#', 'labs', {
-                open: 'Transak',
-                code: currentToken?.symbol ?? currentToken?.name,
-            })
-            openWindow(browser.runtime.getURL(url), 'BUY_DIALOG')
-        }
-    }, [wallet?.address, isActiveSocialNetwork, currentToken])
+    const { data: trending, isLoading: isLoadingTrending } = useTrending(chainId, coinId)
+    const priceChange =
+        trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
 
     const openSwapDialog = useCallback(async () => {
         const url = urlcat(
             'popups.html#/',
             PopupRoutes.Swap,
-            !isSameAddress(nativeToken?.address, currentToken?.address)
+            !isSameAddress(nativeToken?.address, asset?.address)
                 ? {
-                      id: currentToken?.address,
-                      name: currentToken?.name,
-                      symbol: currentToken?.symbol,
-                      contract_address: currentToken?.address,
-                      decimals: currentToken?.decimals,
+                      id: asset?.address,
+                      name: asset?.name,
+                      symbol: asset?.symbol,
+                      contract_address: asset?.address,
+                      decimals: asset?.decimals,
                   }
                 : {},
         )
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
-    }, [currentToken, nativeToken])
+    }, [asset, nativeToken])
 
-    useTitle(t('popups_assets'))
+    const dimension = {
+        ...DEFAULT_DIMENSION,
+        width: DEFAULT_DIMENSION.width,
+        height: DEFAULT_DIMENSION.height,
+    }
+    const svgRef = useRef<SVGSVGElement>(null)
+    useDimension(svgRef, dimension)
 
-    if (!currentToken) return null
+    const [chartRange, setChartRange] = useState(TrendingAPI.Days.ONE_DAY)
+
+    const { data: stats = EMPTY_LIST } = useCoinStats(chainId, address, chartRange)
+    const chartData = useMemo(() => stats.map(([date, price]) => ({ date: new Date(date), value: price })), [stats])
+    const colors = theme.palette.maskColor
+    const firstPrice = first(stats)?.[1] ?? 0
+    const lastPrice = last(stats)?.[1] ?? 0
+    const color = lastPrice - firstPrice < 0 ? colors.danger : colors.success
+    usePriceLineChart(svgRef, chartData, dimension, 'token-price-line-chart', { sign: 'USD', color })
+
+    useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
+    const { setExtension } = useContext(PageTitleContext)
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    useEffect(() => {
+        if (!asset || isNativeToken) return
+        setExtension(
+            <Button
+                variant="text"
+                className={classes.deleteButton}
+                onClick={async () => {
+                    const result = await ConfirmModal.openAndWaitForClose({
+                        title: t('hide_token_symbol', { symbol: asset.symbol }),
+                        message: t('hide_token_description', { symbol: asset.symbol }),
+                    })
+                    if (!result) return
+                    // Actually, blocking.
+                    await Token?.blockToken?.(account, {
+                        id: asset.address,
+                        chainId,
+                        type: TokenType.Fungible,
+                        schema: SchemaType.ERC20,
+                        address: asset.address,
+                    })
+                    queryClient.invalidateQueries(['fungible-assets', NetworkPluginID.PLUGIN_EVM, chainId])
+                    navigate(-1)
+                }}>
+                <Icons.Trash size={24} />
+            </Button>,
+        )
+        return () => setExtension(undefined)
+    }, [chainId, asset, isNativeToken, classes.deleteButton])
+
+    if (!asset) return null
 
     return (
-        <>
-            <div className={classes.content}>
-                <TokenIcon
-                    className={classes.tokenIcon}
-                    address={currentToken.address}
-                    name={currentToken.name}
-                    chainId={currentToken.chainId}
-                    logoURL={currentToken.logoURL}
-                    AvatarProps={{ sx: { width: 24, height: 24 } }}
-                />
-                <Typography className={classes.balance}>
-                    <FormattedBalance
-                        value={currentToken.balance}
-                        decimals={currentToken.decimals}
-                        symbol={currentToken.symbol}
-                        significant={4}
-                        formatter={formatBalance}
+        <div className={classes.halo}>
+            <Box className={classes.page}>
+                <Box padding={2}>
+                    <Typography className={classes.assetValue}>
+                        <FormattedCurrency value={asset.value?.usd} formatter={formatCurrency} />
+                    </Typography>
+                    <PriceChange change={priceChange} loading={isLoadingTrending} />
+
+                    <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
+
+                    <svg
+                        key={`${chainId}.${address}`}
+                        className={classes.svg}
+                        ref={svgRef}
+                        width={dimension.width}
+                        height={dimension.height}
+                        viewBox={`0 0 ${dimension.width} ${dimension.height}`}
+                        preserveAspectRatio="xMidYMid meet"
                     />
-                </Typography>
-                <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken.value)} formatter={formatCurrency} />
-                </Typography>
-                <div className={classes.controller}>
-                    <div onClick={openBuyDialog}>
-                        <ArrowDownCircle className={classes.icon} />
-                        <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
-                    </div>
-                    <div onClick={() => navigate(PopupRoutes.Transfer)}>
-                        <ArrowUpCircle className={classes.icon} />
-                        <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
-                    </div>
-                    <div onClick={openSwapDialog}>
-                        <Icons.InteractionCircle className={classes.icon} />
-                        <Typography className={classes.text}>{t('popups_wallet_token_swap')}</Typography>
-                    </div>
-                </div>
-            </div>
-            <ActivityList tokenAddress={currentToken.address} />
-        </>
+                    <Box display="flex" flexDirection="row" justifyContent="space-between">
+                        <Box>
+                            <Typography className={classes.label}>Balance</Typography>
+                            <Typography component="div" className={classes.value}>
+                                <TokenIcon
+                                    className={classes.tokenIcon}
+                                    address={asset.address}
+                                    name={asset.name}
+                                    chainId={asset.chainId}
+                                    logoURL={asset.logoURL}
+                                    AvatarProps={{ sx: { width: 16, height: 16 } }}
+                                />
+                                <FormattedBalance
+                                    value={balance}
+                                    decimals={asset.decimals}
+                                    significant={4}
+                                    formatter={formatBalance}
+                                />
+                            </Typography>
+                        </Box>
+                        <Box textAlign="right">
+                            <Typography className={classes.label}>value</Typography>
+                            <Typography component="div" className={classes.value}>
+                                <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
+                {isLoadingTrending ? (
+                    <Box className={classes.info}>
+                        <FungibleCoinMarketTableSkeleton />
+                        <CoinMetadataTableSkeleton />
+                    </Box>
+                ) : trending ? (
+                    <Box className={classes.info}>
+                        <FungibleCoinMarketTable trending={trending} />
+                        <CoinMetadataTable trending={trending} />
+                    </Box>
+                ) : null}
+                <ActionGroup address={address} className={classes.actions} onSwap={openSwapDialog} />
+            </Box>
+        </div>
     )
 })
 

@@ -15,8 +15,7 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import '../../social-network-adaptor/browser-action/index.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
-import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
-import { PopupFrame } from './components/PopupFrame/index.js'
+import { PopupLayout } from './components/PopupLayout/index.js'
 import { PageTitleContext } from './context.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import { ChooseNetworkModal, Modals } from './modals/index.js'
@@ -48,8 +47,10 @@ const PopupRoutes = memo(function PopupRoutes() {
     return (
         <WalletContext.Provider>
             <Routes location={mainLocation || location}>
-                <Route path={PopupPaths.Personas + '/*'} element={frame(<Personas />)} />
-                <Route path={PopupPaths.Wallet + '/*'} element={frame(<Wallet />)} />
+                <Route path="/" element={<PopupLayout />}>
+                    <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
+                    <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
+                </Route>
                 <Route path={PopupPaths.Swap} element={<SwapPage />} />
                 <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
                 <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
@@ -92,10 +93,6 @@ export default function Popups() {
                 </TelemetryProvider>
             </Web3ContextProvider>
         </PopupSnackbarProvider>,
-        frame(<LoadingPlaceholder />),
+        null,
     )
-}
-
-function frame(x: React.ReactNode) {
-    return <PopupFrame children={x} />
 }

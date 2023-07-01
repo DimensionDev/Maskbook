@@ -1,15 +1,14 @@
-import { memo, useCallback } from 'react'
-import { Alert, AlertTitle, Box, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { Link, useLocation } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { NetworkSelector } from '../../../../components/NetworkSelector/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useI18N } from '../../../../../../utils/index.js'
-import { useHasPassword } from '../../../../hook/useHasPassword.js'
-import Services from '../../../../../service.js'
+import { makeStyles } from '@masknet/theme'
+import { Alert, AlertTitle, Box, Typography } from '@mui/material'
+import { memo, useCallback } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { Navigator } from '../../../../components/Navigator/index.js'
+import { useI18N } from '../../../../../../utils/index.js'
+import Services from '../../../../../service.js'
+import { NetworkSelector } from '../../../../components/NetworkSelector/index.js'
+import { useHasPassword } from '../../../../hook/useHasPassword.js'
 import { useTitle } from '../../../../hook/useTitle.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -131,7 +130,6 @@ export const WalletStartUp = memo(() => {
                     </Link>
                 ) : null}
             </Box>
-            <Navigator />
         </Box>
     )
 })

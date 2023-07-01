@@ -13,7 +13,6 @@ import createEmotionServer from '@emotion/server/create-instance'
 import { addShareBaseI18N } from '@masknet/shared-base-ui'
 import { addMaskI18N } from '../../../shared-ui/locales/languages.js'
 import type { PopupSSR_Props } from '../../../background/tasks/Cancellable/PopupSSR/type.js'
-import { PopupFrame } from './components/PopupFrame/index.js'
 import { PersonaHomeUI } from './pages/Personas/Home/UI.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 
@@ -55,23 +54,21 @@ function PopupSSR(props: PopupSSR_Props) {
                             useTheme={usePopupTheme}
                             CustomSnackbarOffsetY={0}
                             useMaskIconPalette={() => 'light'}>
-                            <PopupFrame>
-                                {/* Persona */}
-                                <Suspense fallback={null}>
-                                    <PersonaHomeUI
-                                        accounts={props.accounts ?? EMPTY_LIST}
-                                        networks={props.networks}
-                                        onRestore={noop}
-                                        onCreatePersona={noop}
-                                        onConnect={noop}
-                                        onAccountClick={noop}
-                                        avatar={props.avatar}
-                                        fingerprint={props.currentFingerPrint || ''}
-                                        isEmpty={!props.hasPersona}
-                                        nickname={props.nickname}
-                                    />
-                                </Suspense>
-                            </PopupFrame>
+                            {/* Persona */}
+                            <Suspense fallback={null}>
+                                <PersonaHomeUI
+                                    accounts={props.accounts ?? EMPTY_LIST}
+                                    networks={props.networks}
+                                    onRestore={noop}
+                                    onCreatePersona={noop}
+                                    onConnect={noop}
+                                    onAccountClick={noop}
+                                    avatar={props.avatar}
+                                    fingerprint={props.currentFingerPrint || ''}
+                                    isEmpty={!props.hasPersona}
+                                    nickname={props.nickname}
+                                />
+                            </Suspense>
                         </MaskThemeProvider>
                     </StaticRouter>
                 </Suspense>
