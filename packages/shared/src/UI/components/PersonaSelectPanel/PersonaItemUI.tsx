@@ -27,7 +27,7 @@ interface PersonaItemProps extends withClasses<'checked' | 'unchecked'> {
     onClick: () => void
     currentPersona?: PersonaNextIDMixture
     currentPersonaIdentifier?: ECKeyIdentifier
-    currentProfileIdentify: IdentityResolved
+    currentProfileIdentify?: IdentityResolved
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -70,7 +70,7 @@ export function PersonaItemUI(props: PersonaItemProps) {
             (p) =>
                 isSameProfile(
                     resolveNextIDIdentityToProfile(p.identity, p.platform),
-                    currentProfileIdentify.identifier,
+                    currentProfileIdentify?.identifier,
                 ) && p.is_valid,
         )
     }, [data.proof])

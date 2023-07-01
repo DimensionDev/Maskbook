@@ -57,5 +57,18 @@
     "create_persona_intro": "Please create your persona to use Web3 Profile.",
     "add_wallet_intro": "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension.",
     "others_lack_wallet": "The user has not set this.",
+    "reload": "Reload",
+    "persona_load_failed": "Load failed",
+    "applications_create_persona_title": "Persona",
+    "applications_create_persona_hint": "Please create a Persona and verify your account to use this function.",
+    "applications_create_persona_action": "Create persona",
+    "applications_persona_title": "Persona",
+    "applications_persona_copy": "Copy Success",
+    "applications_persona_connect": "Connect {{-nickname}}",
+    "applications_persona_connect_hint": "Please connect {{-nickname}} before using dApps.",
+    "applications_persona_verify": "Verify {{-nickname}}",
+    "applications_persona_verify_hint": "Please verify current persona with social media account before using dApps.",
+    "applications_persona_verify_connect": "Connect and Verify {{-nickname}}",
+    "applications_persona_verify_connect_hint": "Please connect {{-nickname}} and send proof post before using dApps.",
     "enable_plugin": "You need to open the DAPP to view the specific content"
 }

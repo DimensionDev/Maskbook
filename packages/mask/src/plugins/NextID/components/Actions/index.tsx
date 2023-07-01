@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../locales/index.js'
-import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel.js'
+import { PersonaSelectPanel } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

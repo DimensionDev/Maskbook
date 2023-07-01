@@ -301,5 +301,15 @@
     "upload_drag_n_drop": "Drag & Drop your files here",
     "upload_size_limit": "Size limit: 10 MB",
     "upload_or": "or",
-    "upload_browse_files": "Browse Files"
+    "upload_browse_files": "Browse Files",
+    "reload": "Reload",
+    "persona_load_failed": "Load failed",
+    "applications_persona_title": "Persona",
+    "applications_persona_copy": "Copy Success",
+    "applications_persona_connect": "Connect {{-nickname}}",
+    "applications_persona_connect_hint": "Please connect {{-nickname}} before using dApps.",
+    "applications_persona_verify": "Verify {{-nickname}}",
+    "applications_persona_verify_hint": "Please verify current persona with social media account before using dApps.",
+    "applications_persona_verify_connect": "Connect and Verify {{-nickname}}",
+    "applications_persona_verify_connect_hint": "Please connect {{-nickname}} and send proof post before using dApps."
 }

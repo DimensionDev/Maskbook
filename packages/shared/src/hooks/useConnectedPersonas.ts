@@ -2,17 +2,17 @@ import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, MaskMessages, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import Services from '../../extension/service.js'
-import { usePersonasFromDB } from './usePersonasFromDB.js'
+import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useConnectedPersonas() {
-    const personasInDB = usePersonasFromDB()
+    const personasInDB = useAllPersonas()
+    const { getPersonaAvatars } = useSNSAdaptorContext()
 
     const result = useAsyncRetry(async () => {
         const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
         const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
-        const avatars = await Services.Identity.getPersonaAvatars(allPersonaIdentifiers)
+        const avatars = await getPersonaAvatars?.(allPersonaIdentifiers)
         const allNextIDBindings = await NextIDProof.queryExistedBindingByPlatform(
             NextIDPlatform.NextID,
             allPersonaPublicKeys.join(','),
@@ -25,10 +25,10 @@ export function useConnectedPersonas() {
                     allNextIDBindings
                         .find((p) => p.persona.toLowerCase() === x.identifier.publicKeyAsHex.toLowerCase())
                         ?.proofs.filter((x) => x.is_valid) ?? EMPTY_LIST,
-                avatar: avatars.get(x.identifier),
+                avatar: avatars?.get(x.identifier),
             }
         })
-    }, [personasInDB])
+    }, [personasInDB, getPersonaAvatars])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 

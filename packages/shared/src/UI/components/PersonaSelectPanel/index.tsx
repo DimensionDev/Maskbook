@@ -1,6 +1,3 @@
-import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
-import { Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import {
@@ -9,21 +6,22 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
+    resolveNextIDIdentityToProfile,
     type PersonaIdentifier,
     type ProfileIdentifier,
-    resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { ApplicationBoardModal, LeavePageConfirmModal } from '@masknet/shared'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import Services from '../../../extension/service.js'
-import { useI18N } from '../../../utils/index.js'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { useConnectedPersonas } from '../../DataSource/useConnectedPersonas.js'
-import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
-import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
+import { Button, Stack, Typography } from '@mui/material'
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { ApplicationBoardModal, LeavePageConfirmModal, useSharedI18N } from '../../../index.js'
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
+import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
+import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -55,13 +53,12 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { finishTarget, enableVerify = true, onClose } = props
 
-    const { t } = useI18N()
+    const t = useSharedI18N()
 
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
 
-    const currentPersona = useCurrentPersona()
-    const currentPersonaIdentifier = currentPersona?.identifier
+    const currentPersonaIdentifier = useCurrentPersona()
 
     const { classes } = useStyles(undefined, { props })
 
@@ -70,6 +67,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading, error, retry } = useConnectedPersonas()
+    const { openDashboard, attachProfile, setCurrentPersonaIdentifier } = useSNSAdaptorContext()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -84,12 +82,12 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, connect] = useAsyncFn(
         async (profileIdentifier?: ProfileIdentifier, personaIdentifier?: PersonaIdentifier) => {
             if (!profileIdentifier || !personaIdentifier) return
-            await Services.Identity.attachProfile(profileIdentifier, personaIdentifier, {
+            await attachProfile?.(profileIdentifier, personaIdentifier, {
                 connectionConfirmState: 'confirmed',
             })
-            await Services.Settings.setCurrentPersonaIdentifier(personaIdentifier)
+            await setCurrentPersonaIdentifier?.(personaIdentifier)
         },
-        [],
+        [attachProfile, setCurrentPersonaIdentifier],
     )
 
     useLayoutEffect(() => {
@@ -97,16 +95,16 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         onClose?.()
         LeavePageConfirmModal.open({
-            openDashboard: Services.Helper.openDashboard,
+            openDashboard,
             info: {
                 target: 'dashboard',
                 url: DashboardRoutes.Setup,
-                text: t('applications_create_persona_hint'),
-                title: t('applications_create_persona_title'),
-                actionHint: t('applications_create_persona_action'),
+                text: t.applications_create_persona_hint(),
+                title: t.applications_create_persona_title(),
+                actionHint: t.applications_create_persona_action(),
             },
         })
-    }, [!personas.length, loading, !error])
+    }, [!personas.length, loading, !error, openDashboard])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -167,34 +165,32 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 const { persona } = selectedPersona
                 if (!isConnected && !isVerified && enableVerify)
                     return {
-                        buttonText: t('applications_persona_verify_connect', {
-                            nickname: persona.nickname,
+                        buttonText: t.applications_persona_verify_connect({
+                            nickname: persona.nickname ?? '',
                         }),
-                        hint: t('applications_persona_verify_connect_hint', {
-                            nickname: persona.nickname,
+                        hint: t.applications_persona_verify_connect_hint({
+                            nickname: persona.nickname ?? '',
                         }),
                     }
                 if (!isConnected)
                     return {
-                        buttonText: t('applications_persona_connect', {
-                            nickname: persona.nickname,
+                        buttonText: t.applications_persona_connect({
+                            nickname: persona.nickname ?? '',
                         }),
-                        hint: t('applications_persona_connect_hint', {
-                            nickname: persona.nickname,
+                        hint: t.applications_persona_connect_hint({
+                            nickname: persona.nickname ?? '',
                         }),
                     }
                 if (!isVerified)
                     return {
-                        buttonText: t('applications_persona_verify', {
-                            nickname: persona.nickname,
+                        buttonText: t.applications_persona_verify({
+                            nickname: persona.nickname ?? '',
                         }),
-                        hint: t('applications_persona_verify_hint', {
-                            nickname: persona.nickname,
-                        }),
+                        hint: t.applications_persona_verify_hint(),
                     }
                 return {
-                    buttonText: t('applications_persona_connect', {
-                        nickname: persona.nickname,
+                    buttonText: t.applications_persona_connect({
+                        nickname: persona.nickname ?? '',
                     }),
                 }
             })(),
@@ -216,7 +212,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         e.preventDefault()
         e.stopPropagation()
         copyToClipboard(p.persona.identifier.rawPublicKey)
-        showSnackbar(t('applications_persona_copy'), { variant: 'success' })
+        showSnackbar(t.applications_persona_copy(), { variant: 'success' })
     }
     if (loading) {
         return (
