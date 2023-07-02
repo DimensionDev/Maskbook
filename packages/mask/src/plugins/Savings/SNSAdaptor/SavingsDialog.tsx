@@ -21,13 +21,13 @@ import { Contract } from '@masknet/web3-providers'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { useI18N } from '../../../utils/index.js'
-import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { SavingsFormDialog } from './SavingsForm.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
+import { AllProviderTradeContext } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {

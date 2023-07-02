@@ -35,6 +35,7 @@
     { "path": "../../plugins/Avatar" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
+    { "path": "../../plugins/Trader" },
     { "path": "../../plugins/External" },
     { "path": "../../sandboxed-plugin-runtime/src/site-adaptor" },
     { "path": "../web-workers" },
