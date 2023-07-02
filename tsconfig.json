@@ -134,6 +134,7 @@
       "@masknet/plugin-claim": ["./packages/plugins/Claim/src"],
       "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src"],
       "@masknet/plugin-pets": ["./packages/plugins/Pets/src"],
+      "@masknet/plugin-tips": ["./packages/plugins/Tips/src"],
       "@masknet/plugin-external": ["./packages/plugins/External/src"],
       "@masknet/plugin-game": ["./packages/plugins/Game/src"],
       "@masknet/plugin-nextid": ["./packages/plugins/NextID/src"],

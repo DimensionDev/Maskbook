@@ -4,7 +4,6 @@ import { PluginGuide } from '@masknet/shared'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 import { useTipsUserGuide } from '../../../storage/index.js'
 import { TipButton } from '../../../components/index.js'
 import { useI18N } from '../../../locales/index.js'
@@ -71,8 +70,8 @@ export function TipsRealmContent({
 }: Plugin.SNSAdaptor.TipsRealmOptions) {
     const t = useI18N()
     const { classes, cx } = useStyles({ buttonSize })
-    const userGuide = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
     const myIdentity = useLastRecognizedIdentity()
+    const userGuide = useTipsUserGuide(myIdentity?.identifier?.network as EnhanceableSite)
 
     if (!identity || identity.userId === myIdentity?.identifier?.userId) return null
 

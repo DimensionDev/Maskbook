@@ -886,6 +886,9 @@ importers:
       '@masknet/plugin-solana':
         specifier: workspace:^
         version: link:../plugins/Solana
+      '@masknet/plugin-tips':
+        specifier: workspace:^
+        version: link:../plugins/Tips
       '@masknet/plugin-transak':
         specifier: workspace:^
         version: link:../plugins/Transak
@@ -2691,6 +2694,60 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+
+  packages/plugins/Tips:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../../web3-shared/evm
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-9a72e6227-20230525)
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
 
   packages/plugins/Transak:
     dependencies:

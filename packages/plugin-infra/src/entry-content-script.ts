@@ -44,6 +44,7 @@ export {
     useThemeMode,
     useThemeSettings,
     useThemeSize,
+    useSocialIdentityByUserId,
 } from './sns-adaptor/index.js'
 
 export { getBackgroundColor, isDark, toRGB, fromRGB, shade } from './utils/theme/color-tools.js'
