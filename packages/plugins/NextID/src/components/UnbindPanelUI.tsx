@@ -5,10 +5,9 @@ import { LoadingButton } from '@mui/lab'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { InjectedDialog, WalletStatusBox } from '@masknet/shared'
+import { InjectedDialog, WalletStatusBox, type AbstractTabProps, AbstractTab } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID, type PersonaInformation } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import AbstractTab, { type AbstractTabProps } from '../../../components/shared/AbstractTab.js'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {

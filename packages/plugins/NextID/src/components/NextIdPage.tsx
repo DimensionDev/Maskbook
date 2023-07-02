@@ -2,14 +2,21 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { ThemeProvider } from '@mui/material'
 import { MaskLightTheme } from '@masknet/theme'
-import { useAllPersonas } from '@masknet/plugin-infra/content-script'
-import { PluginCardFrameMini, useCurrentPersonaConnectStatus, usePersonaProofs } from '@masknet/shared'
+import {
+    useAllPersonas,
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+    useSNSAdaptorContext,
+} from '@masknet/plugin-infra/content-script'
+import {
+    PluginCardFrameMini,
+    useCurrentPersonaConnectStatus,
+    usePersonaProofs,
+    PluginEnableBoundary,
+} from '@masknet/shared'
 import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import Services from '../../../extension/service.js'
 import { BindDialog } from './BindDialog.js'
-import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import {
     AddWalletPersonaAction,
     CreatePersonaAction,
@@ -22,29 +29,33 @@ export const NextIdPage = memo(function NextIdPage() {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSNSAdaptorContext()
+
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
         currentIdentifier,
-        Services.Helper.openDashboard,
+        openDashboard,
         currentProfileIdentifier,
         MaskMessages,
     )
 
     const [openBindDialog, toggleBindDialog] = useState(false)
-    const isOwn = currentProfileIdentifier.identifier?.userId === visitingPersonaIdentifier.identifier?.userId
+    const isOwn =
+        currentProfileIdentifier &&
+        currentProfileIdentifier?.identifier?.userId === visitingPersonaIdentifier?.identifier?.userId
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
-        return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
-    }, [visitingPersonaIdentifier.identifier, personaConnectStatus.hasPersona])
+        return queryPersonaByProfile?.(visitingPersonaIdentifier.identifier)
+    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona, queryPersonaByProfile])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
     const proofs = usePersonaProofs(publicKeyAsHex, MaskMessages)
 
     const handleAddWallets = useCallback(() => {
-        Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+        openPopupWindow?.(PopupRoutes.ConnectedWallets, {
             internal: true,
         })
-    }, [])
+    }, [openPopupWindow])
 
     const getActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />

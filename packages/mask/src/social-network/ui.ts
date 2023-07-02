@@ -184,6 +184,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         getPersonaAvatars: Services.Identity.getPersonaAvatars,
         getPostIdFromNewPostToast: activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         postMessage: activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText,
+        setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
     }
 
     startPluginSNSAdaptor(

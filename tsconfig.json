@@ -136,6 +136,7 @@
       "@masknet/plugin-pets": ["./packages/plugins/Pets/src"],
       "@masknet/plugin-external": ["./packages/plugins/External/src"],
       "@masknet/plugin-game": ["./packages/plugins/Game/src"],
+      "@masknet/plugin-nextid": ["./packages/plugins/NextID/src"],
 
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]

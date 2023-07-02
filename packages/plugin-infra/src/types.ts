@@ -359,6 +359,7 @@ export namespace Plugin.SNSAdaptor {
         ) => Promise<Map<ProfileIdentifier | PersonaIdentifier, string>>
         getPostIdFromNewPostToast?: () => string
         postMessage?: (text: string, options?: any) => Promise<void>
+        setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =
