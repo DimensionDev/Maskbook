@@ -287,7 +287,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: difference(EnhanceableSiteList, [
                 EnhanceableSite.Localhost,
-                EnhanceableSite.SPA,
+                EnhanceableSite.App,
             ]),
             supportedExtensionSites: ExtensionSiteList,
         },
@@ -347,7 +347,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
                   supportedChainIds: ChainIdList,
                   supportedEnhanceableSites: difference(EnhanceableSiteList, [
                       EnhanceableSite.Localhost,
-                      EnhanceableSite.SPA,
+                      EnhanceableSite.App,
                   ]),
                   supportedExtensionSites: Flags.wc_v2_enabled ? ExtensionSiteList : [],
               }

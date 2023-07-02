@@ -8,7 +8,7 @@ declare module NodeJS {
          * Debug flags
          */
         readonly BUILD_DATE: string
-        readonly SPA: boolean
+        readonly APP: boolean
         readonly VERSION: string
         readonly COMMIT_HASH: string
         readonly COMMIT_DATE: string

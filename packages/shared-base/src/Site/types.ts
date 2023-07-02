@@ -1,6 +1,6 @@
 export enum EnhanceableSite {
     Localhost = 'localhost',
-    SPA = 'app.mask.io',
+    App = 'app.mask.io',
     Twitter = 'twitter.com',
     Facebook = 'facebook.com',
     Minds = 'minds.com',

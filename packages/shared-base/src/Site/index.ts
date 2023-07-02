@@ -4,7 +4,7 @@ import { ExtensionSite, EnhanceableSite } from './types.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
-    [EnhanceableSite.SPA]: /app\.mask\.io/i,
+    [EnhanceableSite.App]: /app\.mask\.io/i,
     [EnhanceableSite.Facebook]: /facebook\.com/i,
     [EnhanceableSite.Twitter]: /twitter\.com/i,
     [EnhanceableSite.Minds]: /minds\.com/i,
