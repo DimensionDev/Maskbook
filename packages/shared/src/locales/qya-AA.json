@@ -311,5 +311,7 @@
     "applications_persona_verify": "crwdns20757:0{{-nickname}}crwdne20757:0",
     "applications_persona_verify_hint": "crwdns20759:0crwdne20759:0",
     "applications_persona_verify_connect": "crwdns20761:0{{-nickname}}crwdne20761:0",
+    "enable_plugin_boundary": "crwdns20765:0crwdne20765:0",
+    "enable_plugin_boundary_description": "crwdns20767:0crwdne20767:0",
     "applications_persona_verify_connect_hint": "crwdns20763:0{{-nickname}}crwdne20763:0"
 }
