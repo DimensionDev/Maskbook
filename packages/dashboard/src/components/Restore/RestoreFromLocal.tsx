@@ -2,7 +2,6 @@ import { type BackupSummary, decryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, Button, Typography } from '@mui/material'
@@ -41,7 +40,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 7,
     },
 }))
-export const RestoreFromLocal = memo(function RestoreFromLocal() {
+interface RestoreFromLocalProps {
+    handleRestoreFromLocalStore: () => Promise<void>
+}
+
+export const RestoreFromLocal = memo(function RestoreFromLocal({ handleRestoreFromLocalStore }: RestoreFromLocalProps) {
     const { classes, theme } = useStyles()
     const t = useDashboardI18N()
     const navigate = useNavigate()
@@ -110,15 +113,6 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
         }
     }, [file, password])
 
-    const restoreCallback = useCallback(async () => {
-        if (!currentPersona) {
-            const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastedPersona) await changeCurrentPersona(lastedPersona)
-        }
-        await delay(1000)
-        navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
-    }, [!currentPersona, changeCurrentPersona, navigate])
-
     const restoreDB = useCallback(async () => {
         try {
             // If json has wallets, restore in popup.
@@ -127,7 +121,7 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
                 return
             } else {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
-                await restoreCallback()
+                await handleRestoreFromLocalStore()
             }
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
@@ -135,8 +129,8 @@ export const RestoreFromLocal = memo(function RestoreFromLocal() {
     }, [backupId, summary?.wallets])
 
     useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
+        return Messages.events.restoreSuccess.on(handleRestoreFromLocalStore)
+    }, [handleRestoreFromLocalStore])
 
     const disabled = useMemo(() => {
         if (!readingFile && restoreStatus === RestoreStatus.Verified) return !summary

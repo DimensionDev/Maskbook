@@ -6,6 +6,7 @@ import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 const CreateWalletForm = lazy(() => import('./CreateWalletForm/index.js'))
 const CreateMnemonic = lazy(() => import('./CreateMnemonic/index.js'))
 const OnBoarding = lazy(() => import('./Onboarding/index.js'))
+const OnRecovery = lazy(() => import('./Recovery/index.js'))
 
 const r = relativeRouteOf(DashboardRoutes.CreateMaskWallet)
 export default function CreateWallet() {
@@ -15,6 +16,7 @@ export default function CreateWallet() {
                 <Route path={r(DashboardRoutes.CreateMaskWalletForm)} element={<CreateWalletForm />} />
                 <Route path={r(DashboardRoutes.CreateMaskWalletMnemonic)} element={<CreateMnemonic />} />
                 <Route path={r(DashboardRoutes.SignUpMaskWalletOnboarding)} element={<OnBoarding />} />
+                <Route path={r(DashboardRoutes.RecoveryMaskWallet)} element={<OnRecovery />} />
             </Routes>
         </SetupFrame>
     )

@@ -199,6 +199,10 @@ const CreateMnemonic = memo(() => {
         setIsVerify(true)
     }, [])
 
+    const handleRecovery = useCallback(() => {
+        navigate(DashboardRoutes.RecoveryMaskWallet)
+    }, [])
+
     const { value: address } = useAsync(async () => {
         const password = location.state?.password
         if (isUndefined(hasPassword)) return
@@ -245,7 +249,7 @@ const CreateMnemonic = memo(() => {
                     <Typography className={cx(classes.second, classes.helveticaBold)}>
                         {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
                     </Typography>
-                    <Typography className={cx(classes.import, classes.helveticaBold)}>
+                    <Typography className={cx(classes.import, classes.helveticaBold)} onClick={handleRecovery}>
                         {t.wallets_import_wallet_import()}
                     </Typography>
                 </div>
