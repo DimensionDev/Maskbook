@@ -1,0 +1,18 @@
+{
+    "plugin_external_unknown_plugin": "New unknown Mask plugins found. Do you want to load them?",
+    "plugin_external_loader_search_holder": "Search for an external plugin",
+    "plugin_external_loader_search_button": "Search for plugin",
+    "plugin_external_loader_search_sub_title": "Every external plugin has to hosted on an URL.",
+    "plugin_external_loader_alert": "IT WILL CHANGE. DO NOT BUILD OFFICIAL PRODUCT ON IT.",
+    "plugin_external_loader_example_github": "An official plugin example can be found at <terms>GitHub</terms>.",
+    "plugin_external_loader_intro": "Mask External plugin is an early stage feature of Mask Network that allows anyone to develop an external Mask plugin.",
+    "plugin_external_loader_alert_title": "External plugin: an experimental Mask Network feature!",
+    "plugin_external_plugin_url": "Plugin URL:",
+    "plugin_external_unverified_publisher": "Publisher: {{publisher}} (Unverified)",
+    "plugin_external_entry_title": "🧩 Load external plugins (Nightly feature)",
+    "plugin_external_name": "External plugin",
+    "load": "Load",
+    "load_all": "Load All",
+    "reload": "Reload",
+    "plugin_external_get_started": "Let's get started"
+}

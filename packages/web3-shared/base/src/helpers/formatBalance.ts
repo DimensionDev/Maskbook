@@ -37,7 +37,7 @@ export function formatBalance(
     fraction = fraction.match(matchSignificantDigits)?.[0] ?? ''
 
     // trim tailing zeros
-    fraction = fraction.replace(/0+$/g, '')
+    fraction = fraction.replaceAll(/0+$/g, '')
     const whole = balance.dividedToIntegerBy(base).toString(10) // (balance / base).toString(10)
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 

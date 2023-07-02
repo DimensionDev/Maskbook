@@ -178,6 +178,14 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         connectPersona,
         ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
         currentPersonaIdentifier,
+        getUserIdentity: activatedSocialNetworkUI.utils.getUserIdentity,
+        fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
+        attachProfile: Services.Identity.attachProfile,
+        setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
+        getPersonaAvatars: Services.Identity.getPersonaAvatars,
+        getPostIdFromNewPostToast: activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast,
+        postMessage: activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText,
+        setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
     }
 
     startPluginSNSAdaptor(

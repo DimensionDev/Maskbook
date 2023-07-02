@@ -42,7 +42,7 @@ import type {
 import type { TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
-
+import type { LinkedProfileDetails } from '@masknet/public-api'
 export declare namespace Plugin {
     /**
      * A code loader interface of the plugin API.
@@ -344,6 +344,23 @@ export namespace Plugin.SNSAdaptor {
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
+        getUserIdentity?: (useId: string) => Promise<IdentityResolved | undefined>
+
+        fetchManifest?: (addr: string) => Promise<any>
+
+        setCurrentPersonaIdentifier?: (x?: PersonaIdentifier) => Promise<void>
+        attachProfile?: (
+            source: ProfileIdentifier,
+            target: ProfileIdentifier | PersonaIdentifier,
+            data: LinkedProfileDetails,
+        ) => Promise<void>
+
+        getPersonaAvatars?: (
+            identifiers?: PersonaIdentifier[],
+        ) => Promise<Map<ProfileIdentifier | PersonaIdentifier, string>>
+        getPostIdFromNewPostToast?: () => string
+        postMessage?: (text: string, options?: any) => Promise<void>
+        setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =

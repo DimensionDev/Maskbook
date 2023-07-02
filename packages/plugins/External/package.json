@@ -1,0 +1,22 @@
+{
+  "name": "@masknet/plugin-external",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@masknet/flags": "workspace:^",
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/theme": "workspace:^",
+    "@masknet/typed-message": "workspace:^",
+    "@masknet/web3-providers": "workspace:^",
+    "react-use": "^17.4.0",
+    "ts-results": "^3.3.0"
+  }
+}

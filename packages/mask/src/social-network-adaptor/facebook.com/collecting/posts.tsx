@@ -207,7 +207,7 @@ function getMetadataImages(node: DOMProxy): string[] {
     const imgUrls = isMobileFacebook
         ? (getComputedStyle(imgNodes[0]).backgroundImage || '')
               .slice(4, -1)
-              .replace(/["']/g, '')
+              .replaceAll(/["']/g, '')
               .split(',')
               .filter(Boolean)
         : Array.from(imgNodes, (node) => node.src).filter(Boolean)

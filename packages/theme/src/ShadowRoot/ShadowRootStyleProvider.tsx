@@ -41,7 +41,7 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     if (styleSheetMap.has(shadow)) return styleSheetMap.get(shadow)!
 
     // emotion doesn't allow numbers appears in the key
-    const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x').slice(0, 4)
+    const instanceID = Math.random().toString(36).slice(2).replaceAll(/\d/g, 'x').slice(0, 4)
     const key = 'css-' + instanceID
 
     // https://github.com/emotion-js/emotion/issues/2933

@@ -501,7 +501,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                     {...field}
                                     type="text"
                                     onChange={(ev) => {
-                                        const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+                                        const amount_ = ev.currentTarget.value.replaceAll(',', '.')
                                         if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
                                             ev.currentTarget.value = `0${amount_}`
                                             field.onChange(ev)

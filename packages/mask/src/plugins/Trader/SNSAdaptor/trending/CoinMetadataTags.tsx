@@ -34,7 +34,7 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
         <>
             {tags.slice(0, 4).map((x, i) => (
                 <Linking key={i} href={x} LinkProps={{ className: classes.tag }}>
-                    <Chip style={{ marginTop: 2, marginBottom: 2 }} label={x.replace(/-/g, ' ')} size="small" />
+                    <Chip style={{ marginTop: 2, marginBottom: 2 }} label={x.replaceAll('-', ' ')} size="small" />
                 </Linking>
             ))}
             {tags.length > 4 ? (
@@ -71,7 +71,7 @@ function TagsDialog(props: TagsDialogProps) {
                     <DialogContent>
                         {tags?.map((x, i) => (
                             <Linking key={i} href={x}>
-                                <Chip label={x.replace(/-/g, ' ')} className={classes.chip} />
+                                <Chip label={x.replaceAll('-', ' ')} className={classes.chip} />
                             </Linking>
                         ))}
                     </DialogContent>

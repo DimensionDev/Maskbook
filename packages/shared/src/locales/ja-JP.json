@@ -225,5 +225,7 @@
     "application_settings_tab_plug_app-listed-placeholder": "アプリアイコンをクリックして、アプリ一覧で非表示にします。",
     "application_display_tab_plug_app-unlisted-placeholder": "設定のアイコンをクリックして、アプリボードに表示します。",
     "application_settings_tab_plug_app-unlisted-placeholder": "アプリのアイコンをクリックして、アプリボードに表示します。",
-    "plugin_wallet_on_connect": "ウォレットに接続しています"
+    "plugin_wallet_on_connect": "ウォレットに接続しています",
+    "enable_plugin_boundary": "プラグインを有効にする",
+    "enable_plugin_boundary_description": "特定のコンテンツを表示するには DApp を開く必要があります。"
 }

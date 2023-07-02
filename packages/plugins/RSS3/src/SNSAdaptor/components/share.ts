@@ -163,7 +163,7 @@ export function getLastAction<
     T extends RSS3BaseAPI.Tag,
     P extends keyof RSS3BaseAPI.MetadataMap[T] = keyof RSS3BaseAPI.MetadataMap[T],
 >(feed: RSS3BaseAPI.Web3FeedGeneric<T, P>) {
-    return feed.actions[feed.actions.length - 1]
+    return feed.actions.at(-1)!
 }
 
 /**
@@ -214,11 +214,11 @@ export function formatTimestamp(timestamp: string): string {
  */
 export function transformPlanetResource(markdown: string, base: string) {
     return markdown
-        .replace(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
+        .replaceAll(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
             if (url.match(/^https?:\/\//)) return match
             return `${before}src=${quotation}https://thumbor.rss3.dev/unsafe/${base}/${url}${quotation}${after}`
         })
-        .replace(/(!\[.*?])\((.*?)\)/g, (match, head, url) => {
+        .replaceAll(/(!\[.*?])\((.*?)\)/g, (match, head, url) => {
             if (url.match(/^https?:\/\//)) return match
             return `${head}(https://thumbor.rss3.dev/unsafe/${base}/${url})`
         })

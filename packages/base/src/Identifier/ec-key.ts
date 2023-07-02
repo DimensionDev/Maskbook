@@ -32,7 +32,7 @@ export class ECKeyIdentifier extends Identifier {
     declare readonly curve: 'secp256k1'
     declare readonly rawPublicKey: string
     constructor(curve: 'secp256k1', publicKey: string) {
-        publicKey = String(publicKey).replace(/\|/g, '/')
+        publicKey = String(publicKey).replaceAll('|', '/')
         if (curve !== 'secp256k1') throw new Error('Only secp256k1 is supported')
 
         // return the cache to keep the object identity
@@ -47,7 +47,7 @@ export class ECKeyIdentifier extends Identifier {
         instance.add(this)
     }
     toText() {
-        const normalized = this.rawPublicKey.replace(/\//g, '|')
+        const normalized = this.rawPublicKey.replaceAll('/', '|')
         return `ec_key:${this.curve}/${normalized}`
     }
     get publicKeyAsHex() {

@@ -32,10 +32,10 @@ export class PostIVIdentifier extends Identifier {
         instance.add(this)
     }
     toText() {
-        return `post_iv:${this.network}/${this.postIV.replace(/\//g, '|')}`
+        return `post_iv:${this.network}/${this.postIV.replaceAll('/', '|')}`
     }
     toIV() {
-        const x = this.postIV.replace(/\|/g, '/')
+        const x = this.postIV.replaceAll('|', '/')
         return new Uint8Array(decodeArrayBuffer(x))
     }
     declare [Symbol.toStringTag]: string

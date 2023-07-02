@@ -32,7 +32,7 @@ function parse(input: string | null | undefined): Option<Identifier> {
     } else if (input.startsWith('post_iv:')) {
         const [network, postIV] = input.slice('post_iv:'.length).split('/')
         if (!network || !postIV) return None
-        return Some(new PostIVIdentifier(network, postIV.replace(/\|/g, '/')))
+        return Some(new PostIVIdentifier(network, postIV.replaceAll('|', '/')))
     } else if (input.startsWith('ec_key:')) {
         const [curve, compressedPoint] = input.slice('ec_key:'.length).split('/')
         if (curve !== 'secp256k1') return None

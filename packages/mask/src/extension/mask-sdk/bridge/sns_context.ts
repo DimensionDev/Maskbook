@@ -1,6 +1,5 @@
 import type { BridgeAPI } from '@masknet/sdk'
-import { ExternalPluginMessages } from '../../../plugins/External/messages.js'
-import type { MaskSDK_SNS_ContextIdentifier } from '../../../plugins/External/sns-context.js'
+import { ExternalPluginMessages, type MaskSDK_SNS_ContextIdentifier } from '@masknet/plugin-external'
 import { SDKErrors } from '../constants.js'
 
 export const SNSMethods: Pick<BridgeAPI, 'sns_appendComposition'> = {

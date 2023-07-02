@@ -18,7 +18,7 @@ function __TwitterEncoderText(text: string) {
             .replace(':||', '%40')
             .replace('+', '-')
             .replace('=', '_')
-            .replace(/\|/g, '.')
+            .replaceAll('|', '.')
     )
 }
 function __TwitterEncoderBinary(data: Uint8Array) {
@@ -69,7 +69,7 @@ function TwitterDecoderText(raw: string): Option<string> {
                     .replace(/%40$/, '')
                     .replace('-', '+')
                     .replace('_', '=')
-                    .replace(/\./g, '|') +
+                    .replaceAll('.', '|') +
                 ':||',
         )
     } catch {
