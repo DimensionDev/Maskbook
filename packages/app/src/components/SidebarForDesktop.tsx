@@ -1,5 +1,6 @@
 import { ArrowPathRoundedSquareIcon, Cog6ToothIcon, RocketLaunchIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { SelectProviderModal } from '@masknet/shared'
+import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { classNames } from '../helpers/classNames.js'
 
 const navigation = [
@@ -18,6 +19,10 @@ const teams = [
 export interface SidebarForDesktopProps {}
 
 export function SidebarForDesktop(props: SidebarForDesktopProps) {
+    const pluginID = useNetworkContext()
+    const { account, chainId } = useChainContext()
+    const Others = useWeb3Others()
+
     return (
         <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
             {/* Sidebar component, swap this element with another sidebar if you like */}
@@ -87,7 +92,9 @@ export function SidebarForDesktop(props: SidebarForDesktopProps) {
                                     alt=""
                                 />
                                 <span className="sr-only">Your profile</span>
-                                <span aria-hidden="true">Connect Wallet</span>
+                                <span aria-hidden="true">
+                                    {account ? Others.formatAddress(account, 4) : 'Connect Wallet'}
+                                </span>
                             </a>
                         </li>
                     </ul>

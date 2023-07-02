@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
+import { DisableShadowRootContext, MaskLightTheme } from '@masknet/theme'
+import { PageUIProvider } from '@masknet/shared'
 import { SortDropdown } from './components/SortDropdown.js'
 import { StickySearchHeader } from './components/StickySearchBar.js'
 import { SidebarForDesktop } from './components/SidebarForDesktop.js'
@@ -8,10 +10,8 @@ import { SidebarForMobile } from './components/SidebarForMobile.js'
 import { ActivityFeed } from './components/ActivityFeed.js'
 import { DecryptUI } from './main/index.js'
 
-export function App() {
-    useMountReport(EventID.AccessPopups)
-
-    return <MainUI />
+function useTheme() {
+    return MaskLightTheme
 }
 
 function MainUI() {
@@ -44,5 +44,15 @@ function MainUI() {
                 <ActivityFeed />
             </div>
         </div>
+    )
+}
+
+export function App() {
+    useMountReport(EventID.AccessPopups)
+
+    return (
+        <DisableShadowRootContext.Provider value>
+            {PageUIProvider(useTheme, <MainUI />)}
+        </DisableShadowRootContext.Provider>
     )
 }
