@@ -2,7 +2,12 @@ import './register.js'
 
 import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
-import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import {
+    CurrentSNSNetwork,
+    Plugin,
+    SNSAdaptorContextRef,
+    startPluginSNSAdaptor,
+} from '@masknet/plugin-infra/content-script'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import {
     BooleanPreference,
@@ -12,7 +17,6 @@ import {
     i18NextInstance,
     ValueRefWithReady,
 } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
@@ -78,20 +82,20 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext(id, signal) {
-        return {
+        const context: Plugin.SNSAdaptor.SNSAdaptorContext = {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
                 else return indexedDBStorage(id, defaultValues, signal)
             },
-            account: createConstantSubscription(''),
-            chainId: createConstantSubscription(ChainId.Mainnet),
             currentPersona: createConstantSubscription(undefined),
             wallets: createConstantSubscription([]),
+            share(text) {
+                window.alert(`share: ${text}`)
+            },
             addWallet: reject,
             closePopupWindow: reject,
             confirmRequest: reject,
             connectPersona: reject,
-            createLogger: () => undefined,
             createPersona: reject,
             currentPersonaIdentifier: emptyValueRef,
             currentVisitingProfile: createConstantSubscription(undefined),
@@ -129,6 +133,10 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             NFTAvatarTimelineUpdated: emptyEventRegistry,
             themeSettings: createConstantSubscription(undefined),
         }
+
+        SNSAdaptorContextRef.value = context
+
+        return context
     },
     permission: {
         hasPermission: async () => false,
