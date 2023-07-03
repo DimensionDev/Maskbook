@@ -3,9 +3,9 @@ import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { type EnhanceableSite } from '@masknet/shared-base'
 import { base } from '../base.js'
-import { AvatarBadge } from '../../../components/shared/AvatarBadge/AvatarBadge.js'
 import { SNS_RSS3_FIELD_KEY_MAP } from '@masknet/shared'
 import { PLUGIN_ID } from '../constants.js'
+import { AvatarBadge } from './AvatarBadge/AvatarBadge.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

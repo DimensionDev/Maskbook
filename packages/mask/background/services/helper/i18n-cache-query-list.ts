@@ -29,7 +29,6 @@ export default {
     'plugins/Game/src/locales/%locale%.json': 'com.maskbook.game',
     'plugins/Pets/src/locales/%locale%.json': 'com.maskbook.pets',
     'plugins/Web3Profile/src/locales/%locale%.json': 'io.mask.web3-profile',
-    'mask/src/plugins/ProfileCard/locales/%locale%.json': 'io.mask.web3-profile-card',
     'plugins/Handle/src/locales/%locale%.json': 'com.maskbook.handle',
     'plugins/Approval/src/locales/%locale%.json': 'com.maskbook.approval',
     'plugins/ScamWarning/src/locales/%locale%.json': 'com.mask.scam-warning',
@@ -41,4 +40,5 @@ export default {
     'plugins/ArtBlocks/src/locales/%locale%.json': 'io.artblocks',
     'plugins/External/src/locales/%locale%.json': 'io.mask.external',
     'plugins/ITO/src/locales/%locale%.json': 'com.maskbook.ito',
+    'plugins/ProfileCard/src/locales/%locale%.json': 'io.mask.web3-profile-card',
 }
