@@ -2,12 +2,8 @@ import './register.js'
 
 import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
-import {
-    CurrentSNSNetwork,
-    Plugin,
-    SNSAdaptorContextRef,
-    startPluginSNSAdaptor,
-} from '@masknet/plugin-infra/content-script'
+import { CurrentSNSNetwork, SNSAdaptorContextRef, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import {
     BooleanPreference,
@@ -90,7 +86,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             currentPersona: createConstantSubscription(undefined),
             wallets: createConstantSubscription([]),
             share(text) {
-                window.alert(`share: ${text}`)
+                throw new Error('To be implemented.')
             },
             addWallet: reject,
             closePopupWindow: reject,
