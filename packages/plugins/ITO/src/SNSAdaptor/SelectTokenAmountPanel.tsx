@@ -3,7 +3,7 @@ import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { FungibleTokenInput, SelectFungibleTokenModal, type FungibleTokenInputProps } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: Web3Helper.ChainIdAll
@@ -30,7 +30,7 @@ export interface SelectTokenAmountPanelProps {
 }
 
 export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const {
         amount,
         balance,
@@ -61,7 +61,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
             amount={amount}
             balance={balance}
             token={token}
-            label={t('amount')}
+            label={t.amount()}
             onAmountChange={onAmountChange}
             {...FungibleTokenInputProps}
             onSelectToken={onSelectTokenChipClick}

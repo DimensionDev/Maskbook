@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
-import { useI18N } from '../../../utils/index.js'
 import {
     type ChainId,
     formatEthereumAddress,
@@ -14,6 +13,7 @@ import { SwapStatus } from './SwapGuide.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     reminderText: {
@@ -80,7 +80,7 @@ export interface RemindDialogProps extends withClasses<'root'> {
 export function RemindDialog(props: RemindDialogProps) {
     const { token, chainId, setStatus } = props
 
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const [agreeReminder, setAgreeReminder] = useState(false)
     const { networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -89,18 +89,18 @@ export function RemindDialog(props: RemindDialogProps) {
         <>
             <section className={classes.wrapper}>
                 <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextFirst)}>
-                    {t('plugin_ito_dialog_claim_reminder_text1', {
-                        networkType: networkResolver.networkName(networkType),
+                    {t.plugin_ito_dialog_claim_reminder_text1({
+                        networkType: networkResolver.networkName(networkType) || '',
                     })}
                 </Typography>
                 <Typography variant="body1" className={classes.reminderText}>
-                    {t('plugin_ito_dialog_claim_reminder_text2')}
+                    {t.plugin_ito_dialog_claim_reminder_text2()}
                 </Typography>
                 <Typography variant="body1" className={classes.reminderText}>
-                    {t('plugin_ito_dialog_claim_reminder_text3')}
+                    {t.plugin_ito_dialog_claim_reminder_text3()}
                 </Typography>
                 <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextLast)}>
-                    {t('plugin_ito_dialog_claim_reminder_text4')}
+                    {t.plugin_ito_dialog_claim_reminder_text4()}
                 </Typography>
             </section>
             <section className={cx(classes.wrapper, classes.tokenWrapper)}>
@@ -123,7 +123,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         href={explorerResolver.fungibleTokenLink(chainId, token.address)}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} formatter={formatEthereumAddress} /> (
-                            {t('plugin_ito_view_on_explorer')})
+                            {t.plugin_ito_view_on_explorer()})
                         </Typography>
                     </Link>
                 </div>
@@ -139,7 +139,7 @@ export function RemindDialog(props: RemindDialogProps) {
                             }}
                         />
                     }
-                    label={t('plugin_ito_dialog_claim_reminder_agree')}
+                    label={t.plugin_ito_dialog_claim_reminder_agree()}
                 />
             </section>
             <ActionButton
@@ -147,7 +147,7 @@ export function RemindDialog(props: RemindDialogProps) {
                 fullWidth
                 onClick={() => setStatus(SwapStatus.Swap)}
                 disabled={!agreeReminder}>
-                {t('plugin_ito_continue')}
+                {t.plugin_ito_continue()}
             </ActionButton>
         </>
     )

@@ -22,10 +22,7 @@ import { Box, Card, Link, Typography } from '@mui/material'
 import { TokenIcon, ChainBoundary, WalletConnectedBoundary, useAssetAsBlobURL } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
-import { EnhanceableSite, NetworkPluginID, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
-import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { getTextUILength, useI18N } from '../../../utils/index.js'
+import { EnhanceableSite, NetworkPluginID, getSiteType, isFacebook, isTwitter } from '@masknet/shared-base'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
 import { sortTokens } from './helpers.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
@@ -37,10 +34,11 @@ import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useR
 import { ITO_Status, type JSON_PayloadInMask } from '../types.js'
 import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useI18N } from '../locales/index.js'
+import { getTextUILength } from './utils/sliceTextByUILength.js'
 
 export interface IconProps {
     size?: number
@@ -228,7 +226,7 @@ export function ITO(props: ITO_Props) {
     const { regions: defaultRegions = '-' } = props.payload
     const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, message } = payload
 
-    const { t } = useI18N()
+    const t = useI18N()
 
     const sellerName = payload.seller.name
         ? payload.seller.name
@@ -241,7 +239,7 @@ export function ITO(props: ITO_Props) {
     const { classes, cx } = useStyles({
         titleLength: getTextUILength(title),
         tokenNumber: exchange_tokens.length,
-        snsId: activatedSocialNetworkUI.networkIdentifier,
+        snsId: getSiteType(),
     })
     // #region token detailed
     const {
@@ -250,6 +248,8 @@ export function ITO(props: ITO_Props) {
         loading: loadingAvailability,
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
+
+    const { share } = useSNSAdaptorContext()
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
@@ -284,15 +284,14 @@ export function ITO(props: ITO_Props) {
     const isBuyer =
         chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || !!availability?.claimed)
 
-    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
-    const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+    const isOnTwitter = isTwitter()
+    const isOnFacebook = isFacebook()
     const context = isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : undefined
-    const successShareText = t('plugin_ito_claim_success_share', {
+    const successShareText = t.plugin_ito_claim_success_share({
         context,
         user: sellerName,
-        link: postLink,
+        link: postLink.toString(),
         symbol: token.symbol,
-        sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
     })
     const canWithdraw = useMemo(() => {
         return (
@@ -312,8 +311,8 @@ export function ITO(props: ITO_Props) {
     const refundAllAmount = tradeInfo?.buyInfo && isZero(tradeInfo?.buyInfo.amount_sold)
 
     const onShareSuccess = useCallback(async () => {
-        activatedSocialNetworkUI.utils.share?.(successShareText)
-    }, [successShareText])
+        share?.(successShareText)
+    }, [successShareText, share])
     // #endregion
 
     const retryITOCard = useCallback(() => {
@@ -323,16 +322,15 @@ export function ITO(props: ITO_Props) {
 
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback([pid], payload.contract_address)
 
-    const shareText = t('plugin_ito_claim_foreshow_share', {
+    const shareText = t.plugin_ito_claim_foreshow_share({
         context,
-        link: postLink,
+        link: postLink.toString(),
         name: token.name,
         symbol: token.symbol ?? 'token',
-        sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
     })
     const onShare = useCallback(async () => {
-        activatedSocialNetworkUI.utils.share?.(shareText)
-    }, [shareText])
+        share?.(shareText)
+    }, [shareText, share])
     const onUnlock = useCallback(async () => {
         setClaimDialogStatus(SwapStatus.Unlock)
         setOpenClaimDialog(true)
@@ -367,26 +365,26 @@ export function ITO(props: ITO_Props) {
     // #endregion
 
     const swapStatusText = useMemo(() => {
-        if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
-        if (listOfStatus.includes(ITO_Status.expired)) return t('plugin_ito_expired')
+        if (listOfStatus.includes(ITO_Status.waited)) return t.plugin_ito_status_no_start()
+        if (listOfStatus.includes(ITO_Status.expired)) return t.plugin_ito_expired()
         if (listOfStatus.includes(ITO_Status.started)) {
-            if (total_remaining.isZero()) return t('plugin_ito_status_out_of_stock')
-            return t('plugin_ito_status_ongoing')
+            if (total_remaining.isZero()) return t.plugin_ito_status_out_of_stock()
+            return t.plugin_ito_status_ongoing()
         }
         return ''
     }, [listOfStatus, total_remaining])
 
     const swapResultText = useMemo(() => {
         if (refundAllAmount) {
-            return t('plugin_ito_out_of_stock_hit')
+            return t.plugin_ito_out_of_stock_hit()
         }
 
         const _text = isGreaterThan(availability?.swapped || 0, 0)
-            ? t('plugin_ito_your_swapped_amount', {
+            ? t.plugin_ito_your_swapped_amount({
                   amount: formatBalance(availability?.swapped || 0, token.decimals),
                   symbol: token.symbol,
               })
-            : t('plugin_ito_your_claimed_amount', {
+            : t.plugin_ito_your_claimed_amount({
                   amount: formatBalance(tradeInfo?.buyInfo?.amount_bought || 0, token.decimals),
                   symbol: token.symbol,
               })
@@ -395,9 +393,9 @@ export function ITO(props: ITO_Props) {
             return `${_text}.`
         }
 
-        return `${_text}, ${t('plugin_ito_your_refund_amount', {
+        return `${_text}, ${t.plugin_ito_your_refund_amount({
             amount: formatBalance(refundAmount, tradeInfo?.buyInfo?.token.decimals ?? 0),
-            symbol: tradeInfo?.buyInfo?.token.symbol,
+            symbol: tradeInfo?.buyInfo?.token.symbol || '',
         })}`
     }, [
         availability?.swapped,
@@ -412,7 +410,7 @@ export function ITO(props: ITO_Props) {
     const FooterStartTime = useMemo(() => {
         return (
             <Typography variant="body1" className={classes.footerInfo}>
-                {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
+                {t.plugin_ito_list_start_date({ date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         )
     }, [startTime])
@@ -420,7 +418,7 @@ export function ITO(props: ITO_Props) {
     const FooterEndTime = useMemo(
         () => (
             <Typography variant="body1" className={classes.footerInfo}>
-                {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
+                {t.plugin_ito_swap_end_date({ date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         ),
         [endTime, t],
@@ -438,7 +436,7 @@ export function ITO(props: ITO_Props) {
                 unlockTime > Date.now() &&
                 new BigNumber(availability?.swapped || 0).isGreaterThan(0) ? (
                     <Typography className={classes.footerInfo}>
-                        {t('plugin_ito_wait_unlock_time', {
+                        {t.plugin_ito_wait_unlock_time({
                             unlockTime: formatDateTime(unlockTime, 'yyyy-MM-dd HH:mm'),
                         })}
                     </Typography>
@@ -452,7 +450,7 @@ export function ITO(props: ITO_Props) {
         () => (
             <>
                 <Typography variant="body1" className={classes.footerInfo}>
-                    {t('plugin_ito_allocation_per_wallet', {
+                    {t.plugin_ito_allocation_per_wallet({
                         limit: formatBalance(limit, token.decimals),
                         token: token.symbol,
                     })}
@@ -478,7 +476,7 @@ export function ITO(props: ITO_Props) {
                     onClick={claimCallback}
                     disabled={isClaiming}
                     className={classes.actionButton}>
-                    {isClaiming ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
+                    {isClaiming ? t.plugin_ito_claiming() : t.plugin_ito_claim()}
                 </ActionButton>
             )
         }
@@ -486,7 +484,7 @@ export function ITO(props: ITO_Props) {
         if (canWithdraw) {
             return (
                 <ActionButton onClick={onWithdraw} className={classes.actionButton} variant="roundedDark">
-                    {t('plugin_ito_withdraw')}
+                    {t.plugin_ito_withdraw()}
                 </ActionButton>
             )
         }
@@ -505,7 +503,7 @@ export function ITO(props: ITO_Props) {
                             onClick={() => undefined}
                             disabled
                             className={cx(classes.actionButton, classes.textInOneLine)}>
-                            {t('plugin_ito_claim')}
+                            {t.plugin_ito_claim()}
                         </ActionButton>
                     )
                 })()}
@@ -526,7 +524,7 @@ export function ITO(props: ITO_Props) {
                                     onClick={onWithdraw}
                                     className={classes.actionButton}
                                     variant="roundedDark">
-                                    {t('plugin_ito_withdraw')}
+                                    {t.plugin_ito_withdraw()}
                                 </ActionButton>
                             </Box>
                         )
@@ -555,7 +553,7 @@ export function ITO(props: ITO_Props) {
                     ) : null}
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
-                    {t('plugin_ito_swapped_status', {
+                    {t.plugin_ito_swapped_status({
                         remain: formatBalance(sold, token.decimals),
                         total: formatBalance(total, token.decimals),
                         token: token.symbol,
@@ -623,7 +621,7 @@ export function ITO(props: ITO_Props) {
                                     onClick={() => undefined}
                                     className={classes.actionButton}
                                     variant="roundedDark">
-                                    {t('plugin_ito_region_ban')}
+                                    {t.plugin_ito_region_ban()}
                                 </ActionButton>
                             </Box>
                         )
@@ -645,7 +643,7 @@ export function ITO(props: ITO_Props) {
                                     onClick={() => undefined}
                                     className={classes.actionButton}
                                     variant="roundedDark">
-                                    {t('plugin_ito_loading')}
+                                    {t.plugin_ito_loading()}
                                 </ActionButton>
                             </Box>
                         )
@@ -660,7 +658,7 @@ export function ITO(props: ITO_Props) {
                                     onClick={onWithdraw}
                                     className={classes.actionButton}
                                     variant="roundedDark">
-                                    {t('plugin_ito_withdraw')}
+                                    {t.plugin_ito_withdraw()}
                                 </ActionButton>
                             </Box>
                         )
@@ -678,7 +676,7 @@ export function ITO(props: ITO_Props) {
                                         onClick={onShareSuccess}
                                         className={classes.actionButton}
                                         variant="roundedDark">
-                                        {t('plugin_ito_share')}
+                                        {t.plugin_ito_share()}
                                     </ActionButton>
                                 </Box>
                                 <Box style={{ padding: '12px 5px', flex: 1 }}>
@@ -698,9 +696,9 @@ export function ITO(props: ITO_Props) {
                                                 loading={loadingIfQualified}
                                                 className={classes.actionButton}>
                                                 {loadingIfQualified
-                                                    ? t('plugin_ito_qualification_loading')
+                                                    ? t.plugin_ito_qualification_loading()
                                                     : !ifQualified
-                                                    ? t('plugin_ito_qualification_failed')
+                                                    ? t.plugin_ito_qualification_failed()
                                                     : !(ifQualified as Qual_V2).qualified
                                                     ? startCase((ifQualified as Qual_V2).errorMsg)
                                                     : null}
@@ -722,7 +720,7 @@ export function ITO(props: ITO_Props) {
                                         onClick={onUnlock}
                                         className={classes.actionButton}
                                         variant="roundedDark">
-                                        {t('plugin_ito_unlock_in_advance')}
+                                        {t.plugin_ito_unlock_in_advance()}
                                     </ActionButton>
                                 </Box>
                                 {shareText ? (
@@ -732,7 +730,7 @@ export function ITO(props: ITO_Props) {
                                             onClick={onShare}
                                             className={classes.actionButton}
                                             variant="roundedDark">
-                                            {t('plugin_ito_share')}
+                                            {t.plugin_ito_share()}
                                         </ActionButton>
                                     </Box>
                                 ) : undefined}
@@ -748,7 +746,7 @@ export function ITO(props: ITO_Props) {
                                         onClick={onClaim}
                                         className={classes.actionButton}
                                         variant="roundedDark">
-                                        {t('plugin_ito_enter')}
+                                        {t.plugin_ito_enter()}
                                     </ActionButton>
                                 </Box>
                                 <Box style={{ flex: 1, padding: '12px 5px' }}>
@@ -757,7 +755,7 @@ export function ITO(props: ITO_Props) {
                                         onClick={onShareSuccess}
                                         className={classes.actionButton}
                                         variant="roundedDark">
-                                        {t('plugin_ito_share')}
+                                        {t.plugin_ito_share()}
                                     </ActionButton>
                                 </Box>
                             </>
@@ -785,7 +783,7 @@ export function ITO(props: ITO_Props) {
 }
 
 export function ITO_Loading() {
-    const { t } = useI18N()
+    const t = useI18N()
     const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const { classes, cx } = useStyles({})
     return (
@@ -795,7 +793,7 @@ export function ITO_Loading() {
                 elevation={0}
                 style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Typography variant="body1" className={classes.loadingITO}>
-                    {t('plugin_ito_loading')}
+                    {t.plugin_ito_loading()}
                 </Typography>
             </Card>
         </div>
@@ -803,7 +801,7 @@ export function ITO_Loading() {
 }
 
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles({})
     const PoolBackground = useAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
@@ -812,10 +810,10 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {t('loading_failed')}
+                {t.loading_failed()}
             </Typography>
             <ActionButton onClick={retryPoolPayload} variant="outlined" className={classes.loadingITO_Button}>
-                {t('try_again')}
+                {t.try_again()}
             </ActionButton>
         </Card>
     )

@@ -14,10 +14,10 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { Launch as LaunchIcon, Repeat as RepeatIcon } from '@mui/icons-material'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import { useI18N } from '../../../utils/index.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { useI18N } from '../locales/index.js'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -37,16 +37,16 @@ function SwapItem(props: SwapItemProps) {
     const { token, swap, swapAmount } = props
     const [exchange, setExchange] = useState(false)
     const { classes } = useSwapItemStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     const amount_ = leftShift(swapAmount || '0', swap?.decimals)
 
     return (
         <div className={classes.root}>
             <Typography variant="body1" color="textPrimary">
-                {t('plugin_ito_swap_title', {
-                    swap: exchange ? swap?.symbol : token?.symbol,
-                    token: exchange ? token?.symbol : swap?.symbol,
+                {t.plugin_ito_swap_title({
+                    swap: (exchange ? swap?.symbol : token?.symbol) || '',
+                    token: (exchange ? token?.symbol : swap?.symbol) || '',
                     amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_.toFixed(),
                 })}
             </Typography>
@@ -101,7 +101,7 @@ export interface ConfirmDialogProps {
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, loading, onDone, onBack, onClose } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
@@ -125,7 +125,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.label}>
-                            <Typography>{t('plugin_ito_sell_token')}</Typography>
+                            <Typography>{t.plugin_ito_sell_token()}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
@@ -148,7 +148,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                     <Grid item xs={6}>
                         <Paper className={classes.label}>
-                            <Typography>{t('plugin_ito_sell_total_amount')}</Typography>
+                            <Typography>{t.plugin_ito_sell_total_amount()}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
@@ -171,7 +171,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     <Grid item xs={1}>
                                         <Paper className={classes.label}>
                                             <Typography variant="body1" color="textSecondary">
-                                                {t('plugin_ito_sell_price')}
+                                                {t.plugin_ito_sell_price()}
                                             </Typography>
                                         </Paper>
                                     </Grid>
@@ -189,7 +189,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                     <Grid item xs={6}>
                         <Paper className={classes.label}>
-                            <Typography>{t('plugin_ito_allocation_per_wallet_title')}</Typography>
+                            <Typography>{t.plugin_ito_allocation_per_wallet_title()}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
@@ -207,7 +207,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                     <Grid item xs={6}>
                         <Paper className={classes.label}>
-                            <Typography>{t('plugin_ito_begin_time_title')}</Typography>
+                            <Typography>{t.plugin_ito_begin_time_title()}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
@@ -218,7 +218,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                     <Grid item xs={6}>
                         <Paper className={classes.label}>
-                            <Typography>{t('plugin_ito_end_time_title')}</Typography>
+                            <Typography>{t.plugin_ito_end_time_title()}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
@@ -231,7 +231,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <>
                             <Grid item xs={6}>
                                 <Paper className={classes.label}>
-                                    <Typography>{t('plugin_ito_qualification_label')}</Typography>
+                                    <Typography>{t.plugin_ito_qualification_label()}</Typography>
                                 </Paper>
                             </Grid>
                             <Grid item xs={6}>
@@ -256,7 +256,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <>
                             <Grid item xs={6}>
                                 <Paper className={classes.label}>
-                                    <Typography>{t('plugin_ito_region_confirm_label')}</Typography>
+                                    <Typography>{t.plugin_ito_region_confirm_label()}</Typography>
                                 </Paper>
                             </Grid>
                             <Grid item xs={6}>
@@ -272,7 +272,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <>
                             <Grid item xs={6}>
                                 <Paper className={classes.label}>
-                                    <Typography>{t('plugin_ito_unlock_time')}</Typography>
+                                    <Typography>{t.plugin_ito_unlock_time()}</Typography>
                                 </Paper>
                             </Grid>
                             <Grid item xs={6}>
@@ -286,16 +286,16 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     ) : null}
                     <Grid item xs={12}>
                         <Typography variant="h5" className={classes.title} component="p">
-                            {t('plugin_ito_send_tip')}
+                            {t.plugin_ito_send_tip()}
                         </Typography>
                     </Grid>
                 </Grid>
             </Box>
             <PluginWalletStatusBar>
                 <ActionButton loading={loading} disabled={loading} fullWidth onClick={onDone}>
-                    {t('plugin_ito_send_text', {
+                    {t.plugin_ito_send_text({
                         total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
-                        symbol: poolSettings?.token?.symbol,
+                        symbol: poolSettings?.token?.symbol || '',
                     })}
                 </ActionButton>
             </PluginWalletStatusBar>

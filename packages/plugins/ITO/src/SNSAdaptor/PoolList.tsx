@@ -4,9 +4,9 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { PoolInList } from './PoolInList.js'
-import { useI18N } from '../../../utils/index.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -38,7 +38,7 @@ export interface PoolListProps {
 
 export function PoolList(props: PoolListProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value = { loadMore: true, pools: [] }, loading, retry } = useAllPoolsAsSeller(account)
     const { pools } = value
@@ -55,7 +55,7 @@ export function PoolList(props: PoolListProps) {
         return (
             <Box className={classes.placeholder}>
                 <Typography variant="body1" color="textSecondary" className={classes.placeholder}>
-                    {t('no_data')}
+                    {t.no_data()}
                 </Typography>
             </Box>
         )

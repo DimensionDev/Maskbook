@@ -17,8 +17,8 @@ import {
     EthereumERC20TokenApprovedBoundary,
     SelectFungibleTokenModal,
 } from '@masknet/shared'
-import { useI18N } from '../../../utils/index.js'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useI18N } from '../locales/index.js'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -41,7 +41,7 @@ export interface UnlockDialogProps {
 
 export function UnlockDialog(props: UnlockDialogProps) {
     const { tokens } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -65,11 +65,11 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
-    if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
+    if (!tokens.length) return <Typography>{t.plugin_ito_empty_token()}</Typography>
     return (
         <div className={classes.root}>
             <FungibleTokenInput
-                label={t('amount')}
+                label={t.amount()}
                 amount={rawAmount}
                 balance={tokenBalance ?? '0'}
                 token={token}
@@ -104,10 +104,10 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     {(allowance: string) => (
                         <ActionButton className={classes.button} fullWidth disabled>
                             {isMoreThanMillion(allowance, token.decimals)
-                                ? t('plugin_ito_amount_unlocked_infinity', {
+                                ? t.plugin_ito_amount_unlocked_infinity({
                                       symbol: token.symbol ?? 'Token',
                                   })
-                                : t('plugin_ito_amount_unlocked', {
+                                : t.plugin_ito_amount_unlocked({
                                       amount: formatBalance(allowance, token.decimals, 2),
                                       symbol: token.symbol ?? 'Token',
                                   })}

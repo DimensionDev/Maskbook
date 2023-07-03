@@ -7,6 +7,8 @@ import { toFixed } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
+import type { AsyncFnReturn } from 'react-use/lib/useAsync.js'
+import type { EventLog, TransactionReceipt } from 'web3-core'
 
 export function useCreateNftRedpacketCallback(
     duration: number,
@@ -15,7 +17,18 @@ export function useCreateNftRedpacketCallback(
     contractAddress: string,
     tokenIdList: string[],
     gasOption?: GasConfig,
-) {
+): AsyncFnReturn<
+    (publicKey: string) => Promise<
+        | {
+              hash: string
+              receipt: TransactionReceipt | null
+              events?: {
+                  [eventName: string]: EventLog | undefined
+              }
+          }
+        | undefined
+    >
+> {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     const createCallback = useAsyncFn(

@@ -7,10 +7,10 @@ import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../utils/index.js'
 import { RemindDialog } from './RemindDialog.js'
 import { SwapDialog, type SwapDialogProps } from './SwapDialog.js'
 import { UnlockDialog } from './UnlockDialog.js'
+import { useI18N } from '../locales/index.js'
 
 export enum SwapStatus {
     Remind = 0,
@@ -41,7 +41,7 @@ interface SwapGuideProps
 }
 
 export function SwapGuide(props: SwapGuideProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const {
         status,
         payload,
@@ -69,9 +69,9 @@ export function SwapGuide(props: SwapGuideProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const SwapTitle: Record<SwapStatus, string> = {
-        [SwapStatus.Remind]: t('plugin_ito_dialog_swap_reminder_title'),
-        [SwapStatus.Unlock]: t('plugin_ito_dialog_swap_unlock_title'),
-        [SwapStatus.Swap]: t('plugin_ito_dialog_swap_title', { token: payload.token.symbol }),
+        [SwapStatus.Remind]: t.plugin_ito_dialog_swap_reminder_title(),
+        [SwapStatus.Unlock]: t.plugin_ito_dialog_swap_unlock_title(),
+        [SwapStatus.Swap]: t.plugin_ito_dialog_swap_title({ token: payload.token.symbol }),
     }
 
     const closeDialog = useCallback(() => {

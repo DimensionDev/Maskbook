@@ -14,10 +14,9 @@ import {
     FilledInput,
 } from '@mui/material'
 import { Flags } from '@masknet/flags'
-
-import { useI18N } from '../../../utils/index.js'
 import { useRegionList } from './hooks/useRegion.js'
 import type { RegionCode } from './hooks/useRegion.js'
+import { useI18N } from '../locales/index.js'
 
 export interface RegionSelectProps extends InputBaseComponentProps {
     value: RegionCode[]
@@ -61,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
 
 // TODO fix TextField focus style
 export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }: RegionSelectProps, ref) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const allRegions = useRegionList()
     const isAll = value.length === allRegions.length
@@ -144,8 +143,8 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
         <>
             <Typography className={classes.root} ref={handleDisplayRef} onMouseDown={handleMouseDown}>
                 {isAll
-                    ? t('plugin_ito_region_all')
-                    : t('plugin_ito_region_list', { all: allRegions.length, select: value.length })}
+                    ? t.plugin_ito_region_all()
+                    : t.plugin_ito_region_list({ all: allRegions.length.toString(), select: value.length.toString() })}
             </Typography>
             {usePortalShadowRoot((container) => (
                 <Popover
@@ -168,7 +167,7 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                     <FormControl className={classes.inputControl} variant="filled">
                         <FilledInput
                             className={classes.inputRoot}
-                            placeholder={t('plugin_ito_region_search')}
+                            placeholder={t.plugin_ito_region_search()}
                             onChange={handleFilter}
                             inputProps={{
                                 className: classes.input,

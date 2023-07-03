@@ -3,14 +3,13 @@ import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { useCallback, useEffect, useMemo } from 'react'
-import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback.js'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet.js'
 import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { useI18N } from '../locales/index.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { isFacebook, isTwitter } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -56,25 +55,26 @@ export interface ITO_CardProps {
 
 export function ITO_Card(props: ITO_CardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
+    const { share } = useSNSAdaptorContext()
 
     // #region claim
     const [{ loading: isClaiming }, claimCallback] = useMaskClaimCallback()
     const openShareTxDialog = useOpenShareTxDialog()
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
-        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+        const isOnTwitter = isTwitter()
+        const isOnFacebook = isFacebook()
         const cashTag = isOnTwitter ? '$' : ''
-        return t('plugin_ito_share_text', {
+        return t.plugin_ito_share_text({
             symbol: `${cashTag}${token?.symbol}`,
             balance: formatBalance(packet?.claimable, 18, 6),
-            account_promote: t('plugin_ito_account_promote', {
+            account_promote: t.plugin_ito_account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
-            link: postLink,
+            link: postLink.toString(),
         })
     }, [t, postLink, packet?.claimable, token?.symbol])
 
@@ -84,13 +84,13 @@ export function ITO_Card(props: ITO_CardProps) {
         await openShareTxDialog({
             hash,
             onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
+                share?.(shareText)
             },
         })
 
         onUpdateBalance()
         packetRetry()
-    }, [shareText, openShareTxDialog, claimCallback])
+    }, [shareText, openShareTxDialog, claimCallback, share])
     // #endregion
 
     // #region update parent amount
@@ -124,7 +124,7 @@ export function ITO_Card(props: ITO_CardProps) {
                 <Box className={classes.content}>
                     <Typography>{packetError.message}</Typography>
                     <ActionButton className={classes.button} onClick={() => packetRetry()}>
-                        {t('retry')}
+                        {t.retry()}
                     </ActionButton>
                 </Box>
             </Box>
@@ -134,7 +134,7 @@ export function ITO_Card(props: ITO_CardProps) {
         <Box className={classes.root}>
             <Box className={classes.content}>
                 <Box display="flex" flexDirection="column" justifyContent="space-between">
-                    <Typography>{t('plugin_ito_locked')}</Typography>
+                    <Typography>{t.plugin_ito_locked()}</Typography>
                     <Typography className={classes.amount}>
                         {packet && packet.claimable !== '0'
                             ? formatBalance(packet.claimable, token.decimals, 6)
@@ -152,7 +152,7 @@ export function ITO_Card(props: ITO_CardProps) {
                                 isClaiming
                             }
                             onClick={claim}>
-                            {t('plugin_ito_claim')}
+                            {t.plugin_ito_claim()}
                         </ActionButton>
                     </Box>
                 ) : null}
@@ -160,7 +160,7 @@ export function ITO_Card(props: ITO_CardProps) {
             {packet ? (
                 <Box className={classes.ITOAlertContainer}>
                     <Alert icon={false} className={classes.ITOAlert}>
-                        {t('plugin_ito_unlock_time_cert', {
+                        {t.plugin_ito_unlock_time_cert({
                             date: new Date(Number.parseInt(packet.unlockTime, 10) * 1000).toUTCString(),
                         })}
                     </Alert>

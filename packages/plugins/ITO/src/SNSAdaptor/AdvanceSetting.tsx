@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { FormGroup, FormLabel, FormControlLabel, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
 
 export enum SettingField {
     IPRegion = 'IPRegion',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: AdvanceSettingProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     const handleAdvanceSettingToggle = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target
@@ -52,7 +52,7 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
     return (
         <fieldset className={classes.root}>
             <FormLabel component="legend" className={classes.label}>
-                {t('plugin_ito_advanced')}
+                {t.plugin_ito_advanced()}
             </FormLabel>
             <FormGroup className={classes.group}>
                 <FormControlLabel
@@ -63,7 +63,7 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
                             name={SettingField.IPRegion}
                         />
                     }
-                    label={t('plugin_ito_advanced_ip_region')}
+                    label={t.plugin_ito_advanced_ip_region()}
                 />
                 <FormControlLabel
                     control={
@@ -73,7 +73,7 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
                             name={SettingField.delayUnlocking}
                         />
                     }
-                    label={t('plugin_ito_advanced_delay_unlocking')}
+                    label={t.plugin_ito_advanced_delay_unlocking()}
                 />
                 <FormControlLabel
                     control={
@@ -83,7 +83,7 @@ export function AdvanceSetting({ advanceSettingData, setAdvanceSettingData }: Ad
                             name={SettingField.contract}
                         />
                     }
-                    label={t('plugin_ito_advanced_contract')}
+                    label={t.plugin_ito_advanced_contract()}
                 />
             </FormGroup>
         </fieldset>
