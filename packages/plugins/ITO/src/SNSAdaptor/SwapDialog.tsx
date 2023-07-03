@@ -21,11 +21,11 @@ import {
 import { useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 import { type ChainId, SchemaType, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Slider, Typography } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
-import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
+import { useI18N } from '../locales/index.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
@@ -78,7 +78,7 @@ export interface SwapDialogProps extends withClasses<'root'> {
 }
 
 export function SwapDialog(props: SwapDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const {
         payload,
         initAmount,
@@ -92,6 +92,7 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens,
     } = props
 
+    const { share } = useSNSAdaptorContext()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles(undefined, { props })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -176,25 +177,26 @@ export function SwapDialog(props: SwapDialogProps) {
                 amount: formatBalance(to_value, payload.token?.decimals, 2),
                 token: payload.token,
                 tokenType: TokenType.Fungible,
-                messageTextForFT: t('plugin_ito_your_claimed_amount', {
+                messageTextForFT: t.plugin_ito_your_claimed_amount({
                     amount: formatBalance(to_value, payload.token?.decimals, 2),
                     symbol: `$${payload.token.symbol}`,
                 }),
-                title: t('plugin_ito_name'),
-                share: activatedSocialNetworkUI.utils.share,
+                title: t.plugin_ito_name(),
+                share,
             })
 
             setActualSwapAmount(to_value)
         }
         if (payload.token.schema !== SchemaType.ERC20) return
         await Token?.addToken?.(account, payload.token)
-    }, [swapCallback, payload.token, Token, account, successShareText])
+    }, [swapCallback, payload.token, Token, account, successShareText, share])
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))
-            return t('plugin_ito_error_enter_amount')
-        if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken?.symbol })
-        if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_swap_exceed_wallet_limit')
+            return t.plugin_ito_error_enter_amount()
+        if (swapAmount.isGreaterThan(tokenBalance))
+            return t.plugin_ito_error_balance({ symbol: swapToken?.symbol || '' })
+        if (tokenAmount.isGreaterThan(maxSwapAmount)) return t.plugin_ito_dialog_swap_exceed_wallet_limit()
         return ''
     }, [swapAmount, tokenBalance, maxSwapAmount, swapToken, ratio])
 
@@ -220,12 +222,12 @@ export function SwapDialog(props: SwapDialogProps) {
                 </Typography>
             </section>
             <Typography className={classes.exchangeText} variant="body1" color="textSecondary">
-                {t('plugin_ito_dialog_swap_exchange')}{' '}
+                {t.plugin_ito_dialog_swap_exchange()}{' '}
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}.
             </Typography>
             <FungibleTokenInput
-                label={t('amount')}
+                label={t.amount()}
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
                 balance={tokenBalance}
@@ -244,7 +246,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 onSelectToken={onSelectTokenChipClick}
             />
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
-                {t('plugin_ito_swap_only_once_remind')}
+                {t.plugin_ito_swap_only_once_remind()}
             </Typography>
             <section className={classes.swapButtonWrapper}>
                 <WalletConnectedBoundary expectedChainId={payload.chain_id}>
@@ -259,7 +261,7 @@ export function SwapDialog(props: SwapDialogProps) {
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
-                            {validationMessage || t('plugin_ito_swap')}
+                            {validationMessage || t.plugin_ito_swap()}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>

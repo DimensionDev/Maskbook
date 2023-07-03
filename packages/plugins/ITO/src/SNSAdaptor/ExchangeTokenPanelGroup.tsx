@@ -2,7 +2,6 @@ import { Fragment, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import { ArrowDownward as ArrowDownwardIcon } from '@mui/icons-material'
-import { useI18N } from '../../../utils/index.js'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants.js'
 import {
     type ExchangeTokenAndAmountState,
@@ -12,6 +11,7 @@ import {
 import { ExchangeTokenPanel } from './ExchangeTokenPanel.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     arrow: {
@@ -29,7 +29,7 @@ export interface ExchangeTokenPanelGroupProps {
 
 export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const { onTokenAmountChange, chainId } = props
     const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])
     const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(props.origin)
@@ -88,7 +88,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                     <Fragment key={idx}>
                         <ExchangeTokenPanel
                             chainId={chainId}
-                            label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
+                            label={idx ? t.plugin_ito_swap_ration_label() : t.plugin_ito_sell_total_amount()}
                             dataIndex={item.key}
                             disableBalance={idx !== 0}
                             isSell={idx === 0}

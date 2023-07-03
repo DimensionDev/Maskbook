@@ -21,7 +21,7 @@ export default {
     'plugins/GoPlusSecurity/src/locales/%locale%.json': 'io.gopluslabs.security',
     'plugins/CrossChainBridge/src/locales/%locale%.json': 'io.mask.cross-chain-bridge',
     'mask/src/plugins/RedPacket/locales/%locale%.json': 'com.maskbook.red_packet',
-    'mask/src/plugins/Tips/locales/%locale%.json': 'com.maskbook.tip',
+    'plugins/Tips/src/locales/%locale%.json': 'com.maskbook.tip',
     'plugins/Avatar/src/locales/%locale%.json': 'com.maskbook.avatar',
     'plugins/Trader/src/locales/%locale%.json': 'com.maskbook.trader',
     'plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
@@ -40,4 +40,5 @@ export default {
     'plugins/Collectible/src/locales/%locale%.json': 'com.maskbook.collectibles',
     'plugins/ArtBlocks/src/locales/%locale%.json': 'io.artblocks',
     'plugins/External/src/locales/%locale%.json': 'io.mask.external',
+    'plugins/ITO/src/locales/%locale%.json': 'com.maskbook.ito',
 }

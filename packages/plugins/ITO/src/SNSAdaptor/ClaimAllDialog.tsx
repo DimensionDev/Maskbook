@@ -16,10 +16,10 @@ import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } fr
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils/index.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
 import type { SwappedTokenType } from '../types.js'
+import { useI18N } from '../locales/index.js'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -160,7 +160,7 @@ interface ClaimAllDialogProps {
 }
 
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { open, onClose } = props
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
@@ -210,7 +210,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                 variantSuccess: classes.snackbarSuccess,
                 variantError: classes.snackbarError,
             }}>
-            <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
+            <InjectedDialog open={open} onClose={onClose} title={t.plugin_ito_claim_all_dialog_title()}>
                 <DialogContent className={classes.wrapper}>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab chains={chainIdList} pluginID={NetworkPluginID.PLUGIN_EVM} />
@@ -226,7 +226,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </div>
                         ) : (
                             <div className={classes.emptyContentWrapper}>
-                                <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
+                                <Typography color="textPrimary">{t.plugin_ito_no_claimable_token()} </Typography>
                             </div>
                         )}
                     </div>
@@ -242,7 +242,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         loading={isClaiming}
                                         disabled={claimablePids.length === 0}
                                         onClick={claim}>
-                                        {t('plugin_ito_claim_all')}
+                                        {t.plugin_ito_claim_all()}
                                     </ActionButton>
                                 </WalletConnectedBoundary>
                             ) : null}
@@ -280,7 +280,7 @@ interface SwappedTokensProps {
 }
 
 function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const theme = useTheme()
     const { classes, cx } = useStyles({ shortITOwrapper: false })
     const { data: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, {
@@ -308,15 +308,15 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
                     <span>
                         {token.symbol}{' '}
                         {swappedToken.isClaimable
-                            ? t('plugin_ito_claim_all_status_unclaimed')
-                            : t('plugin_ito_claim_all_status_locked')}
+                            ? t.plugin_ito_claim_all_status_unclaimed()
+                            : t.plugin_ito_claim_all_status_locked()}
                         :
                     </span>
                 </Typography>
                 {swappedToken.isClaimable ? null : (
                     <Typography className={classes.unlockTime}>
-                        {t('plugin_ito_claim_all_unlock_time', {
-                            time: formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd HH:mm:ss'),
+                        {t.plugin_ito_claim_all_unlock_time({
+                            time: formatDateTime(swappedToken.unlockTime, 'yyyy-MM-dd HH:mm:ss') || '',
                         })}
                     </Typography>
                 )}

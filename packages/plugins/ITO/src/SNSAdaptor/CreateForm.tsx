@@ -15,12 +15,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
-import {
-    useCurrentIdentity,
-    useCurrentLinkedPersona,
-    useLastRecognizedIdentity,
-} from '../../../components/DataSource/useActivatedUI.js'
-import { sliceTextByUILength, useI18N } from '../../../utils/index.js'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
@@ -29,6 +23,10 @@ import { type AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useI18N } from '../locales/index.js'
+import { sliceTextByUILength } from './utils/sliceTextByUILength.js'
+import { useCurrentLinkedPersona } from './hooks/useCurrentLinkedPersona.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -123,20 +121,19 @@ export interface CreateFormProps {
 
 export function CreateForm(props: CreateFormProps) {
     const { onChangePoolSettings, onNext, origin } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles()
 
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
-    const currentIdentity = useCurrentIdentity()
+    const currentIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-
-    const { value: linkedPersona } = useCurrentLinkedPersona()
+    const linkedPersona = useCurrentLinkedPersona()
 
     const senderName =
-        lastRecognizedIdentity.identifier?.userId ??
-        currentIdentity?.identifier.userId ??
+        lastRecognizedIdentity?.identifier?.userId ??
+        currentIdentity?.identifier?.userId ??
         linkedPersona?.nickname ??
         'Unknown User'
 
@@ -284,34 +281,34 @@ export function CreateForm(props: CreateFormProps) {
     }, [chainId])
 
     const validationMessage = useMemo(() => {
-        if (tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
+        if (tokenAndAmounts.length === 0) return t.plugin_ito_error_enter_amount_and_token()
         for (const { amount, token } of tokenAndAmounts) {
-            if (!token) return t('plugin_ito_error_select_token')
-            if (amount === '') return t('plugin_ito_error_enter_amount')
-            if (isZero(amount)) return t('plugin_ito_error_enter_amount')
+            if (!token) return t.plugin_ito_error_select_token()
+            if (amount === '') return t.plugin_ito_error_enter_amount()
+            if (isZero(amount)) return t.plugin_ito_error_enter_amount()
         }
 
         if (isGreaterThan(tokenAndAmount?.amount ?? '0', tokenBalance))
-            return t('plugin_ito_error_balance', {
-                symbol: tokenAndAmount?.token?.symbol,
+            return t.plugin_ito_error_balance({
+                symbol: tokenAndAmount?.token?.symbol || '',
             })
 
-        if (!totalOfPerWallet || isZero(totalOfPerWallet)) return t('plugin_ito_error_allocation_absence')
+        if (!totalOfPerWallet || isZero(totalOfPerWallet)) return t.plugin_ito_error_allocation_absence()
 
         if (isGreaterThan(totalOfPerWallet, tokenAndAmount?.amount ?? '0'))
-            return t('plugin_ito_error_allocation_invalid')
+            return t.plugin_ito_error_allocation_invalid()
 
-        if (startTime >= endTime) return t('plugin_ito_error_exchange_time')
+        if (startTime >= endTime) return t.plugin_ito_error_exchange_time()
 
-        if (endTime >= unlockTime && advanceSettingData.delayUnlocking) return t('plugin_ito_error_unlock_time')
+        if (endTime >= unlockTime && advanceSettingData.delayUnlocking) return t.plugin_ito_error_unlock_time()
 
         if (qualification?.startTime) {
             if (new Date(Number(qualification.startTime) * 1000) >= endTime)
-                return t('plugin_ito_error_qualification_start_time')
+                return t.plugin_ito_error_qualification_start_time()
         }
 
         if (!qualification?.isQualification && advanceSettingData.contract && qualificationAddress.length > 0) {
-            return t('plugin_ito_error_invalid_qualification')
+            return t.plugin_ito_error_invalid_qualification()
         }
         return ''
     }, [
@@ -352,12 +349,12 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const StartTime = (
-        <DateTimePanel label={t('plugin_ito_begin_time_title')} onChange={handleStartTime} date={startTime} />
+        <DateTimePanel label={t.plugin_ito_begin_time_title()} onChange={handleStartTime} date={startTime} />
     )
 
     const EndTime = (
         <DateTimePanel
-            label={t('plugin_ito_end_time_title')}
+            label={t.plugin_ito_end_time_title()}
             onChange={handleEndTime}
             min={formatDateTime(startTime, "yyyy-MM-dd'T00:00")}
             date={endTime}
@@ -365,7 +362,7 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const UnlockTime = (
-        <DateTimePanel label={t('plugin_ito_unlock_time')} onChange={handleUnlockTime} date={unlockTime} />
+        <DateTimePanel label={t.plugin_ito_unlock_time()} onChange={handleUnlockTime} date={unlockTime} />
     )
 
     return (
@@ -380,7 +377,7 @@ export function CreateForm(props: CreateFormProps) {
             </Box>
             <Box className={classes.line}>
                 <InputBase
-                    placeholder={t('plugin_ito_message_label')}
+                    placeholder={t.plugin_ito_message_label()}
                     value={message}
                     onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                     fullWidth
@@ -389,7 +386,7 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line}>
                 <InputBase
                     fullWidth
-                    placeholder={t('plugin_ito_allocation_per_wallet_title')}
+                    placeholder={t.plugin_ito_allocation_per_wallet_title()}
                     onChange={onTotalOfPerWalletChange}
                     value={totalOfPerWallet}
                     inputProps={{
@@ -419,7 +416,7 @@ export function CreateForm(props: CreateFormProps) {
                 <Box className={classes.line}>
                     <InputBase
                         startAdornment={
-                            <Typography className={classes.inputLabel}>{t('plugin_ito_region_label')}</Typography>
+                            <Typography className={classes.inputLabel}>{t.plugin_ito_region_label()}</Typography>
                         }
                         className={classes.input}
                         inputComponent={RegionSelect}
@@ -436,9 +433,7 @@ export function CreateForm(props: CreateFormProps) {
                         onChange={(e) => setQualificationAddress(e.currentTarget.value)}
                         value={qualificationAddress}
                         startAdornment={
-                            <Typography className={classes.inputLabel}>
-                                {t('plugin_ito_qualification_label')}
-                            </Typography>
+                            <Typography className={classes.inputLabel}>{t.plugin_ito_qualification_label()}</Typography>
                         }
                         endAdornment={
                             qualification?.isQualification ? (
@@ -457,7 +452,7 @@ export function CreateForm(props: CreateFormProps) {
                     />
                     {qualification?.startTime && new Date(Number(qualification.startTime) * 1000) > startTime ? (
                         <div className={classes.qualStartTime}>
-                            <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
+                            <Typography>{t.plugin_ito_qualification_start_time()}</Typography>
                             <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>
                         </div>
                     ) : null}
@@ -476,7 +471,7 @@ export function CreateForm(props: CreateFormProps) {
                             size="medium"
                             disabled={!!validationMessage}
                             onClick={onNext}>
-                            {validationMessage || t('plugin_ito_next')}
+                            {validationMessage || t.plugin_ito_next()}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>

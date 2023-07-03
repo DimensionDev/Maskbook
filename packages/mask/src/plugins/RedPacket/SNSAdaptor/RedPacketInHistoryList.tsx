@@ -11,7 +11,6 @@ import {
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { Translate, useI18N } from '../locales/index.js'
-import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
@@ -19,6 +18,7 @@ import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@maskne
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, type FungibleToken, minus } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
+import { dateTimeFormat } from './utils/formatDate.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()(
     (theme, { listItemBackground, listItemBackgroundIcon }) => {

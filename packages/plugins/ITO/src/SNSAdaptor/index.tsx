@@ -10,8 +10,7 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { EnhanceableSite, SOCIAL_MEDIA_NAME, getSiteType } from '@masknet/shared-base'
 import { ITOInjection } from './ITOInjection.js'
 import { openDialog } from './emitter.js'
 import { Typography } from '@mui/material'
@@ -85,7 +84,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 description: (
                     <Trans
                         i18nKey="plugin_ito_description"
-                        values={{ sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier] }}
+                        values={{ sns: SOCIAL_MEDIA_NAME[getSiteType() ?? EnhanceableSite.Twitter] }}
                     />
                 ),
                 category: 'dapp',
