@@ -1,0 +1,16 @@
+{
+    "contract": "コントラクト",
+    "load_failed": "読み込み失敗",
+    "loading": "読み込み中...",
+    "done": "完了です！",
+    "download": "ダウンロード",
+    "failed": "失敗しました",
+    "buy_now": "今すぐ購入",
+    "no_enough_gas_fees": "ガス料金が足りません",
+    "open": "オープン",
+    "settings": "設定",
+    "powered_by": "以下により提供されています",
+    "available_balance": "利用可能な残高",
+    "wallet_balance": "残高",
+    "edit": "編集"
+}

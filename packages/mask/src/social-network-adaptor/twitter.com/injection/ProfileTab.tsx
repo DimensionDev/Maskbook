@@ -19,11 +19,11 @@ import {
     searchNameTag,
     isProfilePageLike,
 } from '../utils/selector.js'
-import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import Services from '../../../extension/service.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 import { useAsync } from 'react-use'
+import { useCollectionByTwitterHandler } from '@masknet/shared'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
