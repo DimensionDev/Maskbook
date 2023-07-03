@@ -98,7 +98,6 @@ function Configuration(env, argv) {
             new webpack.DefinePlugin({
                 'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
                 'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.env.VERSION': JSON.stringify('v19.0.0'),
                 'process.env.APP': 'true',

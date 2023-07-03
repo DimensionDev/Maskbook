@@ -3,6 +3,7 @@ import webpack from 'webpack'
 export function EnvironmentPluginCache(def) {
     return new webpack.EnvironmentPlugin(def)
 }
+
 export function EnvironmentPluginNoCache(def) {
     const next = {}
     for (const key in def) {

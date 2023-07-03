@@ -13,6 +13,7 @@ import {
     i18NextInstance,
     ValueRefWithReady,
 } from '@masknet/shared-base'
+import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
@@ -139,3 +140,5 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         events: new Emitter(),
     },
 })
+
+setupReactShadowRootEnvironment({ mode: 'open' }, [])
