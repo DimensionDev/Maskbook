@@ -60,6 +60,7 @@ function Configuration(env, argv) {
                     loader: 'swc-loader',
                     options: {
                         jsc: {
+                            externalHelpers: true,
                             parser: {
                                 syntax: 'typescript',
                                 tsx: true,
@@ -95,14 +96,15 @@ function Configuration(env, argv) {
                 return EnvironmentPluginNoCache(info)
             })(),
             new webpack.DefinePlugin({
+                'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
+                'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.env.VERSION': JSON.stringify('v19.0.0'),
                 'process.env.APP': 'true',
                 'process.env.channel': JSON.stringify('stable'),
                 'process.version': JSON.stringify('v19.0.0'),
                 'process.browser': 'true',
-                'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
-                'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
             }),
         ],
         devServer: {
