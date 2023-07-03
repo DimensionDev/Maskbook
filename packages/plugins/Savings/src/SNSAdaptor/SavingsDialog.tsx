@@ -20,7 +20,6 @@ import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shar
 import { Contract } from '@masknet/web3-providers'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
-import { useI18N } from '../../../utils/index.js'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { SavingsFormDialog } from './SavingsForm.js'
@@ -28,6 +27,7 @@ import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -64,7 +64,7 @@ export interface SavingsDialogProps {
 const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
 
@@ -138,15 +138,15 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         <InjectedDialog
                             open={open}
                             classes={{ paper: classes.dialogRoot }}
-                            title={t('plugin_savings')}
+                            title={t.plugin_savings()}
                             onClose={() => {
                                 onClose?.()
                                 setSelectedProtocol(null)
                             }}
                             titleTabs={
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                                    <Tab label={t('plugin_savings_deposit')} value={tabs.deposit} />
-                                    <Tab label={t('plugin_savings_withdraw')} value={tabs.withdraw} />
+                                    <Tab label={t.plugin_savings_deposit()} value={tabs.deposit} />
+                                    <Tab label={t.plugin_savings_withdraw()} value={tabs.withdraw} />
                                 </MaskTabList>
                             }>
                             <DialogContent className={classes.content}>
