@@ -20,7 +20,6 @@ import {
     currySameAddress,
     isSameAddress,
     leftShift,
-    minus,
     toZero,
     type FungibleToken,
 } from '@masknet/web3-shared-base'
@@ -97,12 +96,24 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             (x) => x.address.toLowerCase(),
         )
 
-        return allFungibleTokens.filter(
-            (token) =>
-                (!includeTokens || includeTokens.some(currySameAddress(token.address))) &&
-                (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
-        )
-    }, [nativeToken, tokens, fungibleTokens, trustedFungibleTokens, includeTokens, excludeTokens])
+        const blockedTokenAddresses = blockedFungibleTokens.map((x) => x.address)
+        return allFungibleTokens.filter((token) => {
+            const checkSameAddress = (addr: string) => addr.toLowerCase() === token.address.toLowerCase()
+            const isIncluded = !includeTokens || includeTokens.some(checkSameAddress)
+            const isExcluded = excludeTokens.length ? excludeTokens.some(checkSameAddress) : false
+            const isBlocked = blockedTokenAddresses.some(checkSameAddress)
+
+            return isIncluded && !isExcluded && !isBlocked
+        })
+    }, [
+        nativeToken,
+        tokens,
+        fungibleTokens,
+        trustedFungibleTokens,
+        includeTokens,
+        excludeTokens,
+        blockedFungibleTokens,
+    ])
 
     const { value: fungibleTokensBalance = EMPTY_OBJECT } = useFungibleTokensBalance(
         pluginID,
@@ -112,26 +123,23 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     // To avoid SearchableList re-render, reduce the dep
     const sortedFungibleTokensForManage = useMemo(() => {
-        if (mode === TokenListMode.List) return []
+        if (mode === TokenListMode.List) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
 
-        return filteredFungibleTokens.sort((a, z) => {
+        return [...filteredFungibleTokens].sort((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
 
             const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
-            const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
-
-            const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
-            const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
-
-            // native token
             if (isNativeTokenA) return -1
+            const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
             if (isNativeTokenZ) return 1
 
             // mask token with position value
+            const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
             if (isMaskTokenA) return -1
+            const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
             if (isMaskTokenZ) return 1
 
             if (z.rank && (!a.rank || a.rank - z.rank > 0)) return 1
@@ -145,32 +153,24 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     }, [chainId, trustedFungibleTokens, Others, mode])
 
     const sortedFungibleTokensForList = useMemo(() => {
-        if (mode === TokenListMode.Manage) return []
+        if (mode === TokenListMode.Manage) return EMPTY_LIST
         const fungibleAssetsTable = Object.fromEntries(
             fungibleAssets.filter((x) => x.chainId === chainId).map((x) => [x.address, x]),
         )
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
-        const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
         const getTokenValue = (address: string) => {
             const value = fungibleAssetsTable[address]?.value?.[CurrencyType.USD]
             return value ? toZero(value) : ZERO
         }
+        const { getNativeTokenAddress, getMaskTokenAddress } = Others
         return filteredFungibleTokens
-            .filter((x) => !isBlockedToken(x))
+            .map((x) => ({
+                ...x,
+                // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
+                balance: fungibleTokensBalance[x.address],
+            }))
             .sort((a, z) => {
-                const aBalance = leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals)
-                const zBalance = leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals)
-
-                const aUSD = getTokenValue(a.address)
-                const zUSD = getTokenValue(z.address)
-
-                const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
-                const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
-
-                const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
-                const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
-
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1
@@ -178,18 +178,26 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 }
 
                 // native token
+                const isNativeTokenA = isSameAddress(a.address, getNativeTokenAddress(a.chainId))
                 if (isNativeTokenA) return -1
+                const isNativeTokenZ = isSameAddress(z.address, getNativeTokenAddress(z.chainId))
                 if (isNativeTokenZ) return 1
 
                 // mask token with position value
+                const aUSD = getTokenValue(a.address)
+                const isMaskTokenA = isSameAddress(a.address, getMaskTokenAddress(a.chainId))
                 if (aUSD.isPositive() && isMaskTokenA) return -1
+                const zUSD = getTokenValue(z.address)
+                const isMaskTokenZ = isSameAddress(z.address, getMaskTokenAddress(z.chainId))
                 if (zUSD.isPositive() && isMaskTokenZ) return 1
 
                 // token value
-                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+                if (!aUSD.isEqualTo(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
 
+                const aBalance = leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals)
+                const zBalance = leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals)
                 // token balance
-                if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
+                if (!aBalance.isEqualTo(zBalance)) return zBalance.gt(aBalance) ? 1 : -1
 
                 // trusted token
                 if (isTrustedToken(a.address)) return -1
@@ -207,21 +215,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
                 return 0
             })
-            .map((x) => ({
-                ...x,
-                // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
-                balance: fungibleTokensBalance[x.address],
-            }))
-    }, [
-        mode,
-        chainId,
-        fungibleAssets,
-        trustedFungibleTokens,
-        blockedFungibleTokens,
-        filteredFungibleTokens,
-        fungibleTokensBalance,
-        Others,
-    ])
+    }, [mode, chainId, fungibleAssets, trustedFungibleTokens, filteredFungibleTokens, fungibleTokensBalance, Others])
 
     // #region add token by address
     const [keyword, setKeyword] = useState('')

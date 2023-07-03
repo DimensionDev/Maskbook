@@ -7,10 +7,10 @@ import { ZERO, formatBalance, isZero, rightShift } from '@masknet/web3-shared-ba
 import { Button, Grid, Typography } from '@mui/material'
 import { type BigNumber } from 'bignumber.js'
 import { memo } from 'react'
-import { useI18N } from '../../../../utils/index.js'
 import { ProtocolType, type SavingsProtocol } from '../../types.js'
 import { ProviderIconURLs } from '../IconURL.js'
 import { useApr, useBalance } from '../hooks/index.js'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     tableRow: {
@@ -54,7 +54,7 @@ interface SavingsRowProps {
 }
 
 export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWithdraw, onDeposit }: SavingsRowProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [seen, ref] = useEverSeen()
@@ -101,7 +101,7 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
                         }
                         onDeposit?.(protocol)
                     }}>
-                    {isDeposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
+                    {isDeposit ? t.plugin_savings_deposit() : t.plugin_savings_withdraw()}
                 </Button>
             </Grid>
         </Grid>

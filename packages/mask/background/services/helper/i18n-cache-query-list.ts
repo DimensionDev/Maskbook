@@ -41,4 +41,5 @@ export default {
     'plugins/External/src/locales/%locale%.json': 'io.mask.external',
     'plugins/ITO/src/locales/%locale%.json': 'com.maskbook.ito',
     'plugins/ProfileCard/src/locales/%locale%.json': 'io.mask.web3-profile-card',
+    'plugins/Savings/src/locales/%locale%.json': 'com.savings',
 }

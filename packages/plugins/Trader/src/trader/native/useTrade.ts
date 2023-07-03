@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useTokenConstants } from '@masknet/web3-shared-evm'
+import { useTokenConstant } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -8,7 +8,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 export function useTrade(inputToken?: Web3Helper.FungibleTokenAll, outputToken?: Web3Helper.FungibleTokenAll) {
     const { chainId: targetChainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
+    const WNATIVE_ADDRESS = useTokenConstant(targetChainId, 'WNATIVE_ADDRESS')
     const Others = useWeb3Others()
 
     // to mimic the same interface with other trade providers
