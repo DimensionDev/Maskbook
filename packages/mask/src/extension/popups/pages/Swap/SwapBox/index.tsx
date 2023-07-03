@@ -4,7 +4,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
+import { Trader } from '@masknet/plugin-trader'
 
 export function SwapBox() {
     const location = useLocation()

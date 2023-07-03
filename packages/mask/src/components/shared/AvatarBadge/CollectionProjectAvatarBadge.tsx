@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { SocialIdentity } from '@masknet/shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { IconButton, type IconButtonProps } from '@mui/material'
-import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
+import { PluginTraderMessages } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {

@@ -289,8 +289,8 @@
             }
         },
         {
-            "input": "./packages/mask/src/plugins/Trader/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/Trader/locales/i18n_generated",
+            "input": "./packages/plugins/Trader/src/locales/en-US.json",
+            "output": "./packages/plugins/Trader/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
