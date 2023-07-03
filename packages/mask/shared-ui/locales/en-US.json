@@ -281,7 +281,6 @@
     "recent_transaction_cancelled": "Cancelled",
     "wallet_balance": "Balance",
     "wallet_available_balance": "Available Balance",
-    "wallet_balance_eth": "Balance({{symbol}})",
     "wallet_new": "New Wallet",
     "wallet_status_button_change": "Change",
     "wallet_status_button_change_to_evm": "Change to EVM wallet",

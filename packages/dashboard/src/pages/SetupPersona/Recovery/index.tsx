@@ -11,7 +11,7 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud.js'
-import { PersonaRecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
+import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { Services } from '../../../API.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
@@ -155,7 +155,7 @@ export const Recovery = memo(function Recovery() {
             <Typography className={classes.second} mt={2}>
                 {t.data_recovery_description()}
             </Typography>
-            <PersonaRecoveryProvider>
+            <RecoveryProvider>
                 <div className={classes.tabContainer}>
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
@@ -195,7 +195,7 @@ export const Recovery = memo(function Recovery() {
                         )
                     }}
                 </RecoveryContext.Consumer>
-            </PersonaRecoveryProvider>
+            </RecoveryProvider>
         </Box>
     )
 })

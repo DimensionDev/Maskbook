@@ -5,8 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { isUndefined } from 'lodash-es'
-import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
@@ -17,8 +16,8 @@ import { toBlob } from 'html-to-image'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-
-const walletName = Math.random().toString(36).slice(2)
+import { isUndefined } from 'lodash-es'
+import { walletName } from '../constants.js'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
     container: {
@@ -169,7 +168,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     checkIcon: {
         width: 18,
         height: 18,
-        color: theme.palette.maskColor.bottom,
+        color: 'transparent',
     },
     verificationFail: {
         color: theme.palette.maskColor.danger,
@@ -189,11 +188,7 @@ const CreateMnemonic = memo(() => {
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
 
-    const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
-
-    useEffect(() => {
-        CrossIsolationMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+    const { value: hasPassword, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     const onVerifyClick = useCallback(() => {
         setIsVerify(true)
@@ -220,7 +215,7 @@ const CreateMnemonic = memo(() => {
         )
 
         return address
-    }, [walletName, words, hasPassword, location.state?.password])
+    }, [JSON.stringify(words), hasPassword, location.state?.password])
 
     const [, onSubmit] = useAsyncFn(async () => {
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
@@ -236,11 +231,7 @@ const CreateMnemonic = memo(() => {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words])
-
-    useEffect(() => {
-        if (!location.state?.password && !hasPassword && !loading) navigate(-1)
-    }, [location.state, hasPassword, loading])
+    }, [walletName, JSON.stringify(words)])
 
     return (
         <div className={classes.container}>

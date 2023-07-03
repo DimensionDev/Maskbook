@@ -280,7 +280,6 @@
     "recent_transaction_cancelled": "crwdns16394:0crwdne16394:0",
     "wallet_balance": "crwdns4505:0crwdne4505:0",
     "wallet_available_balance": "crwdns19903:0crwdne19903:0",
-    "wallet_balance_eth": "crwdns10189:0{{symbol}}crwdne10189:0",
     "wallet_new": "crwdns4511:0crwdne4511:0",
     "wallet_status_button_change": "crwdns4519:0crwdne4519:0",
     "wallet_status_button_change_to_evm": "crwdns18126:0crwdne18126:0",

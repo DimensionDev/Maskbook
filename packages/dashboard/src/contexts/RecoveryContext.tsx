@@ -26,7 +26,7 @@ RecoveryContext.displayName = 'RecoveryContext'
  *
  * Render some component (the submit button) outside TabPanel's
  */
-export const PersonaRecoveryProvider = memo<PropsWithChildren<{}>>(function PersonaRecoveryProvider({ children }) {
+export const RecoveryProvider = memo<PropsWithChildren<{}>>(function RecoveryProvider({ children }) {
     const [outlet, setOutlet] = useState<ReactNode>(null)
     const fillSubmitOutlet = useCallback((outlet: ReactNode) => {
         setOutlet(outlet)

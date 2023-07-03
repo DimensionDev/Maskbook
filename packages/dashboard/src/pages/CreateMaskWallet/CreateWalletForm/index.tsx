@@ -6,11 +6,10 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { useAsyncRetry } from 'react-use'
 import { PluginServices } from '../../../API.js'
-import urlcat from 'urlcat'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 
@@ -81,8 +80,8 @@ const CreateWalletForm = memo(() => {
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+        if (hasPassword) navigate(DashboardRoutes.CreateMaskWalletMnemonic)
+    }, [hasPassword])
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -90,18 +89,16 @@ const CreateWalletForm = memo(() => {
             .min(8, t.create_wallet_password_length_error())
             .max(20, t.create_wallet_password_length_error())
 
-        return hasPassword
-            ? zod.object({})
-            : zod
-                  .object({
-                      password: passwordRule,
-                      confirm: zod.string().optional(),
-                  })
-                  .refine((data) => data.password === data.confirm, {
-                      message: t.create_wallet_password_match_tip(),
-                      path: ['confirm'],
-                  })
-    }, [hasPassword])
+        return zod
+            .object({
+                password: passwordRule,
+                confirm: zod.string().optional(),
+            })
+            .refine((data) => data.password === data.confirm, {
+                message: t.create_wallet_password_match_tip(),
+                path: ['confirm'],
+            })
+    }, [])
 
     const {
         control,
@@ -118,9 +115,7 @@ const CreateWalletForm = memo(() => {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, {
-                chainId: searchParams.get('chainId'),
-            }),
+            DashboardRoutes.CreateMaskWalletMnemonic,
             data.password
                 ? {
                       state: { password: data.password },

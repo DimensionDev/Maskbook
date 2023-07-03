@@ -9,7 +9,7 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
-import { PersonaRecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
+import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { PluginServices } from '../../../API.js'
 
@@ -22,12 +22,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
-    },
-    setup: {
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.main,
-        fontWeight: 700,
     },
     title: {
         fontSize: 36,
@@ -69,6 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     between: {
         display: 'flex',
         justifyContent: 'space-between',
+        marginBottom: 12,
     },
     helveticaBold: {
         fontWeight: 700,
@@ -96,6 +91,7 @@ const Recovery = memo(function Recovery() {
             try {
                 const mnemonic = values.join(' ')
                 await PluginServices.Wallet.getDerivableAccounts(mnemonic, 0, 1)
+
                 navigate(DashboardRoutes.AddDeriveWallet, {
                     replace: false,
                     state: { mnemonic },
@@ -108,7 +104,7 @@ const Recovery = memo(function Recovery() {
     )
 
     const handleRecovery = useCallback(() => {
-        navigate(-1)
+        navigate(DashboardRoutes.CreateMaskWalletMnemonic)
     }, [])
 
     return (
@@ -130,7 +126,7 @@ const Recovery = memo(function Recovery() {
             <Typography className={classes.second} mt={2}>
                 {t.wallet_recovery_description()}
             </Typography>
-            <PersonaRecoveryProvider>
+            <RecoveryProvider>
                 <div className={classes.tabContainer}>
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
@@ -166,7 +162,7 @@ const Recovery = memo(function Recovery() {
                         )
                     }}
                 </RecoveryContext.Consumer>
-            </PersonaRecoveryProvider>
+            </RecoveryProvider>
         </Box>
     )
 })
