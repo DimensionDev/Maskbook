@@ -51,6 +51,7 @@
     "@masknet/plugin-scamsniffer": "workspace:^",
     "@masknet/plugin-smart-pay": "workspace:^",
     "@masknet/plugin-solana": "workspace:^",
+    "@masknet/plugin-tips": "workspace:^",
     "@masknet/plugin-transak": "workspace:^",
     "@masknet/plugin-vcent": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
