@@ -13,7 +13,7 @@ import {
     WalletConnectedBoundary,
     useOpenShareTxDialog,
 } from '@masknet/shared'
-import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, isTwitter } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
@@ -37,11 +37,10 @@ import { Contract, Others, Web3 } from '@masknet/web3-providers'
 import { SchemaType, chainResolver, getAaveConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
+import { useI18N } from '../locales/index.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -101,10 +100,10 @@ export const resolveProtocolName = createLookupTableResolver<ProtocolType, strin
 )
 
 export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFormDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const isDeposit = tab === TabType.Deposit
-
+    const { share } = useSNSAdaptorContext()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
@@ -156,10 +155,10 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     // #region form validation
     const validationMessage = useMemo(() => {
         if (needsSwap) return ''
-        if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
-        if (isLessThan(tokenAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
+        if (tokenAmount.isZero() || !inputAmount) return t.plugin_trader_error_amount_absence()
+        if (isLessThan(tokenAmount, 0)) return t.plugin_trade_error_input_amount_less_minimum_amount()
         if (isLessThan(balanceGasMinus, tokenAmount)) {
-            return t('plugin_trader_error_insufficient_balance', {
+            return t.plugin_trader_error_insufficient_balance({
                 symbol: isDeposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol,
             })
         }
@@ -197,12 +196,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }, [chainId, protocol.bareToken, inputAmount])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = t(isDeposit ? 'promote_savings' : 'promote_withdraw', {
+    const promote = {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
-        chain: chainResolver.chainName(chainId),
-        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-    })
+        chain: chainResolver.chainName(chainId) ?? '',
+        account: isTwitter() ? t.twitter_account() : t.facebook_account(),
+    }
+    const shareText = isDeposit ? t.promote_savings(promote) : t.promote_withdraw(promote)
     const queryClient = useQueryClient()
     const [, executor] = useAsyncFn(async () => {
         const methodName = isDeposit ? 'deposit' : 'withdraw'
@@ -216,10 +216,10 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         await openShareTxDialog({
             hash,
             onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
+                share?.(shareText)
             },
         })
-    }, [isDeposit, protocol, account, chainId, tokenAmount, openShareTxDialog, currentChainId])
+    }, [isDeposit, protocol, account, chainId, tokenAmount, openShareTxDialog, currentChainId, share])
 
     const buttonDom = useMemo(() => {
         return (
@@ -235,13 +235,11 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             spender={approvalData?.approveAddress}>
                             <ActionButtonPromise
                                 className={classes.button}
-                                init={
-                                    validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
-                                }
-                                waiting={t('plugin_savings_process_deposit')}
-                                failed={t('failed')}
+                                init={validationMessage || t.plugin_savings_deposit() + ' ' + protocol.bareToken.symbol}
+                                waiting={t.plugin_savings_process_deposit()}
+                                failed={t.failed()}
                                 failedOnClick="use executor"
-                                complete={t('done')}
+                                complete={t.done()}
                                 disabled={validationMessage !== '' && !needsSwap}
                                 noUpdateEffect
                                 executor={executor}
@@ -250,11 +248,11 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     ) : (
                         <ActionButtonPromise
                             className={classes.button}
-                            init={validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol}
-                            waiting={t('plugin_savings_process_deposit')}
-                            failed={t('failed')}
+                            init={validationMessage || t.plugin_savings_deposit() + ' ' + protocol.bareToken.symbol}
+                            waiting={t.plugin_savings_process_deposit()}
+                            failed={t.failed()}
                             failedOnClick="use executor"
-                            complete={t('done')}
+                            complete={t.done()}
                             disabled={validationMessage !== '' && !needsSwap}
                             noUpdateEffect
                             executor={executor}
@@ -264,15 +262,15 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     <ActionButtonPromise
                         init={
                             needsSwap
-                                ? t('plugin_savings_swap_token', { token: protocol.bareToken.symbol })
+                                ? t.plugin_savings_swap_token({ token: protocol.bareToken.symbol })
                                 : validationMessage ||
-                                  t('plugin_savings_withdraw_token', { token: protocol.stakeToken.symbol })
+                                  t.plugin_savings_withdraw_token({ token: protocol.stakeToken.symbol })
                         }
-                        waiting={t('plugin_savings_process_withdraw')}
-                        failed={t('failed')}
+                        waiting={t.plugin_savings_process_withdraw()}
+                        failed={t.failed()}
                         failedOnClick="use executor"
                         className={classes.button}
-                        complete={t('done')}
+                        complete={t.done()}
                         disabled={validationMessage !== ''}
                         noUpdateEffect
                         executor={executor}
@@ -283,7 +281,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }, [executor, validationMessage, needsSwap, protocol, isDeposit, approvalData, chainId, inputTokenBalance])
     return (
         <InjectedDialog
-            title={isDeposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
+            title={isDeposit ? t.plugin_savings_deposit() : t.plugin_savings_withdraw()}
             open
             onClose={onClose}>
             <DialogContent className={classes.containerWrap}>
@@ -295,7 +293,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                     amount={inputAmount}
                                     maxAmount={balanceGasMinus.toString()}
                                     balance={balanceAsBN.toString()}
-                                    label={t('plugin_savings_amount')}
+                                    label={t.plugin_savings_amount()}
                                     token={protocol.bareToken}
                                     onAmountChange={setInputAmount}
                                 />
@@ -327,7 +325,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                 chainId={protocol.bareToken.chainId}
                                 name={protocol.bareToken.name}
                             />
-                            {protocol.bareToken.name} {t('plugin_savings_apr')}%
+                            {protocol.bareToken.name} {t.plugin_savings_apr()}%
                         </Typography>
                         <Typography variant="body2" className={classes.infoRowRight}>
                             {apr}%
