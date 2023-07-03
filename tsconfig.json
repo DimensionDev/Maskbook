@@ -139,6 +139,7 @@
       "@masknet/plugin-game": ["./packages/plugins/Game/src"],
       "@masknet/plugin-nextid": ["./packages/plugins/NextID/src"],
       "@masknet/plugin-trader": ["./packages/plugins/Trader/src"],
+      "@masknet/plugin-ito": ["./packages/plugins/ITO/src"],
 
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]

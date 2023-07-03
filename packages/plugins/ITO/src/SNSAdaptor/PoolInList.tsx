@@ -4,7 +4,7 @@ import { omit } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
 import formatDateTime from 'date-fns/format'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PersistentStorages } from '@masknet/shared-base'
 import { SchemaType, chainResolver, type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { isZero, formatBalance, type FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
@@ -21,14 +21,13 @@ import {
     Typography,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useI18N } from '../../../utils/index.js'
 import { MSG_DELIMITER } from '../constants.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
 import { ITO_Status, type JSON_PayloadFromChain, type JSON_PayloadInMask, type PoolFromNetwork } from '../types.js'
 import { useDestructCallback } from './hooks/useDestructCallback.js'
-import { PersistentStorages } from '../../../../shared/index.js'
 import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -127,7 +126,7 @@ export interface PoolInListProps extends PoolFromNetwork {
 
 export function PoolInList(props: PoolInListProps) {
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
@@ -215,18 +214,18 @@ export function PoolInList(props: PoolInListProps) {
                                 {title}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
-                                {t('plugin_ito_list_start_date', {
+                                {t.plugin_ito_list_start_date({
                                     date: formatDateTime(pool.start_time, 'yyyy-MM-dd HH:mm:ss'),
                                 })}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
-                                {t('plugin_ito_list_end_date', {
+                                {t.plugin_ito_list_end_date({
                                     date: formatDateTime(pool.end_time, 'yyyy-MM-dd HH:mm:ss'),
                                 })}
                             </Typography>
                             {isDebugging ? (
                                 <Typography className={classes.date} variant="body2" color="textSecondary">
-                                    {t('plugin_ito_password', {
+                                    {t.plugin_ito_password({
                                         password: pool.password === '' ? 'no password' : pool.password,
                                     })}
                                 </Typography>
@@ -240,7 +239,7 @@ export function PoolInList(props: PoolInListProps) {
                                     fullWidth
                                     size="small"
                                     onClick={() => destruct(pool.pid)}>
-                                    {t('plugin_ito_withdraw')}
+                                    {t.plugin_ito_withdraw()}
                                 </ActionButton>
                             ) : canSend ? (
                                 <ActionButton
@@ -254,11 +253,11 @@ export function PoolInList(props: PoolInListProps) {
                                             ]) as JSON_PayloadInMask,
                                         )
                                     }>
-                                    {t('plugin_ito_list_button_send')}
+                                    {t.plugin_ito_list_button_send()}
                                 </ActionButton>
                             ) : isWithdrawn ? (
                                 <ActionButton fullWidth size="small" disabled>
-                                    {t('plugin_ito_withdrawn')}
+                                    {t.plugin_ito_withdrawn()}
                                 </ActionButton>
                             ) : null}
                         </Box>
@@ -269,7 +268,7 @@ export function PoolInList(props: PoolInListProps) {
 
                     <Box className={classes.price}>
                         <Typography variant="body2" color="textSecondary" component="span">
-                            {t('plugin_ito_list_sold_total')}
+                            {t.plugin_ito_list_sold_total()}
                             <Typography variant="body2" color="textPrimary" component="span">
                                 <FormattedBalance
                                     value={BigNumber.sum(...exchangeOutVolumes)}
@@ -280,7 +279,7 @@ export function PoolInList(props: PoolInListProps) {
                             {poolToken.symbol}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="span">
-                            {t('plugin_ito_list_total')}
+                            {t.plugin_ito_list_total()}
                             <Typography variant="body2" color="textPrimary" component="span">
                                 <FormattedBalance
                                     value={pool.total}
@@ -298,16 +297,16 @@ export function PoolInList(props: PoolInListProps) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className={classes.head} align="center" size="small">
-                                            {t('plugin_ito_list_table_type')}
+                                            {t.plugin_ito_list_table_type()}
                                         </TableCell>
                                         <TableCell className={classes.head} align="center" size="small">
-                                            {t('plugin_ito_list_table_price')}
+                                            {t.plugin_ito_list_table_price()}
                                         </TableCell>
                                         <TableCell className={classes.head} align="center" size="small">
-                                            {t('plugin_ito_list_table_sold')}
+                                            {t.plugin_ito_list_table_sold()}
                                         </TableCell>
                                         <TableCell className={classes.head} align="center" size="small">
-                                            {t('plugin_ito_list_table_got')}
+                                            {t.plugin_ito_list_table_got()}
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>

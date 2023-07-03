@@ -1,22 +1,19 @@
 import { omit, set } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
+import {
+    useActivatedPlugin,
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+} from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, type InjectedDialogProps, NetworkTab, ApplicationBoardModal } from '@masknet/shared'
-import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
-import {
-    useCurrentIdentity,
-    useCurrentLinkedPersona,
-    useLastRecognizedIdentity,
-} from '../../../components/DataSource/useActivatedUI.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { useI18N } from '../../../utils/index.js'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
 import { PluginITO_RPC } from '../messages.js'
 import { DialogTabs, type JSON_PayloadInMask } from '../types.js'
@@ -25,6 +22,8 @@ import { CreateForm } from './CreateForm.js'
 import { openComposition, payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
 import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
+import { useI18N } from '../locales/index.js'
+import { useCurrentLinkedPersona } from './hooks/useCurrentLinkedPersona.js'
 
 interface StyleProps {
     snsId: string
@@ -66,14 +65,15 @@ export interface CompositionDialogProps extends withClasses<'root'>, Omit<Inject
 }
 
 export function CompositionDialog(props: CompositionDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
 
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { pluginID } = useNetworkContext()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: chainIdValid ? undefined : ChainId.Mainnet,
     })
-    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
+
+    const { classes } = useStyles({ snsId: getSiteType() ?? EnhanceableSite.Twitter })
 
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList =
@@ -162,12 +162,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #endregion
 
     // #region tabs
-    const currentIdentity = useCurrentIdentity()
+    const currentIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { value: linkedPersona } = useCurrentLinkedPersona()
-
+    const linkedPersona = useCurrentLinkedPersona()
     const senderName =
-        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
+        lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname
+
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
@@ -226,7 +226,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
-            title={t('plugin_ito_display_name')}
+            title={t.plugin_ito_display_name()}
             onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
             <DialogContent className={classes.content}>
                 <Web3ContextProvider value={{ pluginID, chainId: currentChainId }}>

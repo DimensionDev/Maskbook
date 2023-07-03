@@ -4,10 +4,10 @@ import { AddOutlined as AddIcon, RemoveOutlined as RemoveIcon } from '@mui/icons
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { FungibleTokenInput, SelectFungibleTokenModal } from '@masknet/shared'
-import { useI18N } from '../../../utils/index.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     line: {
@@ -68,7 +68,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         onAdd,
         placeholder,
     } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
     const onSelectTokenChipClick = useCallback(async () => {
@@ -121,7 +121,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
                 onAmountChange={onAmountChangeForUI}
                 onSelectToken={onSelectTokenChipClick}
                 disabled={!exchangeToken}
-                placeholder={!exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : placeholder || '0.0'}
+                placeholder={!exchangeToken ? t.plugin_ito_placeholder_when_token_unselected() : placeholder || '0.0'}
                 disableMax
                 disableBalance={disableBalance}
             />

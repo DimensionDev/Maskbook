@@ -8,12 +8,12 @@ import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Box, ListItem, Typography } from '@mui/material'
-import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
 import { Translate, useI18N } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
 import { TokenIcon } from '@masknet/shared'
+import { dateTimeFormat } from './utils/formatDate.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()(
     (theme, { listItemBackground, listItemBackgroundIcon }) => {
