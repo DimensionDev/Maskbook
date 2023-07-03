@@ -1,7 +1,10 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
 import { Convert } from 'pvtsutils'
-import { type Option, None, Some } from 'ts-results-es'
+import { type Option, None, Some, Result, Err } from 'ts-results-es'
 import { Identifier } from './base.js'
+import { isEC_JsonWebKey, type EC_JsonWebKey, type EC_Public_JsonWebKey } from '../WebCrypto/JsonWebKey.js'
+import { decompressK256Key, type EC_CryptoKey, type EC_Public_CryptoKey } from '../index.js'
+import { compressK256Key } from '../WebCrypto/k256.js'
 
 const instance = new WeakSet()
 const k256Cache: Record<string, ECKeyIdentifier> = Object.create(null)
@@ -25,10 +28,35 @@ export class ECKeyIdentifier extends Identifier {
         const publicKey = encodeArrayBuffer(new Uint8Array(Convert.FromHex(hex)))
         return Some(new ECKeyIdentifier('secp256k1', publicKey))
     }
+    static async fromJsonWebKey(key: EC_JsonWebKey): Promise<Result<ECKeyIdentifier, unknown>> {
+        if (!isEC_JsonWebKey(key)) return Err(new Error('key is not a EC_JsonWebKey'))
+        if (key.crv !== 'K-256') return Err(new Error('curve is not K-256'))
+        const result = await Result.wrapAsync(() => compressK256Key(key))
+        return result.map((key) => new ECKeyIdentifier('secp256k1', key))
+    }
+    static async fromCryptoKey(key: EC_CryptoKey): Promise<Result<ECKeyIdentifier, unknown>> {
+        if (!key.extractable) return Err('key is not extractable')
+        if ((key.algorithm as EcKeyAlgorithm).namedCurve !== 'K-256') return Err('curve is not K-256')
+        const jwk = await Result.wrapAsync(() => crypto.subtle.exportKey('jwk', key))
+        if (jwk.err) return jwk
+        return ECKeyIdentifier.fromJsonWebKey(jwk.val as EC_JsonWebKey)
+    }
+    async toJsonWebKey(usage: 'sign_and_verify' | 'derive'): Promise<EC_Public_JsonWebKey> {
+        const key = await decompressK256Key(this.rawPublicKey)
+        if (usage === 'sign_and_verify') key.key_ops = ['sign', 'verify']
+        return key
+    }
+    async toCryptoKey(usage: 'sign_and_verify' | 'derive'): Promise<EC_Public_CryptoKey> {
+        const key = await this.toJsonWebKey(usage)
+        return crypto.subtle.importKey(
+            'jwk',
+            key as JsonWebKey,
+            { name: 'ECDSA', namedCurve: 'K-256' },
+            true,
+            key.key_ops as readonly KeyUsage[],
+        ) as Promise<EC_Public_CryptoKey>
+    }
 
-    // ! TODO: handle compressedPoint and encodedCompressedKey
-    // private declare readonly encodedCompressedKey?: string
-    // ! "curve" and "compressedPoint" cannot be renamed because they're stored in the database in it's object form.
     declare readonly curve: 'secp256k1'
     declare readonly rawPublicKey: string
     constructor(curve: 'secp256k1', publicKey: string) {

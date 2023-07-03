@@ -1,10 +1,5 @@
 import { decodeArrayBuffer } from '@masknet/kit'
-import {
-    ECKeyIdentifierFromJsonWebKey,
-    isEC_Private_JsonWebKey,
-    MaskMessages,
-    type PersonaIdentifier,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, isEC_Private_JsonWebKey, MaskMessages, type PersonaIdentifier } from '@masknet/shared-base'
 import { decode } from '@msgpack/msgpack'
 import {
     consistentPersonaDBWriteAccess,
@@ -71,7 +66,7 @@ export async function setupPersona(id: PersonaIdentifier) {
 export async function loginExistPersonaByPrivateKey(privateKeyString: string): Promise<PersonaIdentifier | null> {
     const privateKey = decode(decodeArrayBuffer(privateKeyString))
     if (!isEC_Private_JsonWebKey(privateKey)) throw new TypeError('Invalid private key')
-    const identifier = await ECKeyIdentifierFromJsonWebKey(privateKey)
+    const identifier = (await ECKeyIdentifier.fromJsonWebKey(privateKey)).unwrap()
 
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
@@ -97,7 +92,7 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: ''): Pr
     if (!verified) throw new Error('Verify error')
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
-    const identifier = await ECKeyIdentifierFromJsonWebKey(key.privateKey)
+    const identifier = (await ECKeyIdentifier.fromJsonWebKey(key.privateKey)).unwrap()
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)

@@ -16,11 +16,11 @@ import {
 } from '@masknet/encryption'
 import {
     type AESCryptoKey,
-    ECKeyIdentifierFromJsonWebKey,
     type EC_JsonWebKey,
     type EC_Public_JsonWebKey,
     PostIVIdentifier,
     type ProfileIdentifier,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-es'
@@ -242,7 +242,7 @@ async function storeAuthorPublicKey(
     if (persona?.privateKey) return
 
     const key = (await crypto.subtle.exportKey('jwk', pub.key)) as EC_JsonWebKey
-    const otherPersona = await queryPersonaDB(await ECKeyIdentifierFromJsonWebKey(key))
+    const otherPersona = await queryPersonaDB((await ECKeyIdentifier.fromJsonWebKey(key)).unwrap())
     if (otherPersona?.privateKey) return
 
     return createProfileWithPersona(
