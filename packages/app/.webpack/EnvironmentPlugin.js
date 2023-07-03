@@ -1,10 +1,10 @@
 import webpack from 'webpack'
 
-export function EnvironmentPluginCache(def: Record<string, any>) {
+export function EnvironmentPluginCache(def) {
     return new webpack.EnvironmentPlugin(def)
 }
-export function EnvironmentPluginNoCache(def: Record<string, any>) {
-    const next = {} as any
+export function EnvironmentPluginNoCache(def) {
+    const next = {}
     for (const key in def) {
         // Mark the usage site as not cacheable
         next['process.env.' + key] = webpack.DefinePlugin.runtimeValue(
