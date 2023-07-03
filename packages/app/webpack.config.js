@@ -37,10 +37,12 @@ function Configuration(env, argv) {
             extensions: ['.js', '.ts', '.tsx'],
             conditionNames: ['mask-src', '...'],
             fallback: {
-                https: false,
-                http: false,
+                http: require.resolve('stream-http'),
+                https: require.resolve('https-browserify'),
                 crypto: require.resolve('crypto-browserify'),
                 stream: require.resolve('stream-browserify'),
+                buffer: require.resolve('buffer'),
+                'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
         },
         devtool: mode === 'development' ? /** default option */ undefined : 'source-map',
@@ -75,6 +77,7 @@ function Configuration(env, argv) {
             new webpack.ProvidePlugin({
                 // Polyfill for Node global "Buffer" variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
+                'process.nextTick': require.resolve('next-tick'),
             }),
             new HtmlWebpackPlugin({
                 templateContent: readFileSync(join(__dirname, './.webpack/template.html'), 'utf8'),
