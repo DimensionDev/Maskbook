@@ -3,7 +3,6 @@ import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import {
     WalletConnectedBoundary,
     AssetPreviewer,
@@ -13,6 +12,7 @@ import {
     EthereumERC721TokenApprovedBoundary,
     SelectGasSettingsToolbar,
     useAvailableBalance,
+    useCurrentLinkedPersona,
 } from '@masknet/shared'
 import {
     type ChainId,
@@ -39,8 +39,7 @@ import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shar
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
-import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
-import Services from '../../../extension/service.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -221,7 +220,6 @@ interface RedPacketERC721FormProps {
     onGasOptionChange?: (config: GasConfig) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
-    const { t: tr } = useBaseI18n()
     const t = useI18N()
     const {
         onClose,
@@ -247,17 +245,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
-    const currentIdentity = useCurrentIdentity()
-    const { value: linkedPersona } = useAsync(async () => {
-        if (!currentIdentity?.linkedPersona) return
-        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    }, [currentIdentity?.linkedPersona])
-
+    const currentIdentity = useCurrentVisitingIdentity()
+    const linkedPersona = useCurrentLinkedPersona()
     const lastRecognized = useLastRecognizedIdentity()
-
     const senderName =
-        lastRecognized.identifier?.userId ??
-        currentIdentity?.identifier.userId ??
+        lastRecognized?.identifier?.userId ??
+        currentIdentity?.identifier?.userId ??
         linkedPersona?.nickname ??
         'Unknown User'
 
@@ -345,15 +338,15 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
         return ''
-    }, [tokenDetailedList.length, balance, t, isAvailableGasBalance, tr])
+    }, [tokenDetailedList.length, balance, t, isAvailableGasBalance])
 
     const gasValidationMessage = useMemo(() => {
         if (!isAvailableGasBalance) {
-            return tr('no_enough_gas_fees')
+            return t.no_enough_gas_fees()
         }
         if (isGasFeeGreaterThanOneETH) return t.erc721_create_lucky_drop()
         return ''
-    }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH, tr])
+    }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH])
 
     useEffect(() => {
         setIsNFTRedPacketLoaded?.(balance > 0)

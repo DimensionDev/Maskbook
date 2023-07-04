@@ -12,7 +12,6 @@ import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
 
 interface StyleProps {
@@ -240,7 +239,6 @@ export interface SelectNftTokenDialogProps {
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
-    const { t: tr } = useBaseI18N()
     const t = useI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
@@ -427,7 +425,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 disabled={loadingToken || isSelectSharesExceed}
                 className={classes.confirmButton}
                 onClick={onSubmit}>
-                {tr('confirm')}
+                {t.confirm()}
             </Button>
         </DialogContent>
     ) : (
@@ -468,7 +466,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                         {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
                                     </div>
                                     <Typography className={cx(classes.selectAllCheckBoxText)}>
-                                        {tr('select_all')}
+                                        {t.select_all()}
                                     </Typography>
                                 </div>
                                 <Typography>
@@ -533,7 +531,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 disabled={loadingToken || tokenDetailedSelectedList.length === 0 || isSelectSharesExceed}
                 className={classes.confirmButton}
                 onClick={onSubmit}>
-                {tr('confirm')}
+                {t.confirm()}
             </Button>
         </DialogContent>
     )

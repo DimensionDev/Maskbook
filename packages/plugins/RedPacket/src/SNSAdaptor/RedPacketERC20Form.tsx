@@ -33,16 +33,16 @@ import {
     TokenValue,
     WalletConnectedBoundary,
     SelectFungibleTokenModal,
+    useCurrentLinkedPersona,
 } from '@masknet/shared'
 import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
 import { Icons } from '@masknet/icons'
+import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -113,7 +113,6 @@ export interface RedPacketFormProps {
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
-    const { t: tr } = useBaseI18n()
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const { onChange, onNext, origin, gasOption, onGasOptionChange } = props
@@ -146,11 +145,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #region packet settings
     const [isRandom, setRandom] = useState(!origin ? 1 : origin?.isRandom ? 1 : 0)
     const [message, setMessage] = useState(origin?.message || '')
-    const currentIdentity = useCurrentIdentity()
+    const currentIdentity = useCurrentVisitingIdentity()
+    const linkedPersona = useCurrentLinkedPersona()
 
-    const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName = currentIdentity?.identifier?.userId ?? linkedPersona?.nickname ?? 'Unknown User'
 
     // shares
     const [shares, setShares] = useState<number | ''>(origin?.shares || RED_PACKET_DEFAULT_SHARES)
@@ -256,7 +254,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     const validationMessage = useMemo(() => {
         if (!token) return t.select_a_token()
-        if (!account) return tr('plugin_wallet_connect_a_wallet')
+        if (!account) return t.plugin_wallet_connect_a_wallet()
         if (isZero(shares || '0')) return t.enter_shares()
         if (isGreaterThan(shares || '0', 255)) return t.max_shares()
         if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
@@ -271,12 +269,12 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [isRandom, account, amount, totalAmount, shares, token, balance, t, tr, minTotalAmount])
+    }, [isRandom, account, amount, totalAmount, shares, token, balance, t, minTotalAmount])
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
         if (!isAvailableGasBalance) {
-            return tr('no_enough_gas_fees')
+            return t.no_enough_gas_fees()
         }
         if (!loadingTransactionValue && new BigNumber(transactionValue).isLessThanOrEqualTo(0))
             return t.insufficient_balance()

@@ -5,7 +5,6 @@ import '@masknet/plugin-example'
 import '@masknet/plugin-debugger'
 
 import '../../src/plugins/WalletService/index.js'
-import '../../src/plugins/RedPacket/index.js'
 
 import '@masknet/plugin-wallet'
 import '@masknet/plugin-evm'
@@ -40,3 +39,4 @@ import '@masknet/plugin-ito'
 import '@masknet/plugin-profilecard'
 import '@masknet/plugin-savings'
 import '@masknet/plugin-snapshot'
+import '@masknet/plugin-redpacket'

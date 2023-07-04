@@ -250,8 +250,8 @@
             }
         },
         {
-            "input": "./packages/mask/src/plugins/RedPacket/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/RedPacket/locales/i18n_generated",
+            "input": "./packages/plugins/RedPacket/src/locales/en-US.json",
+            "output": "./packages/plugins/RedPacket/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
