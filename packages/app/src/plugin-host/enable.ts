@@ -115,8 +115,6 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             closeWalletConnectDialog: () => {
                 WalletConnectQRCodeModal.close()
             },
-            ownPersonaChanged: emptyEventRegistry,
-            ownProofChanged: emptyEventRegistry,
             queryPersonaByProfile: reject,
             recordConnectedSites: reject,
             rejectRequest: reject,
@@ -127,7 +125,6 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             signWithWallet: reject,
             updateWallet: reject,
             send: reject,
-            NFTAvatarTimelineUpdated: emptyEventRegistry,
             themeSettings: createConstantSubscription(undefined),
         }
 

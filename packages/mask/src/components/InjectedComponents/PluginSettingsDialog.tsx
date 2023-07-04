@@ -66,7 +66,7 @@ export function PluginSettingsDialog() {
     )
 
     const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
-    const { isLoading, data: proofs } = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
+    const { isLoading, data: proofs } = usePersonaProofs(currentPersona?.publicKeyAsHex)
 
     const bindingWallets = useMemo(() => {
         if (isLoading || !proofs) return EMPTY_LIST

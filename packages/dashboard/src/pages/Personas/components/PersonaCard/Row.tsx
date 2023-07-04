@@ -25,7 +25,7 @@ import { styled } from '@mui/material/styles'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
-import { Messages, PluginServices } from '../../../../API.js'
+import { PluginServices } from '../../../../API.js'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
@@ -121,7 +121,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
-    const proofs = usePersonaProofs(publicKey, Messages)
+    const proofs = usePersonaProofs(publicKey)
     const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)

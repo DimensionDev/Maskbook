@@ -14,7 +14,7 @@ import {
     usePersonaProofs,
     PluginEnableBoundary,
 } from '@masknet/shared'
-import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
+import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { BindDialog } from './BindDialog.js'
 import {
@@ -36,7 +36,6 @@ export const NextIdPage = memo(function NextIdPage() {
         currentIdentifier,
         openDashboard,
         currentProfileIdentifier,
-        MaskMessages,
     )
 
     const [openBindDialog, toggleBindDialog] = useState(false)
@@ -49,7 +48,7 @@ export const NextIdPage = memo(function NextIdPage() {
         return queryPersonaByProfile?.(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona, queryPersonaByProfile])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
-    const proofs = usePersonaProofs(publicKeyAsHex, MaskMessages)
+    const proofs = usePersonaProofs(publicKeyAsHex)
 
     const handleAddWallets = useCallback(() => {
         openPopupWindow?.(PopupRoutes.ConnectedWallets, {

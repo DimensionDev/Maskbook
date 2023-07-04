@@ -4,9 +4,8 @@ import type { AvatarMetaDB } from '../types.js'
 import { RainbowBox } from './RainbowBox.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import type { NFTAvatarEvent } from '@masknet/shared-base'
 import { useCheckPersonaNFTAvatar } from '../index.js'
+import { MaskMessages } from '@masknet/shared-base'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -14,7 +13,6 @@ interface NFTBadgeTimelineProps extends withClasses<'root'> {
     width: number
     height: number
     snsKey: RSS3_KEY_SNS
-    timelineUpdated: UnboundedRegistry<NFTAvatarEvent>
     avatarType?: AvatarType
 }
 
@@ -25,7 +23,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId, width, height, snsKey, timelineUpdated } = props
+    const { userId, avatarId, width, height, snsKey } = props
     const { loading, value: _avatar } = useCheckPersonaNFTAvatar(userId, avatarId, '', snsKey)
 
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
@@ -49,7 +47,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
         setAvatar(_avatar)
     }, [_avatar])
 
-    useEffect(() => timelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
+    useEffect(() => MaskMessages.events.NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar || !avatarId || avatar.avatarId !== avatarId_) return null
 

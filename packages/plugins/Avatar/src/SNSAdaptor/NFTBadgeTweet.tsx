@@ -18,7 +18,6 @@ export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
     if (!identity?.identifier?.userId) return null
     return (
         <NFTBadgeTimeline
-            timelineUpdated={timelineUpdated}
             width={width}
             height={height}
             userId={identity?.identifier.userId}

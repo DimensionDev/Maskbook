@@ -1,10 +1,5 @@
-import {
-    DOMProxy,
-    type LiveSelector,
-    MutationObserverWatcher,
-    type UnboundedRegistry,
-} from '@dimensiondev/holoflows-kit'
-import { type NFTAvatarEvent, attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
@@ -12,7 +7,6 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
-import { MaskMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -21,19 +15,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const TimeLineRainbow = memo(
-    ({
-        userId,
-        avatarId,
-        width,
-        height,
-        timelineUpdated,
-    }: {
-        userId: string
-        avatarId: string
-        width: number
-        height: number
-        timelineUpdated: UnboundedRegistry<NFTAvatarEvent>
-    }) => {
+    ({ userId, avatarId, width, height }: { userId: string; avatarId: string; width: number; height: number }) => {
         const { classes } = useStyles()
         return (
             <div
@@ -44,7 +26,6 @@ const TimeLineRainbow = memo(
                     zIndex: 2,
                 }}>
                 <NFTBadgeTimeline
-                    timelineUpdated={timelineUpdated}
                     userId={userId}
                     avatarId={avatarId}
                     width={width}
@@ -86,7 +67,6 @@ function _(selector: () => LiveSelector<HTMLImageElement>, signal: AbortSignal) 
 
                 root.render(
                     <TimeLineRainbow
-                        timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
                         userId={id}
                         avatarId={info.avatarId}
                         width={info.width - 4}

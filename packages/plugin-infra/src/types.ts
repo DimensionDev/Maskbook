@@ -3,7 +3,6 @@ import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
     ECKeyIdentifier,
@@ -20,7 +19,6 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     SignType,
-    NFTAvatarEvent,
     ValueRefWithReady,
     Wallet,
     SocialAccount,
@@ -322,7 +320,6 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
-        NFTAvatarTimelineUpdated: UnboundedRegistry<NFTAvatarEvent>
         allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
@@ -333,8 +330,6 @@ export namespace Plugin.SNSAdaptor {
             platform: NextIDPlatform,
             identity: IdentityResolved | undefined,
         ) => Promise<SocialIdentity | undefined>
-        ownProofChanged: UnboundedRegistry<void>
-        ownPersonaChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
         currentPersonaIdentifier: ValueRefWithReady<string>
 

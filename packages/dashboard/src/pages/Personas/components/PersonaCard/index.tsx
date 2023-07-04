@@ -12,7 +12,6 @@ import {
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import type { SocialNetwork } from '../../api.js'
 import { usePersonaProofs } from '@masknet/shared'
-import { Messages } from '../../../../API.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -84,7 +83,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes, cx } = useStyles()
-    const proofs = usePersonaProofs(publicKey, Messages)
+    const proofs = usePersonaProofs(publicKey)
     return (
         <div className={classes.card}>
             <div className={cx(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />

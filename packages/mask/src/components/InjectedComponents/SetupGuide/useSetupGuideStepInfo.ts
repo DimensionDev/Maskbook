@@ -63,7 +63,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         [username, lastRecognized, persona],
     )
 
-    const { data: proofs } = usePersonaProofs(destinedPersona.publicKeyAsHex, MaskMessages)
+    const { data: proofs } = usePersonaProofs(destinedPersona.publicKeyAsHex)
 
     return useMemo(() => {
         if (!persona || !username) return composeInfo(SetupGuideStep.Close, 'close')

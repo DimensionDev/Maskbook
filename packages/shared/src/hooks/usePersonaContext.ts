@@ -55,10 +55,7 @@ function usePersonaContext(initialState?: {
     )
     const avatar = currentPersona?.avatar
 
-    const { data: proofs, isLoading: fetchProofsLoading } = usePersonaProofs(
-        currentPersona?.identifier.publicKeyAsHex,
-        MaskMessages,
-    )
+    const { data: proofs, isLoading: fetchProofsLoading } = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex)
 
     const accounts = useMemo(() => {
         if (!currentPersona) return EMPTY_LIST

@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { NextIDProof } from '@masknet/web3-providers'
-import { EMPTY_LIST, type BindingProof, type MaskEvents } from '@masknet/shared-base'
+import { EMPTY_LIST, type BindingProof, MaskMessages } from '@masknet/shared-base'
 
-export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessage<MaskEvents>) {
+export function usePersonaProofs(publicKey?: string) {
     const result = useQuery<BindingProof[], Error>({
         queryKey: ['next-id', 'bindings-by-persona', publicKey],
         enabled: !!publicKey,
@@ -17,7 +16,7 @@ export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessa
 
     useEffect(
         () =>
-            message?.events.ownProofChanged.on(() => {
+            MaskMessages.events.ownProofChanged.on(() => {
                 refetch()
             }),
         [publicKey],

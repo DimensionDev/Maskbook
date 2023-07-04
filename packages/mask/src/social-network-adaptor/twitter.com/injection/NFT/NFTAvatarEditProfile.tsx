@@ -3,7 +3,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { ConnectPersonaBoundary } from '@masknet/shared'
-import { PluginID, CrossIsolationMessages, currentPersonaIdentifier, MaskMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { startWatch, attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
@@ -74,8 +74,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             identity={lastRecognized}
             currentPersonaIdentifier={currentIdentifier}
             openDashboard={Services.Helper.openDashboard}
-            ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
-            ownProofChanged={MaskMessages.events.ownProofChanged}
             handlerPosition="top-right"
             customHint
             directTo={PluginID.Avatar}>
