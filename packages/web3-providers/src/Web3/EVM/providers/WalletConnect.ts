@@ -157,7 +157,7 @@ export default class WalletConnectProvider
                     account,
                 })
             } else {
-                await this.logoutClientSide()
+                await this.cleanup()
                 await this.connector.createSession()
             }
         } else {
@@ -170,7 +170,7 @@ export default class WalletConnectProvider
     }
 
     private async logout() {
-        await this.logoutClientSide(true)
+        await this.cleanup()
 
         this.onDisconnect(new Error('disconnect'), {
             event: 'disconnect',
@@ -182,7 +182,7 @@ export default class WalletConnectProvider
         })
     }
 
-    private async logoutClientSide(force = false) {
+    private async cleanup() {
         try {
             await this.connector.killSession()
         } catch {
