@@ -31,6 +31,7 @@ export interface WalletBackupProvider {
         initialPassword?: string,
     ): Promise<string | null | undefined>
     recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
+    recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>
 }
 export let provider: WalletBackupProvider

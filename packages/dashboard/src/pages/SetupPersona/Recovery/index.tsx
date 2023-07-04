@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
-import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
+import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud.js'
 import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
@@ -178,7 +178,7 @@ export const Recovery = memo(function Recovery() {
                                 <RestoreFromPrivateKey handleRestoreFromPrivateKey={handleRestoreFromPrivateKey} />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                                <RestoreFromLocal handleRestoreFromLocalStore={handleRestoreFromLocalStore} />
+                                <RestorePersonaFromLocal handleRestoreFromLocalStore={handleRestoreFromLocalStore} />
                             </TabPanel>
                             <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
                                 <RestoreFromCloud />

@@ -9,11 +9,11 @@ import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
-import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { PluginServices } from '../../../API.js'
 import { walletName } from '../constants.js'
+import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -117,6 +117,24 @@ const Recovery = memo(function Recovery() {
         [walletName, navigate],
     )
 
+    const handleRestoreFromLocalStore = useCallback(
+        async (keyStoreContent: string, keyStorePassword: string) => {
+            try {
+                console.log({ walletName, keyStoreContent, keyStorePassword })
+                const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
+                    walletName,
+                    keyStoreContent,
+                    keyStorePassword,
+                )
+                await PluginServices.Wallet.resolveMaskAccount([{ address }])
+                navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
+            } catch {
+                setError(t.create_wallet_key_store_incorrect_password())
+            }
+        },
+        [walletName],
+    )
+
     const handleRecovery = useCallback(() => {
         navigate(DashboardRoutes.CreateMaskWalletMnemonic)
     }, [])
@@ -165,7 +183,11 @@ const Recovery = memo(function Recovery() {
                                 />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                                <RestoreFromLocal handleRestoreFromLocalStore={async () => undefined} />
+                                <RestoreWalletFromLocal
+                                    handleRestoreFromLocalStore={handleRestoreFromLocalStore}
+                                    onSetError={setError}
+                                    error={error}
+                                />
                             </TabPanel>
                         </div>
                     </TabContext>

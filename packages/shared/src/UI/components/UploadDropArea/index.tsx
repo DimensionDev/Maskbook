@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
     tips: {
         lineHeight: '18px',
         fontSize: 14,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.second,
         fontWeight: 700,
         marginTop: 10,
     },

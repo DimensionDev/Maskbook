@@ -6,12 +6,10 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { Messages, Services } from '../../API.js'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
-import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
 import { BackupPreview } from '../../pages/Settings/components/BackupPreview.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
@@ -44,12 +42,12 @@ interface RestoreFromLocalProps {
     handleRestoreFromLocalStore: () => Promise<void>
 }
 
-export const RestoreFromLocal = memo(function RestoreFromLocal({ handleRestoreFromLocalStore }: RestoreFromLocalProps) {
+export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({
+    handleRestoreFromLocalStore,
+}: RestoreFromLocalProps) {
     const { classes, theme } = useStyles()
     const t = useDashboardI18N()
-    const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
-    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const [file, setFile] = useState<File | null>(null)
@@ -173,7 +171,7 @@ export const RestoreFromLocal = memo(function RestoreFromLocal({ handleRestoreFr
                     <PasswordField
                         placeholder={t.sign_in_account_cloud_backup_password()}
                         type="password"
-                        onChange={(e) => setPassword(e.currentTarget.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                         error={!!error}
                         helperText={error}
                     />

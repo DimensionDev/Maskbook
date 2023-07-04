@@ -10,11 +10,7 @@ function defineSchema(refine: boolean, t: I18NFunction) {
             password: zod
                 .string()
                 .min(8, t('popups_wallet_password_length_error'))
-                .max(20, t('popups_wallet_password_length_error'))
-                .refine(
-                    (input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
-                    t('popups_wallet_password_satisfied_requirement'),
-                ),
+                .max(20, t('popups_wallet_password_length_error')),
             confirm: zod.string().optional(),
         })
         .refine((data) => !refine || data.password === data.confirm, {
