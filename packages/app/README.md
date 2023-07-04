@@ -2,6 +2,15 @@
 
 This package is a SPA that provides a normal Web page that can decrypt public Mask messages and run a limited set of functionality of Mask plugins.
 
+## Development
+
+```bash
+npm run start
+
+# another console
+npm run watch:css
+```
+
 ## Payloads
 
 Below payloads are preset for local development. It works by copying the payload and inserting it into the template: `https://localhost:8000/?PostData_V2=[PAYLOAD]`.
