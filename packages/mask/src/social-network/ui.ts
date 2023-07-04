@@ -146,10 +146,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     )
     const themeSettingsSub = createSubscriptionFromValueRef(ui.collecting.themeSettingsProvider.recognized, signal)
 
-    const createPersona = () => {
-        Services.Helper.openDashboard(DashboardRoutes.Setup)
-    }
-
     const connectPersona = async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
@@ -162,26 +158,26 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ...RestPartOfPluginUIContextShared,
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
+        currentPersonaIdentifier,
         allPersonas: allPersonaSub,
         themeSettings: themeSettingsSub,
-        getThemeSettings: () => activatedSocialNetworkUI.configuration.themeSettings,
-        getNextIDPlatform: () => activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-        getPersonaAvatar: Services.Identity.getPersonaAvatar,
-        getSocialIdentity: Services.Identity.querySocialIdentity,
-        setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
+        getThemeSettings: () => ui.configuration.themeSettings,
+        getNextIDPlatform: () => ui.configuration.nextIDConfig?.platform,
+        getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         getPostURL: ui.utils.getPostURL,
         share: ui.utils.share,
-        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
-        createPersona,
+        getUserIdentity: ui.utils.getUserIdentity,
+        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.Setup),
         connectPersona,
-        currentPersonaIdentifier,
-        getUserIdentity: activatedSocialNetworkUI.utils.getUserIdentity,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
+        getPersonaAvatar: Services.Identity.getPersonaAvatar,
+        getSocialIdentity: Services.Identity.querySocialIdentity,
+        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         attachProfile: Services.Identity.attachProfile,
-        setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         getPersonaAvatars: Services.Identity.getPersonaAvatars,
-        getPostIdFromNewPostToast: activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast,
-        postMessage: activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText,
+        postMessage: ui.automation?.nativeCompositionDialog?.appendText,
+        setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
+        setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
     }
 

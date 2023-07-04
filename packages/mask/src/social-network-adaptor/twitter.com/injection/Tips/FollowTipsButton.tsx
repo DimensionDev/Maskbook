@@ -1,15 +1,15 @@
-import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
+import { noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
+import { makeStyles } from '@masknet/theme'
+import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
 import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import { getUserIdentity } from '../../utils/user.js'
-import { noop } from 'lodash-es'
-import { Flags } from '@masknet/flags'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
