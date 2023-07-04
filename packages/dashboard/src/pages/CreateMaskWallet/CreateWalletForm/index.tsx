@@ -86,7 +86,7 @@ const CreateWalletForm = memo(() => {
     const schema = useMemo(() => {
         const passwordRule = zod
             .string()
-            .min(8, t.create_wallet_password_length_error())
+            .min(6, t.create_wallet_password_length_error())
             .max(20, t.create_wallet_password_length_error())
 
         return zod

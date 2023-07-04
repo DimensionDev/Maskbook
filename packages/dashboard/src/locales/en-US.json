@@ -412,7 +412,7 @@
     "store_recovery_phrase_tip": "Please write down or copy these words in the correct way and store them in secure places.",
     "create_wallet_payment_password_place_holder": "At least 8 charachters",
     "create_wallet_re_enter_payment_password": "Confirm Payment Password",
-    "create_wallet_payment_password_tip_1": "Payment Password should be between 8 and 20 characters.",
+    "create_wallet_payment_password_tip_1": "Payment Password should be between 6 and 20 characters.",
     "create_wallet_payment_password_tip_2": "Your wallet data will be encrypted using this payment password, which will also be required for trade confirmation and wallet unlocking.",
     "create_wallet_payment_password_tip_3": "The payment password is securely stored on your device. We do not have the capability to retrieve it, so it is essential that you remember it.",
     "create_wallet_your_wallet_address": "Your wallet address",

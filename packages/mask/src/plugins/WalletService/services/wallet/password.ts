@@ -48,7 +48,7 @@ export async function changePassword(newPassword: string) {
 
 export function validatePassword(unverifiedPassword: string) {
     if (!unverifiedPassword) return false
-    if (unverifiedPassword.length < 8) return false
+    if (unverifiedPassword.length < 6) return false
     if (unverifiedPassword.length > 20) return false
     return true
 }

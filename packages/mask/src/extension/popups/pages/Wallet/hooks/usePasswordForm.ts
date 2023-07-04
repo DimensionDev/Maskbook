@@ -9,7 +9,7 @@ function defineSchema(refine: boolean, t: I18NFunction) {
         .object({
             password: zod
                 .string()
-                .min(8, t('popups_wallet_password_length_error'))
+                .min(6, t('popups_wallet_password_length_error'))
                 .max(20, t('popups_wallet_password_length_error')),
             confirm: zod.string().optional(),
         })
