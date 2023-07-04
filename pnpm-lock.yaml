@@ -877,6 +877,9 @@ importers:
       '@masknet/plugin-pets':
         specifier: workspace:^
         version: link:../plugins/Pets
+      '@masknet/plugin-profilecard':
+        specifier: workspace:^
+        version: link:../plugins/ProfileCard
       '@masknet/plugin-rss3':
         specifier: workspace:^
         version: link:../plugins/RSS3
@@ -2553,6 +2556,36 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
+
+  packages/plugins/ProfileCard:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/plugin-trader':
+        specifier: workspace:^
+        version: link:../Trader
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../../web3-helpers
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
 
   packages/plugins/RSS3:
     dependencies:

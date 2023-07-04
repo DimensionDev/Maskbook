@@ -367,19 +367,6 @@
             }
         },
         {
-            "input": "./packages/mask/src/plugins/ProfileCard/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/ProfileCard/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "io.mask.web3-profile-card",
-                "trans": "Translate",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
             "input": "./packages/plugins/Handle/src/locales/en-US.json",
             "output": "./packages/plugins/Handle/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -551,6 +538,18 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "org.snapshot",
+                "trans": "Translate",
+                "emitTS": true
+            }
+        },
+        {
+            "input": "./packages/plugins/ProfileCard/src/locales/en-US.json",
+            "output": "./packages/plugins/ProfileCard/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "io.mask.web3-profile-card",
                 "trans": "Translate",
                 "emitTS": true
             }
