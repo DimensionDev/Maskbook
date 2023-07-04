@@ -5,6 +5,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { FeedCardProps } from '../../components/base.js'
 import { CardType } from '../../components/share.js'
 import { FeedDetailsDialog } from './DetailDialog.js'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
 export interface FeedDetailsModalOpenProps
     extends Omit<PropsWithChildren<InjectedDialogProps>, 'open'>,
@@ -26,13 +27,15 @@ export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsM
 
         if (!open) return null
         return (
-            <FeedDetailsDialog
-                open
-                onClose={() => dispatch?.close()}
-                {...props_}
-                type={props_?.type ?? CardType.UnknownIn}
-                feed={props_?.feed!}
-            />
+            <ScopedDomainsContainer.Provider>
+                <FeedDetailsDialog
+                    open
+                    onClose={() => dispatch?.close()}
+                    {...props_}
+                    type={props_?.type ?? CardType.UnknownIn}
+                    feed={props_?.feed!}
+                />
+            </ScopedDomainsContainer.Provider>
         )
     },
 )
