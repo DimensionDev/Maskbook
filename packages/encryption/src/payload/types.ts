@@ -1,6 +1,13 @@
 // This file contains normalized Payload.
 // Internal payload should not be exported
-import type { ProfileIdentifier, CheckedError, OptionalResult, EC_CryptoKey, AESCryptoKey } from '@masknet/base'
+import type {
+    ProfileIdentifier,
+    CheckedError,
+    OptionalResult,
+    EC_CryptoKey,
+    AESCryptoKey,
+    EC_Public_CryptoKey,
+} from '@masknet/base'
 import type { Result, Option } from 'ts-results-es'
 import type { CryptoException, PayloadException } from '../types/index.js'
 
@@ -60,7 +67,7 @@ export declare namespace PayloadWellFormed {
         /**
          * The claimed public key of author.
          */
-        readonly authorPublicKey: Option<EC_Key>
+        readonly authorPublicKey: Option<EC_Key<EC_Public_CryptoKey>>
         /** The encryption method this payload used. */
         readonly encryption: PublicEncryption | EndToEndEncryption
         /** The encrypted content. */

@@ -51,7 +51,7 @@ export class ECKeyIdentifier extends Identifier {
         return crypto.subtle.importKey(
             'jwk',
             key as JsonWebKey,
-            { name: 'ECDSA', namedCurve: 'K-256' },
+            { name: usage === 'sign_and_verify' ? 'ECDSA' : 'ECDH', namedCurve: 'K-256' },
             true,
             key.key_ops as readonly KeyUsage[],
         ) as Promise<EC_Public_CryptoKey>

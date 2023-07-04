@@ -163,6 +163,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
             queryAuthorPublicKey(author, signal) {
+                // TODO: This should try to fetch publicKey from NextID
+                // but it is not urgent because all new posts has their publicKey embedded
                 return queryPublicKey(author || authorHint)
             },
             async *queryPostKey_version37(iv, signal) {
