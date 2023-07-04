@@ -143,8 +143,6 @@ export default class WalletConnectProvider
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
 
-        this.connector = this.createConnector()
-
         this.connection = {
             resolve,
             reject,
@@ -173,6 +171,15 @@ export default class WalletConnectProvider
 
     private async logout() {
         await this.logoutClientSide(true)
+
+        this.onDisconnect(new Error('disconnect'), {
+            event: 'disconnect',
+            params: [
+                {
+                    message: 'disconnect',
+                },
+            ],
+        })
     }
 
     private async logoutClientSide(force = false) {
@@ -180,18 +187,6 @@ export default class WalletConnectProvider
             await this.connector.killSession()
         } catch {
             window.localStorage.removeItem('walletconnect')
-
-            // force to clean client state
-            if (force) {
-                this.onDisconnect(new Error('disconnect'), {
-                    event: 'disconnect',
-                    params: [
-                        {
-                            message: 'disconnect',
-                        },
-                    ],
-                })
-            }
         }
     }
 
