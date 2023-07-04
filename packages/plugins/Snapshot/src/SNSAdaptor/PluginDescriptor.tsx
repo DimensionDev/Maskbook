@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { Stack, Typography, Link } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item1: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PluginDescriptor() {
-    const { t } = useI18N()
+    const t = useI18N()
     const tr = useSharedI18N()
     const { classes } = useStyles()
 
@@ -31,7 +31,7 @@ export function PluginDescriptor() {
             <Stack flexDirection="row" justifyContent="space-between" gap={1} alignItems="center">
                 <Icons.Snapshot />
                 <Typography fontWeight="bolder" fontSize={16} color={(theme) => theme.palette.maskColor.dark}>
-                    {t('plugin_snapshot_info_snapshot')}
+                    {t.plugin_snapshot_info_snapshot()}
                 </Typography>
             </Stack>
             <Stack direction="row" gap={0.5}>

@@ -16,15 +16,14 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
-import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useI18N } from '../../../utils/index.js'
+import { useIsMinimalMode, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
 import { ProfileProposalList } from './ProfileProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
-import Services from '../../../extension/service.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -73,7 +72,7 @@ export interface ProfileViewProps extends withClasses<'content' | 'footer'> {
 export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles(undefined, { props })
-    const { t } = useI18N()
+    const t = useI18N()
     const theme = useTheme()
     const [currentTab, , , setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
@@ -94,10 +93,10 @@ export function ProfileView(props: ProfileViewProps) {
         currentSpace.spaceId,
         currentSpace.strategyName ?? space?.symbol,
     )
-
+    const { setPluginMinimalModeEnabled } = useSNSAdaptorContext()
     const [{ loading: loadingModeEnabled }, onEnablePlugin] = useAsyncFn(async () => {
-        await Services.Settings.setPluginMinimalModeEnabled(PluginID.Snapshot, false)
-    }, [])
+        await setPluginMinimalModeEnabled?.(PluginID.Snapshot, false)
+    }, [setPluginMinimalModeEnabled])
 
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
@@ -117,7 +116,7 @@ export function ProfileView(props: ProfileViewProps) {
                             <Stack height="100%" alignItems="center" justifyContent="end">
                                 <Stack justifyContent="center" alignItems="center" width="100%" boxSizing="border-box">
                                     <Typography fontWeight={400} fontSize={14} className={classes.minimalText}>
-                                        {t('enable_plugin_boundary_description')}
+                                        {t.enable_plugin_boundary_description()}
                                     </Typography>
                                 </Stack>
                                 <ActionButton
@@ -127,7 +126,7 @@ export function ProfileView(props: ProfileViewProps) {
                                     color="primary"
                                     onClick={onEnablePlugin}
                                     sx={{ mt: 6 }}>
-                                    {t('enable_plugin_boundary')}
+                                    {t.enable_plugin_boundary()}
                                 </ActionButton>
                             </Stack>
                         </CardContent>
@@ -171,7 +170,7 @@ export function ProfileView(props: ProfileViewProps) {
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />
                         <Typography fontSize="14px" mt={1.5}>
-                            {t('loading')}
+                            {t.loading()}
                         </Typography>
                     </Stack>
                 </CardContent>
@@ -182,7 +181,7 @@ export function ProfileView(props: ProfileViewProps) {
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <Icons.EmptySimple size={36} />
                         <Typography fontSize="14px" mt={1.5}>
-                            {t('plugin_snapshot_proposal_no_results')}
+                            {t.plugin_snapshot_proposal_no_results()}
                         </Typography>
                     </Stack>
                 </CardContent>

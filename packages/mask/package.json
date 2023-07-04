@@ -28,6 +28,7 @@
     "@masknet/plugin-artblocks": "workspace:^",
     "@masknet/plugin-avatar": "workspace:^",
     "@masknet/plugin-nextid": "workspace:^",
+    "@masknet/plugin-snapshot": "workspace:^",
     "@masknet/plugin-trader": "workspace:^",
     "@masknet/plugin-profilecard": "workspace:^",
     "@masknet/plugin-ito": "workspace:^",

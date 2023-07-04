@@ -1,11 +1,11 @@
 import type { RefObject } from 'react'
 import { isEqual } from 'lodash-es'
-import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Avatar, MenuItem, Stack, Typography, Divider } from '@mui/material'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     menu: {
@@ -93,7 +93,7 @@ export function SpaceMenu({
     disableScrollLock,
 }: SpaceMenuProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     return (
         <ShadowRootMenu
             anchorEl={containerRef.current}
@@ -105,7 +105,7 @@ export function SpaceMenu({
             }}
             onClose={() => setSpaceMenuOpen(false)}>
             <div key="rss3" className={classes.group}>
-                <Typography className={classes.groupName}>{t('plugin_snapshot_space')}</Typography>
+                <Typography className={classes.groupName}>{t.plugin_snapshot_space()}</Typography>
                 <Divider className={classes.divider} />
                 {options.map((x, i) => {
                     const selected = isEqual(x, currentOption)

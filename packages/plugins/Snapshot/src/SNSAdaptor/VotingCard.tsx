@@ -6,7 +6,6 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../../../utils/index.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useProposal } from './hooks/useProposal.js'
 import { usePower } from './hooks/usePower.js'
@@ -15,6 +14,7 @@ import { SnapshotContext } from '../context.js'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { getSnapshotVoteType } from '../utils.js'
 import { PluginSnapshotRPC } from '../messages.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function VotingCard() {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
@@ -63,7 +63,7 @@ export function VotingCard() {
     const messageText = (text: string) => (
         <Box>
             <Typography fontSize={14} fontWeight={700}>
-                {t('plugin_snapshot_vote')}
+                {t.plugin_snapshot_vote()}
             </Typography>
             <Typography fontSize={14} fontWeight={400}>
                 {text}
@@ -117,8 +117,8 @@ export function VotingCard() {
         },
         (_err: Error) => setLoading(false),
         void 0,
-        messageText(t('plugin_snapshot_vote_success')),
-        messageText(t('plugin_snapshot_vote_failed')),
+        messageText(t.plugin_snapshot_vote_success()),
+        messageText(t.plugin_snapshot_vote_failed()),
     )
 
     useEffect(() => {
@@ -144,7 +144,7 @@ export function VotingCard() {
         return text
     }, [choices_])
     return account && pluginID === NetworkPluginID.PLUGIN_EVM ? (
-        <SnapshotCard title={t('plugin_snapshot_vote_title')}>
+        <SnapshotCard title={t.plugin_snapshot_vote_title()}>
             <Box className={classes.buttons}>
                 {choices.map((choiceText, i) => (
                     <Button
@@ -173,7 +173,7 @@ export function VotingCard() {
                     disabled={disabled}
                     onClick={() => setOpen(true)}>
                     <Typography fontWeight={700} fontSize={16}>
-                        {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                        {power && account ? t.plugin_snapshot_vote() : t.plugin_snapshot_no_power()}
                     </Typography>
                 </Button>
             </Box>

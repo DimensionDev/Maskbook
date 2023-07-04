@@ -1,7 +1,6 @@
 import { useContext, useMemo, unstable_useCacheRefresh } from 'react'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import { useI18N } from '../../../utils/index.js'
 
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
@@ -11,8 +10,9 @@ import { SnapshotCard } from './SnapshotCard.js'
 // cspell: disable-next-line
 import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
-import { LoadingCard } from './LoadingCard.js'
 import { formatCount } from '@masknet/web3-shared-base'
+import { useI18N } from '../locales/index.js'
+import { LoadingCard } from './LoadingCard.js'
 
 const choiceMaxWidth = 240
 
@@ -90,7 +90,7 @@ function Content() {
     const votes = useVotes(identifier)
     const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     const dataForCsv = useMemo(
         () =>
@@ -107,7 +107,7 @@ function Content() {
 
     return (
         <SnapshotCard
-            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
+            title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}>
             <List className={classes.list}>
                 {results
                     ? results.map((result, i) => (
@@ -182,7 +182,7 @@ function Content() {
                         link.click()
                         document.body.removeChild(link)
                     }}>
-                    {t('plugin_snapshot_download_report')}
+                    {t.plugin_snapshot_download_report()}
                 </Button>
             ) : null}
         </SnapshotCard>
@@ -190,25 +190,25 @@ function Content() {
 }
 
 function Loading(props: React.PropsWithChildren<{}>) {
-    const { t } = useI18N()
+    const t = useI18N()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     return (
         <LoadingCard
-            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
+            title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}>
             {props.children}
         </LoadingCard>
     )
 }
 
 function Fail(props: React.PropsWithChildren<{}>) {
-    const { t } = useI18N()
+    const t = useI18N()
     const identifier = useContext(SnapshotContext)
     const retry = unstable_useCacheRefresh()
     const proposal = useProposal(identifier.id)
     return (
         <LoadingFailCard
-            title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}
+            title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}
             retry={retry}>
             {props.children}
         </LoadingFailCard>
