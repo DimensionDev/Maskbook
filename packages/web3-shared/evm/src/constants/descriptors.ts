@@ -5,11 +5,18 @@ import {
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSiteList, ExtensionSiteList, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import {
+    EnhanceableSite,
+    EnhanceableSiteList,
+    ExtensionSiteList,
+    NetworkPluginID,
+    Sniffings,
+} from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { ChainIdList, getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
+import { difference } from 'lodash-es'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
@@ -278,7 +285,10 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/maskwallet.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedEnhanceableSites: difference(EnhanceableSiteList, [
+                EnhanceableSite.Localhost,
+                EnhanceableSite.App,
+            ]),
             supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://mask.io',
@@ -335,7 +345,10 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         enableRequirements: Flags.wc_v2_enabled
             ? {
                   supportedChainIds: ChainIdList,
-                  supportedEnhanceableSites: EnhanceableSiteList,
+                  supportedEnhanceableSites: difference(EnhanceableSiteList, [
+                      EnhanceableSite.Localhost,
+                      EnhanceableSite.App,
+                  ]),
                   supportedExtensionSites: Flags.wc_v2_enabled ? ExtensionSiteList : [],
               }
             : undefined,

@@ -123,7 +123,6 @@ export function arrow_down_round_url() { return new URL("./general/ArrowDownRoun
 export function arrow_downward_url() { return new URL("./general/ArrowDownward.svg", import.meta.url) }
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url) }
 export function arrow_right_url() { return new URL("./general/ArrowRight.svg", import.meta.url) }
-export function arrow_right_ios_url() { return new URL("./general/ArrowRightIos.svg", import.meta.url) }
 export function arrow_up_url() { return new URL("./general/ArrowUp.svg", import.meta.url) }
 export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.svg", import.meta.url) }
 export function asset_loading_url() { return new URL("./general/AssetLoading.svg", import.meta.url) }
@@ -209,6 +208,7 @@ export function loader_url() { return new URL("./general/Loader.svg", import.met
 export function loading_base_dark_url() { return new URL("./general/LoadingBase.dark.svg", import.meta.url) }
 export function loading_base_light_url() { return new URL("./general/LoadingBase.light.svg", import.meta.url) }
 export function local_backup_url() { return new URL("./general/LocalBackup.png", import.meta.url) }
+export function lock_url() { return new URL("./general/Lock.svg", import.meta.url) }
 export function marketing_url() { return new URL("./general/Marketing.svg", import.meta.url) }
 export function mask_avatar_dark_url() { return new URL("./general/MaskAvatar.dark.svg", import.meta.url) }
 export function mask_avatar_light_url() { return new URL("./general/MaskAvatar.light.svg", import.meta.url) }

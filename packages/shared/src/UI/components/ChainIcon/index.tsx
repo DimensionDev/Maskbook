@@ -1,31 +1,16 @@
+import type { AvatarProps } from '@mui/material'
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { Icon } from '../Icon/index.js'
 
-const useStyles = makeStyles()((theme) => ({
-    point: {
-        width: 12.5,
-        height: 12.5,
-        borderRadius: 6.25,
-        margin: 3.75,
-    },
-}))
-export interface ChainIconProps extends withClasses<'point'> {
-    color: string
+export interface ChainIconProps {
+    color?: string
     size?: number
-    bordered?: boolean
+    name?: string
 }
 
-export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5, ...props }) => {
-    const { classes } = useStyles(undefined, { props })
-
-    return (
-        <div
-            className={classes.point}
-            style={{
-                width: size,
-                height: size,
-                backgroundColor: color,
-            }}
-        />
-    )
+const avatarProps: AvatarProps = {
+    sx: { fontSize: 12 },
+}
+export const ChainIcon = memo<ChainIconProps>(function ChainIcon({ color, size = 12.5, name }) {
+    return <Icon color={color} size={size} name={name} AvatarProps={avatarProps} />
 })

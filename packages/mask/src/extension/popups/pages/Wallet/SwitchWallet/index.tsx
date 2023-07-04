@@ -1,18 +1,20 @@
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, List } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, List, Typography } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, MAX_WALLET_LIMIT } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, MAX_WALLET_LIMIT, type Wallet } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { ActionModal, useActionModal } from '../../../components/index.js'
+import { Icons } from '@masknet/icons'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     content: {
         overflow: 'auto',
         backgroundColor: '#F7F9FA',
@@ -22,39 +24,30 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
-        height: 'calc(100vh - 168px)',
         overflow: 'auto',
     },
-    controller: {
+    walletItem: {
+        marginBottom: 6,
+    },
+    modalAction: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-        padding: 16,
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
-        backgroundColor: '#ffffff',
+        gridTemplateColumns: '1fr 1fr',
+        gap: theme.spacing(2, 1),
     },
-    button: {
-        fontWeight: 600,
-        padding: '9px 0',
-        borderRadius: 20,
-        fontSize: 14,
-        lineHeight: '20px',
+    actionButton: {
+        display: 'flex',
+        justifyContent: 'flex-start',
     },
-    secondaryButton: {
-        backgroundColor: '#F7F9FA',
-        color: '#1C68F3',
-        '&:hover': {
-            backgroundColor: 'rgba(28, 104, 243, 0.04)',
-        },
+    actionLabel: {
+        marginLeft: theme.spacing(0.5),
     },
-})
+}))
 
-const SwitchWallet = memo(() => {
+const SwitchWallet = memo(function SwitchWallet() {
     const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes, theme } = useStyles()
     const navigate = useNavigate()
+    const { closeModal } = useActionModal()
     const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
@@ -69,67 +62,86 @@ const SwitchWallet = memo(() => {
             navigate(PopupRoutes.CreateWallet)
         }
     }, [wallets, history])
+    const handleImport = useCallback(() => {
+        if (navigator.userAgent.includes('Firefox')) {
+            Services.Helper.openPopupWindow(PopupRoutes.ImportWallet)
+            return
+        }
+        navigate(PopupRoutes.ImportWallet)
+    }, [])
 
     const handleSelect = useCallback(
-        async (address: string | undefined, options?: { owner?: string; identifier?: ECKeyIdentifier }) => {
+        async (wallet: Wallet) => {
+            const address = wallet.address
             await Web3.connect({
                 account: address,
-                chainId: options?.owner && smartPayChainId ? smartPayChainId : chainId,
+                chainId: wallet.owner && smartPayChainId ? smartPayChainId : chainId,
                 providerType: ProviderType.MaskWallet,
-                ...options,
+                owner: wallet.owner,
+                identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             })
-            if (options?.owner && smartPayChainId) setChainId(smartPayChainId)
-            navigate(PopupRoutes.Wallet, { replace: true })
+            closeModal()
+            if (wallet.owner && smartPayChainId) setChainId(smartPayChainId)
         },
-        [history, smartPayChainId, chainId],
+        [history, smartPayChainId, chainId, closeModal],
     )
+
+    const action = (
+        <Box className={classes.modalAction}>
+            <ActionButton
+                className={classes.actionButton}
+                fullWidth
+                size="small"
+                variant="outlined"
+                disabled={wallets.length >= MAX_WALLET_LIMIT}
+                onClick={handleClickCreate}>
+                <Icons.ConnectWallet size={20} color={theme.palette.maskColor.second} />
+                <Typography className={classes.actionLabel} component="span">
+                    {t('popups_add_wallet')}
+                </Typography>
+            </ActionButton>
+            <ActionButton
+                className={classes.actionButton}
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={handleImport}>
+                <Icons.Download2 size={20} color={theme.palette.maskColor.second} />
+                <Typography className={classes.actionLabel} component="span">
+                    {t('popups_import_wallet')}
+                </Typography>
+            </ActionButton>
+            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
+                <Icons.Lock size={20} color={theme.palette.maskColor.second} />
+                <Typography className={classes.actionLabel} component="span">
+                    {t('popups_lock_wallet')}
+                </Typography>
+            </ActionButton>
+            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
+                <Icons.WalletSetting size={20} color={theme.palette.maskColor.second} />
+                <Typography className={classes.actionLabel} component="span">
+                    {t('popups_wallet_settings')}
+                </Typography>
+            </ActionButton>
+        </Box>
+    )
+
     return (
-        <>
+        <ActionModal header={t('wallet_account')} action={action}>
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    {wallets.map((item, index) => (
+                    {wallets.map((item) => (
                         <WalletItem
-                            key={index}
+                            key={item.address}
                             wallet={item}
-                            onClick={() =>
-                                handleSelect(
-                                    item.address,
-                                    item.owner
-                                        ? {
-                                              owner: item.owner,
-                                              identifier: ECKeyIdentifier.from(item.identifier).unwrapOr(undefined),
-                                          }
-                                        : undefined,
-                                )
-                            }
+                            onSelect={handleSelect}
                             isSelected={isSameAddress(item.address, wallet?.address)}
+                            className={classes.walletItem}
                         />
                     ))}
                 </List>
             </div>
-            <div className={classes.controller}>
-                <Button
-                    variant="contained"
-                    className={cx(classes.button, classes.secondaryButton)}
-                    disabled={wallets.length >= MAX_WALLET_LIMIT}
-                    onClick={handleClickCreate}>
-                    {t('create')}
-                </Button>
-                <Button
-                    variant="contained"
-                    disabled={wallets.length >= MAX_WALLET_LIMIT}
-                    className={classes.button}
-                    onClick={() => {
-                        if (navigator.userAgent.includes('Firefox')) {
-                            Services.Helper.openPopupWindow(PopupRoutes.ImportWallet)
-                            return
-                        }
-                        navigate(PopupRoutes.ImportWallet)
-                    }}>
-                    {t('import')}
-                </Button>
-            </div>
-        </>
+        </ActionModal>
     )
 })
 

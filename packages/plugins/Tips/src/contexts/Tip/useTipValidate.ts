@@ -26,7 +26,7 @@ export function useTipValidate(
 ): ValidationTuple {
     const { account } = useChainContext()
 
-    const { value: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
+    const { data: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {

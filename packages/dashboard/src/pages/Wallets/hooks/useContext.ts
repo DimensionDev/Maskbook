@@ -32,15 +32,15 @@ function useContext(initialState?: {
     })
 
     const assets = useMemo(() => {
-        if (!fungibleAssets?.value) return EMPTY_LIST
-        return fungibleAssets.value.map((x) => {
+        if (!fungibleAssets?.data) return EMPTY_LIST
+        return fungibleAssets.data.map((x) => {
             if (isNativeTokenAddress(x.address))
                 return { ...x, logoURL: Others.chainResolver.nativeCurrency(x.chainId)?.logoURL || x.logoURL }
             const token = fungibleTokens.find((y) => isSameAddress(x.address, y.address) && x.chainId === y.chainId)
             if (!token?.logoURL) return x
             return { ...x, logoURL: token.logoURL }
         })
-    }, [fungibleAssets.value, fungibleTokens, Others.chainResolver.nativeCurrency])
+    }, [fungibleAssets.data, fungibleTokens, Others.chainResolver.nativeCurrency])
     return {
         account,
         chainId,
@@ -49,7 +49,7 @@ function useContext(initialState?: {
             (providerType === ProviderType.WalletConnect || providerType === ProviderType.WalletConnectV2) &&
             initialState?.connectedChainId !== chainId,
         pluginID: initialState?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
-        fungibleAssets: { ...fungibleAssets, value: assets, loading: loading || fungibleAssets.loading },
+        fungibleAssets: { ...fungibleAssets, data: assets, isLoading: loading || fungibleAssets.isLoading },
     }
 }
 

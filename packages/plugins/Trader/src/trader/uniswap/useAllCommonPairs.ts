@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/v2-sdk'
 import type { Currency, Token } from '@uniswap/sdk-core'
-import { toUniswapToken } from '../../helpers/index.js'
-import { PairState, usePairs } from './usePairs.js'
 import type { TradeProvider } from '@masknet/public-api'
-import { useGetTradeContext } from '../useGetTradeContext.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { uniswap } from '@masknet/web3-providers/helpers'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { PairState, usePairs } from './usePairs.js'
+import { useGetTradeContext } from '../useGetTradeContext.js'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const { chainId } = useChainContext()
@@ -24,7 +24,7 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
         const common = context?.AGAINST_TOKENS?.[chainId as ChainId] ?? []
         const additionalA = tokenA ? context?.ADDITIONAL_TOKENS?.[chainId as ChainId]?.[tokenA.address] ?? [] : []
         const additionalB = tokenB ? context?.ADDITIONAL_TOKENS?.[chainId as ChainId]?.[tokenB.address] ?? [] : []
-        return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId as ChainId, x))
+        return [...common, ...additionalA, ...additionalB].map((x) => uniswap.toUniswapToken(chainId as ChainId, x))
     }, [chainId, chainIdValid, tokenA?.address, tokenB?.address, pluginID])
 
     const basePairs: Array<[Token, Token]> = useMemo(
@@ -52,10 +52,10 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
                 const customBases = context?.CUSTOM_TOKENS?.[chainId as ChainId]
 
                 const customBasesA: Token[] | undefined = customBases?.[tokenA.address]?.map((x) =>
-                    toUniswapToken(chainId as ChainId, x),
+                    uniswap.toUniswapToken(chainId as ChainId, x),
                 )
                 const customBasesB: Token[] | undefined = customBases?.[tokenB.address]?.map((x) =>
-                    toUniswapToken(chainId as ChainId, x),
+                    uniswap.toUniswapToken(chainId as ChainId, x),
                 )
 
                 if (!customBasesA && !customBasesB) return true

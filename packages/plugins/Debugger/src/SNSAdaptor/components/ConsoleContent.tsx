@@ -35,7 +35,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { pluginID: currentPluginID } = useNetworkContext()
     const Others = useWeb3Others()
     const { account, chainId, networkType, providerType } = useChainContext()
-    const { value: balance = '0' } = useBalance()
+    const { data: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
     const { data: reversedName } = useReverseAddress(currentPluginID, account)

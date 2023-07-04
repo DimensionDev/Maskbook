@@ -1,8 +1,8 @@
 import { memoize } from 'lodash-es'
 import { isAddress, toChecksumAddress } from 'web3-utils'
-import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
+    ChainIdList,
     getArbConstants,
     getCryptoPunksConstants,
     getENSConstants,
@@ -35,7 +35,7 @@ export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
-const nativeTokenSet = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
+const nativeTokenSet = new Set(ChainIdList.map((chainId) => getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS')))
 
 export function isNativeTokenAddress(address?: string): address is string {
     return !!(address && nativeTokenSet.has(address))

@@ -11,3 +11,5 @@ export * from './helpers/getPaymentToken.js'
 export * from './helpers/parseJSON.js'
 export * from './helpers/resolveActivityType.js'
 export * from './helpers/resolveActivityTypeBackgroundColor.js'
+
+export * as uniswap from './Trader/helpers/uniswap.js'

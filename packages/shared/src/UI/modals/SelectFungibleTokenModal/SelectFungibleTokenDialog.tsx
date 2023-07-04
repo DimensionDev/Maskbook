@@ -92,7 +92,7 @@ export function SelectFungibleTokenDialog({
         chainId,
     })
 
-    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
+    const { data: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
         chainId,
     })
 

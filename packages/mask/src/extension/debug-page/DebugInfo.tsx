@@ -2,6 +2,7 @@ import { map } from 'lodash-es'
 import { makeNewBugIssueURL } from './issue.js'
 import { useI18N } from '../../utils/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
+
 export const DEBUG_INFO = {
     'User Agent': navigator.userAgent,
     'Mask Version': process.env.VERSION,

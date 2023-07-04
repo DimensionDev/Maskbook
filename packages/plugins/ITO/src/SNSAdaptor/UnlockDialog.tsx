@@ -63,7 +63,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
+    const { data: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
     if (!tokens.length) return <Typography>{t.plugin_ito_empty_token()}</Typography>
     return (
@@ -71,7 +71,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
             <FungibleTokenInput
                 label={t.amount()}
                 amount={rawAmount}
-                balance={tokenBalance ?? '0'}
+                balance={tokenBalance}
                 token={token}
                 onAmountChange={setRawAmount}
                 onSelectToken={onSelectTokenChipClick}

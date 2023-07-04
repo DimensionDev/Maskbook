@@ -1,50 +1,20 @@
 import { useMemo } from 'react'
 import { Percent, TradeType } from '@uniswap/sdk-core'
-import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
+import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SwapRouter } from '@uniswap/v3-sdk'
-import { TradeProvider } from '@masknet/public-api'
+import type { TradeProvider } from '@masknet/public-api'
+import { uniswap } from '@masknet/web3-providers/helpers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract.js'
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract.js'
 import { useTransactionDeadline } from './useTransactionDeadline.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 const UNISWAP_BIPS_BASE = 10000
-
-// Pangolin and TraderJoe have modified uniswap contracts
-type SwapParams = Parameters<typeof Router.swapCallParameters>
-const swapCallParameters = (trade: SwapParams[0], options: SwapParams[1], tradeProvider?: TradeProvider) => {
-    const parameters = Router.swapCallParameters(trade, options)
-    if (tradeProvider === TradeProvider.PANGOLIN || tradeProvider === TradeProvider.TRADERJOE) {
-        switch (parameters.methodName) {
-            case 'WETH':
-                parameters.methodName = 'WAVAX'
-                break
-            case 'swapTokensForExactETH':
-                parameters.methodName = 'swapTokensForExactAVAX'
-                break
-            case 'swapExactTokensForETHSupportingFeeOnTransferTokens':
-                /* cspell:disable-next-line */
-                parameters.methodName = 'swapExactTokensForAVAXSupportingFeeOnTransferTokens'
-                break
-            case 'swapExactTokensForETH':
-                parameters.methodName = 'swapExactTokensForAVAX'
-                break
-            case 'swapExactETHForTokensSupportingFeeOnTransferTokens':
-                /* cspell:disable-next-line */
-                parameters.methodName = 'swapExactAVAXForTokensSupportingFeeOnTransferTokens'
-                break
-            case 'swapExactETHForTokens':
-                parameters.methodName = 'swapExactAVAXForTokens'
-                break
-        }
-    }
-    return parameters
-}
 
 /**
  * Returns the swap calls that can be used to make the trade
@@ -80,7 +50,7 @@ export function useSwapParameters(
             if (!routerV2Contract) return []
 
             const parameters = [
-                swapCallParameters(
+                uniswap.swapCallParameters(
                     trade_,
                     {
                         feeOnTransfer: false,
@@ -93,7 +63,7 @@ export function useSwapParameters(
             ]
             if (trade_.tradeType === TradeType.EXACT_INPUT)
                 parameters.push(
-                    swapCallParameters(
+                    uniswap.swapCallParameters(
                         trade_,
                         {
                             feeOnTransfer: true,
