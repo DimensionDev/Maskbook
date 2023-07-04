@@ -1,17 +1,19 @@
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
+import type { UseFormSetError } from 'react-hook-form'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { RestoreFromPrivateKey } from '../../../components/Restore/RestoreFromPrivateKey.js'
+import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { PluginServices } from '../../../API.js'
+import { walletName } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -103,6 +105,18 @@ const Recovery = memo(function Recovery() {
         [navigate],
     )
 
+    const handleRestoreFromPrivateKey = useCallback(
+        async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
+            try {
+                await PluginServices.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
+                navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
+            } catch {
+                onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
+            }
+        },
+        [walletName, navigate],
+    )
+
     const handleRecovery = useCallback(() => {
         navigate(DashboardRoutes.CreateMaskWalletMnemonic)
     }, [])
@@ -145,7 +159,7 @@ const Recovery = memo(function Recovery() {
                                 />
                             </TabPanel>
                             <TabPanel value={tabs.privateKey} classes={tabPanelClasses}>
-                                <RestoreFromPrivateKey />
+                                <RestoreFromPrivateKey handleRestoreFromPrivateKey={handleRestoreFromPrivateKey} />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
                                 <RestoreFromLocal handleRestoreFromLocalStore={async () => undefined} />
