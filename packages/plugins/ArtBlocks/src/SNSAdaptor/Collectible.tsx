@@ -53,7 +53,7 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
     const { value, loading, error } = useFetchProject(projectId, chainId)
     const project = value?.projects[0]
 
-    if (!loading)
+    if (loading)
         return (
             <div className={classes.body}>
                 <LoadingBase />
