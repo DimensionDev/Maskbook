@@ -11,7 +11,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
-import { useI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -84,16 +84,16 @@ export function Snapshot() {
     const proposal = useProposal(identifier.id)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
-    const { t } = useI18N()
+    const t = useI18N()
 
     const Tabs = [
         {
             value: tabs.Proposal,
-            label: t('plugin_snapshot_proposal'),
+            label: t.plugin_snapshot_proposal(),
         },
         {
             value: tabs.Progress,
-            label: t('plugin_snapshot_progress'),
+            label: t.plugin_snapshot_progress(),
         },
     ]
 

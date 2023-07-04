@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import { OpenInNew } from '@mui/icons-material'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils/index.js'
 import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
@@ -12,6 +11,7 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import { SNAPSHOT_IPFS } from '../constants.js'
+import { useI18N } from '../locales/index.js'
 
 export interface InformationCardProps {}
 
@@ -71,13 +71,13 @@ export function InfoField(props: InfoFieldProps) {
 
 export function InformationCard(props: InformationCardProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const { start, end, snapshot, strategies, chainId } = proposal
     return (
-        <SnapshotCard title={t('plugin_snapshot_info_title')}>
-            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.info }}>
+        <SnapshotCard title={t.plugin_snapshot_info_title()}>
+            <InfoField title={t.plugin_snapshot_info_strategy()} classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
                         .filter((strategy) => !!strategy.params.address)
@@ -93,7 +93,7 @@ export function InformationCard(props: InformationCardProps) {
                         ))}
                 </Box>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_author')} classes={{ field: classes.infoColor }}>
+            <InfoField title={t.plugin_snapshot_info_author()} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
@@ -111,7 +111,7 @@ export function InformationCard(props: InformationCardProps) {
                     </Typography>
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_ipfs')} classes={{ field: classes.infoColor }}>
+            <InfoField title={t.plugin_snapshot_info_ipfs()} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
@@ -121,17 +121,17 @@ export function InformationCard(props: InformationCardProps) {
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_start')} classes={{ field: classes.infoColor }}>
+            <InfoField title={t.plugin_snapshot_info_start()} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(start * 1000, 'MMM dd, yyyy, hh:mm a')}
                 </Typography>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_end')} classes={{ field: classes.infoColor }}>
+            <InfoField title={t.plugin_snapshot_info_end()} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(end * 1000, 'MMM dd, yyyy, hh:mm a')}
                 </Typography>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_snapshot')} classes={{ field: classes.infoColor }}>
+            <InfoField title={t.plugin_snapshot_info_snapshot()} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"

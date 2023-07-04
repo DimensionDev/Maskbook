@@ -6,7 +6,6 @@ import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useI18N } from '../../../utils/index.js'
 import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
 import { useVotes } from './hooks/useVotes.js'
@@ -14,6 +13,7 @@ import { useProposal } from './hooks/useProposal.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -89,7 +89,7 @@ function Content() {
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier, account)
     const { classes, cx, theme } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     return (
         <SnapshotCard
             lazy
@@ -99,7 +99,7 @@ function Content() {
                     classes={{ badge: classes.badge }}
                     badgeContent={proposal.voterAmounts}
                     color="primary">
-                    {t('plugin_snapshot_votes_title')}
+                    {t.plugin_snapshot_votes_title()}
                 </Badge>
             }>
             <List className={classes.list}>
@@ -127,7 +127,7 @@ function Content() {
                                 </Box>
                                 <Typography color={theme.palette.maskColor.dark}>
                                     {isSameAddress(v.address, account)
-                                        ? t('plugin_snapshot_votes_yourself')
+                                        ? t.plugin_snapshot_votes_yourself()
                                         : formatEthereumAddress(v.address, 4)}
                                 </Typography>
                             </Link>
@@ -177,15 +177,15 @@ function Content() {
 }
 
 function Loading(props: React.PropsWithChildren<{}>) {
-    const { t } = useI18N()
-    return <LoadingCard title={t('plugin_snapshot_votes_title')}>{props.children}</LoadingCard>
+    const t = useI18N()
+    return <LoadingCard title={t.plugin_snapshot_votes_title()}>{props.children}</LoadingCard>
 }
 
 function Fail(props: React.PropsWithChildren<{}>) {
-    const { t } = useI18N()
+    const t = useI18N()
     const retry = unstable_useCacheRefresh()
     return (
-        <LoadingFailCard title={t('plugin_snapshot_votes_title')} retry={retry}>
+        <LoadingFailCard title={t.plugin_snapshot_votes_title()} retry={retry}>
             {props.children}
         </LoadingFailCard>
     )

@@ -1,6 +1,5 @@
 import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils/index.js'
 import { useState, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, Avatar, IconButton, Button, ThemeProvider, type Theme } from '@mui/material'
@@ -9,6 +8,7 @@ import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
 import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { useI18N } from '../locales/index.js'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
     const { spaceList, currentSpace, setSpaceIndex, theme } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
@@ -108,7 +108,7 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                     </div>
                     {currentSpace.followersCount ? (
                         <Typography component="span" className={classes.followersCount}>
-                            {t('plugin_snapshot_space_info_followers_count', {
+                            {t.plugin_snapshot_space_info_followers_count({
                                 followersCount: formatCount(currentSpace.followersCount, 1),
                             })}
                         </Typography>
@@ -122,8 +122,8 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                 variant="roundedContained"
                 onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
                 {followedSpaceList?.includes(currentSpace.spaceId) && account
-                    ? t('plugin_snapshot_space_view')
-                    : t('plugin_snapshot_space_join')}
+                    ? t.plugin_snapshot_space_view()
+                    : t.plugin_snapshot_space_join()}
             </Button>
         </Box>
     )

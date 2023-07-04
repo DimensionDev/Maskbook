@@ -11,8 +11,8 @@ import { useIntersectionObserver } from '@react-hookz/web'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { resolveSnapshotProposalUrl } from './helpers.js'
-import { useI18N } from '../../../utils/index.js'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -213,16 +213,16 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
 function ProfileProposalListItemBody(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
-    const { t } = useI18N()
+    const t = useI18N()
 
     const date = useMemo(() => {
         const now = Date.now()
         if (now < proposal.start * 1000) {
-            return t('plugin_snapshot_proposal_not_start', { date: formatElapsedPure(proposal.start * 1000, false) })
+            return t.plugin_snapshot_proposal_not_start({ date: formatElapsedPure(proposal.start * 1000, false) })
         } else if (now > proposal.end * 1000) {
-            return t('plugin_snapshot_proposal_ended', { date: formatElapsed(proposal.end * 1000) })
+            return t.plugin_snapshot_proposal_ended({ date: formatElapsed(proposal.end * 1000) })
         } else {
-            return t('plugin_snapshot_proposal_started', { date: formatElapsedPure(proposal.end * 1000, false) })
+            return t.plugin_snapshot_proposal_started({ date: formatElapsedPure(proposal.end * 1000, false) })
         }
     }, [proposal.start, proposal.end])
 
@@ -239,7 +239,7 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes, cx } = useStyles({ state: proposal.state })
     const theme = useTheme()
-    const { t } = useI18N()
+    const t = useI18N()
     const { value: currentAccountVote } = useCurrentAccountVote(proposal.id, proposal.votes)
 
     return (
@@ -265,7 +265,7 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         </Typography>
                         {currentAccountVote?.choice === i + 1 ? (
                             <div className={classes.myVote}>
-                                <Typography className={classes.myVoteText}>{t('plugin_snapshot_my_vote')}</Typography>
+                                <Typography className={classes.myVoteText}>{t.plugin_snapshot_my_vote()}</Typography>
                             </div>
                         ) : null}
                     </div>
