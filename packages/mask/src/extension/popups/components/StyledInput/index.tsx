@@ -22,7 +22,7 @@ const useStyles = makeStyles()(({ palette }) => ({
 }))
 
 export const StyledInput = memo(
-    forwardRef<{}, TextFieldProps>((props, ref) => {
+    forwardRef<{}, TextFieldProps>(function StyledInput(props, ref) {
         const { classes, cx } = useStyles(undefined, { props })
 
         return (

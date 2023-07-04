@@ -1,5 +1,5 @@
-import { makeStyles } from '@masknet/theme'
-import { Button, Typography } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Box } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -16,22 +16,11 @@ const useStyles = makeStyles()({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-    },
-    label: {
-        color: '#1C68F3',
-        fontSize: 12,
-        lineHeight: '16px',
-        marginBottom: 10,
-    },
-    button: {
-        fontWeight: 600,
-        padding: '9px 0',
-        borderRadius: 20,
+        overflow: 'auto',
     },
 })
 
-const CreateWallet = memo(() => {
+const CreateWallet = memo(function CreateWallet() {
     const { t } = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
@@ -57,31 +46,28 @@ const CreateWallet = memo(() => {
 
     const onSubmit = handleSubmit(onCreate)
 
-    useTitle(t('popups_create_wallet'))
+    useTitle(t('popups_add_wallet'))
 
     return (
-        <>
-            <div className={classes.content}>
-                <div>
-                    <Typography className={classes.label}>{t('wallet_name')}</Typography>
-                    <Controller
-                        name="name"
-                        control={control}
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                placeholder={t('popups_wallet_enter_your_wallet_name')}
-                                error={!!errorMessage || !!errors.name?.message}
-                                helperText={errorMessage || errors.name?.message}
-                            />
-                        )}
-                    />
-                </div>
-                <Button variant="contained" className={classes.button} disabled={!isValid} onClick={onSubmit}>
-                    {t('confirm')}
-                </Button>
-            </div>
-        </>
+        <div className={classes.content}>
+            <Box flexGrow={1} overflow="auto">
+                <Controller
+                    name="name"
+                    control={control}
+                    render={({ field }) => (
+                        <StyledInput
+                            {...field}
+                            placeholder={t('popups_wallet_enter_your_wallet_name')}
+                            error={!!errorMessage || !!errors.name?.message}
+                            helperText={errorMessage || errors.name?.message}
+                        />
+                    )}
+                />
+            </Box>
+            <ActionButton fullWidth disabled={!isValid} onClick={onSubmit}>
+                {t('add')}
+            </ActionButton>
+        </div>
     )
 })
 

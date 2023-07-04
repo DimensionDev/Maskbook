@@ -40,7 +40,7 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
                     <LoadingBase />
                 </Box>
             ) : null}
-            <span>{children}</span>
+            {children}
         </Button>
     )
 }

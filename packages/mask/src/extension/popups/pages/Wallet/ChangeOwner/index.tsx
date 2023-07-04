@@ -9,7 +9,7 @@ import {
     ECKeyIdentifier,
     formatPersonaFingerprint,
     type NetworkPluginID,
-    PopupRoutes,
+    PopupModalRoutes,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
@@ -25,6 +25,7 @@ import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
+import { useModalNavigate } from '../../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -213,9 +214,10 @@ export default function ChangeOwner() {
         await Services.Helper.removePopupWindow()
     }, [])
 
+    const modalNavigate = useModalNavigate()
     const onCreateWallet = useCallback(() => {
-        navigate(PopupRoutes.SwitchWallet, { replace: true })
-    }, [])
+        modalNavigate(PopupModalRoutes.SwitchWallet)
+    }, [modalNavigate])
 
     return (
         <>
@@ -232,7 +234,8 @@ export default function ChangeOwner() {
                                 formatter={formatEthereumAddress}
                             />
                             <Link
-                                sx={{ display: 'flex', alignItems: 'center' }}
+                                display="flex"
+                                alignItems="center"
                                 href={
                                     contractAccount?.address
                                         ? explorerResolver.addressLink(chainId, contractAccount.address)

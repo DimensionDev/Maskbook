@@ -8,7 +8,7 @@ type PluralsSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 
 type LocaleKeys = keyof typeof en
 type ExtendBaseKeys<K> = K extends `${infer B}$${string}` ? B | K : K extends `${infer B}_${PluralsSuffix}` ? B | K : K
-type AvailableLocaleKeys = ExtendBaseKeys<LocaleKeys>
+export type AvailableLocaleKeys = ExtendBaseKeys<LocaleKeys>
 
 export type I18NFunction = <TKeys extends AvailableLocaleKeys>(
     key: TKeys | TKeys[],

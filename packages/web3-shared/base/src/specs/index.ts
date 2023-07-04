@@ -201,9 +201,9 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     averageBlockDelay: number
     /** The background gradient color for relative network bar */
     backgroundGradient?: string
-    /** The network name */
+    /** The network name. e.g. Ethereum */
     name: string
-    /** The network short name */
+    /** The network short name. e.g. 'ETH' */
     shortName?: string
     /** Is a mainnet network */
     isMainnet: boolean

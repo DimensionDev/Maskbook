@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo, useContext, type ReactNode } from 'react'
+import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -47,7 +47,6 @@ const useStyles = makeStyles()((theme) => ({
 interface NormalHeaderProps {
     onlyTitle?: boolean
     onClose(): void
-    extension?: ReactNode
 }
 
 function canNavBack() {
@@ -56,11 +55,11 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose, extension }) => {
+export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onlyTitle, onClose }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
-    const { title } = useContext(PageTitleContext)
+    const { title, extension } = useContext(PageTitleContext)
 
     const goBack = new URLSearchParams(location.search).get('goBack')
 
@@ -80,6 +79,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose, exten
             <Box className={classes.container} style={{ justifyContent: 'center' }}>
                 <Icons.PopupClose className={classes.close} onClick={onClose} />
                 <Typography className={classes.title}>{title}</Typography>
+                {extension}
             </Box>
         )
     }
@@ -90,11 +90,11 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose, exten
                 <>
                     <Icons.Comeback className={classes.back} onClick={() => navigate(-1)} />
                     <Typography className={classes.title}>{title}</Typography>
+                    {extension}
                 </>
             ) : (
                 <Icons.Mask className={classes.logo} />
             )}
-            {extension}
         </Box>
     )
 })

@@ -83,17 +83,17 @@ export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'var
 }
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
-    const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
+    const { label, sx, required = false, className, wrapperProps, helperText, onChange, ...rest } = props
     const InputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
-    const onChange = useCallback(
+    const handleChange = useCallback(
         (ev: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
             if (ev.currentTarget.value && !new RegExp(InputProps.inputProps?.pattern).test(ev.currentTarget.value)) {
                 return
             }
-            props.onChange?.(ev)
+            onChange?.(ev)
         },
-        [InputProps.inputProps?.pattern, props.onChange],
+        [InputProps.inputProps?.pattern, onChange],
     )
     return (
         <Box sx={sx} {...wrapperProps}>
@@ -111,8 +111,8 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
             {Sniffings.is_dashboard_page ? (
                 <TextField
                     ref={ref}
+                    onChange={handleChange}
                     {...rest}
-                    onChange={onChange}
                     classes={{ root: classes.field }}
                     variant="standard"
                     required={required}
@@ -131,9 +131,9 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
             ) : (
                 <InputBase
                     className={classes.field}
-                    {...InputProps}
-                    onChange={onChange}
-                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps')}
+                    {...omit(InputProps, 'disableUnderline')}
+                    onChange={handleChange}
+                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps', 'FormHelperTextProps')}
                 />
             )}
         </Box>

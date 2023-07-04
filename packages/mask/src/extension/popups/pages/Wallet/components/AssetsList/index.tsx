@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 
 type Asset = FungibleAsset<ChainId, SchemaType>
 
-export const AssetsList = memo(() => {
+export const AssetsList = memo(function AssetsList() {
     const navigate = useNavigate()
     const { assets, setCurrentToken } = useContainer(WalletContext)
     const [isExpand, setIsExpand] = useState(false)
@@ -101,42 +101,38 @@ export interface AssetsListUIProps {
     onItemClick: (token: Asset) => void
 }
 
-export const AssetsListUI = memo<AssetsListUIProps>(({ isExpand, dataSource, onItemClick }) => {
+export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isExpand, dataSource, onItemClick }) {
     const { classes } = useStyles()
+    const list = dataSource.filter(
+        (asset) => isExpand || isNativeTokenAddress(asset.address) || isGreaterThanOrEqualTo(asset.value?.usd ?? 0, 1),
+    )
     return (
         <List dense className={classes.list}>
-            {dataSource
-                .filter(
-                    (asset) =>
-                        isExpand ||
-                        isNativeTokenAddress(asset.address) ||
-                        isGreaterThanOrEqualTo(asset.value?.usd ?? 0, 1),
-                )
-                .map((asset, index) => {
-                    return (
-                        <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
-                            <TokenIcon
-                                className={classes.tokenIcon}
-                                address={asset.address}
-                                name={asset.name}
-                                chainId={asset.chainId}
-                                logoURL={asset.logoURL}
-                                AvatarProps={{ sx: { width: 20, height: 20 } }}
+            {list.map((asset, index) => {
+                return (
+                    <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
+                        <TokenIcon
+                            className={classes.tokenIcon}
+                            address={asset.address}
+                            name={asset.name}
+                            chainId={asset.chainId}
+                            logoURL={asset.logoURL}
+                            AvatarProps={{ sx: { width: 20, height: 20 } }}
+                        />
+                        <ListItemText className={classes.text}>
+                            <FormattedBalance
+                                classes={{ symbol: classes.symbol, balance: classes.balance }}
+                                value={isNaN(asset.balance) ? 0 : asset.balance}
+                                decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
+                                symbol={asset.symbol}
+                                significant={6}
+                                formatter={formatBalance}
                             />
-                            <ListItemText className={classes.text}>
-                                <FormattedBalance
-                                    classes={{ symbol: classes.symbol, balance: classes.balance }}
-                                    value={isNaN(asset.balance) ? 0 : asset.balance}
-                                    decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
-                                    symbol={asset.symbol}
-                                    significant={6}
-                                    formatter={formatBalance}
-                                />
-                            </ListItemText>
-                            <Icons.ArrowRight size={20} color="#15181B" />
-                        </ListItem>
-                    )
-                })}
+                        </ListItemText>
+                        <Icons.ArrowRight size={20} color="#15181B" />
+                    </ListItem>
+                )
+            })}
         </List>
     )
 })

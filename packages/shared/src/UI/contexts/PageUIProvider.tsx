@@ -1,6 +1,5 @@
 import { Suspense, useMemo } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { StyledEngineProvider, type Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
@@ -42,9 +41,6 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
                 <EnvironmentContextProvider value={context}>
                     <QueryClientProvider client={queryClient}>
-                        {process.env.NODE_ENV === 'development' ? (
-                            <ReactQueryDevtools position="top-right" toggleButtonProps={{ style: { width: 24 } }} />
-                        ) : null}
                         <Web3ContextProvider value={context}>
                             <TelemetryProvider>
                                 <SharedContextProvider>
