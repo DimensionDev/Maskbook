@@ -10,4 +10,8 @@ const channel: EventBasedChannel = {
         postMessage('rpc', data)
     },
 }
-export const worker = AsyncCall<typeof import('../plugin-worker/service.js')>({}, { channel, log: true, serializer })
+
+export const PluginWorker = AsyncCall<typeof import('../plugin-worker/service.js')>(
+    {},
+    { channel, log: true, serializer },
+)

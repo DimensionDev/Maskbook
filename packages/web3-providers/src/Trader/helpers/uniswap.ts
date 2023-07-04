@@ -1,12 +1,12 @@
 import { memoize } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
+import { Trade as V2Trade, Router } from '@uniswap/v2-sdk'
+import { Route, type Pool } from '@uniswap/v3-sdk'
 import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenType, isGreaterThan, isSameAddress, pow10 } from '@masknet/web3-shared-base'
 import { type ChainId, WNATIVE, SchemaType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { type Currency, Ether, Token, CurrencyAmount, Percent, Fraction, type Price } from '@uniswap/sdk-core'
-import { Trade as V2Trade, Router } from '@uniswap/v2-sdk'
-import { Route, type Pool } from '@uniswap/v3-sdk'
 import type { Trade } from '../../types/Trader.js'
 import { INPUT_FRACTION_AFTER_FEE, ONE_HUNDRED_PERCENT } from '../constants/index.js'
 
@@ -40,11 +40,13 @@ export function toUniswapCurrencyAmount(chainId?: ChainId, token?: Web3Helper.Fu
     return
 }
 
-const wrapEtherMemo = memoize((chainId: ChainId) => toUniswapToken(chainId, WNATIVE[chainId]))
+export const toUniswapTokenMemo: (chainID: ChainId) => Token = memoize((chainId: ChainId) =>
+    toUniswapToken(chainId, WNATIVE[chainId]),
+)
 
 export class ExtendedEther extends Ether {
     public override get wrapped(): Token {
-        if (this.chainId in WNATIVE) return ExtendedEther.wrapEther(this.chainId)
+        if (this.chainId in WNATIVE) return toUniswapTokenMemo(this.chainId)
         throw new Error('Unsupported chain ID')
     }
 
@@ -53,8 +55,6 @@ export class ExtendedEther extends Ether {
     public static override onChain(chainId: number): ExtendedEther {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
     }
-
-    public static wrapEther: (chainID: ChainId) => Token = wrapEtherMemo
 }
 
 export function toUniswapCurrency(chainId?: ChainId, token?: Web3Helper.FungibleTokenAll): Currency | undefined {
@@ -144,6 +144,7 @@ export function uniswapTokenTo(token: Token) {
 
 // Pangolin and TraderJoe have modified uniswap contracts
 type SwapParams = Parameters<typeof Router.swapCallParameters>
+
 export const swapCallParameters = (trade: SwapParams[0], options: SwapParams[1], tradeProvider?: TradeProvider) => {
     const parameters = Router.swapCallParameters(trade, options)
     if (tradeProvider === TradeProvider.PANGOLIN || tradeProvider === TradeProvider.TRADERJOE) {

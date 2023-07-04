@@ -3,7 +3,7 @@ export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
 
 function MessageEventReceiver(event: MessageEvent): void {
-    const [type, data] = event.data
+    const { type, data } = event.data
     const handler = messageHandlers.get(type)
     if (!handler?.size) return
     for (const h of handler) h(data)

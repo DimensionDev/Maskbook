@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { DialogContent, dialogClasses } from '@mui/material'
-import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -23,19 +23,12 @@ interface ConnectWalletProps {
     pluginID?: NetworkPluginID
     networkType?: Web3Helper.NetworkTypeAll
     providerType?: Web3Helper.ProviderTypeAll
-    walletConnectedCallback?: () => void
     open: boolean
+    onConnect: () => void
     onClose: () => void
 }
 
-export function ConnectWallet({
-    pluginID,
-    networkType,
-    providerType,
-    walletConnectedCallback,
-    open,
-    onClose,
-}: ConnectWalletProps) {
+export function ConnectWallet({ pluginID, networkType, providerType, open, onConnect, onClose }: ConnectWalletProps) {
     const { classes } = useStyles()
     const t = useSharedI18N()
 
@@ -64,12 +57,10 @@ export function ConnectWallet({
             }
         }
 
-        ConnectWalletModal.close()
-
-        walletConnectedCallback?.()
+        onConnect?.()
 
         return true
-    }, [open, walletConnectedCallback, Others, Web3, pluginIDsSettings])
+    }, [open, onConnect, Others, Web3, pluginIDsSettings])
 
     if (!pluginID || !providerType || !networkType) return null
 

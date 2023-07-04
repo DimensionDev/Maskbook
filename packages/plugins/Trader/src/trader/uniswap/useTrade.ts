@@ -1,13 +1,13 @@
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { TradeStrategy } from '../../types/index.js'
-import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers/index.js'
-import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade.js'
-import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade.js'
 import type { TradeProvider } from '@masknet/public-api'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { uniswap } from '@masknet/web3-providers/helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade.js'
+import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade.js'
+import { TradeStrategy } from '../../types/index.js'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -26,15 +26,15 @@ function useTrade(
         (isZero(outputAmount) && !isExactIn)
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const inputCurrency = toUniswapCurrency(
+    const inputCurrency = uniswap.toUniswapCurrency(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         inputToken,
     )
-    const outputCurrency = toUniswapCurrency(
+    const outputCurrency = uniswap.toUniswapCurrency(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         outputToken,
     )
-    const tradeAmount = toUniswapCurrencyAmount(
+    const tradeAmount = uniswap.toUniswapCurrencyAmount(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         isExactIn ? inputToken : outputToken,
         isExactIn ? inputAmount : outputAmount,

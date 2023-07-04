@@ -91,7 +91,7 @@ const useStyles = makeStyles()((theme) => ({
             width: '100%',
             maxWidth: '100%',
             maxHeight: 176,
-            objectFit: 'cover',
+            objectFit: 'contain',
             borderRadius: theme.spacing(1.5),
         },
     },

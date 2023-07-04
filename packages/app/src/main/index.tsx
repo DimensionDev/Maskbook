@@ -17,7 +17,6 @@ export function DecryptUI() {
     if (!message) return <Typography>Decrypting...</Typography>
     return (
         <Suspense>
-            {/* Do not add React context here. Add it in ./plugin-render */}
             <PluginRender message={message} />
             <PageInspectorRender />
         </Suspense>

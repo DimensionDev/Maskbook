@@ -46,7 +46,7 @@ export enum EventID {
     // Open the application board dialog
     AccessApplicationBoard = 'AccessApplicationBoard',
     // Open the SPA
-    AccessSPA = 'AccessSPA',
+    AccessApp = 'AccessApp',
     // Open the dashboard page
     AccessDashboard = 'AccessDashboard',
     // Open the popups page

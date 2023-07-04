@@ -20,6 +20,7 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
         [EnhanceableSite.Localhost]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Mirror]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Mask]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.App]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.PopupConnect]: NetworkPluginID.PLUGIN_EVM,
@@ -34,7 +35,6 @@ export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
 export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
-
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 
 /**
