@@ -8,10 +8,10 @@ import { type RedPacketJSONPayload, type NftRedPacketJSONPayload } from '@maskne
 import { RedPacketHistoryList } from './RedPacketHistoryList.js'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
 import { RedPacketNftMetaKey } from '../constants.js'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { openComposition } from './openComposition.js'
-import { ApplicationBoardModal, PluginWalletStatusBar } from '@masknet/shared'
+import { ApplicationBoardModal, PluginWalletStatusBar, useCurrentLinkedPersona } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
@@ -28,11 +28,10 @@ interface Props {
 export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const { classes } = useStyles()
 
-    const currentIdentity = useCurrentIdentity()
+    const currentIdentity = useCurrentVisitingIdentity()
+    const linkedPersona = useCurrentLinkedPersona()
 
-    const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName = currentIdentity?.identifier?.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const handleSendNftRedpacket = useCallback(
         (history: NftRedPacketJSONPayload, collection: NonFungibleCollection<ChainId, SchemaType>) => {
             const { rpid, txid, duration, sender, password, chainId } = history

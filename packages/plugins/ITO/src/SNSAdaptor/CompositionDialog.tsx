@@ -6,7 +6,13 @@ import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
 } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, type InjectedDialogProps, NetworkTab, ApplicationBoardModal } from '@masknet/shared'
+import {
+    InjectedDialog,
+    type InjectedDialogProps,
+    NetworkTab,
+    ApplicationBoardModal,
+    useCurrentLinkedPersona,
+} from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
@@ -23,7 +29,6 @@ import { openComposition, payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
 import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { useI18N } from '../locales/index.js'
-import { useCurrentLinkedPersona } from './hooks/useCurrentLinkedPersona.js'
 
 interface StyleProps {
     snsId: string

@@ -9,22 +9,16 @@ import {
     useGasPrice,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
-import { ApplicationBoardModal, InjectedDialog, NetworkTab } from '@masknet/shared'
+import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import {
-    useCurrentIdentity,
-    useCurrentLinkedPersona,
-    useLastRecognizedIdentity,
-} from '../../../components/DataSource/useActivatedUI.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
-import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { DialogTabs } from '../types.js'
@@ -34,6 +28,7 @@ import { RedPacketPast } from './RedPacketPast.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean }>()(
     (theme, { currentTab, showHistory }) => ({
@@ -67,7 +62,6 @@ interface RedPacketDialogProps {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
-    const { t: i18n } = useBaseI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
     const { pluginID } = useNetworkContext()
@@ -106,11 +100,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onClose()
     }, [props, state, step])
 
-    const currentIdentity = useCurrentIdentity()
+    const currentIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { value: linkedPersona } = useCurrentLinkedPersona()
+    const linkedPersona = useCurrentLinkedPersona()
     const senderName =
-        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
+        lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname
 
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
@@ -177,7 +171,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         : openSelectNFTDialog
         ? t.nft_select_collection()
         : openNFTConfirmDialog
-        ? i18n('confirm')
+        ? t.confirm()
         : isCreateStep
         ? t.display_name()
         : t.details()

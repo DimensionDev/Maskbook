@@ -13,17 +13,13 @@ import {
 import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
-import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
-import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -190,14 +186,13 @@ export interface RedPacketNftProps {
 }
 
 export function RedPacketNft({ payload }: RedPacketNftProps) {
-    const { t: i18n } = useBaseI18N()
     const t = useI18N()
 
     const { pluginID } = useNetworkContext()
     const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
-
+    const { share } = useSNSAdaptorContext()
     const {
         value: availability,
         loading,
@@ -221,8 +216,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
-        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+        const isOnTwitter = isTwitter()
+        const isOnFacebook = isFacebook()
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
@@ -239,8 +234,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [availability?.isClaimed, t])
 
     const onShare = useCallback(() => {
-        if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
-    }, [shareText])
+        if (shareText) share?.(shareText)
+    }, [shareText, share])
     // #endregion
 
     const { value: nonFungibleToken } = useNonFungibleAsset(
@@ -264,9 +259,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 name: '',
             }),
             title: t.lucky_drop(),
-            share: activatedSocialNetworkUI.utils.share,
+            share,
         })
-    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address])
+    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address, share])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
@@ -299,9 +294,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     if (availabilityError)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
-                <Typography color="textPrimary">{i18n('go_wrong')}</Typography>
+                <Typography color="textPrimary">{t.go_wrong()}</Typography>
                 <Button variant="roundedDark" onClick={retryAvailability}>
-                    {i18n('retry')}
+                    {t.retry()}
                 </Button>
             </Box>
         )
@@ -318,7 +313,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 padding={1}
                 minHeight={148}>
                 <LoadingBase />
-                <Typography>{i18n('loading')}</Typography>
+                <Typography>{t.loading()}</Typography>
             </Box>
         )
 
@@ -420,7 +415,6 @@ interface OperationFooterProps {
 
 function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
     const { classes } = useStyles({ claimed, outdated: false })
-    const { t: i18n } = useBaseI18N()
     const t = useI18N()
 
     return (
@@ -432,7 +426,7 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
                     className={classes.button}
                     fullWidth
                     onClick={onShare}>
-                    {i18n('share')}
+                    {t.share()}
                 </Button>
             </Box>
             {claimed ? null : (

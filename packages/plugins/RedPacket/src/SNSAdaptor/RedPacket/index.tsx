@@ -4,14 +4,9 @@ import { Stack } from '@mui/system'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
-import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
-import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base.js'
-import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
@@ -19,6 +14,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { TransactionConfirmModal } from '@masknet/shared'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -135,8 +131,7 @@ export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
     const t = useI18N()
-    const { t: tr } = useBaseI18n()
-
+    const { share } = useSNSAdaptorContext()
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
@@ -170,13 +165,13 @@ export function RedPacket(props: RedPacketProps) {
     )
 
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
-        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+        const isOnTwitter = isTwitter()
+        const isOnFacebook = isFacebook()
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
             network: networkResolver.networkName(networkType) ?? 'Mainnet',
-            account: isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account'),
+            account: isTwitter() ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
         }
         if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
@@ -188,7 +183,7 @@ export function RedPacket(props: RedPacketProps) {
         return isOnTwitter || isOnFacebook
             ? t.share_unclaimed_message_official_account(shareTextOption)
             : t.share_unclaimed_message_not_twitter(shareTextOption)
-    }, [payload, postLink, networkType, claimTxHash, listOfStatus, activatedSocialNetworkUI, t, tr])
+    }, [payload, postLink, networkType, claimTxHash, listOfStatus, t])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
@@ -213,9 +208,9 @@ export function RedPacket(props: RedPacketProps) {
                 name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
-            share: activatedSocialNetworkUI.utils.share,
+            share,
         })
-    }, [JSON.stringify(token), availability?.claimed_amount])
+    }, [JSON.stringify(token), availability?.claimed_amount, share])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
@@ -265,9 +260,9 @@ export function RedPacket(props: RedPacketProps) {
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
     const handleShare = useCallback(() => {
-        if (!shareText || !activatedSocialNetworkUI.utils.share) return
-        activatedSocialNetworkUI.utils.share(shareText)
-    }, [shareText])
+        if (!shareText || !share) return
+        share(shareText)
+    }, [shareText, share])
 
     const outdated =
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
@@ -287,7 +282,7 @@ export function RedPacket(props: RedPacketProps) {
                 padding={1}
                 minHeight={148}>
                 <LoadingBase />
-                <Typography>{tr('loading')}</Typography>
+                <Typography>{t.loading()}</Typography>
             </Box>
         )
 

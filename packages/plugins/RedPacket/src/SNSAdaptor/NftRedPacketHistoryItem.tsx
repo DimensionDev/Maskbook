@@ -282,7 +282,7 @@ export const NftRedPacketHistoryItem = memo(
                                     name={collection?.name ?? '-'}
                                     logoURL={
                                         collection?.iconURL ??
-                                        new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                                        new URL('./assets/maskFilledIcon.png', import.meta.url).toString()
                                     }
                                 />
                             </section>

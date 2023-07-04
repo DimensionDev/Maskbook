@@ -20,7 +20,7 @@ export default {
     'plugins/template/src/locales/%locale%.json': '__template__',
     'plugins/GoPlusSecurity/src/locales/%locale%.json': 'io.gopluslabs.security',
     'plugins/CrossChainBridge/src/locales/%locale%.json': 'io.mask.cross-chain-bridge',
-    'mask/src/plugins/RedPacket/locales/%locale%.json': 'com.maskbook.red_packet',
+    'plugins/RedPacket/src/locales/%locale%.json': 'com.maskbook.red_packet',
     'plugins/Tips/src/locales/%locale%.json': 'com.maskbook.tip',
     'plugins/Avatar/src/locales/%locale%.json': 'com.maskbook.avatar',
     'plugins/Trader/src/locales/%locale%.json': 'com.maskbook.trader',
@@ -40,7 +40,7 @@ export default {
     'plugins/ArtBlocks/src/locales/%locale%.json': 'io.artblocks',
     'plugins/External/src/locales/%locale%.json': 'io.mask.external',
     'plugins/ITO/src/locales/%locale%.json': 'com.maskbook.ito',
-    'plugins/ProfileCard/src/locales/%locale%.json': 'io.mask.web3-profile-card',
     'plugins/Savings/src/locales/%locale%.json': 'com.savings',
     'plugins/Snapshot/src/locales/%locale%.json': 'org.snapshot',
+    'plugins/ProfileCard/src/locales/%locale%.json': 'io.mask.web3-profile-card',
 }

@@ -27,6 +27,7 @@
     "@masknet/plugin-approval": "workspace:^",
     "@masknet/plugin-artblocks": "workspace:^",
     "@masknet/plugin-avatar": "workspace:^",
+    "@masknet/plugin-redpacket": "workspace:^",
     "@masknet/plugin-nextid": "workspace:^",
     "@masknet/plugin-snapshot": "workspace:^",
     "@masknet/plugin-trader": "workspace:^",

@@ -126,6 +126,7 @@
       "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
       "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src"],
       "@masknet/plugin-avatar": ["./packages/plugins/Avatar/src"],
+      "@masknet/plugin-redpacket": ["./packages/plugins/RedPacket/src"],
       "@masknet/plugin-maskbox": ["./packages/plugins/MaskBox/src"],
       "@masknet/plugin-smart-pay": ["./packages/plugins/SmartPay/src"],
       "@masknet/plugin-transak": ["./packages/plugins/Transak/src"],
