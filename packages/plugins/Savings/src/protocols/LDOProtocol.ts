@@ -59,7 +59,7 @@ export class LidoProtocol implements SavingsProtocol {
                 .estimateGas({
                     from: account,
                     // it's a BigNumber so it's ok
-                     
+                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     value: value.toString(),
                 })
 
@@ -83,7 +83,7 @@ export class LidoProtocol implements SavingsProtocol {
                 .send({
                     from: account,
                     // it's a BigNumber so it's ok
-                     
+                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     value: value.toString(),
                     gas: gasEstimate.toNumber(),
                 })
