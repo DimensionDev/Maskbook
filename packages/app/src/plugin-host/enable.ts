@@ -2,7 +2,9 @@ import './register.js'
 
 import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
-import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { CurrentSNSNetwork, SNSAdaptorContextRef, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { WalletConnectQRCodeModal } from '@masknet/shared'
 import {
     BooleanPreference,
     createConstantSubscription,
@@ -11,18 +13,19 @@ import {
     i18NextInstance,
     ValueRefWithReady,
 } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
-import { worker } from './rpc.js'
+import * as services from '../plugin-worker/service.js'
+// import { PluginWorker } from './rpc.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: worker.memoryRead,
-        setValue: worker.memoryWrite,
+        getValue: services.memoryRead,
+        setValue: services.memoryWrite,
     },
     {
         on: (callback) => addListener('inMemoryStorage', callback),
@@ -31,8 +34,8 @@ const inMemoryStorage = createKVStorageHost(
 const indexedDBStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: worker.indexedDBRead,
-        setValue: worker.indexedDBWrite,
+        getValue: services.indexedDBRead,
+        setValue: services.indexedDBWrite,
     },
     {
         on: (callback) => addListener('indexedDBStorage', callback),
@@ -76,21 +79,20 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext(id, signal) {
-        return {
+        const context: Plugin.SNSAdaptor.SNSAdaptorContext = {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
                 else return indexedDBStorage(id, defaultValues, signal)
             },
-            account: createConstantSubscription(''),
-            chainId: createConstantSubscription(ChainId.Mainnet),
             currentPersona: createConstantSubscription(undefined),
             wallets: createConstantSubscription([]),
+            share(text) {
+                throw new Error('To be implemented.')
+            },
             addWallet: reject,
             closePopupWindow: reject,
-            closeWalletConnectDialog: reject,
             confirmRequest: reject,
             connectPersona: reject,
-            createLogger: () => undefined,
             createPersona: reject,
             currentPersonaIdentifier: emptyValueRef,
             currentVisitingProfile: createConstantSubscription(undefined),
@@ -105,9 +107,14 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             openPopupConnectWindow: reject,
             openPopupWindow: reject,
             fetchJSON: reject,
-            openWalletConnectDialog: reject,
-            ownPersonaChanged: emptyEventRegistry,
-            ownProofChanged: emptyEventRegistry,
+            openWalletConnectDialog: async (uri: string) => {
+                await WalletConnectQRCodeModal.openAndWaitForClose({
+                    uri,
+                })
+            },
+            closeWalletConnectDialog: () => {
+                WalletConnectQRCodeModal.close()
+            },
             queryPersonaByProfile: reject,
             recordConnectedSites: reject,
             rejectRequest: reject,
@@ -118,12 +125,17 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             signWithWallet: reject,
             updateWallet: reject,
             send: reject,
-            NFTAvatarTimelineUpdated: emptyEventRegistry,
             themeSettings: createConstantSubscription(undefined),
         }
+
+        SNSAdaptorContextRef.value = context
+
+        return context
     },
     permission: {
         hasPermission: async () => false,
         events: new Emitter(),
     },
 })
+
+setupReactShadowRootEnvironment({ mode: 'open' }, [])

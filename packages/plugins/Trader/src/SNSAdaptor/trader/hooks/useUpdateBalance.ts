@@ -12,7 +12,7 @@ export function useUpdateBalance(chainId: Web3Helper.ChainIdAll) {
     const { pluginID } = useNetworkContext()
     const Others = useWeb3Others()
 
-    const balance = useBalance(pluginID, {
+    const { data: balance } = useBalance(pluginID, {
         chainId,
     })
 
@@ -35,20 +35,20 @@ export function useUpdateBalance(chainId: Web3Helper.ChainIdAll) {
         if (Others.isNativeTokenSchemaType(inputToken?.schema)) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-                balance: balance.value || '0',
+                balance: balance || '0',
             })
         }
-    }, [account, inputToken?.schema, balance.value, Others.isNativeTokenSchemaType])
+    }, [account, inputToken?.schema, balance, Others.isNativeTokenSchemaType])
 
     useEffect(() => {
         if (!account) return
         const value =
             Others.isNativeTokenSchemaType(outputToken?.schema) || isNativeTokenAddress(outputToken?.address)
-                ? balance.value
+                ? balance
                 : '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: value || '0',
         })
-    }, [account, outputToken?.schema, outputToken?.address, balance.value, Others.isNativeTokenSchemaType])
+    }, [account, outputToken?.schema, outputToken?.address, balance, Others.isNativeTokenSchemaType])
 }

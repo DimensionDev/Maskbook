@@ -247,7 +247,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const { data: searchedToken } = useFungibleToken(pluginID, searchedTokenAddress, undefined, {
         chainId,
     })
-    const { value: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
+    const { data: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
         chainId,
         account,
     })

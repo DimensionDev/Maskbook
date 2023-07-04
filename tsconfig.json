@@ -140,7 +140,9 @@
       "@masknet/plugin-nextid": ["./packages/plugins/NextID/src"],
       "@masknet/plugin-trader": ["./packages/plugins/Trader/src"],
       "@masknet/plugin-ito": ["./packages/plugins/ITO/src"],
+      "@masknet/plugin-profilecard": ["./packages/plugins/ProfileCard/src"],
       "@masknet/plugin-savings": ["./packages/plugins/Savings/src"],
+      "@masknet/plugin-snapshot": ["./packages/plugins/Snapshot/src"],
 
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]

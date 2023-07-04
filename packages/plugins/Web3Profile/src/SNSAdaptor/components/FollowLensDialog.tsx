@@ -194,7 +194,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     )
     // #endregion
 
-    const { value: feeTokenBalance, loading: getBalanceLoading } = useFungibleTokenBalance(
+    const { data: feeTokenBalance, isLoading: getBalanceLoading } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         profile?.followModule?.amount?.asset.address ?? '',
     )

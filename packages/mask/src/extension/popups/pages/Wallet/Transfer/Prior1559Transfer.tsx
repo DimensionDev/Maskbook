@@ -269,7 +269,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     )
     // #endregion
 
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+    const { data: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         selectedAsset?.address ?? '',
     )

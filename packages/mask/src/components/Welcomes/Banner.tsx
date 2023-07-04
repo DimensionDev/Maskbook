@@ -3,7 +3,7 @@ import { useMount } from 'react-use'
 import { IconButton } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useCurrentPersonaConnectStatus } from '@masknet/shared'
-import { DashboardRoutes, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
+import { DashboardRoutes, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import Services from '../../extension/service.js'
@@ -62,7 +62,6 @@ export function Banner(props: BannerProps) {
         currentIdentifier,
         Services.Helper.openDashboard,
         lastRecognizedIdentity,
-        MaskMessages,
     )
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier

@@ -2,10 +2,9 @@ import { memo, type ReactNode, useCallback, useMemo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import type { DashboardRoutes, MaskEvents, PersonaInformation, PluginID } from '@masknet/shared-base'
+import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
 import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -47,8 +46,6 @@ interface ConnectPersonaBoundaryProps {
     currentPersonaIdentifier: string
     openDashboard: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
     identity?: IdentityResolved
-    ownPersonaChanged: UnboundedRegistry<void>
-    ownProofChanged: UnboundedRegistry<void>
 }
 
 export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
@@ -63,10 +60,8 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
         beforeAction,
         afterAction,
         currentPersonaIdentifier,
-        ownPersonaChanged,
         identity,
         openDashboard,
-        ownProofChanged,
     }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
@@ -76,7 +71,6 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             currentPersonaIdentifier,
             openDashboard,
             identity,
-            { events: { ownPersonaChanged, ownProofChanged } } as WebExtensionMessage<MaskEvents>,
         )
         const isFnChildren = typeof children === 'function'
 

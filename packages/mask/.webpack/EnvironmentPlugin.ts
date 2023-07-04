@@ -1,4 +1,5 @@
 import webpack from 'webpack'
+
 export function EnvironmentPluginCache(def: Record<string, any>) {
     return new webpack.EnvironmentPlugin(def)
 }

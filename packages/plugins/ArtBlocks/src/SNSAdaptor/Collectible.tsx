@@ -29,6 +29,13 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: '0 !important',
         },
+        body: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            minHeight: 300,
+            justifyContent: 'center',
+        },
     }
 })
 
@@ -46,7 +53,12 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
     const { value, loading, error } = useFetchProject(projectId, chainId)
     const project = value?.projects[0]
 
-    if (loading) return <LoadingBase />
+    if (loading)
+        return (
+            <div className={classes.body}>
+                <LoadingBase />
+            </div>
+        )
 
     if (error || !project)
         return (

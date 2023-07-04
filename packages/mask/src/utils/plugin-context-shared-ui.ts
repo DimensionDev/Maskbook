@@ -15,14 +15,11 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'getNextIDPlatform'
     | 'getSocialIdentity'
     | 'getPersonaAvatar'
-    | 'ownProofChanged'
     | 'setMinimalMode'
     | 'queryPersonaByProfile'
     | 'connectPersona'
     | 'createPersona'
-    | 'NFTAvatarTimelineUpdated'
     | 'currentPersonaIdentifier'
-    | 'ownPersonaChanged'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

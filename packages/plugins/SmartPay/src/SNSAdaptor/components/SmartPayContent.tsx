@@ -183,7 +183,7 @@ export const SmartPayContent = memo(() => {
     const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
 
     const wallets = useWallets()
-    const contractAccounts = wallets.filter((x) => x.owner)
+    const contractAccounts = useMemo(() => wallets.filter((x) => x.owner), [wallets])
 
     // #region Remote Dialog Controller
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
@@ -205,7 +205,7 @@ export const SmartPayContent = memo(() => {
     const maskAddress = Others.getMaskTokenAddress(chainId)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const { value: assets, retry: refreshAssets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const { data: assets, refetch: refreshAssets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
 

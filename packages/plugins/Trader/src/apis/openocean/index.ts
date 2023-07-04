@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import { leftShift } from '@masknet/web3-shared-base'
 import { getOpenOceanConstants } from '@masknet/web3-shared-evm'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { SwapOOData, SwapOORequest } from '../../types/openocean.js'
 import { OPENOCEAN_BASE_URL } from '../../constants/openocean.js'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
     const payload = await fetchJSON<{

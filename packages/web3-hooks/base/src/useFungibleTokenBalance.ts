@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { noop } from 'lodash-es'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { useQuery } from '@tanstack/react-query'
+import { noop } from 'lodash-es'
+import { useEffect } from 'react'
 import { useChainContext } from './useContext.js'
-import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -20,20 +20,24 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     })
     const { BalanceNotifier } = useWeb3State(pluginID)
 
-    const asyncRetry = useAsyncRetry(async () => {
-        if (!address) return '0'
-        return Web3.getFungibleTokenBalance(address ?? '', undefined)
-    }, [address, Web3])
+    const result = useQuery({
+        enabled: !!address,
+        queryKey: ['fungible-token', 'balance', pluginID, account, address, options],
+        queryFn: async () => {
+            if (!address) return '0'
+            return Web3.getFungibleTokenBalance(address, undefined)
+        },
+    })
 
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
                 if (isSameAddress(account, ev.account)) {
-                    asyncRetry.retry()
+                    result.refetch()
                 }
             }) ?? noop
         )
-    }, [account, asyncRetry.retry, BalanceNotifier])
+    }, [account, result.refetch, BalanceNotifier])
 
-    return asyncRetry
+    return result
 }

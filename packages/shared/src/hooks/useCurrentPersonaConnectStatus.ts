@@ -1,14 +1,13 @@
 import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 import {
     DashboardRoutes,
-    type MaskEvents,
     type PersonaInformation,
     isSamePersona,
     isSameProfile,
     resolveNextIDIdentityToProfile,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
@@ -29,7 +28,6 @@ export function useCurrentPersonaConnectStatus(
     currentPersonaIdentifier?: string,
     openDashboard?: (route?: DashboardRoutes, search?: string) => Promise<any>,
     identity?: IdentityResolved,
-    message?: WebExtensionMessage<MaskEvents>,
 ) {
     const t = useSharedI18N()
 
@@ -120,13 +118,13 @@ export function useCurrentPersonaConnectStatus(
         }
     }, [currentPersonaIdentifier, personas, identity?.identifier, create, openPersonListDialog])
 
-    useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message?.events.ownPersonaChanged])
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     useEffect(() => {
-        return message?.events.ownProofChanged.on(() => {
+        return MaskMessages.events.ownProofChanged.on(() => {
             retry()
         })
-    }, [message?.events.ownPersonaChanged, retry])
+    }, [retry])
 
     return { value, loading, retry, error }
 }

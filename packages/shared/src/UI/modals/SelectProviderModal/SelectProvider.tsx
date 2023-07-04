@@ -28,17 +28,17 @@ function getProviders() {
         : providers
 }
 
-interface SelectProviderProps {
-    onClose: () => void
+export interface SelectProviderProps {
     open: boolean
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
-    walletConnectedCallback?: () => void
+    onConnect?: () => void
+    onClose: () => void
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const { requiredSupportPluginID, requiredSupportChainIds, walletConnectedCallback, open, onClose } = props
+    const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose } = props
 
     const onProviderIconClicked = useCallback(
         async (
@@ -56,13 +56,16 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
 
             await delay(500)
 
-            ConnectWalletModal.open({
+            const connected = await ConnectWalletModal.openAndWaitForClose({
+                pluginID: network.networkSupporterPluginID,
                 networkType: network.type,
                 providerType: provider.type,
-                walletConnectedCallback,
             })
+
+            if (connected) onConnect?.()
+            else onClose()
         },
-        [onClose, walletConnectedCallback],
+        [onConnect, onClose],
     )
     const providers = useMemo(getProviders, [])
 

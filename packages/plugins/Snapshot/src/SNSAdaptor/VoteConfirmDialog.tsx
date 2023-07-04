@@ -3,9 +3,9 @@ import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { OpenInNew } from '@mui/icons-material'
 import { type ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
-import { useI18N } from '../../../utils/index.js'
 import { InfoField } from './InformationCard.js'
 import { formatCount } from '@masknet/web3-shared-base'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -44,17 +44,17 @@ interface VoteConfirmDialogProps {
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
     const { open, onClose, onVoteConfirm, choiceText, snapshot, powerSymbol, power = 0, loading, chainId } = props
-    const { t } = useI18N()
+    const t = useI18N()
 
     const { classes } = useStyles()
     return (
         <InjectedDialog
             open={open}
             onClose={onClose}
-            title={t('plugin_snapshot_vote_confirm_dialog_title')}
+            title={t.plugin_snapshot_vote_confirm_dialog_title()}
             disableBackdropClick>
             <DialogContent className={classes.content}>
-                <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_choice')}>
+                <InfoField classes={{ field: classes.field }} title={t.plugin_snapshot_vote_choice()}>
                     <ShadowRootTooltip
                         PopperProps={{
                             disablePortal: true,
@@ -74,7 +74,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         </Typography>
                     </ShadowRootTooltip>
                 </InfoField>
-                <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_info_snapshot')}>
+                <InfoField classes={{ field: classes.field }} title={t.plugin_snapshot_info_snapshot()}>
                     <Link
                         className={classes.link}
                         target="_blank"
@@ -84,7 +84,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
-                <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_power')}>
+                <InfoField classes={{ field: classes.field }} title={t.plugin_snapshot_vote_power()}>
                     <Typography>
                         {formatCount(power, 2, true)} {powerSymbol.toUpperCase()}
                     </Typography>
@@ -99,7 +99,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                             disabled={loading}
                             onClick={onVoteConfirm}
                             loading={loading}>
-                            {t('plugin_snapshot_vote')}
+                            {t.plugin_snapshot_vote()}
                         </ActionButton>
                     </PluginWalletStatusBar>
                 </WalletConnectedBoundary>

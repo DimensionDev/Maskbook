@@ -1,60 +1,13 @@
 import { useMemo } from 'react'
-import { Trade as V2Trade } from '@uniswap/v2-sdk'
-import { Percent, Fraction, CurrencyAmount, type Currency } from '@uniswap/sdk-core'
+import { uniswap } from '@masknet/web3-providers/helpers'
 import type { Trade } from '../../types/index.js'
-
-const BASE_FEE = new Percent(30, 10000)
-const ONE_HUNDRED_PERCENT = new Percent(10000, 10000)
-const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
-
-// computes realized lp fee as a percent
-function computeRealizedLPFeePercent(trade: Trade): Percent {
-    if (trade instanceof V2Trade) {
-        // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
-        // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
-        const percent = ONE_HUNDRED_PERCENT.subtract(
-            trade.route.pairs.reduce<Percent>(
-                (currentFee: Percent): Percent => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
-                ONE_HUNDRED_PERCENT,
-            ),
-        )
-        return new Percent(percent.numerator, percent.denominator)
-    } else {
-        const percent = ONE_HUNDRED_PERCENT.subtract(
-            trade.route.pools.reduce<Percent>(
-                (currentFee: Percent, pool): Percent =>
-                    currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(new Fraction(pool.fee, 1000000))),
-                ONE_HUNDRED_PERCENT,
-            ),
-        )
-        return new Percent(percent.numerator, percent.denominator)
-    }
-}
-
-// computes price breakdown for the trade
-function computeRealizedLPFeeAmount(trade?: Trade | null): CurrencyAmount<Currency> | undefined {
-    try {
-        if (trade) {
-            const realizedLPFee = computeRealizedLPFeePercent(trade)
-
-            // the amount of the input that accrues to LPs
-            return CurrencyAmount.fromRawAmount(
-                trade.inputAmount.currency,
-                trade.inputAmount.multiply(realizedLPFee).quotient,
-            )
-        }
-        return undefined
-    } catch {
-        return undefined
-    }
-}
 
 export function useTradeBreakdown(trade: Trade | null) {
     return useMemo(() => {
         try {
             if (!trade) return null
-            const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
-            const realizedLPFeeAmount = computeRealizedLPFeeAmount(trade)
+            const realizedLPFeePercent = uniswap.computeRealizedLPFeePercent(trade)
+            const realizedLPFeeAmount = uniswap.computeRealizedLPFeeAmount(trade)
             return {
                 realizedLPFeePercent,
                 realizedLPFeeAmount,

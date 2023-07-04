@@ -1,5 +1,4 @@
 import { AvatarType, NFTAvatarMiniClip, NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
-import { MaskMessages } from '@masknet/shared-base'
 
 interface MiniAvatarBorderProps {
     avatarType: AvatarType
@@ -14,7 +13,6 @@ export function MiniAvatarBorder(props: MiniAvatarBorderProps) {
 
     return (
         <NFTBadgeTimeline
-            timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
             userId={screenName}
             avatarId={avatarId || ''}
             width={size - 4}

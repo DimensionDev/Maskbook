@@ -1,40 +1,32 @@
 import { forwardRef, useState } from 'react'
-import type {
-    EnhanceableSite,
-    ExtensionSite,
-    NetworkPluginID,
-    SingletonModalRefCreator,
-    ValueRefWithReady,
-} from '@masknet/shared-base'
+import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ConnectWallet } from './ConnectWallet.js'
 
 export interface ConnectWalletModalOpenProps {
-    pluginIDSettings?: ValueRefWithReady<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
-    pluginID?: NetworkPluginID
-    networkType?: Web3Helper.NetworkTypeAll
-    providerType?: Web3Helper.ProviderTypeAll
-    walletConnectedCallback?: () => void
+    pluginID: NetworkPluginID
+    networkType: Web3Helper.NetworkTypeAll
+    providerType: Web3Helper.ProviderTypeAll
 }
+
+export type ConnectWalletModalCloseProps = boolean
 
 export interface ConnectWalletModalProps {}
 
 export const ConnectWalletModal = forwardRef<
-    SingletonModalRefCreator<ConnectWalletModalOpenProps>,
+    SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>,
     ConnectWalletModalProps
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
-    const [walletConnectedCallback, setWalletConnectedCallback] = useState<() => void>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setPluginID(props?.pluginID)
-            setProviderType(props?.providerType)
-            setNetworkType(props?.networkType)
-            setWalletConnectedCallback(() => props?.walletConnectedCallback)
+            setPluginID(props.pluginID ?? NetworkPluginID.PLUGIN_EVM)
+            setProviderType(props.providerType)
+            setNetworkType(props.networkType)
         },
     })
 
@@ -45,8 +37,8 @@ export const ConnectWalletModal = forwardRef<
             pluginID={pluginID}
             providerType={providerType}
             networkType={networkType}
-            walletConnectedCallback={walletConnectedCallback}
-            onClose={() => dispatch?.close()}
+            onConnect={() => dispatch?.close(true)}
+            onClose={() => dispatch?.close(false)}
         />
     )
 })

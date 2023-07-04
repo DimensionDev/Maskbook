@@ -1,3 +1,6 @@
+import urlcat from 'urlcat'
+import { leftShift } from '@masknet/web3-shared-base'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type {
     SwapRouteData,
     SwapRouteErrorResponse,
@@ -6,9 +9,6 @@ import type {
     SwapRouteSuccessResponse,
 } from '../../types/dodo.js'
 import { DODO_BASE_URL } from '../../constants/dodo.js'
-import urlcat from 'urlcat'
-import { leftShift } from '@masknet/web3-shared-base'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export async function swapRoute(request: SwapRouteRequest) {
     const payload = await fetchJSON<SwapRouteResponse>(

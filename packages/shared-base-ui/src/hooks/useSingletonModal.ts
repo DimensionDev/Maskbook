@@ -42,7 +42,7 @@ export function useSingletonModal<OpenProps, CloseProps>(
         return dispatchRef.current
     }, [])
 
-    useImperativeHandle(ref, () => creator, [])
+    useImperativeHandle(ref, () => creator, [creator])
 
     return [open, dispatchRef.current] as const
 }

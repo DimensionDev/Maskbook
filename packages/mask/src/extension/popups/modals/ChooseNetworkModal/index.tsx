@@ -65,7 +65,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
         liRef.current?.scrollIntoView()
     }, [selected, liRef.current])
 
-    const { value: balance, loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: balance, isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: token, isLoading: loadingToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const loading = loadingBalance || loadingToken
 

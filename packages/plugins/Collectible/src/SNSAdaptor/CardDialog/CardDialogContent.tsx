@@ -84,7 +84,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { ownPersonaChanged, currentPersonaIdentifier, openDashboard, ownProofChanged } = useSNSAdaptorContext()
+    const { currentPersonaIdentifier, openDashboard } = useSNSAdaptorContext()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {
@@ -138,8 +138,6 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             identity={lastRecognized}
                             currentPersonaIdentifier={currentIdentifier}
                             openDashboard={openDashboard}
-                            ownPersonaChanged={ownPersonaChanged}
-                            ownProofChanged={ownProofChanged}
                             handlerPosition="top-right"
                             customHint
                             directTo={PluginID.Avatar}

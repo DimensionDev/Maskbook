@@ -29,7 +29,7 @@ export function PersonaPage() {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
-    const { getPersonaAvatar, ownProofChanged, currentPersona: currentPersona_ } = useSNSAdaptorContext()
+    const { getPersonaAvatar, currentPersona: currentPersona_ } = useSNSAdaptorContext()
     const myPersonas = useAllPersonas()
     const _persona = useSubscription(currentPersona_)
     const currentPersona = myPersonas?.find(
@@ -39,7 +39,6 @@ export function PersonaPage() {
     const { value: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
         _persona?.publicKeyAsHex ?? '',
         NextIDPlatform.NextID,
-        ownProofChanged,
         true,
     )
 

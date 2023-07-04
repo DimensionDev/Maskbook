@@ -140,7 +140,7 @@ export function SwapDialog(props: SwapDialogProps) {
     // #endregion
 
     // #region balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+    const { data: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
     )
