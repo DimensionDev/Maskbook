@@ -14,9 +14,10 @@ import { SignUpRoutePath } from '../../pages/SignUp/routePath.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
 
-type FormInputs = {
-    privateKey: string
-}
+const schema = z.object({
+    privateKey: z.string(),
+})
+type FormInputs = z.infer<typeof schema>
 
 export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey() {
     const navigate = useNavigate()
@@ -24,9 +25,6 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey() {
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
-    const schema = z.object({
-        privateKey: z.string(),
-    })
     const {
         control,
         handleSubmit,

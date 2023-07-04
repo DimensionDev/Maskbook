@@ -4,10 +4,10 @@ import { makeStyles } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { useCallback } from 'react'
-import { useI18N } from '../../../../utils/index.js'
 import { LDO_PAIRS } from '../../constants.js'
 import { TabType, type SavingsProtocol } from '../../types.js'
 import { SavingsRow } from './SavingsRow.js'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -63,7 +63,7 @@ export interface SavingsTableProps {
 }
 
 export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProtocols }: SavingsTableProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
 
@@ -85,25 +85,25 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
                 <Grid item xs={4} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_asset')}</Typography>
+                    <Typography variant="body1">{t.plugin_savings_asset()}</Typography>
                 </Grid>
                 {isDeposit ? (
                     <Grid item xs={2} className={classes.tableCell}>
-                        <Typography variant="body1"> {t('plugin_savings_apr')}</Typography>
+                        <Typography variant="body1"> {t.plugin_savings_apr()}</Typography>
                     </Grid>
                 ) : null}
                 <Grid item xs={isDeposit ? 3 : 5} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
+                    <Typography variant="body1">{t.plugin_savings_wallet()}</Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_operation')}</Typography>
+                    <Typography variant="body1">{t.plugin_savings_operation()}</Typography>
                 </Grid>
             </Grid>
 
             {loadingProtocols ? (
                 <div className={classes.placeholder}>
                     <Icons.CircleLoading size={36} className={classes.animated} />
-                    <Typography className={classes.loading}>{t('popups_loading')}</Typography>
+                    <Typography className={classes.loading}>{t.popups_loading()}</Typography>
                 </div>
             ) : protocols.length ? (
                 <div className={classes.tableContainer}>
@@ -121,7 +121,7 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
                 <div className={classes.placeholder}>
                     <Icons.EmptySimple size={36} className={classes.empty} />
                     <Typography fontSize="14px" mt={1.5} color={theme.palette.maskColor.second}>
-                        {t('plugin_savings_no_protocol')}
+                        {t.plugin_savings_no_protocol()}
                     </Typography>
                 </div>
             )}
