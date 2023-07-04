@@ -1,0 +1,32 @@
+{
+  "name": "@masknet/plugin-snapshot",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@json2csv/plainjs": "^6.1.3",
+    "@masknet/icons": "workspace:^",
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/shared-base-ui": "workspace:^",
+    "@masknet/theme": "workspace:^",
+    "@masknet/typed-message": "workspace:^",
+    "@masknet/web3-hooks-base": "workspace:^",
+    "@masknet/web3-providers": "workspace:^",
+    "@masknet/web3-shared-base": "workspace:^",
+    "@masknet/web3-shared-evm": "workspace:^",
+    "@react-hookz/web": "^23.0.0",
+    "@types/color": "^3.0.3",
+    "color": "^4.2.3",
+    "date-fns": "^2.30.0",
+    "react-use": "^17.4.0",
+    "ts-results": "^3.3.0",
+    "urlcat": "^3.1.0"
+  }
+}
