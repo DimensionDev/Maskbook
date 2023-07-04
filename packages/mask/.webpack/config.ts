@@ -201,7 +201,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 'process.env.VERSION': `(typeof browser === 'object' && browser.runtime ? browser.runtime.getManifest().version : ${JSON.stringify(
                     VERSION,
                 )})`,
-                'process.env.APP': 'false',
                 'process.browser': 'true',
                 'process.version': JSON.stringify('v19.0.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout

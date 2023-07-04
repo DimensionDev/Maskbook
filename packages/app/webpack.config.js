@@ -100,7 +100,6 @@ function Configuration(env, argv) {
                 'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.env.VERSION': JSON.stringify('v19.0.0'),
-                'process.env.APP': 'true',
                 'process.env.channel': JSON.stringify('stable'),
                 'process.version': JSON.stringify('v19.0.0'),
                 'process.browser': 'true',
