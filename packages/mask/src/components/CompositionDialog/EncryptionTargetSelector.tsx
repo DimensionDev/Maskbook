@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { unreachable } from '@masknet/kit'
 import { ConnectPersonaBoundary } from '@masknet/shared'
-import { EncryptionTargetType, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
+import { EncryptionTargetType, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
 import { PopoverListItem } from './PopoverListItem.js'
@@ -75,8 +75,6 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     identity={lastRecognized}
                     currentPersonaIdentifier={currentIdentifier}
                     openDashboard={Services.Helper.openDashboard}
-                    ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
-                    ownProofChanged={MaskMessages.events.ownProofChanged}
                     customHint
                     handlerPosition="top-right"
                     enableVerify={false}

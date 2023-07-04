@@ -1,10 +1,4 @@
-import {
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    MaskMessages,
-    NextIDPlatform,
-    type ProfileInformation as Profile,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
@@ -54,7 +48,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
         _value,
         type ?? NextIDPlatform.NextID,
-        MaskMessages.events.ownProofChanged,
         false,
     )
 

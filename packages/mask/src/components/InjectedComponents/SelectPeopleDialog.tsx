@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, alpha } from '@mui/material'
 import { InjectedDialog, usePersonasFromNextID } from '@masknet/shared'
-import { EMPTY_LIST, MaskMessages, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { resolveNextIDPlatform, resolveValueToSearch } from '../shared/SelectRecipients/SelectRecipients.js'
@@ -91,7 +91,6 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
         value,
         type ?? NextIDPlatform.NextID,
-        MaskMessages.events.ownProofChanged,
         false,
     )
 

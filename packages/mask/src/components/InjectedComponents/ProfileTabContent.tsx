@@ -152,13 +152,7 @@ function Content(props: ProfileTabContentProps) {
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
-    } = useCurrentPersonaConnectStatus(
-        allPersonas,
-        currentIdentifier,
-        Services.Helper.openDashboard,
-        lastRecognized,
-        MaskMessages,
-    )
+    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, Services.Helper.openDashboard, lastRecognized)
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
@@ -482,8 +476,6 @@ function Content(props: ProfileTabContentProps) {
                                     identity={lastRecognized}
                                     currentPersonaIdentifier={currentIdentifier}
                                     openDashboard={Services.Helper.openDashboard}
-                                    ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
-                                    ownProofChanged={MaskMessages.events.ownProofChanged}
                                     customHint
                                     handlerPosition="top-right"
                                     directTo={PluginID.Web3Profile}>

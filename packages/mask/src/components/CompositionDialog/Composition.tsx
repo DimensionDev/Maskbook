@@ -56,7 +56,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         currentIdentifier,
         Services.Helper.openDashboard,
         lastRecognized,
-        MaskMessages,
     )
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(

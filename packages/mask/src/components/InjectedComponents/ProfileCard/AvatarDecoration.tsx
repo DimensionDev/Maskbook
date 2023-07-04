@@ -1,7 +1,6 @@
 import { Twitter } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import { RSS3_KEY_SNS, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
-import { MaskMessages } from '@masknet/shared-base'
 
 interface Props {
     className?: string
@@ -23,7 +22,6 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
         <NFTAvatarMiniClip className={className} id={clipPathId} size={size} screenName={userId} />
     ) : (
         <NFTBadgeTimeline
-            timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
             classes={{ root: className }}
             userId={userId}
             avatarId={avatarId}

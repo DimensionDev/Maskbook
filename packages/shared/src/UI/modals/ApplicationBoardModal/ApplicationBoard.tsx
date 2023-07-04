@@ -17,7 +17,6 @@ import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import {
     currentPersonaIdentifier,
     type DashboardRoutes,
-    MaskMessages,
     type NetworkPluginID,
     type PersonaInformation,
 } from '@masknet/shared-base'
@@ -307,7 +306,6 @@ function ApplicationEntryStatusProvider({
         currentIdentifier,
         openDashboard,
         lastRecognized,
-        MaskMessages,
     )
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =

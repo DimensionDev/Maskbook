@@ -1,11 +1,10 @@
 import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { DialogActions, DialogContent } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform, PopupRoutes, type MaskEvents, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, PopupRoutes, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
@@ -48,7 +47,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const { chainId } = useChainContext()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
-    const { getPersonaAvatar, openPopupWindow, ownProofChanged } = useSNSAdaptorContext()
+    const { getPersonaAvatar, openPopupWindow } = useSNSAdaptorContext()
 
     const [tipsVisible, setTipsVisible] = useState(true)
     const dismissTips = useCallback(() => setTipsVisible(false), [])
@@ -60,13 +59,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         return allPersona.flatMap((x) => x.linkedProfiles).filter((x) => x.identifier.network === 'twitter.com')
     }, [])
 
-    const {
-        data: proofs,
-        isLoading: loadingBinding,
-        isFetched,
-    } = usePersonaProofs(personaPublicKey, {
-        events: { ownProofChanged },
-    } as WebExtensionMessage<MaskEvents>)
+    const { data: proofs, isLoading: loadingBinding, isFetched } = usePersonaProofs(personaPublicKey)
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST
         return uniqBy(
