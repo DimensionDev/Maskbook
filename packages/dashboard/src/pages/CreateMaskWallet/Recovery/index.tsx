@@ -159,7 +159,10 @@ const Recovery = memo(function Recovery() {
                                 />
                             </TabPanel>
                             <TabPanel value={tabs.privateKey} classes={tabPanelClasses}>
-                                <RestoreFromPrivateKey handleRestoreFromPrivateKey={handleRestoreFromPrivateKey} />
+                                <RestoreFromPrivateKey
+                                    handleRestoreFromPrivateKey={handleRestoreFromPrivateKey}
+                                    multiline
+                                />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
                                 <RestoreFromLocal handleRestoreFromLocalStore={async () => undefined} />

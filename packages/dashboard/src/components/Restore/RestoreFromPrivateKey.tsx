@@ -17,10 +17,12 @@ export type FormInputs = z.infer<typeof schema>
 
 interface RestoreFromPrivateKeyProps {
     handleRestoreFromPrivateKey?: (data: FormInputs, onError: UseFormSetError<FormInputs>) => Promise<void>
+    multiline?: boolean
 }
 
 export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
     handleRestoreFromPrivateKey,
+    multiline,
 }: RestoreFromPrivateKeyProps) {
     const navigate = useNavigate()
     const t = useDashboardI18N()
@@ -65,6 +67,8 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                 render={({ field }) => (
                     <MaskTextField
                         {...field}
+                        multiline={multiline}
+                        rows={multiline ? 6 : undefined}
                         sx={{ width: '100%' }}
                         type="password"
                         helperText={errors.privateKey?.message}
