@@ -6,7 +6,6 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
-import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 
 export const useStyles = makeStyles()((theme) => {
@@ -46,7 +45,6 @@ export function OperationFooter({
     onClaimOrRefund,
 }: OperationFooterProps) {
     const { classes } = useStyles()
-    const { t: tr } = useBaseI18n()
     const t = useI18N()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
@@ -57,14 +55,14 @@ export function OperationFooter({
         if (!account) {
             return (
                 <ActionButton fullWidth onClick={() => SelectProviderModal.open()} variant="roundedDark">
-                    {tr('plugin_wallet_connect_a_wallet')}
+                    {t.plugin_wallet_connect_a_wallet()}
                 </ActionButton>
             )
         }
         if (!currentChainId) {
             return (
                 <ActionButton disabled fullWidth variant="roundedDark">
-                    {tr('plugin_wallet_invalid_network')}
+                    {t.plugin_wallet_invalid_network()}
                 </ActionButton>
             )
         }
@@ -99,7 +97,7 @@ export function OperationFooter({
                         variant="roundedDark"
                         startIcon={<Icons.Shared size={18} />}
                         onClick={onShare}>
-                        {tr('share')}
+                        {t.share()}
                     </ActionButton>
                 )}
 

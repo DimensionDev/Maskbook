@@ -33,7 +33,6 @@ function MainUI() {
                         <SortDropdown />
                     </header>
 
-                    {/* <DevelopmentList /> */}
                     <div className="bg-white p-5">
                         <div className="border pt-3 rounded-lg">
                             <DecryptUI />

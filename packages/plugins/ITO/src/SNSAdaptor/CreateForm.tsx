@@ -10,6 +10,7 @@ import {
     WalletConnectedBoundary,
     DateTimePanel,
     EthereumERC20TokenApprovedBoundary,
+    useCurrentLinkedPersona,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
@@ -26,7 +27,6 @@ import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-ba
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../locales/index.js'
 import { sliceTextByUILength } from './utils/sliceTextByUILength.js'
-import { useCurrentLinkedPersona } from './hooks/useCurrentLinkedPersona.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

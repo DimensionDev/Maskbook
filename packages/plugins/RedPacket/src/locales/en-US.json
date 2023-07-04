@@ -112,5 +112,14 @@
     "share": "Share",
     "ok": "OK",
     "got_nft": "You got 1 {{name}}",
-    "history": "History"
+    "history": "History",
+    "twitter_account": "realMaskNetwork",
+    "facebook_account": "masknetwork",
+    "loading": "Loading",
+    "plugin_wallet_connect_a_wallet": "Connect Wallet",
+    "plugin_wallet_invalid_network": "Invalid Network",
+    "select_all": "Select All",
+    "retry": "Retry",
+    "go_wrong": "Something went wrong.",
+    "no_enough_gas_fees": "No Enough Gas Fees"
 }

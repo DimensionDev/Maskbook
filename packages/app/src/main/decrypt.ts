@@ -11,6 +11,7 @@ import type { TypedMessage } from '@masknet/typed-message'
 import { decodeArrayBuffer } from '@masknet/kit'
 
 const cache = new Map<string, AESCryptoKey>()
+
 export async function parsePayloadText(encoded: string): Promise<PayloadParseResult.Payload | null> {
     let payload = TwitterDecoder(
         'https://mask.io/?PostData_v1=' +
