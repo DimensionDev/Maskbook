@@ -7,7 +7,9 @@ import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
-import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
+import { WalletActions } from './WalletActions.js'
+import { CopyIconButton } from '../../../../components/index.js'
+import { WalletAssetsValue } from './WalletAssetsValue.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -15,6 +17,8 @@ const useStyles = makeStyles()((theme) => ({
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
         padding: '11px 16px',
         lineHeight: 0,
+    },
+    topbar: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -57,10 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         transition: 'all 300ms',
         color: theme.palette.maskColor.secondaryDark,
     },
-    colorChainICon: {
-        borderRadius: '999px!important',
-        margin: '0 !important',
-    },
     networkSelector: {
         display: 'flex',
         alignItems: 'center',
@@ -92,6 +92,16 @@ const useStyles = makeStyles()((theme) => ({
     unconnectedDot: {
         backgroundColor: theme.palette.maskColor.third,
     },
+    balance: {
+        fontSize: 36,
+        color: theme.palette.maskColor.main,
+        height: 54,
+        paddingTop: theme.spacing(1.5),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: theme.spacing(2),
+    },
 }))
 interface WalletHeaderUIProps {
     currentNetwork: NetworkDescriptor<ChainId, NetworkType>
@@ -99,42 +109,36 @@ interface WalletHeaderUIProps {
     onOpenNetworkSelector: (event: MouseEvent<HTMLDivElement>) => void
     onActionClick: () => void
     wallet: Wallet
-    isSwitchWallet: boolean
     disabled?: boolean
     connected?: boolean
     hiddenConnected?: boolean
 }
 
-export const WalletHeaderUI = memo<WalletHeaderUIProps>(
-    ({
-        currentNetwork,
-        chainId,
-        onOpenNetworkSelector,
-        onActionClick,
-        wallet,
-        isSwitchWallet,
-        disabled,
-        connected,
-        hiddenConnected,
-    }) => {
-        const { t } = useI18N()
-        const { classes, cx } = useStyles()
+export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI({
+    currentNetwork,
+    chainId,
+    onOpenNetworkSelector,
+    onActionClick,
+    wallet,
+    disabled,
+    connected,
+    hiddenConnected,
+}) {
+    const { t } = useI18N()
+    const { classes, cx } = useStyles()
 
-        return (
-            <Box className={classes.container}>
+    return (
+        <Box className={classes.container}>
+            <div className={classes.topbar}>
                 <div
                     className={classes.networkSelector}
                     onClick={(event) => {
                         if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon mainIcon={currentNetwork.icon} size={30} />
+                        <WalletIcon size={30} mainIcon={currentNetwork.icon} />
                     ) : (
-                        <ChainIcon
-                            color={currentNetwork.iconColor}
-                            size={30}
-                            classes={{ point: classes.colorChainICon }}
-                        />
+                        <ChainIcon size={30} name={currentNetwork.name} />
                     )}
 
                     <div style={{ marginLeft: 4 }}>
@@ -185,14 +189,11 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             </Link>
                         </Typography>
                     </div>
-                    {!disabled ? (
-                        <Icons.ArrowDrop
-                            className={classes.arrow}
-                            style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
-                        />
-                    ) : null}
+                    {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
                 </div>
-            </Box>
-        )
-    },
-)
+            </div>
+            <WalletAssetsValue className={classes.balance} skeletonWidth={200} skeletonHeight="2em" />
+            <WalletActions mt={2} />
+        </Box>
+    )
+})

@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const AddToken = memo(() => {
+const AddToken = memo(function AddToken() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()

@@ -10,9 +10,10 @@ import { useDashboardI18N } from '../../locales/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
 
-export type FormInputs = {
-    privateKey: string
-}
+const schema = z.object({
+    privateKey: z.string(),
+})
+export type FormInputs = z.infer<typeof schema>
 
 interface RestoreFromPrivateKeyProps {
     handleRestoreFromPrivateKey?: (data: FormInputs, onError: UseFormSetError<FormInputs>) => Promise<void>
@@ -25,9 +26,6 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
     const t = useDashboardI18N()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
-    const schema = z.object({
-        privateKey: z.string(),
-    })
     const {
         control,
         handleSubmit,
