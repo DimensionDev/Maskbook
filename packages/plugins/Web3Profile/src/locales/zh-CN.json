@@ -81,6 +81,12 @@
     "wallet_setting_hint": "点击开关按钮来显示或隐藏钱包。",
     "no_authenticated_wallet": "尚未得到认证。",
     "no_items_found": "找不到任何项。",
+    "no_verified_account": "在此找不到已验证的帐户。",
     "account_empty": "请验证此身份以设置您的 Web3 名片。",
-    "load_more": "加载更多"
+    "load_more": "加载更多",
+    "setup_tips": "设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏地址。",
+    "save_successfully": "保存成功",
+    "save_successfully_message": "成功设置 Web3 个人资料钱包。",
+    "save_failed": "保存失败",
+    "save_failed_message": "无法设置 Web3 个人资料钱包。请重试。"
 }
