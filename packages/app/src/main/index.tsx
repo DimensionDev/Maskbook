@@ -1,16 +1,24 @@
-import { lazy, Suspense } from 'react'
+import { Suspense, lazy, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Typography } from '@mui/material'
 import { DecryptError, DecryptErrorReasons } from '@masknet/encryption'
 import type { TypedMessage } from '@masknet/typed-message'
 import { decrypt, parsePayloadBinary, parsePayloadText } from './decrypt.js'
-import { text } from './mockData.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
 const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptUI() {
-    const [error, isE2E, message] = useDecrypt(text)
+    const postData = usePostData()
+    if (!postData) return <Typography>No payload found.</Typography>
+
+    const [text, version] = postData
+    return <UI text={text} version={version} />
+}
+
+function UI(props: { text: string; version: string }) {
+    const { text, version } = props
+    const [error, isE2E, message] = useDecrypt(text, version)
 
     if (isE2E) return <Typography>This message is a e2e encrypted message. We can not decrypt it here.</Typography>
     if (error) return <Typography>We encountered an error when try to decrypt this message: {error.message}</Typography>
@@ -21,6 +29,15 @@ export function DecryptUI() {
             <PageInspectorRender />
         </Suspense>
     )
+}
+
+function usePostData() {
+    return useMemo(() => {
+        const params = new URLSearchParams(location.search)
+        if (params.has('PostData_v2')) return [params.get('PostData_v2')!, '2'] as const
+        if (params.has('PostData_v1')) return [params.get('PostData_v1')!, '1'] as const
+        return
+    }, [])
 }
 
 function useDecrypt(text: string, version = '2') {
