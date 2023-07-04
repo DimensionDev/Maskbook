@@ -4,3 +4,5 @@ import type { ConnectSocialAccountModalOpenProps } from './ConnectSocialAccountM
 
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps>()
 export const ConnectSocialAccountModal = new SingletonModal<ConnectSocialAccountModalOpenProps>()
+
+export * from './ChooseNetworkModal/index.js'

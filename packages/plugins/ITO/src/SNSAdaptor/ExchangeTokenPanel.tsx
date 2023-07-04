@@ -92,7 +92,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     // #endregion
 
     // #region balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
+    const { data: tokenBalance = '0', isLoading: loadingTokenBalance } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         exchangeToken?.address ?? '',
     )

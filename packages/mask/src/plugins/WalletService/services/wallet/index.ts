@@ -34,6 +34,8 @@ export {
     clearPassword,
 } from './password.js'
 
+export * from './network.js'
+
 // locker
 export { isLocked, lockWallet, unlockWallet } from './locker.js'
 

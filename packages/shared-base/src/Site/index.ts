@@ -4,6 +4,8 @@ import { ExtensionSite, EnhanceableSite } from './types.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
+    [EnhanceableSite.App]:
+        process.env.NODE_ENV === 'production' ? /^(app\.mask\.io|app-stage\.mask\.io)$/i : /localhost/,
     [EnhanceableSite.Facebook]: /facebook\.com/i,
     [EnhanceableSite.Twitter]: /twitter\.com/i,
     [EnhanceableSite.Minds]: /minds\.com/i,
@@ -73,6 +75,10 @@ export function isExtensionSiteType() {
 }
 
 export function isEthereumInjected() {
+    return typeof Reflect.get(window, 'ethereum') !== 'undefined'
+}
+
+export function isInPageEthereumInjected() {
     return !isExtensionSiteType() && !Sniffings.is_firefox
 }
 

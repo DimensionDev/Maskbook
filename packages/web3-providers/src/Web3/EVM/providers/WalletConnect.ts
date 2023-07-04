@@ -114,7 +114,7 @@ export default class WalletConnectProvider
 
     private onDisconnect(error: Error | null, payload: DisconnectPayload) {
         if (this.connection) {
-            this.connection.reject(error || new Error('User rejected connection.'))
+            this.connection.reject(error || new Error('User rejected'))
             return
         }
 
@@ -136,8 +136,7 @@ export default class WalletConnectProvider
     }
 
     private onModalClose(error: Error | null, payload: ModalClosePayload) {
-        if (!this.connection) return
-        this.connection.reject(error || new Error('User rejected'))
+        this.connection?.reject(error || new Error('User rejected'))
     }
 
     private async login(expectedChainId?: ChainId) {

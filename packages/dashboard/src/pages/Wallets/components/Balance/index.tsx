@@ -92,13 +92,13 @@ export const Balance = memo<BalanceCardProps>(
         const { fungibleAssets } = useContainer(Context)
 
         const balance = useMemo(() => {
-            if (!fungibleAssets.value?.length) return 0
+            if (!fungibleAssets.data?.length) return 0
 
-            const values = fungibleAssets.value
+            const values = fungibleAssets.data
                 .filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
                 .map((y) => getTokenUSDValue(y.value))
             return BigNumber.sum(...values).toNumber()
-        }, [selectedNetwork, fungibleAssets.value])
+        }, [selectedNetwork, fungibleAssets.data])
 
         const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath || networks.length <= 1
 

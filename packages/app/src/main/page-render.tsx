@@ -1,13 +1,8 @@
 import '../plugin-host/enable.js'
 
-import { PageUIProvider } from '@masknet/shared'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
-import { ShadowRootIsolation, MaskLightTheme } from '@masknet/theme'
-
-function useTheme() {
-    return MaskLightTheme
-}
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 
 const GlobalInjection = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
@@ -17,5 +12,11 @@ const GlobalInjection = createInjectHooksRenderer(
 export interface PageInspectorProps {}
 
 export default function PageInspectorRender(props: PageInspectorProps) {
-    return <ShadowRootIsolation>{PageUIProvider(useTheme, <GlobalInjection />)}</ShadowRootIsolation>
+    return (
+        <DisableShadowRootContext.Provider value={false}>
+            <ShadowRootIsolation>
+                <GlobalInjection />
+            </ShadowRootIsolation>
+        </DisableShadowRootContext.Provider>
+    )
 }

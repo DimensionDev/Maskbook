@@ -1,5 +1,8 @@
+import urlcat from 'urlcat'
 import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-es'
+import type { NetworkType } from '@masknet/web3-shared-evm'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { BIPS_BASE, ZRX_BASE_URL } from '../../constants/index.js'
 import type {
     SwapErrorResponse,
@@ -8,9 +11,6 @@ import type {
     SwapServerErrorResponse,
     SwapValidationErrorResponse,
 } from '../../types/index.js'
-import type { NetworkType } from '@masknet/web3-shared-evm'
-import urlcat from 'urlcat'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
     const params: Record<string, string | number> = {}

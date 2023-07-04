@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
-import { isEthereumInjected } from '@masknet/shared-base'
+import { isInPageEthereumInjected } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script'
 import {
     type ChainId,
@@ -26,7 +26,7 @@ export class BaseInjectedProvider
     }
 
     override get readyPromise() {
-        if (isEthereumInjected()) return this.bridge.untilAvailable().then(() => undefined)
+        if (isInPageEthereumInjected()) return this.bridge.untilAvailable().then(() => undefined)
         return Promise.reject(new Error('Not available on extension site.'))
     }
 

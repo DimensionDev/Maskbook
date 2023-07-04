@@ -755,11 +755,6 @@ export const ArrowRight = /*#__PURE__*/ __createIcon('ArrowRight', [
         s: true,
     },
 ])
-export const ArrowRightIos = /*#__PURE__*/ __createIcon('ArrowRightIos', [
-    {
-        u: () => new URL('./general/ArrowRightIos.svg', import.meta.url),
-    },
-])
 export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
     {
         u: () => new URL('./general/ArrowUp.svg', import.meta.url),
@@ -864,6 +859,20 @@ export const Buy = /*#__PURE__*/ __createIcon('Buy', [
 export const Cached = /*#__PURE__*/ __createIcon('Cached', [
     {
         u: () => new URL('./general/Cached.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 25 25',
+                children: /*#__PURE__*/ _jsx('path', {
+                    d: 'm19.617 8.902-4 4h3c0 3.31-2.69 6-6 6a5.87 5.87 0 0 1-2.8-.7l-1.46 1.46a7.93 7.93 0 0 0 4.26 1.24c4.42 0 8-3.58 8-8h3l-4-4Zm-13 4c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46a7.93 7.93 0 0 0-4.26-1.24c-4.42 0-8 3.58-8 8h-3l4 4 4-4h-3Z',
+                    style: {
+                        '--default-color': '#1C68F3',
+                        fill: 'var(--icon-color, var(--default-color, currentColor))',
+                    },
+                }),
+            }),
+        s: true,
     },
 ])
 export const Candle = /*#__PURE__*/ __createIcon('candle', [
@@ -1773,6 +1782,11 @@ export const LoadingBase = /*#__PURE__*/ __createIcon('LoadingBase', [
 export const LocalBackup = /*#__PURE__*/ __createIcon('LocalBackup', [
     {
         u: () => new URL('./general/LocalBackup.png', import.meta.url),
+    },
+])
+export const Lock = /*#__PURE__*/ __createIcon('Lock', [
+    {
+        u: () => new URL('./general/Lock.svg', import.meta.url),
     },
 ])
 export const Marketing = /*#__PURE__*/ __createIcon('Marketing', [

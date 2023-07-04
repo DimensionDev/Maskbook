@@ -82,10 +82,6 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
-    colorChainIcon: {
-        borderRadius: '999px!important',
-        margin: '0 !important',
-    },
 })
 
 const SelectWallet = memo(() => {
@@ -177,11 +173,7 @@ const SelectWallet = memo(() => {
                                 {currentNetwork.icon ? (
                                     <WalletIcon mainIcon={currentNetwork.icon} size={20} />
                                 ) : (
-                                    <ChainIcon
-                                        color={currentNetwork.iconColor}
-                                        size={20}
-                                        classes={{ point: classes.colorChainIcon }}
-                                    />
+                                    <ChainIcon color={currentNetwork.iconColor} size={20} name={currentNetwork.name} />
                                 )}
                             </div>
                             <Typography className={classes.title}>{currentNetwork.name}</Typography>
