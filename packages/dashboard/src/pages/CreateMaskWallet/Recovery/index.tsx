@@ -120,7 +120,6 @@ const Recovery = memo(function Recovery() {
     const handleRestoreFromLocalStore = useCallback(
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
-                console.log({ walletName, keyStoreContent, keyStorePassword })
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
                     walletName,
                     keyStoreContent,
