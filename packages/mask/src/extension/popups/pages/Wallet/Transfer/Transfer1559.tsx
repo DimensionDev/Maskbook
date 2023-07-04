@@ -410,7 +410,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         if (
             !wallet?.owner ||
             chainId !== smartPayChainId ||
-            !isSameAddress(selectedAsset?.address, maskTokenAddress) ||
+            !isSameAddress(selectedAsset.address, maskTokenAddress) ||
             !ratio
         )
             return selectedAsset
@@ -419,7 +419,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             ...selectedAsset,
             balance: toFixed(
                 minus(
-                    selectedAsset?.balance,
+                    selectedAsset.balance,
                     new BigNumber(formatGweiToWei(maxFeePerGas))
                         .multipliedBy(!isZero(gasLimit) ? addGasMargin(gasLimit) : '200000')
                         .integerValue()

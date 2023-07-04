@@ -81,9 +81,9 @@ export interface ConfirmRedPacketFormProps {
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
-    const { onBack, settings, onCreated, onClose, gasOption, onGasOptionChange } = props
+    const { settings, onCreated, onClose, gasOption, onGasOptionChange } = props
     const { classes, cx } = useStyles()
-    const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()

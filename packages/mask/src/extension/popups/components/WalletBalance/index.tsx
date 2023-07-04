@@ -17,11 +17,11 @@ export const WalletBalance = memo(function WalletBalance({
     account,
     ...props
 }: WalletBalanceProps) {
-    const { value: balance, loading } = useBalance(NetworkPluginID.PLUGIN_EVM, { account })
-    const { data: nativeToken, isLoading } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { data: balance, isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, { account })
+    const { data: nativeToken, isLoading: isLoadingToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
 
     if (!nativeToken) return null
-    if (loading || isLoading) {
+    if (loadingBalance || isLoadingToken) {
         return (
             <Typography {...props}>
                 <Skeleton

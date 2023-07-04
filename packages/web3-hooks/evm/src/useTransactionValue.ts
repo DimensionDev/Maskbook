@@ -3,9 +3,13 @@ import { useBalance, useChainContext, useFungibleTokenBalance } from '@masknet/w
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGasConfig } from './useGasConfig.js'
 
-export function useTransactionValue(originalValue?: BigNumber.Value, gas?: string, gasCurrency?: string) {
-    const { value: nativeTokenBalance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { value: gasCurrencyBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
+export function useTransactionValue(
+    originalValue?: BigNumber.Value,
+    gas?: string,
+    /** token address */ gasCurrency?: string,
+) {
+    const { data: nativeTokenBalance = '0', isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasCurrencyBalance = '0', isLoading: loadingTokenBalance } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         gasCurrency,
     )
