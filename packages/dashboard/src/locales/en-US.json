@@ -454,6 +454,7 @@
     "persona_onboarding_ready": "Your Persona is on ",
     "wallet_history_no_data": "No history records.",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
+    "welcome_new_agreement_policy": "By continuing to the app, you agree to these <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "wallets_history_burn": "Burn",
     "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 }

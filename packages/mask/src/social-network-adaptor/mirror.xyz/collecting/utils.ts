@@ -37,7 +37,7 @@ export function getMirrorPageType(url?: string) {
 
     const urlSplits = url.split('/').filter(Boolean)
 
-    if (MIRROR_ENTRY_ID.test((urlSplits[urlSplits.length - 1] ?? '').trim())) return MirrorPageType.Post
+    if (MIRROR_ENTRY_ID.test((urlSplits.at(-1) ?? '').trim())) return MirrorPageType.Post
 
     return MirrorPageType.Profile
 }

@@ -1,8 +1,10 @@
+import { memoize } from 'lodash-es'
 import { useMemo } from 'react'
 import type { ChainIdEnum, Constants, Primitive } from './types.js'
 
 function replaceAll(input: string, values: Record<string, string>) {
-    return input.replace(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
+    if (!input.includes('${')) return input
+    return input.replaceAll(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
 }
 
 export function transformAll<ChainId extends number, T extends Constants>(
@@ -13,7 +15,8 @@ export function transformAll<ChainId extends number, T extends Constants>(
     type Entries = Readonly<{
         [key in keyof T]?: T[key]['Mainnet']
     }>
-    return (chainId: ChainId = 1 as ChainId) => {
+    type MemoizedFn = (chainId?: ChainId) => Entries
+    return memoize((chainId: ChainId = 1 as ChainId) => {
         const chainName = chainIdEnum[chainId] as 'Mainnet'
         // unknown chain id
         if (!chainName) return {} as Entries
@@ -32,7 +35,7 @@ export function transformAll<ChainId extends number, T extends Constants>(
             return [name, value] as [string, Primitive | Primitive[]]
         })
         return Object.fromEntries(entries) as Entries
-    }
+    }) as MemoizedFn
 }
 
 export function transform<ChainId extends number, T extends Constants>(
@@ -43,12 +46,23 @@ export function transform<ChainId extends number, T extends Constants>(
     type Entries = {
         [key in keyof T]?: T[key]['Mainnet']
     }
-    const getAllConstants = transformAll(chainIdEnum, constants, environment)
-    return <K extends keyof Entries, F extends Entries[K], R = F extends undefined ? Entries[K] : Required<Entries>[K]>(
+    type MemoizeFn = <
+        K extends keyof Entries,
+        F extends Entries[K],
+        R = F extends undefined ? Entries[K] : Required<Entries>[K],
+    >(
         chainId: ChainId,
         key: K,
         fallback?: F,
-    ): R => (getAllConstants(chainId)[key] ?? fallback) as R
+    ) => R
+    const getAllConstants = transformAll(chainIdEnum, constants, environment)
+    return memoize(
+        <K extends keyof Entries, F extends Entries[K], R = F extends undefined ? Entries[K] : Required<Entries>[K]>(
+            chainId: ChainId,
+            key: K,
+            fallback?: F,
+        ) => (getAllConstants(chainId)[key] ?? fallback) as R,
+    ) as MemoizeFn
 }
 
 export function transformAllFromJSON<ChainId extends number, T extends Constants>(

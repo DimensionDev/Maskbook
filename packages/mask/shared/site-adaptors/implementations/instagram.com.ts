@@ -11,7 +11,7 @@ export const InstagramAdaptor: SiteAdaptor.Definition = {
     declarativePermissions: { origins },
     homepage: 'https://www.instagram.com/',
     isSocialNetwork: true,
-
+    sortIndex: 3,
     getProfilePage: () => new URL('https://www.instagram.com/'),
     getShareLinkURL: null,
 }

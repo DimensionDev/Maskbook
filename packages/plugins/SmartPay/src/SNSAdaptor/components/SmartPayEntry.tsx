@@ -21,10 +21,6 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     const personas = useAllPersonas()
     const { openDashboard } = useSNSAdaptorContext()
 
-    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
     const { setDialog: setSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     const { value, loading } = useQueryQualifications()

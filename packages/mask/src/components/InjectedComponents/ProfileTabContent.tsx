@@ -20,6 +20,7 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     SocialAccountList,
+    useCollectionByTwitterHandler,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -44,7 +45,6 @@ import {
     useSocialIdentity,
     useSocialIdentityByUserId,
 } from '../DataSource/useActivatedUI.js'
-import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'

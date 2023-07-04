@@ -52,6 +52,6 @@ export class AllConnectionAPI {
             Web3Helper.Definition[T]['Transaction']
         >,
     ) {
-        return (this.creators[pluginID] as ConnectionCreatorAPI_Base<T>).create(initial)
+        return (this.creators[pluginID] as unknown as ConnectionCreatorAPI_Base<T>).create(initial)
     }
 }

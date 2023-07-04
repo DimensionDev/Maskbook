@@ -3,7 +3,6 @@ import { useAsyncRetry } from 'react-use'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 import {
-    CrossIsolationMessages,
     DashboardRoutes,
     type MaskEvents,
     type PersonaInformation,
@@ -11,9 +10,8 @@ import {
     isSameProfile,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
-import { LeavePageConfirmModal } from '../UI/modals/index.js'
+import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
 import { useSharedI18N } from '../locales/index.js'
 import type { PersonaConnectStatus } from '../types.js'
 
@@ -35,10 +33,6 @@ export function useCurrentPersonaConnectStatus(
 ) {
     const t = useSharedI18N()
 
-    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-    )
-
     const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
         if (direct) {
             openDashboard?.(DashboardRoutes.Setup)
@@ -59,14 +53,13 @@ export function useCurrentPersonaConnectStatus(
 
     const openPersonListDialog = useCallback(
         (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
-            setPersonaSelectPanelDialog({
-                open: true,
+            PersonaSelectPanelModal.open({
                 target,
                 position,
                 enableVerify,
             })
         },
-        [setPersonaSelectPanelDialog],
+        [],
     )
 
     const {

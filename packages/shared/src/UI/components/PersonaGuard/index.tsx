@@ -1,12 +1,8 @@
-import { memo, type PropsWithChildren, useCallback, useLayoutEffect } from 'react'
-import {
-    CrossIsolationMessages,
-    type PersonaInformation,
-    type PersonaSelectPanelDialogEvent,
-} from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { memo, type PropsWithChildren, useLayoutEffect, useEffect } from 'react'
+import { type PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { useCurrentPersonaConnectStatus } from '../../../hooks/useCurrentPersonaConnectStatus.js'
+import { PersonaSelectPanelModal } from '../../modals/index.js'
 
 interface Props {
     personas: PersonaInformation[]
@@ -37,26 +33,24 @@ export const PersonaGuard = memo(function PersonaGuard({
     )
 
     const connectedAndVerified = status.connected && status.verified
-    const handleEvent = useCallback(
-        (event: PersonaSelectPanelDialogEvent) => {
-            if (!event.open && !connectedAndVerified) {
+
+    useEffect(() => {
+        const off = PersonaSelectPanelModal.emitter.on('close', () => {
+            if (!connectedAndVerified) {
                 onDiscard?.()
             }
-        },
-        [connectedAndVerified, onDiscard],
-    )
-    const { setDialog: setPersonaSelectPanelDialog, closeDialog } = useRemoteControlledDialog(
-        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
-        handleEvent,
-    )
+        })
+        return () => {
+            off()
+        }
+    }, [connectedAndVerified])
 
     useLayoutEffect(() => {
         if (connectedAndVerified || loading) {
-            closeDialog()
+            PersonaSelectPanelModal.close()
             return
         }
-        setPersonaSelectPanelDialog({
-            open: true,
+        PersonaSelectPanelModal.open({
             enableVerify: true,
             target: forwardTarget,
         })

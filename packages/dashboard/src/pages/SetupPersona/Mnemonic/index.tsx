@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         columnGap: 4,
         fontWeight: 700,
+        fontSize: 12,
     },
     buttonGroup: {
         display: 'flex',
@@ -67,6 +68,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.warn,
+    },
+    label: {
+        fontSize: 14,
     },
 }))
 
@@ -175,6 +179,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
             </Box>
 
             <FormControlLabel
+                classes={{ label: classes.label }}
                 control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
                 label={t.persona_phrase_create_check_tips()}
                 sx={{ marginTop: '12px', color: MaskColorVar.textSecondary }}

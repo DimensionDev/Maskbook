@@ -156,7 +156,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const [shares, setShares] = useState<number | ''>(origin?.shares || RED_PACKET_DEFAULT_SHARES)
     const onShareChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
-            const shares_ = ev.currentTarget.value.replace(/[,.]/g, '')
+            const shares_ = ev.currentTarget.value.replaceAll(/[,.]/g, '')
             if (shares_ === '') setShares('')
             else if (/^[1-9]+\d*$/.test(shares_)) {
                 const parsed = Number.parseInt(shares_, 10)

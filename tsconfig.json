@@ -134,6 +134,13 @@
       "@masknet/plugin-claim": ["./packages/plugins/Claim/src"],
       "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src"],
       "@masknet/plugin-pets": ["./packages/plugins/Pets/src"],
+      "@masknet/plugin-tips": ["./packages/plugins/Tips/src"],
+      "@masknet/plugin-external": ["./packages/plugins/External/src"],
+      "@masknet/plugin-game": ["./packages/plugins/Game/src"],
+      "@masknet/plugin-nextid": ["./packages/plugins/NextID/src"],
+      "@masknet/plugin-trader": ["./packages/plugins/Trader/src"],
+      "@masknet/plugin-ito": ["./packages/plugins/ITO/src"],
+      "@masknet/plugin-savings": ["./packages/plugins/Savings/src"],
 
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]

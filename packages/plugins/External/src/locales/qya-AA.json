@@ -1,0 +1,18 @@
+{
+    "plugin_external_unknown_plugin": "crwdns10143:0crwdne10143:0",
+    "plugin_external_loader_search_holder": "crwdns10145:0crwdne10145:0",
+    "plugin_external_loader_search_button": "crwdns10147:0crwdne10147:0",
+    "plugin_external_loader_search_sub_title": "crwdns10149:0crwdne10149:0",
+    "plugin_external_loader_alert": "crwdns10151:0crwdne10151:0",
+    "plugin_external_loader_example_github": "crwdns10153:0crwdne10153:0",
+    "plugin_external_loader_intro": "crwdns10155:0crwdne10155:0",
+    "plugin_external_loader_alert_title": "crwdns10157:0crwdne10157:0",
+    "plugin_external_plugin_url": "crwdns10159:0crwdne10159:0",
+    "plugin_external_unverified_publisher": "crwdns10161:0{{publisher}}crwdne10161:0",
+    "plugin_external_entry_title": "crwdns10163:0crwdne10163:0",
+    "plugin_external_name": "crwdns10165:0crwdne10165:0",
+    "load": "crwdns10089:0crwdne10089:0",
+    "load_all": "crwdns10093:0crwdne10093:0",
+    "reload": "crwdns18338:0crwdne18338:0",
+    "plugin_external_get_started": "crwdns10167:0crwdne10167:0"
+}

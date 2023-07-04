@@ -2,7 +2,13 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
-import { AddressItem, Image, TokenWithSocialGroupMenu, useSnackbarCallback } from '@masknet/shared'
+import {
+    AddressItem,
+    Image,
+    TokenWithSocialGroupMenu,
+    useCollectionByTwitterHandler,
+    useSnackbarCallback,
+} from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -13,10 +19,9 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
-import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
+import { PluginTraderMessages } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {

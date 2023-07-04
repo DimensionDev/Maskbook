@@ -1,9 +1,9 @@
 import { type IconButtonProps, Box } from '@mui/material'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
-import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { CollectionProjectAvatarBadge } from './CollectionProjectAvatarBadge.js'
 import { ProfileAvatarBadge } from './ProfileAvatarBadge.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useCollectionByTwitterHandler } from '@masknet/shared'
 
 interface Props extends IconButtonProps {
     userId: string

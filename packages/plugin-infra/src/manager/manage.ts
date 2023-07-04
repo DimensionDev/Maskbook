@@ -142,6 +142,7 @@ export function createManager<
         await timeout(
             Promise.resolve(definition.init(activatedPlugin.controller.signal, activatedPlugin.context)),
             1000,
+            `Plugin ${id} init() timed out.`,
         ).catch(console.error)
         events.emit('activateChanged', id, true)
     }

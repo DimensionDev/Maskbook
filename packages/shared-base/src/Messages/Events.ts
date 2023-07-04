@@ -5,13 +5,6 @@ import type { NetworkPluginID, PluginID } from '../Plugin/index.js'
 import type { PersonaInformation, RelationFavor } from '../Persona/types.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/types.js'
 
-export type PersonaSelectPanelDialogEvent = {
-    open: boolean
-    target?: string
-    position?: 'center' | 'top-right'
-    enableVerify: boolean
-}
-
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     telemetrySettings: boolean

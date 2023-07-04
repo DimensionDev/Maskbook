@@ -42,7 +42,7 @@ export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => 
                         <Spline scene={Welcome.toString()} onLoad={() => setLoading(false)} />
                     </>
                 ) : null}
-                {loading ? (
+                {loading && !hiddenSpline ? (
                     <Box position="absolute" top="calc(50% - 18px)" left="calc(50% - 18px)">
                         <LoadingBase size={36} />
                     </Box>

@@ -9,6 +9,8 @@ const GENERATED_PATH = join(__dirname, 'types')
 async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
     for (const [pattern, value] of pairs) {
+        // only replace once.
+        // eslint-disable-next-line unicorn/prefer-string-replace-all
         content = content.replace(new RegExp(pattern, 'img'), value)
     }
     await fs.writeFile(file, content, 'utf-8')
