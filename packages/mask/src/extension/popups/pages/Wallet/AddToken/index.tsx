@@ -65,7 +65,7 @@ const AddToken = memo(function AddToken() {
 
     const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
 
-    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
+    const { data: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
         chainId,
     })
 

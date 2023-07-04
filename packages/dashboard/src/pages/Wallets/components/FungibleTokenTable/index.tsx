@@ -89,7 +89,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
 
     const dataSource = useMemo(() => {
         const results =
-            fungibleAssets.value?.filter((x) => !selectedChainId || x.chainId === selectedChainId) ?? EMPTY_LIST
+            fungibleAssets.data?.filter((x) => !selectedChainId || x.chainId === selectedChainId) ?? EMPTY_LIST
 
         if (!selectedChainId) {
             return results.sort((a, z) => {
@@ -113,7 +113,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
         }
 
         return results
-    }, [nativeToken, fungibleAssets.value, selectedChainId])
+    }, [nativeToken, fungibleAssets.data, selectedChainId])
 
     const handleSwitch = useCallback(() => {
         setIsExpand((x) => !x)
@@ -142,16 +142,16 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
     return (
         <>
             <TokenTableUI
-                isLoading={fungibleAssets.loading}
-                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
+                isLoading={fungibleAssets.isLoading}
+                isEmpty={!fungibleAssets.isLoading && (!!fungibleAssets.error || !fungibleAssets.data?.length)}
                 isExpand={isExpand}
                 data={visibleData}
                 onSwap={onSwap}
                 onSend={onSend}
             />
             <MoreBarUI
-                isLoading={fungibleAssets.loading}
-                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
+                isLoading={fungibleAssets.isLoading}
+                isEmpty={!fungibleAssets.isLoading && (!!fungibleAssets.error || !fungibleAssets.data?.length)}
                 isExpand={isExpand}
                 hasLowValueToken={hasLowValueToken}
                 onSwitch={handleSwitch}
@@ -201,7 +201,7 @@ export interface TokenTableUIProps {
     onSend(token: Web3Helper.FungibleAssetAll): void
 }
 
-export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, data }) => {
+export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, data }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const { pluginID: currentPluginId } = useNetworkContext()
