@@ -123,38 +123,37 @@ const CreateWalletForm = memo(() => {
             <Typography className={cx(classes.title, classes.helveticaBold)}>{t.set_payment_password()}</Typography>
             <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
             <form className={classes.form} onSubmit={onSubmit}>
-                {!loading ? (
-                    <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
-                        <Controller
-                            control={control}
-                            render={({ field }) => (
-                                <PasswordField
-                                    {...field}
-                                    className={classes.input}
-                                    placeholder={t.create_wallet_payment_password_place_holder()}
-                                    error={!isValid && !!errors.password?.message}
-                                    helperText={!isValid ? errors.password?.message : ''}
-                                    InputProps={{ className: classes.textField }}
-                                />
-                            )}
-                            name="password"
-                        />
-                        <Controller
-                            render={({ field }) => (
-                                <PasswordField
-                                    {...field}
-                                    className={classes.input}
-                                    error={!isValid && !!errors.confirm?.message}
-                                    helperText={!isValid ? errors.confirm?.message : ''}
-                                    placeholder={t.create_wallet_re_enter_payment_password()}
-                                    InputProps={{ className: classes.textField }}
-                                />
-                            )}
-                            name="confirm"
-                            control={control}
-                        />
-                    </Box>
-                ) : null}
+                <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
+                    <Controller
+                        control={control}
+                        render={({ field }) => (
+                            <PasswordField
+                                {...field}
+                                className={classes.input}
+                                placeholder={t.create_wallet_payment_password_place_holder()}
+                                error={!isValid && !!errors.password?.message}
+                                helperText={!isValid ? errors.password?.message : ''}
+                                InputProps={{ className: classes.textField }}
+                            />
+                        )}
+                        name="password"
+                    />
+                    <Controller
+                        render={({ field }) => (
+                            <PasswordField
+                                {...field}
+                                className={classes.input}
+                                error={!isValid && !!errors.confirm?.message}
+                                helperText={!isValid ? errors.confirm?.message : ''}
+                                placeholder={t.create_wallet_re_enter_payment_password()}
+                                InputProps={{ className: classes.textField }}
+                            />
+                        )}
+                        name="confirm"
+                        control={control}
+                    />
+                </Box>
+
                 <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_2()}</Typography>
                 <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_3()}</Typography>
             </form>
