@@ -397,7 +397,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, o
         if (copyState.error?.message) {
             showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
         }
-    }, [t, copyState.value, copyState.error?.message])
+    }, [copyState.value, copyState.error?.message])
 
     return (
         <>
