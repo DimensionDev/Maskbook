@@ -1,28 +1,41 @@
 import * as Service from './service.js'
 import { AsyncCall, type CallbackBasedChannel } from 'async-call-rpc/full'
 import { serializer } from '@masknet/shared-base'
+import { pluginWorkerReadyPromise } from './ready.js'
 
-const livingPorts = new Set<MessagePort>()
-const messageHandlers = new Map<string, Set<(message: any, fromPort: MessagePort | null) => void>>()
+let mode: 'Worker' | 'SharedWorker'
+/** Only used in SharedWorker mode */
+const ports = new Set<MessagePort>()
+const messageHandlers = new Map<string, Set<TargetAwareHandler>>()
+
 const channel: CallbackBasedChannel = {
     setup(jsonRPCHandlerCallback) {
-        addListener('rpc', (message, port) => {
-            jsonRPCHandlerCallback(message).then((x) => x && port?.postMessage(x))
+        addListener('rpc', (message, _, response) => {
+            jsonRPCHandlerCallback(message).then((data) => response('rpc', data))
         })
     },
 }
 AsyncCall(Service, { channel, log: true, serializer })
-export type PortAwareHandler = (message: unknown, port: MessagePort | null) => void
-export function addListener(type: string, handler: PortAwareHandler) {
+
+export type TargetAwareHandler = (
+    message: unknown,
+    sender: MessagePort | null,
+    response: (type: string, value: unknown) => void,
+) => void
+export function addListener(type: string, handler: TargetAwareHandler) {
     if (!messageHandlers.has(type)) messageHandlers.set(type, new Set())
     const store = messageHandlers.get(type)!
     store.add(handler)
     return () => store.delete(handler)
 }
 
+addListener('request-ready', (_, __, response) => {
+    pluginWorkerReadyPromise.then(() => response('ready', undefined))
+})
+
 export function broadcastMessage(type: string, message: unknown) {
-    if (livingPorts.size) {
-        livingPorts.forEach((port) => port.postMessage([type, message]))
+    if (ports.size) {
+        ports.forEach((port) => port.postMessage([type, message]))
     } else {
         postMessage([type, message])
     }
@@ -30,21 +43,30 @@ export function broadcastMessage(type: string, message: unknown) {
 
 // shared worker
 globalThis.addEventListener('connect', (event) => {
-    const port: MessagePort = (event as any).ports[0]
+    mode = 'SharedWorker'
+
+    const port: MessagePort = (event as MessageEvent).ports[0]
+    ports.add(port)
     // message send through port is a tuple [type, data]
     port.addEventListener('message', (e) => {
         const [type, data] = e.data
-        const handler = messageHandlers.get(type)
-        if (!handler?.size) return
-        for (const h of handler) h(data, port)
+        const handlers = messageHandlers.get(type)
+        if (!handlers?.size) return
+        for (const f of handlers) {
+            f(data, port, (type, value) => port.postMessage([type, value]))
+        }
     })
     port.start()
 })
 
 // normal worker
 globalThis.addEventListener('message', (event) => {
-    const { type, data } = event.data
-    const handler = messageHandlers.get(type)
-    if (!handler?.size) return
-    for (const h of handler) h(data, null)
+    mode = 'Worker'
+
+    const [type, data] = event.data
+    const handlers = messageHandlers.get(type)
+    if (!handlers?.size) return
+    for (const f of handlers) {
+        f(data, null, (type, value) => globalThis.postMessage([type, value]))
+    }
 })

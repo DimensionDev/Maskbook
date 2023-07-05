@@ -1,9 +1,11 @@
+import { defer } from '@masknet/kit'
+
 export type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
 
 function MessageEventReceiver(event: MessageEvent): void {
-    const { type, data } = event.data
+    const [type, data] = event.data
     const handler = messageHandlers.get(type)
     if (!handler?.size) return
     for (const h of handler) h(data)
@@ -13,6 +15,7 @@ if (typeof SharedWorker === 'function') {
         name: 'mask plugin worker',
     })
     worker.port.addEventListener('message', MessageEventReceiver)
+    worker.port.start()
     postMessage = (type: string, data: unknown) => worker.port.postMessage([type, data])
 } else {
     const worker = new Worker(new URL('../plugin-worker/index.ts', import.meta.url), {
@@ -20,6 +23,17 @@ if (typeof SharedWorker === 'function') {
     })
     worker.addEventListener('message', MessageEventReceiver)
     postMessage = (type: string, data: unknown) => worker.postMessage([type, data])
+}
+
+// Ensure plugin host is ready by blocking this file
+{
+    const [promise, resolve] = defer<void>()
+    const removeListener = addListener('ready', () => {
+        removeListener()
+        resolve()
+    })
+    postMessage('request-ready', null)
+    await promise
 }
 
 export function addListener(type: string, callback: MessageHandler) {

@@ -1,6 +1,5 @@
 import './register.js'
 
-import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
 import { CurrentSNSNetwork, SNSAdaptorContextRef, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
@@ -14,18 +13,16 @@ import {
     ValueRefWithReady,
 } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
-import * as services from '../plugin-worker/service.js'
-// import { PluginWorker } from './rpc.js'
+import { PluginWorker } from './rpc.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: services.memoryRead,
-        setValue: services.memoryWrite,
+        getValue: PluginWorker.memoryRead,
+        setValue: PluginWorker.memoryWrite,
     },
     {
         on: (callback) => addListener('inMemoryStorage', callback),
@@ -34,8 +31,8 @@ const inMemoryStorage = createKVStorageHost(
 const indexedDBStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: services.indexedDBRead,
-        setValue: services.indexedDBWrite,
+        getValue: PluginWorker.indexedDBRead,
+        setValue: PluginWorker.indexedDBWrite,
     },
     {
         on: (callback) => addListener('indexedDBStorage', callback),
@@ -47,27 +44,6 @@ async function reject(): Promise<never> {
     throw new Error('Not implemented')
 }
 
-const asyncNoop = async () => {}
-const emptyEventRegistry: UnboundedRegistry<any> = {
-    send: noop,
-    off: noop,
-    on: () => noop,
-    sendByBroadcast: noop,
-    sendToAll: noop,
-    sendToBackgroundPage: noop,
-    pause: () => asyncNoop,
-    sendToContentScripts: noop,
-    sendToFocusedPage: noop,
-    sendToLocal: noop,
-    sendToVisiblePages: noop,
-    bind: () => ({
-        off: noop,
-        on: () => noop,
-        pause: () => asyncNoop,
-        send: noop,
-    }),
-    async *[Symbol.asyncIterator]() {},
-}
 const emptyValueRef = new ValueRefWithReady<any>()
 
 startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
