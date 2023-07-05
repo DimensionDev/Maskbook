@@ -33,13 +33,13 @@ export interface PluginServices {
             name: string,
             mnemonic: string,
             derivationPath?: string,
-            initialPassword?: string | undefined,
+            initialPassword?: string,
         ): Promise<string>
         generateAddressFromMnemonic(
             name: string,
             mnemonic: string,
             derivationPath?: string,
-            initialPassword?: string | undefined,
+            initialPassword?: string,
         ): Promise<string | undefined>
         resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
