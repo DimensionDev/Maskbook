@@ -216,6 +216,7 @@ export function mask_in_minds_url() { return new URL("./general/MaskInMinds.svg"
 export function masks_url() { return new URL("./general/Masks.svg", import.meta.url) }
 export function me_url() { return new URL("./general/Me.svg", import.meta.url) }
 export function message_url() { return new URL("./general/Message.svg", import.meta.url) }
+export function mnemonic_url() { return new URL("./general/Mnemonic.svg", import.meta.url) }
 export function more_url() { return new URL("./general/More.svg", import.meta.url) }
 export function next_id_persona_warning_url() { return new URL("./general/NextIdPersonaWarning.svg", import.meta.url) }
 export function nft_link_url() { return new URL("./general/NFTLink.svg", import.meta.url) }

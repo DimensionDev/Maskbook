@@ -57,6 +57,8 @@ export default function Wallet() {
 
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
+    const { value: hasPassword } = useAsyncRetry(WalletRPC.hasPassword, [])
+
     const { loading, retry } = useAsyncRetry(async () => {
         if (
             [
@@ -110,6 +112,12 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
     }, [retry])
+
+    useEffect(() => {
+        if (!wallet) return
+
+        if (!hasPassword) navigate(PopupRoutes.SetPaymentPassword, { replace: true })
+    }, [hasPassword, !wallet])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
