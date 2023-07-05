@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import { DecryptError, DecryptErrorReasons } from '@masknet/encryption'
 import type { TypedMessage } from '@masknet/typed-message'
 import { decrypt, parsePayloadBinary, parsePayloadText } from './decrypt.js'
+import { RegistryContext, TypedMessageRender, createTypedMessageRenderRegistry } from '@masknet/typed-message-react'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
 const PageInspectorRender = lazy(() => import('./page-render.js'))
@@ -16,6 +17,7 @@ export function DecryptUI() {
     return <UI text={text} version={version} />
 }
 
+const registry = createTypedMessageRenderRegistry()
 function UI(props: { text: string; version: string }) {
     const { text, version } = props
     const [error, isE2E, message] = useDecrypt(text, version)
@@ -25,8 +27,11 @@ function UI(props: { text: string; version: string }) {
     if (!message) return <Typography>Decrypting...</Typography>
     return (
         <Suspense>
-            <PluginRender message={message} />
-            <PageInspectorRender />
+            <RegistryContext.Provider value={registry.getTypedMessageRender}>
+                <TypedMessageRender message={message} />
+                <PluginRender message={message} />
+                <PageInspectorRender />
+            </RegistryContext.Provider>
         </Suspense>
     )
 }

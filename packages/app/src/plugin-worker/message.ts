@@ -7,7 +7,7 @@ const messageHandlers = new Map<string, Set<(message: any, fromPort: MessagePort
 const channel: CallbackBasedChannel = {
     setup(jsonRPCHandlerCallback) {
         addListener('rpc', (message, port) => {
-            jsonRPCHandlerCallback(message).then((x) => x && port?.postMessage(x))
+            jsonRPCHandlerCallback(message).then((x) => broadcastMessage('rpc', x))
         })
     },
 }
@@ -30,7 +30,8 @@ export function broadcastMessage(type: string, message: unknown) {
 
 // shared worker
 globalThis.addEventListener('connect', (event) => {
-    const port: MessagePort = (event as any).ports[0]
+    const port: MessagePort = (event as MessageEvent).ports[0]
+    livingPorts.add(port)
     // message send through port is a tuple [type, data]
     port.addEventListener('message', (e) => {
         const [type, data] = e.data
@@ -43,7 +44,7 @@ globalThis.addEventListener('connect', (event) => {
 
 // normal worker
 globalThis.addEventListener('message', (event) => {
-    const { type, data } = event.data
+    const [type, data] = event.data
     const handler = messageHandlers.get(type)
     if (!handler?.size) return
     for (const h of handler) h(data, null)

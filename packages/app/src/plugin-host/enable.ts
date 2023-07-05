@@ -17,15 +17,14 @@ import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
-import * as services from '../plugin-worker/service.js'
-// import { PluginWorker } from './rpc.js'
+import { PluginWorker } from './rpc.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: services.memoryRead,
-        setValue: services.memoryWrite,
+        getValue: PluginWorker.memoryRead,
+        setValue: PluginWorker.memoryWrite,
     },
     {
         on: (callback) => addListener('inMemoryStorage', callback),
@@ -34,8 +33,8 @@ const inMemoryStorage = createKVStorageHost(
 const indexedDBStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: services.indexedDBRead,
-        setValue: services.indexedDBWrite,
+        getValue: PluginWorker.indexedDBRead,
+        setValue: PluginWorker.indexedDBWrite,
     },
     {
         on: (callback) => addListener('indexedDBStorage', callback),
