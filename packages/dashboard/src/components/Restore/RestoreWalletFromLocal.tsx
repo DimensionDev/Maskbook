@@ -43,17 +43,20 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     const { showSnackbar } = useCustomSnackbar()
     const [readingFile, setReadingFile] = useState(false)
 
-    const handleSetFile = useCallback(async (file: File) => {
-        setFile(file)
-        if (file.type === 'application/json') {
-            setReadingFile(true)
-            const [value] = await Promise.all([file.text(), delay(1000)])
-            setKeyStoreContent(value)
-            setReadingFile(false)
-        } else {
-            showSnackbar(t.create_wallet_key_store_not_support(), { variant: 'error' })
-        }
-    }, [])
+    const handleSetFile = useCallback(
+        async (file: File) => {
+            setFile(file)
+            if (file.type === 'application/json') {
+                setReadingFile(true)
+                const [value] = await Promise.all([file.text(), delay(1000)])
+                setKeyStoreContent(value)
+                setReadingFile(false)
+            } else {
+                showSnackbar(t.create_wallet_key_store_not_support(), { variant: 'error' })
+            }
+        },
+        [t],
+    )
     const reset = useCallback(() => {
         setFile(null)
     }, [])
@@ -72,7 +75,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                 {t.continue()}
             </PrimaryButton>,
         )
-    }, [disabled, keyStoreContent, keyStorePassword])
+    }, [t, disabled, keyStoreContent, keyStorePassword])
 
     return (
         <Box width="100%">
