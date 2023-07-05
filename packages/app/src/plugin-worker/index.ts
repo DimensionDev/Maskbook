@@ -6,6 +6,7 @@ import { Emitter } from '@servie/events'
 import { BooleanPreference, createI18NBundle, createKVStorageHost, i18NextInstance } from '@masknet/shared-base'
 import { createPluginDatabase } from './database/database.js'
 import { indexedDBStorageBackend, inMemoryStorageBackend } from './storage.js'
+import { setPluginWorkerReady } from './ready.js'
 
 const inMemoryStorage = createKVStorageHost(inMemoryStorageBackend, {
     on: () => noop,
@@ -42,3 +43,6 @@ startPluginWorker({
         hasPermission: async () => false,
     },
 })
+
+// TODO: add a callback in startPluginWorker instead of timeout
+setTimeout(() => setPluginWorkerReady(), 200)

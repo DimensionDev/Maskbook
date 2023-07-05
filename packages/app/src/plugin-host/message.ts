@@ -1,3 +1,5 @@
+import { defer } from '@masknet/kit'
+
 export type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
@@ -21,6 +23,17 @@ if (typeof SharedWorker === 'function') {
     })
     worker.addEventListener('message', MessageEventReceiver)
     postMessage = (type: string, data: unknown) => worker.postMessage([type, data])
+}
+
+// Ensure plugin host is ready by blocking this file
+{
+    const [promise, resolve] = defer<void>()
+    const removeListener = addListener('ready', () => {
+        removeListener()
+        resolve()
+    })
+    postMessage('request-ready', null)
+    await promise
 }
 
 export function addListener(type: string, callback: MessageHandler) {
