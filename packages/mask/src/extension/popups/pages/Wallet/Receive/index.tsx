@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             alignItems: 'center',
             padding: theme.spacing(2),
-            fontFamily: 'Helvetica',
         },
         network: {
             color: theme.palette.maskColor.main,
@@ -81,7 +80,6 @@ const useStyles = makeStyles()((theme) => {
         tip: {
             fontSize: 16,
             marginTop: 10,
-            fontFamily: 'Helvetica',
             textAlign: 'center',
             color: theme.palette.maskColor.second,
         },

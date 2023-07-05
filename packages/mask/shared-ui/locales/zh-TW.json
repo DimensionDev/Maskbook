@@ -118,7 +118,6 @@
     "plugin_airdrop_nft_claim_successful": "代幣認領成功",
     "plugin_airdrop_nft_claim_failed": "代幣認領失敗",
     "wallet_balance": "餘額",
-    "wallet_balance_eth": "餘額（ETH）",
     "wallet_new": "新錢包",
     "wallet_status_button_change": "更改",
     "wallet_status_button_copy_address": "複製地址",

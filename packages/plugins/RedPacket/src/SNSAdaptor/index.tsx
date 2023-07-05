@@ -150,7 +150,6 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
             <Typography
                 fontSize="12px"
                 lineHeight="16px"
-                fontFamily="Helvetica"
                 marginLeft="8px"
                 maxWidth="450px"
                 overflow="hidden"

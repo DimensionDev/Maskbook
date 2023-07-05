@@ -13,7 +13,6 @@ import { DashboardFrame } from '../components/DashboardFrame/index.js'
 const SetupPersona = lazy(() => import(/* webpackPrefetch: true */ './SetupPersona/index.js'))
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const SignUp = lazy(() => import('./SignUp/index.js'))
-const SignIn = lazy(() => import('./SignIn/index.js'))
 const PrivacyPolicy = lazy(() => import('./PrivacyPolicy/index.js'))
 const Personas = lazy(() => import(/* webpackPrefetch: true */ './Personas/index.js'))
 const Settings = lazy(() => import(/* webpackPrefetch: true */ './Settings/index.js'))
@@ -59,7 +58,6 @@ export function Pages() {
                 <Routes>
                     <Route path={`${DashboardRoutes.Setup}/*`} element={<SetupPersona />} />
                     <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
-                    <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
                     <Route path={DashboardRoutes.PrivacyPolicy} element={<PrivacyPolicy />} />
                     <Route path={DashboardRoutes.Personas} element={frame(<Personas />)} />
                     <Route path={`${DashboardRoutes.Wallets}/*`} element={frame(<Wallets />)} />

@@ -34,7 +34,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     cardContent: {
         padding: theme.spacing(1, 2),
@@ -50,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     headerAction: {
         display: 'flex',
-        fontFamily: 'Helvetica',
         height: theme.spacing(4.5),
         alignItems: 'center',
         justifyContent: 'center',
@@ -60,7 +58,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
     },
     personas: {
-        fontFamily: 'Helvetica',
         maxWidth: 200,
         overflow: 'hidden',
         fontWeight: 700,

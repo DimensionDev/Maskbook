@@ -131,7 +131,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const { value: avatar } = useAsyncRetry(async () => getPersonaAvatar(currentPersona?.identifier), [])
 
     const openPopupsWindow = useCallback(() => {
-        openPopupWindow(PopupRoutes.ConnectedWallets, {
+        openPopupWindow(PopupRoutes.Personas, {
             chainId,
             internal: true,
         })

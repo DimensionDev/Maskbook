@@ -1,37 +1,57 @@
-import { styled, Grid, Typography } from '@mui/material'
-import { MaskColorVar } from '@masknet/theme'
+import { Typography, Box } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 
-const WordCard = styled(Typography)(
-    ({ theme }) => `
-    padding: ${theme.spacing(1)};
-    border-radius: 6px;
-    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.textLink};
-    font-size: 14;
-    background-color: ${MaskColorVar.blue.alpha(0.1)};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`,
-)
+const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4,1fr)',
+        gap: theme.spacing(2),
+        paddingLeft: 0,
+        margin: 0,
+    },
+    wordCard: {
+        backgroundColor: theme.palette.maskColor.bg,
+        padding: theme.spacing(1),
+        borderRadius: 8,
+        listStyleType: 'decimal',
+        listStylePosition: 'inside',
+        position: 'relative',
+        '&::marker': {
+            backgroundColor: theme.palette.maskColor.bg,
+            color: theme.palette.maskColor.third,
+            fontSize: 14,
+        },
+    },
+    text: {
+        width: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 8,
+        display: 'flex',
+        justifyContent: 'center',
+    },
+}))
 
-export interface MnemonicRevealProps {
+export interface MnemonicRevealProps extends withClasses<'container' | 'wordCard' | 'text'> {
     words: string[]
     indexed?: boolean
     wordClass?: string
+    textClass?: string
 }
 
 export function MnemonicReveal(props: MnemonicRevealProps) {
-    const { words, indexed, wordClass } = props
+    const { words } = props
+    const { classes } = useStyles(undefined, { props })
+
     return (
-        <Grid container spacing={2}>
+        <Box component="ul" className={classes.container}>
             {words.map((item, index) => (
-                <Grid item xs={3} key={index}>
-                    <WordCard className={wordClass}>
-                        {indexed ? `${index + 1}. ` : ''}
+                <Box className={classes.wordCard} component="li" key={index}>
+                    <Typography className={classes.text} fontWeight={700} textAlign="center" flex="1 0 0">
                         {item}
-                    </WordCard>
-                </Grid>
+                    </Typography>
+                </Box>
             ))}
-        </Grid>
+        </Box>
     )
 }

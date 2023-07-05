@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 
     congratulation: {
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         fontSize: '20px',
         lineHeight: '24px',
@@ -42,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     nftName: {
         display: 'flex',
-        fontFamily: 'Helvetica',
         marginTop: 10,
     },
     nftMessage: {

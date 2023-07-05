@@ -200,12 +200,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         <>
             <Grid container spacing={2} className={cx(classes.grid, classes.gridWrapper)}>
                 <Grid item xs={12}>
-                    <Typography
-                        variant="h4"
-                        color="textPrimary"
-                        align="center"
-                        className={classes.ellipsis}
-                        fontFamily="Helvetica">
+                    <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
                         {settings?.message}
                     </Typography>
                 </Grid>
@@ -307,8 +302,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                             marginTop="1px"
                             marginLeft="8.5px"
                             style={{ lineHeight: '18px' }}
-                            fontSize="14px"
-                            fontFamily="Helvetica">
+                            fontSize="14px">
                             {t.hint()}
                         </Typography>
                     </Paper>

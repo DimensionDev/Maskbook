@@ -35,14 +35,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     name: {
         fontSize: 12,
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
     },
     balance: {
         fontSize: 12,
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.second,
         fontWeight: 700,
         lineHeight: '16px',

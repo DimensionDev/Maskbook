@@ -25,7 +25,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     header: {
         fontSize: 24,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         height: 40,
         display: 'flex',

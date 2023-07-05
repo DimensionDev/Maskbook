@@ -6,10 +6,9 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Trend } from '../../../assets/index.js'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 
 import { Services } from '../../../API.js'
-import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -64,42 +63,33 @@ const useStyles = makeStyles()((theme) => ({
         top: 206,
         right: 408,
     },
-    twitter: {
-        color: theme.palette.maskColor.bottom,
-    },
 }))
 
-export const Onboarding = memo(function Onboarding() {
+const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
-    const onSetupTwitter = useCallback(async () => {
-        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
-        if (!url) return
-        await delay(300)
-        await browser.tabs.create({
-            active: true,
-            url,
-        })
+    const onOpenPopupWallet = useCallback(async () => {
+        await Services.Helper.openPopupWindow(PopupRoutes.Wallet)
         window.close()
     }, [])
 
     const words = useMemo(() => {
         return [
             <Typography key="identity">
-                {t.persona_onboarding_creating_identity()}
-                {t.identity()}
+                {t.create_wallet_onboarding_creating_identity()}
+                {t.wallet()}
             </Typography>,
             <Typography key="account">
-                {t.persona_onboarding_generating_accounts()}
+                {t.create_wallet_onboarding_generating_accounts()}
                 {t.accounts()}
             </Typography>,
             <Typography key="data">
-                {t.persona_onboarding_encrypting_data()}
+                {t.create_wallet_onboarding_encrypting_data()}
                 {t.data()}
             </Typography>,
             <Typography key="ready">
-                {t.persona_onboarding_ready()}
+                {t.create_wallet_onboarding_ready()}
                 {t.ready()}
             </Typography>,
         ]
@@ -130,13 +120,12 @@ export const Onboarding = memo(function Onboarding() {
                 <OnboardingWriter words={words} />
             </Box>
             <SetupFrameController>
-                <PrimaryButton
-                    onClick={onSetupTwitter}
-                    size="large"
-                    startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
-                    {t.persona_onboarding_to_twitter()}
+                <PrimaryButton onClick={onOpenPopupWallet} size="large" width={'228px'}>
+                    <Typography fontWeight={700}>{t.create_wallet_onboarding_got_it()}</Typography>
                 </PrimaryButton>
             </SetupFrameController>
         </Box>
     )
 })
+
+export default Onboarding

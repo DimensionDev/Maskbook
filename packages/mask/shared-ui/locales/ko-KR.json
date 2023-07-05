@@ -277,7 +277,6 @@
     "recent_transaction_cancelled": "취소됨",
     "wallet_balance": "잔액",
     "wallet_available_balance": "이용 가능 잔액",
-    "wallet_balance_eth": "잔액 ({{symbol}})",
     "wallet_new": "새로운 월렛",
     "wallet_status_button_change": "바꾸기",
     "wallet_status_button_change_to_evm": "EVM 월렛으로 변경하기",

@@ -43,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         marginRight: theme.spacing(0.5),
         fontSize: 12,
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',

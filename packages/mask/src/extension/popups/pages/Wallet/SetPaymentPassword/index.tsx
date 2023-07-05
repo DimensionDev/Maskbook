@@ -134,7 +134,7 @@ const SetPaymentPassword = memo(() => {
                             control={control}
                         />
                     </div>
-                    <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
+                    <Typography className={classes.tips}>{t('popups_wallet_create_payment_password_tip')}</Typography>
                 </form>
             </div>
             <div className={classes.controller}>

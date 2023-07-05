@@ -83,7 +83,7 @@ export const SignUp = memo(function SignUp() {
     return (
         <Box>
             <Box className={classes.header}>
-                <Typography className={classes.second}>{t.persona_create_step({ step: '1' })}</Typography>
+                <Typography className={classes.second}>{t.create_step({ step: '1', total: '2' })}</Typography>
                 <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
                     {t.recovery()}
                 </Button>

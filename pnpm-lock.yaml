@@ -616,6 +616,9 @@ importers:
       html-to-image:
         specifier: ^1.11.11
         version: 1.11.11
+      immer:
+        specifier: ^10.0.1
+        version: 10.0.1
       json-stable-stringify:
         specifier: ^1.0.2
         version: 1.0.2

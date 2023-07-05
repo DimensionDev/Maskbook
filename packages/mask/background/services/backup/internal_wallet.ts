@@ -24,7 +24,14 @@ export interface WalletBackupProvider {
         derivationPath?: string,
         initialPassword?: string,
     ): Promise<string>
+    generateAddressFromMnemonic(
+        name: string,
+        mnemonic: string,
+        derivationPath?: string,
+        initialPassword?: string,
+    ): Promise<string | undefined>
     recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
+    recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>
 }
 export let provider: WalletBackupProvider

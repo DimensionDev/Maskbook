@@ -3,15 +3,14 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
-import { MaskWallet, PrintBackground } from '../../../assets/index.js'
-import { Words } from './Words.js'
+import { PrintBackground } from '../../../assets/index.js'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
+import { NetworkType, networkResolver } from '@masknet/web3-shared-evm'
 
 interface ComponentToPrintProps {
-    personaName: string
     words: string[]
-    privateKey: string
-    publicKey: string
+    address: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,18 +32,15 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundSize: 'cover',
     },
-    personaName: {
-        fontSize: 24,
-        lineHeight: '120%',
-        fontWeight: 700,
-    },
     publicKeyTitle: {
         fontSize: 14,
+        color: theme.palette.maskColor.white,
         lineHeight: '18px',
         fontWeight: 700,
     },
     publicKey: {
         fontSize: 10,
+        color: theme.palette.maskColor.white,
         lineHeight: '10px',
     },
     title: {
@@ -76,27 +72,26 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: ForwardedRef<any>) => {
-    const { words, privateKey, personaName, publicKey } = props
+export const ComponentToPrint = forwardRef(function ComponentToPrint(
+    props: ComponentToPrintProps,
+    ref: ForwardedRef<any>,
+) {
+    const { words, address } = props
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
     const qrValue = useMemo(() => {
-        const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
-        return `mask://persona/${main}?nickname=${personaName}`
-    }, [words?.join(','), privateKey, personaName])
+        return `mask://wallet/mnemonic/${btoa(words.join(' '))}`
+    }, [words.join(',')])
 
     return (
         <Box className={classes.container} ref={ref}>
             <Box className={classes.card}>
                 <Box flex={1}>
-                    <Typography className={classes.personaName}>
-                        {t.persona()}: {personaName}
-                    </Typography>
                     <Typography className={classes.publicKeyTitle}>
-                        {t.public_key()}:{' '}
+                        {t.address()}:{' '}
                         <Typography component="span" className={classes.publicKey}>
-                            {publicKey}
+                            {address}
                         </Typography>
                     </Typography>
                 </Box>
@@ -105,16 +100,14 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
                     ecLevel="L"
                     size={136}
                     quietZone={6}
-                    logoImage={MaskWallet.toString()}
-                    logoWidth={28}
-                    logoHeight={28}
+                    logoImage={networkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
                 />
             </Box>
-            <Typography className={classes.title}>{t.create_account_identity_id()}</Typography>
-            <Words words={words} classes={{ text: classes.text, wordCard: classes.wordCard }} />
+            <Typography className={classes.title}>{t.wallets_mnemonic_word()}</Typography>
+            <MnemonicReveal words={words} indexed classes={{ wordCard: classes.wordCard, text: classes.text }} />
             <Typography className={classes.tips}>
                 <Icons.Info variant="light" size={20} />
-                {t.print_tips()}
+                {t.wallets_print_tips()}
             </Typography>
         </Box>
     )

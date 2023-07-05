@@ -30,9 +30,7 @@ export const Alert = memo(function Alert({ className, children, open, onClose, .
     return (
         <Box className={cx(classes.alert, className)} {...rest}>
             <Icons.Info size={20} />
-            <Typography fontSize={14} fontFamily="Helvetica">
-                {children}
-            </Typography>
+            <Typography fontSize={14}>{children}</Typography>
             <Icons.Close size={20} onClick={onClose} />
         </Box>
     )
