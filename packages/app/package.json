@@ -35,6 +35,7 @@
         "@masknet/plugin-gitcoin": "workspace:^",
         "@masknet/plugin-infra": "workspace:^",
         "@masknet/plugin-snapshot": "workspace:^",
+        "@masknet/plugin-vcent": "workspace:^",
         "@masknet/plugin-wallet": "workspace:^",
         "@masknet/public-api": "workspace:^",
         "@masknet/shared": "workspace:^",
