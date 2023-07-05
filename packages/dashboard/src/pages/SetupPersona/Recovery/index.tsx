@@ -124,7 +124,7 @@ export const Recovery = memo(function Recovery() {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
             }
         },
-        [navigate],
+        [t, navigate],
     )
 
     const handleRestoreFromLocalStore = useCallback(async () => {
