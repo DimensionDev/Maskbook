@@ -103,7 +103,7 @@ export const Onboarding = memo(function Onboarding() {
                 {t.ready()}
             </Typography>,
         ]
-    }, [])
+    }, [t])
 
     return (
         <Box>

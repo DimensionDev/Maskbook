@@ -397,7 +397,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, o
         if (copyState.error?.message) {
             showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
         }
-    }, [copyState.value, copyState.error?.message])
+    }, [t, copyState.value, copyState.error?.message])
 
     return (
         <>
@@ -436,11 +436,9 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, o
                 </PrimaryButton>
             </SetupFrameController>
 
-            {words?.length ? (
-                <Box sx={{ position: 'absolute', top: -9999 }}>
-                    <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
-                </Box>
-            ) : null}
+            <Box sx={{ position: 'absolute', top: -9999 }}>
+                <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
+            </Box>
         </>
     )
 })

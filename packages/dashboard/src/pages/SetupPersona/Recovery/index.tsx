@@ -102,7 +102,7 @@ export const Recovery = memo(function Recovery() {
                 setError(t.sign_in_account_mnemonic_confirm_failed())
             }
         },
-        [navigate],
+        [t, navigate],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
