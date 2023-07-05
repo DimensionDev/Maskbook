@@ -146,7 +146,6 @@ const AddDeriveWallet = memo(() => {
                     loading={loading}
                     dataSource={dataSource}
                     onCheck={onCheck}
-                    confirmLoading={confirmLoading}
                     symbol={nativeToken?.symbol ?? 'ETH'}
                 />
             </TableContainer>

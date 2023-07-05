@@ -42,16 +42,13 @@ export function useMnemonicWordsPuzzle() {
         }))
     }, [words, indexes])
 
-    const answerCallback = useCallback(
-        (index: number, word: string) => {
-            setPuzzleAnswer(
-                produce((draft) => {
-                    draft[index] = word
-                }),
-            )
-        },
-        [setPuzzleAnswer],
-    )
+    const answerCallback = useCallback((index: number, word: string) => {
+        setPuzzleAnswer(
+            produce((draft) => {
+                draft[index] = word
+            }),
+        )
+    }, [])
 
     const verifyAnswerCallback = useCallback(
         (callback?: () => void) => {

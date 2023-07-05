@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useAsync, useCopyToClipboard } from 'react-use'
+import { useCopyToClipboard } from 'react-use'
 import { range } from 'lodash-es'
 import {
     Table,
@@ -18,9 +18,10 @@ import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
 import { useSharedI18N } from '../../locales/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
+import { useBalance } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -90,14 +91,13 @@ interface DeriveWalletTableProps {
         selected: boolean
     }>
     onCheck: (checked: boolean, index: number) => void
-    confirmLoading: boolean
     symbol: string
     page: number
     hiddenHeader?: boolean
 }
 
 export const DeriveWalletTable = memo<DeriveWalletTableProps>(
-    ({ loading, dataSource, onCheck, confirmLoading, symbol, hiddenHeader, page }) => {
+    ({ loading, dataSource, onCheck, symbol, hiddenHeader, page }) => {
         const { classes, cx } = useStyles()
         const t = useSharedI18N()
         return (
@@ -130,7 +130,6 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(
                                   selected={item.selected}
                                   added={item.added}
                                   onCheck={(checked) => onCheck(checked, index)}
-                                  confirmLoading={confirmLoading}
                                   symbol={symbol}
                               />
                           ))
@@ -159,13 +158,16 @@ export interface DeriveWalletTableRowProps {
     page: number
     selected: boolean
     onCheck: (checked: boolean) => void
-    confirmLoading: boolean
     symbol: string
 }
 export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(
     ({ address, added, onCheck, selected, symbol, index, page }) => {
         const { classes, cx } = useStyles()
-        const { loading, value: balance } = useAsync(async () => Web3.getBalance(address), [address])
+        const { data: balance, isFetching } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+            account: address,
+            chainId: ChainId.Mainnet,
+        })
+
         const [, copyToClipboard] = useCopyToClipboard()
         const theme = useTheme()
 
@@ -186,7 +188,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(
                     </div>
                 </TableCell>
                 <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
-                    {loading ? (
+                    {isFetching ? (
                         <CircularProgress color="primary" size={12} />
                     ) : (
                         <Typography className={classes.title}>

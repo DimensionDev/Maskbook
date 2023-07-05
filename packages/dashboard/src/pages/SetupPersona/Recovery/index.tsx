@@ -130,9 +130,11 @@ export const Recovery = memo(function Recovery() {
     const handleRestoreFromLocalStore = useCallback(async () => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastedPersona) await changeCurrentPersona(lastedPersona)
+            if (lastedPersona) {
+                await changeCurrentPersona(lastedPersona)
+                await delay(1000)
+            }
         }
-        await delay(1000)
         navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
     }, [!currentPersona, changeCurrentPersona, navigate])
 
