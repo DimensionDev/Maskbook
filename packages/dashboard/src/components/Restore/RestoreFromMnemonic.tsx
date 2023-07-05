@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface RestoreFromMnemonicProp {
-    handleRestoreFromMnemonic?: (values: string[]) => void
+    handleRestoreFromMnemonic?: (values: string[]) => Promise<void>
     error?: string
     setError?: (error: string) => void
 }

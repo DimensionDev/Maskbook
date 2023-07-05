@@ -43,7 +43,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
 
     const onSubmit: SubmitHandler<FormInputs> = useCallback(
         async (data) => {
-            handleRestoreFromPrivateKey?.(data, setError)
+            await handleRestoreFromPrivateKey?.(data, setError)
         },
         [navigate, setError],
     )

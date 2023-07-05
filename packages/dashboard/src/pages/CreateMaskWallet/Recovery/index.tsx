@@ -184,7 +184,7 @@ const Recovery = memo(function Recovery() {
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
                                 <RestoreWalletFromLocal
                                     handleRestoreFromLocalStore={handleRestoreFromLocalStore}
-                                    onSetError={setError}
+                                    setError={setError}
                                     error={error}
                                 />
                             </TabPanel>

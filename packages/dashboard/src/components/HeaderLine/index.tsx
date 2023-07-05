@@ -7,7 +7,7 @@ export const HeaderLine = memo((props: HTMLProps<HTMLElement>) => {
     const Icon = mode === 'dark' ? Icons.MaskBanner : Icons.Mask
     return (
         <header {...props}>
-            <Icon width={130} height={40} {...props} />
+            <Icon width={130} height={40} />
         </header>
     )
 })

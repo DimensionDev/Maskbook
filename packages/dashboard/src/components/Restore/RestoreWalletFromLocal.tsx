@@ -22,13 +22,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface RestoreFromLocalProps {
     handleRestoreFromLocalStore: (keyStoreContent: string, keyStorePassword: string) => Promise<void>
-    onSetError: (error: string) => void
+    setError: (error: string) => void
     error: string
 }
 
 export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     handleRestoreFromLocalStore,
-    onSetError,
+    setError,
     error,
 }: RestoreFromLocalProps) {
     const { classes, theme } = useStyles()
@@ -98,7 +98,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                                 type="password"
                                 onChange={(e) => {
                                     setKeyStorePassword(e.target.value)
-                                    onSetError('')
+                                    setError('')
                                 }}
                                 error={!!error}
                                 helperText={error}

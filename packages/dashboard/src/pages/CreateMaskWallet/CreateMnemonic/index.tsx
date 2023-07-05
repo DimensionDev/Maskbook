@@ -188,7 +188,7 @@ const CreateMnemonic = memo(() => {
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
 
-    const { value: hasPassword, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
+    const { value: hasPassword = false } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     const onVerifyClick = useCallback(() => {
         setIsVerify(true)
@@ -208,11 +208,7 @@ const CreateMnemonic = memo(() => {
 
         if (!words.length) return
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonic(
-            walletName,
-            words.join(' '),
-            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-        )
+        const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
 
         return address
     }, [JSON.stringify(words), hasPassword, location.state?.password])

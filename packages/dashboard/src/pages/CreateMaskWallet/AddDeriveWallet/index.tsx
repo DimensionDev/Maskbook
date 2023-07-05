@@ -5,7 +5,7 @@ import { memo, useCallback, useState } from 'react'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress } from '@masknet/web3-shared-base'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { PluginServices } from '../../../API.js'
@@ -98,7 +98,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 }
             })
         }
-        return []
+        return EMPTY_LIST
     }, [mnemonic, wallets.length, page])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {

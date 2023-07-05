@@ -36,7 +36,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 10,
     },
     textField: {
-        background: theme.palette.mode === 'dark' ? '#1D2023' : '#F7F9FA',
         padding: theme.spacing(1),
         fontSize: 12,
         lineHeight: '16px',
@@ -98,7 +97,7 @@ const CreateWalletForm = memo(() => {
                 message: t.create_wallet_password_match_tip(),
                 path: ['confirm'],
             })
-    }, [])
+    }, [t])
 
     const {
         control,
@@ -133,38 +132,36 @@ const CreateWalletForm = memo(() => {
             <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
             <form className={classes.form} onSubmit={onSubmit}>
                 {!loading ? (
-                    <>
-                        <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        className={classes.input}
-                                        placeholder={t.create_wallet_payment_password_place_holder()}
-                                        error={!isValid && !!errors.password?.message}
-                                        helperText={!isValid ? errors.password?.message : ''}
-                                        InputProps={{ className: classes.textField }}
-                                    />
-                                )}
-                                name="password"
-                            />
-                            <Controller
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        className={classes.input}
-                                        error={!isValid && !!errors.confirm?.message}
-                                        helperText={!isValid ? errors.confirm?.message : ''}
-                                        placeholder={t.create_wallet_re_enter_payment_password()}
-                                        InputProps={{ className: classes.textField }}
-                                    />
-                                )}
-                                name="confirm"
-                                control={control}
-                            />
-                        </Box>
-                    </>
+                    <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
+                        <Controller
+                            control={control}
+                            render={({ field }) => (
+                                <PasswordField
+                                    {...field}
+                                    className={classes.input}
+                                    placeholder={t.create_wallet_payment_password_place_holder()}
+                                    error={!isValid && !!errors.password?.message}
+                                    helperText={!isValid ? errors.password?.message : ''}
+                                    InputProps={{ className: classes.textField }}
+                                />
+                            )}
+                            name="password"
+                        />
+                        <Controller
+                            render={({ field }) => (
+                                <PasswordField
+                                    {...field}
+                                    className={classes.input}
+                                    error={!isValid && !!errors.confirm?.message}
+                                    helperText={!isValid ? errors.confirm?.message : ''}
+                                    placeholder={t.create_wallet_re_enter_payment_password()}
+                                    InputProps={{ className: classes.textField }}
+                                />
+                            )}
+                            name="confirm"
+                            control={control}
+                        />
+                    </Box>
                 ) : null}
                 <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_2()}</Typography>
                 <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_3()}</Typography>
