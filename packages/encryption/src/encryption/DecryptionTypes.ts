@@ -142,7 +142,11 @@ export enum DecryptErrorReasons {
 export class DecryptError extends Error {
     static Reasons = DecryptErrorReasons
     readonly type = DecryptProgressKind.Error
-    constructor(public override message: DecryptErrorReasons, cause: any, public recoverable = false) {
+    constructor(
+        public override message: DecryptErrorReasons,
+        cause: any,
+        public recoverable = false,
+    ) {
         super(message, { cause })
     }
 }

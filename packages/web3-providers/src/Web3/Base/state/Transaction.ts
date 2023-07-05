@@ -116,18 +116,19 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
         const transaction_ = all[chainId]?.[address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
-        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map((x) =>
-            Object.keys(x.candidates).includes(id)
-                ? {
-                      ...x,
-                      indexId: newId,
-                      candidates: {
-                          ...x.candidates,
-                          [newId]: transaction,
-                      },
-                      updatedAt: now,
-                  }
-                : x,
+        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map(
+            (x) =>
+                Object.keys(x.candidates).includes(id)
+                    ? {
+                          ...x,
+                          indexId: newId,
+                          candidates: {
+                              ...x.candidates,
+                              [newId]: transaction,
+                          },
+                          updatedAt: now,
+                      }
+                    : x,
         )
 
         await this.storage.setValue({
@@ -153,15 +154,16 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
         const transaction_ = all[chainId]?.[address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
-        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map((x) =>
-            Object.keys(x.candidates).includes(id)
-                ? {
-                      ...x,
-                      indexId: id,
-                      status,
-                      updatedAt: now,
-                  }
-                : x,
+        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map(
+            (x) =>
+                Object.keys(x.candidates).includes(id)
+                    ? {
+                          ...x,
+                          indexId: id,
+                          status,
+                          updatedAt: now,
+                      }
+                    : x,
         )
 
         await this.storage.setValue({

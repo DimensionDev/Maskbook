@@ -12,7 +12,10 @@ import type {
 } from '../types/index.js'
 
 export class GasEditor {
-    constructor(private chainId: ChainId, private config: Partial<GasConfig>) {}
+    constructor(
+        private chainId: ChainId,
+        private config: Partial<GasConfig>,
+    ) {}
 
     private get isEIP1559() {
         return chainResolver.isSupport(this.chainId, 'EIP1559')

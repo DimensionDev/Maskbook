@@ -144,10 +144,10 @@ export function PoolInList(props: PoolInListProps) {
                       type: TokenType.Fungible,
                       address: v,
                       schema: isNativeTokenAddress(v) ? SchemaType.Native : SchemaType.ERC20,
-                  } as Pick<
+                  }) as Pick<
                       FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
                       'address' | 'type' | 'schema'
-                  >),
+                  >,
           )
         : []
 

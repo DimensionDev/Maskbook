@@ -16,7 +16,11 @@ export enum JSON_RPC_ERROR_CODE {
  * JSON RPC Error Editor
  */
 export class ErrorEditor {
-    constructor(private unknownError: unknown, private response?: JsonRpcResponse | null, private fallback?: string) {}
+    constructor(
+        private unknownError: unknown,
+        private response?: JsonRpcResponse | null,
+        private fallback?: string,
+    ) {}
 
     private get internalError(): Error {
         {

@@ -91,7 +91,10 @@ export enum EncryptErrorReasons {
 }
 export class EncryptError extends Error {
     static Reasons = EncryptErrorReasons
-    constructor(public override message: EncryptErrorReasons, cause?: any) {
+    constructor(
+        public override message: EncryptErrorReasons,
+        cause?: any,
+    ) {
         super(message, { cause })
     }
 }

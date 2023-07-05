@@ -102,7 +102,9 @@ const useStyles = makeStyles()((theme) => ({
     warning: {
         backgroundColor: Sniffings.is_dashboard_page
             ? theme.palette.warning.main
-            : parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
+            : parseColor(theme.palette.maskColor?.warn)
+                  .setAlpha(0.1)
+                  .toRgbString(),
         color: Sniffings.is_dashboard_page ? theme.palette.warning.main : theme.palette.maskColor?.warn,
     },
     info: {
@@ -112,7 +114,9 @@ const useStyles = makeStyles()((theme) => ({
     error: {
         backgroundColor: Sniffings.is_dashboard_page
             ? MaskColorVar.redMain
-            : parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
+            : parseColor(theme.palette.maskColor?.danger)
+                  .setAlpha(0.1)
+                  .toRgbString(),
         color: Sniffings.is_dashboard_page ? theme.palette.common.white : theme.palette.maskColor?.danger,
     },
     action: {

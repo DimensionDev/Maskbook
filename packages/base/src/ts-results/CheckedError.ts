@@ -1,7 +1,10 @@
 import { Err, type Result } from 'ts-results-es'
 
 export class CheckedError<T> extends Error {
-    constructor(private kind: T, private reason: any) {
+    constructor(
+        private kind: T,
+        private reason: any,
+    ) {
         super(kind + '', { cause: reason })
     }
     override toString() {

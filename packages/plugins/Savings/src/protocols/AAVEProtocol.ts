@@ -221,17 +221,18 @@ export class AAVEProtocol implements SavingsProtocol {
 
         const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
         const contract = createContract<AaveLendingPool>(web3, poolAddress, AaveLendingPoolABI as AbiItem[])
-        return new Promise<string>((resolve, reject) =>
-            contract?.methods
-                .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
-                .send({
-                    from: account,
-                    gas: gasEstimate.toNumber(),
-                })
-                .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                }),
+        return new Promise<string>(
+            (resolve, reject) =>
+                contract?.methods
+                    .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
+                    .send({
+                        from: account,
+                        gas: gasEstimate.toNumber(),
+                    })
+                    .once(TransactionEventType.ERROR, reject)
+                    .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                        resolve(receipt.transactionHash)
+                    }),
         )
     }
 }

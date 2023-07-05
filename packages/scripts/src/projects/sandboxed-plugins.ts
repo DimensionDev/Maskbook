@@ -210,7 +210,10 @@ async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]
     )
 }
 class TransformStream extends Transform {
-    constructor(public origin: string, public onJS: (id: string, relative: string) => void) {
+    constructor(
+        public origin: string,
+        public onJS: (id: string, relative: string) => void,
+    ) {
         super({ objectMode: true, defaultEncoding: 'utf-8' })
     }
     wasm = require.resolve('@masknet/static-module-record-swc')

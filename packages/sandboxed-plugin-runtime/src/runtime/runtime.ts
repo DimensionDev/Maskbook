@@ -13,7 +13,12 @@ import { createGlobal } from './global.js'
 
 export class PluginRuntime {
     declare readonly id: string
-    constructor(id: string, private origin: string, manifest: unknown, signal: AbortSignal) {
+    constructor(
+        id: string,
+        private origin: string,
+        manifest: unknown,
+        signal: AbortSignal,
+    ) {
         const { localThis, membrane } = createGlobal(id, manifest, signal)
 
         Object.defineProperty(this, 'id', { value: id })

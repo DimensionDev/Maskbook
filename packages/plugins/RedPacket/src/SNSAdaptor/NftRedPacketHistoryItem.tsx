@@ -15,148 +15,149 @@ import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketRecei
 import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from './utils/formatDate.js'
 
-const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()(
-    (theme, { listItemBackground, listItemBackgroundIcon }) => {
-        const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
-        return {
-            root: {
-                width: '100%',
-                padding: 0,
-                background: theme.palette.common.white,
-                marginBottom: theme.spacing(1.5),
-                borderRadius: 8,
-                '&:last-child': {
-                    marginBottom: '80px',
-                },
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
+    theme,
+    { listItemBackground, listItemBackgroundIcon },
+) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            width: '100%',
+            padding: 0,
+            background: theme.palette.common.white,
+            marginBottom: theme.spacing(1.5),
+            borderRadius: 8,
+            '&:last-child': {
+                marginBottom: '80px',
             },
-            contentItem: {
-                width: '100%',
-                borderRadius: 8,
-                position: 'static !important' as any,
-                height: 'auto !important',
-                padding: theme.spacing(1.5),
-                background: listItemBackground ?? theme.palette.background.default,
-                [smallQuery]: {
-                    padding: theme.spacing(2, 1.5),
-                },
-                '&:before': {
-                    position: 'absolute',
-                    content: '""',
-                    top: 45,
-                    left: 400,
-                    zIndex: 0,
-                    width: 114,
-                    opacity: 0.2,
-                    height: 61,
-                    filter: 'blur(1.5px)',
-                    background: listItemBackgroundIcon,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '114px 114px',
-                },
+        },
+        contentItem: {
+            width: '100%',
+            borderRadius: 8,
+            position: 'static !important' as any,
+            height: 'auto !important',
+            padding: theme.spacing(1.5),
+            background: listItemBackground ?? theme.palette.background.default,
+            [smallQuery]: {
+                padding: theme.spacing(2, 1.5),
             },
-            message: {
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                [smallQuery]: {
-                    whiteSpace: 'normal',
-                },
+            '&:before': {
+                position: 'absolute',
+                content: '""',
+                top: 45,
+                left: 400,
+                zIndex: 0,
+                width: 114,
+                opacity: 0.2,
+                height: 61,
+                filter: 'blur(1.5px)',
+                background: listItemBackgroundIcon,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '114px 114px',
             },
-            box: {
-                display: 'flex',
-                width: '100%',
+        },
+        message: {
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            [smallQuery]: {
+                whiteSpace: 'normal',
             },
-            content: {
-                transform: 'translateY(-4px)',
-                width: '100%',
-                paddingLeft: theme.spacing(1),
+        },
+        box: {
+            display: 'flex',
+            width: '100%',
+        },
+        content: {
+            transform: 'translateY(-4px)',
+            width: '100%',
+            paddingLeft: theme.spacing(1),
+        },
+        section: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: theme.spacing(2),
+            [smallQuery]: {
+                marginBottom: 0,
             },
-            section: {
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: theme.spacing(2),
-                [smallQuery]: {
-                    marginBottom: 0,
-                },
+        },
+        icon: {
+            width: 18,
+            height: 18,
+            marginLeft: 6,
+            zIndex: -1,
+        },
+        title: {
+            color: theme.palette.maskColor.dark,
+            whiteSpace: 'break-spaces',
+            fontWeight: 500,
+            fontSize: 16,
+        },
+        info: {
+            color: theme.palette.maskColor.dark,
+            [smallQuery]: {
+                fontSize: 13,
             },
-            icon: {
-                width: 18,
-                height: 18,
-                marginLeft: 6,
-                zIndex: -1,
+            fontSize: 14,
+        },
+        infoTitle: {
+            color: theme.palette.maskColor.secondaryDark,
+            marginRight: 4,
+            fontSize: 14,
+            [smallQuery]: {
+                fontSize: 13,
             },
-            title: {
-                color: theme.palette.maskColor.dark,
-                whiteSpace: 'break-spaces',
-                fontWeight: 500,
-                fontSize: 16,
+        },
+        actionButton: {
+            fontSize: 12,
+            width: 88,
+            height: 32,
+            background: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.white,
+            borderRadius: '999px',
+            minHeight: 'auto',
+            [smallQuery]: {
+                marginTop: theme.spacing(1),
             },
-            info: {
-                color: theme.palette.maskColor.dark,
-                [smallQuery]: {
-                    fontSize: 13,
-                },
-                fontSize: 14,
+            '&:disabled': {
+                background: theme.palette.maskColor.dark,
+                color: theme.palette.common.white,
             },
-            infoTitle: {
-                color: theme.palette.maskColor.secondaryDark,
-                marginRight: 4,
-                fontSize: 14,
-                [smallQuery]: {
-                    fontSize: 13,
-                },
-            },
-            actionButton: {
-                fontSize: 12,
-                width: 88,
-                height: 32,
+            '&:hover': {
                 background: theme.palette.maskColor.dark,
                 color: theme.palette.maskColor.white,
-                borderRadius: '999px',
-                minHeight: 'auto',
-                [smallQuery]: {
-                    marginTop: theme.spacing(1),
-                },
-                '&:disabled': {
-                    background: theme.palette.maskColor.dark,
-                    color: theme.palette.common.white,
-                },
-                '&:hover': {
-                    background: theme.palette.maskColor.dark,
-                    color: theme.palette.maskColor.white,
-                    opacity: 0.8,
-                },
+                opacity: 0.8,
             },
-            footer: {
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                flexWrap: 'nowrap',
-                marginTop: 15,
+        },
+        footer: {
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'nowrap',
+            marginTop: 15,
+        },
+        footerInfo: {
+            fontSize: 14,
+            color: theme.palette.maskColor.secondaryDark,
+            '& span': {
+                color: theme.palette.maskColor.dark,
+                marginRight: 2,
             },
-            footerInfo: {
-                fontSize: 14,
-                color: theme.palette.maskColor.secondaryDark,
-                '& span': {
-                    color: theme.palette.maskColor.dark,
-                    marginRight: 2,
-                },
-            },
-            fullWidthBox: {
-                width: '100%',
-                display: 'flex',
-            },
-            ellipsis: {
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                maxWidth: 360,
-            },
-        }
-    },
-)
+        },
+        fullWidthBox: {
+            width: '100%',
+            display: 'flex',
+        },
+        ellipsis: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: 360,
+        },
+    }
+})
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketJSONPayload

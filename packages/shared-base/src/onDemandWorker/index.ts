@@ -24,17 +24,20 @@ export class OnDemandWorker extends EventTarget {
         this.log(init[1]?.name ?? 'anonymous Worker', 'created with', ...init)
     }
     protected watchUsage() {
-        const i = setInterval(() => {
-            if (!this.worker) {
-                clearInterval(i)
-                return
-            }
-            if (Date.now() - this.lastUsed > this.inactiveTimeToTerminate) {
-                this.log('inactive for', this.inactiveTimeToTerminate / 1000, 'sec')
-                this.terminate()
-                clearInterval(i)
-            }
-        }, Math.min(this.inactiveTimeToTerminate, 60 * 1000))
+        const i = setInterval(
+            () => {
+                if (!this.worker) {
+                    clearInterval(i)
+                    return
+                }
+                if (Date.now() - this.lastUsed > this.inactiveTimeToTerminate) {
+                    this.log('inactive for', this.inactiveTimeToTerminate / 1000, 'sec')
+                    this.terminate()
+                    clearInterval(i)
+                }
+            },
+            Math.min(this.inactiveTimeToTerminate, 60 * 1000),
+        )
     }
     protected log(...args: any[]) {
         // console.log(`OnDemandWorker ${this.init[1]?.name}`, ...args)

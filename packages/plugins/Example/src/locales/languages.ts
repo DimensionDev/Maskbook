@@ -9,11 +9,13 @@ export const languages = {
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
-    import.meta.webpackHot.accept(['./en-US.json'], () =>
-        globalThis.dispatchEvent?.(
-            new CustomEvent('MASK_I18N_HMR', {
-                detail: ['io.mask.example', { en: en_US }],
-            }),
-        ),
+    import.meta.webpackHot.accept(
+        ['./en-US.json'],
+        () =>
+            globalThis.dispatchEvent?.(
+                new CustomEvent('MASK_I18N_HMR', {
+                    detail: ['io.mask.example', { en: en_US }],
+                }),
+            ),
     )
 }

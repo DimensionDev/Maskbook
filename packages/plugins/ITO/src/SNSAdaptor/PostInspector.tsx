@@ -45,10 +45,10 @@ export function PostInspector(props: PostInspectorProps) {
                         schema: isNativeTokenAddress(t.address) ? SchemaType.Native : SchemaType.ERC20,
                         chainId: _payload.chain_id,
                         type: TokenType.Fungible,
-                    } as Pick<
+                    }) as Pick<
                         FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
                         'address' | 'type' | 'schema' | 'chainId'
-                    >),
+                    >,
             ),
         [JSON.stringify(_payload.exchange_tokens)],
     )

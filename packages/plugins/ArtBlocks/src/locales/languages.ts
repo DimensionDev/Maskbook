@@ -15,11 +15,13 @@ export const languages = {
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
-    import.meta.webpackHot.accept(['./en-US.json', './ko-KR.json', './qya-AA.json', './zh-CN.json'], () =>
-        globalThis.dispatchEvent?.(
-            new CustomEvent('MASK_I18N_HMR', {
-                detail: ['io.artblocks', { en: en_US, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN }],
-            }),
-        ),
+    import.meta.webpackHot.accept(
+        ['./en-US.json', './ko-KR.json', './qya-AA.json', './zh-CN.json'],
+        () =>
+            globalThis.dispatchEvent?.(
+                new CustomEvent('MASK_I18N_HMR', {
+                    detail: ['io.artblocks', { en: en_US, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN }],
+                }),
+            ),
     )
 }

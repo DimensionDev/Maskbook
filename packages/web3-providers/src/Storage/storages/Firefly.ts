@@ -12,7 +12,10 @@ export class FireflyStorage implements StorageAPI.Storage {
     private Firefly = new FireflyGetterSetter()
     private Web3 = new ConnectionAPI()
 
-    constructor(private namespace: string, private address: string) {
+    constructor(
+        private namespace: string,
+        private address: string,
+    ) {
         const cache = caches.get(this.getKey())
         if (cache) {
             this.cache = cache
