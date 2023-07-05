@@ -92,6 +92,11 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.maskColor.bottom,
         marginBottom: 10,
         boxShadow: theme.palette.mode === 'dark' ? '0 0 5px #FFFFFF' : '0 0 5px #CCCCCC',
+        '& > ul': {
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
     },
     icon: {
         margin: theme.spacing(0, 1),
