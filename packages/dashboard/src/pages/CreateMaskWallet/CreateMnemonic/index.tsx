@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { Check as CheckIcon } from '@mui/icons-material'
 import { useAsync, useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
@@ -145,29 +144,24 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
         fontFamily: 'Helvetica',
         fontWeight: 700,
     },
-    checkIconWrapper: {
+    iconWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        cursor: 'pointer',
-        width: 20,
-        height: 20,
-        borderRadius: 999,
         marginRight: 8,
-        border: `2px solid ${theme.palette.maskColor.secondaryLine}`,
-        backgroundColor: 'transparent',
-    },
-    checked: {
-        borderColor: `${theme.palette.maskColor.primary} !important`,
-        backgroundColor: `${theme.palette.maskColor.primary} !important`,
-    },
-    checkedText: {
-        color: theme.palette.maskColor.white,
-    },
-    checkIcon: {
         width: 18,
         height: 18,
-        color: 'transparent',
+        borderRadius: '99px',
+        overflow: 'hidden',
+    },
+    checkIcon: {
+        width: 20,
+        height: 20,
+        color: theme.palette.maskColor.primary,
+    },
+    emptyCheckbox: {
+        border: `2px solid ${theme.palette.maskColor.secondaryLine}`,
+        background: 'transparent',
     },
     verificationFail: {
         color: theme.palette.maskColor.danger,
@@ -177,7 +171,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     },
 }))
 
-const CreateMnemonic = memo(() => {
+const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
     const t = useDashboardI18N()
@@ -210,7 +204,7 @@ const CreateMnemonic = memo(() => {
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
 
         return address
-    }, [JSON.stringify(words), hasPassword, location.state?.password])
+    }, [words, hasPassword, location.state?.password])
 
     const [, onSubmit] = useAsyncFn(async () => {
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
@@ -222,7 +216,7 @@ const CreateMnemonic = memo(() => {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, JSON.stringify(words)])
+    }, [walletName, words])
 
     return (
         <div className={classes.container}>
@@ -287,59 +281,65 @@ interface PuzzleOption {
     answerCallback: (index: number, word: string) => void
 }
 
-const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(
-    ({ answerCallback, setIsVerify, onSubmit, puzzleWordList, puzzleAnswer, verifyAnswerCallback, isMatched }) => {
-        const t = useDashboardI18N()
-        const { classes, cx } = useStyles({ isVerify: true })
+const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
+    answerCallback,
+    setIsVerify,
+    onSubmit,
+    puzzleWordList,
+    puzzleAnswer,
+    verifyAnswerCallback,
+    isMatched,
+}) {
+    const t = useDashboardI18N()
+    const { classes, cx } = useStyles({ isVerify: true })
 
-        return (
-            <>
-                <Typography className={cx(classes.title, classes.helveticaBold)}>
-                    {t.wallets_create_wallet_verification()}
+    return (
+        <>
+            <Typography className={cx(classes.title, classes.helveticaBold)}>
+                {t.wallets_create_wallet_verification()}
+            </Typography>
+            <Typography className={classes.tips}>{t.create_wallet_verify_words()}</Typography>
+            <Box component="ul" className={classes.puzzleWordList}>
+                {puzzleWordList.map((puzzleWord, index) => (
+                    <section key={index} className={classes.puzzleWord}>
+                        <Typography className={classes.puzzleWordIndex}>{puzzleWord.index + 1}.</Typography>
+                        <PuzzleOption
+                            puzzleWord={puzzleWord}
+                            answerCallback={answerCallback}
+                            puzzleAnswer={puzzleAnswer}
+                        />
+                    </section>
+                ))}
+            </Box>
+            {isMatched === false ? (
+                <Typography className={classes.verificationFail}>
+                    {t.create_wallet_mnemonic_verification_fail()}
                 </Typography>
-                <Typography className={classes.tips}>{t.create_wallet_verify_words()}</Typography>
-                <Box component="ul" className={classes.puzzleWordList}>
-                    {puzzleWordList.map((puzzleWord, index) => (
-                        <section key={index} className={classes.puzzleWord}>
-                            <Typography className={classes.puzzleWordIndex}>{puzzleWord.index + 1}.</Typography>
-                            <PuzzleOption
-                                puzzleWord={puzzleWord}
-                                answerCallback={answerCallback}
-                                puzzleAnswer={puzzleAnswer}
-                            />
-                        </section>
-                    ))}
-                </Box>
-                {isMatched === false ? (
-                    <Typography className={classes.verificationFail}>
-                        {t.create_wallet_mnemonic_verification_fail()}
-                    </Typography>
-                ) : null}
-                <SetupFrameController>
-                    <div className={classes.buttonGroup}>
-                        <SecondaryButton
-                            className={classes.helveticaBold}
-                            width="125px"
-                            size="large"
-                            onClick={() => setIsVerify(false)}>
-                            {t.back()}
-                        </SecondaryButton>
-                        <PrimaryButton
-                            className={classes.helveticaBold}
-                            width="125px"
-                            size="large"
-                            color="primary"
-                            onClick={() => verifyAnswerCallback(onSubmit)}>
-                            {t.verify()}
-                        </PrimaryButton>
-                    </div>
-                </SetupFrameController>
-            </>
-        )
-    },
-)
+            ) : null}
+            <SetupFrameController>
+                <div className={classes.buttonGroup}>
+                    <SecondaryButton
+                        className={classes.helveticaBold}
+                        width="125px"
+                        size="large"
+                        onClick={() => setIsVerify(false)}>
+                        {t.back()}
+                    </SecondaryButton>
+                    <PrimaryButton
+                        className={classes.helveticaBold}
+                        width="125px"
+                        size="large"
+                        color="primary"
+                        onClick={() => verifyAnswerCallback(onSubmit)}>
+                        {t.verify()}
+                    </PrimaryButton>
+                </div>
+            </SetupFrameController>
+        </>
+    )
+})
 
-const PuzzleOption = memo<PuzzleOption>(({ puzzleWord, puzzleAnswer, answerCallback }) => {
+const PuzzleOption = memo<PuzzleOption>(function PuzzleOption({ puzzleWord, puzzleAnswer, answerCallback }) {
     const { classes, cx } = useStyles({ isVerify: false })
 
     return (
@@ -351,16 +351,14 @@ const PuzzleOption = memo<PuzzleOption>(({ puzzleWord, puzzleAnswer, answerCallb
                     onClick={() => answerCallback(puzzleWord.index, word)}>
                     <div
                         className={cx(
-                            classes.checkIconWrapper,
-                            word === puzzleAnswer[puzzleWord.index] ? classes.checked : '',
+                            classes.iconWrapper,
+                            word !== puzzleAnswer[puzzleWord.index] ? classes.emptyCheckbox : '',
                         )}>
-                        <CheckIcon
-                            className={cx(
-                                classes.checkIcon,
-                                word === puzzleAnswer[puzzleWord.index] ? classes.checkedText : '',
-                            )}
-                        />
+                        {word === puzzleAnswer[puzzleWord.index] ? (
+                            <Icons.Checkbox size={18} className={classes.checkIcon} />
+                        ) : null}
                     </div>
+
                     <Typography className={classes.puzzleWordText}>{word}</Typography>
                 </section>
             ))}
@@ -368,7 +366,12 @@ const PuzzleOption = memo<PuzzleOption>(({ puzzleWord, puzzleAnswer, answerCallb
     )
 })
 
-const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, onVerifyClick, address }) => {
+const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
+    words,
+    onRefreshWords,
+    onVerifyClick,
+    address,
+}) {
     const t = useDashboardI18N()
     const ref = useRef(null)
     const { classes, cx } = useStyles({ isVerify: false })

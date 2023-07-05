@@ -39,12 +39,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface RestoreFromLocalProps {
-    handleRestoreFromLocalStore: () => Promise<void>
+    onRestore: () => Promise<void>
 }
 
-export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({
-    handleRestoreFromLocalStore,
-}: RestoreFromLocalProps) {
+export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ onRestore }: RestoreFromLocalProps) {
     const { classes, theme } = useStyles()
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
@@ -119,7 +117,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({
                 return
             } else {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
-                await handleRestoreFromLocalStore()
+                await onRestore()
             }
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
@@ -127,8 +125,8 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({
     }, [backupId, summary?.wallets])
 
     useEffect(() => {
-        return Messages.events.restoreSuccess.on(handleRestoreFromLocalStore)
-    }, [handleRestoreFromLocalStore])
+        return Messages.events.restoreSuccess.on(onRestore)
+    }, [onRestore])
 
     const disabled = useMemo(() => {
         if (!readingFile && restoreStatus === RestoreStatus.Verified) return !summary

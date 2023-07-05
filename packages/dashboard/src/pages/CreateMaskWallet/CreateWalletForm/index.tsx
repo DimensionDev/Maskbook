@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const CreateWalletForm = memo(() => {
+const CreateWalletForm = memo(function CreateWalletForm() {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()

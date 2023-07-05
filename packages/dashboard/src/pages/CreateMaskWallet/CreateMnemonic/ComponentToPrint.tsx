@@ -72,7 +72,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: ForwardedRef<any>) => {
+export const ComponentToPrint = forwardRef(function ComponentToPrint(
+    props: ComponentToPrintProps,
+    ref: ForwardedRef<any>,
+) {
     const { words, address } = props
     const t = useDashboardI18N()
     const { classes } = useStyles()

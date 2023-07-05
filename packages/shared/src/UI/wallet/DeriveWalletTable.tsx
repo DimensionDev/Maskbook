@@ -96,61 +96,64 @@ interface DeriveWalletTableProps {
     hiddenHeader?: boolean
 }
 
-export const DeriveWalletTable = memo<DeriveWalletTableProps>(
-    ({ loading, dataSource, onCheck, symbol, hiddenHeader, page }) => {
-        const { classes, cx } = useStyles()
-        const t = useSharedI18N()
-        return (
-            <Table size="small" padding="none" stickyHeader>
-                {hiddenHeader ? null : (
-                    <TableHead>
-                        <TableRow>
-                            <TableCell key="address" align="center" variant="head" className={classes.header}>
-                                <Typography className={classes.title}>
-                                    {t.address_viewer_address_name_address()}
-                                </Typography>
-                            </TableCell>
-                            <TableCell key="balance" align="center" variant="head" className={classes.header}>
-                                <Typography className={classes.title}>{t.wallet_balance_eth({ symbol })}</Typography>
-                            </TableCell>
-                            <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                                <Typography className={classes.title}>{t.operation()}</Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                )}
-                <TableBody>
-                    {dataSource?.length && !loading
-                        ? dataSource.map((item, index) => (
-                              <DeriveWalletTableRow
-                                  address={item.address}
-                                  page={page}
-                                  key={index}
-                                  index={index}
-                                  selected={item.selected}
-                                  added={item.added}
-                                  onCheck={(checked) => onCheck(checked, index)}
-                                  symbol={symbol}
-                              />
-                          ))
-                        : range(10).map((index) => (
-                              <TableRow key={index} className={classes.tableRow}>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
-                                  </TableCell>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
-                                  </TableCell>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
-                                  </TableCell>
-                              </TableRow>
-                          ))}
-                </TableBody>
-            </Table>
-        )
-    },
-)
+export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWalletTable({
+    loading,
+    dataSource,
+    onCheck,
+    symbol,
+    hiddenHeader,
+    page,
+}) {
+    const { classes, cx } = useStyles()
+    const t = useSharedI18N()
+    return (
+        <Table size="small" padding="none" stickyHeader>
+            {hiddenHeader ? null : (
+                <TableHead>
+                    <TableRow>
+                        <TableCell key="address" align="center" variant="head" className={classes.header}>
+                            <Typography className={classes.title}>{t.address_viewer_address_name_address()}</Typography>
+                        </TableCell>
+                        <TableCell key="balance" align="center" variant="head" className={classes.header}>
+                            <Typography className={classes.title}>{t.wallet_balance_eth({ symbol })}</Typography>
+                        </TableCell>
+                        <TableCell key="Operation" align="center" variant="head" className={classes.header}>
+                            <Typography className={classes.title}>{t.operation()}</Typography>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+            )}
+            <TableBody>
+                {dataSource?.length && !loading
+                    ? dataSource.map((item, index) => (
+                          <DeriveWalletTableRow
+                              address={item.address}
+                              page={page}
+                              key={index}
+                              index={index}
+                              selected={item.selected}
+                              added={item.added}
+                              onCheck={(checked) => onCheck(checked, index)}
+                              symbol={symbol}
+                          />
+                      ))
+                    : range(10).map((index) => (
+                          <TableRow key={index} className={classes.tableRow}>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
+                              </TableCell>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
+                              </TableCell>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
+                              </TableCell>
+                          </TableRow>
+                      ))}
+            </TableBody>
+        </Table>
+    )
+})
 export interface DeriveWalletTableRowProps {
     address: string
     added: boolean
@@ -160,69 +163,75 @@ export interface DeriveWalletTableRowProps {
     onCheck: (checked: boolean) => void
     symbol: string
 }
-export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(
-    ({ address, added, onCheck, selected, symbol, index, page }) => {
-        const { classes, cx } = useStyles()
-        const { data: balance, isFetching } = useBalance(NetworkPluginID.PLUGIN_EVM, {
-            account: address,
-            chainId: ChainId.Mainnet,
-        })
+export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function DeriveWalletTableRow({
+    address,
+    added,
+    onCheck,
+    selected,
+    symbol,
+    index,
+    page,
+}) {
+    const { classes, cx } = useStyles()
+    const { data: balance, isFetching } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+        account: address,
+        chainId: ChainId.Mainnet,
+    })
 
-        const [, copyToClipboard] = useCopyToClipboard()
-        const theme = useTheme()
+    const [, copyToClipboard] = useCopyToClipboard()
+    const theme = useTheme()
 
-        return (
-            <TableRow key={address} className={classes.tableRow}>
-                <TableCell align="left" variant="body" className={classes.cell}>
-                    <Typography className={classes.second}>{page * 10 + index + 1}</Typography>
-                    <Typography className={classes.title}>
-                        <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
-                    </Typography>
-                    <div className={classes.icons}>
-                        <Icons.Copy size={16} className={classes.icon} onClick={() => copyToClipboard(address)} />
-                        <Icons.LinkOut
-                            size={16}
-                            className={classes.link}
-                            onClick={() => openWindow(explorerResolver.addressLink(ChainId.Mainnet, address))}
-                        />
-                    </div>
-                </TableCell>
-                <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
-                    {isFetching ? (
-                        <CircularProgress color="primary" size={12} />
-                    ) : (
-                        <Typography className={classes.title}>
-                            <FormattedBalance
-                                value={balance}
-                                decimals={18}
-                                significant={4}
-                                symbol={symbol}
-                                formatter={formatBalance}
-                                classes={{ symbol: cx(classes.second, classes.symbol) }}
-                            />
-                        </Typography>
-                    )}
-                </TableCell>
-                <TableCell align="right" variant="body" className={classes.cell}>
-                    <Checkbox
-                        disabled={added}
-                        defaultChecked={selected || added}
-                        icon={<Icons.CheckboxBorder size={16} color={theme.palette.maskColor.primary} />}
-                        checkedIcon={<Icons.Checkbox size={16} />}
-                        sx={{
-                            color: theme.palette.maskColor.primary,
-                            padding: 0,
-                            width: 16,
-                            height: 16,
-                            borderRadius: 1,
-                            '&.Mui-checked': {
-                                color: theme.palette.maskColor.primary,
-                            },
-                        }}
-                        onChange={(e) => onCheck(e.target.checked)}
+    return (
+        <TableRow key={address} className={classes.tableRow}>
+            <TableCell align="left" variant="body" className={classes.cell}>
+                <Typography className={classes.second}>{page * 10 + index + 1}</Typography>
+                <Typography className={classes.title}>
+                    <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
+                </Typography>
+                <div className={classes.icons}>
+                    <Icons.Copy size={16} className={classes.icon} onClick={() => copyToClipboard(address)} />
+                    <Icons.LinkOut
+                        size={16}
+                        className={classes.link}
+                        onClick={() => openWindow(explorerResolver.addressLink(ChainId.Mainnet, address))}
                     />
-                </TableCell>
-            </TableRow>
-        )
-    },
-)
+                </div>
+            </TableCell>
+            <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
+                {isFetching ? (
+                    <CircularProgress color="primary" size={12} />
+                ) : (
+                    <Typography className={classes.title}>
+                        <FormattedBalance
+                            value={balance}
+                            decimals={18}
+                            significant={4}
+                            symbol={symbol}
+                            formatter={formatBalance}
+                            classes={{ symbol: cx(classes.second, classes.symbol) }}
+                        />
+                    </Typography>
+                )}
+            </TableCell>
+            <TableCell align="right" variant="body" className={classes.cell}>
+                <Checkbox
+                    disabled={added}
+                    defaultChecked={selected || added}
+                    icon={<Icons.CheckboxBorder size={16} color={theme.palette.maskColor.primary} />}
+                    checkedIcon={<Icons.Checkbox size={16} />}
+                    sx={{
+                        color: theme.palette.maskColor.primary,
+                        padding: 0,
+                        width: 16,
+                        height: 16,
+                        borderRadius: 1,
+                        '&.Mui-checked': {
+                            color: theme.palette.maskColor.primary,
+                        },
+                    }}
+                    onChange={(e) => onCheck(e.target.checked)}
+                />
+            </TableCell>
+        </TableRow>
+    )
+})

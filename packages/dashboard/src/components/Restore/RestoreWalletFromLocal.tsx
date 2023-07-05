@@ -3,7 +3,7 @@ import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
 import PasswordField from '../PasswordField/index.js'
@@ -21,13 +21,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface RestoreFromLocalProps {
-    handleRestoreFromLocalStore: (keyStoreContent: string, keyStorePassword: string) => Promise<void>
+    onRestore: (keyStoreContent: string, keyStorePassword: string) => Promise<void>
     setError: (error: string) => void
     error: string
 }
 
 export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
-    handleRestoreFromLocalStore,
+    onRestore,
     setError,
     error,
 }: RestoreFromLocalProps) {
@@ -61,16 +61,14 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
         setFile(null)
     }, [])
 
-    const disabled = useMemo(() => {
-        return readingFile || !file
-    }, [readingFile, !file])
+    const disabled = readingFile || !file
 
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
                 size="large"
                 color="primary"
-                onClick={() => handleRestoreFromLocalStore(keyStoreContent, keyStorePassword)}
+                onClick={() => onRestore(keyStoreContent, keyStorePassword)}
                 disabled={disabled}>
                 {t.continue()}
             </PrimaryButton>,

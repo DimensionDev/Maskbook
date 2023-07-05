@@ -127,7 +127,7 @@ export const Recovery = memo(function Recovery() {
         [t, navigate],
     )
 
-    const handleRestoreFromLocalStore = useCallback(async () => {
+    const onRestore = useCallback(async () => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastedPersona) {
@@ -180,7 +180,7 @@ export const Recovery = memo(function Recovery() {
                                 <RestoreFromPrivateKey handleRestoreFromPrivateKey={handleRestoreFromPrivateKey} />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                                <RestorePersonaFromLocal handleRestoreFromLocalStore={handleRestoreFromLocalStore} />
+                                <RestorePersonaFromLocal onRestore={onRestore} />
                             </TabPanel>
                             <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
                                 <RestoreFromCloud />

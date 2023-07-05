@@ -117,7 +117,7 @@ const Recovery = memo(function Recovery() {
         [t, walletName, navigate],
     )
 
-    const handleRestoreFromLocalStore = useCallback(
+    const onRestore = useCallback(
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
@@ -182,11 +182,7 @@ const Recovery = memo(function Recovery() {
                                 />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                                <RestoreWalletFromLocal
-                                    handleRestoreFromLocalStore={handleRestoreFromLocalStore}
-                                    setError={setError}
-                                    error={error}
-                                />
+                                <RestoreWalletFromLocal onRestore={onRestore} setError={setError} error={error} />
                             </TabPanel>
                         </div>
                     </TabContext>
