@@ -381,7 +381,6 @@
     "create_wallet_name_placeholder": "1〜12文字を入力してください",
     "create_wallet_form_title": "ウォレットを作成します",
     "create_wallet_re_enter_payment_password": "支払いパスワードを再入力",
-    "create_wallet_payment_password_tip_1": "決済パスワードは、数字、文字、特殊文字の2つのカテゴリの組み合わせで、8〜20文字の長さが必要です。",
     "create_wallet_your_wallet_address": "あなたのウォレットアドレス",
     "create_wallet_done": "完了",
     "create_wallet_verify_words": "ニーモニックワードを検証します",
