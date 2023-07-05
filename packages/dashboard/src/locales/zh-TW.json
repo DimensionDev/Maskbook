@@ -342,7 +342,6 @@
     "create_wallet_name_placeholder": "輸入1-12個字元",
     "create_wallet_form_title": "創建錢包",
     "create_wallet_re_enter_payment_password": "再次輸入支付密碼",
-    "create_wallet_payment_password_tip_1": "支付密碼必須是數字、大小寫字母和特殊字母中至少兩種類別的組合，長度為8-20個字符",
     "create_wallet_your_wallet_address": "錢包地址",
     "create_wallet_done": "完成",
     "create_wallet_verify_words": "驗證助記詞",
