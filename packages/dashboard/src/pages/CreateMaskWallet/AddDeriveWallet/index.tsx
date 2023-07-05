@@ -99,7 +99,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             })
         }
         return EMPTY_LIST
-    }, [mnemonic, wallets.length, page])
+    }, [mnemonic, wallets.length, page, indexes])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         if (!mnemonic) return

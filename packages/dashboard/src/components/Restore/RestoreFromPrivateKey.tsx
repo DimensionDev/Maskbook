@@ -45,7 +45,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
         async (data) => {
             await handleRestoreFromPrivateKey?.(data, setError)
         },
-        [navigate, setError],
+        [navigate, setError, handleRestoreFromPrivateKey],
     )
 
     useLayoutEffect(() => {

@@ -79,7 +79,7 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
 
     const qrValue = useMemo(() => {
         return `mask://wallet/mnemonic/${btoa(words.join(' '))}`
-    }, [words?.join(',')])
+    }, [words.join(',')])
 
     return (
         <Box className={classes.container} ref={ref}>

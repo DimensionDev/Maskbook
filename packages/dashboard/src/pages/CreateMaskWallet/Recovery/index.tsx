@@ -102,7 +102,7 @@ const Recovery = memo(function Recovery() {
                 setError(t.wallet_recovery_mnemonic_confirm_failed())
             }
         },
-        [navigate],
+        [t, navigate],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
@@ -114,7 +114,7 @@ const Recovery = memo(function Recovery() {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
             }
         },
-        [walletName, navigate],
+        [t, walletName, navigate],
     )
 
     const handleRestoreFromLocalStore = useCallback(
@@ -131,7 +131,7 @@ const Recovery = memo(function Recovery() {
                 setError(t.create_wallet_key_store_incorrect_password())
             }
         },
-        [walletName],
+        [t, walletName],
     )
 
     const handleRecovery = useCallback(() => {

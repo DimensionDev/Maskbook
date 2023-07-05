@@ -40,7 +40,7 @@ export interface PluginServices {
             mnemonic: string,
             derivationPath?: string,
             initialPassword?: string | undefined,
-        ): Promise<string | null | undefined>
+        ): Promise<string | undefined>
         resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }

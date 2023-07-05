@@ -6,7 +6,6 @@ import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/mat
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
@@ -214,11 +213,7 @@ const CreateMnemonic = memo(() => {
     }, [JSON.stringify(words), hasPassword, location.state?.password])
 
     const [, onSubmit] = useAsyncFn(async () => {
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
-            walletName,
-            words.join(' '),
-            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-        )
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
             {
@@ -441,9 +436,11 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshWords, o
                 </PrimaryButton>
             </SetupFrameController>
 
-            <Box sx={{ position: 'absolute', top: -9999 }}>
-                <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
-            </Box>
+            {words?.length ? (
+                <Box sx={{ position: 'absolute', top: -9999 }}>
+                    <ComponentToPrint ref={ref} words={words} address={address ?? ''} />
+                </Box>
+            ) : null}
         </>
     )
 })
