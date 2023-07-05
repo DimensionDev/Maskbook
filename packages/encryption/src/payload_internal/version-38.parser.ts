@@ -121,9 +121,9 @@ async function decodePublicSharedAESKey(
 
 async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalResult<EC_Key, CryptoException>> {
     const key = await andThenAsync(decodeUint8ArrayCrypto(compressedPublic), async (val) =>
-        (
-            await Result.wrapAsync(() => decompressK256Point(val))
-        ).mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e)),
+        (await Result.wrapAsync(() => decompressK256Point(val))).mapErr(
+            (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
+        ),
     )
 
     if (key.err) return key

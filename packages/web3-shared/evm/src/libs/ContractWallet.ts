@@ -20,7 +20,12 @@ export class ContractWallet {
      * @param address  the deployed logic contract address
      * @param entryPoint the entry point contract address
      */
-    constructor(private chainId: ChainId, private owner: string, private address: string, private entryPoint: string) {}
+    constructor(
+        private chainId: ChainId,
+        private owner: string,
+        private address: string,
+        private entryPoint: string,
+    ) {}
 
     /**
      * The wallet proxy contract instance

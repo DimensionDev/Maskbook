@@ -125,8 +125,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter((x) =>
-                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        tokens[account.toLowerCase()]?.filter(
+                            (x) => blockedBy[account.toLowerCase()]?.includes(x.address),
                         ),
                     ),
             )
@@ -138,8 +138,8 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 ),
                 ([account, tokens, blockedBy]) =>
                     safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter((x) =>
-                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        tokens[account.toLowerCase()]?.filter(
+                            (x) => blockedBy[account.toLowerCase()]?.includes(x.address),
                         ),
                     ),
             )

@@ -60,9 +60,7 @@ export function OffersList(props: OffersListProps) {
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
-            {_offers?.map((x, idx) => (
-                <OfferCard key={idx} offer={x} />
-            ))}
+            {_offers?.map((x, idx) => <OfferCard key={idx} offer={x} />)}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
                 {!offers.ended && (
                     <Button variant="roundedContained" sx={{ mb: 2 }} onClick={() => offers.next()}>

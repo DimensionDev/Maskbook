@@ -55,7 +55,7 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
                             hash: x.transaction_hash,
                             chainId,
                             blockNumber: Number(x.block_number),
-                        } as Transaction<ChainId, SchemaType>),
+                        }) as Transaction<ChainId, SchemaType>,
                 )
         } catch {
             return

@@ -244,10 +244,13 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                         const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
                         return !!transferAmount || !isZero(transferAmount)
                     }, t('wallet_transfer_error_amount_absence'))
-                    .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
-                        return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                    }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.symbol })),
+                    .refine(
+                        (amount) => {
+                            const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
+                            return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
+                        },
+                        t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.symbol }),
+                    ),
                 gasLimit: zod
                     .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))

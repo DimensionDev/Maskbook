@@ -19,9 +19,7 @@ export const PostHistory = memo(({ network }: PostHistoryProps) => {
     return (
         <Stack justifyContent="space-between" height="100%">
             <Box flex={1} mt={1}>
-                {posts?.map((x) => (
-                    <PostHistoryRow network={network} post={x} key={x.url} />
-                ))}
+                {posts?.map((x) => <PostHistoryRow network={network} post={x} key={x.url} />)}
             </Box>
             {!loading && !error && !!posts?.length ? (
                 <Stack justifyContent="center" direction="row">

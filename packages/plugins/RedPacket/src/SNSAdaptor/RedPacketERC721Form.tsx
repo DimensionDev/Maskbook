@@ -287,7 +287,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const assets = collection?.assets?.length ? collection?.assets : assets_
 
-    const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index } as OrderedERC721Token))
+    const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index }) as OrderedERC721Token)
 
     const balance = collection?.balance ?? tokenDetailedOwnerList.length
     const removeToken = useCallback(

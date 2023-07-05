@@ -96,7 +96,7 @@ export class TheGraphRedPacketAPI {
                     total_remaining: '',
                     password: '',
                     is_random: x.is_random,
-                } as RedPacketJSONPayloadFromChain),
+                }) as RedPacketJSONPayloadFromChain,
         )
     }
 
@@ -158,7 +158,7 @@ export class TheGraphRedPacketAPI {
                     // #region Retrieve from database
                     password: '',
                     // #endregion
-                } as NftRedPacketJSONPayload),
+                }) as NftRedPacketJSONPayload,
         )
     }
 }

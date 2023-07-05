@@ -54,9 +54,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
-            {_events?.map((x, idx) => (
-                <ActivityCard key={idx} activity={x} />
-            ))}
+            {_events?.map((x, idx) => <ActivityCard key={idx} activity={x} />)}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
                 {!events.ended && (
                     <Stack py={1}>

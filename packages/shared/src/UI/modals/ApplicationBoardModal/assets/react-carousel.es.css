@@ -47,7 +47,9 @@
     right: 0;
     opacity: 0;
     cursor: zoom-in;
-    transition: opacity 0.3s, transform 0.3s;
+    transition:
+        opacity 0.3s,
+        transform 0.3s;
 }
 .hover___MYy31,
 .loading___1pvNI,

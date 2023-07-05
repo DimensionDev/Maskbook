@@ -157,9 +157,8 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
     return {
         ...token,
         link: asset.opensea_link ?? asset.permalink ?? createAssetLink(chainId, token.address, token.tokenId),
-        paymentTokens: uniqBy(
-            asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)),
-            (x) => x.address.toLowerCase(),
+        paymentTokens: uniqBy(asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)), (x) =>
+            x.address.toLowerCase(),
         ),
         creator: {
             address: asset.creator.address,

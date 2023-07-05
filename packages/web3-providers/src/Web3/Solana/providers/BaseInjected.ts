@@ -8,7 +8,10 @@ export class BaseInjectedProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
+    constructor(
+        protected providerType: ProviderType,
+        protected bridge: InjectedProvider,
+    ) {
         super()
     }
 

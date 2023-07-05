@@ -2,7 +2,10 @@ import type { Account } from '@masknet/shared-base'
 import { type ChainId, formatEthereumAddress, EthereumMethodType, isValidAddress, isValidChainId } from '../index.js'
 
 export class EIP155Editor {
-    constructor(private chainId: ChainId, private address: string) {}
+    constructor(
+        private chainId: ChainId,
+        private address: string,
+    ) {}
 
     get account(): Account<ChainId> {
         return {

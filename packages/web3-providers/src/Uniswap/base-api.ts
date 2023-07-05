@@ -269,10 +269,7 @@ export async function getCoinInfo(chainId: Web3Helper.ChainIdAll, id: string) {
     // #endregion
 
     // #region get pairs data
-    const pairsData = await getBulkPairData(
-        chainId,
-        allPairs?.map(({ id }) => id),
-    )
+    const pairsData = await getBulkPairData(chainId, allPairs?.map(({ id }) => id))
     // #endregion
 
     return {

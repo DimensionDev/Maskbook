@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: npx prettier@2.8.8 --check .
+      - run: npx prettier@3.0.0 --check .
   markdownlint:
     runs-on: ubuntu-latest
     steps:

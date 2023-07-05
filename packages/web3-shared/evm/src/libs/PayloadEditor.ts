@@ -14,7 +14,10 @@ import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
 export class PayloadEditor {
-    constructor(private payload: JsonRpcPayload, private options?: Options) {}
+    constructor(
+        private payload: JsonRpcPayload,
+        private options?: Options,
+    ) {}
 
     get pid() {
         const { id } = this.payload
