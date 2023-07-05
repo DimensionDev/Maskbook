@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     itemText: {
         fontSize: 14,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
     },
     popoverPaper: {
@@ -86,7 +85,6 @@ const useStyles = makeStyles()((theme) => ({
     dialingCode: {
         width: 33,
         fontSize: 13,
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.main,
         flexShrink: 0,
         textAlign: 'right',

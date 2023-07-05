@@ -55,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         fontSize: 16,
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     panels: {
         display: 'flex',

@@ -50,9 +50,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         fontWeight: 700,
     },
-    helveticaBold: {
+    bold: {
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     create: {
         fontSize: 14,
@@ -145,10 +144,10 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     return (
         <Box>
             <div className={classes.between}>
-                <Typography className={cx(classes.second, classes.helveticaBold)}>
+                <Typography className={cx(classes.second, classes.bold)}>
                     {t.create_step({ step: '2', total: '2' })}
                 </Typography>
-                <Typography className={cx(classes.create, classes.helveticaBold)} onClick={handleRecovery}>
+                <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
                     {t.create()}
                 </Typography>
             </div>
@@ -177,17 +176,13 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                         className={classes.paginationButton}
                         disabled={page === 0 || confirmLoading}
                         onClick={() => setPage((prev) => prev - 1)}>
-                        <Typography fontWeight={700} fontFamily="Helvetica">
-                            {t.previous()}
-                        </Typography>
+                        <Typography fontWeight={700}>{t.previous()}</Typography>
                     </SecondaryButton>
                     <SecondaryButton
                         className={classes.paginationButton}
                         disabled={confirmLoading}
                         onClick={() => setPage((prev) => prev + 1)}>
-                        <Typography fontWeight={700} fontFamily="Helvetica">
-                            {t.next()}
-                        </Typography>
+                        <Typography fontWeight={700}>{t.next()}</Typography>
                     </SecondaryButton>
                 </div>
             ) : null}
@@ -196,7 +191,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 <PrimaryButton
                     loading={confirmLoading}
                     disabled={confirmLoading || loading || !indexes.size}
-                    className={classes.helveticaBold}
+                    className={classes.bold}
                     width="125px"
                     size="large"
                     color="primary"

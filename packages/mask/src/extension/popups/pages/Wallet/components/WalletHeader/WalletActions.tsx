@@ -40,7 +40,6 @@ const useStyles = makeStyles()((theme) => {
         label: {
             color: theme.palette.maskColor.main,
             marginLeft: theme.spacing(1),
-            fontFamily: 'Helvetica',
             fontWeight: 700,
             fontSize: 14,
         },

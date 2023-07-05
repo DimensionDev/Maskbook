@@ -43,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         fontSize: 16,
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     panels: {
         display: 'flex',
@@ -64,9 +63,8 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         marginBottom: 12,
     },
-    helveticaBold: {
+    bold: {
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     create: {
         fontSize: 14,
@@ -138,10 +136,10 @@ const Recovery = memo(function Recovery() {
     return (
         <Box>
             <div className={classes.between}>
-                <Typography className={cx(classes.second, classes.helveticaBold)}>
+                <Typography className={cx(classes.second, classes.bold)}>
                     {t.create_step({ step: '2', total: '2' })}
                 </Typography>
-                <Typography className={cx(classes.create, classes.helveticaBold)} onClick={handleRecovery}>
+                <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
                     {t.create()}
                 </Typography>
             </div>

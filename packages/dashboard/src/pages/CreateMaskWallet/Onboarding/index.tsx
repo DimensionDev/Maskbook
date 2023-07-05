@@ -121,9 +121,7 @@ const Onboarding = memo(function Onboarding() {
             </Box>
             <SetupFrameController>
                 <PrimaryButton onClick={onOpenPopupWallet} size="large" width={'228px'}>
-                    <Typography fontWeight={700} fontFamily="Helvetica">
-                        {t.create_wallet_onboarding_got_it()}
-                    </Typography>
+                    <Typography fontWeight={700}>{t.create_wallet_onboarding_got_it()}</Typography>
                 </PrimaryButton>
             </SetupFrameController>
         </Box>

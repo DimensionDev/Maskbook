@@ -33,7 +33,6 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     tips: {
         fontSize: 14,
         lineHeight: '18px',
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.second,
     },
     refresh: {
@@ -71,9 +70,8 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
-    helveticaBold: {
+    bold: {
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     alert: {
         marginTop: 24,
@@ -141,7 +139,6 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     },
     puzzleWordText: {
         fontSize: 14,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
     },
     iconWrapper: {
@@ -166,7 +163,6 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     verificationFail: {
         color: theme.palette.maskColor.danger,
         fontSize: 14,
-        fontFamily: 'Helvetica',
         fontWeight: 400,
     },
 }))
@@ -222,10 +218,10 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         <div className={classes.container}>
             <div className={classes.leftSide}>
                 <div className={classes.between}>
-                    <Typography className={cx(classes.second, classes.helveticaBold)}>
+                    <Typography className={cx(classes.second, classes.bold)}>
                         {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
                     </Typography>
-                    <Typography className={cx(classes.import, classes.helveticaBold)} onClick={handleRecovery}>
+                    <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
                         {t.wallets_import_wallet_import()}
                     </Typography>
                 </div>
@@ -295,7 +291,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
 
     return (
         <>
-            <Typography className={cx(classes.title, classes.helveticaBold)}>
+            <Typography className={cx(classes.title, classes.bold)}>
                 {t.wallets_create_wallet_verification()}
             </Typography>
             <Typography className={classes.tips}>{t.create_wallet_verify_words()}</Typography>
@@ -319,14 +315,14 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <SecondaryButton
-                        className={classes.helveticaBold}
+                        className={classes.bold}
                         width="125px"
                         size="large"
                         onClick={() => setIsVerify(false)}>
                         {t.back()}
                     </SecondaryButton>
                     <PrimaryButton
-                        className={classes.helveticaBold}
+                        className={classes.bold}
                         width="125px"
                         size="large"
                         color="primary"
@@ -404,9 +400,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
 
     return (
         <>
-            <Typography className={cx(classes.title, classes.helveticaBold)}>
-                {t.write_down_recovery_phrase()}
-            </Typography>
+            <Typography className={cx(classes.title, classes.bold)}>{t.write_down_recovery_phrase()}</Typography>
             <Typography className={classes.tips}>{t.store_recovery_phrase_tip()}</Typography>
             <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={onRefreshWords}>
@@ -430,7 +424,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
             </Alert>
             <SetupFrameController>
                 <PrimaryButton
-                    className={cx(classes.helveticaBold, classes.button)}
+                    className={cx(classes.bold, classes.button)}
                     width="125px"
                     size="large"
                     color="primary"

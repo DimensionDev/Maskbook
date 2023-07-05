@@ -49,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletName: {
         fontSize: 12,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         color: 'rgba(118, 127, 141, 1)',
     },

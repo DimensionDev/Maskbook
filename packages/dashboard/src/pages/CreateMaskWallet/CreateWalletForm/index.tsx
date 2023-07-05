@@ -46,13 +46,11 @@ const useStyles = makeStyles()((theme) => ({
     tips: {
         fontSize: 14,
         lineHeight: '18px',
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.second,
     },
     tipsBottom: {
         fontSize: 14,
         lineHeight: '18px',
-        fontFamily: 'Helvetica',
         marginTop: 8,
         marginBottom: 24,
         color: theme.palette.maskColor.main,
@@ -63,9 +61,8 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
-    helveticaBold: {
+    bold: {
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
 }))
 
@@ -117,10 +114,10 @@ const CreateWalletForm = memo(function CreateWalletForm() {
 
     return (
         <div className={classes.container}>
-            <Typography className={cx(classes.second, classes.helveticaBold)}>
+            <Typography className={cx(classes.second, classes.bold)}>
                 {t.create_step({ step: '1', total: '3' })}
             </Typography>
-            <Typography className={cx(classes.title, classes.helveticaBold)}>{t.set_payment_password()}</Typography>
+            <Typography className={cx(classes.title, classes.bold)}>{t.set_payment_password()}</Typography>
             <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
             <form className={classes.form} onSubmit={onSubmit}>
                 <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
@@ -162,7 +159,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
                     width="125px"
                     size="large"
                     color="primary"
-                    className={classes.helveticaBold}
+                    className={classes.bold}
                     onClick={onSubmit}
                     disabled={!isValid}>
                     {t.continue()}
