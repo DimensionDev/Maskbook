@@ -289,7 +289,7 @@ export async function generateAddressFromMnemonic(
         StoredKeyData: imported.StoredKey.data,
     })
 
-    return created?.account?.address
+    return created?.account?.address ?? undefined
 }
 
 export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string) {
