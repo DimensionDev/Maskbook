@@ -41,6 +41,7 @@
     "collectible_trade$no_platform": "<bold>{{user}}</bold>在<bold>{{platform}}</bold>上售出 <collectible>{{collectible}}</collectible> 至 <recipient>{{recipient}}</recipient> <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "collectible_trade$platform": "<bold>{{user}}</bold> 售出 <collectible>{{collectible}}</collectible> 至 <recipient>{{recipient}}</recipient> <bold>{{cost_value}} {{cost_symbol}}</bold> <bold>{{platform}}</bold>",
     "collectible_burn": "<user>{{user}}</user>销毁<collectible>{{collectible}}</collectible>",
+    "carry_out_activity": "<bold>{{user}}</bold> 在 <bold>{{target}}</bold> <bold>{{platform}}</bold> 进行了一项活动",
     "donation_donate": "<bold>{{user}}</bold> 捐赠了 <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "donation_donate_verbose": "<bold>{{user}}</bold> 捐赠了 <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "note$post": "<bold>{{user}}</bold> 在 <bold>{{platform}}</bold> 发帖",

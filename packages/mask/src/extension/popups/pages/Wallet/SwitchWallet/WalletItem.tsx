@@ -47,7 +47,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     badge: {
         fontSize: 12,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         display: 'inline-block',
         padding: '2px 4px',

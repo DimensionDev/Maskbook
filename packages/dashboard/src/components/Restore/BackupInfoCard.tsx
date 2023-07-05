@@ -12,7 +12,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     desc: {
         fontSize: 12,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         lineHeight: '16px',
     },

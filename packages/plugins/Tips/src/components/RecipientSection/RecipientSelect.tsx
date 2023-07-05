@@ -27,7 +27,6 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
         },
         text: {
             fontWeight: 700,
-            fontFamily: 'Helvetica',
             marginLeft: theme.spacing(0.5),
         },
         select: {

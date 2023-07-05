@@ -1,6 +1,7 @@
 {
     "send": "Send",
     "approve": "Approve",
+    "operation": "Operation",
     "approve_mask": "Approve MASK?",
     "approve_mask_description": "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token.",
     "approve_mask_question": "Do you want to set MASK token as gas fee?",
@@ -18,6 +19,7 @@
     "import": "Import",
     "select_an_nft": "Select an NFT",
     "wallet_balance": "Balance",
+    "wallet_balance_eth": "Balance({{symbol}})",
     "balance": "Balance",
     "decentralized_search_name": "DSearch",
     "web3_profile_card_name": "Web3 Profile Card",

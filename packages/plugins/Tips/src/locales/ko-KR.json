@@ -49,7 +49,5 @@
     "wallet_set_up_failed": "팁 월렛 설정 실패, 디시 시도",
     "view_on_explorer": "Explorer에서 보기",
     "tips_guide_description": "마스크 네트워크의 팁 기능을 사용하여 작성자에게 팁을 보냅니다.",
-    "tips_guide_action": "닫기",
-    "tips_no_collectible_found": "수집품이 없습니다.",
-    "retry": "다시 시도"
+    "tips_guide_action": "닫기"
 }

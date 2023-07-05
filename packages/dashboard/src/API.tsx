@@ -14,14 +14,33 @@ interface MaskAccount {
 export interface PluginServices {
     Wallet: {
         createMnemonicWords(): Promise<string[]>
+        recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
+        recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
+        getDerivableAccounts(
+            mnemonic: string,
+            page: number,
+            pageSize?: number,
+        ): Promise<
+            Array<{
+                index: number
+                address: string
+                derivationPath: string
+            }>
+        >
         hasPassword(): Promise<boolean>
         setPassword(newPassword: string): Promise<void>
         recoverWalletFromMnemonic(
             name: string,
             mnemonic: string,
             derivationPath?: string,
-            initialPassword?: string | undefined,
+            initialPassword?: string,
         ): Promise<string>
+        generateAddressFromMnemonic(
+            name: string,
+            mnemonic: string,
+            derivationPath?: string,
+            initialPassword?: string,
+        ): Promise<string | undefined>
         resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }

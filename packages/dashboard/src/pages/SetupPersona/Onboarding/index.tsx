@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
@@ -10,7 +10,7 @@ import { EnhanceableSite } from '@masknet/shared-base'
 
 import { Services } from '../../../API.js'
 import { delay } from '@masknet/kit'
-import { OnboardingWriter } from './Writer.js'
+import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -84,6 +84,27 @@ export const Onboarding = memo(function Onboarding() {
         window.close()
     }, [])
 
+    const words = useMemo(() => {
+        return [
+            <Typography key="identity">
+                {t.persona_onboarding_creating_identity()}
+                {t.identity()}
+            </Typography>,
+            <Typography key="account">
+                {t.persona_onboarding_generating_accounts()}
+                {t.accounts()}
+            </Typography>,
+            <Typography key="data">
+                {t.persona_onboarding_encrypting_data()}
+                {t.data()}
+            </Typography>,
+            <Typography key="ready">
+                {t.persona_onboarding_ready()}
+                {t.ready()}
+            </Typography>,
+        ]
+    }, [t])
+
     return (
         <Box>
             <Box className={classes.card}>
@@ -106,7 +127,7 @@ export const Onboarding = memo(function Onboarding() {
             </Box>
             <img className={classes.trend} src={Trend.toString()} />
             <Box>
-                <OnboardingWriter />
+                <OnboardingWriter words={words} />
             </Box>
             <SetupFrameController>
                 <PrimaryButton

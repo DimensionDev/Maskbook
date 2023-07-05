@@ -57,7 +57,6 @@
     "insufficient_balance": "잔액 부족",
     "back": "뒤로",
     "hint": "행운 드롭을 발송한 후 24시간 후에 남은 자금을 인출할 수 있습니다.",
-    "total_cost": "총액",
     "amount_per_share": "한 지분 금액",
     "estimate_gas_fee": "예상 가스비",
     "shares": "Shares",
@@ -92,12 +91,5 @@
     "lucky_drop": "행운 드랍",
     "share": "공유",
     "ok": "확인",
-    "got_nft": "{{name}} 하나를 받았습니다.",
-    "plugin_wallet_invalid_network": "잘못된 네트워크",
-    "plugin_wallet_connect_a_wallet": "월렛을 연결하기",
-    "loading": "로딩 중",
-    "select_all": "전체 선택",
-    "retry": "다시 시도",
-    "go_wrong": "오류가 발생합니다.",
-    "no_enough_gas_fees": "가스비 부족"
+    "got_nft": "{{name}} 하나를 받았습니다."
 }

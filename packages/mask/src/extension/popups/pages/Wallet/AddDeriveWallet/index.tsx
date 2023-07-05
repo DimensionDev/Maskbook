@@ -10,7 +10,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
+import { DeriveWalletTable } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
@@ -142,10 +142,10 @@ const AddDeriveWallet = memo(() => {
             </Typography>
             <TableContainer sx={{ maxHeight: 320 }}>
                 <DeriveWalletTable
+                    page={page}
                     loading={loading}
                     dataSource={dataSource}
                     onCheck={onCheck}
-                    confirmLoading={confirmLoading}
                     symbol={nativeToken?.symbol ?? 'ETH'}
                 />
             </TableContainer>

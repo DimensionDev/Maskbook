@@ -10,7 +10,7 @@ interface SetupFrameProps extends PropsWithChildren {
     hiddenSpline?: boolean
 }
 
-export const SetupFrame = memo<SetupFrameProps>(({ children, hiddenSpline }) => {
+export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, hiddenSpline }) {
     const theme = useTheme()
     const t = useDashboardI18N()
     const [loading, setLoading] = useState(true)

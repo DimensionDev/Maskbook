@@ -55,7 +55,7 @@ export function PurchaseDialog(props: ActionBarProps) {
 
     const {
         token: { data: token },
-        balance: { value: balance },
+        balance: { data: balance },
     } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, project.currencyAddress ? project.currencyAddress : '')
 
     const [ToS_Checked, setToS_Checked] = useState(false)
@@ -160,7 +160,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                                     color="primary"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    href="https://www.artblocks.io/tos.pdf"
+                                                    href="https://www.artblocks.io/terms-of-service"
                                                 />
                                             ),
                                         }}

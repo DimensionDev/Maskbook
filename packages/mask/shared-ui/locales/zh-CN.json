@@ -281,7 +281,6 @@
     "recent_transaction_cancelled": "已取消",
     "wallet_balance": "余额",
     "wallet_available_balance": "可用余额",
-    "wallet_balance_eth": "余额(ETH)",
     "wallet_new": "新建钱包",
     "wallet_status_button_change": "切换",
     "wallet_status_button_change_to_evm": "更改至EVM钱包",

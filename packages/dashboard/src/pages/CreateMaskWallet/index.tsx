@@ -1,20 +1,25 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import { lazy } from 'react'
-import { CreateMaskWalletFrame } from '../../components/CreateWalletFrame/index.js'
+import { SetupFrame } from '../../components/CreateWalletFrame/index.js'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 
-// const Welcome = lazy(() => import('./components/Welcome/index.js'))
-const CreateWalletForm = lazy(() => import('./components/CreateWalletForm/index.js'))
-const CreateMnemonic = lazy(() => import('./components/CreateMnemonic/index.js'))
+const CreateWalletForm = lazy(() => import('./CreateWalletForm/index.js'))
+const CreateMnemonic = lazy(() => import('./CreateMnemonic/index.js'))
+const OnBoarding = lazy(() => import('./Onboarding/index.js'))
+const OnRecovery = lazy(() => import('./Recovery/index.js'))
+const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
 
 const r = relativeRouteOf(DashboardRoutes.CreateMaskWallet)
 export default function CreateWallet() {
     return (
-        <CreateMaskWalletFrame>
+        <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpMaskWalletOnboarding)}>
             <Routes>
                 <Route path={r(DashboardRoutes.CreateMaskWalletForm)} element={<CreateWalletForm />} />
                 <Route path={r(DashboardRoutes.CreateMaskWalletMnemonic)} element={<CreateMnemonic />} />
+                <Route path={r(DashboardRoutes.SignUpMaskWalletOnboarding)} element={<OnBoarding />} />
+                <Route path={r(DashboardRoutes.RecoveryMaskWallet)} element={<OnRecovery />} />
+                <Route path={r(DashboardRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
             </Routes>
-        </CreateMaskWalletFrame>
+        </SetupFrame>
     )
 }

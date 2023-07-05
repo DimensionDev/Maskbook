@@ -1,17 +1,22 @@
 import { DashboardRoutes } from '@masknet/shared-base'
+import type { UseFormSetError } from 'react-hook-form'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Button, Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { RestoreFromPrivateKey } from '../../../components/Restore/RestoreFromPrivateKey.js'
-import { RestoreFromLocal } from '../../../components/Restore/RestoreFromLocal.js'
+import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
+import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud.js'
-import { PersonaRecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
+import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
+import { Services } from '../../../API.js'
+import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
+import { delay } from '@masknet/kit'
+import { SignUpRoutePath } from '../../SignUp/routePath.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -50,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         fontSize: 16,
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     panels: {
         display: 'flex',
@@ -71,10 +75,67 @@ const useStyles = makeStyles()((theme) => ({
 export const Recovery = memo(function Recovery() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
+    const [error, setError] = useState('')
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
+
+    const handleRestoreFromMnemonic = useCallback(
+        async (values: string[]) => {
+            try {
+                const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
+                if (persona) {
+                    await changeCurrentPersona(persona)
+                    // Waiting persona changed event notify
+                    await delay(100)
+                    navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
+                } else {
+                    navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
+                        replace: false,
+                        state: { mnemonic: values },
+                    })
+                }
+            } catch {
+                setError(t.sign_in_account_mnemonic_confirm_failed())
+            }
+        },
+        [t, navigate],
+    )
+
+    const handleRestoreFromPrivateKey = useCallback(
+        async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
+            try {
+                const persona = await Services.Identity.loginExistPersonaByPrivateKey(data.privateKey)
+                if (persona) {
+                    await changeCurrentPersona(persona)
+                    // Waiting persona changed event notify
+                    await delay(100)
+                    navigate(DashboardRoutes.SignUpPersonaOnboarding)
+                } else {
+                    navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
+                        replace: false,
+                        state: { privateKey: data.privateKey },
+                    })
+                }
+            } catch {
+                onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
+            }
+        },
+        [t, navigate],
+    )
+
+    const onRestore = useCallback(async () => {
+        if (!currentPersona) {
+            const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+            if (lastedPersona) {
+                await changeCurrentPersona(lastedPersona)
+                await delay(1000)
+            }
+        }
+        navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
+    }, [!currentPersona, changeCurrentPersona, navigate])
 
     return (
         <Box>
@@ -95,7 +156,7 @@ export const Recovery = memo(function Recovery() {
             <Typography className={classes.second} mt={2}>
                 {t.data_recovery_description()}
             </Typography>
-            <PersonaRecoveryProvider>
+            <RecoveryProvider>
                 <div className={classes.tabContainer}>
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
@@ -108,13 +169,17 @@ export const Recovery = memo(function Recovery() {
                         </div>
                         <div className={classes.panelContainer}>
                             <TabPanel value={tabs.mnemonic} classes={tabPanelClasses}>
-                                <RestoreFromMnemonic />
+                                <RestoreFromMnemonic
+                                    handleRestoreFromMnemonic={handleRestoreFromMnemonic}
+                                    error={error}
+                                    setError={setError}
+                                />
                             </TabPanel>
                             <TabPanel value={tabs.privateKey} classes={tabPanelClasses}>
-                                <RestoreFromPrivateKey />
+                                <RestoreFromPrivateKey handleRestoreFromPrivateKey={handleRestoreFromPrivateKey} />
                             </TabPanel>
                             <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                                <RestoreFromLocal />
+                                <RestorePersonaFromLocal onRestore={onRestore} />
                             </TabPanel>
                             <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
                                 <RestoreFromCloud />
@@ -131,7 +196,7 @@ export const Recovery = memo(function Recovery() {
                         )
                     }}
                 </RecoveryContext.Consumer>
-            </PersonaRecoveryProvider>
+            </RecoveryProvider>
         </Box>
     )
 })

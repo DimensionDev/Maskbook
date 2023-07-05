@@ -114,7 +114,6 @@ function Badge({ payload }: BadgeProps) {
             <Typography
                 fontSize="12px"
                 lineHeight="16px"
-                fontFamily="Helvetica"
                 marginLeft="8px"
                 maxWidth="450px"
                 overflow="hidden"
