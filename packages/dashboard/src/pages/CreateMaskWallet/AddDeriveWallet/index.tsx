@@ -168,7 +168,6 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 loading={loading}
                 dataSource={dataSource}
                 onCheck={onCheck}
-                confirmLoading={confirmLoading}
                 symbol={'ETH'}
             />
 
