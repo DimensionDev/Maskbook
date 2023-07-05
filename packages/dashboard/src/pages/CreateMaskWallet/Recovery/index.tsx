@@ -131,7 +131,7 @@ const Recovery = memo(function Recovery() {
                 setError(t.create_wallet_key_store_incorrect_password())
             }
         },
-        [t, walletName],
+        [t, walletName, navigate],
     )
 
     const handleRecovery = useCallback(() => {
