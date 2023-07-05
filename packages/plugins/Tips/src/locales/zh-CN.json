@@ -49,7 +49,5 @@
     "wallet_set_up_failed": "小费钱包设置失败，请重试。",
     "view_on_explorer": "在区块链浏览器查看",
     "tips_guide_description": "使用Mask Newwork发送小费给作者。",
-    "tips_guide_action": "关闭",
-    "retry": "重试",
-    "tips_no_collectible_found": "未找到任何 NFT。"
+    "tips_guide_action": "关闭"
 }

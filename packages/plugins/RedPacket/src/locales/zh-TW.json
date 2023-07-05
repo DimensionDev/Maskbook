@@ -20,8 +20,5 @@
     "erc721_insufficient_balance": "餘額不足",
     "erc20_tab_title": "代幣",
     "claimed": "已領取",
-    "details": "紅包詳情",
-    "plugin_wallet_invalid_network": "錯誤的網路",
-    "plugin_wallet_connect_a_wallet": "連接到錢包",
-    "select_all": "選擇全部"
+    "details": "紅包詳情"
 }
