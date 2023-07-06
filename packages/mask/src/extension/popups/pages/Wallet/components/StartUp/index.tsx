@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         lineHeight: '120%',
         fontStyle: 'normal',
-        fontFamily: 'Helvetica',
         fontWeight: 700,
     },
     addWalletWrapper: {
@@ -48,13 +47,11 @@ const useStyles = makeStyles()((theme) => ({
     subTitle: {
         color: theme.palette.maskColor.main,
         fontSize: 12,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
     },
     description: {
         color: theme.palette.maskColor.third,
         fontSize: 12,
-        fontFamily: 'Helvetica',
         fontWeight: 400,
     },
     mnemonicIcon: {

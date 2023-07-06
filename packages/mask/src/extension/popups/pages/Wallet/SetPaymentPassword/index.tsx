@@ -16,6 +16,7 @@ import { FormattedBalance } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Controller } from 'react-hook-form'
 import { PasswordField } from '../../../components/PasswordField/index.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -35,13 +36,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         marginBottom: 12,
-        fontFamily: 'Helvetica',
         justifyContent: 'center',
         alignItems: 'center',
     },
     addWalletWrapper: {
         display: 'flex',
-        width: 368,
+        width: '100%',
         padding: 12,
         alignItems: 'center',
         gap: 8,
@@ -57,7 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         lineHeight: '120%',
         fontStyle: 'normal',
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         marginBottom: 12,
     },
@@ -67,12 +66,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         fontSize: 12,
         lineHeight: '16px',
-        fontFamily: 'Helvetica',
         fontWeight: 700,
     },
     description: {
         color: theme.palette.maskColor.third,
-        fontFamily: 'Helvetica',
         fontWeight: 400,
     },
     walletsWrapper: {
@@ -95,10 +92,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     form: {
         width: '100%',
-        height: 134,
+        height: 154,
+        marginBottom: 24,
     },
     textField: {
         marginTop: 10,
+    },
+    strong: {
+        color: theme.palette.maskColor.main,
     },
 }))
 
@@ -108,6 +109,8 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const navigate = useNavigate()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const [isCreating, setIsCreating] = useState(false)
+
+    const theme = useTheme()
 
     const {
         control,
@@ -121,7 +124,10 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         async (data: zod.infer<typeof schema>) => {
             try {
                 await WalletRPC.setPassword(data.password)
-                navigate(PopupRoutes.ImportWallet, { replace: true })
+                const hasPassword = await WalletRPC.hasPassword()
+                if (hasPassword) {
+                    navigate(PopupRoutes.Wallet, { replace: true })
+                }
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
@@ -133,7 +139,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 
     const onSubmit = handleSubmit(onConfirm)
 
-    console.log({ wallets })
+    const errorMsg = errors.password?.message ?? errors.confirm?.message
 
     return (
         <Box className={classes.container}>
@@ -152,7 +158,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 </Box>
                 {isCreating ? (
                     <>
-                        <form className={classes.form}>
+                        <form className={classes.form} onSubmit={onSubmit}>
                             <Controller
                                 control={control}
                                 render={({ field }) => (
@@ -183,15 +189,39 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                 name="confirm"
                                 control={control}
                             />
-                        </form>
 
-                        <Typography>{t('popups_wallet_term_of_service_agree')}</Typography>
+                            {errorMsg ? (
+                                <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
+                                    {errorMsg}
+                                </Typography>
+                            ) : null}
+                        </form>
+                        <Typography
+                            color={theme.palette.maskColor.third}
+                            fontSize={14}
+                            textAlign="center"
+                            fontWeight={700}>
+                            <Trans i18nKey="popups_wallet_term_of_service_agree_part_1" />
+                        </Typography>
+
+                        <Typography
+                            color={theme.palette.maskColor.third}
+                            marginBottom="24px"
+                            fontSize={14}
+                            textAlign="center"
+                            fontWeight={700}>
+                            <Trans
+                                i18nKey="popups_wallet_term_of_service_agree_part_2"
+                                components={{ strong: <strong className={classes.strong} /> }}
+                            />
+                        </Typography>
 
                         <ActionButton
                             fullWidth
                             className={classes.setPasswordButton}
-                            onClick={() => setIsCreating(true)}>
-                            {t('popups_set_the_payment_password_title')}
+                            onClick={onSubmit}
+                            loading={loading}>
+                            {t('confirm')}
                         </ActionButton>
                     </>
                 ) : (
