@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { useNavigate } from 'react-router-dom'
@@ -15,7 +15,6 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { first } from 'lodash-es'
 import { walletName } from '../constants.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { produce } from 'immer'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -71,7 +70,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         }
     }
     const { mnemonic } = state.usr
-    const [indexes, setIndexes] = useState(new Set<number>())
+    const indexes = useRef(new Set<number>())
 
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
@@ -83,7 +82,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
     const { loading, value: dataSource } = useAsync(async () => {
         if (mnemonic) {
-            const unDeriveWallets = Array.from(indexes)
+            const unDeriveWallets = Array.from(indexes.current)
 
             const derivableAccounts = await PluginServices.Wallet.getDerivableAccounts(mnemonic, page)
 
@@ -98,12 +97,12 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             })
         }
         return EMPTY_LIST
-    }, [mnemonic, wallets.length, page, indexes])
+    }, [mnemonic, wallets.length, page])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         if (!mnemonic) return
 
-        const unDeriveWallets = Array.from(indexes)
+        const unDeriveWallets = Array.from(indexes.current)
         if (!unDeriveWallets.length) return
 
         const firstPath = first(unDeriveWallets)
@@ -131,12 +130,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
     const onCheck = useCallback(
         async (checked: boolean, index: number) => {
-            setIndexes(
-                produce((draft) => {
-                    checked ? draft.add(page * 10 + index) : draft.delete(page * 10 + index)
-                    return draft
-                }),
-            )
+            checked ? indexes.current.add(page * 10 + index) : indexes.current.delete(page * 10 + index)
         },
         [page],
     )
@@ -190,7 +184,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             <SetupFrameController>
                 <PrimaryButton
                     loading={confirmLoading}
-                    disabled={confirmLoading || loading || !indexes.size}
+                    disabled={confirmLoading || loading || !indexes.current.size}
                     className={classes.bold}
                     width="125px"
                     size="large"
