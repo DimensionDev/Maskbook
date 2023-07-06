@@ -10,6 +10,7 @@ import {
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { classNames } from '../helpers/classNames.js'
+import { DashboardContext } from '../contexts/DashboardContext.js'
 
 const navigation = [
     { name: 'Projects', href: '#', icon: FolderIcon, current: false },
@@ -20,13 +21,10 @@ const navigation = [
     { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
 ]
 
-export interface DashboardForMobileProps {
-    sidebarOpen: boolean
-    setSidebarOpen: (opened: boolean) => void
-}
+export interface DashboardForMobileProps {}
 
 export function DashboardForMobile(props: DashboardForMobileProps) {
-    const { sidebarOpen, setSidebarOpen } = props
+    const { sidebarOpen, setSidebarOpen } = DashboardContext.useContainer()
 
     return (
         <Transition.Root show={sidebarOpen} as={Fragment}>

@@ -1,37 +1,28 @@
-import { Suspense, useState } from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import { StickySearchHeader } from './components/StickySearchBar.js'
+import { Suspense, lazy } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { DashboardForDesktop } from './components/DashboardDesktop.js'
 import { DashboardForMobile } from './components/DashboardMobile.js'
-import { DecryptMessage } from './main/index.js'
-import { DashboardHeader } from './components/DashboardHeader.js'
-import { DashboardContainer } from './components/DashboardContainer.js'
+import { DashboardContext } from './contexts/DashboardContext.js'
+import { ApplicationRoutes } from './constants/ApplicationRoutes.js'
+
+const ExplorerPage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorerPage.js'))
 
 export function MainUI() {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
-
     return (
         <Suspense fallback={null}>
-            <BrowserRouter>
-                <div className="bg-zinc-900 h-full">
-                    <DashboardForMobile sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-                    <DashboardForDesktop />
+            <DashboardContext.Provider>
+                <BrowserRouter>
+                    <div className="bg-zinc-900 h-full">
+                        <DashboardForMobile />
+                        <DashboardForDesktop />
 
-                    <DashboardContainer>
-                        <StickySearchHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-                        <main>
-                            <DashboardHeader title="Deployments" />
-
-                            <div className="bg-white p-5">
-                                <div className="border pt-3 rounded-lg">
-                                    <DecryptMessage />
-                                </div>
-                            </div>
-                        </main>
-                    </DashboardContainer>
-                </div>
-            </BrowserRouter>
+                        <Routes>
+                            <Route path={`${ApplicationRoutes.Explorer}/*`} element={<ExplorerPage />} />
+                            <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
+                        </Routes>
+                    </div>
+                </BrowserRouter>
+            </DashboardContext.Provider>
         </Suspense>
     )
 }
