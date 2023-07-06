@@ -13,7 +13,7 @@ export default function OverviewPage(props: OverviewPageProps) {
             <StickySearchHeader />
 
             <main>
-                <DashboardHeader title="Deployments" />
+                <DashboardHeader title="Overview" />
 
                 {account ? (
                     <div className="bg-white p-5">
