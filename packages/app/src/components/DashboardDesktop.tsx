@@ -5,6 +5,7 @@ import {
     RocketLaunchIcon,
     HeartIcon,
     EyeIcon,
+    TruckIcon,
 } from '@heroicons/react/24/outline'
 import { SelectProviderModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
@@ -16,6 +17,7 @@ const navigation = [
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
+    { name: 'Bridge', icon: TruckIcon, to: ApplicationRoutes.Bridge },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
 ]
 

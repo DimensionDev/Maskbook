@@ -38,6 +38,7 @@
         "@masknet/plugin-vcent": "workspace:^",
         "@masknet/plugin-wallet": "workspace:^",
         "@masknet/plugin-trader": "workspace:^",
+        "@masknet/plugin-cross-chain-bridge": "workspace:^",
         "@masknet/public-api": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",

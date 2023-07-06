@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { AllProviderTradeContext, Trader } from '@masknet/plugin-trader'
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3ContextProvider, useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
@@ -8,7 +9,6 @@ import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-s
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { StickySearchHeader } from '../components/StickySearchBar.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
-import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 
 export interface SwapPageProps {}
 
