@@ -1,5 +1,4 @@
 import { EnhanceableSite } from '@masknet/shared-base'
-import urlcat from 'urlcat'
 import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
 
@@ -14,11 +13,6 @@ export const OpenSeaAdaptor: SiteAdaptor.Definition = {
     isSocialNetwork: false,
 
     getProfilePage: () => new URL('https://opensea.io/account'),
-    getShareLinkURL(message) {
-        const url = urlcat('https://www.minds.com/newsfeed/subscriptions', {
-            intentUrl: message,
-        })
-        return new URL(url)
-    },
+    getShareLinkURL: (message) => new URL('https://opensea.io'),
 }
 defineSiteAdaptor(OpenSeaAdaptor)

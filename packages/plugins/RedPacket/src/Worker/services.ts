@@ -31,15 +31,12 @@ export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPa
 }
 
 export async function getNftRedPacketHistory(histories: NftRedPacketJSONPayload[]) {
-    const historiesWithPassword: NftRedPacketJSONPayload[] = EMPTY_LIST
+    let historiesWithPassword: NftRedPacketJSONPayload[] = EMPTY_LIST
+
     for (const history of histories) {
         const record = await nftDb.getRedPacketNft(history.txid)
-        if (record) {
-            history.password = record.password
-        } else {
-            history.password = ''
-        }
-        historiesWithPassword.push(history)
+
+        historiesWithPassword = historiesWithPassword.concat({ ...history, password: record?.password || '' })
     }
     return historiesWithPassword
 }
