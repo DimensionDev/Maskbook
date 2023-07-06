@@ -14,9 +14,7 @@ export default function ExplorerPage(props: ExplorerPageProps) {
                 <DashboardHeader title="Deployments" />
 
                 <div className="bg-white p-5">
-                    <div className="border pt-3 rounded-lg">
-                        <DecryptMessage />
-                    </div>
+                    <DecryptMessage />
                 </div>
             </main>
         </DashboardContainer>

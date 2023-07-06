@@ -39,9 +39,12 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
     return (
         <RegistryContext.Provider value={registry.getTypedMessageRender}>
             <TypedMessageRender message={message} />
+
             <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
-                <PluginRender message={message} />
-                <PageInspectorRender />
+                <div className="border mt-3 pt-3 rounded-lg">
+                    <PluginRender message={message} />
+                    <PageInspectorRender />
+                </div>
             </Suspense>
         </RegistryContext.Provider>
     )
