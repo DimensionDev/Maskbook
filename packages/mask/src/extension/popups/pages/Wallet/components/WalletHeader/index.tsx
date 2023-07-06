@@ -22,6 +22,7 @@ export const WalletHeader = memo(function WalletHeader() {
 
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
     const { connected, url } = useConnected()
+    const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
     const matchCreatePassword = useMatch(PopupRoutes.CreatePassword)
@@ -40,7 +41,7 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (matchCreatePassword) return null
 
-    if (!wallet || !hasPassword) return <WalletSetupHeaderUI />
+    if (!wallet || !hasPassword || matchUnlock) return <WalletSetupHeaderUI />
 
     if (matchContractInteraction) {
         return (

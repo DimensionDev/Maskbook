@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { useI18N } from '../../../../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -23,8 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletSetupHeaderUIProps {}
 
 export const WalletSetupHeaderUI = memo<WalletSetupHeaderUIProps>(function WalletSetupHeaderUI() {
-    const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     return (
         <Box className={classes.container}>

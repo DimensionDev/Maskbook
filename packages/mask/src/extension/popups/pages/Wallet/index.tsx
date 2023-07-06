@@ -103,9 +103,9 @@ export default function Wallet() {
     }, [location.search, location.pathname, chainId, TransactionFormatter])
 
     useEffect(() => {
-        if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return
-        navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
-    }, [isLocked, location.pathname, getLockStatusLoading])
+        if (getLockStatusLoading) return
+        if (isLocked) navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
+    }, [isLocked, getLockStatusLoading, location.pathname])
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
@@ -114,10 +114,10 @@ export default function Wallet() {
     }, [retry])
 
     useEffect(() => {
-        if (!wallet || loadingHasPassword) return
+        if (!wallet || loadingHasPassword || isLocked || getLockStatusLoading) return
 
         navigate(hasPassword ? PopupRoutes.Wallet : PopupRoutes.SetPaymentPassword, { replace: true })
-    }, [hasPassword, !wallet, loadingHasPassword])
+    }, [hasPassword, isLocked, !wallet, loadingHasPassword, getLockStatusLoading])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

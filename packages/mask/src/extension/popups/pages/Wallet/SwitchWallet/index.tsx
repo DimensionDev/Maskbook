@@ -9,10 +9,10 @@ import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base
 import { Web3 } from '@masknet/web3-providers'
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { Services } from '../../../../service.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { Icons } from '@masknet/icons'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -63,11 +63,10 @@ const SwitchWallet = memo(function SwitchWallet() {
         }
     }, [wallets, history])
     const handleImport = useCallback(() => {
-        if (navigator.userAgent.includes('Firefox')) {
-            Services.Helper.openPopupWindow(PopupRoutes.ImportWallet)
-            return
-        }
-        navigate(PopupRoutes.ImportWallet)
+        browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/recovery'),
+        })
     }, [])
 
     const handleSelect = useCallback(
@@ -85,6 +84,8 @@ const SwitchWallet = memo(function SwitchWallet() {
         },
         [history, smartPayChainId, chainId, closeModal],
     )
+
+    const handleLock = useCallback(async () => WalletRPC.lockWallet(), [])
 
     const action = (
         <Box className={classes.modalAction}>
@@ -111,7 +112,12 @@ const SwitchWallet = memo(function SwitchWallet() {
                     {t('popups_import_wallet')}
                 </Typography>
             </ActionButton>
-            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
+            <ActionButton
+                className={classes.actionButton}
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={handleLock}>
                 <Icons.Lock size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_lock_wallet')}
