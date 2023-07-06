@@ -12,10 +12,10 @@ export function DecryptMessage() {
     if (!postData) return <Typography>No payload found.</Typography>
 
     const [text, version] = postData
-    return <DecryptMessageUI text={text} version={version} />
+    return <DecryptMessageWorker text={text} version={version} />
 }
 
-function DecryptMessageUI(props: { text: string; version: string }) {
+function DecryptMessageWorker(props: { text: string; version: string }) {
     const { text, version } = props
     const [error, isE2E, message] = useDecrypt(text, version)
 
