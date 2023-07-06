@@ -35,6 +35,7 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
             </Typography>
         )
     if (!message) return <Typography>Decrypting...</Typography>
+
     return (
         <RegistryContext.Provider value={registry.getTypedMessageRender}>
             <TypedMessageRender message={message} />

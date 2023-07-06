@@ -2,34 +2,10 @@ import './register.js'
 
 import { Emitter } from '@servie/events'
 import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { BooleanPreference, createI18NBundle, createKVStorageHost, i18NextInstance } from '@masknet/shared-base'
+import { BooleanPreference, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
-import { addListener } from './message.js'
-import { PluginWorker } from './rpc.js'
+import { inMemoryStorage, indexedDBStorage } from './storage.js'
 import { createSharedContext } from '../helpers/createSharedContext.js'
-
-// #region Setup storage
-const inMemoryStorage = createKVStorageHost(
-    {
-        beforeAutoSync: Promise.resolve(),
-        getValue: PluginWorker.memoryRead,
-        setValue: PluginWorker.memoryWrite,
-    },
-    {
-        on: (callback) => addListener('inMemoryStorage', callback),
-    },
-)
-const indexedDBStorage = createKVStorageHost(
-    {
-        beforeAutoSync: Promise.resolve(),
-        getValue: PluginWorker.indexedDBRead,
-        setValue: PluginWorker.indexedDBWrite,
-    },
-    {
-        on: (callback) => addListener('indexedDBStorage', callback),
-    },
-)
-// #endregion
 
 startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
     minimalMode: {
