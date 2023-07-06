@@ -12,6 +12,7 @@ import {
     recoverWalletFromMnemonic,
     generateAddressFromMnemonic,
     recoverWalletFromPrivateKey,
+    removeWallet,
     recoverWalletFromKeyStoreJSON,
 } from '../services/index.js'
 import { INTERNAL_getPasswordRequired } from '../services/wallet/password.js'
@@ -23,6 +24,7 @@ const worker: Plugin.Worker.Definition = {
     init(signal, context) {
         setupDatabase(context.getDatabaseStorage())
         setWalletBackupProvider({
+            removeWallet,
             exportMnemonic,
             exportPrivateKey,
             recoverWalletFromKeyStoreJSON,

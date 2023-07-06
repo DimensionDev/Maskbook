@@ -163,13 +163,13 @@ export async function renameWallet(address: string, name: string) {
 }
 
 export async function removeWallet(address: string, unverifiedPassword: string) {
-    await password.verifyPasswordRequired(unverifiedPassword)
+    // await password.verifyPasswordRequired(unverifiedPassword)
 
     // delete a wallet with derivationPath is not allowed
-    const wallet = await database.getWalletRequired(address)
-    if (wallet.derivationPath) throw new Error('Illegal operation.')
+    // const wallet = await database.getWalletRequired(address)
+    // if (wallet.derivationPath) throw new Error('Illegal operation.')
 
-    await database.deleteWallet(wallet.address)
+    await database.deleteWallet(address)
 }
 
 export async function exportMnemonic(address: string, unverifiedPassword?: string) {

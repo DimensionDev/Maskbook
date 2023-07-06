@@ -30,6 +30,7 @@ export interface WalletBackupProvider {
         derivationPath?: string,
         initialPassword?: string,
     ): Promise<string | undefined>
+    removeWallet(address: string, unverifiedPassword: string): Promise<void>
     recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>

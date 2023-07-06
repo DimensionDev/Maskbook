@@ -15,6 +15,7 @@ export interface PluginServices {
     Wallet: {
         createMnemonicWords(): Promise<string[]>
         recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
+        removeWallet(address: string, unverifiedPassword: string): Promise<void>
         recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
         getDerivableAccounts(
             mnemonic: string,
