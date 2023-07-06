@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useCallback, useEffect } from 'react'
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate, HashRouter } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { useMountReport } from '@masknet/web3-hooks-base'
@@ -55,16 +55,18 @@ export function Pages() {
     return (
         <Suspense fallback={null}>
             <TermsGuard>
-                <Routes>
-                    <Route path={`${DashboardRoutes.Setup}/*`} element={<SetupPersona />} />
-                    <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
-                    <Route path={DashboardRoutes.PrivacyPolicy} element={<PrivacyPolicy />} />
-                    <Route path={DashboardRoutes.Personas} element={frame(<Personas />)} />
-                    <Route path={`${DashboardRoutes.Wallets}/*`} element={frame(<Wallets />)} />
-                    <Route path={DashboardRoutes.Settings} element={frame(<Settings />)} />
-                    <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
-                    <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
-                </Routes>
+                <HashRouter>
+                    <Routes>
+                        <Route path={`${DashboardRoutes.Setup}/*`} element={<SetupPersona />} />
+                        <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
+                        <Route path={DashboardRoutes.PrivacyPolicy} element={<PrivacyPolicy />} />
+                        <Route path={DashboardRoutes.Personas} element={frame(<Personas />)} />
+                        <Route path={`${DashboardRoutes.Wallets}/*`} element={frame(<Wallets />)} />
+                        <Route path={DashboardRoutes.Settings} element={frame(<Settings />)} />
+                        <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
+                        <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
+                    </Routes>
+                </HashRouter>
             </TermsGuard>
         </Suspense>
     )
