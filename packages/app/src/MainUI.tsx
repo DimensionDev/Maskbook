@@ -8,7 +8,7 @@ import { ApplicationRoutes } from './constants/ApplicationRoutes.js'
 import { createSharedContext } from './helpers/createSharedContext.js'
 
 const OverviewPage = lazy(() => import(/* webpackPrefetch: true */ './pages/OverviewPage.js'))
-const ExplorerPage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorerPage.js'))
+const ExplorePage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorePage.js'))
 const SwapPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SwapPage.js'))
 const SettingsPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SettingsPage.js'))
 
@@ -27,7 +27,7 @@ export function MainUI() {
 
                         <Routes>
                             <Route path={`${ApplicationRoutes.Overview}/*`} element={<OverviewPage />} />
-                            <Route path={`${ApplicationRoutes.Explorer}/*`} element={<ExplorerPage />} />
+                            <Route path={`${ApplicationRoutes.Explorer}/*`} element={<ExplorePage />} />
                             <Route path={`${ApplicationRoutes.Swap}/*`} element={<SwapPage />} />
                             <Route path={`${ApplicationRoutes.Settings}/*`} element={<SettingsPage />} />
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
