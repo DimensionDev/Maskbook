@@ -8,10 +8,6 @@ export interface SortDropdownProps {}
 export function SortDropdown(props: SortDropdownProps) {
     return (
         <Menu as="div" className="relative">
-            <Menu.Button className="flex items-center gap-x-1 text-sm font-medium leading-6 text-white">
-                Sort by
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
-            </Menu.Button>
             <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"

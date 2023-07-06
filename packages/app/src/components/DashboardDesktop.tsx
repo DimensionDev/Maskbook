@@ -10,15 +10,9 @@ const navigation = [
     { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
 ]
 
-const teams = [
-    { id: 1, name: 'Planetaria', href: '#', initial: 'P', current: false },
-    { id: 2, name: 'Protocol', href: '#', initial: 'P', current: false },
-    { id: 3, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-]
-
 export interface SidebarForDesktopProps {}
 
-export function SidebarForDesktop(props: SidebarForDesktopProps) {
+export function DashboardForDesktop(props: SidebarForDesktopProps) {
     const pluginID = useNetworkContext()
     const { account, chainId } = useChainContext()
     const Others = useWeb3Others()
@@ -50,28 +44,6 @@ export function SidebarForDesktop(props: SidebarForDesktopProps) {
                                             )}>
                                             <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                             {item.name}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                        <li>
-                            <div className="text-xs font-semibold leading-6 text-gray-400">Shortcuts</div>
-                            <ul role="list" className="-mx-2 mt-2 space-y-1">
-                                {teams.map((team) => (
-                                    <li key={team.name}>
-                                        <a
-                                            href={team.href}
-                                            className={classNames(
-                                                team.current
-                                                    ? 'bg-gray-800 text-white'
-                                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                            )}>
-                                            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                                                {team.initial}
-                                            </span>
-                                            <span className="truncate">{team.name}</span>
                                         </a>
                                     </li>
                                 ))}
