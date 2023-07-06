@@ -11,7 +11,7 @@ export interface FeedDetailsModalOpenProps
     extends Omit<PropsWithChildren<InjectedDialogProps>, 'open'>,
         Pick<FeedCardProps, 'feed' | 'actionIndex'> {
     type: CardType
-    getDomain?: (address: string) => string
+    map?: Record<string, string>
 }
 
 export interface FeedDetailsModalProps {}
@@ -19,17 +19,17 @@ export interface FeedDetailsModalProps {}
 export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsModalOpenProps>, FeedDetailsModalProps>(
     (props, ref) => {
         const [props_, setProps_] = useState<FeedDetailsModalOpenProps>()
-        const [getDomain, setGetDomain] = useState<(address: string) => string>()
+        const [scopedDomainMap, setScopedDomainMap] = useState<Record<string, string>>()
         const [open, dispatch] = useSingletonModal(ref, {
             onOpen(props) {
                 setProps_(props)
-                setGetDomain(() => props.getDomain)
+                setScopedDomainMap(props?.map)
             },
         })
 
         if (!open) return null
         return (
-            <ScopedDomainsContainer.Provider initialState={{ getDomain }}>
+            <ScopedDomainsContainer.Provider initialState={{ defaultMap: scopedDomainMap ?? {} }}>
                 <FeedDetailsDialog
                     open
                     onClose={() => dispatch?.close()}

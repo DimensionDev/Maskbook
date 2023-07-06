@@ -83,7 +83,7 @@ export function CardFrame({
     const CardIcon = cardTypeIconMap[type]
     const PrimaryPlatformIcon = getPlatformIcon(feed.network)
     const ProviderPlatformIcon = getPlatformIcon(feed.platform)
-    const { getDomain } = ScopedDomainsContainer.useContainer()
+    const { map } = ScopedDomainsContainer.useContainer()
 
     return (
         <article
@@ -93,7 +93,7 @@ export function CardFrame({
                 if (!verbose) {
                     FeedDetailsModal.open({
                         type,
-                        getDomain,
+                        map,
                         feed,
                         actionIndex,
                     })
