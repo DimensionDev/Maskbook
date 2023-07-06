@@ -321,6 +321,9 @@ importers:
       '@masknet/plugin-snapshot':
         specifier: workspace:^
         version: link:../plugins/Snapshot
+      '@masknet/plugin-trader':
+        specifier: workspace:^
+        version: link:../plugins/Trader
       '@masknet/plugin-vcent':
         specifier: workspace:^
         version: link:../plugins/VCent

@@ -7,6 +7,7 @@ import { ApplicationRoutes } from './constants/ApplicationRoutes.js'
 
 const OverviewPage = lazy(() => import(/* webpackPrefetch: true */ './pages/OverviewPage.js'))
 const ExplorerPage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorerPage.js'))
+const SwapPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SwapPage.js'))
 
 export function MainUI() {
     return (
@@ -20,6 +21,7 @@ export function MainUI() {
                         <Routes>
                             <Route path={`${ApplicationRoutes.Overview}/*`} element={<OverviewPage />} />
                             <Route path={`${ApplicationRoutes.Explorer}/*`} element={<ExplorerPage />} />
+                            <Route path={`${ApplicationRoutes.Swap}/*`} element={<SwapPage />} />
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
                         </Routes>
                     </div>

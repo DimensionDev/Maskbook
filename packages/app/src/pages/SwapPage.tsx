@@ -1,12 +1,17 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Trader } from '@masknet/plugin-trader'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Trader } from '@masknet/plugin-trader'
+import { DashboardContainer } from '../components/DashboardContainer.js'
+import { StickySearchHeader } from '../components/StickySearchBar.js'
+import { DashboardHeader } from '../components/DashboardHeader.js'
 
-export function SwapBox() {
+export interface SwapPageProps {}
+
+export default function SwapPage(props: SwapPageProps) {
     const location = useLocation()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const params = new URLSearchParams(location.search)
@@ -27,9 +32,17 @@ export function SwapBox() {
     const { data: coin } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address ?? '', fallbackToken, { chainId })
 
     return (
-        <Trader
-            defaultInputCoin={coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>}
-            chainId={chainId}
-        />
+        <DashboardContainer>
+            <StickySearchHeader />
+
+            <main>
+                <DashboardHeader title="Swap" />
+
+                <Trader
+                    defaultInputCoin={coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>}
+                    chainId={chainId}
+                />
+            </main>
+        </DashboardContainer>
     )
 }

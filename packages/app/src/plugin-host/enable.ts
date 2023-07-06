@@ -57,7 +57,6 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext(id, signal) {
-        const { search } = location
         const context: Plugin.SNSAdaptor.SNSAdaptorContext = {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)

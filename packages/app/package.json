@@ -37,6 +37,7 @@
         "@masknet/plugin-snapshot": "workspace:^",
         "@masknet/plugin-vcent": "workspace:^",
         "@masknet/plugin-wallet": "workspace:^",
+        "@masknet/plugin-trader": "workspace:^",
         "@masknet/public-api": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",
