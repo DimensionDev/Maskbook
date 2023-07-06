@@ -55,6 +55,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext(id, signal) {
+        const { search } = location
         const context: Plugin.SNSAdaptor.SNSAdaptorContext = {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
@@ -72,6 +73,13 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             createPersona: reject,
             currentPersonaIdentifier: emptyValueRef,
             currentVisitingProfile: createConstantSubscription(undefined),
+            getPostURL: (identifier) => new URL(`${location.protocol}//${location.host}${search}`),
+            getPostPayload: () => {
+                const params = new URLSearchParams(search)
+                if (params.has('PostData_v2')) return [params.get('PostData_v2')!, '2']
+                if (params.has('PostData_v1')) return [params.get('PostData_v1')!, '1']
+                return
+            },
             getNextIDPlatform: () => undefined,
             getPersonaAvatar: reject,
             getSocialIdentity: reject,
