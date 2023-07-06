@@ -10,6 +10,7 @@ import { createSharedContext } from './helpers/createSharedContext.js'
 const OverviewPage = lazy(() => import(/* webpackPrefetch: true */ './pages/OverviewPage.js'))
 const ExplorerPage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorerPage.js'))
 const SwapPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SwapPage.js'))
+const SettingsPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SettingsPage.js'))
 
 export function MainUI() {
     useEffect(() => {
@@ -28,6 +29,7 @@ export function MainUI() {
                             <Route path={`${ApplicationRoutes.Overview}/*`} element={<OverviewPage />} />
                             <Route path={`${ApplicationRoutes.Explorer}/*`} element={<ExplorerPage />} />
                             <Route path={`${ApplicationRoutes.Swap}/*`} element={<SwapPage />} />
+                            <Route path={`${ApplicationRoutes.Settings}/*`} element={<SettingsPage />} />
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
                         </Routes>
                     </div>
