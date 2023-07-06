@@ -1,14 +1,41 @@
-import { ArrowPathRoundedSquareIcon, Cog6ToothIcon, RocketLaunchIcon, HeartIcon } from '@heroicons/react/24/outline'
+import { Link, useMatch } from 'react-router-dom'
+import {
+    ArrowPathRoundedSquareIcon,
+    Cog6ToothIcon,
+    RocketLaunchIcon,
+    HeartIcon,
+    EyeIcon,
+} from '@heroicons/react/24/outline'
 import { SelectProviderModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { classNames } from '../helpers/classNames.js'
+import { ApplicationRoutes } from '../constants/ApplicationRoutes.js'
 
 const navigation = [
-    { name: 'Explore', href: '#', icon: RocketLaunchIcon, current: false },
-    { name: 'Favorites', href: '#', icon: HeartIcon, current: true },
-    { name: 'Trade', href: '#', icon: ArrowPathRoundedSquareIcon, current: false },
-    { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+    { name: 'Overview', icon: EyeIcon, to: ApplicationRoutes.Overview },
+    { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
+    { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
+    { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
+    { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
 ]
+
+function NavigationLink(props: (typeof navigation)[0]) {
+    const { name, to } = props
+    const matched = useMatch(to)
+    return (
+        <li>
+            <Link
+                to={to}
+                className={classNames(
+                    matched ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                )}>
+                <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                {name}
+            </Link>
+        </li>
+    )
+}
 
 export interface SidebarForDesktopProps {}
 
@@ -19,7 +46,6 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
 
     return (
         <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
-            {/* Sidebar component, swap this element with another sidebar if you like */}
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black/10 px-6 ring-1 ring-white/5">
                 <div className="flex h-16 shrink-0 items-center">
                     <img
@@ -33,19 +59,7 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                         <li>
                             <ul role="list" className="-mx-2 space-y-1">
                                 {navigation.map((item) => (
-                                    <li key={item.name}>
-                                        <a
-                                            href={item.href}
-                                            className={classNames(
-                                                item.current
-                                                    ? 'bg-gray-800 text-white'
-                                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                            )}>
-                                            <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                            {item.name}
-                                        </a>
-                                    </li>
+                                    <NavigationLink key={item.name} {...item} />
                                 ))}
                             </ul>
                         </li>
