@@ -6,17 +6,16 @@ import { useDecrypt } from './Decrypt/useDecrypt.js'
 import { getPostPayload } from '../helpers/getPostPayload.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
-const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptMessage() {
     const postData = getPostPayload()
     if (!postData) return <Typography>No payload found.</Typography>
 
     const [text, version] = postData
-    return <DecryptMessageWorker text={text} version={version} />
+    return <DecryptMessageUI text={text} version={version} />
 }
 
-function DecryptMessageWorker(props: { text: string; version: string }) {
+function DecryptMessageUI(props: { text: string; version: string }) {
     const { text, version } = props
     const [error, isE2E, message] = useDecrypt(text, version)
 
@@ -43,7 +42,6 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
             <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
                 <div className="border mt-3 pt-3 rounded-lg">
                     <PluginRender message={message} />
-                    <PageInspectorRender />
                 </div>
             </Suspense>
         </RegistryContext.Provider>
