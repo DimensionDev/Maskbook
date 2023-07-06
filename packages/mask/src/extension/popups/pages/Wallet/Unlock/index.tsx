@@ -100,9 +100,7 @@ const Unlock = memo(() => {
                 <Typography
                     color={theme.palette.maskColor.third}
                     marginTop="16px"
-                    onClick={() => {
-                        ResetWalletModal.open({})
-                    }}
+                    onClick={() => ResetWalletModal.open({})}
                     className={classes.pointer}
                     fontSize={14}
                     textAlign="center"

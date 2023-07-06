@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Dialog, DialogContent, DialogActions, Typography, Button } from '@mui/material'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
@@ -43,6 +43,12 @@ export const ResetWalletDialog = memo<RestWalletDialogProps>(function ResetWalle
     const { t } = useI18N()
     const { classes } = useStyles()
     const [answer, setAnswer] = useState('')
+    const onConfirm = useCallback(async () => {
+        await browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
+        })
+    }, [])
 
     const disabled = answer !== 'RESET'
     return (
@@ -65,7 +71,7 @@ export const ResetWalletDialog = memo<RestWalletDialogProps>(function ResetWalle
                 <ActionButton
                     variant="roundedContained"
                     color="error"
-                    onClick={() => {}}
+                    onClick={onConfirm}
                     className={classes.button}
                     disabled={disabled}>
                     {t('confirm')}
