@@ -1,13 +1,14 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Trader } from '@masknet/plugin-trader'
+import { AllProviderTradeContext, Trader } from '@masknet/plugin-trader'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { StickySearchHeader } from '../components/StickySearchBar.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 
 export interface SwapPageProps {}
 
@@ -38,10 +39,24 @@ export default function SwapPage(props: SwapPageProps) {
             <main>
                 <DashboardHeader title="Swap" />
 
-                <Trader
-                    defaultInputCoin={coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>}
-                    chainId={chainId}
-                />
+                <div className="bg-white p-5">
+                    <div className="border pt-3 rounded-lg">
+                        <DisableShadowRootContext.Provider value={false}>
+                            <ShadowRootIsolation>
+                                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                                    <AllProviderTradeContext.Provider>
+                                        <Trader
+                                            defaultInputCoin={
+                                                coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+                                            }
+                                            chainId={chainId}
+                                        />
+                                    </AllProviderTradeContext.Provider>
+                                </Web3ContextProvider>
+                            </ShadowRootIsolation>
+                        </DisableShadowRootContext.Provider>
+                    </div>
+                </div>
             </main>
         </DashboardContainer>
     )

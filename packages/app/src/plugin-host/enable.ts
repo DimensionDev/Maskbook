@@ -1,23 +1,12 @@
 import './register.js'
 
 import { Emitter } from '@servie/events'
-import { CurrentSNSNetwork, SNSAdaptorContextRef, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { WalletConnectQRCodeModal } from '@masknet/shared'
-import {
-    BooleanPreference,
-    createConstantSubscription,
-    createI18NBundle,
-    createKVStorageHost,
-    i18NextInstance,
-    ValueRefWithReady,
-} from '@masknet/shared-base'
+import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { BooleanPreference, createI18NBundle, createKVStorageHost, i18NextInstance } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
-import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
 import { PluginWorker } from './rpc.js'
-import { getPostURL } from '../helpers/getPostURL.js'
-import { getPostPayload } from '../helpers/getPostPayload.js'
+import { createSharedContext } from '../helpers/createSharedContext.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(
@@ -42,12 +31,6 @@ const indexedDBStorage = createKVStorageHost(
 )
 // #endregion
 
-async function reject(): Promise<never> {
-    throw new Error('Not implemented')
-}
-
-const emptyValueRef = new ValueRefWithReady<any>()
-
 startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
     minimalMode: {
         events: new Emitter(),
@@ -57,60 +40,13 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext(id, signal) {
-        const context: Plugin.SNSAdaptor.SNSAdaptorContext = {
+        return {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
                 else return indexedDBStorage(id, defaultValues, signal)
             },
-            currentPersona: createConstantSubscription(undefined),
-            wallets: createConstantSubscription([]),
-            share(text) {
-                throw new Error('To be implemented.')
-            },
-            addWallet: reject,
-            closePopupWindow: reject,
-            confirmRequest: reject,
-            connectPersona: reject,
-            createPersona: reject,
-            currentPersonaIdentifier: emptyValueRef,
-            currentVisitingProfile: createConstantSubscription(undefined),
-            getPostURL,
-            getPostPayload,
-            getNextIDPlatform: () => undefined,
-            getPersonaAvatar: reject,
-            getSocialIdentity: reject,
-            getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
-            getWallets: reject,
-            hasPaymentPassword: reject,
-            lastRecognizedProfile: createConstantSubscription(undefined),
-            openDashboard: reject,
-            openPopupConnectWindow: reject,
-            openPopupWindow: reject,
-            fetchJSON: reject,
-            openWalletConnectDialog: async (uri: string) => {
-                await WalletConnectQRCodeModal.openAndWaitForClose({
-                    uri,
-                })
-            },
-            closeWalletConnectDialog: () => {
-                WalletConnectQRCodeModal.close()
-            },
-            queryPersonaByProfile: reject,
-            recordConnectedSites: reject,
-            rejectRequest: reject,
-            removeWallet: reject,
-            selectAccount: reject,
-            setMinimalMode: reject,
-            signWithPersona: reject,
-            signWithWallet: reject,
-            updateWallet: reject,
-            send: reject,
-            themeSettings: createConstantSubscription(undefined),
+            ...createSharedContext(),
         }
-
-        SNSAdaptorContextRef.value = context
-
-        return context
     },
     permission: {
         hasPermission: async () => false,
