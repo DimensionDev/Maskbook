@@ -3,6 +3,6 @@ export enum ApplicationRoutes {
     Explorer = '/explorer',
     Favorites = '/favorites',
     Swap = '/swap',
-    Bridge = '/bridge',
+    Bridges = '/bridges',
     Settings = '/settings',
 }
