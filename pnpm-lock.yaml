@@ -306,6 +306,9 @@ importers:
       '@masknet/plugin-collectible':
         specifier: workspace:^
         version: link:../plugins/Collectible
+      '@masknet/plugin-cross-chain-bridge':
+        specifier: workspace:^
+        version: link:../plugins/CrossChainBridge
       '@masknet/plugin-cyberconnect':
         specifier: workspace:^
         version: link:../plugins/CyberConnect

@@ -1,6 +1,8 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base.js'
 
+export * from './SNSAdaptor/components/BridgeStack.js'
+
 registerPlugin({
     ...base,
     SNSAdaptor: {

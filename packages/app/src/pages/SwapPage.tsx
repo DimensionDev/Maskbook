@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { AllProviderTradeContext, Trader } from '@masknet/plugin-trader'
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { Web3ContextProvider, useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
