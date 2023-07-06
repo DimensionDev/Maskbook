@@ -11,7 +11,7 @@ export default function BridgePage(props: BridgePageProps) {
         <DashboardContainer>
             <StickySearchHeader />
 
-            <main id="explore">
+            <main>
                 <DashboardHeader title="Bridges" />
 
                 <div className="bg-white p-5">
