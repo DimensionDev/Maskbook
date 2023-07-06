@@ -333,8 +333,9 @@ export namespace Plugin.SNSAdaptor {
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
         currentPersonaIdentifier: ValueRefWithReady<string>
 
-        getPostURL?: (identifier: PostIdentifier) => URL | null
         share?: (text: string) => void
+        getPostURL?: (identifier: PostIdentifier) => URL | null
+        getPostPayload?: () => [string, '1' | '2'] | undefined
 
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>

@@ -74,7 +74,8 @@
         "react-router-dom": "^6.10.0",
         "react-use": "^17.4.0",
         "stream-browserify": "^3.0.0",
-        "tailwindcss": "^3.3.1"
+        "tailwindcss": "^3.3.1",
+        "urlcat": "^3.1.0"
     },
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",

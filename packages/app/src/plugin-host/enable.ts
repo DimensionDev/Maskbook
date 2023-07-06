@@ -16,6 +16,8 @@ import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import { addListener } from './message.js'
 import { PluginWorker } from './rpc.js'
+import { getPostURL } from '../helpers/getPostURL.js'
+import { getPostPayload } from '../helpers/getPostPayload.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(
@@ -55,6 +57,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext(id, signal) {
+        const { search } = location
         const context: Plugin.SNSAdaptor.SNSAdaptorContext = {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
@@ -72,6 +75,8 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             createPersona: reject,
             currentPersonaIdentifier: emptyValueRef,
             currentVisitingProfile: createConstantSubscription(undefined),
+            getPostURL,
+            getPostPayload,
             getNextIDPlatform: () => undefined,
             getPersonaAvatar: reject,
             getSocialIdentity: reject,

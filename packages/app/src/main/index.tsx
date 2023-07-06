@@ -3,12 +3,13 @@ import { Typography } from '@mui/material'
 import { RegistryContext, TypedMessageRender } from '@masknet/typed-message-react'
 import { registry } from './TypedMessageRender/registry.js'
 import { useDecrypt } from './Decrypt/useDecrypt.js'
+import { getPostPayload } from '../helpers/getPostPayload.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
 const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptMessage() {
-    const postData = usePostData()
+    const postData = getPostPayload()
     if (!postData) return <Typography>No payload found.</Typography>
 
     const [text, version] = postData
@@ -43,11 +44,4 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
             </Suspense>
         </RegistryContext.Provider>
     )
-}
-
-function usePostData() {
-    const params = new URLSearchParams(location.search)
-    if (params.has('PostData_v2')) return [params.get('PostData_v2')!, '2'] as const
-    if (params.has('PostData_v1')) return [params.get('PostData_v1')!, '1'] as const
-    return
 }
