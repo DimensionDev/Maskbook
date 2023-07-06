@@ -11,4 +11,4 @@ function useDashboardContext() {
 }
 
 export const DashboardContext = createContainer(useDashboardContext)
-DashboardContext.Provider.displayName = 'PersonaProvider'
+DashboardContext.Provider.displayName = 'DashboardContext'
