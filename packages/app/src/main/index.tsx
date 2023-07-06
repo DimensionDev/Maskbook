@@ -6,7 +6,6 @@ import { useDecrypt } from './Decrypt/useDecrypt.js'
 import { getPostPayload } from '../helpers/getPostPayload.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
-const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptMessage() {
     const postData = getPostPayload()
@@ -43,7 +42,6 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
             <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
                 <div className="border mt-3 pt-3 rounded-lg">
                     <PluginRender message={message} />
-                    <PageInspectorRender />
                 </div>
             </Suspense>
         </RegistryContext.Provider>
