@@ -22,7 +22,7 @@
         "@masknet/web3-shared-evm": "workspace:^",
         "@masknet/web3-helpers": "workspace:^",
         "date-fns": "2.29.3",
-        "react-router-dom": "6.4.3",
+        "react-router-dom": "^6.10.0",
         "react-use": "^17.4.0",
         "unstated-next": "^1.1.0",
         "use-subscription": "1.6.0"

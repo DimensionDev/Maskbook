@@ -95,7 +95,6 @@
     "@types/node": "18.15.11",
     "@types/react-avatar-editor": "^13.0.0",
     "@types/react-highlight-words": "^0.16.4",
-    "@types/react-router-dom": "^5.3.3",
     "@types/react-window": "^1.8.5",
     "@types/remarkable": "^2.0.3",
     "@types/use-subscription": "^1.0.0",
