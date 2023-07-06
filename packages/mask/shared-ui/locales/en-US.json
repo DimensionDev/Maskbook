@@ -870,6 +870,8 @@
     "popups_wallet_backup_wallet": "Back up the wallet",
     "popups_wallet_backup_json_file": "JSON File",
     "popups_wallet_backup_private_key": "Private Key",
+    "popups_wallet_reset_wallet": "Reset Wallet",
+    "popups_wallet_reset_wallet_description": "This operation will reset your Mask wallet, please make sure that your accounts in the previous wallet have been backed up.enter \"RESET\" to reset the Wallet.",
     "popups_wallet_backup_json_file_confirm_password_tip": "This file has been encrypted and stored with your current password. Your current password is needed to decrypt this file when using it to import wallet.",
     "popups_wallet_backup_private_key_tip": "Please don’t show anyone your private key. The private key can be used in any wallet that supports EVM-compatible chains without decryption.",
     "popups_wallet_backup_input_password": "Input your password",

@@ -10,6 +10,7 @@ import { PasswordField } from '../../../components/PasswordField/index.js'
 import { Navigator } from '../../../components/Navigator/index.js'
 import { LoadingButton } from '@mui/lab'
 import { Trans } from 'react-i18next'
+import { ResetWalletModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -99,6 +100,9 @@ const Unlock = memo(() => {
                 <Typography
                     color={theme.palette.maskColor.third}
                     marginTop="16px"
+                    onClick={() => {
+                        ResetWalletModal.open({})
+                    }}
                     className={classes.pointer}
                     fontSize={14}
                     textAlign="center"
