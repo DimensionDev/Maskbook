@@ -3,14 +3,13 @@ import { Typography } from '@mui/material'
 import { RegistryContext, TypedMessageRender } from '@masknet/typed-message-react'
 import { registry } from './TypedMessageRender/registry.js'
 import { useDecrypt } from './Decrypt/useDecrypt.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { getPostPayload } from '../helpers/getPostPayload.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
 const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptMessage() {
-    const { getPostPayload } = useSNSAdaptorContext()
-    const postData = getPostPayload?.()
+    const postData = getPostPayload()
     if (!postData) return <Typography>No payload found.</Typography>
 
     const [text, version] = postData
