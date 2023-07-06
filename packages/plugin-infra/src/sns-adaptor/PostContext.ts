@@ -128,7 +128,7 @@ export const usePostInfoDetails: {
                 if (typeof key === 'symbol') return undefined
                 function usePostInfoDetails() {
                     const postInfo = useContext(PostInfoContext)
-                    if (!postInfo) throw new TypeError('No post context')
+                    if (!postInfo) return ''
                     if (!(key in postInfo)) throw new TypeError('postInfo.' + (key as string) + ' is not found')
                     const k = postInfo[key as keyof PostInfo]
                     // eslint-disable-next-line react-hooks/rules-of-hooks

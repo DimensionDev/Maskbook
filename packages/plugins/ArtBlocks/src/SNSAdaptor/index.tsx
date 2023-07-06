@@ -7,6 +7,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
+import { ArtBlocksContainer } from '../hooks/context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,12 +16,24 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
-        return asset?.project_id ? <Renderer chainId={asset.chain_id} projectId={asset.project_id} /> : null
+        return asset?.project_id ? (
+            <ArtBlocksContainer.Provider>
+                <Renderer chainId={asset.chain_id} projectId={asset.project_id} />
+            </ArtBlocksContainer.Provider>
+        ) : null
     },
     DecryptedInspector(props) {
         const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
+        const url = new URL(collectibleUrl!)
+        const postUrl = url.searchParams.get('postUrl') ?? ''
+        console.log(collectibleUrl)
+        console.log(postUrl)
         const asset = getAssetInfoFromURL(collectibleUrl)
-        return asset ? <Renderer chainId={asset.chain_id} projectId={asset.project_id} /> : null
+        return asset ? (
+            <ArtBlocksContainer.Provider initialState={{ postUrl }}>
+                <Renderer chainId={asset.chain_id} projectId={asset.project_id} />{' '}
+            </ArtBlocksContainer.Provider>
+        ) : null
     },
     ApplicationEntries: [
         {

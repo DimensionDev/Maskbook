@@ -25,8 +25,9 @@ import {
 import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../locales/index.js'
+import { ArtBlocksContainer } from '../hooks/context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -69,7 +70,8 @@ export function PurchaseDialog(props: ActionBarProps) {
         () => leftShift(project.pricePerTokenInWei, token?.decimals),
         [project.pricePerTokenInWei, token?.decimals],
     )
-    const postLink = usePostLink()
+
+    const { postUrl } = ArtBlocksContainer.useContainer()
 
     const shareText = [
         isTwitter() || isFacebook()
@@ -84,7 +86,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                   symbol: token?.symbol || '',
               }),
         '#mask_io #artblocks_io #nft',
-        postLink,
+        postUrl,
     ].join('\n')
     const openShareTxDialog = useOpenShareTxDialog()
     const purchase = useCallback(async () => {
