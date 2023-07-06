@@ -93,7 +93,7 @@ export function CardFrame({
                 if (!verbose) {
                     FeedDetailsModal.open({
                         type,
-                        map,
+                        scopedDomainsMap: map,
                         feed,
                         actionIndex,
                     })
