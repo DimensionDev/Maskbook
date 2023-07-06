@@ -6,5 +6,12 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": ["src", "src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra" }, { "path": "../../shared-base" }, { "path": "../../shared" }]
+  "references": [
+    { "path": "../Transak" },
+    { "path": "../GoPlusSecurity" },
+    { "path": "../../plugin-infra" },
+    { "path": "../../plugin-infra" },
+    { "path": "../../shared-base" },
+    { "path": "../../shared" }
+  ]
 }

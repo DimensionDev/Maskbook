@@ -1,12 +1,10 @@
 import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { DashboardContext } from '../contexts/DashboardContext.js'
 
-export interface StickySearchHeaderProps {
-    sidebarOpen: boolean
-    setSidebarOpen: (opened: boolean) => void
-}
+export interface StickySearchHeaderProps {}
 
 export function StickySearchHeader(props: StickySearchHeaderProps) {
-    const { sidebarOpen, setSidebarOpen } = props
+    const { sidebarOpen, setSidebarOpen } = DashboardContext.useContainer()
 
     return (
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-zinc-900 px-4 shadow-sm sm:px-6 lg:px-8">

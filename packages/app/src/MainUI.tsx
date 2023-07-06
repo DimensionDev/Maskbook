@@ -1,37 +1,40 @@
-import { useState } from 'react'
-import { SortDropdown } from './components/SortDropdown.js'
-import { StickySearchHeader } from './components/StickySearchBar.js'
-import { SidebarForDesktop } from './components/SidebarForDesktop.js'
-import { SidebarForMobile } from './components/SidebarForMobile.js'
-import { ActivityFeed } from './components/ActivityFeed.js'
-import { DecryptMessage } from './main/index.js'
+import { Suspense, lazy, useEffect } from 'react'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { SNSAdaptorContextRef } from '@masknet/plugin-infra/content-script'
+import { DashboardForDesktop } from './components/DashboardDesktop.js'
+import { DashboardForMobile } from './components/DashboardMobile.js'
+import { DashboardContext } from './contexts/DashboardContext.js'
+import { ApplicationRoutes } from './constants/ApplicationRoutes.js'
+import { createSharedContext } from './helpers/createSharedContext.js'
+
+const OverviewPage = lazy(() => import(/* webpackPrefetch: true */ './pages/OverviewPage.js'))
+const ExplorerPage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorerPage.js'))
+const SwapPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SwapPage.js'))
+const SettingsPage = lazy(() => import(/* webpackPrefetch: true */ './pages/SettingsPage.js'))
 
 export function MainUI() {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    useEffect(() => {
+        SNSAdaptorContextRef.value = createSharedContext()
+    }, [])
+
     return (
-        <div className="bg-zinc-900 h-full">
-            <SidebarForMobile sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-            <SidebarForDesktop />
+        <DashboardContext.Provider>
+            <Suspense fallback={null}>
+                <HashRouter>
+                    <div className="bg-zinc-900 h-full">
+                        <DashboardForMobile />
+                        <DashboardForDesktop />
 
-            <div className="xl:pl-72">
-                <StickySearchHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-                <main className="lg:pr-96">
-                    <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-                        <h1 className="text-base font-semibold leading-7 text-white">Deployments</h1>
-
-                        <SortDropdown />
-                    </header>
-
-                    <div className="bg-white p-5">
-                        <div className="border pt-3 rounded-lg">
-                            <DecryptMessage />
-                        </div>
+                        <Routes>
+                            <Route path={`${ApplicationRoutes.Overview}/*`} element={<OverviewPage />} />
+                            <Route path={`${ApplicationRoutes.Explorer}/*`} element={<ExplorerPage />} />
+                            <Route path={`${ApplicationRoutes.Swap}/*`} element={<SwapPage />} />
+                            <Route path={`${ApplicationRoutes.Settings}/*`} element={<SettingsPage />} />
+                            <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
+                        </Routes>
                     </div>
-                </main>
-
-                <ActivityFeed />
-            </div>
-        </div>
+                </HashRouter>
+            </Suspense>
+        </DashboardContext.Provider>
     )
 }

@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider } from '@mui/material'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -59,9 +58,7 @@ export default function DashboardRoot() {
                                                 <CssBaseline />
                                                 <CustomSnackbarProvider>
                                                     <SharedContextProvider>
-                                                        <HashRouter>
-                                                            <Pages />
-                                                        </HashRouter>
+                                                        <Pages />
                                                         <PluginRender />
                                                     </SharedContextProvider>
                                                 </CustomSnackbarProvider>
