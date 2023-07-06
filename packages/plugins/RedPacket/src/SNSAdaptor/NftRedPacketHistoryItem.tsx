@@ -174,7 +174,7 @@ export const NftRedPacketHistoryItem = memo(
         const entry = useIntersectionObserver(ref, {})
         const t = useI18N()
 
-        const { value: receipt } = useCreateNftRedPacketReceipt(isViewed ? history.txid : '')
+        const { value: receipt } = useCreateNftRedPacketReceipt(isViewed ? history.txid : '', history.chainId)
         const rpid = receipt?.rpid ?? ''
         const creation_time = receipt?.creation_time ?? 0
         const patchedHistory: NftRedPacketJSONPayload = useMemo(
