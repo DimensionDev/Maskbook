@@ -7,6 +7,7 @@ import type { HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
 import { type CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
 import { FeedDetailsModal } from '../modals/modals.js'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -82,6 +83,7 @@ export function CardFrame({
     const CardIcon = cardTypeIconMap[type]
     const PrimaryPlatformIcon = getPlatformIcon(feed.network)
     const ProviderPlatformIcon = getPlatformIcon(feed.platform)
+    const { map } = ScopedDomainsContainer.useContainer()
 
     return (
         <article
@@ -91,6 +93,7 @@ export function CardFrame({
                 if (!verbose) {
                     FeedDetailsModal.open({
                         type,
+                        scopedDomainsMap: map,
                         feed,
                         actionIndex,
                     })
