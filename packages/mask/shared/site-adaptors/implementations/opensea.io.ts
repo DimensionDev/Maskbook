@@ -13,8 +13,6 @@ export const OpenSeaAdaptor: SiteAdaptor.Definition = {
     isSocialNetwork: false,
 
     getProfilePage: () => new URL('https://opensea.io/account'),
-    getShareLinkURL(message) {
-        return new URL('')
-    },
+    getShareLinkURL: (message) => new URL('https://opensea.io'),
 }
 defineSiteAdaptor(OpenSeaAdaptor)
