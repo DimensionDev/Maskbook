@@ -20,11 +20,6 @@ const sns: Plugin.SNSAdaptor.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        console.log('DEBUG: EVM')
-        console.log({
-            context,
-        })
-
         SharedPluginContext.setup(context)
 
         const state = await Web3State.create(context)
