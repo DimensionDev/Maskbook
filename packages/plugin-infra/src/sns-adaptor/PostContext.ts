@@ -103,6 +103,7 @@ export type PostInfo = PostContext
 
 export const PostInfoContext = createContext<PostContext | null>(null)
 PostInfoContext.displayName = 'PostInfoContext'
+
 /** @deprecated use <PostInfoContext.Provider value={post}> */
 export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo }>) {
     return createElement(PostInfoContext.Provider, { value: props.post, children: props.children })

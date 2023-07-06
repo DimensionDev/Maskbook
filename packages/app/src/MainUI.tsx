@@ -6,6 +6,7 @@ import { DecryptMessage } from './main/index.js'
 
 export function MainUI() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
+
     return (
         <div className="bg-zinc-900 h-full">
             <DashboardForMobile sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
