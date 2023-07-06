@@ -1,6 +1,5 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { classNames } from '../helpers/classNames.js'
 
 export interface SortDropdownProps {}
