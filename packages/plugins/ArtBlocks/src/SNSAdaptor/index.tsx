@@ -26,8 +26,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
         const url = new URL(collectibleUrl!)
         const postUrl = url.searchParams.get('postUrl') ?? ''
-        console.log(collectibleUrl)
-        console.log(postUrl)
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? (
             <ArtBlocksContainer.Provider initialState={{ postUrl }}>
