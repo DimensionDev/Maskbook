@@ -6,8 +6,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
-
-import { useModalNavigate } from '../index.js'
+import { useModalNavigate } from '../ActionModal/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tips: {

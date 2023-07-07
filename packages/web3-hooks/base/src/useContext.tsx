@@ -8,7 +8,7 @@ import { useChainId } from './useChainId.js'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
 import { useSubscription } from 'use-subscription'
-import { type MaskWalletProvider, Providers } from '@masknet/web3-providers'
+import { Providers, type BaseContractWalletProvider } from '@masknet/web3-providers'
 import { ProviderType, chainResolver } from '@masknet/web3-shared-evm'
 
 interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
@@ -70,7 +70,7 @@ export function ChainContextProvider({ value, children }: ProviderProps<ChainCon
     const globalNetworkType = useNetworkType(pluginID)
     const globalProviderType = useProviderType(pluginID)
 
-    const maskProvider = Providers[ProviderType.MaskWallet] as MaskWalletProvider
+    const maskProvider = Providers[ProviderType.MaskWallet] as BaseContractWalletProvider
 
     const maskAccount = useSubscription(maskProvider.subscription.account)
     const maskChainId = useSubscription(maskProvider.subscription.chainId)

@@ -197,7 +197,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         modalNavigate(PopupModalRoutes.SelectProvider, {
             disableNewWindow: true,
         })
-    }, [])
+    }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
         await Web3.disconnect({ providerType })

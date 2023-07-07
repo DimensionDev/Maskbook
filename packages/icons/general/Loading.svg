@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 50 56">
-    <mask id="Loading_svg__popup-loading" fill="#fff">
-        <path d="M3.5 6.983A28 28 0 1 1 .982 46.5l1.354-1.192A26.196 26.196 0 1 0 4.692 8.337L3.499 6.983Z"/>
-    </mask>
-    <path stroke="currentColor" stroke-width="4" d="M3.5 6.983A28 28 0 1 1 .982 46.5l1.354-1.192A26.196 26.196 0 1 0 4.692 8.337L3.499 6.983Z" mask="url('#Loading_svg__popup-loading')"/>
-</svg>

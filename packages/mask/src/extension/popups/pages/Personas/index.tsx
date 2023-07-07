@@ -1,5 +1,5 @@
 import { lazy, memo, Suspense, useEffect } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
@@ -18,17 +18,16 @@ const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {
-    const location = useLocation()
     const modalNavigate = useModalNavigate()
 
+    const [params] = useSearchParams()
     useEffect(() => {
-        const params = new URLSearchParams(location.search)
         const from = params.get('from')
         const providerType = params.get('providerType')
         if (from === PopupModalRoutes.SelectProvider && !!providerType) {
             modalNavigate(PopupModalRoutes.ConnectProvider, { providerType })
         }
-    }, [location.search])
+    }, [params])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

@@ -206,7 +206,6 @@ export function left_arrow_url() { return new URL("./general/LeftArrow.svg", imp
 export function link_url() { return new URL("./general/Link.svg", import.meta.url) }
 export function link_out_url() { return new URL("./general/LinkOut.svg", import.meta.url) }
 export function loader_url() { return new URL("./general/Loader.svg", import.meta.url) }
-export function loading_url() { return new URL("./general/Loading.svg", import.meta.url) }
 export function loading_base_dark_url() { return new URL("./general/LoadingBase.dark.svg", import.meta.url) }
 export function loading_base_light_url() { return new URL("./general/LoadingBase.light.svg", import.meta.url) }
 export function local_backup_url() { return new URL("./general/LocalBackup.png", import.meta.url) }

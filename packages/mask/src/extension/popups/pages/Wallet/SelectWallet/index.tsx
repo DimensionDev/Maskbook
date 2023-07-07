@@ -43,7 +43,7 @@ const SelectWallet = memo(function SelectWallet() {
     const search = new URLSearchParams(location.search)
     const chainIdSearched = search.get('chainId')
     const isVerifyWalletFlow = search.get('verifyWallet')
-    console.log(isVerifyWalletFlow, search, location.search, chainIdSearched)
+
     const { proofs } = PersonaContext.useContainer()
 
     const { data: bindingWallets } = useVerifiedWallets(proofs)
@@ -75,18 +75,14 @@ const SelectWallet = memo(function SelectWallet() {
 
     const handleConfirm = useCallback(async () => {
         if (isVerifyWalletFlow) {
-            try {
-                await Web3.connect({
-                    account: selected,
-                    chainId,
-                    providerType: ProviderType.MaskWallet,
-                })
+            await Web3.connect({
+                account: selected,
+                chainId,
+                providerType: ProviderType.MaskWallet,
+            })
 
-                navigate(PopupRoutes.ConnectWallet, { replace: true })
-                return
-            } catch (error) {
-                console.log(error)
-            }
+            navigate(PopupRoutes.ConnectWallet, { replace: true })
+            return
         }
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))

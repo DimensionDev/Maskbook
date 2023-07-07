@@ -132,7 +132,6 @@ export { Providers } from './Web3/EVM/providers/index.js'
 export { FlowProviders } from './Web3/Flow/providers/index.js'
 export { SolanaProviders } from './Web3/Solana/providers/index.js'
 export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
-export { MaskWalletProvider } from './Web3/EVM/providers/MaskWallet.js'
 
 // Web3
 export const HubAll = new AllHubAPI()

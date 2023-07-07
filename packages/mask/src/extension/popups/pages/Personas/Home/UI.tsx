@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import urlcat from 'urlcat'
 import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
@@ -12,7 +12,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { HomeTabType } from '../../Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -148,15 +148,10 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         const { t } = useI18N()
         const { classes } = useStyles()
 
-        const defaultTab = useMemo(() => {
-            const params = new URLSearchParams(location.search)
-            const tab = params.get('tab')
-
-            return tab
-        }, [location.search])
+        const [params] = useSearchParams()
 
         const [currentTab, onChange] = useTabs(
-            defaultTab || HomeTabType.SocialAccounts,
+            params.get('tab') || HomeTabType.SocialAccounts,
             HomeTabType.SocialAccounts,
             HomeTabType.ConnectedWallets,
         )

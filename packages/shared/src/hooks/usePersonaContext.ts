@@ -17,6 +17,7 @@ import {
 import { useValueRef } from '@masknet/shared-base-ui'
 import { usePersonaProofs } from './usePersonaProofs.js'
 import compareDesc from 'date-fns/compareDesc'
+import isBefore from 'date-fns/isBefore'
 
 export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
 
@@ -98,7 +99,7 @@ function usePersonaContext(initialState?: {
                 if (b.is_valid) return 1
 
                 if (a.last_checked_at && b.last_checked_at) {
-                    return Number(a.last_checked_at) < Number(b.last_checked_at) ? -1 : 1
+                    return isBefore(Number(a.last_checked_at), Number(b.last_checked_at)) ? -1 : 1
                 }
 
                 if (a.createAt && b.createAt && !!aTimeZone && !!bTimeZone) {

@@ -179,11 +179,10 @@ const AccountDetail = memo(() => {
             ) : (
                 <Icons.Disconnect
                     size={24}
-                    onClick={() => {
+                    onClick={async () => {
                         if (!currentPersona) return
-                        DisconnectModal.open({
+                        const results = await DisconnectModal.openAndWaitForClose({
                             title: t('popups_new_persona_disconnect_confirmation'),
-                            onSubmit: handleConfirmReleaseBind,
                             tips: (
                                 <Trans
                                     i18nKey="popups_persona_disconnect_tips"
@@ -195,6 +194,7 @@ const AccountDetail = memo(() => {
                                 />
                             ),
                         })
+                        if (results?.confirmed) return handleConfirmReleaseBind()
                     }}
                 />
             ),

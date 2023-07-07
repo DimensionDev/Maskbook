@@ -1,9 +1,8 @@
 import { type ProfileIdentifier } from '@masknet/shared-base'
-import { type DialogProps, Dialog, DialogContent, Typography, DialogActions, Button } from '@mui/material'
+import { Dialog, DialogContent, Typography, DialogActions, Button } from '@mui/material'
 import { memo, type ReactNode } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -28,35 +27,29 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface DisconnectDialogProps extends DialogProps {
+interface DisconnectDialogProps {
+    title: string
+    open: boolean
     unbundledIdentity?: ProfileIdentifier
-    onSubmit?: () => Promise<void>
-    onClose: () => void
+    onClose: (confirmed?: boolean) => void
     tips: ReactNode
 }
 
-export const DisconnectDialog = memo<DisconnectDialogProps>(({ open, onClose, onSubmit, title, tips }) => {
+export const DisconnectDialog = memo<DisconnectDialogProps>(({ open, onClose, title, tips }) => {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const [{ loading }, handleConfirm] = useAsyncFn(async () => onSubmit?.(), [onSubmit])
-
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog open={open} onClose={() => onClose()}>
             <DialogContent>
                 <Typography className={classes.title}>{title}</Typography>
                 <Typography className={classes.content}>{tips}</Typography>
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <ActionButton
-                    fullWidth
-                    loading={loading}
-                    variant="roundedContained"
-                    color="warning"
-                    onClick={handleConfirm}>
+                <ActionButton fullWidth variant="roundedContained" color="warning" onClick={() => onClose(true)}>
                     {t('confirm')}
                 </ActionButton>
-                <Button fullWidth onClick={onClose} variant="roundedOutlined">
+                <Button fullWidth onClick={() => onClose()} variant="roundedOutlined">
                     {t('cancel')}
                 </Button>
             </DialogActions>

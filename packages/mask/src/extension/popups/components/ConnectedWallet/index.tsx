@@ -5,7 +5,7 @@ import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { MaskMessages, NetworkPluginID, NextIDAction, PopupModalRoutes, SignType } from '@masknet/shared-base'
 import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FormattedAddress, ImageIcon, PersonaContext } from '@masknet/shared'
-import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Trans } from 'react-i18next'
@@ -85,12 +85,6 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
     // TODO: remove this after next dot id support multiple chain
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
 
-    const formatDomain = useCallback((name: string) => {
-        if (name.length > 10) return `${name.slice(0, 5)}...${name.slice(-5)}`
-
-        return name
-    }, [])
-
     const handleConfirmRelease = useCallback(
         async (wallet?: ConnectedWalletInfo) => {
             try {
@@ -126,7 +120,6 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
-                DisconnectModal.close()
             } catch {
                 showSnackbar(t('popups_wallet_disconnect_failed'))
             }
@@ -146,7 +139,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                         <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
                         <Typography className={classes.walletInfo} component="div">
                             <Typography className={classes.walletName}>
-                                <Typography component="span">{formatDomain(wallet.name)}</Typography>
+                                <Typography component="span">{formatDomainName(wallet.name, 10)}</Typography>
                                 <Link
                                     style={{ width: 16, height: 16, color: 'inherit' }}
                                     href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
@@ -166,11 +159,10 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                     </Box>
                     <Icons.Disconnect
                         size={16}
-                        onClick={() => {
+                        onClick={async () => {
                             if (!currentPersona) return
-                            DisconnectModal.open({
+                            const results = await DisconnectModal.openAndWaitForClose({
                                 title: t('popups_release_bind_wallet_title'),
-                                onSubmit: () => handleConfirmRelease(wallet),
                                 tips: (
                                     <Trans
                                         i18nKey="popups_persona_disconnect_tips"
@@ -184,6 +176,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                                     />
                                 ),
                             })
+                            if (results?.confirmed) return handleConfirmRelease(wallet)
                         }}
                     />
                 </Box>

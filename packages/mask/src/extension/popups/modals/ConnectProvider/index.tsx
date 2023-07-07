@@ -1,11 +1,11 @@
 import { memo, useCallback, useMemo } from 'react'
-import { ActionModal, useActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
+import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
-import { useAsyncRetry } from 'react-use'
+import { useAsyncFn, useMount } from 'react-use'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { timeout } from '@masknet/kit'
@@ -68,7 +68,6 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     const { t } = useI18N()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
-    const { closeModal } = useActionModal()
     const location = useLocation()
     const { pluginID } = useNetworkContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -94,7 +93,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
         navigate(urlcat(PopupRoutes.Personas, { disableNewWindow: true }), { replace: true })
     }, [])
 
-    const { loading, error, retry } = useAsyncRetry(async () => {
+    const [{ loading, error }, handleConnect] = useAsyncFn(async () => {
         if (!Provider?.isReady(provider.type)) return
         try {
             const connect = async () => {
@@ -135,7 +134,9 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             },
             { replace: true },
         )
-    }, [])
+    }, [modalNavigate])
+
+    useMount(handleConnect)
 
     return (
         <ActionModal
@@ -162,7 +163,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                     <img src={provider.icon.toString()} style={{ width: 32, height: 32 }} />
                 </Box>
                 {isTimeout ? (
-                    <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={retry}>
+                    <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={handleConnect}>
                         {t('retry')}
                     </Button>
                 ) : null}
