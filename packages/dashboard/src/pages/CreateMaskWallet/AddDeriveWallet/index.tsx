@@ -15,6 +15,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { first } from 'lodash-es'
 import { walletName } from '../constants.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { ResetWalletContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -71,6 +72,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     }
     const { mnemonic } = state.usr
     const indexes = useRef(new Set<number>())
+    const { resetWallets } = ResetWalletContext.useContainer()
 
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
@@ -105,6 +107,8 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         const unDeriveWallets = Array.from(indexes.current)
         if (!unDeriveWallets.length) return
 
+        await resetWallets()
+
         const firstPath = first(unDeriveWallets)
         const firstWallet = await PluginServices.Wallet.recoverWalletFromMnemonic(
             `${walletName}${firstPath!}`,
@@ -125,6 +129,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         )
 
         await PluginServices.Wallet.resolveMaskAccount([{ address: firstWallet }])
+
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [indexes, mnemonic, walletName, wallets.length])
 

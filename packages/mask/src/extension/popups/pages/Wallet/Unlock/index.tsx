@@ -7,7 +7,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { Navigator } from '../../../components/Navigator/index.js'
 import { LoadingButton } from '@mui/lab'
 import { Trans } from 'react-i18next'
 import { ResetWalletModal } from '../../../modals/modals.js'
@@ -111,7 +110,6 @@ const Unlock = memo(() => {
                     />
                 </Typography>
             </Box>
-            <Navigator />
         </Box>
     )
 })

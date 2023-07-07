@@ -5,7 +5,7 @@ import type { UseFormSetError } from 'react-hook-form'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
@@ -13,6 +13,7 @@ import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { PluginServices } from '../../../API.js'
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
+import { ResetWalletContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -75,11 +76,13 @@ const useStyles = makeStyles()((theme) => ({
 
 const Recovery = memo(function Recovery() {
     const t = useDashboardI18N()
+    const location = useLocation()
     const { cx, classes } = useStyles()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
     const [error, setError] = useState('')
     const walletName = Math.random().toString(36).slice(2)
+    const { resetWallets } = ResetWalletContext.useContainer()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
 
@@ -91,18 +94,23 @@ const Recovery = memo(function Recovery() {
 
                 navigate(DashboardRoutes.AddDeriveWallet, {
                     replace: false,
-                    state: { mnemonic },
+                    state: {
+                        mnemonic,
+                        password: location.state?.password,
+                        isReset: location.state?.isReset,
+                    },
                 })
             } catch {
                 setError(t.wallet_recovery_mnemonic_confirm_failed())
             }
         },
-        [t, navigate],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
+                await resetWallets()
                 await PluginServices.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
@@ -115,6 +123,7 @@ const Recovery = memo(function Recovery() {
     const onRestore = useCallback(
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
+                await resetWallets()
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
                     walletName,
                     keyStoreContent,

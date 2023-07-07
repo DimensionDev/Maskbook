@@ -1,10 +1,10 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useAsync, useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
+import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
@@ -14,9 +14,7 @@ import { toBlob } from 'html-to-image'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-import { useWallets } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ResetWalletContext } from '../context.js'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
     container: {
@@ -173,21 +171,25 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const navigate = useNavigate()
     const walletName = Math.random().toString(36).slice(2)
     const t = useDashboardI18N()
+    const { resetWallets } = ResetWalletContext.useContainer()
 
     const [isVerify, setIsVerify] = useState(false)
     const { classes, cx } = useStyles({ isVerify })
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
 
-    const { value: hasPassword = false } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
-
     const onVerifyClick = useCallback(() => {
         setIsVerify(true)
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.RecoveryMaskWallet)
-    }, [])
+        navigate(DashboardRoutes.RecoveryMaskWallet, {
+            state: {
+                password: location.state?.password,
+                isReset: location.state?.isReset,
+            },
+        })
+    }, [location.state?.password, location.state?.isReset])
 
     const { value: address } = useAsync(async () => {
         if (!words.length) return
@@ -195,27 +197,12 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
 
         return address
-    }, [words, location.state?.isReset])
-
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    }, [words, walletName])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
-        const password = location.state?.password
-
-        if (location.state?.isReset && wallets.length) {
-            await PluginServices.Wallet.resetPassword(password)
-            for (const wallet of wallets) {
-                await Web3.removeWallet?.(wallet.address, '', {
-                    providerType: ProviderType.MaskWallet,
-                })
-            }
-        } else if (hasPassword === false) {
-            await PluginServices.Wallet.setPassword(password)
-        }
+        await resetWallets()
 
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
-
-        CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 
         await PluginServices.Wallet.resolveMaskAccount([
             {
@@ -224,7 +211,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words, location.state?.isReset, hasPassword, location.state?.password, wallets])
+    }, [walletName, words])
 
     return (
         <div className={classes.container}>
