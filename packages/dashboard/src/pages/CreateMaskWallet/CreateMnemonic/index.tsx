@@ -215,9 +215,6 @@ const CreateMnemonic = memo(function CreateMnemonic() {
 
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
-        // TODO: this is a workaround, something wrong with sync the `hostedAccount` when update the wallets.
-        Web3.connect({ providerType: ProviderType.MaskWallet, account: address })
-
         CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 
         await PluginServices.Wallet.resolveMaskAccount([

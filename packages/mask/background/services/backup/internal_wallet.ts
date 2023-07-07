@@ -24,6 +24,7 @@ export interface WalletBackupProvider {
         derivationPath?: string,
         initialPassword?: string,
     ): Promise<string>
+    getWallet(address: string): Promise<Wallet | null>
     generateAddressFromMnemonic(
         name: string,
         mnemonic: string,

@@ -120,12 +120,14 @@ export class MaskWalletProvider
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
+        if (!this.hostedAccount && !this.wallets.length) this.walletStorage?.account.setValue(wallet.address)
         await this.context?.addWallet(wallet.address, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         const scWallets = this.wallets.filter((x) => isSameAddress(x.owner, address))
         if (scWallets.length) await super.removeWallets(scWallets)
+        if (isSameAddress(this.hostedAccount, address)) this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
         await this.context?.removeWallet(address, password)
     }

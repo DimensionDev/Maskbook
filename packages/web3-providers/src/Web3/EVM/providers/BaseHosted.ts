@@ -22,7 +22,7 @@ export class BaseHostedProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private walletStorage:
+    public walletStorage:
         | StorageObject<{
               account: string
               chainId: ChainId

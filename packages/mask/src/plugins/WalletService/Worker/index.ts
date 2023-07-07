@@ -10,6 +10,7 @@ import {
     getWallets,
     isLocked,
     recoverWalletFromMnemonic,
+    getWallet,
     generateAddressFromMnemonic,
     resetPassword,
     recoverWalletFromPrivateKey,
@@ -25,6 +26,7 @@ const worker: Plugin.Worker.Definition = {
     init(signal, context) {
         setupDatabase(context.getDatabaseStorage())
         setWalletBackupProvider({
+            getWallet,
             removeWallet,
             exportMnemonic,
             exportPrivateKey,
