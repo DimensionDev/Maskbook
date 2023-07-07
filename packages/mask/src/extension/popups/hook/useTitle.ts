@@ -6,6 +6,6 @@ export function useTitle(title: string, customBackHandler?: () => void) {
 
     useLayoutEffect(() => {
         setTitle(title)
-        if (customBackHandler) setCustomBackHandler(() => customBackHandler)
+        setCustomBackHandler(() => customBackHandler)
     }, [title, customBackHandler])
 }

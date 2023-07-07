@@ -14,7 +14,13 @@ import {
     PopupModalRoutes,
     MaskMessages,
 } from '@masknet/shared-base'
-import { formatDomainName, formatEthereumAddress, explorerResolver, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    formatDomainName,
+    formatEthereumAddress,
+    explorerResolver,
+    ProviderType,
+    providerResolver,
+} from '@masknet/web3-shared-evm'
 import { FormattedAddress, PersonaContext, WalletIcon } from '@masknet/shared'
 import { NextIDProof, Web3 } from '@masknet/web3-providers'
 import {
@@ -72,7 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.danger,
     },
-    congralulation: {
+    congratulation: {
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
@@ -115,12 +121,22 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         return NextIDProof.queryIsBound(currentPersona.identifier.publicKeyAsHex, NextIDPlatform.Ethereum, account)
     }, [account, currentPersona?.identifier.publicKeyAsHex])
 
-    const walletName = useMemo(() => {
+    const walletAlias = useMemo(() => {
         if (domain) return formatDomainName(domain)
+        if (providerType !== ProviderType.MaskWallet) return `${providerResolver.providerName(providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, account))?.name ?? formatEthereumAddress(account, 4)
-    }, [JSON.stringify(wallets), account, domain])
+    }, [JSON.stringify(wallets), account, domain, providerType])
 
-    console.log(providerType)
+    const walletName = useMemo(() => {
+        if (providerType === ProviderType.MaskWallet)
+            return (
+                wallets.find((x) => isSameAddress(x.address, account))?.name ??
+                (domain || formatEthereumAddress(account, 4))
+            )
+
+        return domain || formatEthereumAddress(account, 4)
+    }, [providerType, account, domain, JSON.stringify(wallets)])
+
     const bindProof = useCallback(
         async (payload: NextIDPayload, walletSignature: string, signature: string) => {
             if (!currentPersona) return
@@ -204,13 +220,12 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         await Services.Helper.removePopupWindow()
     }, [providerType])
 
-    const handleBack = useCallback(
-        () => () =>
-            navigate(urlcat(PopupRoutes.Personas, { tab: HomeTabType.ConnectedWallets, disableNewWindow: true }), {
-                replace: true,
-            }),
-        [],
-    )
+    const handleBack = useCallback(() => {
+        console.log('done1')
+        navigate(urlcat(PopupRoutes.Personas, { tab: HomeTabType.ConnectedWallets, disableNewWindow: true }), {
+            replace: true,
+        })
+    }, [])
 
     useTitle(t('plugin_wallet_connect_a_wallet'), handleBack)
 
@@ -223,7 +238,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                             <WalletIcon size={30} mainIcon={providerDescriptor?.icon} />
                             <Box>
                                 <Typography fontSize={14} fontWeight={700} lineHeight="18px">
-                                    {walletName}
+                                    {walletAlias}
                                 </Typography>
                                 <Typography className={classes.address}>
                                     <FormattedAddress address={account} size={4} formatter={formatEthereumAddress} />
@@ -256,8 +271,8 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                     <Typography fontSize={24} lineHeight="120%" fontWeight={700} my={1.5}>
                         {t('congratulations')}
                     </Typography>
-                    <Typography className={classes.congralulation}>
-                        {t('popups_verify_wallet_congralulation_tips', {
+                    <Typography className={classes.congratulation}>
+                        {t('popups_verify_wallet_congratulation_tips', {
                             persona: currentPersona?.nickname,
                             wallet: walletName,
                         })}

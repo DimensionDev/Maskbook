@@ -957,7 +957,7 @@
     "popups_verify_wallet_sign_success_tips": "You have successfully signed with your wallet.",
     "popups_verify_wallet_sign_fail_tips": "Sorry, signature failed! Please try signing again.",
     "popups_verify_wallet_bind_fail_tips": "Failed to add the wallet, please try again.",
-    "popups_verify_wallet_congralulation_tips": "Connecting {{persona}} with {{wallet}} successfully.",
+    "popups_verify_wallet_congratulation_tips": "Connecting {{persona}} with {{wallet}} successfully.",
     "popups_switch_Wallet": "Switch Wallet",
     "nft_wallet_label": "Wallet",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",

@@ -11,7 +11,6 @@ import {
     type ListItemProps,
     Tooltip,
     Radio,
-    listItemClasses,
     listItemSecondaryActionClasses,
 } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'

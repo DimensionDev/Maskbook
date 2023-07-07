@@ -8,7 +8,7 @@ export interface PageTitleState {
     setExtension: (extension: React.ReactNode | undefined) => void
     setTitle: (title: string) => void
     customBackHandler?: () => void
-    setCustomBackHandler: (fn: () => void) => void
+    setCustomBackHandler: (fn?: () => void) => void
 }
 
 export const PageTitleContextDefault = {

@@ -1,15 +1,10 @@
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import {
-    NetworkPluginID,
-    PopupModalRoutes,
-    PopupRoutes as PopupPaths,
-    queryRemoteI18NBundle,
-} from '@masknet/shared-base'
+import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
-import { lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { lazy, memo, useEffect, useState, type ReactNode, useMemo } from 'react'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import '../../social-network-adaptor/browser-action/index.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
@@ -81,13 +76,12 @@ const PopupRoutes = memo(function PopupRoutes() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     const [extension, setExtension] = useState<ReactNode>()
-    const [customBackHanlder, setCustomBackHandler] = useState<() => void>()
+    const [customBackHandler, setCustomBackHandler] = useState<() => void>()
     const titleContext = useMemo(
-        () => ({ title, setTitle, extension, setExtension, customBackHanlder, setCustomBackHandler }),
-        [title, extension, customBackHanlder],
+        () => ({ title, setTitle, extension, setExtension, customBackHandler, setCustomBackHandler }),
+        [title, extension, customBackHandler],
     )
 
-    useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
     useMountReport(EventID.AccessPopups)
 
     return PageUIProvider(

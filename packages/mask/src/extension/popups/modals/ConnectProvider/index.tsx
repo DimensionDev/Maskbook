@@ -1,15 +1,16 @@
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
-import { useAsyncFn, useMount } from 'react-use'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { timeout } from '@masknet/kit'
 import urlcat from 'urlcat'
+import { useAsyncFn, useMount } from 'react-use'
+import type { ProviderType } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
     loading: boolean
@@ -74,14 +75,15 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const { Provider } = useWeb3State<void, NetworkPluginID.PLUGIN_EVM>(pluginID)
+
+    const [params] = useSearchParams()
     const { providerType } = useMemo(() => {
-        const params = new URLSearchParams(location.search)
         const providerType = params.get('providerType')
 
         return {
             providerType: providerType ? providerType : undefined,
         }
-    }, [])
+    }, [params])
 
     const provider = useProviderDescriptor<void, NetworkPluginID.PLUGIN_EVM>(pluginID, providerType)
 
@@ -94,13 +96,17 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     }, [])
 
     const [{ loading, error }, handleConnect] = useAsyncFn(async () => {
-        if (!Provider?.isReady(provider.type)) return
+        console.log('done')
+        const params = new URLSearchParams(location.search)
+
+        const providerType = params.get('providerType')
+        if (!providerType) return
         try {
             const connect = async () => {
-                const chainId = await Web3.getChainId({ providerType: provider.type })
+                const chainId = await Web3.getChainId({ providerType: providerType as ProviderType })
                 return Web3.connect({
                     chainId,
-                    providerType: provider.type,
+                    providerType: providerType as ProviderType,
                 })
             }
 
@@ -120,7 +126,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 }
             }
         }
-    }, [providerType, Provider, handleClose])
+    }, [])
 
     const isTimeout = error?.message === 'timeout'
 
@@ -136,7 +142,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
         )
     }, [modalNavigate])
 
-    useMount(handleConnect)
+    useMount(() => handleConnect())
 
     return (
         <ActionModal
