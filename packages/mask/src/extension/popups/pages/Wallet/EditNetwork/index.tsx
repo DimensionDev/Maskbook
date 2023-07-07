@@ -154,8 +154,10 @@ export const EditNetwork = memo(function EditNetwork() {
                     } else {
                         await WalletRPC.updateNetwork(chainId, data)
                     }
+                    showSnackbar(t('saved_network_successfully'))
                 } else {
                     await WalletRPC.addNetwork(data)
+                    showSnackbar(t('adding_network_successfully'))
                 }
                 navigate(-1)
                 queryClient.invalidateQueries(QUERY_KEY)
@@ -182,7 +184,7 @@ export const EditNetwork = memo(function EditNetwork() {
         )
         if (!result) return
         mutate(data)
-    }, [disabled, getValues])
+    }, [disabled, getValues, isEditing])
 
     return (
         <main className={classes.main}>
