@@ -48,11 +48,6 @@ export class BaseInjectedProvider
     }
 
     protected onDisconnect() {
-        console.log('DEBUG: disconnect')
-        console.log({
-            providerType: this.providerType,
-        })
-
         this.emitter.emit('disconnect', this.providerType)
     }
 
