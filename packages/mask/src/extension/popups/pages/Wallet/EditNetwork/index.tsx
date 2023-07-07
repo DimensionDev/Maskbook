@@ -170,7 +170,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 <Typography className={classes.label}>{t('network_name')}</Typography>
                 <Input fullWidth disableUnderline {...register('name')} placeholder="Cel" disabled={isBuiltIn} />
 
-                <Typography className={classes.label}>{t('new_rpc_url')}</Typography>
+                <Typography className={classes.label}>{t('rpc_url')}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
