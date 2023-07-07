@@ -1,20 +1,25 @@
-import { Environment, isEnvironment, MessageTarget, type UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { AsyncCall, type AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { serializer, getLocalImplementation, getLocalImplementationExotic } from '@masknet/shared-base'
+import type { PluginMessageEmitterItem } from '@masknet/plugin-infra'
 
 const log: AsyncCallLogLevel = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
     sendLocalStack: process.env.NODE_ENV === 'development',
 }
+let isBackgroundF = () => isEnvironment(Environment.ManifestBackground)
+export function __workaround__replaceIsBackground__(f: () => boolean) {
+    isBackgroundF = f
+}
 export function createPluginRPC<T extends Record<string, (...args: any) => Promise<any>>>(
     key: string,
     impl: () => T | Promise<T>,
-    message: UnboundedRegistry<unknown>,
+    message: PluginMessageEmitterItem<unknown>,
     /** Please set this to true if your implementation is a Proxy. */
     exoticImplementation?: boolean,
 ): T {
-    const isBackground = isEnvironment(Environment.ManifestBackground)
+    const isBackground = isBackgroundF()
     return AsyncCall<T>(
         (exoticImplementation ? getLocalImplementationExotic : getLocalImplementation)(
             isBackground,
@@ -24,7 +29,10 @@ export function createPluginRPC<T extends Record<string, (...args: any) => Promi
         ),
         {
             key,
-            channel: message.bind(MessageTarget.Broadcast),
+            channel: {
+                on: message.on,
+                send: message.sendByBroadcast,
+            },
             preferLocalImplementation: isBackground,
             serializer,
             strict: {
@@ -39,10 +47,13 @@ export function createPluginRPC<T extends Record<string, (...args: any) => Promi
 
 export function createPluginRPCGenerator<
     T extends Record<string, (...args: any[]) => Generator<any> | AsyncGenerator<any>>,
->(key: string, impl: () => Promise<T>, message: UnboundedRegistry<any>): T {
-    const isBackground = isEnvironment(Environment.ManifestBackground)
+>(key: string, impl: () => Promise<T>, message: PluginMessageEmitterItem<any>): T {
+    const isBackground = isBackgroundF()
     return AsyncGeneratorCall<T>(getLocalImplementation(isBackground, `Plugin(${key})`, impl, message), {
-        channel: message.bind(MessageTarget.Broadcast),
+        channel: {
+            on: message.on,
+            send: message.sendByBroadcast,
+        },
         preferLocalImplementation: isBackground,
         serializer,
         strict: {

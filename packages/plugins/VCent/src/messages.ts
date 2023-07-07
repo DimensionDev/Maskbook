@@ -5,5 +5,5 @@ interface VCentMessages {
     rpc: unknown
 }
 
-export const PluginVCentMessages: PluginMessageEmitter<VCentMessages> = createPluginMessage(PLUGIN_ID)
+const PluginVCentMessages: PluginMessageEmitter<VCentMessages> = createPluginMessage(PLUGIN_ID)
 export const PluginVCentRPC = createPluginRPC(PLUGIN_ID, () => import('./services.js'), PluginVCentMessages.rpc)

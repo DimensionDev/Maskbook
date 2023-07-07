@@ -13,7 +13,7 @@ export const SNSMethods: Pick<BridgeAPI, 'sns_appendComposition'> = {
             namespacedPayload.set(`plugin:${url}@${key}`, payload.get(key))
         }
 
-        ExternalPluginMessages.appendComposition.sendToContentScripts({
+        ExternalPluginMessages.appendComposition.sendToContentScripts?.({
             payload: namespacedPayload,
             context,
             appendText: message,
@@ -40,7 +40,7 @@ function __validateRemoteContext() {
             resolve(currentSNSContext)
             f()
         })
-        ExternalPluginMessages.ping.sendToContentScripts({
+        ExternalPluginMessages.ping.sendToContentScripts?.({
             context: currentSNSContext,
             challenge,
         })

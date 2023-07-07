@@ -8,7 +8,6 @@ export interface PetMessage {
      */
     essayDialogUpdated: PetsDialogEvent
     setResult: number
-    rpc: unknown
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
