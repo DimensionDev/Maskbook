@@ -60,7 +60,7 @@ export function ConnectWallet({ pluginID, networkType, providerType, open, onCon
         onConnect?.()
 
         return true
-    }, [open, onConnect, Others, Web3, pluginIDsSettings])
+    }, [open])
 
     if (!pluginID || !providerType || !networkType) return null
 
