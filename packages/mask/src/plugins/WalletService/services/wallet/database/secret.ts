@@ -51,6 +51,22 @@ export async function hasSecret() {
     return !!(await getSecret())
 }
 
+export async function resetSecret(password: string) {
+    await PluginDB.remove('secret', SECRET_ID)
+    const iv = getIV()
+    const key = await deriveKey(iv, password)
+    const primaryKey = await createAES()
+    const primaryKeyWrapped = await wrapKey(primaryKey, key)
+    const message = uuid() // the primary key never change
+    await PluginDB.add({
+        id: SECRET_ID,
+        type: 'secret',
+        iv,
+        key: primaryKeyWrapped,
+        encrypted: await encrypt(encodeText(message), primaryKey, iv),
+    })
+}
+
 export async function encryptSecret(password: string) {
     const secret = await getSecret()
     if (secret) throw new Error('Failed to encrypt secret.')

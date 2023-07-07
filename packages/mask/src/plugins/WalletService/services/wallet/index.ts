@@ -30,6 +30,7 @@ export {
     hasPassword,
     verifyPassword,
     changePassword,
+    resetPassword,
     validatePassword,
     clearPassword,
 } from './password.js'
@@ -163,8 +164,6 @@ export async function renameWallet(address: string, name: string) {
 }
 
 export async function removeWallet(address: string, unverifiedPassword?: string) {
-    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
-
     await database.deleteWallet(address)
 }
 

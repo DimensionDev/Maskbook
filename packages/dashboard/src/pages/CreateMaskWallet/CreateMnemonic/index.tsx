@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
@@ -14,8 +14,9 @@ import { toBlob } from 'html-to-image'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-import { isUndefined } from 'lodash-es'
-import { walletName } from '../constants.js'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
     container: {
@@ -170,6 +171,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
+    const walletName = Math.random().toString(36).slice(2)
     const t = useDashboardI18N()
 
     const [isVerify, setIsVerify] = useState(false)
@@ -188,22 +190,35 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [])
 
     const { value: address } = useAsync(async () => {
-        const password = location.state?.password
-        if (isUndefined(hasPassword)) return
-
-        if (hasPassword === false) {
-            await PluginServices.Wallet.setPassword(password)
-        }
-
         if (!words.length) return
 
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
 
         return address
-    }, [words, hasPassword, location.state?.password])
+    }, [words, location.state?.isReset])
 
-    const [, onSubmit] = useAsyncFn(async () => {
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+
+    const [{ loading }, onSubmit] = useAsyncFn(async () => {
+        const password = location.state?.password
+
+        if (location.state?.isReset && wallets.length) {
+            await PluginServices.Wallet.resetPassword(password)
+            for (const wallet of wallets) {
+                await Web3.removeWallet?.(wallet.address, '', {
+                    providerType: ProviderType.MaskWallet,
+                })
+            }
+        } else if (hasPassword === false) {
+            await PluginServices.Wallet.setPassword(password)
+        }
+
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
+
+        // TODO: this is a workaround, something wrong with sync the `hostedAccount` when update the wallets.
+        Web3.connect({ providerType: ProviderType.MaskWallet, account: address })
+
+        CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 
         await PluginServices.Wallet.resolveMaskAccount([
             {
@@ -212,7 +227,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words])
+    }, [walletName, words, location.state?.isReset, hasPassword, location.state?.password, wallets])
 
     return (
         <div className={classes.container}>
@@ -227,8 +242,10 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                 </div>
                 {isVerify ? (
                     <VerifyMnemonicUI
+                        isReset={location.state?.isReset}
                         setIsVerify={setIsVerify}
                         words={words}
+                        loading={loading}
                         isMatched={isMatched}
                         answerCallback={answerCallback}
                         puzzleAnswer={puzzleAnswer}
@@ -264,6 +281,8 @@ interface VerifyMnemonicUIProps {
         [key: number]: string
     }
     puzzleWordList: PuzzleWord[]
+    isReset: boolean
+    loading: boolean
     isMatched: boolean | undefined
     setIsVerify: (isVerify: boolean) => void
     onSubmit: () => void
@@ -281,6 +300,8 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     answerCallback,
     setIsVerify,
     onSubmit,
+    loading,
+    isReset,
     puzzleWordList,
     puzzleAnswer,
     verifyAnswerCallback,
@@ -324,10 +345,12 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                     <PrimaryButton
                         className={classes.bold}
                         width="125px"
+                        disabled={loading}
+                        loading={loading}
                         size="large"
                         color="primary"
                         onClick={() => verifyAnswerCallback(onSubmit)}>
-                        {t.verify()}
+                        {isReset ? t.restore() : t.verify()}
                     </PrimaryButton>
                 </div>
             </SetupFrameController>

@@ -126,6 +126,9 @@ export namespace Plugin.Shared {
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
+        /** Select a Mask Wallet account */
+        selectAccount: Subscription<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
+
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>
 
@@ -145,9 +148,6 @@ export namespace Plugin.Shared {
 
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
-
-        /** Select a Mask Wallet account */
-        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>

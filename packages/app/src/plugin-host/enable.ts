@@ -100,7 +100,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             recordConnectedSites: reject,
             rejectRequest: reject,
             removeWallet: reject,
-            selectAccount: reject,
+            selectAccount: createConstantSubscription([]),
             setMinimalMode: reject,
             signWithPersona: reject,
             signWithWallet: reject,

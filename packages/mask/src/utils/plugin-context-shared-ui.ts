@@ -51,7 +51,12 @@ export const RestPartOfPluginUIContextShared: Omit<
         CrossIsolationMessages.events.walletsUpdated.on,
     ),
 
-    selectAccount: WalletRPC.selectMaskAccount,
+    selectAccount: createSubscriptionFromAsync(
+        async () => WalletRPC.selectMaskAccount(),
+        EMPTY_LIST,
+        CrossIsolationMessages.events.walletsUpdated.on,
+    ),
+
     recordConnectedSites: WalletRPC.recordConnectedSites,
 
     signWithPersona: Services.Identity.signWithPersona,

@@ -10,6 +10,7 @@ import {
     PopupRoutes,
     ValueRef,
     isExtensionSiteType,
+    mapSubscription,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -86,6 +87,9 @@ export class MaskWalletProvider
     override get subscription() {
         return {
             ...super.subscription,
+            account: this.context?.selectAccount
+                ? mapSubscription(this.context?.selectAccount!, (selectAccount) => first(selectAccount)?.address ?? '')
+                : super.subscription.account,
             wallets: createSubscriptionFromValueRef(this.ref),
         }
     }
@@ -164,7 +168,7 @@ export class MaskWalletProvider
             chainId,
         })
 
-        const account = first(await this.context?.selectAccount())
+        const account = first(this.context?.selectAccount.getCurrentValue())
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account

@@ -11,20 +11,34 @@ export async function getConnectedStatus(site: EnhanceableSite | ExtensionSite) 
     return recordSites.get(site)
 }
 
-interface MaskAccount {
-    address: string
-    owner?: string
-    identifier?: ECKeyIdentifier
-}
 // #region select wallet with popups
-let deferred: DeferTuple<MaskAccount[], Error> | null
+let deferred: DeferTuple<
+    Array<{
+        address: string
+        owner?: string
+        identifier?: ECKeyIdentifier
+    }>,
+    Error
+> | null
 
-export async function selectMaskAccount(): Promise<MaskAccount[]> {
+export async function selectMaskAccount(): Promise<
+    Array<{
+        address: string
+        owner?: string
+        identifier?: ECKeyIdentifier
+    }>
+> {
     deferred = defer()
     return deferred?.[0] ?? []
 }
 
-export async function resolveMaskAccount(accounts: MaskAccount[]) {
+export async function resolveMaskAccount(
+    accounts: Array<{
+        address: string
+        owner?: string
+        identifier?: ECKeyIdentifier
+    }>,
+) {
     const [, resolve] = deferred ?? []
     resolve?.(accounts)
     deferred = null

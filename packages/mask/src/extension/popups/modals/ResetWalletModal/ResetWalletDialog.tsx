@@ -46,7 +46,7 @@ export const ResetWalletDialog = memo<RestWalletDialogProps>(function ResetWalle
     const onConfirm = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
+            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form?reset=true'),
         })
     }, [])
 

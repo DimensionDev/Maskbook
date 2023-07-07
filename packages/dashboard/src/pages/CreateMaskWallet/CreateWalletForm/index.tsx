@@ -4,16 +4,12 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { Web3 } from '@masknet/web3-providers'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { useWallets } from '@masknet/web3-hooks-base'
-import { useAsync } from 'react-use'
-import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -74,16 +70,9 @@ const CreateWalletForm = memo(function CreateWalletForm() {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const wallets = useWallets()
-
-    useAsync(async () => {
-        console.log({ wallets })
-        for (const wallet of wallets) {
-            await Web3.removeWallet?.(wallet.address, '', {
-                providerType: ProviderType.MaskWallet,
-            })
-        }
-    }, [wallets])
+    const location = useLocation()
+    const params = new URLSearchParams(location.search)
+    const isReset = params.get('reset')
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -120,7 +109,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
             DashboardRoutes.CreateMaskWalletMnemonic,
             data.password
                 ? {
-                      state: { password: data.password },
+                      state: { password: data.password, isReset },
                   }
                 : undefined,
         )

@@ -12,7 +12,6 @@ import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Rest
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { PluginServices } from '../../../API.js'
-import { walletName } from '../constants.js'
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -80,6 +79,7 @@ const Recovery = memo(function Recovery() {
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
     const [error, setError] = useState('')
+    const walletName = Math.random().toString(36).slice(2)
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
 
