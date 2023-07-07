@@ -24,14 +24,12 @@ export interface WalletBackupProvider {
         derivationPath?: string,
         initialPassword?: string,
     ): Promise<string>
-    getWallet(address: string): Promise<Wallet | null>
     generateAddressFromMnemonic(
         name: string,
         mnemonic: string,
         derivationPath?: string,
         initialPassword?: string,
     ): Promise<string | undefined>
-    removeWallet(address: string, unverifiedPassword: string): Promise<void>
     resetPassword(newPassword: string): Promise<void>
     recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>

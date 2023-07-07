@@ -1,5 +1,5 @@
 import type { Services as ServiceType } from '../../mask/background/services/types.js'
-import type { ECKeyIdentifier, MaskEvents, Wallet } from '@masknet/shared-base'
+import type { ECKeyIdentifier, MaskEvents } from '@masknet/shared-base'
 import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 export let Services: ServiceType = null!
@@ -15,7 +15,6 @@ export interface PluginServices {
     Wallet: {
         createMnemonicWords(): Promise<string[]>
         recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
-        removeWallet(address: string, unverifiedPassword: string): Promise<void>
         recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
         getDerivableAccounts(
             mnemonic: string,
@@ -36,7 +35,6 @@ export interface PluginServices {
             derivationPath?: string,
             initialPassword?: string,
         ): Promise<string>
-        getWallet(address: string): Promise<Wallet | null>
         generateAddressFromMnemonic(
             name: string,
             mnemonic: string,
