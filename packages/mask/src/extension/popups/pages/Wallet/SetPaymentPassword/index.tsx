@@ -21,12 +21,15 @@ import { Trans } from 'react-i18next'
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
+        flexGrow: 1,
         flexDirection: 'column',
         background: theme.palette.maskColor.secondaryBottom,
     },
     content: {
+        position: 'relative',
         padding: 16,
         display: 'flex',
+        height: 386,
         justifyContent: 'flex-start',
         flexDirection: 'column',
     },
@@ -72,18 +75,20 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.third,
         fontWeight: 400,
     },
-    walletsWrapper: {
-        height: 200,
-        background: 'transparent',
-        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        maxHeight: 200,
-        overflow: 'scroll',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    setPasswordButton: {
+    setPasswordButtonWrapper: {
+        position: 'absolute',
+        width: 368,
+        bottom: 16,
         marginTop: 12,
+    },
+    confirmButtonWrapper: {
+        display: 'flex',
+        padding: 16,
+        background: theme.palette.maskColor.bottom,
+        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        position: 'absolute',
+        width: '100%',
+        bottom: 0,
     },
     back: {
         position: 'absolute',
@@ -92,14 +97,19 @@ const useStyles = makeStyles()((theme) => ({
     },
     form: {
         width: '100%',
-        height: 154,
-        marginBottom: 24,
+        height: 204,
+        marginBottom: 128,
     },
     textField: {
         marginTop: 10,
     },
     strong: {
         color: theme.palette.maskColor.main,
+    },
+    navigatorWrapper: {
+        position: 'absolute',
+        width: '100%',
+        bottom: 0,
     },
 }))
 
@@ -215,32 +225,32 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                 components={{ strong: <strong className={classes.strong} /> }}
                             />
                         </Typography>
-
-                        <ActionButton
-                            fullWidth
-                            className={classes.setPasswordButton}
-                            onClick={onSubmit}
-                            loading={loading}>
-                            {t('confirm')}
-                        </ActionButton>
                     </>
                 ) : (
                     <>
-                        <Box className={classes.walletsWrapper}>
-                            {wallets.map((wallet, index) => (
-                                <WalletItem address={wallet.address} key={index} />
-                            ))}
-                        </Box>
-                        <ActionButton
-                            fullWidth
-                            className={classes.setPasswordButton}
-                            onClick={() => setIsCreating(true)}>
-                            {t('popups_set_the_payment_password_title')}
-                        </ActionButton>
+                        {wallets.slice(0, 3).map((wallet, index) => (
+                            <WalletItem address={wallet.address} key={index} />
+                        ))}
+                        <div className={classes.setPasswordButtonWrapper}>
+                            <ActionButton fullWidth onClick={() => setIsCreating(true)}>
+                                {t('popups_set_the_payment_password_title')}
+                            </ActionButton>
+                        </div>
                     </>
                 )}
             </Box>
-            {isCreating ? null : <Navigator />}
+            {isCreating ? null : (
+                <Box className={classes.navigatorWrapper}>
+                    <Navigator />
+                </Box>
+            )}
+            {isCreating ? (
+                <div className={classes.confirmButtonWrapper}>
+                    <ActionButton fullWidth onClick={onSubmit} loading={loading} width={368}>
+                        {t('confirm')}
+                    </ActionButton>
+                </div>
+            ) : null}
             {isCreating ? <Icons.Comeback className={classes.back} onClick={() => setIsCreating(false)} /> : null}
         </Box>
     )

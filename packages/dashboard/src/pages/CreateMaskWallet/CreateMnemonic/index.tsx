@@ -172,7 +172,6 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const walletName = Math.random().toString(36).slice(2)
     const t = useDashboardI18N()
     const { resetWallets } = ResetWalletContext.useContainer()
-
     const [isVerify, setIsVerify] = useState(false)
     const { classes, cx } = useStyles({ isVerify })
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
@@ -192,12 +191,20 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [location.state?.password, location.state?.isReset])
 
     const { value: address } = useAsync(async () => {
+        const password = location.state?.password
+
         if (!words.length) return
+
+        const hasPassword = await PluginServices.Wallet.hasPassword()
+
+        if (!location.state?.isReset && !hasPassword) {
+            await PluginServices.Wallet.setPassword(password)
+        }
 
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
 
         return address
-    }, [words, walletName])
+    }, [words, walletName, location.state?.isReset, location.state?.password])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         await resetWallets()

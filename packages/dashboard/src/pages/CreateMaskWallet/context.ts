@@ -13,8 +13,6 @@ function useContext() {
 
     const resetWallets = useCallback(async () => {
         const password = location.state?.password
-        const hasPassword = await PluginServices.Wallet.hasPassword()
-        console.log({ isReset: location.state?.isReset })
         if (location.state?.isReset && wallets.length) {
             await PluginServices.Wallet.resetPassword(password)
             for (const wallet of wallets) {
@@ -23,8 +21,6 @@ function useContext() {
                 })
             }
             CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
-        } else if (hasPassword === false) {
-            await PluginServices.Wallet.setPassword(password)
         }
     }, [wallets, location.state?.password, location.state?.isReset])
     return {

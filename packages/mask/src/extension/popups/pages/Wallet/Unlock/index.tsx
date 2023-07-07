@@ -18,17 +18,17 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.maskColor.secondaryBottom,
     },
     content: {
-        padding: 16,
+        padding: '0px 16px',
         display: 'flex',
         justifyContent: 'flex-start',
         flexDirection: 'column',
     },
     titleWrapper: {
         paddingTop: 8,
-        paddingBottom: 12,
+        height: 100,
+        padding: 16,
         display: 'flex',
         flexDirection: 'column',
-        marginBottom: 12,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -40,8 +40,8 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 12,
     },
     inputWrapper: {
-        marginTop: 16,
-        height: 152,
+        paddingTop: 18,
+        height: 192,
         width: '100%',
     },
     strong: {
