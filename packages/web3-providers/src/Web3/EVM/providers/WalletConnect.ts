@@ -119,7 +119,6 @@ export default class WalletConnectProvider
         }
 
         if (error) return
-
         this.emitter.emit('disconnect', ProviderType.WalletConnect)
     }
 
@@ -151,7 +150,7 @@ export default class WalletConnectProvider
         if (this.connector.connected) {
             const { chainId: actualChainId, accounts } = this.connector
             const account = first(accounts)
-            if (actualChainId !== 0 && actualChainId === expectedChainId && account && isValidAddress(account)) {
+            if (actualChainId !== 0 && actualChainId === expectedChainId && isValidAddress(account)) {
                 this.connection.resolve({
                     chainId: actualChainId,
                     account,
