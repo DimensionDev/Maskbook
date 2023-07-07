@@ -5,17 +5,6 @@ import { merge } from 'lodash-es'
 import * as Components from './component-changes.js'
 import { grey } from '@mui/material/colors'
 
-function getFontFamily(monospace?: boolean) {
-    // We want to look native.
-    // Windows has no CJK sans monospace. Accommodate that.
-    // We only use it for fingerprints anyway so CJK coverage ain't a problem... yet.
-    const monofont = navigator.platform.startsWith('Win') ? 'Consolas, monospace' : 'monospace'
-    // https://caniuse.com/font-family-system-ui
-    // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
-    // Microsoft YaHei on zh-Hans-CN.
-    return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
-}
-
 function MaskTheme(mode: PaletteMode) {
     const maskColors = MaskColors[mode]
     const theme = merge(
@@ -29,7 +18,7 @@ function MaskTheme(mode: PaletteMode) {
                 },
             },
             typography: {
-                fontFamily: getFontFamily(),
+                fontFamily: 'Helvetica',
             },
             breakpoints: {
                 values: {

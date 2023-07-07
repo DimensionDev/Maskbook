@@ -33,11 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
     },
-    avatar: {
-        marginRight: 4,
-        width: 30,
-        height: 30,
-    },
     nickname: {
         color: '#07101B',
         lineHeight: '18px',
@@ -96,6 +91,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     balance: {
         fontSize: 36,
+        fontWeight: 700,
         color: theme.palette.maskColor.main,
         height: 54,
         paddingTop: theme.spacing(1.5),
