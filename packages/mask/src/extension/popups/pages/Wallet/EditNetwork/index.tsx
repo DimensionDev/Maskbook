@@ -171,17 +171,32 @@ export const EditNetwork = memo(function EditNetwork() {
                 <Input fullWidth disableUnderline {...register('name')} placeholder="Cel" disabled={isBuiltIn} />
 
                 <Typography className={classes.label}>{t('new_rpc_url')}</Typography>
-                <Input fullWidth disableUnderline {...register('rpc')} placeholder="https://" disabled={isBuiltIn} />
+                <Input
+                    fullWidth
+                    disableUnderline
+                    error={!!errors.rpc}
+                    {...register('rpc')}
+                    placeholder="https://"
+                    disabled={isBuiltIn}
+                />
                 {errors.rpc ? <Typography className={classes.error}>{errors.rpc.message}</Typography> : null}
 
                 <Typography className={classes.label}>{t('chain_id')}</Typography>
-                <Input fullWidth disableUnderline {...register('chainId')} placeholder="eg. 2" disabled={isBuiltIn} />
+                <Input
+                    fullWidth
+                    disableUnderline
+                    error={!!errors.chainId}
+                    {...register('chainId')}
+                    placeholder="eg. 2"
+                    disabled={isBuiltIn}
+                />
                 {errors.chainId ? <Typography className={classes.error}>{errors.chainId.message}</Typography> : null}
 
                 <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
+                    error={!!errors.currencySymbol}
                     {...register('currencySymbol')}
                     placeholder="eg. ETH"
                     disabled={isBuiltIn}
