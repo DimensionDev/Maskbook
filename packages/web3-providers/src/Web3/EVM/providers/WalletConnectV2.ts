@@ -37,8 +37,6 @@ class Client {
     }
 
     async setup() {
-        if (!Flags.wc_v2_enabled) return
-
         this.client = await SignClient.init({
             projectId: Flags.wc_v2_project_id,
             logger: Flags.wc_v2_mode,
@@ -78,7 +76,7 @@ export default class WalletConnectV2Provider
     constructor() {
         super(ProviderType.WalletConnectV2)
 
-        this.resume()
+        if (Flags.wc_v2_enabled) this.resume()
     }
 
     private get currentChainId() {

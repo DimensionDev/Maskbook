@@ -47,7 +47,7 @@ export default class WalletConnectProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     private connectorId = 0
-    private connector: WalletConnect = this.createConnector()
+    private connector: WalletConnect | undefined
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
@@ -59,10 +59,16 @@ export default class WalletConnectProvider
 
     constructor() {
         super(ProviderType.WalletConnect)
+
+        if (Flags.wc_v1_enabled) this.resume()
     }
 
     override get connected() {
-        return this.connector.connected
+        return this.connector?.connected ?? false
+    }
+
+    private resume() {
+        this.connector = this.createConnector()
     }
 
     private createConnector() {
@@ -147,7 +153,7 @@ export default class WalletConnectProvider
             reject,
         }
 
-        if (this.connector.connected) {
+        if (this.connector?.connected) {
             const { chainId: actualChainId, accounts } = this.connector
             const account = first(accounts)
             if (actualChainId !== 0 && actualChainId === expectedChainId && isValidAddress(account)) {
@@ -160,7 +166,7 @@ export default class WalletConnectProvider
                 await this.connector.createSession()
             }
         } else {
-            await this.connector.createSession()
+            await this.connector?.createSession()
         }
 
         return deferred.finally(() => {
@@ -183,7 +189,7 @@ export default class WalletConnectProvider
 
     private async cleanup() {
         try {
-            await this.connector.killSession()
+            await this.connector?.killSession()
         } catch {
             window.localStorage.removeItem('walletconnect')
         }
@@ -216,6 +222,7 @@ export default class WalletConnectProvider
     }
 
     override request<T>(requestArguments: RequestArguments): Promise<T> {
+        if (!this.connector) throw new Error('No connection.')
         switch (requestArguments.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 return Promise.resolve(this.connector.chainId) as Promise<T>
