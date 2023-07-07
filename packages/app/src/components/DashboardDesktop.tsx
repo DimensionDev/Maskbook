@@ -7,7 +7,7 @@ import {
     EyeIcon,
     TruckIcon,
 } from '@heroicons/react/24/outline'
-import { SelectProviderModal } from '@masknet/shared'
+import { SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { classNames } from '../helpers/classNames.js'
 import { ApplicationRoutes } from '../constants/ApplicationRoutes.js'
@@ -69,7 +69,7 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                             <a
                                 href="#"
                                 className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-                                onClick={() => SelectProviderModal.open()}>
+                                onClick={() => (account ? WalletStatusModal.open() : SelectProviderModal.open())}>
                                 <img
                                     className="h-8 w-8 rounded-full bg-gray-800"
                                     src="https://github.com/DimensionDev/Mask-VI/raw/master/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
