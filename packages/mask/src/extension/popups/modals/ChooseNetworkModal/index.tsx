@@ -1,6 +1,6 @@
 import { Flags } from '@masknet/flags'
 import { Icons } from '@masknet/icons'
-import { ChainIcon, WalletIcon } from '@masknet/shared'
+import { ChainIcon, ImageIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useBalance, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
@@ -78,7 +78,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
                 })
                 closeModal()
             }}>
-            {network.icon ? <WalletIcon size={24} mainIcon={network.icon} /> : <ChainIcon color={network.iconColor} />}
+            {network.icon ? <ImageIcon size={24} icon={network.icon} /> : <ChainIcon color={network.iconColor} />}
             <Box className={classes.text}>
                 <Typography className={classes.name}>{network.name}</Typography>
                 <Typography className={classes.balance}>
