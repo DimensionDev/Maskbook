@@ -16,13 +16,13 @@ export default function OverviewPage(props: OverviewPageProps) {
                 <DashboardHeader title="Overview" />
 
                 {account ? (
-                    <div className="bg-white p-5">
-                        <div className="border pt-3 rounded-lg">
-                            <h2>Assets</h2>
-                        </div>
+                    <div className="p-5">
+                        <h2>Assets</h2>
                     </div>
                 ) : (
-                    <div>Please connect a wallet.</div>
+                    <div className="p-5">
+                        <p>Please connect a wallet.</p>
+                    </div>
                 )}
             </main>
         </DashboardContainer>

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useCallback, useState } from 'react'
 import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -30,6 +30,9 @@ export const ConnectWalletModal = forwardRef<
         },
     })
 
+    const onConnect = useCallback(() => dispatch?.close(true), [])
+    const onClose = useCallback(() => dispatch?.close(false), [])
+
     if (!open) return null
     return (
         <ConnectWallet
@@ -37,8 +40,8 @@ export const ConnectWalletModal = forwardRef<
             pluginID={pluginID}
             providerType={providerType}
             networkType={networkType}
-            onConnect={() => dispatch?.close(true)}
-            onClose={() => dispatch?.close(false)}
+            onConnect={onConnect}
+            onClose={onClose}
         />
     )
 })
