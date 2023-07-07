@@ -1,8 +1,9 @@
 import { useTheme } from '@mui/material'
 import { useCallback, useRef, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, type NavigateOptions } from 'react-router-dom'
 import type { PopupModalRoutes } from '@masknet/shared-base'
 import { createContainer } from 'unstated-next'
+import urlcat from 'urlcat'
 
 function useModal() {
     const [open, setOpen] = useState(false)
@@ -44,9 +45,11 @@ export function useModalNavigate() {
     const location = useLocation()
     const navigate = useNavigate()
     const openModal = useCallback(
-        (path: PopupModalRoutes) => {
-            navigate(path, {
+        (path: PopupModalRoutes, params?: Record<string, any>, options?: NavigateOptions) => {
+            navigate(urlcat(path, params ?? {}), {
+                ...options,
                 state: {
+                    ...options?.state,
                     mainLocation: location.state?.mainLocation ?? location,
                 },
             })

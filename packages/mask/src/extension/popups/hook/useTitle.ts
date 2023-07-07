@@ -1,10 +1,11 @@
 import { useContext, useLayoutEffect } from 'react'
 import { PageTitleContext } from '../context.js'
 
-export function useTitle(title: string) {
-    const { setTitle } = useContext(PageTitleContext)
+export function useTitle(title: string, customBackHandler?: () => void) {
+    const { setTitle, setCustomBackHandler } = useContext(PageTitleContext)
 
     useLayoutEffect(() => {
         setTitle(title)
-    }, [title])
+        if (customBackHandler) setCustomBackHandler(() => customBackHandler)
+    }, [title, customBackHandler])
 }

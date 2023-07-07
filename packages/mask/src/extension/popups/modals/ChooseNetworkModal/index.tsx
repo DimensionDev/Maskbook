@@ -94,10 +94,6 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
     )
 })
 
-export interface ChooseNetworkModalProps extends ActionModalBaseProps {
-    chainId: ChainId
-}
-
 export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: ActionModalBaseProps) {
     const { classes } = useStyles()
     const navigate = useNavigate()

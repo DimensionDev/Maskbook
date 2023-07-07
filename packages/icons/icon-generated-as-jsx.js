@@ -332,6 +332,11 @@ export const MetaMask = /*#__PURE__*/ __createIcon('MetaMask', [
         u: () => new URL('./brands/MetaMask.svg', import.meta.url),
     },
 ])
+export const MetaMaskWallet = /*#__PURE__*/ __createIcon('MetaMaskWallet', [
+    {
+        u: () => new URL('./brands/MetaMaskWallet.svg', import.meta.url),
+    },
+])
 export const Minds = /*#__PURE__*/ __createIcon('Minds', [
     {
         u: () => new URL('./brands/Minds.svg', import.meta.url),
@@ -1794,6 +1799,37 @@ export const Loader = /*#__PURE__*/ __createIcon('Loader', [
         u: () => new URL('./general/Loader.svg', import.meta.url),
     },
 ])
+export const Loading = /*#__PURE__*/ __createIcon(
+    'Loading',
+    [
+        {
+            u: () => new URL('./general/Loading.svg', import.meta.url),
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 50 56',
+                    children: [
+                        /*#__PURE__*/ _jsx('mask', {
+                            id: 'Loading_svg__popup-loading',
+                            fill: '#fff',
+                            children: /*#__PURE__*/ _jsx('path', {
+                                d: 'M3.5 6.983A28 28 0 1 1 .982 46.5l1.354-1.192A26.196 26.196 0 1 0 4.692 8.337L3.499 6.983Z',
+                            }),
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            stroke: 'currentColor',
+                            strokeWidth: '4',
+                            d: 'M3.5 6.983A28 28 0 1 1 .982 46.5l1.354-1.192A26.196 26.196 0 1 0 4.692 8.337L3.499 6.983Z',
+                            mask: "url('#Loading_svg__popup-loading')",
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [50, 56],
+)
 export const LoadingBase = /*#__PURE__*/ __createIcon('LoadingBase', [
     {
         c: ['dark'],

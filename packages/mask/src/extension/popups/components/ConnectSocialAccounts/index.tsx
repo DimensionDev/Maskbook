@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         display: 'flex',
         alignItems: 'center',
+        cursor: 'pointer',
     },
     networkIcon: {
         width: 24,

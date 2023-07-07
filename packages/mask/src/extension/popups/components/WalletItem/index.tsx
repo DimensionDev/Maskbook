@@ -4,10 +4,19 @@ import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-ev
 import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { Box, ListItem, Typography, alpha, type ListItemProps, Tooltip } from '@mui/material'
+import {
+    Box,
+    ListItem,
+    Typography,
+    type ListItemProps,
+    Tooltip,
+    Radio,
+    listItemClasses,
+    listItemSecondaryActionClasses,
+} from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { WalletBalance } from '../../../components/index.js'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { WalletBalance } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -19,6 +28,9 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             backgroundColor: theme.palette.maskColor.bg,
         },
+        [`& .${listItemSecondaryActionClasses.root}`]: {
+            right: 0,
+        },
     },
     address: {
         fontSize: 12,
@@ -27,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     mainLine: {
-        color: theme.palette.primary.main,
+        color: theme.palette.maskColor.main,
         fontWeight: 500,
         display: 'flex',
         alignItems: 'center',
@@ -54,9 +66,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         lineHeight: '16px',
         height: 20,
-        backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
+        backgroundColor: theme.palette.maskColor.bg,
         marginLeft: theme.spacing(1),
-        color: theme.palette.maskColor.highlight,
+        color: theme.palette.maskColor.second,
     },
     balance: {
         textAlign: 'left',
@@ -94,13 +106,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
         <ListItem
             className={cx(classes.item, className)}
             onClick={handleSelect}
-            secondaryAction={
-                isSelected ? (
-                    <Icons.RadioButtonChecked size={20} />
-                ) : (
-                    <Icons.RadioButtonUnChecked size={20} color={theme.palette.maskColor.line} />
-                )
-            }
+            secondaryAction={<Radio sx={{ marginLeft: 0.75 }} checked={isSelected} />}
             {...rest}>
             {wallet.owner ? <Icons.SmartPay size={24} /> : <Icons.MaskBlue size={24} />}
             <Box className={classes.text}>

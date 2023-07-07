@@ -1,5 +1,5 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useAsyncFn, useUnmount } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import {
     type EnhanceableSite,
@@ -24,10 +24,13 @@ import { useUpdateEffect } from '@react-hookz/web'
 import { isEqualWith, uniq, sortBy, isEqual } from 'lodash-es'
 import { DisconnectModal } from '../../../modals/modals.js'
 import { NextIDProof } from '@masknet/web3-providers'
+import { Trans } from 'react-i18next'
+import { useTheme } from '@mui/material'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
+    const theme = useTheme()
     const { selectedAccount, currentPersona, walletProofs } = PersonaContext.useContainer()
     const { setExtension } = useContext(PageTitleContext)
 
@@ -179,15 +182,28 @@ const AccountDetail = memo(() => {
                     onClick={() => {
                         if (!currentPersona) return
                         DisconnectModal.open({
-                            currentPersona,
-                            unbundledIdentity: selectedAccount.identifier,
+                            title: t('popups_new_persona_disconnect_confirmation'),
                             onSubmit: handleConfirmReleaseBind,
+                            tips: (
+                                <Trans
+                                    i18nKey="popups_persona_disconnect_tips"
+                                    components={{ strong: <strong style={{ color: theme.palette.maskColor.main }} /> }}
+                                    values={{
+                                        identity: selectedAccount.identifier.userId,
+                                        personaName: currentPersona?.nickname,
+                                    }}
+                                />
+                            ),
                         })
                     }}
                 />
             ),
         )
     }, [selectedAccount, handleDetachProfile, currentPersona, handleConfirmReleaseBind])
+
+    useUnmount(() => {
+        setExtension(null)
+    })
 
     useUpdateEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)

@@ -63,6 +63,7 @@ export function mask_wallet_url() { return new URL("./brands/MaskWallet.png", im
 export function medium_url() { return new URL("./brands/Medium.svg", import.meta.url) }
 export function medium_gray_url() { return new URL("./brands/MediumGray.svg", import.meta.url) }
 export function meta_mask_url() { return new URL("./brands/MetaMask.svg", import.meta.url) }
+export function meta_mask_wallet_url() { return new URL("./brands/MetaMaskWallet.svg", import.meta.url) }
 export function minds_url() { return new URL("./brands/Minds.svg", import.meta.url) }
 export function minds_round_url() { return new URL("./brands/MindsRound.svg", import.meta.url) }
 export function mini_mask_dark_url() { return new URL("./brands/MiniMask.dark.svg", import.meta.url) }
@@ -205,6 +206,7 @@ export function left_arrow_url() { return new URL("./general/LeftArrow.svg", imp
 export function link_url() { return new URL("./general/Link.svg", import.meta.url) }
 export function link_out_url() { return new URL("./general/LinkOut.svg", import.meta.url) }
 export function loader_url() { return new URL("./general/Loader.svg", import.meta.url) }
+export function loading_url() { return new URL("./general/Loading.svg", import.meta.url) }
 export function loading_base_dark_url() { return new URL("./general/LoadingBase.dark.svg", import.meta.url) }
 export function loading_base_light_url() { return new URL("./general/LoadingBase.light.svg", import.meta.url) }
 export function local_backup_url() { return new URL("./general/LocalBackup.png", import.meta.url) }

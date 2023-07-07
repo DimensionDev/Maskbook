@@ -296,14 +296,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
-        connect: normalizeEntryDescription(join(__dirname, '../src/extension/popups/renderConnect.tsx')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
         addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
         addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
-        addHTMLEntry({ chunks: ['connect'], filename: 'popups-connect.html' }),
         addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
         addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
     )

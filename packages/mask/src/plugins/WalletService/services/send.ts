@@ -142,7 +142,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             },
             options,
         )
-        if (editor.risky) {
+        if (editor.risky && !options?.silent) {
             await WalletRPC.pushUnconfirmedRequest({
                 ...editor.fill(),
                 owner: options?.owner,

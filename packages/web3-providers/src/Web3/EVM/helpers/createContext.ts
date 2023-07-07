@@ -15,7 +15,7 @@ const initializer = {
             : Web3StateRef.value.Provider?.chainId?.getCurrentValue()
     },
     getDefaultProviderType() {
-        return Web3StateRef.value.Provider?.providerType?.getCurrentValue()
+        return Web3StateRef.value?.Provider?.providerType?.getCurrentValue()
     },
     getDefaultOwner(providerType: ProviderType) {
         const provider = Providers[providerType] as BaseContractWalletProvider | undefined

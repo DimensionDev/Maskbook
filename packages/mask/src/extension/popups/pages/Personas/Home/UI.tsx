@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import urlcat from 'urlcat'
 import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
@@ -10,6 +10,10 @@ import { type EnhanceableSite, formatPersonaFingerprint, type ProfileAccount } f
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
+import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
+import type { ConnectedWalletInfo } from '../type.js'
+import { useLocation } from 'react-router-dom'
+import { HomeTabType } from '../../Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -104,13 +108,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         background: theme.palette.maskColor.bottom,
         flex: 1,
+        maxHeight: 288,
+        overflow: 'auto',
     },
 }))
-
-enum TabType {
-    SocialAccounts = 'Social Accounts',
-    ConnectedWallets = 'Connected Wallets',
-}
 
 export interface PersonaHomeUIProps {
     avatar?: string | null
@@ -124,6 +125,7 @@ export interface PersonaHomeUIProps {
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
+    bindingWallets?: ConnectedWalletInfo[]
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -139,100 +141,123 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         onConnect,
         publicKey,
         onAccountClick,
+        bindingWallets,
     }) => {
         const theme = useTheme()
+        const location = useLocation()
         const { t } = useI18N()
         const { classes } = useStyles()
 
-        const [currentTab, onChange] = useTabs(TabType.SocialAccounts, TabType.ConnectedWallets)
+        const defaultTab = useMemo(() => {
+            const params = new URLSearchParams(location.search)
+            const tab = params.get('tab')
+
+            return tab
+        }, [location.search])
+
+        const [currentTab, onChange] = useTabs(
+            defaultTab || HomeTabType.SocialAccounts,
+            HomeTabType.SocialAccounts,
+            HomeTabType.ConnectedWallets,
+        )
 
         return (
-            <div className={classes.container}>
-                {!isEmpty ? (
-                    <TabContext value={currentTab}>
-                        <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
-                            <Box className={classes.header}>
-                                <Icons.MaskSquare className={classes.logo} />
-                                <Icons.HamburgerMenu className={classes.menu} />
-                            </Box>
-                            <Box className={classes.info}>
-                                <Box position="relative">
-                                    {avatar ? (
-                                        <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                                    ) : (
-                                        <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
-                                    )}
-                                    <Box className={classes.edit}>
-                                        <Icons.Edit size={12} />
-                                    </Box>
+            <>
+                <div className={classes.container}>
+                    {!isEmpty ? (
+                        <TabContext value={currentTab}>
+                            <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
+                                <Box className={classes.header}>
+                                    <Icons.MaskSquare className={classes.logo} />
+                                    <Icons.HamburgerMenu className={classes.menu} />
                                 </Box>
-                                <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
-                                    {nickname}
-                                </Typography>
-                                {fingerprint ? (
-                                    <Typography
-                                        fontSize={12}
-                                        color={theme.palette.maskColor.second}
-                                        lineHeight="16px"
-                                        display="flex"
-                                        alignItems="center"
-                                        columnGap="2px">
-                                        {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyIconButton text={fingerprint} className={classes.icon} />
-                                        <Link
-                                            underline="none"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            href={urlcat('https://web3.bio/', { s: publicKey })}
-                                            className={classes.icon}>
-                                            <Icons.LinkOut size={12} />
-                                        </Link>
+                                <Box className={classes.info}>
+                                    <Box position="relative">
+                                        {avatar ? (
+                                            <Avatar src={avatar} style={{ width: 60, height: 60 }} />
+                                        ) : (
+                                            <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
+                                        )}
+                                        <Box className={classes.edit}>
+                                            <Icons.Edit size={12} />
+                                        </Box>
+                                    </Box>
+                                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                                        {nickname}
                                     </Typography>
-                                ) : null}
-                                <Icons.Settings2 size={20} className={classes.settings} />
-                            </Box>
+                                    {fingerprint ? (
+                                        <Typography
+                                            fontSize={12}
+                                            color={theme.palette.maskColor.second}
+                                            lineHeight="16px"
+                                            display="flex"
+                                            alignItems="center"
+                                            columnGap="2px">
+                                            {formatPersonaFingerprint(fingerprint, 4)}
+                                            <CopyIconButton text={fingerprint} className={classes.icon} />
+                                            <Link
+                                                underline="none"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href={urlcat('https://web3.bio/', { s: publicKey })}
+                                                className={classes.icon}>
+                                                <Icons.LinkOut size={12} />
+                                            </Link>
+                                        </Typography>
+                                    ) : null}
+                                    <Icons.Settings2 size={20} className={classes.settings} />
+                                </Box>
 
-                            <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                                <Tab label={t('popups_social_account')} value={TabType.SocialAccounts} />
-                                <Tab label={t('popups_connected_wallets')} value={TabType.ConnectedWallets} />
-                            </MaskTabList>
+                                <MaskTabList
+                                    onChange={onChange}
+                                    aria-label="persona-tabs"
+                                    classes={{ root: classes.tabs }}>
+                                    <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
+                                    <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
+                                </MaskTabList>
+                            </Box>
+                            <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts}>
+                                <SocialAccounts
+                                    accounts={accounts}
+                                    networks={networks}
+                                    onConnect={onConnect}
+                                    onAccountClick={onAccountClick}
+                                />
+                            </TabPanel>
+                            <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets}>
+                                <ConnectedWallet wallets={bindingWallets} />
+                            </TabPanel>
+                        </TabContext>
+                    ) : (
+                        <Box sx={{ background: theme.palette.maskColor.bottom }}>
+                            <Box className={classes.emptyHeader}>
+                                <Icons.MaskSquare width={160} height={46} />
+                            </Box>
+                            <Box className={classes.placeholder}>
+                                <Typography className={classes.placeholderTitle}>
+                                    {t('popups_welcome_to_mask_network')}
+                                </Typography>
+                                <Typography className={classes.placeholderDescription}>
+                                    {t('popups_persona_description')}
+                                </Typography>
+                            </Box>
+                            <div className={classes.controller}>
+                                <Button
+                                    onClick={onCreatePersona}
+                                    startIcon={<Icons.AddUser color={theme.palette.maskColor.bottom} size={18} />}>
+                                    {t('popups_create_persona')}
+                                </Button>
+                                <Button
+                                    onClick={onRestore}
+                                    variant="outlined"
+                                    startIcon={<Icons.PopupRestore color={theme.palette.maskColor.bottom} size={18} />}>
+                                    {t('popups_restore_and_login')}
+                                </Button>
+                            </div>
                         </Box>
-                        <TabPanel className={classes.panel} value={TabType.SocialAccounts}>
-                            <SocialAccounts
-                                accounts={accounts}
-                                networks={networks}
-                                onConnect={onConnect}
-                                onAccountClick={onAccountClick}
-                            />
-                        </TabPanel>
-                    </TabContext>
-                ) : (
-                    <Box>
-                        <Box className={classes.emptyHeader}>
-                            <Icons.MaskSquare width={160} height={46} />
-                        </Box>
-                        <Box className={classes.placeholder}>
-                            <Typography className={classes.placeholderTitle}>
-                                {t('popups_welcome_to_mask_network')}
-                            </Typography>
-                            <Typography className={classes.placeholderDescription}>
-                                {t('popups_persona_description')}
-                            </Typography>
-                        </Box>
-                        <div className={classes.controller}>
-                            <Button onClick={onCreatePersona} startIcon={<Icons.AddUser color="#F2F5F6" size={18} />}>
-                                {t('popups_create_persona')}
-                            </Button>
-                            <Button
-                                onClick={onRestore}
-                                variant="outlined"
-                                startIcon={<Icons.PopupRestore color="#07101B" size={18} />}>
-                                {t('popups_restore_and_login')}
-                            </Button>
-                        </div>
-                    </Box>
-                )}
-            </div>
+                    )}
+                </div>
+            </>
         )
     },
 )

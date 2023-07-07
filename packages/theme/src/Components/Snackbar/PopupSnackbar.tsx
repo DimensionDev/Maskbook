@@ -1,5 +1,5 @@
 import { memo, useRef, forwardRef, useCallback } from 'react'
-import { Typography, collapseClasses } from '@mui/material'
+import { Typography, alpha, collapseClasses } from '@mui/material'
 import {
     SnackbarProvider,
     type SnackbarProviderProps,
@@ -12,11 +12,12 @@ import {
 import { makeStyles } from '../../UIHelper/index.js'
 import type { ShowSnackbarOptions } from './index.js'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%!important',
         maxWidth: '100%!important',
         top: '0!important',
+        backdropFilter: 'blur(5px)',
         [`& .${collapseClasses.wrapper}`]: {
             padding: '0 !important',
         },
@@ -34,16 +35,20 @@ const useStyles = makeStyles()(() => ({
         padding: '0 8px',
     },
     success: {
-        background: 'rgba(61, 194, 51, 0.5)',
-        color: '#ffffff',
+        background: alpha(theme.palette.maskColor.success, 0.5),
+        color: theme.palette.maskColor.white,
     },
     error: {
-        background: 'rgba(255, 53, 69, 0.5)',
-        color: '#ffffff',
+        background: alpha(theme.palette.maskColor.danger, 0.5),
+        color: theme.palette.maskColor.white,
+    },
+    warning: {
+        background: alpha(theme.palette.maskColor.warn, 0.5),
+        color: theme.palette.maskColor.white,
     },
     // eslint-disable-next-line tss-unused-classes/unused-classes
     default: {},
-    warning: {},
+
     info: {},
 }))
 
