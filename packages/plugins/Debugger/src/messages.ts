@@ -1,4 +1,4 @@
-import { createPluginMessage, type PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 
 type DialogUpdated = {
@@ -25,13 +25,6 @@ interface DebuggerMessages {
      * Open widget dialog
      */
     widgetDialogUpdated: DialogUpdated
-
-    rpc: unknown
 }
 
 export const PluginDebuggerMessages: PluginMessageEmitter<DebuggerMessages> = createPluginMessage(PLUGIN_ID)
-export const PluginDebuggerRPC = createPluginRPC(
-    PLUGIN_ID,
-    () => import('./services/index.js'),
-    PluginDebuggerMessages.rpc,
-)

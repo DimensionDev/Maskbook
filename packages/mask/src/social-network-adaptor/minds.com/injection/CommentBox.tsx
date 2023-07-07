@@ -2,8 +2,9 @@
 import { makeStyles } from '@masknet/theme'
 import { injectCommentBoxDefaultFactory } from '../../../social-network/defaults/index.js'
 import { pasteToCommentBoxMinds } from '../automation/pasteToCommentBoxMinds.js'
+import type { PostContext } from '@masknet/plugin-infra/content-script'
 
-export default function injectCommentBoxAtMinds() {
+export default function injectCommentBoxAtMinds(): (signal: AbortSignal, current: PostContext) => void {
     return injectCommentBoxDefaultFactory(
         pasteToCommentBoxMinds,
         (classes) => ({
