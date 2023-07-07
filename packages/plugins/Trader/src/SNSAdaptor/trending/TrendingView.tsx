@@ -354,7 +354,7 @@ export function TrendingView(props: TrendingViewProps) {
                     flexGrow: 1,
                 }}>
                 {currentTab === ContentTabs.Market && trending.dataProvider ? (
-                    <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
+                    <CoinMarketPanel trending={trending} result={result} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
                     <Box className={classes.priceChartWrapper}>

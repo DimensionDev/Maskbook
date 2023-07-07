@@ -20,8 +20,7 @@ import { RoundTab } from './RoundTab.js'
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 const defaultTabSize = 38
 
-export interface MaskTabListProps
-    extends React.PropsWithChildren<Pick<ButtonGroupProps, 'classes' | 'disabled' | 'fullWidth' | 'size'>> {
+export interface MaskTabListProps extends Omit<ButtonGroupProps, 'variant' | 'onChange'> {
     onChange(event: object, value: string): void
     'aria-label': string
     variant?: MaskTabVariant

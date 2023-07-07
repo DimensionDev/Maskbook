@@ -13,7 +13,8 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: 68,
+            paddingTop: 16,
+            paddingBottom: 16,
             gap: theme.spacing(2),
         },
         button: {
@@ -31,10 +32,10 @@ const useStyles = makeStyles()((theme) => {
             cursor: 'pointer',
             transition: 'transform 0.1s ease',
             '&:hover': {
-                transform: 'scale(1.05)',
+                transform: 'scale(1.03)',
             },
             '&:active': {
-                transform: 'scale(0.95)',
+                transform: 'scale(0.97)',
             },
         },
         label: {
@@ -46,23 +47,36 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const WalletActions = memo(function WalletActions(props: BoxProps) {
+interface Props extends BoxProps {
+    address?: string
+    onSwap?(): void
+}
+
+export const ActionGroup = memo(function ActionGroup({ className, address, onSwap, ...rest }: Props) {
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const navigate = useNavigate()
 
     return (
-        <Box {...props} className={cx(classes.container, props.className)}>
-            <button type="button" className={classes.button}>
+        <Box className={cx(classes.container, className)} {...rest}>
+            <button
+                type="button"
+                className={classes.button}
+                onClick={() => navigate(address ? `${PopupRoutes.Transfer}/${address}` : PopupRoutes.Transfer)}>
                 <Icons.Send size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_send')}</Typography>
             </button>
-            <button type="button" className={classes.button} onClick={() => navigate(PopupRoutes.Receive)}>
+            <button
+                type="button"
+                className={classes.button}
+                onClick={() => {
+                    navigate(address ? `${PopupRoutes.Receive}/${address}` : PopupRoutes.Receive)
+                }}>
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_receive')}</Typography>
             </button>
-            <button type="button" className={classes.button}>
-                <Icons.Send size={20} color={theme.palette.maskColor.main} />
+            <button type="button" className={classes.button} onClick={onSwap}>
+                <Icons.Cached size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_swap')}</Typography>
             </button>
         </Box>

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
+import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { useNetworkContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { CurrencyType, formatBalance, formatCurrency, getTokenUSDValue } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -61,8 +61,8 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
-    const { chainId, pluginID, setSelectedNetwork } = useContainer(Context)
-    const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
+    const { pluginID, setSelectedNetwork } = useContainer(Context)
+    const networkDescriptor = useNetworkDescriptor(pluginID, asset.chainId)
     const { pluginID: currentPluginId } = useNetworkContext()
 
     return (
@@ -79,7 +79,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             size={36}
                         />
                         <Box className={classes.chainIcon}>
-                            <WalletIcon size={16} mainIcon={networkDescriptor?.icon} />
+                            <ImageIcon size={16} icon={networkDescriptor?.icon} />
                         </Box>
                     </Box>
                     <Typography className={classes.symbol}>{asset.symbol}</Typography>

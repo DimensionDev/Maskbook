@@ -19,6 +19,7 @@ import { WalletContext } from '../../hooks/useWalletContext.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityListItem } from './ActivityListItem.js'
+import { EmptyStatus } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     list: {
@@ -46,8 +47,6 @@ const useStyles = makeStyles()({
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 600,
-        color: '#7B8192',
-        background: '#F7F9FA',
     },
 })
 
@@ -110,7 +109,12 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, 
     const navigate = useNavigate()
     const { setTransaction } = useContainer(WalletContext)
 
-    if (dataSource.length === 0) return <div className={classes.empty}>{t('popups_wallet_no_transactions')}</div>
+    if (dataSource.length === 0)
+        return (
+            <EmptyStatus className={classes.empty} height="100%">
+                {t('popups_wallet_no_transactions')}
+            </EmptyStatus>
+        )
 
     return (
         <>

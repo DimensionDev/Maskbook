@@ -32,9 +32,10 @@ export function isGreaterThan(a: BigNumber.Value, b: BigNumber.Value) {
 }
 
 /** a >= b */
-export function isGreaterThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
+function isGreaterThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isGreaterThanOrEqualTo(b)
 }
+export { isGreaterThanOrEqualTo, isGreaterThanOrEqualTo as isGte }
 
 /** a < b */
 export function isLessThan(a: BigNumber.Value, b: BigNumber.Value) {

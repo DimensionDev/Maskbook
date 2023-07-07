@@ -104,8 +104,13 @@ export class HubFungibleAPI_Base<
     async getFungibleAsset(
         address: string,
         initial?: HubOptions_Base<ChainId>,
-    ): Promise<FungibleAsset<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+    ): Promise<FungibleAsset<ChainId, SchemaType> | undefined> {
+        const options = this.HubOptions.fill(initial)
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAsset?.(address, options)),
+            undefined,
+        )
     }
 
     async getFungibleAssets(

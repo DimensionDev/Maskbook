@@ -1,15 +1,15 @@
-import { flatten } from 'lodash-es'
-import { useRef, useState, useEffect } from 'react'
-import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { getCurrency } from '@masknet/web3-providers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { flatten } from 'lodash-es'
+import { useEffect, useRef, useState } from 'react'
+import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { PluginTraderRPC } from '../messages.js'
-import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 export function useNFT_TrendingOverview(
     pluginID: NetworkPluginID,
@@ -68,7 +68,7 @@ export function useTrendingById(
     trending?: TrendingAPI.Trending | null
 }> {
     const { chainId } = useChainContext({ chainId: result.chainId })
-    const currency = useCurrentCurrency(result.chainId, result.source)
+    const currency = getCurrency(result.chainId, result.source)
 
     const {
         value: trending,

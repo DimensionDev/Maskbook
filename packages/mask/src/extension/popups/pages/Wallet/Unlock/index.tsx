@@ -9,7 +9,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
-import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
@@ -77,37 +76,34 @@ const Unlock = memo(() => {
     useTitle('')
 
     return (
-        <>
-            <main className={classes.contain}>
-                <div className={classes.header}>
-                    <Icons.MaskWallet size={48} />
-                    <Typography className={classes.title}>{t('popups_wallet_unlock_wallet')}</Typography>
-                </div>
-                <div>
-                    <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                    <PasswordField
-                        value={password}
-                        type="password"
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') handleUnlock()
-                        }}
-                        onChange={(e) => setPassword(e.target.value)}
-                        error={verified === false}
-                        helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}
-                    />
-                </div>
-                <LoadingButton
-                    loading={loading}
-                    fullWidth
-                    variant="contained"
-                    classes={{ root: classes.button, disabled: classes.disabled }}
-                    disabled={!password}
-                    onClick={handleUnlock}>
-                    {t('unlock')}
-                </LoadingButton>
-            </main>
-            <Navigator />
-        </>
+        <main className={classes.contain}>
+            <div className={classes.header}>
+                <Icons.MaskWallet size={48} />
+                <Typography className={classes.title}>{t('popups_wallet_unlock_wallet')}</Typography>
+            </div>
+            <div>
+                <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
+                <PasswordField
+                    value={password}
+                    type="password"
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') handleUnlock()
+                    }}
+                    onChange={(e) => setPassword(e.target.value)}
+                    error={verified === false}
+                    helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}
+                />
+            </div>
+            <LoadingButton
+                loading={loading}
+                fullWidth
+                variant="contained"
+                classes={{ root: classes.button, disabled: classes.disabled }}
+                disabled={!password}
+                onClick={handleUnlock}>
+                {t('unlock')}
+            </LoadingButton>
+        </main>
     )
 })
 

@@ -16,7 +16,7 @@ export function useFungibleAsset<S extends 'all' | void = void, T extends Networ
         queryKey: ['fungible-asset', pluginID, address, options],
         queryFn: async () => {
             if (!address) return
-            return Hub.getFungibleAsset(address)
+            return Hub.getFungibleAsset(address, options)
         },
     })
 }

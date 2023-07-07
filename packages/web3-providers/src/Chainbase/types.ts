@@ -6,6 +6,8 @@ export interface FT {
     symbol: string
     decimals: number
     balance: string
+    current_usd_price: number
+    logos: Array<{ height: number; width: number; uri: string }>
 }
 
 export interface FT_Price {

@@ -1,35 +1,19 @@
-import { makeStyles } from '@masknet/theme'
+import { memo, type HTMLProps, type CSSProperties } from 'react'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        icon: {},
-    }
-})
-
-export interface ImageIconProps extends withClasses<'icon'> {
+export interface ImageIconProps extends HTMLProps<HTMLImageElement> {
     size?: number
     icon?: URL | string
     iconFilterColor?: string
 }
 
-export function ImageIcon(props: ImageIconProps) {
-    const { size = 48, icon, iconFilterColor } = props
-    const { classes } = useStyles(undefined, { props })
+export const ImageIcon = memo(function ImageIcon({ size = 48, icon, iconFilterColor, ...rest }: ImageIconProps) {
+    const style: CSSProperties | undefined = iconFilterColor
+        ? {
+              filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`,
+              backdropFilter: 'blur(16px)',
+              ...rest.style,
+          }
+        : rest.style
 
-    return (
-        <img
-            height={size}
-            width={size}
-            src={icon?.toString()}
-            className={classes.icon}
-            style={
-                iconFilterColor
-                    ? {
-                          filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`,
-                          backdropFilter: 'blur(16px)',
-                      }
-                    : {}
-            }
-        />
-    )
-}
+    return <img height={size} width={size} src={icon?.toString()} {...rest} style={style} />
+})
