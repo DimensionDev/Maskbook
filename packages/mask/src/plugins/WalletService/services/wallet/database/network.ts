@@ -1,9 +1,12 @@
 import { asyncIteratorToArray } from '@masknet/shared-base'
+import { v4 as uuid } from 'uuid'
 import { type I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 import { createBaseSchema, createSchema, fetchChains } from '../../../../../utils/network-schema.js'
 import { PluginDB } from '../../../database/Plugin.db.js'
 
 interface Network {
+    /** uuid */
+    id: string
     name: string
     chainId: number
     rpc: string
@@ -26,7 +29,7 @@ interface AddEthereumChainParameter {
 
 export interface NetworkRecord extends AddEthereumChainParameter {
     type: 'network'
-    /** chain id as id */
+    /** uuid */
     id: string
     createdAt: number
     updatedAt: number
@@ -34,6 +37,7 @@ export interface NetworkRecord extends AddEthereumChainParameter {
 
 function recordToNetwork(record: NetworkRecord): Network {
     return {
+        id: record.id,
         name: record.chainName!,
         chainId: Number.parseInt(record.chainId, 10),
         rpc: record.rpcUrls![0],
@@ -43,7 +47,7 @@ function recordToNetwork(record: NetworkRecord): Network {
 }
 
 // Use submit Network
-async function networkToChainParameter(network: Network): Promise<AddEthereumChainParameter | null> {
+async function networkToChainParameter(network: Omit<Network, 'id'>): Promise<AddEthereumChainParameter | null> {
     const chains = await fetchChains()
     const match = chains.find((x) => x.chainId === +network.chainId)
     if (!match) return null
@@ -75,13 +79,12 @@ export async function getNetworks() {
         .map(recordToNetwork)
 }
 
-export async function getNetwork(chainId: number) {
-    if (!chainId) return null
-    const record = await PluginDB.get('network', chainId.toString())
+export async function getNetwork(id: string) {
+    const record = await PluginDB.get('network', id)
     return record ? recordToNetwork(record) : null
 }
 
-export async function addNetwork(network: Network, patch?: Partial<NetworkRecord>) {
+export async function addNetwork(network: Omit<Network, 'id'>, patch?: Partial<NetworkRecord>) {
     const now = Date.now()
     const fakeT = ((key: string) => key) as I18NFunction
     // i18n is too large to have in background, therefore we just return the key
@@ -100,23 +103,24 @@ export async function addNetwork(network: Network, patch?: Partial<NetworkRecord
     await PluginDB.add({
         type: 'network',
         ...chainParameter,
-        id: chainParameter.chainId,
+        id: uuid(),
         createdAt: now,
         updatedAt: now,
         ...patch,
     })
 }
 
-export async function updateNetwork(chainId: number, updates: Network) {
-    const oldNetwork = await PluginDB.get('network', chainId.toString())
-    if (!oldNetwork) throw new Error(`Network ${chainId} doesn't exist`)
+export async function updateNetwork(id: string, updates: Network) {
+    const oldNetwork = await PluginDB.get('network', id)
+    if (!oldNetwork) throw new Error("Network doesn't exist")
 
-    await PluginDB.remove('network', chainId.toString())
+    await PluginDB.remove('network', id)
     await addNetwork(updates, {
-        createdAt: Date.now(),
+        id,
+        createdAt: oldNetwork.createdAt,
     })
 }
 
-export async function deleteNetwork(chainId: number) {
-    await PluginDB.remove('network', chainId.toString())
+export async function deleteNetwork(id: string) {
+    await PluginDB.remove('network', id)
 }

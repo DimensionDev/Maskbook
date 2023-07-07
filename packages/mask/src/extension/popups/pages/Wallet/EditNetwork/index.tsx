@@ -8,7 +8,7 @@ import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-s
 import { Button, Input, Typography, alpha } from '@mui/material'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { omit } from 'lodash-es'
-import { memo, useCallback, useContext, useEffect, useMemo } from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type ZodCustomIssue, type z } from 'zod'
@@ -63,14 +63,14 @@ export const EditNetwork = memo(function EditNetwork() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const paramChainId = useParams<{ chainId: string }>().chainId
-    const chainId = paramChainId ? Number.parseInt(paramChainId, 10) : undefined
-    const isEditing = !!chainId
+    const id = useParams<{ id: string }>().id
+    const chainId = id?.match(/^\d+$/) ? Number.parseInt(id, 10) : undefined
+    const isEditing = !!id && !chainId
 
     // #region Get network
     const networks = useMemo(() => getEvmNetworks(true), [])
     const builtInNetwork = useMemo(() => {
-        if (!paramChainId) return null
+        if (!chainId) return null
         const network = networks.find((x) => x.chainId === chainId)
         if (!network) return null
         return {
@@ -86,7 +86,7 @@ export const EditNetwork = memo(function EditNetwork() {
         queryKey: ['system', 'wallet', 'networks'],
         queryFn: () => WalletRPC.getNetworks(),
     })
-    const storedNetwork = storedNetworks.find((x) => x.chainId === chainId)
+    const storedNetwork = storedNetworks.find((x) => x.id === id)
     const network = builtInNetwork || storedNetwork
     // #endregion
 
@@ -95,13 +95,13 @@ export const EditNetwork = memo(function EditNetwork() {
 
     const isBuiltIn = !!builtInNetwork
     useEffect(() => {
-        if (!chainId || isBuiltIn) return
+        if (isBuiltIn || !id) return
         setExtension(
             <Button
                 variant="text"
                 className={classes.iconButton}
                 onClick={async () => {
-                    await WalletRPC.deleteNetwork(chainId)
+                    await WalletRPC.deleteNetwork(id)
                     // Trigger UI update.
                     queryClient.invalidateQueries(QUERY_KEY)
                     navigate(-1)
@@ -110,7 +110,7 @@ export const EditNetwork = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, chainId, classes.iconButton])
+    }, [isBuiltIn, id, classes.iconButton])
 
     const schema = useMemo(() => createSchema(t), [t])
 
@@ -119,7 +119,7 @@ export const EditNetwork = memo(function EditNetwork() {
         getValues,
         register,
         setError,
-        formState: { errors, isValidating, isSubmitting, isValid: isFormValid },
+        formState: { errors, isValidating, isDirty },
     } = useForm<FormInputs>({
         mode: 'all',
         resolver: zodResolver(schema),
@@ -143,16 +143,18 @@ export const EditNetwork = memo(function EditNetwork() {
         },
         [setError, t],
     )
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
+            setIsSubmitting(true)
             try {
                 if (isEditing) {
                     if (data.chainId !== chainId) {
-                        await WalletRPC.deleteNetwork(chainId)
+                        await WalletRPC.deleteNetwork(id)
                         await delay(100)
                         await WalletRPC.addNetwork(data)
                     } else {
-                        await WalletRPC.updateNetwork(chainId, data)
+                        await WalletRPC.updateNetwork(id, { ...data, id })
                     }
                     showSnackbar(t('saved_network_successfully'))
                 } else {
@@ -165,23 +167,27 @@ export const EditNetwork = memo(function EditNetwork() {
                 checkZodError((err as Error).message)
                 showSnackbar(t('failed_to_save_network'))
             }
+            setIsSubmitting(false)
         },
     })
 
+    const [isChecking, setIsChecking] = useState(false)
     // Discard currencySymbol warning
-    const isValid = errors.currencySymbol ? Object.keys(omit(errors, 'currencySymbol')).length === 0 : isFormValid
-    const isNotReady = isValidating || (!isValidating && !isValid)
-    const disabled = isNotReady || isSubmitting || isMutating
+    const isValid = Object.keys(omit(errors, 'currencySymbol')).length === 0
+    const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
+    const disabled = isNotReady || isMutating || isSubmitting
 
     // currency symbol error is tolerable,
     // but react-hook-form's handleSubmit can't tolerate it
     const handleSubmit = useCallback(async () => {
         if (disabled) return
+        setIsChecking(true)
         const data = getValues()
         const result = await schema.parseAsync(data).then(
             () => true,
             (err) => checkZodError((err as Error).message),
         )
+        setIsChecking(false)
         if (!result) return
         mutate(data)
     }, [disabled, getValues, isEditing])
