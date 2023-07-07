@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
-import { PopupRoutes } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-shared-evm'
@@ -245,7 +244,7 @@ export const EditNetwork = memo(function EditNetwork() {
             </form>
             {!isBuiltIn ? (
                 <div className={classes.footer}>
-                    <ActionButton fullWidth variant="outlined" onClick={() => navigate(PopupRoutes.EditNetwork)}>
+                    <ActionButton fullWidth variant="outlined" onClick={() => navigate(-1)}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton fullWidth onClick={handleSubmit} disabled={disabled}>
