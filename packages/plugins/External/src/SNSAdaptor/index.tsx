@@ -14,7 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {
         const a = ExternalPluginMessages.ping.on((data) => {
             if (!isLocalContext(data.context)) return
-            ExternalPluginMessages.pong.sendToContentScripts(data.challenge)
+            ExternalPluginMessages.pong.sendToContentScripts?.(data.challenge)
         })
         const b = ExternalPluginMessages.appendComposition.on((data) => {
             if (!isLocalContext(data.context)) return

@@ -1,4 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { PluginMessageEmitterItem } from '@masknet/plugin-infra'
 import type { Serialization } from 'async-call-rpc/base'
 
 /**
@@ -8,10 +9,10 @@ import type { Serialization } from 'async-call-rpc/base'
  * @example
  * export const MyPluginMessage = createPluginMessage(PLUGIN_ID)
  */
-export function createPluginMessage<T = DefaultPluginMessage>(
+export let createPluginMessage = <T = DefaultPluginMessage>(
     pluginID: string,
     serializer?: Serialization,
-): PluginMessageEmitter<T> {
+): PluginMessageEmitter<T> => {
     const domain = '@plugin/' + pluginID
     if (cache.has(domain)) return cache.get(domain) as any
 
@@ -21,9 +22,19 @@ export function createPluginMessage<T = DefaultPluginMessage>(
     cache.set(domain, events)
     return events
 }
+
+export function __workaround__replaceImplementationOfCreatePluginMessage__(
+    newImpl: (pluginID: string, serializer?: Serialization | undefined) => PluginMessageEmitter<unknown>,
+) {
+    createPluginMessage = newImpl as any
+}
+
 export interface DefaultPluginMessage {
     /** This one is for plugin RPC */
     rpc: unknown
 }
-export type PluginMessageEmitter<T> = WebExtensionMessage<T>['events']
+export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }
 const cache = new Map<string, PluginMessageEmitter<unknown>>()
+
+// TODO: this type should be defined here, not shared-base-ui
+export type { PluginMessageEmitterItem } from '@masknet/shared-base-ui'
