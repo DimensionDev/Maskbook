@@ -127,7 +127,7 @@ export namespace Plugin.Shared {
         wallets: Subscription<Wallet[]>
 
         /** Select a Mask Wallet account */
-        selectAccount: Subscription<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
+        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>

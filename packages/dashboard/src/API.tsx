@@ -6,6 +6,11 @@ export let Services: ServiceType = null!
 export let Messages: WebExtensionMessage<MaskEvents> = null!
 export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
+interface MaskAccount {
+    address: string
+    owner?: string
+    identifier?: ECKeyIdentifier
+}
 export interface PluginServices {
     Wallet: {
         createMnemonicWords(): Promise<string[]>
@@ -39,13 +44,7 @@ export interface PluginServices {
             initialPassword?: string,
         ): Promise<string | undefined>
         resetPassword(newPassword: string): Promise<void>
-        resolveMaskAccount(
-            accounts: Array<{
-                address: string
-                owner?: string
-                identifier?: ECKeyIdentifier
-            }>,
-        ): Promise<void>
+        resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }
 }
