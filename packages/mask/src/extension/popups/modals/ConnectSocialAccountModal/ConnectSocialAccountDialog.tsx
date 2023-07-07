@@ -1,14 +1,12 @@
 import { memo } from 'react'
-import { BottomDrawer } from '../../components/BottomDrawer/index.js'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/BottomDrawer/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
 import { noop } from 'lodash-es'
 import { Box } from '@mui/material'
 
-interface ConnectSocialAccountDialog {
-    open: boolean
-    onClose: () => void
+interface ConnectSocialAccountDialog extends Omit<BottomDrawerProps, 'title'> {
     networks: EnhanceableSite[]
     onConnect?: (networkIdentifier: EnhanceableSite) => void
 }

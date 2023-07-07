@@ -1,11 +1,10 @@
-import { memo, useCallback } from 'react'
-import { Box, Typography, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../../utils/index.js'
-import { useHasPassword } from '../../../../hook/useHasPassword.js'
-import Services from '../../../../../service.js'
-import { Navigator } from '../../../../components/Navigator/index.js'
 import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { Box, Typography, useTheme } from '@mui/material'
+import { memo, useCallback } from 'react'
+import { useI18N } from '../../../../../../utils/index.js'
+import Services from '../../../../../service.js'
+import { useHasPassword } from '../../../../hook/useHasPassword.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -120,7 +119,6 @@ export const WalletStartUp = memo(() => {
                     </div>
                 </Box>
             </Box>
-            <Navigator />
         </Box>
     )
 })

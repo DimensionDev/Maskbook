@@ -1062,5 +1062,8 @@
     "wallet_swap": "crwdns21379:0crwdne21379:0",
     "wallet_account": "crwdns21381:0crwdne21381:0",
     "wallet_imported": "crwdns21383:0crwdne21383:0",
-    "scan_address_to_payment": "crwdns21385:0crwdne21385:0"
+    "scan_address_to_payment": "crwdns21385:0crwdne21385:0",
+    "empty": "crwdns21545:0crwdne21545:0",
+    "hide_token_symbol": "crwdns21547:0{{- symbol}}crwdne21547:0",
+    "hide_token_description": "crwdns21549:0{{- asset.symbol}}crwdne21549:0"
 }

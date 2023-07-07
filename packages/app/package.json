@@ -37,6 +37,8 @@
         "@masknet/plugin-snapshot": "workspace:^",
         "@masknet/plugin-vcent": "workspace:^",
         "@masknet/plugin-wallet": "workspace:^",
+        "@masknet/plugin-trader": "workspace:^",
+        "@masknet/plugin-cross-chain-bridge": "workspace:^",
         "@masknet/public-api": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",
@@ -75,7 +77,9 @@
         "react-use": "^17.4.0",
         "stream-browserify": "^3.0.0",
         "tailwindcss": "^3.3.1",
-        "urlcat": "^3.1.0"
+        "urlcat": "^3.1.0",
+        "unstated-next": "^1.1.0",
+        "use-subscription": "1.6.0"
     },
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",

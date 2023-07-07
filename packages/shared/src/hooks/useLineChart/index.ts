@@ -6,6 +6,7 @@ import format from 'date-fns/format'
 import { alpha, useTheme } from '@mui/material'
 import { fixOverPosition } from './utils.js'
 
+// TODO chart morph transform
 export function useLineChart(
     svgRef: RefObject<SVGSVGElement>,
     data: Array<{
@@ -245,5 +246,5 @@ export function useLineChart(
         })
 
         d3.select(svgRef.current).on('mouseleave', hide)
-    }, [svgRef, data.length, stringify(dimension), tickFormat, formatTooltip])
+    }, [svgRef.current, data.length, stringify(dimension), tickFormat, formatTooltip])
 }

@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { alpha } from '@mui/system'
 import { Box } from '@mui/material'
@@ -24,7 +25,6 @@ import { resolveTradeProviderName } from '../../pipes.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { TradeComputed, TraderAPI } from '@masknet/web3-providers/types'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
 import { useI18N } from '../../locales/index.js'
 

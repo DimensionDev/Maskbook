@@ -11,6 +11,7 @@ import {
     TokenWithSocialGroupMenu,
     useTokenMenuCollectionList,
     SNS_RSS3_FIELD_KEY_MAP,
+    PriceChange,
 } from '@masknet/shared'
 import {
     type NetworkPluginID,
@@ -39,7 +40,6 @@ import {
     useTheme,
 } from '@mui/material'
 import { ContentTabs, type Currency, type Stat } from '../../types/index.js'
-import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './components/index.js'
@@ -360,15 +360,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t.plugin_trader_no_data()}
                                         </Typography>
                                     )}
-                                    {isNFT ? null : (
-                                        <PriceChanged
-                                            amount={
-                                                market?.price_change_percentage_24h_in_currency ??
-                                                market?.price_change_24h ??
+                                    {market && !isNFT ? (
+                                        <PriceChange
+                                            change={
+                                                market.price_change_percentage_24h_in_currency ||
+                                                market.price_change_24h ||
                                                 0
                                             }
                                         />
-                                    )}
+                                    ) : null}
                                 </Stack>
                                 {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT ? (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />

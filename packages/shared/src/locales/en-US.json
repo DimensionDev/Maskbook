@@ -315,5 +315,15 @@
     "applications_persona_verify_connect": "Connect and Verify {{-nickname}}",
     "enable_plugin_boundary": "Enable plugin",
     "enable_plugin_boundary_description": "This function has been turned off in the App settings. Enable plug-ins to fully access.",
-    "applications_persona_verify_connect_hint": "Please connect {{-nickname}} and send proof post before using dApps."
+    "applications_persona_verify_connect_hint": "Please connect {{-nickname}} and send proof post before using dApps.",
+    "usdc_price_statistic": "Price Statistic",
+    "market_cap": "Market Cap",
+    "trader_circulating_supply": "Circulating Supply",
+    "volume_24": "24 Hour Trading Vol",
+    "total_supply": "Total Supply",
+    "circulating_supply": "Circulating Supply",
+    "info": "Info",
+    "contract": "Contract",
+    "community": "Community",
+    "website": "Website"
 }

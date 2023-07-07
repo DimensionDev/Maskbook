@@ -315,5 +315,15 @@
     "applications_persona_verify_connect": "crwdns20761:0{{-nickname}}crwdne20761:0",
     "enable_plugin_boundary": "crwdns20765:0crwdne20765:0",
     "enable_plugin_boundary_description": "crwdns20767:0crwdne20767:0",
-    "applications_persona_verify_connect_hint": "crwdns20763:0{{-nickname}}crwdne20763:0"
+    "applications_persona_verify_connect_hint": "crwdns20763:0{{-nickname}}crwdne20763:0",
+    "usdc_price_statistic": "crwdns21551:0crwdne21551:0",
+    "market_cap": "crwdns21553:0crwdne21553:0",
+    "trader_circulating_supply": "crwdns21555:0crwdne21555:0",
+    "volume_24": "crwdns21557:0crwdne21557:0",
+    "total_supply": "crwdns21559:0crwdne21559:0",
+    "circulating_supply": "crwdns21561:0crwdne21561:0",
+    "info": "crwdns21563:0crwdne21563:0",
+    "contract": "crwdns21565:0crwdne21565:0",
+    "community": "crwdns21567:0crwdne21567:0",
+    "website": "crwdns21569:0crwdne21569:0"
 }

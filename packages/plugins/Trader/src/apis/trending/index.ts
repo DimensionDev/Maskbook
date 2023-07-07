@@ -7,7 +7,7 @@ import {
     NFTScanTrending_Solana,
     SimpleHashEVM,
 } from '@masknet/web3-providers'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import { type TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -55,12 +55,7 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinPriceStats(
-                chainId as ChainIdEVM,
-                id,
-                currency,
-                days === TrendingAPI.Days.MAX ? 11430 : days,
-            )
+            return CoinGeckoTrending.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.NFTScan:

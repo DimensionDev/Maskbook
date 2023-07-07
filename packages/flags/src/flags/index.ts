@@ -54,7 +54,7 @@ export const flags = {
     wc_v2_project_id: '8f1769933420afe8873860925fcca14f',
     wc_v2_mode: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
     wc_v1_enabled: true,
-    wc_v2_enabled: betaOrInsiderOnly,
+    wc_v2_enabled: false,
 } as const
 
 Object.freeze(flags.shadowRootInit)

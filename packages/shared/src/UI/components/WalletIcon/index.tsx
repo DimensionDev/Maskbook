@@ -52,24 +52,9 @@ export function WalletIcon(props: WalletIconProps) {
                 width: size,
             }}>
             {mainIcon ? (
-                <ImageIcon
-                    classes={{
-                        icon: classes.mainIcon,
-                    }}
-                    size={size}
-                    icon={mainIcon}
-                    iconFilterColor={iconFilterColor}
-                />
+                <ImageIcon className={classes.mainIcon} size={size} icon={mainIcon} iconFilterColor={iconFilterColor} />
             ) : null}
-            {badgeIcon ? (
-                <ImageIcon
-                    classes={{
-                        icon: classes.badgeIcon,
-                    }}
-                    size={badgeSize}
-                    icon={badgeIcon}
-                />
-            ) : null}
+            {badgeIcon ? <ImageIcon className={classes.badgeIcon} size={badgeSize} icon={badgeIcon} /> : null}
         </div>
     )
 }

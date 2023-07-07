@@ -278,7 +278,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             AvatarProps={{ sx: { width: 48, height: 48 } }}
                         />
                         <Box className={classes.iconBox}>
-                            <ImageIcon size={24} icon={networkDescriptor?.icon} classes={{ icon: classes.icon }} />
+                            <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.icon} />
                         </Box>
                     </Box>
                     <Box sx={{ flex: 1 }}>

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { createContainer } from 'unstated-next'
 
-function useMap() {
+function useMap(initialState?: { defaultMap: Record<string, string> }) {
     const [map, setMap] = useState<Record<string, string>>({})
 
     const setPair = useCallback((address: string, domain: string) => {
@@ -13,12 +13,12 @@ function useMap() {
     }, [])
     const getDomain = useCallback(
         (address: string) => {
-            return map[address.toLowerCase()]
+            return initialState?.defaultMap?.[address.toLowerCase()] || map[address.toLowerCase()]
         },
-        [map],
+        [map, initialState?.defaultMap],
     )
 
-    return { setPair, getDomain }
+    return { setPair, getDomain, map }
 }
 
 export const ScopedDomainsContainer = createContainer(useMap)

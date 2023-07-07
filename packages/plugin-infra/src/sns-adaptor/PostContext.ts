@@ -66,10 +66,10 @@ export interface PostContext extends PostContextAuthor {
     readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     // #endregion
-    readonly comment: undefined | PostContextComment
+    readonly comment: PostContextComment | undefined
     // #region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
-    readonly identifier: Subscription<null | PostIdentifier>
+    readonly identifier: Subscription<PostIdentifier | null>
     readonly url: Subscription<URL | null>
     readonly coAuthors: Subscription<PostContextCoAuthor[] | null>
     // Meta
@@ -91,6 +91,7 @@ export interface PostContext extends PostContextAuthor {
     readonly publicShared: Subscription<boolean | undefined>
     readonly isAuthorOfPost: Subscription<boolean | undefined>
     readonly version: Subscription<SupportedPayloadVersions | undefined>
+
     decryptedReport(content: {
         sharedPublic?: Some<boolean>
         iv?: string
@@ -103,6 +104,7 @@ export type PostInfo = PostContext
 
 export const PostInfoContext = createContext<PostContext | null>(null)
 PostInfoContext.displayName = 'PostInfoContext'
+
 /** @deprecated use <PostInfoContext.Provider value={post}> */
 export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo }>) {
     return createElement(PostInfoContext.Provider, { value: props.post, children: props.children })

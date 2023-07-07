@@ -16,12 +16,12 @@ import {
     useTheme,
 } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { DashboardContext } from './context.js'
 import { Icons } from '@masknet/icons'
-import { useDashboardI18N } from '../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { DashboardContext } from './context.js'
+import { useDashboardI18N } from '../../locales/index.js'
 
 function ListItemLinkUnStyled({
     to,

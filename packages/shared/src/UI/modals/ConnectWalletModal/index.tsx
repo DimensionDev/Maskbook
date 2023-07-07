@@ -31,6 +31,7 @@ export const ConnectWalletModal = forwardRef<
     })
 
     if (!open) return null
+
     return (
         <ConnectWallet
             open

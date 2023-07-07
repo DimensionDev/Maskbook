@@ -80,6 +80,7 @@ export class SingletonModal<
      * @param props
      */
     open(props: OpenProps) {
+        if (typeof this.dispatchOpen === 'undefined') console.warn("[SingletonModal]: The modal hasn't registered yet.")
         this.dispatchOpen?.(props)
     }
 

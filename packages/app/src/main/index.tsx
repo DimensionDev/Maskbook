@@ -6,7 +6,6 @@ import { useDecrypt } from './Decrypt/useDecrypt.js'
 import { getPostPayload } from '../helpers/getPostPayload.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
-const PageInspectorRender = lazy(() => import('./page-render.js'))
 
 export function DecryptMessage() {
     const postData = getPostPayload()
@@ -35,12 +34,15 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
             </Typography>
         )
     if (!message) return <Typography>Decrypting...</Typography>
+
     return (
         <RegistryContext.Provider value={registry.getTypedMessageRender}>
             <TypedMessageRender message={message} />
+
             <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
-                <PluginRender message={message} />
-                <PageInspectorRender />
+                <div className="border mt-3 pt-3 rounded-lg">
+                    <PluginRender message={message} />
+                </div>
             </Suspense>
         </RegistryContext.Provider>
     )

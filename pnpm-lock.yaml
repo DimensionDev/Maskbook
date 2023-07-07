@@ -306,6 +306,9 @@ importers:
       '@masknet/plugin-collectible':
         specifier: workspace:^
         version: link:../plugins/Collectible
+      '@masknet/plugin-cross-chain-bridge':
+        specifier: workspace:^
+        version: link:../plugins/CrossChainBridge
       '@masknet/plugin-cyberconnect':
         specifier: workspace:^
         version: link:../plugins/CyberConnect
@@ -321,6 +324,9 @@ importers:
       '@masknet/plugin-snapshot':
         specifier: workspace:^
         version: link:../plugins/Snapshot
+      '@masknet/plugin-trader':
+        specifier: workspace:^
+        version: link:../plugins/Trader
       '@masknet/plugin-vcent':
         specifier: workspace:^
         version: link:../plugins/VCent
@@ -441,9 +447,15 @@ importers:
       tailwindcss:
         specifier: ^3.3.1
         version: 3.3.1(postcss@8.4.22)(ts-node@10.9.1)
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
+      use-subscription:
+        specifier: 1.6.0
+        version: 1.6.0(react@0.0.0-experimental-9a72e6227-20230525)
     devDependencies:
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.10
@@ -1045,9 +1057,6 @@ importers:
       '@types/react-highlight-words':
         specifier: ^0.16.4
         version: 0.16.4(patch_hash=cu6glh5cl4qvdid3ys3m6a2f7e)
-      '@types/react-router-dom':
-        specifier: ^5.3.3
-        version: 5.3.3
       '@types/react-window':
         specifier: ^1.8.5
         version: 1.8.5
@@ -2920,8 +2929,8 @@ importers:
         specifier: 2.29.3
         version: 2.29.3
       react-router-dom:
-        specifier: 6.4.3
-        version: 6.4.3(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+        specifier: ^6.10.0
+        version: 6.10.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
@@ -10444,11 +10453,6 @@ packages:
       react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
     dev: false
 
-  /@remix-run/router@1.0.3:
-    resolution: {integrity: sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==}
-    engines: {node: '>=14'}
-    dev: false
-
   /@remix-run/router@1.5.0:
     resolution: {integrity: sha512-bkUDCp8o1MvFO+qxkODcbhSqRa6P2GXgrGZVpt0dCXNW2HCSCqYI0ZoAqEOSAjRWmmlKcYgFvN4B4S+zo/f8kg==}
     engines: {node: '>=14'}
@@ -13140,10 +13144,6 @@ packages:
   /@types/highlight.js@9.12.4:
     resolution: {integrity: sha512-t2szdkwmg2JJyuCM20e8kR2X59WCE5Zkl4bzm1u1Oukjm79zpbiAv+QjnwLnuuV0WHEcX2NgUItu0pAMKuOPww==}
 
-  /@types/history@4.7.11:
-    resolution: {integrity: sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==}
-    dev: false
-
   /@types/html-minifier-terser@5.1.2:
     resolution: {integrity: sha512-h4lTMgMJctJybDp8CQrxTUiiYmedihHWkjnF/8Pxseu2S6Nlfcy8kwboQ8yejh456rP2yWoEVm1sS/FVsfM48w==}
     dev: true
@@ -13362,21 +13362,6 @@ packages:
     dependencies:
       '@types/react': 18.0.37
     dev: true
-
-  /@types/react-router-dom@5.3.3:
-    resolution: {integrity: sha512-kpqnYK4wcdm5UaWI3fLcELopqLrHgLqNsdpHauzlQktfkHL3npOSwtj1Uz9oKBAzs7lFtVkV8j83voAz2D8fhw==}
-    dependencies:
-      '@types/history': 4.7.11
-      '@types/react': 18.0.37
-      '@types/react-router': 5.1.18
-    dev: false
-
-  /@types/react-router@5.1.18:
-    resolution: {integrity: sha512-YYknwy0D0iOwKQgz9v8nOzt2J6l4gouBmDnWqUUznltOTaon+r8US8ky8HvN0tXvc38U9m6z/t2RsVsnd1zM0g==}
-    dependencies:
-      '@types/history': 4.7.11
-      '@types/react': 18.0.37
-    dev: false
 
   /@types/react-transition-group@4.4.5:
     resolution: {integrity: sha512-juKD/eiSM3/xZYzjuzH6ZwpP+/lejltmiS3QEzV/vmb/Q8+HfDmxu+Baga8UEMGBqV88Nbg4l2hY/K2DkyaLLA==}
@@ -28529,24 +28514,6 @@ packages:
       react-router: 6.10.0(react@0.0.0-experimental-9a72e6227-20230525)
     dev: false
 
-  /react-router-dom@6.4.3(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525):
-    resolution: {integrity: sha512-MiaYQU8CwVCaOfJdYvt84KQNjT78VF0TJrA17SIQgNHRvLnXDJO6qsFqq8F/zzB1BWZjCFIrQpu4QxcshitziQ==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      react: '>=16.8 || 0.0.0-experimental-9a72e6227-20230525'
-      react-dom: '>=16.8 || 0.0.0-experimental-9a72e6227-20230525'
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      '@remix-run/router': 1.0.3
-      react: 0.0.0-experimental-9a72e6227-20230525
-      react-dom: 0.0.0-experimental-9a72e6227-20230525(react@0.0.0-experimental-9a72e6227-20230525)
-      react-router: 6.4.3(react@0.0.0-experimental-9a72e6227-20230525)
-    dev: false
-
   /react-router@6.10.0(react@0.0.0-experimental-9a72e6227-20230525):
     resolution: {integrity: sha512-Nrg0BWpQqrC3ZFFkyewrflCud9dio9ME3ojHCF/WLsprJVzkq3q3UeEhMCAW1dobjeGbWgjNn/PVF6m46ANxXQ==}
     engines: {node: '>=14'}
@@ -28557,19 +28524,6 @@ packages:
         optional: true
     dependencies:
       '@remix-run/router': 1.5.0
-      react: 0.0.0-experimental-9a72e6227-20230525
-    dev: false
-
-  /react-router@6.4.3(react@0.0.0-experimental-9a72e6227-20230525):
-    resolution: {integrity: sha512-BT6DoGn6aV1FVP5yfODMOiieakp3z46P1Fk0RNzJMACzE7C339sFuHebfvWtnB4pzBvXXkHP2vscJzWRuUjTtA==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      react: '>=16.8 || 0.0.0-experimental-9a72e6227-20230525'
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      '@remix-run/router': 1.0.3
       react: 0.0.0-experimental-9a72e6227-20230525
     dev: false
 
@@ -34206,7 +34160,6 @@ time:
   /@types/qrcode@1.5.0: '2022-08-19T06:32:33.693Z'
   /@types/react-devtools-inline@4.24.3: '2022-12-16T07:03:08.830Z'
   /@types/react-dom@18.0.11: '2023-02-15T00:33:03.209Z'
-  /@types/react-router-dom@5.3.3: '2022-01-18T22:04:15.185Z'
   /@types/react-window@1.8.5: '2021-07-27T04:01:45.463Z'
   /@types/react@18.0.37: '2023-04-17T17:02:48.297Z'
   /@types/remarkable@2.0.3: '2021-07-08T23:36:05.386Z'
@@ -34318,7 +34271,6 @@ time:
   /react-qrcode-logo@2.9.0: '2023-02-25T14:35:39.109Z'
   /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
   /react-router-dom@6.10.0: '2023-03-29T20:04:49.830Z'
-  /react-router-dom@6.4.3: '2022-11-01T15:08:22.965Z'
   /react-to-print@2.14.12: '2023-02-19T04:32:07.452Z'
   /react-transition-group@4.4.5: '2022-08-01T08:36:58.958Z'
   /react-use@17.4.0: '2022-05-20T12:10:53.726Z'

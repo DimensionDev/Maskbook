@@ -235,7 +235,7 @@ export function Deploy({ open }: { open: boolean }) {
                     <Box display="flex" alignItems="center" columnGap={1.5}>
                         <Box position="relative" width={30} height={30}>
                             <Icons.SmartPay size={30} />
-                            <ImageIcon classes={{ icon: classes.badge }} size={12} icon={polygonDescriptor?.icon} />
+                            <ImageIcon className={classes.badge} size={12} icon={polygonDescriptor?.icon} />
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Typography lineHeight="18px" fontWeight={700}>

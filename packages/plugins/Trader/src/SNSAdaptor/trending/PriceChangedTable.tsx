@@ -1,7 +1,7 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
+import { PriceChange } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import type { Market } from '../../types/index.js'
-import { PriceChanged } from './PriceChanged.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -77,7 +77,7 @@ export function PriceChangedTable({ market }: PriceChangedTableProps) {
                         {filteredRecords.map((x) =>
                             x.percentage ? (
                                 <TableCell className={classes.cell} key={x.name}>
-                                    <PriceChanged amount={x.percentage} />
+                                    <PriceChange change={x.percentage} />
                                 </TableCell>
                             ) : null,
                         )}

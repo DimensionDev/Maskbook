@@ -607,11 +607,36 @@ export const Add = /*#__PURE__*/ __createIcon('Add', [
         s: true,
     },
 ])
-export const AddNoBorder = /*#__PURE__*/ __createIcon('AddNoBorder', [
-    {
-        u: () => new URL('./general/AddNoBorder.svg', import.meta.url),
-    },
-])
+export const AddNoBorder = /*#__PURE__*/ __createIcon(
+    'AddNoBorder',
+    [
+        {
+            u: () => new URL('./general/AddNoBorder.svg', import.meta.url),
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 13 12',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M1.6 6a.4.4 0 0 1 .4-.4h9a.4.4 0 0 1 0 .8H2a.4.4 0 0 1-.4-.4Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M6.5 1.1a.4.4 0 0 1 .4.4v9a.4.4 0 0 1-.8 0v-9a.4.4 0 0 1 .4-.4Z',
+                            clipRule: 'evenodd',
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [13, 12],
+)
 export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
     {
         u: () => new URL('./general/AddUser.svg', import.meta.url),

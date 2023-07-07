@@ -1,15 +1,14 @@
+import { Icons } from '@masknet/icons'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { explorerResolver } from '@masknet/web3-shared-evm'
+import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Link, List, ListItem, ListItemText } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
-import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -52,44 +51,41 @@ const WalletSettings = memo(() => {
     if (!wallet) return null
 
     return (
-        <>
-            <div className={classes.content}>
-                <List dense className={classes.list}>
-                    {!wallet.owner ? (
-                        <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
-                            <Icons.BackUp size={20} />
-                            <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
-                        </ListItem>
-                    ) : null}
-                    {wallet?.configurable && !wallet.owner ? (
-                        <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
-                            <Icons.PopupTrash size={20} />
-                            <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
-                        </ListItem>
-                    ) : null}
-                    {wallet.owner ? (
-                        <ListItem
-                            className={classes.item}
-                            onClick={() => {
-                                navigate(PopupRoutes.ChangeOwner)
-                            }}>
-                            <Icons.Cached size={20} />
-                            <ListItemText className={classes.text}>{t('popups_change_owner')}</ListItemText>
-                        </ListItem>
-                    ) : null}
-                    <Link
-                        href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <ListItem className={classes.item}>
-                            <Icons.CloudLink size={20} />
-                            <ListItemText className={classes.text}>{t('popups_wallet_view_on_explorer')}</ListItemText>
-                        </ListItem>
-                    </Link>
-                </List>
-            </div>
-            <Navigator />
-        </>
+        <div className={classes.content}>
+            <List dense className={classes.list}>
+                {!wallet.owner ? (
+                    <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
+                        <Icons.BackUp size={20} />
+                        <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
+                    </ListItem>
+                ) : null}
+                {wallet?.configurable && !wallet.owner ? (
+                    <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
+                        <Icons.PopupTrash size={20} />
+                        <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
+                    </ListItem>
+                ) : null}
+                {wallet.owner ? (
+                    <ListItem
+                        className={classes.item}
+                        onClick={() => {
+                            navigate(PopupRoutes.ChangeOwner)
+                        }}>
+                        <Icons.Cached size={20} />
+                        <ListItemText className={classes.text}>{t('popups_change_owner')}</ListItemText>
+                    </ListItem>
+                ) : null}
+                <Link
+                    href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <ListItem className={classes.item}>
+                        <Icons.CloudLink size={20} />
+                        <ListItemText className={classes.text}>{t('popups_wallet_view_on_explorer')}</ListItemText>
+                    </ListItem>
+                </Link>
+            </List>
+        </div>
     )
 })
 

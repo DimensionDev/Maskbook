@@ -1,26 +1,25 @@
-import {
-    TableContainer,
-    Paper,
-    Table,
-    TableRow,
-    TableCell,
-    TableBody,
-    Typography,
-    Stack,
-    IconButton,
-} from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import type { SourceType } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
+import { Linking, useMenuConfig } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
-import { Linking, useMenuConfig } from '@masknet/shared'
-import { ContractSection } from './ContractSection.js'
-import type { CommunityType } from '../../types/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    IconButton,
+    Paper,
+    Skeleton,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Typography,
+} from '@mui/material'
+import { memo, useEffect } from 'react'
+import { useSharedI18N } from '../../../locales/index.js'
 import { ContractItem } from './ContractItem.js'
-import { useEffect } from 'react'
-import { useI18N } from '../../locales/index.js'
+import { ContractSection } from './ContractSection.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -60,24 +59,26 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     menu: {
+        borderRadius: 16,
+        padding: theme.spacing(0, 1.5),
         maxHeight: 446,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
         background: theme.palette.maskColor.bottom,
-        boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        boxShadow: theme.palette.maskColor.bottomBg,
+        backdropFilter: 'blur(8px)',
+    },
+    list: {
+        padding: 0,
     },
 }))
 
 export interface CoinMetadataTableProps {
     trending: TrendingAPI.Trending
-    dataProvider: SourceType
 }
 
-const brands: Record<CommunityType, React.ReactNode> = {
+const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
     discord: <Icons.DiscordRoundGray size={16} />,
     facebook: <Icons.FacebookRoundGray size={16} />,
     github: <Icons.GitHubGray size={16} />,
@@ -90,14 +91,11 @@ const brands: Record<CommunityType, React.ReactNode> = {
     other: null,
 }
 
-export function CoinMetadataTable(props: CoinMetadataTableProps) {
-    const { trending } = props
-    const t = useI18N()
+export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: CoinMetadataTableProps) {
+    const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const metadataLinks = [[t.plugin_trader_website(), trending.coin.home_urls]] as Array<
-        [string, string[] | undefined]
-    >
+    const metadataLinks = [[t.website(), trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
     const contracts = trending.contracts?.filter((x) => x.chainId) ?? [
         {
@@ -112,7 +110,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             <ContractItem
                 key={x.chainId}
                 pluginID={x.pluginID}
-                chainId={x.chainId}
+                chainId={x.chainId!}
                 address={x.address}
                 name={x.address}
             />
@@ -127,7 +125,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                 vertical: 'top',
                 horizontal: 'right',
             },
-            classes: { paper: classes.menu },
+            classes: { paper: classes.menu, list: classes.list },
         },
     )
 
@@ -140,7 +138,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
-                    {t.plugin_trader_info()}
+                    {t.info()}
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -207,7 +205,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
-                                        {t.plugin_trader_community()}
+                                        {t.community()}
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cellValue} align="right">
@@ -240,4 +238,55 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             </TableContainer>
         </Stack>
     )
-}
+})
+
+export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton() {
+    const t = useSharedI18N()
+    const { classes } = useStyles()
+
+    return (
+        <Stack>
+            <Stack>
+                <Typography fontSize={14} fontWeight={700}>
+                    {t.info()}
+                </Typography>
+            </Stack>
+            <TableContainer className={classes.container} component={Paper} elevation={0}>
+                <Table className={classes.table} size="small">
+                    <TableBody>
+                        <TableRow>
+                            <TableCell className={classes.cell}>
+                                <Typography className={classes.label} variant="body2">
+                                    {t.contract()}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cellValue} align="right">
+                                <Skeleton />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className={classes.cell}>
+                                <Typography className={classes.label} variant="body2">
+                                    {t.website()}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cellValue} align="right">
+                                <Skeleton />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className={classes.cell}>
+                                <Typography className={classes.label} variant="body2">
+                                    {t.community()}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cellValue} align="right">
+                                <Skeleton />
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Stack>
+    )
+})
