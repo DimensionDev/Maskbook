@@ -54,8 +54,8 @@ export function Pages() {
 
     return (
         <Suspense fallback={null}>
-            <TermsGuard>
-                <HashRouter>
+            <HashRouter>
+                <TermsGuard>
                     <Routes>
                         <Route path={`${DashboardRoutes.Setup}/*`} element={<SetupPersona />} />
                         <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
@@ -66,8 +66,8 @@ export function Pages() {
                         <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
                         <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
                     </Routes>
-                </HashRouter>
-            </TermsGuard>
+                </TermsGuard>
+            </HashRouter>
         </Suspense>
     )
 }
