@@ -8,7 +8,7 @@ import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-s
 import { Button, Input, Typography, alpha } from '@mui/material'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { omit } from 'lodash-es'
-import { memo, useContext, useEffect, useMemo } from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type ZodCustomIssue, type z } from 'zod'
@@ -116,7 +116,7 @@ export const EditNetwork = memo(function EditNetwork() {
 
     type FormInputs = z.infer<typeof schema>
     const {
-        handleSubmit,
+        getValues,
         register,
         setError,
         formState: { errors, isValidating, isSubmitting, isValid: isFormValid },
@@ -126,6 +126,23 @@ export const EditNetwork = memo(function EditNetwork() {
         defaultValues: network,
     })
     const { showSnackbar } = usePopupCustomSnackbar()
+    const checkZodError = useCallback(
+        (message: string) => {
+            try {
+                const issues = JSON.parse(message) as ZodCustomIssue[]
+                const isInvalid = issues.some((issue) => issue.path[0] !== 'currencySymbol')
+                if (!isInvalid) return true
+                issues.forEach((issue) => {
+                    // We assume there is no multiple paths.
+                    setError(issue.path[0] as keyof FormInputs, {
+                        message: t(issue.message as AvailableLocaleKeys, issue.params),
+                    })
+                })
+            } catch {}
+            return false
+        },
+        [setError, t],
+    )
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
             try {
@@ -143,17 +160,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 navigate(-1)
                 queryClient.invalidateQueries(QUERY_KEY)
             } catch (err) {
-                try {
-                    // Set background validation errors to fields
-                    const issuesJson = (err as Error).message
-                    const issues = JSON.parse(issuesJson) as ZodCustomIssue[]
-                    issues.forEach((issue) => {
-                        // We assume there is no multiple paths.
-                        setError(issue.path[0] as keyof FormInputs, {
-                            message: t(issue.message as AvailableLocaleKeys, issue.params),
-                        })
-                    })
-                } catch {}
+                checkZodError((err as Error).message)
                 showSnackbar(t('failed_to_save_network'))
             }
         },
@@ -163,6 +170,19 @@ export const EditNetwork = memo(function EditNetwork() {
     const isValid = errors.currencySymbol ? Object.keys(omit(errors, 'currencySymbol')).length === 0 : isFormValid
     const isNotReady = isValidating || (!isValidating && !isValid)
     const disabled = isNotReady || isSubmitting || isMutating
+
+    // currency symbol error is tolerable,
+    // but react-hook-form's handleSubmit can't tolerate it
+    const handleSubmit = useCallback(async () => {
+        if (disabled) return
+        const data = getValues()
+        const result = await schema.parseAsync(data).then(
+            () => true,
+            (err) => checkZodError((err as Error).message),
+        )
+        if (!result) return
+        mutate(data)
+    }, [disabled, getValues])
 
     return (
         <main className={classes.main}>
@@ -197,7 +217,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     fullWidth
                     disableUnderline
                     error={!!errors.currencySymbol}
-                    {...register('currencySymbol')}
+                    {...register('currencySymbol', { required: false })}
                     placeholder="eg. ETH"
                     disabled={isBuiltIn}
                 />
@@ -220,10 +240,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     <ActionButton fullWidth variant="outlined" onClick={() => navigate(PopupRoutes.EditNetwork)}>
                         {t('cancel')}
                     </ActionButton>
-                    <ActionButton
-                        fullWidth
-                        onClick={handleSubmit((data: FormInputs) => mutate(data))}
-                        disabled={disabled}>
+                    <ActionButton fullWidth onClick={handleSubmit} disabled={disabled}>
                         {t('confirm')}
                     </ActionButton>
                 </div>

@@ -1,6 +1,6 @@
 import { asyncIteratorToArray } from '@masknet/shared-base'
 import { type I18NFunction } from '../../../../../utils/i18n-next-ui.js'
-import { createSchema, fetchChains } from '../../../../../utils/network-schema.js'
+import { createBaseSchema, createSchema, fetchChains } from '../../../../../utils/network-schema.js'
 import { PluginDB } from '../../../database/Plugin.db.js'
 
 interface Network {
@@ -45,7 +45,7 @@ function recordToNetwork(record: NetworkRecord): Network {
 // Use submit Network
 async function networkToChainParameter(network: Network): Promise<AddEthereumChainParameter | null> {
     const chains = await fetchChains()
-    const match = chains.find((x) => x.chainId === network.chainId)
+    const match = chains.find((x) => x.chainId === +network.chainId)
     if (!match) return null
     return {
         chainId: network.chainId.toString(),
@@ -54,7 +54,7 @@ async function networkToChainParameter(network: Network): Promise<AddEthereumCha
         iconUrls: [],
         nativeCurrency: {
             name: match.nativeCurrency.name || network.currencySymbol || match.nativeCurrency.symbol,
-            symbol: match.nativeCurrency.symbol,
+            symbol: network.currencySymbol || match.nativeCurrency.symbol,
             decimals: match.nativeCurrency.decimals,
         },
         rpcUrls: [network.rpc],
@@ -85,8 +85,15 @@ export async function addNetwork(network: Network, patch?: Partial<NetworkRecord
     const now = Date.now()
     const fakeT = ((key: string) => key) as I18NFunction
     // i18n is too large to have in background, therefore we just return the key
+    const baseSchema = createBaseSchema(fakeT)
     const schema = createSchema(fakeT)
-    const parsed: Network = await schema.parseAsync(network)
+    const check = await schema.safeParseAsync(network)
+    // currency symbol error is tolerable,
+    if (!check.success && check.error.errors.some((issue) => issue.path[0] !== 'currencySymbol')) {
+        throw check.error
+    }
+    // Transform data with zod
+    const parsed = baseSchema.parse(network)
     const chainParameter = await networkToChainParameter(parsed)
     if (!chainParameter) throw new Error('Failed to create Chain Parameter')
 

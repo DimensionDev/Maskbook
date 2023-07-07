@@ -34,26 +34,34 @@ export async function fetchChains(): Promise<ChainConfig[]> {
     return res.json()
 }
 
-export const createSchema = function createSchema(t: I18NFunction) {
-    const schema = z
-        .object({
-            name: z.string().nonempty(),
-            rpc: z
+/**
+ * schema with basic validation
+ */
+export function createBaseSchema(t: I18NFunction) {
+    const schema = z.object({
+        name: z.string().nonempty(),
+        rpc: z
+            .string()
+            .trim()
+            .url(t('incorrect_rpc_url'))
+            .refine((rpc) => rpc.startsWith('https'), t('rpc_requires_https')),
+        chainId: z.union([
+            z
                 .string()
                 .trim()
-                .url(t('incorrect_rpc_url'))
-                .refine((rpc) => rpc.startsWith('https'), t('rpc_requires_https')),
-            chainId: z.union([
-                z
-                    .string()
-                    .trim()
-                    .regex(/^\d+$/, t('incorrect_chain_id'))
-                    .transform((v) => Number.parseInt(v, 10)),
-                z.number(),
-            ]),
-            currencySymbol: z.string().optional(),
-            explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.string().optional()]),
-        })
+                .regex(/^\d+$/, t('incorrect_chain_id'))
+                .transform((v) => Number.parseInt(v, 10)),
+            z.number(),
+        ]),
+        currencySymbol: z.string().optional(),
+        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.string().optional()]),
+    })
+    return schema
+}
+
+export function createSchema(t: I18NFunction) {
+    const baseSchema = createBaseSchema(t)
+    const schema = baseSchema
         .superRefine(async (schema, context) => {
             if (!schema.rpc || !schema.chainId) return true
             let rpcId: number
@@ -109,7 +117,6 @@ export const createSchema = function createSchema(t: I18NFunction) {
                         message: t('rpc_return_different_symbol', params),
                         params,
                     })
-                    return
                 }
             } catch {
                 // Ignore
