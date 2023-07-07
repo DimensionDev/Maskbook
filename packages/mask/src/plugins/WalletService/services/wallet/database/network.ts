@@ -53,8 +53,8 @@ async function networkToChainParameter(network: Network): Promise<AddEthereumCha
         chainName: network.name,
         iconUrls: [],
         nativeCurrency: {
-            name: network.currencySymbol || match.nativeCurrency.name,
-            symbol: match.nativeCurrency.name,
+            name: match.nativeCurrency.name || network.currencySymbol || match.nativeCurrency.symbol,
+            symbol: match.nativeCurrency.symbol,
             decimals: match.nativeCurrency.decimals,
         },
         rpcUrls: [network.rpc],
