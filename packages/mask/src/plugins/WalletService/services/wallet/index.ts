@@ -162,12 +162,8 @@ export async function renameWallet(address: string, name: string) {
     })
 }
 
-export async function removeWallet(address: string, unverifiedPassword: string) {
-    // await password.verifyPasswordRequired(unverifiedPassword)
-
-    // delete a wallet with derivationPath is not allowed
-    // const wallet = await database.getWalletRequired(address)
-    // if (wallet.derivationPath) throw new Error('Illegal operation.')
+export async function removeWallet(address: string, unverifiedPassword?: string) {
+    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
 
     await database.deleteWallet(address)
 }

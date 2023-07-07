@@ -184,7 +184,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             <SetupFrameController>
                 <PrimaryButton
                     loading={confirmLoading}
-                    disabled={confirmLoading || loading || !indexes.current.size}
+                    disabled={confirmLoading || loading}
                     className={classes.bold}
                     width="125px"
                     size="large"
