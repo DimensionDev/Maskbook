@@ -16,7 +16,7 @@ const BOUNDARIES = {
     twelveDecimalExp: 12,
 }
 
-const DIGITAL_CURRENCY_SYMBOLS: Record<string, string> = {
+const DIGITAL_CURRENCY_SYMBOLS = {
     BTC: '\u20BF',
     ETH: '\u039E',
     SOL: '\u25CE',
@@ -27,6 +27,9 @@ const DIGITAL_CURRENCY_SYMBOLS: Record<string, string> = {
     GLMR: 'GLMR',
     MATIC: 'MATIC',
 }
+
+type UpperCaseKeys = keyof typeof DIGITAL_CURRENCY_SYMBOLS
+type Keys = UpperCaseKeys | Lowercase<UpperCaseKeys>
 
 const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbol: string, isDigitalCurrency: boolean) => {
     if (!isDigitalCurrency) return parts
@@ -40,7 +43,11 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 }
 
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
-export function formatCurrency(value: BigNumber.Value, currency = 'USD', options?: FormatterCurrencyOptions): string {
+export function formatCurrency(
+    value: BigNumber.Value,
+    currency: LiteralUnion<Keys | 'USD'> = 'USD',
+    options?: FormatterCurrencyOptions,
+): string {
     const bn = new BigNumber(value)
     const { onlyRemainTwoDecimal = false } = options ?? {}
     const integerValue = bn.integerValue(1)
@@ -57,10 +64,10 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
         twelveDecimalExp,
     } = BOUNDARIES
 
-    const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase()] : ''
+    const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase() as UpperCaseKeys] : ''
 
     let formatter: Intl.NumberFormat
-    let isIntlCurrencyValid = !DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase()]
+    let isIntlCurrencyValid = !DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase() as UpperCaseKeys]
 
     try {
         formatter = new Intl.NumberFormat('en-US', {

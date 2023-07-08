@@ -9,7 +9,6 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 const useStyles = makeStyles()((theme) => ({
     message: {
         fontSize: 14,
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.third,
         fontWeight: 700,
         lineHeight: '18px',

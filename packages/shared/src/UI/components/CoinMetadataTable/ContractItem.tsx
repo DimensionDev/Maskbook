@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
         fontSize: 12,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         minWidth: theme.spacing(11),
     },
