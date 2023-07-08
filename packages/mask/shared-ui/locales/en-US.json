@@ -1051,6 +1051,7 @@
     "chain_id": "Chain ID",
     "optional_currency_symbol": "Currency Symbol (Optional)",
     "optional_block_explorer_url": "Block Explorer URL (Optional)",
+    "account_already_exists": "This account name already exists",
     "incorrect_rpc_url": "Incorrect RPC URL.",
     "incorrect_explorer_url": "Incorrect Block Explorer URL.",
     "failed_to_fetch_chain_id": "Could not fetch chain ID. Is your RPC URL correct?",

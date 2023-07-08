@@ -86,10 +86,13 @@ export async function getNetwork(id: string) {
 
 export async function addNetwork(network: Omit<Network, 'id'>, patch?: Partial<NetworkRecord>) {
     const now = Date.now()
-    const fakeT = ((key: string) => key) as I18NFunction
     // i18n is too large to have in background, therefore we just return the key
-    const baseSchema = createBaseSchema(fakeT)
-    const schema = createSchema(fakeT)
+    const fakeT = ((key: string) => key) as I18NFunction
+    const baseSchema = createBaseSchema(fakeT, () => true)
+    const schema = createSchema(fakeT, async (name) => {
+        const networks = await getNetworks()
+        return !networks.find((network) => network.name === name && network.id !== patch?.id)
+    })
     const check = await schema.safeParseAsync(network)
     // currency symbol error is tolerable,
     if (!check.success && check.error.errors.some((issue) => issue.path[0] !== 'currencySymbol')) {

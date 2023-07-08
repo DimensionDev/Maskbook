@@ -111,7 +111,12 @@ export const EditNetwork = memo(function EditNetwork() {
         return () => setExtension(undefined)
     }, [isBuiltIn, id, classes.iconButton])
 
-    const schema = useMemo(() => createSchema(t), [t])
+    const schema = useMemo(() => {
+        return createSchema(t, async (name) => {
+            const networks = await WalletRPC.getNetworks()
+            return !networks.find((network) => network.name === name && network.id !== id)
+        })
+    }, [t, id])
 
     type FormInputs = z.infer<typeof schema>
     const {
@@ -195,7 +200,15 @@ export const EditNetwork = memo(function EditNetwork() {
         <main className={classes.main}>
             <form className={classes.form}>
                 <Typography className={classes.label}>{t('network_name')}</Typography>
-                <Input fullWidth disableUnderline {...register('name')} placeholder="Cel" disabled={isBuiltIn} />
+                <Input
+                    fullWidth
+                    disableUnderline
+                    error={!!errors.name}
+                    {...register('name')}
+                    placeholder="Cel"
+                    disabled={isBuiltIn}
+                />
+                {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
 
                 <Typography className={classes.label}>{t('rpc_url')}</Typography>
                 <Input

@@ -34,12 +34,16 @@ export async function fetchChains(): Promise<ChainConfig[]> {
     return res.json()
 }
 
+type NameValidator = (name: string) => boolean | Promise<boolean>
+
 /**
  * schema with basic validation
+ * duplicated name validator is injected as dependency, both frontend and
+ * background can provide their own validator
  */
-export function createBaseSchema(t: I18NFunction) {
+export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
     const schema = z.object({
-        name: z.string().nonempty(),
+        name: z.string().nonempty().refine(duplicateNameValidator, t('account_already_exists')),
         rpc: z
             .string()
             .trim()
@@ -59,8 +63,8 @@ export function createBaseSchema(t: I18NFunction) {
     return schema
 }
 
-export function createSchema(t: I18NFunction) {
-    const baseSchema = createBaseSchema(t)
+export function createSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
+    const baseSchema = createBaseSchema(t, duplicateNameValidator)
     const schema = baseSchema
         .superRefine(async (schema, context) => {
             if (!schema.rpc || !schema.chainId) return true
