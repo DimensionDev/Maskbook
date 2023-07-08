@@ -54,10 +54,11 @@ export const SelectProvider = memo(function SelectProvider() {
             const disableNewWindow = params.get('disableNewWindow')
 
             if (providerType === ProviderType.MaskWallet) {
-                return navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
+                navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
+                return
             }
             if (disableNewWindow) {
-                return modalNavigate(
+                modalNavigate(
                     PopupModalRoutes.ConnectProvider,
                     {
                         providerType,
@@ -66,6 +67,7 @@ export const SelectProvider = memo(function SelectProvider() {
                         replace: true,
                     },
                 )
+                return
             } else if (providerType === ProviderType.MetaMask) {
                 await Services.Helper.openPopupWindow(
                     PopupRoutes.Personas,

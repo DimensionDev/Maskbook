@@ -12,7 +12,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { HomeTabType } from '../../Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -144,7 +144,6 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         bindingWallets,
     }) => {
         const theme = useTheme()
-        const location = useLocation()
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -157,102 +156,97 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         )
 
         return (
-            <>
-                <div className={classes.container}>
-                    {!isEmpty ? (
-                        <TabContext value={currentTab}>
-                            <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
-                                <Box className={classes.header}>
-                                    <Icons.MaskSquare className={classes.logo} />
-                                    <Icons.HamburgerMenu className={classes.menu} />
-                                </Box>
-                                <Box className={classes.info}>
-                                    <Box position="relative">
-                                        {avatar ? (
-                                            <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                                        ) : (
-                                            <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
-                                        )}
-                                        <Box className={classes.edit}>
-                                            <Icons.Edit size={12} />
-                                        </Box>
+            <div className={classes.container}>
+                {!isEmpty ? (
+                    <TabContext value={currentTab}>
+                        <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
+                            <Box className={classes.header}>
+                                <Icons.MaskSquare className={classes.logo} />
+                                <Icons.HamburgerMenu className={classes.menu} />
+                            </Box>
+                            <Box className={classes.info}>
+                                <Box position="relative">
+                                    {avatar ? (
+                                        <Avatar src={avatar} style={{ width: 60, height: 60 }} />
+                                    ) : (
+                                        <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
+                                    )}
+                                    <Box className={classes.edit}>
+                                        <Icons.Edit size={12} />
                                     </Box>
-                                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
-                                        {nickname}
-                                    </Typography>
-                                    {fingerprint ? (
-                                        <Typography
-                                            fontSize={12}
-                                            color={theme.palette.maskColor.second}
-                                            lineHeight="16px"
-                                            display="flex"
-                                            alignItems="center"
-                                            columnGap="2px">
-                                            {formatPersonaFingerprint(fingerprint, 4)}
-                                            <CopyIconButton text={fingerprint} className={classes.icon} />
-                                            <Link
-                                                underline="none"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                href={urlcat('https://web3.bio/', { s: publicKey })}
-                                                className={classes.icon}>
-                                                <Icons.LinkOut size={12} />
-                                            </Link>
-                                        </Typography>
-                                    ) : null}
-                                    <Icons.Settings2 size={20} className={classes.settings} />
                                 </Box>
+                                <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                                    {nickname}
+                                </Typography>
+                                {fingerprint ? (
+                                    <Typography
+                                        fontSize={12}
+                                        color={theme.palette.maskColor.second}
+                                        lineHeight="16px"
+                                        display="flex"
+                                        alignItems="center"
+                                        columnGap="2px">
+                                        {formatPersonaFingerprint(fingerprint, 4)}
+                                        <CopyIconButton text={fingerprint} className={classes.icon} />
+                                        <Link
+                                            underline="none"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href={urlcat('https://web3.bio/', { s: publicKey })}
+                                            className={classes.icon}>
+                                            <Icons.LinkOut size={12} />
+                                        </Link>
+                                    </Typography>
+                                ) : null}
+                                <Icons.Settings2 size={20} className={classes.settings} />
+                            </Box>
 
-                                <MaskTabList
-                                    onChange={onChange}
-                                    aria-label="persona-tabs"
-                                    classes={{ root: classes.tabs }}>
-                                    <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
-                                    <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
-                                </MaskTabList>
-                            </Box>
-                            <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts}>
-                                <SocialAccounts
-                                    accounts={accounts}
-                                    networks={networks}
-                                    onConnect={onConnect}
-                                    onAccountClick={onAccountClick}
-                                />
-                            </TabPanel>
-                            <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets}>
-                                <ConnectedWallet wallets={bindingWallets} />
-                            </TabPanel>
-                        </TabContext>
-                    ) : (
-                        <Box sx={{ background: theme.palette.maskColor.bottom }}>
-                            <Box className={classes.emptyHeader}>
-                                <Icons.MaskSquare width={160} height={46} />
-                            </Box>
-                            <Box className={classes.placeholder}>
-                                <Typography className={classes.placeholderTitle}>
-                                    {t('popups_welcome_to_mask_network')}
-                                </Typography>
-                                <Typography className={classes.placeholderDescription}>
-                                    {t('popups_persona_description')}
-                                </Typography>
-                            </Box>
-                            <div className={classes.controller}>
-                                <Button
-                                    onClick={onCreatePersona}
-                                    startIcon={<Icons.AddUser color={theme.palette.maskColor.bottom} size={18} />}>
-                                    {t('popups_create_persona')}
-                                </Button>
-                                <Button
-                                    onClick={onRestore}
-                                    variant="outlined"
-                                    startIcon={<Icons.PopupRestore color={theme.palette.maskColor.bottom} size={18} />}>
-                                    {t('popups_restore_and_login')}
-                                </Button>
-                            </div>
+                            <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                                <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
+                                <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
+                            </MaskTabList>
                         </Box>
-                    )}
-                </div>
-            </>
+                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts}>
+                            <SocialAccounts
+                                accounts={accounts}
+                                networks={networks}
+                                onConnect={onConnect}
+                                onAccountClick={onAccountClick}
+                            />
+                        </TabPanel>
+                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets}>
+                            <ConnectedWallet wallets={bindingWallets} />
+                        </TabPanel>
+                    </TabContext>
+                ) : (
+                    <Box sx={{ background: theme.palette.maskColor.bottom }}>
+                        <Box className={classes.emptyHeader}>
+                            <Icons.MaskSquare width={160} height={46} />
+                        </Box>
+                        <Box className={classes.placeholder}>
+                            <Typography className={classes.placeholderTitle}>
+                                {t('popups_welcome_to_mask_network')}
+                            </Typography>
+                            <Typography className={classes.placeholderDescription}>
+                                {t('popups_persona_description')}
+                            </Typography>
+                        </Box>
+                        <div className={classes.controller}>
+                            <Button
+                                onClick={onCreatePersona}
+                                startIcon={<Icons.AddUser color={theme.palette.maskColor.bottom} size={18} />}>
+                                {t('popups_create_persona')}
+                            </Button>
+                            <Button
+                                onClick={onRestore}
+                                variant="outlined"
+                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.bottom} size={18} />}>
+                                {t('popups_restore_and_login')}
+                            </Button>
+                        </div>
+                    </Box>
+                )}
+            </div>
         )
     },
 )

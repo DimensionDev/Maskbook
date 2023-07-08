@@ -9,11 +9,7 @@ export interface DisconnectModalOpenProps {
 }
 
 export interface DisconnectModalProps {}
-export type DisconnectModalCloseProps =
-    | {
-          confirmed?: boolean
-      }
-    | undefined
+export type DisconnectModalCloseProps = boolean | undefined
 
 export const DisconnectModal = forwardRef<
     SingletonModalRefCreator<DisconnectModalOpenProps, DisconnectModalCloseProps>
@@ -28,11 +24,6 @@ export const DisconnectModal = forwardRef<
     })
 
     return (
-        <DisconnectDialog
-            open={open}
-            onClose={(confirmed) => dispatch?.close({ confirmed })}
-            title={title}
-            tips={tips}
-        />
+        <DisconnectDialog open={open} onClose={(confirmed) => dispatch?.close(confirmed)} title={title} tips={tips} />
     )
 })

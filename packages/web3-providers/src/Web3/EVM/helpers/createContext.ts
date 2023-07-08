@@ -7,15 +7,15 @@ import type { ConnectionOptions } from '../types/index.js'
 
 const initializer = {
     getDefaultAccount(providerType: ProviderType) {
-        return providerType === ProviderType.MaskWallet ? '' : Web3StateRef.value?.Provider?.account?.getCurrentValue()
+        return providerType === ProviderType.MaskWallet ? '' : Web3StateRef.value.Provider?.account?.getCurrentValue()
     },
     getDefaultChainId(providerType: ProviderType) {
         return providerType === ProviderType.MaskWallet
             ? ChainId.Mainnet
-            : Web3StateRef.value?.Provider?.chainId?.getCurrentValue()
+            : Web3StateRef.value.Provider?.chainId?.getCurrentValue()
     },
     getDefaultProviderType() {
-        return Web3StateRef.value?.Provider?.providerType?.getCurrentValue()
+        return Web3StateRef.value.Provider?.providerType?.getCurrentValue()
     },
     getDefaultOwner(providerType: ProviderType) {
         const provider = Providers[providerType] as BaseContractWalletProvider | undefined

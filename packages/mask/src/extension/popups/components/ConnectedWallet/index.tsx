@@ -161,7 +161,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                         size={16}
                         onClick={async () => {
                             if (!currentPersona) return
-                            const results = await DisconnectModal.openAndWaitForClose({
+                            const confirmed = await DisconnectModal.openAndWaitForClose({
                                 title: t('popups_release_bind_wallet_title'),
                                 tips: (
                                     <Trans
@@ -176,7 +176,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                                     />
                                 ),
                             })
-                            if (results?.confirmed) return handleConfirmRelease(wallet)
+                            if (confirmed) return handleConfirmRelease(wallet)
                         }}
                     />
                 </Box>

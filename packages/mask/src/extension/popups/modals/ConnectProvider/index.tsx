@@ -7,7 +7,7 @@ import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import { timeout } from '@masknet/kit'
+import { delay, timeout } from '@masknet/kit'
 import urlcat from 'urlcat'
 import { useAsyncFn, useMount } from 'react-use'
 import type { ProviderType } from '@masknet/web3-shared-evm'
@@ -78,10 +78,10 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
 
     const [params] = useSearchParams()
     const { providerType } = useMemo(() => {
-        const providerType = params.get('providerType')
+        const providerType = params.get('providerType') as ProviderType | undefined
 
         return {
-            providerType: providerType ? providerType : undefined,
+            providerType,
         }
     }, [params])
 
@@ -89,21 +89,22 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
 
     const providerExist = useMemo(() => {
         return Provider?.isReady(provider.type)
-    }, [providerType, Provider])
+    }, [provider.type, Provider])
 
     const handleClose = useCallback(() => {
         navigate(urlcat(PopupRoutes.Personas, { disableNewWindow: true }), { replace: true })
     }, [])
 
     const [{ loading, error }, handleConnect] = useAsyncFn(async () => {
-        console.log('done')
         const params = new URLSearchParams(location.search)
 
-        const providerType = params.get('providerType')
+        const providerType = params.get('providerType') as ProviderType | undefined
         if (!providerType) return
         try {
             const connect = async () => {
-                const chainId = await Web3.getChainId({ providerType: providerType as ProviderType })
+                // wait for web3 state init
+                await delay(1500)
+                const chainId = await Web3.getChainId({ providerType })
                 return Web3.connect({
                     chainId,
                     providerType: providerType as ProviderType,
