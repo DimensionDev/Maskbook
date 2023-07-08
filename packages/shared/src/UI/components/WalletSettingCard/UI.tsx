@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletSettingCardUIProps {
-    icon?: URL
+    icon?: string
     walletName?: string
     formattedAddress?: string
     addressLink?: string

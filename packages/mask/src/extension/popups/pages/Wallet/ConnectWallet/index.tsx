@@ -127,7 +127,7 @@ const ConnectWalletPage = memo(() => {
     ) => {
         return (
             <div className={classes.walletItem} onClick={options?.onClick}>
-                <img src={provider.icon.toString()} className={classes.walletIcon} />
+                <img src={provider.icon} className={classes.walletIcon} />
                 <Typography className={classes.walletName}>{provider.name}</Typography>
             </div>
         )

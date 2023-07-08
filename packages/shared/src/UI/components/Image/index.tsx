@@ -37,15 +37,15 @@ const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((
     },
 }))
 
-const MASK_DARK_FALLBACK = new URL('./mask-dark.png', import.meta.url).toString()
-const MASK_LIGHT_FALLBACK = new URL('./mask-light.png', import.meta.url).toString()
+const MASK_DARK_FALLBACK = new URL('./mask-dark.png', import.meta.url).href
+const MASK_LIGHT_FALLBACK = new URL('./mask-light.png', import.meta.url).href
 
 export interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
     size?: number | string
     rounded?: boolean
-    fallback?: URL | string | JSX.Element | null
+    fallback?: string | JSX.Element | null
     disableSpinner?: boolean
     containerProps?: HTMLProps<HTMLDivElement>
 }
