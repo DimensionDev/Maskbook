@@ -1,7 +1,6 @@
-import { useCopyToClipboard } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { IconButton, MenuItem, Stack, Typography, type MenuItemProps, Link } from '@mui/material'
-import { FormattedAddress, ImageIcon, useSnackbarCallback } from '@masknet/shared'
+import { MenuItem, Stack, Typography, type MenuItemProps, Link } from '@mui/material'
+import { CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -48,14 +47,8 @@ interface ContractItemProps extends MenuItemProps {
 export function ContractItem({ pluginID, chainId, address, className, ...rest }: ContractItemProps) {
     const { classes, cx } = useStyles()
     const Others = useWeb3Others(pluginID)
-    const [, copyToClipboard] = useCopyToClipboard()
 
     const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
-
-    const onCopyAddress = useSnackbarCallback(async () => {
-        if (!address) return
-        copyToClipboard(address)
-    }, [address])
 
     if (!networkDescriptor?.icon) return null
 
@@ -66,9 +59,7 @@ export function ContractItem({ pluginID, chainId, address, className, ...rest }:
                 <Typography className={classes.address} ml={1}>
                     <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
                 </Typography>
-                <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
-                    <Icons.PopupCopy size={16} className={classes.icon} />
-                </IconButton>
+                <CopyButton className={classes.icon} text={address} size={16} title="Copy address" />
                 <Link
                     href={Others.explorerResolver.addressLink(chainId, address)}
                     className={classes.link}

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { Icons } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
+import { CopyButton, FormattedAddress } from '@masknet/shared'
 import {
     DashboardRoutes,
     ECKeyIdentifier,
@@ -19,7 +19,6 @@ import { Box, Link, Popover, Typography, Button } from '@mui/material'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
@@ -301,7 +300,7 @@ export default function ChangeOwner() {
                                             <Typography className={classes.popoverTitle}>{persona.nickname}</Typography>
                                             <Typography className={classes.identity}>
                                                 {formatPersonaFingerprint(persona.identifier.rawPublicKey, 4)}
-                                                <CopyIconButton
+                                                <CopyButton
                                                     text={persona.identifier.rawPublicKey}
                                                     className={classes.copy}
                                                 />
@@ -357,8 +356,7 @@ export default function ChangeOwner() {
                                             <Typography className={classes.popoverTitle}>{wallet.name}</Typography>
                                             <Typography className={classes.identity}>
                                                 {formatEthereumAddress(wallet.address, 4)}
-
-                                                <CopyIconButton text={wallet.address} className={classes.copy} />
+                                                <CopyButton text={wallet.address} className={classes.copy} />
                                                 <Link
                                                     sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
                                                     href={explorerResolver.addressLink(chainId, wallet.address)}

@@ -10,10 +10,10 @@ import {
     type PersonaIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { ApplicationBoardModal, LeavePageConfirmModal, useSharedI18N } from '../../../index.js'
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
@@ -54,9 +54,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { finishTarget, enableVerify = true, onClose } = props
 
     const t = useSharedI18N()
-
-    const [, copyToClipboard] = useCopyToClipboard()
-    const { showSnackbar } = useCustomSnackbar()
 
     const currentPersonaIdentifier = useCurrentPersona()
 
@@ -208,12 +205,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         selectedPersona?.persona.linkedProfiles,
     ])
 
-    const onCopyPersonsPublicKey = (e: React.MouseEvent<HTMLElement>, p: PersonaNextIDMixture) => {
-        e.preventDefault()
-        e.stopPropagation()
-        copyToClipboard(p.persona.identifier.rawPublicKey)
-        showSnackbar(t.applications_persona_copy(), { variant: 'success' })
-    }
     if (loading) {
         return (
             <Stack justifyContent="center" alignItems="center" height="100%">
@@ -238,7 +229,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                         <PersonaItemUI
                             key={x.persona.identifier.toText()}
                             data={x}
-                            onCopy={(e) => onCopyPersonsPublicKey(e, x)}
                             onClick={() => setSelectedPersona(x)}
                             currentPersona={selectedPersona}
                             currentPersonaIdentifier={currentPersonaIdentifier}

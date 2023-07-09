@@ -1,5 +1,5 @@
 import { Flags } from '@masknet/flags'
-import { ChainIcon, FormattedAddress, ImageIcon, TokenIcon } from '@masknet/shared'
+import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, TokenIcon } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -9,7 +9,6 @@ import { memo, useMemo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useParams } from 'react-router-dom'
 import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
-import { CopyIconButton } from '../../../components/index.js'
 import { useTitle } from '../../../hook/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -114,7 +113,7 @@ export default memo(function Receive() {
                 <Typography className={classes.network}>{currentNetwork.name}</Typography>
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />
-                    <CopyIconButton text={account} size={24} style={{ marginLeft: 16 }} />
+                    <CopyButton text={account} size={24} style={{ marginLeft: 16 }} />
                 </Typography>
             </Box>
             <div className={classes.halo}>
