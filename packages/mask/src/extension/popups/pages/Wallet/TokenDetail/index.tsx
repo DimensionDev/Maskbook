@@ -51,7 +51,6 @@ const useStyles = makeStyles()((theme) => {
         },
         assetValue: {
             fontSize: 24,
-            fontFamily: 'Helvetica',
             fontWeight: 700,
             textAlign: 'center',
         },

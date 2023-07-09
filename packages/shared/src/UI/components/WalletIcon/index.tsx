@@ -28,8 +28,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 interface WalletIconProps extends withClasses<'root' | 'mainIcon'> {
     size?: number
     badgeSize?: number
-    mainIcon?: URL
-    badgeIcon?: URL
+    mainIcon?: string
+    badgeIcon?: string
     badgeIconBorderColor?: string
     iconFilterColor?: string
 }

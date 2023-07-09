@@ -1,5 +1,5 @@
 import { Flags } from '@masknet/flags'
-import { ChainIcon, FormattedAddress, TokenIcon, WalletIcon } from '@masknet/shared'
+import { ChainIcon, FormattedAddress, ImageIcon, TokenIcon } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -107,7 +107,7 @@ export default memo(function Receive() {
                 {address && !isNativeTokenAddress(address) ? (
                     <TokenIcon address={address} />
                 ) : currentNetwork.isMainnet ? (
-                    <WalletIcon size={60} mainIcon={currentNetwork.icon} />
+                    <ImageIcon size={60} icon={currentNetwork.icon} />
                 ) : (
                     <ChainIcon size={60} name={currentNetwork.name} />
                 )}

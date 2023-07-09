@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface PersonaImageIconProps extends withClasses<'icon'> {
     size?: number
-    icon?: URL | string
+    icon?: string
     borderRadius?: string
 }
 

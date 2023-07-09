@@ -20,7 +20,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
 
     return useQuery({
         enabled: !!address,
-        queryKey: ['fungible-token', pluginID, address, options],
+        queryKey: ['fungible-token', pluginID, address, chainId, options],
         queryFn: async () => {
             if (!address) return
             return attemptUntil(

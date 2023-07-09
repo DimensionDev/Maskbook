@@ -55,8 +55,8 @@ export interface WalletDescriptionProps {
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     pending?: boolean
     onPendingClick?: () => void
-    providerIcon?: URL
-    networkIcon?: URL
+    providerIcon?: string
+    networkIcon?: string
     iconFilterColor?: string
     name?: string
     address?: string

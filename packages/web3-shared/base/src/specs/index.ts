@@ -194,7 +194,7 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     /** The network type */
     type: NetworkType
     /** The network icon */
-    icon: URL
+    icon: string
     /** The network icon in fixed color */
     iconColor: Color
     /** The average time for mining a block (unit: seconds). */
@@ -217,7 +217,7 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     /** The provider type */
     type: ProviderType
     /** The provider icon */
-    icon: URL
+    icon: string
     /** The provider name */
     name: string
     /** The provider bar background gradient color */

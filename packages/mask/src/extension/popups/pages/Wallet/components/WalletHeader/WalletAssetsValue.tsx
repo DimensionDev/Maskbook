@@ -4,7 +4,6 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { sum } from 'lodash-es'
 import { formatCurrency } from '@masknet/web3-shared-base'
-import { FormattedCurrency } from '@masknet/shared'
 
 interface WalletAssetsValueProps extends TypographyProps {
     account?: string
@@ -37,9 +36,5 @@ export const WalletAssetsValue = memo(function WalletAssetsValue({
         )
     }
 
-    return (
-        <Typography {...props}>
-            <FormattedCurrency value={value} formatter={formatCurrency} />
-        </Typography>
-    )
+    return <Typography {...props}>{formatCurrency(value, 'USD', { onlyRemainTwoDecimal: true })}</Typography>
 })

@@ -87,8 +87,8 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                     mainIcon={
                         props.profile
                             ? avatarUrl
-                                ? new URL(avatarUrl)
-                                : new URL('../assets/Lens.png', import.meta.url)
+                                ? avatarUrl
+                                : new URL('../assets/Lens.png', import.meta.url).href
                             : providerDescriptor?.icon
                     }
                 />
