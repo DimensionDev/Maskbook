@@ -57,7 +57,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const { classes } = useStyles()
     const [selectedChain, setSelectedChain] = useState<
         SecurityAPI.SupportedChain<ChainId> & {
-            icon?: URL
+            icon?: string
         }
     >()
     const [searchContent, setSearchSearchContent] = useState<string>()

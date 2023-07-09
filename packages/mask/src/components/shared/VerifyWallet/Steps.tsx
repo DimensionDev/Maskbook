@@ -179,7 +179,7 @@ export function Steps(props: StepsProps) {
                 <div className={classes.stepBox}>
                     <div className={classes.stepLine}>
                         <ImageIcon size={22} icon={stepIconMap[step].step1} />
-                        <img className={classes.divider} src={stepIconMap[step].divider.toString()} />
+                        <img className={classes.divider} src={stepIconMap[step].divider} />
                         <ImageIcon size={22} icon={stepIconMap[step].step2} />
                     </div>
                     <div className={classes.stepRowBox}>

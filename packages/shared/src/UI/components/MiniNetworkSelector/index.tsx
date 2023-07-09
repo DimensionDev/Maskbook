@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Button, Stack, styled } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainIcon } from '../ChainIcon/index.js'
-import { WalletIcon } from '../WalletIcon/index.js'
+import { ImageIcon } from '../index.js'
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -44,7 +44,7 @@ export interface NetworkSelectorMinProps {
         ID: string
         isMainnet: boolean
         chainId: number
-        icon: URL
+        icon: string
         iconColor: string
     }>
     onSelect(
@@ -94,7 +94,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                 }}
                                 className={selectedNetwork?.ID === network.ID ? classes.networkSelected : ''}>
                                 {network.isMainnet ? (
-                                    <WalletIcon mainIcon={network.icon} size={size} />
+                                    <ImageIcon icon={network.icon} size={size} />
                                 ) : (
                                     <ChainIcon color={network.iconColor} size={size} />
                                 )}

@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage' | 'container'> {
     url?: string
-    fallbackImage?: URL | JSX.Element | string
+    fallbackImage?: JSX.Element | string
     icon?: React.ReactNode
 }
 

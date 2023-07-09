@@ -2,7 +2,7 @@ import { memo, type HTMLProps, type CSSProperties } from 'react'
 
 export interface ImageIconProps extends HTMLProps<HTMLImageElement> {
     size?: number
-    icon?: URL | string
+    icon?: string
     iconFilterColor?: string
 }
 
