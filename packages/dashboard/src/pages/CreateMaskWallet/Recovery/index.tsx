@@ -81,7 +81,7 @@ const Recovery = memo(function Recovery() {
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
     const [error, setError] = useState('')
-    const walletName = Math.random().toString(36).slice(2)
+    const walletName = 'Wallet 1'
     const { resetWallets } = ResetWalletContext.useContainer()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')

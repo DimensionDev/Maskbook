@@ -13,7 +13,6 @@ import { useWallets } from '@masknet/web3-hooks-base'
 import { DeriveWalletTable } from '@masknet/shared'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { first } from 'lodash-es'
-import { walletName } from '../constants.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
 
@@ -70,6 +69,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             mnemonic: string
         }
     }
+    const walletName = 'Wallet 1'
     const { mnemonic } = state.usr
     const indexes = useRef(new Set<number>())
     const { resetWallets } = ResetWalletContext.useContainer()

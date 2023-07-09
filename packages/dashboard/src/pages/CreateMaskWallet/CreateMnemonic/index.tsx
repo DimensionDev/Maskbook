@@ -169,7 +169,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
-    const walletName = Math.random().toString(36).slice(2)
+    const walletName = 'Wallet 1'
     const t = useDashboardI18N()
     const { resetWallets } = ResetWalletContext.useContainer()
     const [isVerify, setIsVerify] = useState(false)
