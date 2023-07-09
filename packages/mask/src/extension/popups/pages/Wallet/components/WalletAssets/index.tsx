@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => {
             padding: '8px 12px',
             fontSize: 14,
             fontWeight: 700,
-            fontFamily: 'Helvetica',
             color: theme.palette.maskColor.second,
             minHeight: 'unset',
             backgroundColor: 'transparent',
@@ -41,7 +40,6 @@ const useStyles = makeStyles()((theme) => {
             [`&.${tabClasses.selected}`]: {
                 backgroundColor: theme.palette.maskColor.bottom,
                 fontWeight: 700,
-                fontFamily: 'Helvetica',
                 color: theme.palette.maskColor.main,
                 boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
                 backdropFilter: 'blur(5px)',

@@ -33,11 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
     },
-    avatar: {
-        marginRight: 4,
-        width: 30,
-        height: 30,
-    },
     nickname: {
         color: '#07101B',
         lineHeight: '18px',
@@ -96,6 +91,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     balance: {
         fontSize: 36,
+        fontWeight: 700,
         color: theme.palette.maskColor.main,
         height: 54,
         paddingTop: theme.spacing(1.5),
@@ -175,8 +171,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     onClick={() => {
                         if (!disabled) onActionClick()
                     }}>
-                    <Icons.MaskBlue className={classes.avatar} />
-                    <div>
+                    {wallet.owner ? <Icons.SmartPay size={30} /> : <Icons.MaskBlue size={30} />}
+                    <Box ml={0.5}>
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
@@ -190,7 +186,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 <Icons.PopupLink className={classes.icon} />
                             </Link>
                         </Typography>
-                    </div>
+                    </Box>
                     {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
                 </div>
             </div>

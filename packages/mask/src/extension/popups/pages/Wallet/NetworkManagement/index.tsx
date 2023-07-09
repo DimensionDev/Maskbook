@@ -71,13 +71,14 @@ export const NetworkManagement = memo(function NetworkManagement() {
                 {[...networks, ...additionalNetworks].map((network) => {
                     // Only NetworkDescriptor has `icon`
                     const isBuiltIn = 'icon' in network
+                    const id = 'id' in network ? network.id : network.chainId
                     return (
                         <ListItem
-                            key={network.chainId}
+                            key={id}
                             className={classes.network}
                             role="link"
                             onClick={() => {
-                                navigate(`${PopupRoutes.EditNetwork}/${network.chainId}`)
+                                navigate(`${PopupRoutes.EditNetwork}/${id}`)
                             }}>
                             {isBuiltIn ? (
                                 <WalletIcon size={24} mainIcon={network.icon} />
@@ -94,7 +95,7 @@ export const NetworkManagement = memo(function NetworkManagement() {
                 })}
             </List>
             <div className={classes.footer}>
-                <ActionButton fullWidth onClick={() => navigate(PopupRoutes.EditNetwork)}>
+                <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
                     {t('network_management_add_network')}
                 </ActionButton>
             </div>
