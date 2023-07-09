@@ -1,1 +1,1 @@
-export const walletName = Math.random().toString(36).slice(2)
+export const walletName = 'Wallet 1'
