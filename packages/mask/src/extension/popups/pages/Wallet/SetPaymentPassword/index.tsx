@@ -81,9 +81,9 @@ const useStyles = makeStyles()((theme) => ({
         bottom: 16,
         marginTop: 12,
     },
-    confirmButtonWrapper: {
+    bottomAction: {
         display: 'flex',
-        padding: 16,
+        justifyContent: 'center',
         background: theme.palette.maskColor.bottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         position: 'absolute',
@@ -105,11 +105,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     strong: {
         color: theme.palette.maskColor.main,
-    },
-    navigatorWrapper: {
-        position: 'absolute',
-        width: '100%',
-        bottom: 0,
     },
 }))
 
@@ -239,18 +234,17 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                     </>
                 )}
             </Box>
-            {isCreating ? null : (
-                <Box className={classes.navigatorWrapper}>
-                    <Navigator />
-                </Box>
-            )}
-            {isCreating ? (
-                <div className={classes.confirmButtonWrapper}>
+
+            <div className={classes.bottomAction}>
+                {isCreating ? (
                     <ActionButton fullWidth onClick={onSubmit} loading={loading} width={368}>
                         {t('confirm')}
                     </ActionButton>
-                </div>
-            ) : null}
+                ) : (
+                    <Navigator />
+                )}
+            </div>
+
             {isCreating ? <Icons.Comeback className={classes.back} onClick={() => setIsCreating(false)} /> : null}
         </Box>
     )
