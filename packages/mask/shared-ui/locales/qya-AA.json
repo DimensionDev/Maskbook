@@ -292,7 +292,7 @@
     "wallet_transfer_receiving_account": "crwdns10193:0crwdne10193:0",
     "wallet_transfer_to_address": "crwdns4529:0crwdne4529:0",
     "wallet_transfer_send": "crwdns4539:0crwdne4539:0",
-    "wallet_transfer_1559_placeholder": "crwdns10433:0crwdne10433:0",
+    "wallet_transfer_placeholder": "crwdns10433:0crwdne10433:0",
     "wallet_transfer_title": "crwdns4541:0crwdne4541:0",
     "wallet_transfer_error_amount_absence": "crwdns4543:0crwdne4543:0",
     "wallet_transfer_error_address_absence": "crwdns4545:0crwdne4545:0",

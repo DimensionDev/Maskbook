@@ -1,6 +1,5 @@
-import { FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { MaskTextField, makeStyles } from '@masknet/theme'
 import {
     useAccount,
     useBalance,
@@ -9,33 +8,49 @@ import {
     useNativeTokenAddress,
     useWallets,
 } from '@masknet/web3-hooks-base'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
-import { chainResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { MenuItem, Typography } from '@mui/material'
-import { first } from 'lodash-es'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { Box, Typography, useTheme } from '@mui/material'
+import { memo, useMemo, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
-import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { WalletContext, useAsset } from '../hooks/index.js'
-import { Prior1559Transfer } from './Prior1559Transfer.js'
-import { Transfer1559 } from './Transfer1559.js'
+import { Icons } from '@masknet/icons'
 
-const useStyles = makeStyles()({
-    assetItem: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        minWidth: 278,
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        overflowX: 'hidden',
+        height: '100%',
     },
-    assetSymbol: {
+    page: {
+        position: 'relative',
+        height: '100%',
+        overflow: 'auto',
+    },
+    to: {
+        color: theme.palette.maskColor.second,
+        fontSize: 14,
+        fontWeight: 700,
+        marginRight: 16,
+    },
+    receiverPanel: {
         display: 'flex',
         alignItems: 'center',
-        '& > p': {
-            marginLeft: 10,
-        },
+        width: '100%',
+        padding: '16px',
     },
-})
+    input: {
+        flex: 1,
+    },
+    save: {
+        color: theme.palette.maskColor.primary,
+        marginRight: 4,
+    },
+    endAdornment: {
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+    },
+}))
 
 const Transfer = memo(function Transfer() {
     const location = useLocation()
@@ -47,66 +62,42 @@ const Transfer = memo(function Transfer() {
     const isNativeToken = !address || isNativeTokenAddress(address)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { assets } = useContainer(WalletContext)
+    const [receiver, setReceiver] = useState('')
+    const theme = useTheme()
+
     const { data: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { data: erc20Balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
     const balance = isNativeToken ? nativeTokenBalance : erc20Balance
-    const currentAsset = useAsset(address, account)
-    const [selectedAsset, setSelectedAsset] = useState(currentAsset ?? first(assets))
 
     const otherWallets = useMemo(
         () => wallets.map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
         [wallets],
     )
 
-    const [assetsMenu, openAssetMenu] = useMenu(
-        ...assets.map((asset, index) => {
-            return (
-                <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
-                    <div className={classes.assetSymbol}>
-                        <TokenIcon
-                            chainId={asset.chainId}
-                            address={asset.address}
-                            name={asset.name}
-                            symbol={asset.symbol}
-                        />
-                        <Typography>{asset.symbol}</Typography>
-                    </div>
-                    <Typography>
-                        <FormattedBalance
-                            value={balance}
-                            decimals={asset.decimals}
-                            significant={4}
-                            formatter={formatBalance}
-                        />
-                    </Typography>
-                </MenuItem>
-            )
-        }),
-    )
-
     useTitle(t('popups_send'))
 
-    useEffect(() => {
-        const address = new URLSearchParams(location.search).get('selectedToken')
-        if (!address) return
-        const target = assets.find((x) => isSameAddress(x.address, address))
-        setSelectedAsset(target)
-    }, [assets, location])
-
     return (
-        <>
-            {chainResolver.isSupport(chainId, 'EIP1559') ? (
-                <Transfer1559 selectedAsset={selectedAsset} otherWallets={otherWallets} openAssetMenu={openAssetMenu} />
-            ) : (
-                <Prior1559Transfer
-                    selectedAsset={selectedAsset}
-                    otherWallets={otherWallets}
-                    openAssetMenu={openAssetMenu}
-                />
-            )}
-            {assetsMenu}
-        </>
+        <div className={classes.root}>
+            <Box className={classes.page}>
+                <Box padding={2} className={classes.receiverPanel}>
+                    <Typography className={classes.to}>{t('popups_wallet_transfer_to')}</Typography>
+                    <MaskTextField
+                        placeholder={t('wallet_transfer_placeholder')}
+                        value={receiver}
+                        onChange={(ev) => setReceiver(ev.target.value)}
+                        wrapperProps={{ className: classes.input }}
+                        InputProps={{
+                            endAdornment: (
+                                <div className={classes.endAdornment}>
+                                    <Typography className={classes.save}>{t('save')}</Typography>
+                                    <Icons.AddUser size={18} color={theme.palette.maskColor.second} />
+                                </div>
+                            ),
+                        }}
+                    />
+                </Box>
+            </Box>
+        </div>
     )
 })
 
