@@ -63,7 +63,9 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                 <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
             }
             onClose={onClose}>
-            <Web3ProfileForm />
+            <DialogContent style={{ width: 'unset', height: 'unset', padding: 0 }}>
+                <Web3ProfileForm />
+            </DialogContent>
         </InjectedDialog>
     )
 })
