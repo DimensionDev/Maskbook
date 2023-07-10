@@ -69,7 +69,13 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                             <a
                                 href="#"
                                 className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-                                onClick={() => (account ? WalletStatusModal.open() : SelectProviderModal.open())}>
+                                onClick={(ev) => {
+                                    ev.preventDefault()
+                                    ev.stopPropagation()
+
+                                    if (account) WalletStatusModal.open()
+                                    else SelectProviderModal.open()
+                                }}>
                                 <img
                                     className="h-8 w-8 rounded-full bg-gray-800"
                                     src="https://github.com/DimensionDev/Mask-VI/raw/master/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"

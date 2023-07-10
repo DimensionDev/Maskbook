@@ -156,6 +156,10 @@ export class ConnectionContext {
         return this._options?.paymentToken
     }
 
+    get silent() {
+        return this._options?.silent
+    }
+
     get requestOptions() {
         return {
             ...this._options,

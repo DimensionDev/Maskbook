@@ -19,12 +19,14 @@ export interface ProfileInformation {
     avatar?: string
     identifier: ProfileIdentifier
     linkedPersona?: PersonaIdentifier
+    createAt?: Date
 }
 
 export interface ProfileAccount extends ProfileInformation {
     is_valid?: boolean
     identity?: string
     platform?: NextIDPlatform
+    last_checked_at?: string
 }
 
 export interface ProfileInformationFromNextID extends ProfileInformation {

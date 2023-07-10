@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
-import { WalletItem } from './WalletItem.js'
+import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({

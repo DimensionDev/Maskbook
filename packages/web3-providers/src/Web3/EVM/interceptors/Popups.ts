@@ -110,6 +110,7 @@ export class Popups implements Middleware<ConnectionContext> {
                     owner: context.owner,
                     identifier: context.identifier?.toText(),
                     popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
+                    silent: context.silent,
                     ...paymentToken,
                 },
                 isUndefined,

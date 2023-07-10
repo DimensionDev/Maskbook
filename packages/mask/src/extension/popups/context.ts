@@ -7,6 +7,8 @@ export interface PageTitleState {
     extension?: React.ReactNode
     setExtension: (extension: React.ReactNode | undefined) => void
     setTitle: (title: string) => void
+    customBackHandler?: () => void
+    setCustomBackHandler: (fn?: () => void) => void
 }
 
 export const PageTitleContextDefault = {
@@ -14,6 +16,7 @@ export const PageTitleContextDefault = {
     extension: null,
     setExtension: () => {},
     setTitle: () => {},
+    setCustomBackHandler: () => {},
 }
 
 export const PageTitleContext = createContext<PageTitleState>(PageTitleContextDefault)

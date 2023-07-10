@@ -10,6 +10,10 @@ import { type EnhanceableSite, formatPersonaFingerprint, type ProfileAccount } f
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
+import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
+import type { ConnectedWalletInfo } from '../type.js'
+import { useSearchParams } from 'react-router-dom'
+import { HomeTabType } from '../../Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -104,13 +108,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         background: theme.palette.maskColor.bottom,
         flex: 1,
+        maxHeight: 288,
+        overflow: 'auto',
     },
 }))
-
-enum TabType {
-    SocialAccounts = 'Social Accounts',
-    ConnectedWallets = 'Connected Wallets',
-}
 
 export interface PersonaHomeUIProps {
     avatar?: string | null
@@ -124,6 +125,7 @@ export interface PersonaHomeUIProps {
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
+    bindingWallets?: ConnectedWalletInfo[]
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -139,12 +141,19 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         onConnect,
         publicKey,
         onAccountClick,
+        bindingWallets,
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
         const { classes } = useStyles()
 
-        const [currentTab, onChange] = useTabs(TabType.SocialAccounts, TabType.ConnectedWallets)
+        const [params] = useSearchParams()
+
+        const [currentTab, onChange] = useTabs(
+            params.get('tab') || HomeTabType.SocialAccounts,
+            HomeTabType.SocialAccounts,
+            HomeTabType.ConnectedWallets,
+        )
 
         return (
             <div className={classes.container}>
@@ -193,11 +202,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
 
                             <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                                <Tab label={t('popups_social_account')} value={TabType.SocialAccounts} />
-                                <Tab label={t('popups_connected_wallets')} value={TabType.ConnectedWallets} />
+                                <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
+                                <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
                             </MaskTabList>
                         </Box>
-                        <TabPanel className={classes.panel} value={TabType.SocialAccounts}>
+                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts}>
                             <SocialAccounts
                                 accounts={accounts}
                                 networks={networks}
@@ -205,9 +214,12 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onAccountClick={onAccountClick}
                             />
                         </TabPanel>
+                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets}>
+                            <ConnectedWallet wallets={bindingWallets} />
+                        </TabPanel>
                     </TabContext>
                 ) : (
-                    <Box>
+                    <Box sx={{ background: theme.palette.maskColor.bottom }}>
                         <Box className={classes.emptyHeader}>
                             <Icons.MaskSquare width={160} height={46} />
                         </Box>
@@ -220,13 +232,15 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Typography>
                         </Box>
                         <div className={classes.controller}>
-                            <Button onClick={onCreatePersona} startIcon={<Icons.AddUser color="#F2F5F6" size={18} />}>
+                            <Button
+                                onClick={onCreatePersona}
+                                startIcon={<Icons.AddUser color={theme.palette.maskColor.bottom} size={18} />}>
                                 {t('popups_create_persona')}
                             </Button>
                             <Button
                                 onClick={onRestore}
                                 variant="outlined"
-                                startIcon={<Icons.PopupRestore color="#07101B" size={18} />}>
+                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.bottom} size={18} />}>
                                 {t('popups_restore_and_login')}
                             </Button>
                         </div>

@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { ResetWalletModal } from './ResetWalletModal/index.js'
 import { DisconnectModal } from './DisconnectModal/index.js'
-import { ConnectSocialAccountModal } from './ConnectSocialAccountModal/index.js'
 import { ConfirmModal } from './ConfirmModal/index.js'
 
 import * as modals from './modals.js'
@@ -12,7 +11,6 @@ export const Modals = memo(function Modals() {
         <>
             <ResetWalletModal ref={modals.ResetWalletModal.register} />
             <DisconnectModal ref={modals.DisconnectModal.register} />
-            <ConnectSocialAccountModal ref={modals.ConnectSocialAccountModal.register} />
             <ConfirmModal ref={modals.ConfirmModal.register} />
         </>
     )
