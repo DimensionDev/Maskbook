@@ -107,11 +107,14 @@ const AddDeriveWallet = memo(() => {
         const unDeriveWallets = Array.from(indexes.current)
         if (!unDeriveWallets.length) return
 
+        const hasPassword = await WalletRPC.hasPassword()
+
         const firstPath = first(unDeriveWallets)
         const firstWallet = await WalletRPC.recoverWalletFromMnemonic(
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
+            hasPassword ? undefined : 'MASK',
         )
 
         await Promise.all(
@@ -122,6 +125,7 @@ const AddDeriveWallet = memo(() => {
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
+                        hasPassword ? undefined : 'MASK',
                     ),
                 ),
         )

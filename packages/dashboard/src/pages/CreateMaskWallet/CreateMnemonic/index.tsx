@@ -201,7 +201,12 @@ const CreateMnemonic = memo(function CreateMnemonic() {
             await PluginServices.Wallet.setPassword(password)
         }
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
+        const address = await PluginServices.Wallet.generateAddressFromMnemonic(
+            walletName,
+            words.join(' '),
+            undefined,
+            hasPassword ? undefined : 'MASK',
+        )
 
         return address
     }, [words, walletName, location.state?.isReset, location.state?.password])
@@ -209,7 +214,14 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         await resetWallets()
 
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
+        const hasPassword = await PluginServices.Wallet.hasPassword()
+
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
+            walletName,
+            words.join(' '),
+            undefined,
+            hasPassword ? undefined : 'MASK',
+        )
 
         await PluginServices.Wallet.resolveMaskAccount([
             {
