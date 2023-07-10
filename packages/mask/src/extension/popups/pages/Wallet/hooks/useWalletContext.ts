@@ -16,6 +16,8 @@ function useWalletContext() {
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
 
+    const [assetsIsExpand, setAssetsIsExpand] = useState(false)
+
     useEffect(() => {
         const contractAccount = new URLSearchParams(location.search).get('contractAccount')
         if (!contractAccount || selectedWallet) return
@@ -42,6 +44,8 @@ function useWalletContext() {
          */
         selectedWallet,
         setSelectedWallet,
+        assetsIsExpand,
+        setAssetsIsExpand,
     }
 }
 

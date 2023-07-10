@@ -1,8 +1,8 @@
-import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
-import { useNativeTokenAddress } from './useNativeTokenAddress.js'
+import { useQuery } from '@tanstack/react-query'
 import { useChainContext } from './useContext.js'
+import { useNativeTokenAddress } from './useNativeTokenAddress.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useNativeTokenPrice<T extends NetworkPluginID = NetworkPluginID>(pluginID: T, options?: HubOptions<T>) {
@@ -10,8 +10,9 @@ export function useNativeTokenPrice<T extends NetworkPluginID = NetworkPluginID>
     const Hub = useWeb3Hub(pluginID, options)
     const nativeTokenAddress = useNativeTokenAddress(pluginID, options)
 
-    return useAsyncRetry(async () => {
-        if (!nativeTokenAddress) return
-        return Hub.getFungibleTokenPrice(chainId, nativeTokenAddress)
-    }, [chainId, nativeTokenAddress, Hub])
+    return useQuery({
+        enabled: !!nativeTokenAddress,
+        queryKey: ['native-token', 'price', pluginID, chainId, nativeTokenAddress, options],
+        queryFn: async () => Hub.getFungibleTokenPrice(chainId, nativeTokenAddress!),
+    })
 }

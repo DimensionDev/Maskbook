@@ -1,6 +1,6 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Box } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
+import { Box, Typography } from '@mui/material'
+import { memo, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import type { z as zod } from 'zod'
@@ -9,8 +9,11 @@ import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
+import { Web3 } from '@masknet/web3-providers'
+import { PopupRoutes } from '@masknet/shared-base'
+import { useAsyncFn } from 'react-use'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: '16px',
         flex: 1,
@@ -18,7 +21,11 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
         overflow: 'auto',
     },
-})
+    error: {
+        color: theme.palette.maskColor.danger,
+        marginTop: theme.spacing(0.5),
+    },
+}))
 
 const CreateWallet = memo(function CreateWallet() {
     const { t } = useI18N()
@@ -33,10 +40,13 @@ const CreateWallet = memo(function CreateWallet() {
         schema,
     } = useSetWalletNameForm()
 
-    const onCreate = useCallback(async ({ name }: zod.infer<typeof schema>) => {
+    const [{ loading }, onCreate] = useAsyncFn(async ({ name }: zod.infer<typeof schema>) => {
         try {
-            await WalletRPC.deriveWallet(name)
-            navigate(-1)
+            const address = await WalletRPC.deriveWallet(name)
+            await Web3.connect({
+                account: address,
+            })
+            navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(errorMessage)
@@ -47,6 +57,7 @@ const CreateWallet = memo(function CreateWallet() {
     const onSubmit = handleSubmit(onCreate)
 
     useTitle(t('popups_add_wallet'))
+    const disabled = !isValid || loading
 
     return (
         <div className={classes.content}>
@@ -63,8 +74,9 @@ const CreateWallet = memo(function CreateWallet() {
                         />
                     )}
                 />
+                {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
             </Box>
-            <ActionButton fullWidth disabled={!isValid} onClick={onSubmit}>
+            <ActionButton loading={loading} fullWidth disabled={disabled} onClick={onSubmit}>
                 {t('add')}
             </ActionButton>
         </div>

@@ -49,8 +49,12 @@ export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInf
     return has
 }
 
+async function getWalletRecords() {
+    return (await asyncIteratorToArray(PluginDB.iterate('wallet'))).map((x) => x.value)
+}
+
 export async function getWallets() {
-    const wallets = (await asyncIteratorToArray(PluginDB.iterate('wallet'))).map((x) => x.value)
+    const wallets = await getWalletRecords()
 
     return wallets
         .sort((a, z) => {
@@ -97,11 +101,12 @@ export async function updateWallet(
     const wallet = await getWallet(address)
     const now = new Date()
     const address_ = formatEthereumAddress(address)
+    const total = (await getWalletRecords()).length
     await PluginDB.add({
         type: 'wallet',
         id: address_,
         address: address_,
-        name: `Account ${(await getWallets()).length + 1}`,
+        name: `Account ${total + 1}`,
         ...wallet,
         ...updates,
         createdAt: wallet?.createdAt ?? now,

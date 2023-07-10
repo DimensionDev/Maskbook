@@ -7,7 +7,7 @@ import { formatBalance, formatCurrency, isGte, isLessThan, type FungibleAsset } 
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemIcon, ListItemText, Typography, type TypographyProps } from '@mui/material'
 import { isNaN } from 'lodash-es'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../../utils/index.js'
@@ -64,32 +64,34 @@ type Asset = FungibleAsset<ChainId, SchemaType>
 
 export const AssetsList = memo(function AssetsList() {
     const navigate = useNavigate()
-    const { assets, setCurrentToken } = useContainer(WalletContext)
-    const [isExpand, setIsExpand] = useState(false)
+    const { assets, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
         navigate(`${PopupRoutes.TokenDetail}/${asset.address}`)
     }, [])
-    const onSwitch = useCallback(() => setIsExpand((x) => !x), [])
+    const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
+
+    const hasLowValueToken = useMemo(() => {
+        return !!assets.find((x) =>
+            !isNativeTokenAddress(x.address) && x.value?.usd ? isLessThan(x.value.usd, 1) : true,
+        )
+    }, [assets])
     return (
         <>
-            <AssetsListUI isExpand={isExpand} assets={assets} onItemClick={onItemClick} />
-            <MoreBar isExpand={isExpand} assets={assets} onClick={onSwitch} />
+            <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
+            <MoreBar isExpand={assetsIsExpand} hasLowValueToken={hasLowValueToken} onClick={onSwitch} />
         </>
     )
 })
 
 export interface MoreBarProps extends TypographyProps {
     isExpand: boolean
-    assets: Asset[]
+    hasLowValueToken?: boolean
 }
 
-export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, assets, className, ...rest }) {
+export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, hasLowValueToken, className, ...rest }) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
-    const hasLowValueToken = !!assets.find((x) =>
-        !isNativeTokenAddress(x.address) && x.value?.usd ? isLessThan(x.value.usd, 1) : true,
-    )
     if (!hasLowValueToken) return null
     if (isExpand)
         return (

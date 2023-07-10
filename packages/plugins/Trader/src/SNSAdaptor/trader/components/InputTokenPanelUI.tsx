@@ -243,3 +243,4 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         )
     },
 )
+InputTokenPanelUI.displayName = 'InputTokenPanelUI'

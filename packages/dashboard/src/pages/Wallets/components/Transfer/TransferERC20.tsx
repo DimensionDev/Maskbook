@@ -111,7 +111,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const isNativeToken = isNativeTokenAddress(selectedToken.address)
 
     const { data: nativeToken } = useNativeToken(pluginID, { chainId })
-    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     // balance
     const { data: tokenBalance = '0', refetch: tokenBalanceRetry } = useFungibleTokenBalance(
@@ -152,7 +152,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
         return multipliedBy(gasLimit, price)
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
-    const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice.value ?? 0)
+    const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     // #region hack for smartPay, will be removed
     const maskTokenAddress = useMaskTokenAddress()
