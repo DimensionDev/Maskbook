@@ -11,5 +11,3 @@ registerPlugin({
             import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js'))),
     },
 })
-
-export * from './SNSAdaptor/components/Web3ProfileDialog.js'

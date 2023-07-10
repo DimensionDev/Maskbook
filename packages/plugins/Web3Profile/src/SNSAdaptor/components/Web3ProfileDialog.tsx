@@ -45,37 +45,6 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const t = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext()
-    const { openPopupWindow } = useSNSAdaptorContext()
-    const openPopupsWindow = useCallback(() => {
-        openPopupWindow(PopupRoutes.Personas, {
-            chainId,
-            internal: true,
-        })
-    }, [chainId])
-    return (
-        <InjectedDialog
-            classes={{ dialogContent: classes.content }}
-            title={t.web3_profile()}
-            fullWidth={false}
-            open={open}
-            isOnBack
-            titleTail={
-                <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
-            }
-            onClose={onClose}>
-            <DialogContent style={{ width: 'unset', height: 'unset', padding: 0 }}>
-                <Web3ProfileForm />
-            </DialogContent>
-        </InjectedDialog>
-    )
-})
-
-interface Web3ProfileFormProps {}
-
-export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
-    const t = useI18N()
-    const { classes } = useStyles()
-    const { chainId } = useChainContext()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
     const { getPersonaAvatar, openPopupWindow } = useSNSAdaptorContext()
@@ -88,14 +57,7 @@ export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
     const personaPublicKey = currentPersona?.identifier.publicKeyAsHex
     const allLinkedProfiles = useMemo(() => {
         return allPersona.flatMap((x) => x.linkedProfiles).filter((x) => x.identifier.network === 'twitter.com')
-    }, [])
-
-    const openPopupsWindow = useCallback(() => {
-        openPopupWindow(PopupRoutes.Personas, {
-            chainId,
-            internal: true,
-        })
-    }, [chainId])
+    }, [allPersona])
 
     const { data: proofs, isLoading: loadingBinding, isFetched } = usePersonaProofs(personaPublicKey)
     const twitterProofs = useMemo(() => {
@@ -105,9 +67,15 @@ export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
             (x) => x.identity,
         )
     }, [proofs])
+    const walletProofs = useMemo(() => {
+        if (!proofs?.length) return EMPTY_LIST
+        return uniqBy(
+            proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum),
+            (x) => x.identity,
+        )
+    }, [proofs])
 
     const socialIds = useMemo(() => twitterProofs.map((x) => x.identity), [twitterProofs])
-
     const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
         useUnlistedAddressConfig({
             identifier: currentPersona?.identifier,
@@ -119,7 +87,6 @@ export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
     useEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)
     }, [unlistedAddressConfig])
-
     const isClean = useMemo(() => {
         return isEqualWith(unlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
             // Some identities might only in pendingUnlistedConfig but not in migratedUnlistedAddressConfig,
@@ -131,14 +98,6 @@ export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
             return true
         })
     }, [unlistedAddressConfig, pendingUnlistedConfig])
-
-    const walletProofs = useMemo(() => {
-        if (!proofs?.length) return EMPTY_LIST
-        return uniqBy(
-            proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum),
-            (x) => x.identity,
-        )
-    }, [proofs])
 
     const toggleUnlisted = useCallback((identity: string, address: string) => {
         setPendingUnlistedConfig((config) => {
@@ -171,10 +130,26 @@ export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
 
     const { value: avatar } = useAsyncRetry(async () => getPersonaAvatar(currentPersona?.identifier), [])
 
+    const openPopupsWindow = useCallback(() => {
+        openPopupWindow(PopupRoutes.Personas, {
+            chainId,
+            internal: true,
+        })
+    }, [chainId])
+
     const disabled = isClean || isInitialLoading
 
     return (
-        <>
+        <InjectedDialog
+            classes={{ dialogContent: classes.content }}
+            title={t.web3_profile()}
+            fullWidth={false}
+            open={open}
+            isOnBack
+            titleTail={
+                <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
+            }
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Alert open={tipsVisible} onClose={dismissTips}>
                     {t.setup_tips()}
@@ -223,6 +198,6 @@ export const Web3ProfileForm = memo<Web3ProfileFormProps>((props) => {
                     </PersonaAction>
                 </DialogActions>
             ) : null}
-        </>
+        </InjectedDialog>
     )
 })
