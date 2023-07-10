@@ -34,6 +34,7 @@ import { useTrending } from './useTrending.js'
 import { useCoinGeckoCoinId } from './useCoinGeckoCoinId.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useTokenPrice } from './useTokenPrice.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -141,10 +142,11 @@ const TokenDetail = memo(function TokenDetail() {
     const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
     const asset = useAsset(address, account)
     const coinId = useCoinGeckoCoinId(chainId, address)
+    const { data: tokenPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
-        if (!asset?.decimals || !asset?.value?.usd || !balance) return 0
-        return leftShift(balance, asset.decimals).times(asset.value.usd)
-    }, [balance, asset?.decimals, asset?.value?.usd])
+        if (!asset?.decimals || !tokenPrice || !balance) return 0
+        return leftShift(balance, asset.decimals).times(tokenPrice)
+    }, [balance, asset?.decimals, tokenPrice])
 
     const { data: trending, isLoading: isLoadingTrending } = useTrending(chainId, coinId)
     const priceChange =
@@ -224,7 +226,7 @@ const TokenDetail = memo(function TokenDetail() {
             <Box className={classes.page}>
                 <Box padding={2}>
                     <Typography className={classes.assetValue}>
-                        <FormattedCurrency value={asset.value?.usd} formatter={formatCurrency} />
+                        <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
                     </Typography>
                     <PriceChange change={priceChange} loading={isLoadingTrending} />
 
@@ -262,7 +264,7 @@ const TokenDetail = memo(function TokenDetail() {
                         <Box textAlign="right">
                             <Typography className={classes.label}>value</Typography>
                             <Typography component="div" className={classes.value}>
-                                <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
+                                {formatCurrency(tokenValue, 'USD', { onlyRemainTwoDecimal: true })}
                             </Typography>
                         </Box>
                     </Box>

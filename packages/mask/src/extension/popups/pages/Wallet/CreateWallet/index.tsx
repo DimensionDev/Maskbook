@@ -9,6 +9,8 @@ import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
+import { Web3 } from '@masknet/web3-providers'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -35,8 +37,11 @@ const CreateWallet = memo(function CreateWallet() {
 
     const onCreate = useCallback(async ({ name }: zod.infer<typeof schema>) => {
         try {
-            await WalletRPC.deriveWallet(name)
-            navigate(-1)
+            const address = await WalletRPC.deriveWallet(name)
+            Web3.connect({
+                account: address,
+            })
+            navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(errorMessage)

@@ -17,6 +17,7 @@ import { SmartPayFunderAPI } from './FunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
 import type { OwnerAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 type OwnerShip = {
     address: string
@@ -195,29 +196,36 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         owner: string,
         exact = true,
     ): Promise<Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const create2Factory = await this.createCreate2Factory(chainId, owner)
-        const contractWallet = await this.createContractWallet(chainId, owner)
-        const operations = await this.Funder.getOperationsByOwner(chainId, owner)
+        const accounts = await queryClient.fetchQuery({
+            queryKey: ['smart-pay', 'get-accounts-by-owner', chainId, owner, exact],
+            cacheTime: 1000_000,
+            queryFn: async () => {
+                const create2Factory = await this.createCreate2Factory(chainId, owner)
+                const contractWallet = await this.createContractWallet(chainId, owner)
+                const operations = await this.Funder.getOperationsByOwner(chainId, owner)
 
-        const allSettled = await Promise.allSettled([
-            this.getAccountsFromMulticall(
-                chainId,
-                owner,
-                create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
-            ),
-            this.getAccountsFromTheGraph(chainId, owner),
-        ])
+                const allSettled = await Promise.allSettled([
+                    this.getAccountsFromMulticall(
+                        chainId,
+                        owner,
+                        create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
+                    ),
+                    this.getAccountsFromTheGraph(chainId, owner),
+                ])
 
-        const result = allSettled
-            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            .map((y) => ({
-                ...y,
-                funded: y.creator
-                    ? operations.some((operation) => isSameAddress(operation.walletAddress, y.address))
-                    : y.funded,
-            }))
+                const result = allSettled
+                    .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+                    .map((y) => ({
+                        ...y,
+                        funded: y.creator
+                            ? operations.some((operation) => isSameAddress(operation.walletAddress, y.address))
+                            : y.funded,
+                    }))
 
-        return this.filterAccounts(result).filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
+                return this.filterAccounts(result).filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
+            },
+        })
+        return accounts ?? []
     }
 
     async getAccountsByOwners(

@@ -52,3 +52,5 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
         )
     },
 )
+
+InputTokenPanel.displayName = 'InputTokenPanel'

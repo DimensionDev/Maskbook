@@ -93,7 +93,7 @@ export const TransferERC721 = memo(() => {
     const network = useNetworkDescriptor()
 
     const { data: nativeToken } = useNativeToken(pluginID, { chainId })
-    const nativeTokenPrice = useNativeTokenPrice(pluginID, { chainId })
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
     // form
     const schema = z.object({
         recipient: z
@@ -220,7 +220,7 @@ export const TransferERC721 = memo(() => {
     const { value: defaultGasPrice = '0' } = useGasPrice()
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
     const gasFee = useMemo(() => multipliedBy(gasLimit, gasPrice), [gasLimit, gasPrice])
-    const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice.value ?? 0)
+    const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     const { loading: loadingOwnerList, value: tokenDetailedOwnerList = [] } = useNonFungibleOwnerTokens(
         contract?.address ?? '',

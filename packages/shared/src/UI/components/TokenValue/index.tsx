@@ -45,7 +45,7 @@ export function TokenValue({ className, token, amount, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
+    const { data: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
 
     const priceUSD = useMemo(() => {
         if (!tokenPrice || !amount) return
