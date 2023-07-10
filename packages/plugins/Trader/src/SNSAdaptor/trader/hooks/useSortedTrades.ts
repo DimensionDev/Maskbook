@@ -21,13 +21,13 @@ export function useSortedTrades(
     const { pluginID } = useNetworkContext()
     const Others = useWeb3Others()
     const { data: nativeToken } = useFungibleToken(pluginID, '', undefined, { chainId })
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const {
         tradeState: [{ outputToken }],
     } = AllProviderTradeContext.useContainer()
 
-    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken?.address.toLowerCase(), {
+    const { data: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken?.address.toLowerCase(), {
         chainId,
     })
 

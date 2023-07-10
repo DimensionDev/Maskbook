@@ -48,10 +48,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const currentSlippage = useValueRef(currentSlippageSettings)
     const nativeToken = Others.createNativeToken(chainId)
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID)
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID)
 
-    const { value: inputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, inputToken.address)
-    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken.address)
+    const { data: inputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, inputToken.address)
+    const { data: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken.address)
 
     const gasFee = useMemo(() => {
         return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'

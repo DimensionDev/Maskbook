@@ -17,7 +17,7 @@ export function useFungibleTokenPrice<T extends NetworkPluginID = NetworkPluginI
 
     return useQuery({
         enabled: !!chainId && !!address,
-        queryKey: ['fungible', 'token-price', pluginID, chainId, options],
+        queryKey: ['fungible', 'token-price', pluginID, chainId, address, options],
         queryFn: async () => {
             return Hub.getFungibleTokenPrice(chainId, address!.toLowerCase())
         },
