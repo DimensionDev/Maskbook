@@ -24,13 +24,16 @@ import {
 } from './keys.js'
 import { exportCryptoKeyToJWK } from '../src/utils/crypto.js'
 import { defer } from '@masknet/kit'
+import { None } from 'ts-results-es'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',
 }
+const alice = ProfileIdentifier.of('localhost', 'alice')
 const example: EncryptOptions = {
     version: -38,
-    author: ProfileIdentifier.of('localhost', 'alice').unwrap(),
+    author: alice,
+    authorPublicKey: await queryTestPublicKey(alice.unwrap()),
     message: makeTypedMessageText('hello world'),
     target: publicTarget,
     network: 'localhost',
@@ -48,7 +51,7 @@ function createSetPostKeyCache() {
     }
 }
 test('v37 public encryption', async () => {
-    await testSet('minimal v37', { ...example, version: -37 })
+    await testSet('minimal v37', { ...example, authorPublicKey: None, version: -37 })
 
     await testSet(
         'full v37',
@@ -57,12 +60,10 @@ test('v37 public encryption', async () => {
             target: publicTarget,
             message: complexMessage(),
             author: example.author,
+            authorPublicKey: example.authorPublicKey,
             network: 'localhost',
         },
-        {
-            ...minimalEncryptIO,
-            queryPublicKey: queryTestPublicKey,
-        },
+        minimalEncryptIO,
         {
             ...minimalDecryptIO,
             setPostKeyCache: returnVoid,
@@ -71,7 +72,7 @@ test('v37 public encryption', async () => {
 })
 
 test('v38 public encryption', async () => {
-    await testSet('minimal v38', example)
+    await testSet('minimal v38', { ...example, authorPublicKey: None })
 
     await testSet(
         'full v38',
@@ -80,12 +81,10 @@ test('v38 public encryption', async () => {
             target: publicTarget,
             message: makeTypedMessageText('hello world'),
             author: example.author,
+            authorPublicKey: example.authorPublicKey,
             network: 'localhost',
         },
-        {
-            ...minimalEncryptIO,
-            queryPublicKey: queryTestPublicKey,
-        },
+        minimalEncryptIO,
         {
             ...minimalDecryptIO,
             setPostKeyCache: returnVoid,
@@ -94,13 +93,15 @@ test('v38 public encryption', async () => {
 })
 
 test('v37 E2E encryption', async () => {
+    const bob = ProfileIdentifier.of('localhost', 'bob')
     const payload: EncryptOptions = {
         network: 'localhost',
-        author: ProfileIdentifier.of('localhost', 'bob').unwrap(),
+        author: bob,
+        authorPublicKey: await queryTestPublicKey(bob.unwrap()),
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [ProfileIdentifier.of('localhost', 'jack').unwrap()],
+            target: [(await queryTestPublicKey(ProfileIdentifier.of('localhost', 'jack').unwrap())).unwrap()],
         },
         version: -37,
     }
@@ -108,7 +109,6 @@ test('v37 E2E encryption', async () => {
     const encrypted = await encrypt(payload, {
         encryptByLocalKey: reject,
         deriveAESKey: reject,
-        queryPublicKey: queryTestPublicKey,
         getRandomAESKey: getTestRandomAESKey(),
         getRandomECKey: getTestRandomECKey(),
         getRandomValues: getRandomValues(),
@@ -161,13 +161,12 @@ test('v37 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [ProfileIdentifier.of('localhost', 'joey').unwrap()],
+            target: [(await queryTestPublicKey(ProfileIdentifier.of('localhost', 'joey').unwrap())).unwrap()],
             version: -37,
         },
         {
             getRandomValues: getRandomValues(),
             getRandomECKey: getTestRandomECKey(),
-            queryPublicKey: queryTestPublicKey,
             deriveAESKey: reject,
         },
     )
@@ -196,13 +195,15 @@ test('v37 E2E encryption', async () => {
     }
 })
 test('v38 E2E encryption', async () => {
+    const bob = ProfileIdentifier.of('localhost', 'bob')
     const payload: EncryptOptions = {
         network: 'localhost',
-        author: ProfileIdentifier.of('localhost', 'bob').unwrap(),
+        author: bob,
+        authorPublicKey: await queryTestPublicKey(bob.unwrap()),
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [ProfileIdentifier.of('localhost', 'jack').unwrap()],
+            target: [(await queryTestPublicKey(ProfileIdentifier.of('localhost', 'jack').unwrap())).unwrap()],
         },
         version: -38,
     }
@@ -211,7 +212,6 @@ test('v38 E2E encryption', async () => {
     const encrypted = await encrypt(payload, {
         encryptByLocalKey: encryptByBobLocalKey,
         deriveAESKey: deriveAESKey('bob', 'single'),
-        queryPublicKey: queryTestPublicKey,
         getRandomAESKey: getTestRandomAESKey(),
         getRandomECKey: getTestRandomECKey(),
         getRandomValues: getRandomValues(),
@@ -266,13 +266,12 @@ test('v38 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [ProfileIdentifier.of('localhost', 'joey').unwrap()],
+            target: [(await queryTestPublicKey(ProfileIdentifier.of('localhost', 'joey').unwrap())).unwrap()],
             version: -38,
         },
         {
             getRandomValues: getRandomValues(),
             getRandomECKey: getTestRandomECKey(),
-            queryPublicKey: queryTestPublicKey,
             deriveAESKey: deriveAESKey('bob', 'single'),
         },
     )
@@ -335,7 +334,6 @@ async function testSet(
 }
 
 const minimalEncryptIO: EncryptIO = {
-    queryPublicKey: returnNull,
     deriveAESKey: reject,
     encryptByLocalKey: reject,
 
