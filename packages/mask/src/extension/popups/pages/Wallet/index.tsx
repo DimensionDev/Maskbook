@@ -5,7 +5,6 @@ import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { lazy, Suspense, useEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
-import urlcat from 'urlcat'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
@@ -103,21 +102,10 @@ export default function Wallet() {
     }, [location.search, location.pathname, chainId, TransactionFormatter])
 
     useEffect(() => {
-        if (getLockStatusLoading) return
-        if (isLocked) navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
-    }, [isLocked, getLockStatusLoading, location.pathname])
-
-    useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
     }, [retry])
-
-    useEffect(() => {
-        if (!wallet || loadingHasPassword || isLocked || getLockStatusLoading) return
-
-        navigate(hasPassword ? PopupRoutes.Wallet : PopupRoutes.SetPaymentPassword, { replace: true })
-    }, [hasPassword, isLocked, !wallet, loadingHasPassword, getLockStatusLoading])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
@@ -126,7 +114,20 @@ export default function Wallet() {
                 <LoadingPlaceholder />
             ) : (
                 <Routes>
-                    <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
+                    <Route
+                        path="*"
+                        element={
+                            !wallet ? (
+                                <WalletStartUp />
+                            ) : isLocked ? (
+                                <Unlock />
+                            ) : !loadingHasPassword && !hasPassword ? (
+                                <SetPaymentPassword />
+                            ) : (
+                                <WalletAssets />
+                            )
+                        }
+                    />
                     <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
                     <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
                     <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
