@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     form: {
         overflow: 'auto',
         flexGrow: 1,
-        padding: theme.spacing(2),
+        padding: theme.spacing(0, 2, 2),
     },
     iconButton: {
         padding: 0,
@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         color: theme.palette.maskColor.second,
         marginBottom: theme.spacing(0.5),
+        marginTop: theme.spacing(2),
     },
     error: {
         color: theme.palette.maskColor.danger,

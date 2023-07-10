@@ -7,7 +7,7 @@ import { formatBalance, formatCurrency, isGte, isLessThan, type FungibleAsset } 
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemIcon, ListItemText, Typography, type TypographyProps } from '@mui/material'
 import { isNaN } from 'lodash-es'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../../utils/index.js'
@@ -64,13 +64,12 @@ type Asset = FungibleAsset<ChainId, SchemaType>
 
 export const AssetsList = memo(function AssetsList() {
     const navigate = useNavigate()
-    const { assets, setCurrentToken } = useContainer(WalletContext)
-    const [isExpand, setIsExpand] = useState(false)
+    const { assets, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
         navigate(`${PopupRoutes.TokenDetail}/${asset.address}`)
     }, [])
-    const onSwitch = useCallback(() => setIsExpand((x) => !x), [])
+    const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
 
     const hasLowValueToken = useMemo(() => {
         return !!assets.find((x) =>
@@ -79,8 +78,8 @@ export const AssetsList = memo(function AssetsList() {
     }, [assets])
     return (
         <>
-            <AssetsListUI isExpand={isExpand} assets={assets} onItemClick={onItemClick} />
-            <MoreBar isExpand={isExpand} hasLowValueToken={hasLowValueToken} onClick={onSwitch} />
+            <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
+            <MoreBar isExpand={assetsIsExpand} hasLowValueToken={hasLowValueToken} onClick={onSwitch} />
         </>
     )
 })
