@@ -1,12 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { useSnackbarCallback } from '@masknet/shared'
+import { CopyButton } from '@masknet/shared'
 import { EMPTY_LIST, formatPersonaFingerprint, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
-import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/index.js'
 import { Avatar } from '../../../utils/components/Avatar.js'
 
@@ -93,19 +92,7 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
     const { profile, selected, disabled, highlightText, onChange } = props
     const searchWords = useMemo(() => (highlightText ? [highlightText] : EMPTY_LIST), [highlightText])
 
-    const [, copyToClipboard] = useCopyToClipboard()
     const rawPublicKey = profile.linkedPersona?.rawPublicKey
-    const onCopyPubkey = useSnackbarCallback(
-        async () => {
-            if (!rawPublicKey) return
-            copyToClipboard(rawPublicKey)
-        },
-        [rawPublicKey],
-        undefined,
-        undefined,
-        undefined,
-        t('copied'),
-    )
     const primaryText = (() => {
         if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
         const mentions = profile.linkedTwitterNames?.map((x) => '@' + x).join(' ') ?? ''
@@ -174,7 +161,7 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                             autoEscape
                             textToHighlight={secondaryText}
                         />
-                        <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
+                        {rawPublicKey ? <CopyButton className={classes.actionIcon} text={rawPublicKey} /> : null}
                         {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }

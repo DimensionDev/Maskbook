@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { useCopyToClipboard } from 'react-use'
 import { range } from 'lodash-es'
 import {
     Table,
@@ -15,7 +14,7 @@ import {
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { CopyButton, FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../locales/index.js'
@@ -178,7 +177,6 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
         chainId: ChainId.Mainnet,
     })
 
-    const [, copyToClipboard] = useCopyToClipboard()
     const theme = useTheme()
 
     return (
@@ -189,7 +187,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                     <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
                 </Typography>
                 <div className={classes.icons}>
-                    <Icons.Copy size={16} className={classes.icon} onClick={() => copyToClipboard(address)} />
+                    <CopyButton size={16} className={classes.icon} text={address} />
                     <Icons.LinkOut
                         size={16}
                         className={classes.link}

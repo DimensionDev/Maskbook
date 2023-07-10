@@ -1,40 +1,49 @@
-import { memo } from 'react'
+import { memo, useCallback, useState, type MouseEvent, useRef } from 'react'
 import { Link } from '@mui/material'
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
-import { useSharedI18N, useSnackbarCallback } from '../../../index.js'
+import { useSharedI18N } from '../../../index.js'
+import { ShadowRootTooltip } from '@masknet/theme'
 
-export interface CopyIconLinkProps extends Omit<GeneratedIconProps, 'title'> {
+export interface CopyButtonProps extends Omit<GeneratedIconProps, 'title'> {
     title?: string
-    message?: string
     text: string
+    /** defaults to 'Copied' */
+    successText?: string
 }
 
-export const CopyButton = memo<CopyIconLinkProps>(({ text, message, title, ...props }) => {
+export const CopyButton = memo<CopyButtonProps>(function CopyButton({ text, title, successText, ...props }) {
     const t = useSharedI18N()
     const [, copyToClipboard] = useCopyToClipboard()
+    const [copied, setCopied] = useState(false)
+    const [active, setActive] = useState(false)
+    const timerRef = useRef<NodeJS.Timeout>()
 
-    const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleCopy = useCallback(
+        async (ev: MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
             ev.preventDefault()
+
             copyToClipboard(text)
+            setCopied(true)
+            setActive(true)
+            clearTimeout(timerRef.current)
+            timerRef.current = setTimeout(setActive, 1500, false)
         },
-        [],
-        undefined,
-        undefined,
-        undefined,
-        message ?? t.copy_success_of_wallet_addr(),
+        [text],
     )
+
+    const reset = useCallback(() => {
+        setCopied(false)
+    }, [])
+
+    const tooltipTitle = copied ? successText ?? t.copied() : title ?? t.copy()
+
     return (
-        <Link
-            underline="none"
-            component="button"
-            title={title ?? t.wallet_status_button_copy_address()}
-            onClick={onCopy}>
-            <Icons.Copy {...props} />
-        </Link>
+        <ShadowRootTooltip title={tooltipTitle} placement="top" onOpen={reset}>
+            <Link underline="none" component="button" onClick={handleCopy}>
+                {active ? <Icons.Check {...props} /> : <Icons.Copy {...props} />}
+            </Link>
+        </ShadowRootTooltip>
     )
 })
-
-CopyButton.displayName = 'CopyButton'
