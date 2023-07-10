@@ -356,6 +356,9 @@ export namespace Plugin.SNSAdaptor {
         getPostIdFromNewPostToast?: () => string
         postMessage?: (text: string, options?: any) => Promise<void>
         setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>
+        getSearchedKeyword?: () => string
+        hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
+        requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
     }
 
     export type SelectProviderDialogEvent =

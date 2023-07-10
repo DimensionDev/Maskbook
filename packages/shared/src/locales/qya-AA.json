@@ -325,5 +325,8 @@
     "info": "crwdns21563:0crwdne21563:0",
     "contract": "crwdns21565:0crwdne21565:0",
     "community": "crwdns21567:0crwdne21567:0",
-    "website": "crwdns21569:0crwdne21569:0"
+    "website": "crwdns21569:0crwdne21569:0",
+    "show_wallet_setting_intro": "crwdns18672:0crwdne18672:0",
+    "show_wallet_setting_button": "crwdns18674:0crwdne18674:0",
+    "web3_profile_no_social_address_list": "crwdns18676:0crwdne18676:0"
 }

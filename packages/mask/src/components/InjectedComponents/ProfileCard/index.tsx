@@ -11,15 +11,15 @@ import {
     getProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { useSocialAccountsBySettings } from '@masknet/shared'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, MaskMessages } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ScopedDomainsContainer, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { addressSorter, useI18N } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
+import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
+import { useI18N } from '../../../utils/index.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -228,5 +228,3 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         </Web3ContextProvider>
     )
 })
-
-ProfileCard.displayName = 'ProfileCard'
