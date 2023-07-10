@@ -57,5 +57,6 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         updateWallet: reject,
         send: reject,
         themeSettings: createConstantSubscription(undefined),
+        allPersonas: createConstantSubscription([]),
     }
 }

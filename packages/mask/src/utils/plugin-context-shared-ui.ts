@@ -20,6 +20,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'connectPersona'
     | 'createPersona'
     | 'currentPersonaIdentifier'
+    | 'allPersonas'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

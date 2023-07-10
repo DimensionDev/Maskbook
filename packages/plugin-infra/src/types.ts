@@ -320,7 +320,6 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
-        allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
         getThemeSettings: () => ThemeSettings | undefined
