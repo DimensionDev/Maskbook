@@ -1085,6 +1085,7 @@
     "saved_network_successfully": "Saved network successfully",
     "adding_network_successfully": "Adding network successfully",
     "deleted_network_successfully": "Network successfully deleted.",
+    "hided_token_successfully": "Successfully hidden.",
     "wallet_send": "Send",
     "wallet_receive": "Receive",
     "wallet_swap": "Swap",

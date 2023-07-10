@@ -15,7 +15,7 @@ import {
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { openWindow, queryClient } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useChainId, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
@@ -190,6 +190,7 @@ const TokenDetail = memo(function TokenDetail() {
     usePriceLineChart(svgRef, chartData, dimension, 'token-price-line-chart', { sign: 'USD', color })
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
+    const { showSnackbar } = usePopupCustomSnackbar()
     const { setExtension } = useContext(PageTitleContext)
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
@@ -212,6 +213,7 @@ const TokenDetail = memo(function TokenDetail() {
                         schema: SchemaType.ERC20,
                         address: asset.address,
                     })
+                    showSnackbar(t('hided_token_successfully'))
                     queryClient.invalidateQueries(['fungible-assets', NetworkPluginID.PLUGIN_EVM, chainId])
                     navigate(-1)
                 }}>
@@ -219,7 +221,7 @@ const TokenDetail = memo(function TokenDetail() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [chainId, asset, isNativeToken, classes.deleteButton])
+    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t])
 
     if (!asset) return null
 
