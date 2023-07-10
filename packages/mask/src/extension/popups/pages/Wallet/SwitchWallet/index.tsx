@@ -86,7 +86,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     )
 
     const handleLock = useCallback(async () => {
-        WalletRPC.lockWallet()
+        await WalletRPC.lockWallet()
         navigate(PopupRoutes.Unlock)
     }, [])
 

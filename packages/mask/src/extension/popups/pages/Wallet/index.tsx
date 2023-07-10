@@ -126,7 +126,20 @@ export default function Wallet() {
                 <LoadingPlaceholder />
             ) : (
                 <Routes>
-                    <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
+                    <Route
+                        path="*"
+                        element={
+                            !wallet ? (
+                                <WalletStartUp />
+                            ) : isLocked ? (
+                                <Unlock />
+                            ) : !loadingHasPassword && !hasPassword ? (
+                                <SetPaymentPassword />
+                            ) : (
+                                <WalletAssets />
+                            )
+                        }
+                    />
                     <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
                     <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
                     <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
