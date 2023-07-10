@@ -7,11 +7,12 @@ export interface ResetWalletModalOpenProps {}
 
 export interface ResetWalletModalProps {}
 
-export const ResetWalletModal = forwardRef<SingletonModalRefCreator<ResetWalletModalOpenProps>, ResetWalletModalProps>(
-    (props, ref) => {
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {},
-        })
-        return <ResetWalletDialog open={open} onClose={() => dispatch?.close()} />
-    },
-)
+export const ResetWalletModal = forwardRef<
+    SingletonModalRefCreator<ResetWalletModalOpenProps, boolean>,
+    ResetWalletModalProps
+>((props, ref) => {
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {},
+    })
+    return <ResetWalletDialog open={open} onClose={() => dispatch?.close(false)} />
+})
