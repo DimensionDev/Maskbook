@@ -4,7 +4,7 @@ import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { isNonNull } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { toBase64URL, type EC_Public_JsonWebKey, type EC_Private_JsonWebKey } from '@masknet/shared-base'
-import { provider } from './internal_wallet.js'
+import { WalletBackupProviderRef } from './internal_wallet.js'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet.js'
 
@@ -14,13 +14,17 @@ export async function internal_wallet_backup() {
 }
 
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const wallets = await provider.getWallets()
+    const wallets = await WalletBackupProviderRef.value.getWallets()
     const allSettled = await Promise.allSettled(
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
-                mnemonic: wallet.derivationPath ? await provider.exportMnemonic(wallet.address) : undefined,
-                privateKey: wallet.derivationPath ? undefined : await provider.exportPrivateKey(wallet.address),
+                mnemonic: wallet.derivationPath
+                    ? await WalletBackupProviderRef.value.exportMnemonic(wallet.address)
+                    : undefined,
+                privateKey: wallet.derivationPath
+                    ? undefined
+                    : await WalletBackupProviderRef.value.exportPrivateKey(wallet.address),
             }
         }),
     )
@@ -30,7 +34,7 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
 }
 
 async function backupAllLegacyWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const x = await provider.getLegacyWallets()
+    const x = await WalletBackupProviderRef.value.getLegacyWallets()
     return x.map(LegacyWalletRecordToJSONFormat)
 }
 function WalletRecordToJSONFormat(
