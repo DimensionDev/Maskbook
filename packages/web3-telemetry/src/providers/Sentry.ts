@@ -39,7 +39,7 @@ const IGNORE_ERRORS = [
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
-    'ResizeObserver loop limit exceeded',
+    'ResizeObserver',
     'User rejected the request.',
     'Non-Error promise rejection captured with keys: message',
     'An attempt was made to break through the security policy of the user agent.',

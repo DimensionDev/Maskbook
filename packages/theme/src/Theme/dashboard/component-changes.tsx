@@ -32,6 +32,9 @@ export const Grid: Theme = {
 
 const button = css_var('m-button', { main: 1, contrast: 1, light: 1 })
 export const Button: Theme = (mode, colors): ThemeOptions => ({
+    typography: {
+        fontFamily: 'Helvetica',
+    },
     components: {
         MuiButton: {
             defaultProps: { disableElevation: true },
@@ -287,6 +290,9 @@ export const Link: Theme = () => ({
 })
 
 export const Typography: Theme = (mode, colors) => ({
+    typography: {
+        fontFamily: 'Helvetica',
+    },
     components: {
         MuiTypography: {
             styleOverrides: {},

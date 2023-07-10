@@ -18,10 +18,10 @@ export const SupportedChainList = [
     'HECO',
 ]
 
-const unIntegrationChainLogos: Record<number, URL> = {
-    128: new URL('../../assets/chain-heco.png', import.meta.url),
-    66: new URL('../../assets/chain-okex.png', import.meta.url),
-    25: new URL('../../assets/chain-cronos.png', import.meta.url),
+const unIntegrationChainLogos: Record<number, string> = {
+    128: new URL('../../assets/chain-heco.png', import.meta.url).href,
+    66: new URL('../../assets/chain-okex.png', import.meta.url).href,
+    25: new URL('../../assets/chain-cronos.png', import.meta.url).href,
 }
 
 export const useSupportedChains = () => {
@@ -31,7 +31,7 @@ export const useSupportedChains = () => {
         const chains = await GoPlusLabs.getSupportedChain()
         const supportedChain = chains.map((x) => {
             const network = networks.find((n) => n.chainId === x.chainId)
-            const icon: URL | undefined = unIntegrationChainLogos[x.chainId]
+            const icon = unIntegrationChainLogos[x.chainId]
             return { ...x, icon, ...network }
         })
 

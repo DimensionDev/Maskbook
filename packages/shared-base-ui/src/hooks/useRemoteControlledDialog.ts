@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { v4 as uuid } from 'uuid'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export interface RemoteControlledDialogEvent {
     open: boolean
@@ -18,7 +17,7 @@ interface Result<T> {
  * Use a dialog state controlled by remote
  */
 export function useRemoteControlledDialog<T extends { open: boolean }>(
-    event: UnboundedRegistry<T>,
+    event: PluginMessageEmitterItem<T>,
     onUpdateByRemote?: (ev: T) => void,
     tabType: 'self' | 'activated' = 'self',
 ): Result<T> {
@@ -69,4 +68,15 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
         closeDialog,
         setDialog: onUpdateByLocal,
     }
+}
+
+export interface PluginMessageEmitterItem<T> {
+    /** @returns A function to remove the listener */
+    on(callback: (data: T) => void): () => void
+    off(callback: (data: T) => void): void
+    sendToLocal(data: T): void
+    sendToContentScripts?(data: T): void
+    sendToVisiblePages(data: T): void
+    sendByBroadcast(data: T): void
+    sendToAll(data: T): void
 }

@@ -141,7 +141,8 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.CreatePassword)} element={<CreatePassword />} />
                     <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                     <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
-                    <Route path={r(`${PopupRoutes.EditNetwork}/:chainId?` as PopupRoutes)} element={<EditNetwork />} />
+                    <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
+                    <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
                     <Route path={r(`${PopupRoutes.Receive}/:address?` as PopupRoutes)} element={<Receive />} />
                 </Routes>
             )}

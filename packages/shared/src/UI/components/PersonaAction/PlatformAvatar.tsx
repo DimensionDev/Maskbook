@@ -32,8 +32,8 @@ interface PlatformAvatarProps extends withClasses<'networkIcon' | 'providerIcon'
     size?: number
     badgeSize?: number
     inverse?: boolean
-    networkIcon?: URL | string
-    providerIcon?: URL | string
+    networkIcon?: string
+    providerIcon?: string
     isBorderColorNotDefault?: boolean
 }
 

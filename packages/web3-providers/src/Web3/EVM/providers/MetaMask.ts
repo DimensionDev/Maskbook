@@ -19,6 +19,12 @@ export class MetaMaskProvider
         super(ProviderType.MetaMask, getInjectedProvider())
     }
 
+    protected override onAccountsChanged(accounts: string[]): void {
+        if (accounts.length) this.emitter.emit('accounts', accounts)
+        // disconnection will trigger an empty accounts list
+        else this.emitter.emit('disconnect', ProviderType.MetaMask)
+    }
+
     override get ready() {
         if (isEthereumInjected()) return true
         if (isInPageEthereumInjected()) return super.ready

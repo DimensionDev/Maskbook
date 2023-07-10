@@ -13,6 +13,7 @@ import { Services } from '../../../../service.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -111,7 +112,14 @@ const SwitchWallet = memo(function SwitchWallet() {
                     {t('popups_import_wallet')}
                 </Typography>
             </ActionButton>
-            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
+            <ActionButton
+                className={classes.actionButton}
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                    WalletRPC.lockWallet()
+                }}>
                 <Icons.Lock size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_lock_wallet')}

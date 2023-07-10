@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
@@ -41,13 +41,11 @@ const useStyles = makeStyles()((theme) => ({
     text: {
         marginLeft: 14,
         fontSize: 16,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
         color: theme.palette.maskColor.main,
     },
     value: {
         fontSize: 16,
-        fontFamily: 'Helvetica',
         fontWeight: 700,
     },
     more: {
@@ -131,7 +129,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                         onClick={() => onItemClick(asset)}
                         secondaryAction={
                             <Typography className={classes.value}>
-                                <FormattedCurrency value={asset.value?.usd || 0} formatter={formatCurrency} />
+                                {formatCurrency(asset.value?.usd || 0, 'USD', { onlyRemainTwoDecimal: true })}
                             </Typography>
                         }>
                         <ListItemIcon>
