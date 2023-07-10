@@ -12,7 +12,6 @@ import {
     useAllPersonas,
     useSNSAdaptorContext,
     useLastRecognizedIdentity,
-    useCurrentVisitingIdentity,
     useSocialIdentity,
     useSocialIdentityByUserId,
     type IdentityResolved,
@@ -29,6 +28,9 @@ import {
     currentPersonaIdentifier,
     isFacebook,
     isTwitter,
+    type SocialAccount,
+    NetworkPluginID,
+    SocialAddressType,
 } from '@masknet/shared-base'
 import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
@@ -44,14 +46,13 @@ import {
     SearchResultInspector,
     SocialAccountList,
     TokenWithSocialGroupMenu,
-    addressSorter,
     useCollectionByTwitterHandler,
     useCurrentPersonaConnectStatus,
     useGrantPermissions,
     usePluginHostPermissionCheck,
     useSharedI18N,
-    useSocialAccountsBySettings,
 } from '../../../index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -140,7 +141,6 @@ function Content(props: ProfileTabContentProps) {
     const t = useSharedI18N()
     const translate = usePluginI18NField()
 
-    const [hidden, setHidden] = useState(false)
     const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setMenuOpen(false), [])
@@ -157,26 +157,36 @@ function Content(props: ProfileTabContentProps) {
         retry: retryLoadPersonaStatus,
     } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, openDashboard, lastRecognized)
 
-    //
-    const currentVisitingSocialIdentity1 = useCurrentVisitingIdentity()
     const currentVisitingSocialIdentity: IdentityResolved = {
-        identifier: { network: 'twitter.com', userId: 'suji_yan' } as ProfileIdentifier,
-        bio: '0x934B510D4C9103E6a87AEf13b816fb080286D649',
+        identifier: {
+            network: 'twitter.com',
+            userId: 'suji_yan',
+        } as ProfileIdentifier,
+        nickname: 'Suji Yan - Mask is BUIDLing',
+        avatar: 'https://pbs.twimg.com/profile_images/1571030729605144577/Nxsva4Vq_400x400.png',
+        bio: 'founder of @realmasknetwork #Mask\u{1F426}\nMaintain some fediverse instances\nsujiyan.eth',
+        homepage: 'https://mask.io',
+        isOwner: false,
     }
+    const socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>> = [
+        {
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            address: '0x934B510D4C9103E6a87AEf13b816fb080286D649',
+            label: 'sujiyan.eth',
+            supportedAddressTypes: [SocialAddressType.ENS, SocialAddressType.TwitterBlue, SocialAddressType.OpenSea],
+        },
+        {
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            address: '0x7cbba07e31dc7b12bb69a1209c5b11a8ac50acf5',
+            label: '',
+            supportedAddressTypes: [SocialAddressType.Firefly],
+        },
+    ]
 
     const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
-
-    console.log(currentSocialIdentity)
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
-    console.log('11111')
-    const {
-        value: socialAccounts = EMPTY_LIST,
-        loading: loadingSocialAccounts,
-        error: loadSocialAccounts,
-        retry: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string>()
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
@@ -185,12 +195,6 @@ function Content(props: ProfileTabContentProps) {
             setPair(selectedSocialAccount.address, selectedSocialAccount.label)
         }
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
-
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retrySocialAccounts()
-        })
-    }, [retrySocialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
@@ -219,7 +223,7 @@ function Content(props: ProfileTabContentProps) {
 
     // the owner persona and sns not verify on next ID
     const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
-    const showNextID =
+    const showNextID1 =
         isOnTwitter &&
         // enabled the plugin
         (isWeb3ProfileDisable ||
@@ -229,6 +233,7 @@ function Content(props: ProfileTabContentProps) {
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAccounts.length))
 
+    const showNextID = false
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
     const contentComponent = useMemo(() => {
@@ -253,12 +258,6 @@ function Content(props: ProfileTabContentProps) {
         setSelectedAddress(undefined)
     }, [currentVisitingUserId])
 
-    useEffect(() => {
-        return MaskMessages.events.profileTabHidden.on((data) => {
-            if (data.hidden) setHidden(data.hidden)
-        })
-    }, [currentVisitingUserId])
-
     const [isHideInspector, hideInspector] = useState(false)
 
     useEffect(() => {
@@ -269,8 +268,6 @@ function Content(props: ProfileTabContentProps) {
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
-            console.log('33333')
-            setHidden(!data.show)
             data.type && setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
@@ -311,8 +308,6 @@ function Content(props: ProfileTabContentProps) {
         return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
     }, [currentVisitingUserId])
 
-    if (hidden) return null
-    console.log('11111')
     const keyword =
         profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
 
@@ -347,7 +342,7 @@ function Content(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || loadingSocialAccounts || loadingPersonaStatus)
+    if (!currentVisitingUserId || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -356,11 +351,9 @@ function Content(props: ProfileTabContentProps) {
             </ThemeProvider>
         )
 
-    if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
+    if (isOwnerIdentity && loadPersonaStatusError && socialAccounts.length === 0) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
-
-            if (loadSocialAccounts) retrySocialAccounts()
         }
         return (
             <ThemeProvider theme={MaskLightTheme}>
