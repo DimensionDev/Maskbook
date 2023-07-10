@@ -1063,6 +1063,7 @@
     "adding_network_exists": "Network already exists",
     "saved_network_successfully": "Saved network successfully",
     "adding_network_successfully": "Adding network successfully",
+    "deleted_network_successfully": "Network successfully deleted.",
     "wallet_send": "Send",
     "wallet_receive": "Receive",
     "wallet_swap": "Swap",

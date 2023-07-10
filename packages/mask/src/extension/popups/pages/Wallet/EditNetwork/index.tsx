@@ -89,6 +89,7 @@ export const EditNetwork = memo(function EditNetwork() {
     const network = builtInNetwork || storedNetwork
     // #endregion
 
+    const { showSnackbar } = usePopupCustomSnackbar()
     useTitle(network ? network.name : t('network_management_add_network'))
     const { setExtension } = useContext(PageTitleContext)
 
@@ -101,6 +102,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 className={classes.iconButton}
                 onClick={async () => {
                     await WalletRPC.deleteNetwork(id)
+                    showSnackbar(t('deleted_network_successfully'))
                     // Trigger UI update.
                     queryClient.invalidateQueries(QUERY_KEY)
                     navigate(-1)
@@ -109,7 +111,7 @@ export const EditNetwork = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton])
+    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t])
 
     const schema = useMemo(() => {
         return createSchema(t, async (name) => {
@@ -129,7 +131,6 @@ export const EditNetwork = memo(function EditNetwork() {
         resolver: zodResolver(schema),
         defaultValues: network,
     })
-    const { showSnackbar } = usePopupCustomSnackbar()
     const checkZodError = useCallback(
         (message: string) => {
             try {
