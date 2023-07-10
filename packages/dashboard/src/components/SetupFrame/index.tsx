@@ -22,7 +22,9 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
 
-                <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative' }}>{children}</Box>
+                <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative', paddingBottom: '116px' }}>
+                    {children}
+                </Box>
             </Grid>
             <Grid item xs={4} position="relative">
                 {!hiddenSpline ? (
@@ -39,6 +41,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                                 {t.persona_setup_identity_tips()}
                             </Typography>
                         </Box>
+
                         <Spline scene={Welcome.toString()} onLoad={() => setLoading(false)} />
                     </>
                 ) : null}

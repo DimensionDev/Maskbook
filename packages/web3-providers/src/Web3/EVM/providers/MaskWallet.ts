@@ -35,9 +35,10 @@ export class MaskWalletProvider
         super(ProviderType.MaskWallet)
     }
 
-    async init() {
+    async updateImmediately() {
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
+        // update local wallets immediately
         this.ref.value = sortBy(
             uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
             (x) => !!x.owner,
@@ -46,6 +47,8 @@ export class MaskWalletProvider
     async update() {
         const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
         if (isRecovery) return
+
+        await this.updateImmediately()
 
         const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
@@ -106,7 +109,7 @@ export class MaskWalletProvider
             }
         })
 
-        await this.init()
+        await this.updateImmediately()
 
         const debounceUpdate = debounce(this.update.bind(this), 1000)
 
