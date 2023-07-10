@@ -43,7 +43,7 @@ type NameValidator = (name: string) => boolean | Promise<boolean>
  */
 export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
     const schema = z.object({
-        name: z.string().nonempty().refine(duplicateNameValidator, t('account_already_exists')),
+        name: z.string().nonempty().refine(duplicateNameValidator, t('network_already_exists')),
         rpc: z
             .string()
             .trim()

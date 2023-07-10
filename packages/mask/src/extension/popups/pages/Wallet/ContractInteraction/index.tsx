@@ -350,13 +350,13 @@ const ContractInteraction = memo(() => {
     const tokenDecimals = token?.decimals
 
     // token estimated value
-    const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, {
+    const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, {
         chainId,
     })
 
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
-    const { value: maskTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, maskAddress, {
+    const { data: maskTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, maskAddress, {
         chainId,
     })
 

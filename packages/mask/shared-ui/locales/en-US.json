@@ -1080,6 +1080,7 @@
     "optional_currency_symbol": "Currency Symbol (Optional)",
     "optional_block_explorer_url": "Block Explorer URL (Optional)",
     "account_already_exists": "This account name already exists",
+    "network_already_exists": "This network name already exists",
     "incorrect_rpc_url": "Incorrect RPC URL.",
     "incorrect_explorer_url": "Incorrect Block Explorer URL.",
     "failed_to_fetch_chain_id": "Could not fetch chain ID. Is your RPC URL correct?",
@@ -1091,6 +1092,7 @@
     "adding_network_exists": "Network already exists",
     "saved_network_successfully": "Saved network successfully",
     "adding_network_successfully": "Adding network successfully",
+    "deleted_network_successfully": "Network successfully deleted.",
     "wallet_send": "Send",
     "wallet_receive": "Receive",
     "wallet_swap": "Swap",
@@ -1099,5 +1101,5 @@
     "scan_address_to_payment": "Scan address to receive payment",
     "empty": "Empty",
     "hide_token_symbol": "Hide {{- symbol}}",
-    "hide_token_description": "Confirm to hide {{- asset.symbol}}  You can redisplay it by re-adding this token at any time."
+    "hide_token_description": "Confirm to hide {{- symbol}}  You can redisplay it by re-adding this token at any time."
 }

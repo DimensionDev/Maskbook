@@ -35,7 +35,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
     // const nativeToken = createNativeToken(chainId)
     const nativeToken = Others.createNativeToken(chainId)
-    const { value: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
+    const { data: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
         return trade.value?.gas && gasPrice
