@@ -1,27 +1,28 @@
+import { ec as EC } from 'elliptic'
+import { concatArrayBuffer } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { concatArrayBuffer } from '@masknet/kit'
-import { ec as EC } from 'elliptic'
 import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from '@masknet/shared-base'
-import { provider } from './internal_wallet.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
-    const password = await provider.INTERNAL_getPasswordRequired()
+    const password = await WalletServiceRef.value.INTERNAL_getPasswordRequired()
+
     for (const wallet of backup) {
         try {
             const name = wallet.name
 
             if (wallet.privateKey.some)
-                await provider.recoverWalletFromPrivateKey(
+                await WalletServiceRef.value.recoverWalletFromPrivateKey(
                     name,
                     await JWKToKey(wallet.privateKey.val, 'private'),
                     password,
                 )
             else if (wallet.mnemonic.some) {
                 // fix a backup bug of pre-v2.2.2 versions
-                const accounts = await provider.getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
+                const accounts = await WalletServiceRef.value.getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
                 const index = accounts.findIndex(currySameAddress(wallet.address))
-                await provider.recoverWalletFromMnemonic(
+                await WalletServiceRef.value.recoverWalletFromMnemonic(
                     name,
                     wallet.mnemonic.val.words,
                     index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
