@@ -2,11 +2,10 @@ import * as bip39 from 'bip39'
 import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { fromHex, toHex } from '@masknet/shared-base'
+import { fromHex, toHex, type LegacyWalletRecord } from '@masknet/shared-base'
 import { isSameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { createTransaction } from '../../../../background/database/utils/openDB.js'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
-import type { LegacyWalletRecord } from '../database/types.js'
 import { LegacyWalletRecordOutDB } from './helpers.js'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
