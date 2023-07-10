@@ -9,6 +9,7 @@ import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
 import { EditNetwork } from './EditNetwork/index.js'
+import urlcat from 'urlcat'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
@@ -102,10 +103,21 @@ export default function Wallet() {
     }, [location.search, location.pathname, chainId, TransactionFormatter])
 
     useEffect(() => {
+        if (getLockStatusLoading) return
+        if (isLocked) navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
+    }, [isLocked, getLockStatusLoading, location.pathname])
+
+    useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
-    }, [retry])
+    }, [])
+
+    useEffect(() => {
+        if (!wallet || loadingHasPassword || isLocked || getLockStatusLoading) return
+
+        navigate(hasPassword ? PopupRoutes.Wallet : PopupRoutes.SetPaymentPassword, { replace: true })
+    }, [hasPassword, isLocked, !wallet, loadingHasPassword, getLockStatusLoading])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
@@ -114,20 +126,7 @@ export default function Wallet() {
                 <LoadingPlaceholder />
             ) : (
                 <Routes>
-                    <Route
-                        path="*"
-                        element={
-                            !wallet ? (
-                                <WalletStartUp />
-                            ) : isLocked ? (
-                                <Unlock />
-                            ) : !loadingHasPassword && !hasPassword ? (
-                                <SetPaymentPassword />
-                            ) : (
-                                <WalletAssets />
-                            )
-                        }
-                    />
+                    <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
                     <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
                     <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
                     <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />

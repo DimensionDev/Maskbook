@@ -62,10 +62,10 @@ const Unlock = memo(() => {
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         const verified = await WalletRPC.unlockWallet(password)
-        const from = new URLSearchParams(location.search).get('from')
-        if (verified) navigate({ pathname: from ?? PopupRoutes.Wallet, search: location.search }, { replace: true })
+
+        if (verified) navigate({ pathname: PopupRoutes.Wallet }, { replace: true })
         return verified
-    }, [password, location.search])
+    }, [password])
 
     return (
         <Box className={classes.container}>

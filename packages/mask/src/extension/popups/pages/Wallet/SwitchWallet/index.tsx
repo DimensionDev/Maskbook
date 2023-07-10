@@ -85,7 +85,10 @@ const SwitchWallet = memo(function SwitchWallet() {
         [history, smartPayChainId, chainId, closeModal],
     )
 
-    const handleLock = useCallback(async () => WalletRPC.lockWallet(), [])
+    const handleLock = useCallback(async () => {
+        WalletRPC.lockWallet()
+        navigate(PopupRoutes.Unlock)
+    }, [])
 
     const action = (
         <Box className={classes.modalAction}>

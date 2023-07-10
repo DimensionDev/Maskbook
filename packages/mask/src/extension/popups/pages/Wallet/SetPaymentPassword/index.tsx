@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { Navigator } from '../../../components/Navigator/index.js'
 import { useBalance, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -90,6 +89,7 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(8px)',
         width: '100%',
         bottom: 0,
+        zIndex: 100,
     },
     confirmButton: {
         margin: '16px 0',
@@ -132,7 +132,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                await WalletRPC.setPassword(data.password)
+                await WalletRPC.resetPassword(data.password)
                 const hasPassword = await WalletRPC.hasPassword()
                 if (hasPassword) {
                     navigate(PopupRoutes.Wallet, { replace: true })
@@ -239,8 +239,8 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 )}
             </Box>
 
-            <div className={classes.bottomAction}>
-                {isCreating ? (
+            {isCreating ? (
+                <div className={classes.bottomAction}>
                     <ActionButton
                         fullWidth
                         onClick={onSubmit}
@@ -249,10 +249,8 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                         className={classes.confirmButton}>
                         {t('confirm')}
                     </ActionButton>
-                ) : (
-                    <Navigator />
-                )}
-            </div>
+                </div>
+            ) : null}
 
             {isCreating ? <Icons.Comeback className={classes.back} onClick={() => setIsCreating(false)} /> : null}
         </Box>
