@@ -57,7 +57,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const personaPublicKey = currentPersona?.identifier.publicKeyAsHex
     const allLinkedProfiles = useMemo(() => {
         return allPersona.flatMap((x) => x.linkedProfiles).filter((x) => x.identifier.network === 'twitter.com')
-    }, [])
+    }, [allPersona])
 
     const { data: proofs, isLoading: loadingBinding, isFetched } = usePersonaProofs(personaPublicKey)
     const twitterProofs = useMemo(() => {
