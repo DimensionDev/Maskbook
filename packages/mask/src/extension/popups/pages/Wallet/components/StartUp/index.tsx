@@ -5,7 +5,7 @@ import { memo, useCallback } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
 import { useHasPassword } from '../../../../hook/useHasPassword.js'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -78,7 +78,7 @@ export const WalletStartUp = memo(() => {
                 active: true,
                 url: browser.runtime.getURL(`/dashboard.html#${route}`),
             })
-            if (navigator.userAgent.includes('Firefox')) {
+            if (Sniffings.is_firefox) {
                 window.close()
             }
 

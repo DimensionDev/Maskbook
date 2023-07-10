@@ -15,11 +15,9 @@ function useContext() {
         const password = location.state?.password
         if (location.state?.isReset && wallets.length) {
             await PluginServices.Wallet.resetPassword(password)
-            for (const wallet of wallets) {
-                await Web3.removeWallet?.(wallet.address, '', {
-                    providerType: ProviderType.MaskWallet,
-                })
-            }
+            await Web3.removeWallets?.(wallets, {
+                providerType: ProviderType.MaskWallet,
+            })
             CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
         }
     }, [wallets, location.state?.password, location.state?.isReset])
