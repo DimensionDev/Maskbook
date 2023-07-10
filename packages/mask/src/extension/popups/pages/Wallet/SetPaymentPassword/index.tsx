@@ -84,11 +84,15 @@ const useStyles = makeStyles()((theme) => ({
     bottomAction: {
         display: 'flex',
         justifyContent: 'center',
-        background: theme.palette.maskColor.bottom,
+        background: theme.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         position: 'absolute',
+        backdropFilter: 'blur(8px)',
         width: '100%',
         bottom: 0,
+    },
+    confirmButton: {
+        margin: '16px 0',
     },
     back: {
         position: 'absolute',
@@ -237,7 +241,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 
             <div className={classes.bottomAction}>
                 {isCreating ? (
-                    <ActionButton fullWidth onClick={onSubmit} loading={loading} width={368}>
+                    <ActionButton
+                        fullWidth
+                        onClick={onSubmit}
+                        loading={loading}
+                        width={368}
+                        className={classes.confirmButton}>
                         {t('confirm')}
                     </ActionButton>
                 ) : (
