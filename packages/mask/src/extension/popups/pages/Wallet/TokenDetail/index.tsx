@@ -43,6 +43,8 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             height: '100%',
             overflow: 'auto',
+            // space for action group.
+            paddingBottom: 68,
             zIndex: 3,
         },
         deleteButton: {
