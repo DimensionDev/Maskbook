@@ -1,12 +1,11 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PageTitleContext } from '../../context.js'
-import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -19,14 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
     },
     back: {
-        fontSize: 24,
-        cursor: 'pointer',
-        color: theme.palette.maskColor.main,
-    },
-    close: {
-        position: 'absolute',
-        left: 16,
-        top: 16,
         fontSize: 24,
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
@@ -59,15 +50,11 @@ function canNavBack() {
 export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onlyTitle, onClose }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const location = useLocation()
-    const { title, extension } = useContext(PageTitleContext)
-
-    const goBack = new URLSearchParams(location.search).get('goBack')
+    const { title, extension, customBackHandler } = useContext(PageTitleContext)
 
     const showTitle = canNavBack() && title
 
-    const showClose = location.pathname === PopupRoutes.ConnectWallet && !goBack
-
+    const handleBack = useCallback(() => navigate(-1), [])
     if (onlyTitle)
         return (
             <Box className={classes.container} style={{ justifyContent: 'center' }}>
@@ -75,21 +62,11 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ only
             </Box>
         )
 
-    if (showClose) {
-        return (
-            <Box className={classes.container} style={{ justifyContent: 'center' }}>
-                <Icons.PopupClose className={classes.close} onClick={onClose} />
-                <Typography className={classes.title}>{title}</Typography>
-                {extension}
-            </Box>
-        )
-    }
-
     return (
         <Box className={classes.container}>
             {showTitle ? (
                 <>
-                    <Icons.Comeback className={classes.back} onClick={() => navigate(-1)} />
+                    <Icons.Comeback className={classes.back} onClick={customBackHandler ?? handleBack} />
                     <Typography className={classes.title}>{title}</Typography>
                     {extension}
                 </>

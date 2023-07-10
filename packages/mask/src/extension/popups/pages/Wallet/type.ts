@@ -13,3 +13,8 @@ export enum TransferAddressError {
 export enum MethodAfterPersonaSign {
     DISCONNECT_NEXT_ID = 'DISCONNECT_NEXT_ID',
 }
+
+export enum HomeTabType {
+    SocialAccounts = 'Social Accounts',
+    ConnectedWallets = 'Connected Wallets',
+}

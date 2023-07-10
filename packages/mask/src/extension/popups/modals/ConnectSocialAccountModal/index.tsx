@@ -1,33 +1,39 @@
-import { forwardRef, useState } from 'react'
-import { EMPTY_LIST, type EnhanceableSite, type SingletonModalRefCreator } from '@masknet/shared-base'
-import { useSingletonModal } from '@masknet/shared-base-ui'
-import { ConnectSocialAccountDialog } from './ConnectSocialAccountDialog.js'
+import { memo, useCallback } from 'react'
+import { EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 
-export interface ConnectSocialAccountModalOpenProps {
-    networks: EnhanceableSite[]
-    onConnect: (networkIdentifier: EnhanceableSite) => void
-}
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
+import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
+import { useSupportSocialNetworks } from '../../hook/useSupportSocialNetworks.js'
+import Services from '../../../service.js'
+import { PersonaContext } from '@masknet/shared'
 
-export interface ConnectSocialAccountModalProps {}
+export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal({ ...rest }) {
+    const { t } = useI18N()
+    const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
-export const ConnectSocialAccountModal = forwardRef<
-    SingletonModalRefCreator<ConnectSocialAccountModalOpenProps>,
-    ConnectSocialAccountModalProps
->((props, ref) => {
-    const [networks, setNetworks] = useState<EnhanceableSite[]>(EMPTY_LIST)
-    const [onConnect, setOnConnect] = useState<(networkIdentifier: EnhanceableSite) => void>()
-    const [open, dispatch] = useSingletonModal(ref, {
-        onOpen(props) {
-            setNetworks(props.networks)
-            setOnConnect(() => props.onConnect)
+    const { currentPersona } = PersonaContext.useContainer()
+
+    const handleConnect = useCallback(
+        async (networkIdentifier: EnhanceableSite) => {
+            if (currentPersona) {
+                await Services.SocialNetwork.connectSite(
+                    currentPersona.identifier,
+                    networkIdentifier,
+                    'local',
+                    undefined,
+                    false,
+                )
+            }
         },
-    })
+        [currentPersona],
+    )
+
+    if (!definedSocialNetworks.length) return null
+
     return (
-        <ConnectSocialAccountDialog
-            open={open}
-            onClose={() => dispatch?.close()}
-            networks={networks}
-            onConnect={onConnect}
-        />
+        <ActionModal header={t('popups_connect_social_account')} keepMounted {...rest}>
+            <ConnectSocialAccounts networks={definedSocialNetworks} onConnect={handleConnect} />
+        </ActionModal>
     )
 })

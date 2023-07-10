@@ -304,6 +304,7 @@ export interface TransactionOptions {
     // popups control
     disableClose?: boolean
     popupsWindow?: boolean
+    silent?: boolean
 }
 
 export type Web3UI = Web3UIShared<ChainId, ProviderType, NetworkType>

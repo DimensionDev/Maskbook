@@ -18,6 +18,7 @@ export function toProfileInformation(profiles: ProfileRecord[]) {
                     identifier: profile.identifier,
                     nickname: profile.nickname,
                     linkedPersona: profile.linkedPersona,
+                    createAt: profile.createdAt,
                 })
             }
 

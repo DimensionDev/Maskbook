@@ -8,6 +8,7 @@ import { Trans } from 'react-i18next'
 import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
 
 import { WalletList } from '../../../components/WalletSettingList/index.js'
+import { BottomController } from '../../../components/BottomController/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {
@@ -29,16 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         marginTop: theme.spacing(2),
-    },
-    bottom: {
-        position: 'fixed',
-        bottom: 0,
-        background: theme.palette.maskColor.secondaryBottom,
-        padding: theme.spacing(2),
-        boxShadow: theme.palette.maskColor.bottomBg,
-        width: '100%',
-        display: 'flex',
-        columnGap: theme.spacing(2),
     },
 }))
 
@@ -106,7 +97,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 </Box>
 
                 {isSupportNextDotID ? (
-                    <Box className={classes.bottom}>
+                    <BottomController>
                         <Button variant="outlined" fullWidth onClick={handleBack}>
                             {t('back')}
                         </Button>
@@ -117,7 +108,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                             disabled={account.is_valid ? isClean || loading : submitting}>
                             {t(account.is_valid ? 'save' : 'popups_verify_account')}
                         </ActionButton>
-                    </Box>
+                    </BottomController>
                 ) : null}
             </Box>
         )
