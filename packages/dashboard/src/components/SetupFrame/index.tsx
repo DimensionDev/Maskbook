@@ -1,10 +1,11 @@
-import { memo, useState, type PropsWithChildren } from 'react'
+import { memo, useState, type PropsWithChildren, useEffect } from 'react'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
 import { useDashboardI18N } from '../../locales/i18n_generated.js'
 import { LoadingBase } from '@masknet/theme'
+import { delay } from '@masknet/kit'
 
 interface SetupFrameProps extends PropsWithChildren {
     hiddenSpline?: boolean
@@ -14,6 +15,24 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
     const theme = useTheme()
     const t = useDashboardI18N()
     const [loading, setLoading] = useState(true)
+    const [scene, setScene] = useState(Welcome.toString())
+
+    /**
+     * When resizing the window, the height of the react-spline component does not immediately adapt to the current window height.
+     * Instead, it continuously decreases. The code is used to solve this problem.
+     */
+    useEffect(() => {
+        const onResize = async () => {
+            setScene('')
+            await delay(200)
+            setScene(Welcome.toString())
+        }
+
+        window.addEventListener('resize', onResize)
+        return () => {
+            window.removeEventListener('resize', onResize)
+        }
+    }, [])
 
     return (
         <Grid container sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
@@ -22,7 +41,9 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
 
-                <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative' }}>{children}</Box>
+                <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative', paddingBottom: '116px' }}>
+                    {children}
+                </Box>
             </Grid>
             <Grid item xs={4} position="relative">
                 {!hiddenSpline ? (
@@ -39,7 +60,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                                 {t.persona_setup_identity_tips()}
                             </Typography>
                         </Box>
-                        <Spline scene={Welcome.toString()} onLoad={() => setLoading(false)} />
+                        <Spline style={{ maxHeight: '100%' }} scene={scene} onLoad={() => setLoading(false)} />
                     </>
                 ) : null}
                 {loading && !hiddenSpline ? (
