@@ -3,10 +3,15 @@ import { ec as EC } from 'elliptic'
 import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { isNonNull } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { toBase64URL, type EC_Public_JsonWebKey, type EC_Private_JsonWebKey } from '@masknet/shared-base'
-import { WalletBackupProviderRef } from './internal_wallet.js'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import {
+    toBase64URL,
+    type EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    type LegacyWalletRecord,
+} from '@masknet/shared-base'
+import type { WalletRecord } from '../../../shared/definitions/wallet.js'
 
 export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
@@ -14,17 +19,17 @@ export async function internal_wallet_backup() {
 }
 
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const wallets = await WalletBackupProviderRef.value.getWallets()
+    const wallets = await WalletServiceRef.value.getWallets()
     const allSettled = await Promise.allSettled(
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
                 mnemonic: wallet.derivationPath
-                    ? await WalletBackupProviderRef.value.exportMnemonic(wallet.address)
+                    ? await WalletServiceRef.value.exportMnemonic(wallet.address)
                     : undefined,
                 privateKey: wallet.derivationPath
                     ? undefined
-                    : await WalletBackupProviderRef.value.exportPrivateKey(wallet.address),
+                    : await WalletServiceRef.value.exportPrivateKey(wallet.address),
             }
         }),
     )
@@ -34,7 +39,7 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
 }
 
 async function backupAllLegacyWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const x = await WalletBackupProviderRef.value.getLegacyWallets()
+    const x = await WalletServiceRef.value.getLegacyWallets()
     return x.map(LegacyWalletRecordToJSONFormat)
 }
 function WalletRecordToJSONFormat(

@@ -4,6 +4,7 @@ export { useActivatedPluginWeb3State } from './useActivatedPluginWeb3State.js'
 export { useActivatedPluginWeb3UI } from './useActivatedPluginWeb3UI.js'
 export { useAllPluginsWeb3State } from './useAllPluginsWeb3State.js'
 export { useSNSAdaptorContext, SNSAdaptorContextRef } from './useSNSAdaptorContext.js'
+export { useWalletService, WalletServiceRef } from './useWalletService.js'
 export { PluginI18NFieldRender, type PluginI18NFieldRenderProps, usePluginI18NField } from './useI18N.js'
 
 export { type PluginWrapperMethods, type PluginWrapperComponent, usePluginWrapper } from './usePluginWrapper.js'
