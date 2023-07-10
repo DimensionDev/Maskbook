@@ -40,7 +40,7 @@ if (location.hash === '#/personas') {
                 window.addEventListener(
                     'resize',
                     () => {
-                        if (window.innerWidth !== 350) {
+                        if (window.innerWidth !== 400) {
                             document.body.style.maxWidth = 'unset'
                         }
                     },

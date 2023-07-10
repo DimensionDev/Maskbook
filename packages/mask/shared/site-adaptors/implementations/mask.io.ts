@@ -10,7 +10,7 @@ export const MaskAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Mask,
     declarativePermissions: { origins },
     homepage: 'https://mask.io',
-    isSocialNetwork: true,
+    isSocialNetwork: false,
     sortIndex: 5,
     getProfilePage: () => null,
     getShareLinkURL(message) {

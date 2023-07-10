@@ -1,4 +1,4 @@
-import { type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -6,7 +6,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
-import { ConnectSocialAccountModal } from '../../modals/modals.js'
+import { useModalNavigate } from '../ActionModal/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tips: {
@@ -75,6 +75,8 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
 }) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const modalNavigate = useModalNavigate()
+
     if (!accounts.length)
         return (
             <Box>
@@ -95,7 +97,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
                     <Typography className={classes.identity}>@{account.identity}</Typography>
                 </Box>
             ))}
-            <Box className={classes.connect} onClick={() => ConnectSocialAccountModal.open({ networks, onConnect })}>
+            <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.ConnectSocialAccount)}>
                 <Icons.Connect size={16} />
                 <Typography fontSize={12} fontWeight={700} lineHeight="18px">
                     {t('connect')}

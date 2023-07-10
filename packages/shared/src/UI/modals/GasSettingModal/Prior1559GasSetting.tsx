@@ -91,7 +91,7 @@ export const Prior1559GasSetting = memo(
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType>(gasOptionType)
 
-        const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+        const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
         const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 

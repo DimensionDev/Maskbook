@@ -216,7 +216,7 @@ export const Transfer1559 = memo<Transfer1559Props>(function Transfer1559({
 
     const { smartPayChainId } = useContainer(PopupContext)
 
-    const { value: etherPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+    const { data: etherPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })
 

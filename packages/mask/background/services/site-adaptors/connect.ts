@@ -1,4 +1,4 @@
-import { compact, first } from 'lodash-es'
+import { compact, first, sortBy } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { delay } from '@masknet/kit'
 import {
@@ -28,9 +28,12 @@ export async function getSupportedSites(options: SitesQueryOptions = {}): Promis
         networkIdentifier: string
     }>
 > {
-    return [...definedSiteAdaptors.values()]
-        .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
-        .map((x) => ({ networkIdentifier: x.networkIdentifier }))
+    return sortBy(
+        [...definedSiteAdaptors.values()].filter((x) =>
+            options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork,
+        ),
+        (x) => x.sortIndex,
+    ).map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
 export async function getSupportedOrigins(options: SitesQueryOptions = {}): Promise<

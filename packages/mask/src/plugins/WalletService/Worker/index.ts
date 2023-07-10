@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { MaskMessages } from '@masknet/shared-base'
-import { setWalletBackupProvider } from '../../../../background/services/backup/internal_wallet.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import '../messages.js'
 import {
     exportMnemonic,
@@ -22,7 +22,7 @@ const worker: Plugin.Worker.Definition = {
     ...base,
     init(signal, context) {
         setupDatabase(context.getDatabaseStorage())
-        setWalletBackupProvider({
+        WalletServiceRef.value = {
             exportMnemonic,
             exportPrivateKey,
             recoverWalletFromKeyStoreJSON,
@@ -33,7 +33,7 @@ const worker: Plugin.Worker.Definition = {
             INTERNAL_getPasswordRequired,
             recoverWalletFromMnemonic,
             recoverWalletFromPrivateKey,
-        })
+        }
         MaskMessages.events.wallet_is_locked.on(
             async ([type]) => {
                 if (type === 'request') {

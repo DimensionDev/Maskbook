@@ -332,6 +332,11 @@ export const MetaMask = /*#__PURE__*/ __createIcon('MetaMask', [
         u: () => new URL('./brands/MetaMask.svg', import.meta.url),
     },
 ])
+export const MetaMaskWallet = /*#__PURE__*/ __createIcon('MetaMaskWallet', [
+    {
+        u: () => new URL('./brands/MetaMaskWallet.svg', import.meta.url),
+    },
+])
 export const Minds = /*#__PURE__*/ __createIcon('Minds', [
     {
         u: () => new URL('./brands/Minds.svg', import.meta.url),

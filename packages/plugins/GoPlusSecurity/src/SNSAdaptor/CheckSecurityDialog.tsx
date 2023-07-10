@@ -63,7 +63,7 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
         NetworkPluginID.PLUGIN_EVM,
         value?.contract,
     )
-    const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
+    const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
     const { value: tokenMarketCap } = useAsync(async () => {
         if (!value?.contract || !value.token_symbol) return
 

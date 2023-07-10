@@ -1,10 +1,11 @@
-import { memo, useState, type PropsWithChildren } from 'react'
+import { memo, useState, type PropsWithChildren, lazy } from 'react'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
 import { useDashboardI18N } from '../../locales/i18n_generated.js'
 import { LoadingBase } from '@masknet/theme'
+
+const Spline = lazy(() => import('@splinetool/react-spline'))
 
 interface SetupFrameProps extends PropsWithChildren {
     hiddenSpline?: boolean

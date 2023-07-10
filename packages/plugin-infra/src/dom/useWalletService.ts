@@ -1,7 +1,6 @@
-import type { Wallet } from '@masknet/shared-base'
-import type { LegacyWalletRecord } from '../../../shared/definitions/wallet.js'
+import { type LegacyWalletRecord, type Wallet, ValueRefWithReady } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 
-// TODO: this should be in the plugin infra.
 export interface WalletBackupProvider {
     exportMnemonic(address: string): Promise<string>
     exportPrivateKey(address: string): Promise<string>
@@ -34,7 +33,9 @@ export interface WalletBackupProvider {
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>
 }
-export let provider: WalletBackupProvider
-export function setWalletBackupProvider(p: WalletBackupProvider) {
-    provider = p
+
+export const WalletServiceRef = new ValueRefWithReady<WalletBackupProvider>()
+
+export function useWalletService() {
+    return useValueRef(WalletServiceRef)
 }

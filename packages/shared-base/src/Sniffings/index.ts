@@ -16,6 +16,11 @@ export const Sniffings = {
         typeof location === 'object' &&
         location.protocol.includes('extension') &&
         location.href.includes('popups.html'),
+    is_popup_wallet_page:
+        typeof location === 'object' &&
+        location.protocol.includes('extension') &&
+        location.href.includes('popups.html') &&
+        location.href.includes('/wallet'),
 
     is_twitter_page: typeof location === 'object' && location.href.includes(SiteType.Twitter),
     is_facebook_page: typeof location === 'object' && location.href.includes(SiteType.Facebook),

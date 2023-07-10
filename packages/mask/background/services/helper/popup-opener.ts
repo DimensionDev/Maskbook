@@ -29,7 +29,7 @@ async function openWindow(url: string): Promise<void> {
             const lastFocused = await browser.windows.getLastFocused()
             // Position window in top right corner of lastFocused window.
             top = lastFocused.top ?? 0
-            left = (lastFocused.left ?? 0) + (lastFocused.width ?? 0) - 350
+            left = (lastFocused.left ?? 0) + (lastFocused.width ?? 0) - 400
         } catch (error_) {
             // The following properties are more than likely 0, due to being
             // opened from the background chrome process for the extension that
@@ -39,7 +39,7 @@ async function openWindow(url: string): Promise<void> {
             const { screenX, outerWidth, screenY } = globalThis as any
             if (typeof screenX === 'number' && typeof outerWidth === 'number') {
                 top = Math.max(screenY, 0)
-                left = Math.max(screenX + (outerWidth - 350), 0)
+                left = Math.max(screenX + (outerWidth - 400), 0)
             } else {
                 top = 100
                 left = 100
@@ -49,7 +49,7 @@ async function openWindow(url: string): Promise<void> {
         const { id } = await browser.windows.create({
             url: browser.runtime.getURL(url),
             width: 400,
-            height: 600,
+            height: 628,
             type: 'popup',
             state: 'normal',
             left,
@@ -68,11 +68,19 @@ async function openWindow(url: string): Promise<void> {
     }
 }
 
-const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock, PopupRoutes.ConnectedWallets]
+const exclusionDetectLocked: PopupRoutes[] = [
+    PopupRoutes.PersonaSignRequest,
+    PopupRoutes.Unlock,
+    PopupRoutes.ConnectedWallets,
+]
 
-export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void> {
+export async function openPopupWindow(
+    route?: PopupRoutes,
+    params?: Record<string, any>,
+    ignoreLock?: boolean,
+): Promise<void> {
     const locked = await isLocked()
-    const shouldUnlockWallet = locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet)
+    const shouldUnlockWallet = locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet) && !ignoreLock
 
     const url = urlcat('popups.html#', shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
         toBeClose: 1,

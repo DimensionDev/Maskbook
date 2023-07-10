@@ -84,7 +84,7 @@ const ReplaceTransaction = memo(() => {
     const defaultMaxPriorityFeePerGas = transaction?._tx.maxPriorityFeePerGas ?? 0
 
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     const is1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const schema = useMemo(() => {
