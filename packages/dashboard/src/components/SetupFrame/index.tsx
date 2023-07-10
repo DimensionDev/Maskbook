@@ -28,7 +28,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
             </Grid>
             <Grid item xs={4} position="relative">
                 {!hiddenSpline ? (
-                    <>
+                    <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
                         <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
                             <Typography
                                 fontSize={36}
@@ -43,7 +43,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                         </Box>
 
                         <Spline scene={Welcome.toString()} onLoad={() => setLoading(false)} />
-                    </>
+                    </div>
                 ) : null}
                 {loading && !hiddenSpline ? (
                     <Box position="absolute" top="calc(50% - 18px)" left="calc(50% - 18px)">
