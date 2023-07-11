@@ -5,7 +5,7 @@ import type { IDBPSafeTransaction } from '../../../../background/database/utils/
 import type { LegacyWalletRecordInDatabase } from '../database/types.js'
 
 /**
- * The default user password for master password encryption.
+ * The default user password for master secret encryption.
  */
 export function getDefaultUserPassword() {
     return 'MASK'

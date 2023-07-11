@@ -6,7 +6,7 @@ export interface SecretRecord {
     iv: ArrayBuffer
     key: ArrayBuffer
     /**
-     * The encrypted master password.
+     * The encrypted master secret.
      */
     encrypted: ArrayBuffer
     /**

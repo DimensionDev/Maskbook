@@ -66,7 +66,7 @@ export async function hasSafeSecret() {
 }
 
 /**
- * Erase the preexisting master password by force, and create a new master password with the given user password.
+ * Erase the preexisting master secret by force, and create a new master secret with the given user password.
  * @param password
  */
 export async function resetSecret(password: string) {
@@ -87,7 +87,7 @@ export async function resetSecret(password: string) {
 }
 
 /**
- * Create a master password which will be encrypted by the given user password.
+ * Create a master secret which will be encrypted by the given user password.
  * @param password
  */
 export async function encryptSecret(password: string) {
@@ -110,7 +110,7 @@ export async function encryptSecret(password: string) {
 }
 
 /**
- * Update the user password which is used for encrypting the master password.
+ * Update the user password which is used for encrypting the master secret.
  * @param oldPassword
  * @param newPassword
  */
