@@ -118,7 +118,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to update secret.')
 
-    if (newPassword === getDefaultUserPassword() || !newPassword) throw new Error('Invalid password.')
+    if (newPassword === getDefaultUserPassword()) throw new Error('Invalid password.')
 
     const iv = getIV()
     const message = await decryptSecret(oldPassword)
