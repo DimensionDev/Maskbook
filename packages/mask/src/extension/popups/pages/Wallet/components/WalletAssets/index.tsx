@@ -1,6 +1,7 @@
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
+import { EmptyStatus } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles, useTabs } from '@masknet/theme'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
@@ -12,7 +13,6 @@ import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -89,12 +89,6 @@ const StyledTabList = styled(TabList)`
     }
 `
 
-enum WalletTabs {
-    Tokens = 'Tokens',
-    Collectibles = 'Collectibles',
-    Activity = 'Activity',
-}
-
 export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -105,11 +99,11 @@ export const WalletAssets = memo(function WalletAssets() {
     })
     const handleAdd = useCallback(() => navigate(PopupRoutes.AddToken), [navigate])
 
-    return wallet ? <WalletAssetsUI onAddTokenClick={handleAdd} /> : null
+    return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })
 
 export interface WalletAssetsUIProps {
-    onAddTokenClick: () => void
+    onAddToken: () => void
 }
 
 enum AssetTabs {
@@ -118,36 +112,32 @@ enum AssetTabs {
     Activity = 'Activity',
 }
 
-export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddTokenClick }) {
+export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
-    const { assetsLoading } = useContainer(WalletContext)
     const [currentTab, onChange, tabs] = useTabs(AssetTabs.Tokens, AssetTabs.Collectibles, AssetTabs.Activity)
 
-    return assetsLoading ? (
-        <LoadingStatus height="100%" />
-    ) : (
+    return (
         <div className={classes.content}>
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
                     <StyledTabList value={currentTab} onChange={onChange}>
                         <Tab className={classes.tab} label={t('popups_wallet_tab_assets')} value={tabs.Tokens} />
-                        <Tab className={classes.tab} label="Collectives" value={tabs.Collectibles} />
+                        <Tab
+                            className={classes.tab}
+                            label={t('popups_wallet_tab_collectibles')}
+                            value={tabs.Collectibles}
+                        />
                         <Tab className={classes.tab} label={t('popups_wallet_tab_activity')} value={tabs.Activity} />
                     </StyledTabList>
-                    <Button variant="text" className={classes.addButton}>
+                    <Button variant="text" className={classes.addButton} onClick={onAddToken}>
                         <Icons.AddNoBorder size={16} />
                     </Button>
                 </Box>
                 <Box className={classes.panels}>
                     <TabPanel value={tabs.Tokens} className={classes.tabPanel}>
                         <AssetsList />
-                        <div style={{ padding: 16 }}>
-                            <ActionButton variant="roundedOutlined" fullWidth onClick={onAddTokenClick}>
-                                {t('add_token')}
-                            </ActionButton>
-                        </div>
                     </TabPanel>
                     <TabPanel value={tabs.Collectibles} className={classes.tabPanel}>
                         <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
