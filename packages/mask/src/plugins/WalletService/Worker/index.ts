@@ -3,6 +3,7 @@ import { MaskMessages } from '@masknet/shared-base'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import '../messages.js'
 import {
+    changePassword,
     exportMnemonic,
     exportPrivateKey,
     getDerivableAccounts,
@@ -12,6 +13,7 @@ import {
     recoverWalletFromMnemonic,
     generateAddressFromMnemonic,
     resetPassword,
+    setDefaultPassword,
     recoverWalletFromPrivateKey,
     recoverWalletFromKeyStoreJSON,
 } from '../services/index.js'
@@ -24,7 +26,9 @@ const worker: Plugin.Worker.Definition = {
     init(signal, context) {
         setupDatabase(context.getDatabaseStorage())
         WalletServiceRef.value = {
+            changePassword,
             exportMnemonic,
+            setDefaultPassword,
             exportPrivateKey,
             recoverWalletFromKeyStoreJSON,
             generateAddressFromMnemonic,

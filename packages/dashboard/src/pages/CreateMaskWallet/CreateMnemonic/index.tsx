@@ -86,7 +86,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
         marginTop: 12,
         gap: '12px',
     },
-    storeIcon: {
+    iconBox: {
         height: 40,
         width: 40,
         cursor: 'pointer',
@@ -172,7 +172,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const navigate = useNavigate()
     const walletName = 'Wallet 1'
     const t = useDashboardI18N()
-    const { resetWallets } = ResetWalletContext.useContainer()
+    const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [isVerify, setIsVerify] = useState(false)
     const { classes, cx } = useStyles({ isVerify })
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
@@ -192,22 +192,18 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [location.state?.password, location.state?.isReset])
 
     const { value: address } = useAsync(async () => {
-        const password = location.state?.password
-
         if (!words.length) return
 
         const hasPassword = await PluginServices.Wallet.hasPassword()
 
-        if (!location.state?.isReset && !hasPassword) {
-            await PluginServices.Wallet.setPassword(password)
-        }
+        if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
 
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
         return address
-    }, [words, walletName, location.state?.isReset, location.state?.password])
+    }, [words.join(' '), walletName])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
-        await resetWallets()
+        handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
@@ -218,7 +214,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words])
+    }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
 
     return (
         <div className={classes.container}>
@@ -412,15 +408,17 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                 <MnemonicReveal words={words} indexed />
             </div>
             <div className={classes.storeWords}>
-                <div className={classes.storeIcon} onClick={handleDownload}>
+                <div className={classes.iconBox} onClick={handleDownload}>
                     <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                 </div>
-                <CopyButton
-                    color={theme.palette.maskColor.main}
-                    size={18}
-                    text={words.join(' ')}
-                    successText={t.persona_phrase_copy_description()}
-                />
+                <div className={classes.iconBox}>
+                    <CopyButton
+                        color={theme.palette.maskColor.main}
+                        size={18}
+                        text={words.join(' ')}
+                        successText={t.persona_phrase_copy_description()}
+                    />
+                </div>
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
                 {t.create_wallet_mnemonic_tip()}

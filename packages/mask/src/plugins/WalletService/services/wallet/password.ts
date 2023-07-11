@@ -6,7 +6,9 @@ import { getDefaultUserPassword } from '../helpers.js'
 let inMemoryPassword = ''
 
 export async function INTERNAL_getPassword() {
-    return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
+    return inMemoryPassword
+        ? database.decryptSecret(inMemoryPassword)
+        : database.decryptSecret(getDefaultUserPassword())
 }
 
 export async function INTERNAL_getPasswordRequired() {
@@ -34,17 +36,21 @@ export async function setPassword(newPassword: string) {
 
 export async function setDefaultPassword() {
     const password = getDefaultUserPassword()
+    const hasUnsafePassword = await database.hasSecret()
+    if (hasUnsafePassword) return
     await database.encryptSecret(password)
     INTERNAL_setPassword(password)
 }
 
 export async function hasPassword() {
-    return database.hasSecret()
+    return database.hasSafeSecret()
 }
 
 export async function verifyPassword(unverifiedPassword: string) {
     if (inMemoryPassword === unverifiedPassword) return true
-    return validate(await database.decryptSecret(unverifiedPassword))
+    const uuid = await database.decryptSecret(unverifiedPassword)
+    console.log({ uuid })
+    return validate(uuid)
 }
 
 export async function verifyPasswordRequired(unverifiedPassword: string) {
@@ -52,11 +58,13 @@ export async function verifyPasswordRequired(unverifiedPassword: string) {
     return true
 }
 
-export async function changePassword(newPassword: string) {
+export async function changePassword(oldPassword: string, newPassword: string) {
     validatePasswordRequired(newPassword)
-    const oldPassword = await INTERNAL_getPasswordRequired()
+    validatePasswordRequired(oldPassword)
+    console.log({ oldPassword, newPassword })
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
+    INTERNAL_setPassword(newPassword)
 }
 
 export function validatePassword(unverifiedPassword: string) {

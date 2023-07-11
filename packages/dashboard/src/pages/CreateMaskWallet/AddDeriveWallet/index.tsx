@@ -67,12 +67,15 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     const state = useLocation().state as {
         usr: {
             mnemonic: string
+            password: string
+            isReset: boolean
         }
     }
+    console.log({ state })
     const walletName = 'Wallet 1'
-    const { mnemonic } = state.usr
+    const { mnemonic, password, isReset } = state.usr
     const indexes = useRef(new Set<number>())
-    const { resetWallets } = ResetWalletContext.useContainer()
+    const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
@@ -107,7 +110,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         const unDeriveWallets = Array.from(indexes.current)
         if (!unDeriveWallets.length) return
 
-        await resetWallets()
+        await handlePasswordAndWallets(password, isReset)
 
         const firstPath = first(unDeriveWallets)
         const firstWallet = await PluginServices.Wallet.recoverWalletFromMnemonic(
@@ -131,7 +134,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await PluginServices.Wallet.resolveMaskAccount([{ address: firstWallet }])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [indexes, mnemonic, walletName, wallets.length])
+    }, [indexes, mnemonic, walletName, wallets.length, isReset, password])
 
     const onCheck = useCallback(
         async (checked: boolean, index: number) => {

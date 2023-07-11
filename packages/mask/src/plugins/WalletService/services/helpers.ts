@@ -8,7 +8,7 @@ import type { LegacyWalletRecordInDatabase } from '../database/types.js'
  * The default user password for master secret encryption.
  */
 export function getDefaultUserPassword() {
-    return 'MASK'
+    return 'MASK NETWORK'
 }
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet']>, address: string) {

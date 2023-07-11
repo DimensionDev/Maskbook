@@ -33,13 +33,19 @@ export function useMnemonicWordsPuzzle() {
     const [isMatched, setIsMatch] = useState<boolean | undefined>()
 
     const puzzleWordList: PuzzleWord[] = useMemo(() => {
-        const restWords = remove(clone(words), (_word, index) => !indexes.includes(index))
+        let restWords = remove(clone(words), (_word, index) => !indexes.includes(index))
 
-        return indexes.map((index) => ({
-            index,
-            rightAnswer: words[index],
-            options: shuffle(shuffle(restWords).slice(0, 2).concat(words[index])),
-        }))
+        return indexes.map((index) => {
+            const randomWords = shuffle(restWords).slice(0, 2)
+            const result = {
+                index,
+                rightAnswer: words[index],
+                options: shuffle(randomWords.concat(words[index])),
+            }
+            restWords = remove(clone(restWords), (word) => !randomWords.includes(word))
+
+            return result
+        })
     }, [words, indexes])
 
     const answerCallback = useCallback((index: number, word: string) => {

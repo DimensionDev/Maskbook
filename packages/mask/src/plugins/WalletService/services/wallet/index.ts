@@ -31,9 +31,12 @@ export {
     verifyPassword,
     changePassword,
     resetPassword,
+    setDefaultPassword,
     validatePassword,
     clearPassword,
 } from './password.js'
+
+export { getDefaultUserPassword } from '../helpers.js'
 
 export * from './network.js'
 

@@ -92,13 +92,14 @@ export async function resetSecret(password: string) {
  */
 export async function encryptSecret(password: string) {
     const secret = await getSecret()
+    if (!password) throw new Error('Invalid password.')
     if (secret) throw new Error('Failed to encrypt secret.')
 
     const iv = getIV()
     const key = await deriveKey(iv, password)
     const primaryKey = await createAES()
     const primaryKeyWrapped = await wrapKey(primaryKey, key)
-    const message = uuid() // the primary key never change
+    const message = uuid() // the master secret never change
     await PluginDB.add({
         id: SECRET_ID,
         type: 'secret',
@@ -108,7 +109,6 @@ export async function encryptSecret(password: string) {
         isUnsafe: password === getDefaultUserPassword(),
     })
 }
-
 /**
  * Update the user password which is used for encrypting the master secret.
  * @param oldPassword
@@ -117,7 +117,8 @@ export async function encryptSecret(password: string) {
 export async function updateSecret(oldPassword: string, newPassword: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to update secret.')
-    if (newPassword === getDefaultUserPassword()) throw new Error('Invalid password.')
+
+    if (newPassword === getDefaultUserPassword() || !newPassword) throw new Error('Invalid password.')
 
     const iv = getIV()
     const message = await decryptSecret(oldPassword)

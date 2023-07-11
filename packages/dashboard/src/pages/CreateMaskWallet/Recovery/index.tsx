@@ -82,7 +82,7 @@ const Recovery = memo(function Recovery() {
     const navigate = useNavigate()
     const [error, setError] = useState('')
     const walletName = 'Wallet 1'
-    const { resetWallets } = ResetWalletContext.useContainer()
+    const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
 
@@ -110,20 +110,21 @@ const Recovery = memo(function Recovery() {
     const handleRestoreFromPrivateKey = useCallback(
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
-                await resetWallets()
+                await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
                 await PluginServices.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
             }
         },
-        [t, walletName, navigate],
+        [t, walletName, navigate, location.state?.isReset, location.state?.password],
     )
 
     const onRestore = useCallback(
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
-                await resetWallets()
+                await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
                     walletName,
                     keyStoreContent,
@@ -135,12 +136,18 @@ const Recovery = memo(function Recovery() {
                 setError(t.create_wallet_key_store_incorrect_password())
             }
         },
-        [t, walletName, navigate],
+        [t, walletName, navigate, location.state?.isReset, location.state?.password],
     )
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.CreateMaskWalletMnemonic)
-    }, [])
+        navigate(DashboardRoutes.CreateMaskWalletMnemonic, {
+            state: {
+                password: location.state?.password,
+                isReset: location.state?.isReset,
+            },
+            replace: true,
+        })
+    }, [location.state?.password, location.state?.isReset])
 
     return (
         <Box>

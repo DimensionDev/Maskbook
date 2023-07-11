@@ -132,7 +132,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                await WalletRPC.resetPassword(data.password)
+                await WalletRPC.changePassword(await WalletRPC.getDefaultUserPassword(), data.password)
                 const hasPassword = await WalletRPC.hasPassword()
                 if (hasPassword) {
                     navigate(PopupRoutes.Wallet, { replace: true })
