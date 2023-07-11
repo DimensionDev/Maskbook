@@ -49,7 +49,8 @@ export async function getSecret() {
 }
 
 export async function hasSecret() {
-    return (await getSecret())?.hasUpdatedByUser === true
+    const secret = await getSecret()
+    return !!secret && (typeof secret.isUnsafe === 'undefined' || secret.isUnsafe === false)
 }
 
 export async function resetSecret(password: string) {
@@ -65,6 +66,7 @@ export async function resetSecret(password: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
+        isUnsafe: password === getDefaultPassword(),
     })
 }
 
@@ -83,6 +85,7 @@ export async function encryptSecret(password: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
+        isUnsafe: password === getDefaultPassword(),
     })
 }
 
@@ -102,7 +105,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
-        hasUpdatedByUser: true,
+        isUnsafe: false,
     })
 }
 

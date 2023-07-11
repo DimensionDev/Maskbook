@@ -7,10 +7,10 @@ export interface SecretRecord {
     key: ArrayBuffer
     encrypted: ArrayBuffer
     /**
-     * Indicate the type of secret is using.
+     * Indicate whether the default secret is used.
      *
-     * true: the default secret has been overrided by the user given secret.
-     * false: the unsafe default secret is using.
+     * true: the unsafe default secret is used.
+     * false: the default secret has been overrided by the user given secret.
      */
-    hasUpdatedByUser?: boolean
+    isUnsafe?: boolean
 }
