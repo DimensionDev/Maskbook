@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="65" height="64" fill="none">
+    <path fill="#1C68F3" d="M54.352 39.575v-.63h1.422a.315.315 0 1 1 0 .63h-1.422Z" />
+    <path fill="url(#wallert-a)" fill-opacity=".9"
+        d="M9.2 27.077c0-3.653 2.789-6.615 6.228-6.615h32.693c3.439 0 6.227 2.962 6.227 6.615v21.499c0 3.653-2.788 6.615-6.227 6.615H15.428c-3.44 0-6.227-2.962-6.227-6.615V27.077Z" />
+    <path fill="#1C68F3"
+        d="M38.497 36.34c-6.644 3.836-15.14 1.56-18.976-5.085-3.836-6.644-1.56-15.14 5.085-18.976 6.644-3.836 15.14-1.56 18.976 5.085 3.836 6.644 1.56 15.14-5.085 18.976Z" />
+    <path fill="#fff" fill-rule="evenodd"
+        d="m22.883 25.64 2.27 3.932 11.794-6.81.508-.292a6.176 6.176 0 0 1-9.335 6.962l-2.286 1.32 1.907 3.302a1.634 1.634 0 0 0 2.232.598l11.323-6.537a1.634 1.634 0 0 0 .598-2.232l-4.858-8.414-14.153 8.172Zm6.594 3.008a4.807 4.807 0 0 0 4.492-.17 4.807 4.807 0 0 0 2.393-3.805l-6.885 3.975Zm4.055-7.897c1.109-.64 2.5-.35 3.269.629l-1.207.696a1.18 1.18 0 0 0-1.946 1.123l-1.206.697a2.543 2.543 0 0 1 1.09-3.145Zm-6.055 3.495c1.11-.64 2.5-.35 3.27.63l-1.207.696a1.18 1.18 0 0 0-1.946 1.123l-1.207.697a2.543 2.543 0 0 1 1.09-3.146ZM21.802 20.5a1.634 1.634 0 0 0-.599 2.232l1 1.73 14.152-8.171-.998-1.73a1.634 1.634 0 0 0-2.233-.598l-11.322 6.537Z"
+        clip-rule="evenodd" />
+    <g filter="url(#wallert-b)">
+        <path fill="url(#wallert-c)" fill-opacity=".7"
+            d="M9.2 33.99c0-3.633 2.789-6.58 6.228-6.58h32.693c3.439 0 6.227 2.947 6.227 6.58v18.096c0 3.634-2.788 6.58-6.227 6.58H15.428c-3.44 0-6.227-2.946-6.227-6.58V33.991Z" />
+    </g>
+    <path fill="url(#wallert-d)"
+        d="M56.084 39.262v6.472c0 .43-.349.779-.779.779H49.14a3.473 3.473 0 0 1-3.473-3.473" />
+    <circle cx="49.141" cy="43.037" r="1.736" fill="#fff" />
+    <defs>
+        <linearGradient id="wallert-a" x1="31.774" x2="31.774" y1="20.462" y2="55.191"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#397FFF" />
+            <stop offset="1" stop-color="#003CA9" />
+        </linearGradient>
+        <linearGradient id="wallert-c" x1="31.774" x2="31.774" y1="27.411" y2="58.666"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0052E7" />
+            <stop offset="1" stop-color="#2975FF" />
+        </linearGradient>
+        <linearGradient id="wallert-d" x1="56.084" x2="45.666" y1="42.887" y2="42.887"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0175FE" />
+            <stop offset="1" stop-color="#96BBFF" />
+        </linearGradient>
+        <filter id="wallert-b" width="55.147" height="41.255" x="4.201" y="22.411"
+            color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feGaussianBlur in="BackgroundImageFix" stdDeviation="2.5" />
+            <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_4044_36586" />
+            <feBlend in="SourceGraphic" in2="effect1_backgroundBlur_4044_36586" result="shape" />
+        </filter>
+    </defs>
+</svg>

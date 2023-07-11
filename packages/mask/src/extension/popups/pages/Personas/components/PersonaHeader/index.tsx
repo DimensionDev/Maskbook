@@ -10,12 +10,13 @@ export const PersonaHeader = memo(function PersonaHeader() {
     const location = useLocation()
     const { setExtension } = useContext(PageTitleContext)
     const matchHome = useMatch(PopupRoutes.Personas)
+    const matchWalletConnect = useMatch(PopupRoutes.WalletConnect)
 
     useUpdateEffect(() => {
         setExtension(undefined)
     }, [location.pathname, setExtension])
 
-    if (matchHome) return null
+    if (matchHome || matchWalletConnect) return null
 
     return <NormalHeader onClose={Services.Helper.removePopupWindow} />
 })

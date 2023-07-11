@@ -1,11 +1,18 @@
 import { lazy, memo, Suspense, useEffect } from 'react'
-import { Route, Routes, useSearchParams } from 'react-router-dom'
-import { NetworkPluginID, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    CrossIsolationMessages,
+    NetworkPluginID,
+    PopupModalRoutes,
+    PopupRoutes,
+    relativeRouteOf,
+} from '@masknet/shared-base'
 
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
+import { useMount } from 'react-use'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
@@ -15,12 +22,31 @@ const SelectPersona = lazy(() => import('./SelectPersona/index.js'))
 const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
 const ConnectedWallets = lazy(() => import('./ConnectedWallets/index.js'))
 const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
-
+const WalletConnect = lazy(() => import('./WalletConnect/index.js'))
 const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {
+    const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
 
     const [params] = useSearchParams()
+
+    useMount(() => {
+        return CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open, uri }) => {
+            if (open)
+                navigate(PopupRoutes.WalletConnect, {
+                    state: {
+                        uri,
+                    },
+                    replace: true,
+                })
+            else {
+                navigate(PopupRoutes.ConnectWallet, {
+                    replace: true,
+                })
+            }
+        })
+    })
+
     useEffect(() => {
         const from = params.get('from')
         const providerType = params.get('providerType')
@@ -41,6 +67,7 @@ const Persona = memo(() => {
                     <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
                     <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
                     <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
+                    <Route path={r(PopupRoutes.WalletConnect)} element={<WalletConnect />} />
                     <Route path="*" element={<Home />} />
                 </Routes>
             </Web3ContextProvider>

@@ -294,6 +294,7 @@ export function undo_url() { return new URL("./general/Undo.svg", import.meta.ur
 export function upload_url() { return new URL("./general/Upload.svg", import.meta.url) }
 export function user_url() { return new URL("./general/User.svg", import.meta.url) }
 export function verification_url() { return new URL("./general/Verification.svg", import.meta.url) }
+export function wallert_url() { return new URL("./general/Wallert.svg", import.meta.url) }
 export function wallet_url() { return new URL("./general/Wallet.svg", import.meta.url) }
 export function wallet_nav_url() { return new URL("./general/WalletNav.svg", import.meta.url) }
 export function wallet_setting_url() { return new URL("./general/WalletSetting.svg", import.meta.url) }

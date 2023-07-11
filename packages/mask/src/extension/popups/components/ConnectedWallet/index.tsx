@@ -139,7 +139,14 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                         <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
                         <Typography className={classes.walletInfo} component="div">
                             <Typography className={classes.walletName}>
-                                <Typography component="span">{formatDomainName(wallet.name, 10)}</Typography>
+                                <Typography
+                                    component="span"
+                                    textOverflow="ellipsis"
+                                    whiteSpace="nowrap"
+                                    maxWidth="100px"
+                                    overflow="hidden">
+                                    {formatDomainName(wallet.name, 10)}
+                                </Typography>
                                 <Link
                                     style={{ width: 16, height: 16, color: 'inherit' }}
                                     href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
