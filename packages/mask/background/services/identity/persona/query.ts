@@ -1,6 +1,6 @@
 import { first, omit, orderBy } from 'lodash-es'
 import {
-    ECKeyIdentifierFromJsonWebKey,
+    ECKeyIdentifier,
     type EC_Public_JsonWebKey,
     fromBase64URL,
     isEC_Private_JsonWebKey,
@@ -72,7 +72,7 @@ export async function queryPersonaEOAByMnemonic(mnemonicWord: string, password: 
     if (!privateKey.d) return
     return {
         address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
-        identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        identifier: (await ECKeyIdentifier.fromJsonWebKey(publicKey)).unwrap(),
         publicKey,
     }
 }
@@ -84,7 +84,7 @@ export async function queryPersonaEOAByPrivateKey(privateKeyString: string) {
     const publicKey = omit(privateKey, 'd') as EC_Public_JsonWebKey
     return {
         address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
-        identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        identifier: (await ECKeyIdentifier.fromJsonWebKey(publicKey)).unwrap(),
         publicKey,
     }
 }

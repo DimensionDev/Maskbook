@@ -1,13 +1,12 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useCopyToClipboard } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import {
     AddressItem,
+    CopyButton,
     Image,
     TokenWithSocialGroupMenu,
     useCollectionByTwitterHandler,
-    useSnackbarCallback,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { useAnchor } from '@masknet/shared-base-ui'
@@ -127,14 +126,6 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
 
-        const [, copyToClipboard] = useCopyToClipboard()
-
-        const onCopy = useSnackbarCallback({
-            executor: async () => copyToClipboard(address!),
-            deps: [],
-            successText: t('copy_success'),
-        })
-
         const Others = useWeb3Others()
         const { chainId } = useChainContext()
 
@@ -182,7 +173,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />
-                            <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
+                            <CopyButton size={14} className={classes.linkIcon} text={address} />
                             <Link
                                 href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"

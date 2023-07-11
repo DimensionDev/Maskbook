@@ -1,23 +1,18 @@
-import {
-    appendEncryptionTarget,
-    type EC_Key,
-    EC_KeyCurveEnum,
-    type SocialNetworkEnum,
-    type SupportedPayloadVersions,
-} from '@masknet/encryption'
-import type { EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { deriveAESByECDH, queryPublicKey } from '../../database/persona/helper.js'
+import { appendEncryptionTarget, type SocialNetworkEnum, type SupportedPayloadVersions } from '@masknet/encryption'
+import type { PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { deriveAESByECDH } from '../../database/persona/helper.js'
 import { updatePostDB, queryPostDB } from '../../database/post/index.js'
 import {
     publishPostAESKey_version37,
     publishPostAESKey_version39Or38,
 } from '../../network/gun/encryption/queryPostKey.js'
 import { getPostKeyCache } from './decryption.js'
+import { prepareEncryptTarget, type EncryptTargetE2EFromProfileIdentifier } from './encryption.js'
 
 export async function appendShareTarget(
     version: SupportedPayloadVersions,
     post: PostIVIdentifier,
-    target: ProfileIdentifier[],
+    target: EncryptTargetE2EFromProfileIdentifier['target'],
     whoAmI: ProfileIdentifier,
     network: SocialNetworkEnum,
 ): Promise<void> {
@@ -26,10 +21,12 @@ export async function appendShareTarget(
     const postRec = await queryPostDB(post)
     const postBy = postRec?.encryptBy || postRec?.postBy || whoAmI
 
+    const [keyMap, { target: convertedTarget }] = await prepareEncryptTarget({ type: 'E2E', target })
+
     if (!key) throw new Error('No post key found')
     const e2e = await appendEncryptionTarget(
         {
-            target,
+            target: convertedTarget,
             iv: post.toIV(),
             postAESKey: key,
             version,
@@ -40,10 +37,6 @@ export async function appendShareTarget(
                 if (result.length === 0) throw new Error('No key found')
                 return result[0]
             },
-            queryPublicKey: (id) =>
-                queryPublicKey(id).then((key): EC_Key<EC_Public_CryptoKey> | null =>
-                    key ? { algr: EC_KeyCurveEnum.secp256k1, key } : null,
-                ),
         },
     )
 
@@ -52,11 +45,10 @@ export async function appendShareTarget(
     } else {
         publishPostAESKey_version37(post.toIV(), network, e2e)
     }
-    updatePostDB(
-        {
-            identifier: post,
-            recipients: new Map(target.map((identifier): [ProfileIdentifier, Date] => [identifier, new Date()])),
-        },
-        'append',
-    )
+
+    {
+        const recipients = new Map<ProfileIdentifier, Date>()
+        for (const [, value] of keyMap) recipients.set(value, new Date())
+        updatePostDB({ identifier: post, recipients }, 'append')
+    }
 }

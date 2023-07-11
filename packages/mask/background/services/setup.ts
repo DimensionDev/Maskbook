@@ -69,13 +69,11 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
     const GeneratorService: GeneratorServices = {
         decryption: decryptionWithSocialNetworkDecoding,
     }
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    import.meta.webpackHot &&
-        import.meta.webpackHot.accept(['./crypto/decryption'], async () => {
-            GeneratorService.decryption = (
-                await import(/* webpackPreload: true */ './crypto/decryption.js')
-            ).decryptionWithSocialNetworkDecoding
-        })
+    import.meta.webpackHot?.accept(['./crypto/decryption'], async () => {
+        GeneratorService.decryption = (
+            await import(/* webpackPreload: true */ './crypto/decryption.js')
+        ).decryptionWithSocialNetworkDecoding
+    })
     const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
 
     if (debugMode) {

@@ -16,14 +16,18 @@ export function isAESJsonWebKey(x: unknown): x is AESJsonWebKey {
     if (!alg || !k || !Array.isArray(key_ops) || kty !== 'oct') return false
     return true
 }
-export function isEC_Public_JsonWebKey(o: unknown): o is EC_Public_JsonWebKey {
+export function isEC_JsonWebKey(o: unknown): o is EC_JsonWebKey {
     if (typeof o !== 'object' || o === null) return false
     const { crv, key_ops, kty, x, y } = o as JsonWebKey
     if (!crv || !Array.isArray(key_ops) || !kty || !x || !y) return false
     return true
 }
+export function isEC_Public_JsonWebKey(o: unknown): o is EC_Public_JsonWebKey {
+    if (!isEC_JsonWebKey(o)) return false
+    return !o.d
+}
 export function isEC_Private_JsonWebKey(o: unknown): o is EC_Private_JsonWebKey {
-    if (!isEC_Public_JsonWebKey(o)) return false
+    if (!isEC_JsonWebKey(o)) return false
     return !!o.d
 }
 declare class Nominal<T> {

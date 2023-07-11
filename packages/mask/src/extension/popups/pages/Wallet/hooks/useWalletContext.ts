@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { createContainer } from 'unstated-next'
 import { useChainContext, useRecentTransactions, useFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
@@ -10,7 +10,11 @@ function useWalletContext() {
     const location = useLocation()
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: assets, isLoading, refetch } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
+    const {
+        data: assets = EMPTY_LIST,
+        isLoading,
+        refetch,
+    } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
     const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
     const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
@@ -25,14 +29,10 @@ function useWalletContext() {
         setSelectedWallet(target)
     }, [location.search, wallets, selectedWallet])
 
-    const currentChainAssets = useMemo(() => {
-        return assets?.filter((asset) => asset.chainId === chainId) ?? EMPTY_LIST
-    }, [assets, chainId])
-
     return {
         currentToken,
         setCurrentToken,
-        assets: currentChainAssets,
+        assets,
         refreshAssets: refetch,
         transactions,
         assetsLoading: isLoading,

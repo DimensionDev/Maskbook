@@ -14,7 +14,7 @@ import {
     isNativeTokenAddress,
     PayloadEditor,
 } from '@masknet/web3-shared-evm'
-import { FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
+import { CopyButton, FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
@@ -46,7 +46,6 @@ import { Web3 } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
@@ -402,7 +401,7 @@ const ContractInteraction = memo(() => {
                         {request?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
                         request?.transactionContext?.methods?.some((x) => x.name === 'approve') &&
                         to ? (
-                            <CopyIconButton text={to} className={classes.copy} />
+                            <CopyButton text={to} className={classes.copy} />
                         ) : null}
                     </Typography>
                 </div>

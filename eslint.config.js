@@ -8,7 +8,7 @@ import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-import'
 import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
-import * as MasknetPlugin from '@masknet/eslint-plugin'
+import MasknetPlugin from '@masknet/eslint-plugin'
 
 import { pathToFileURL } from 'url'
 

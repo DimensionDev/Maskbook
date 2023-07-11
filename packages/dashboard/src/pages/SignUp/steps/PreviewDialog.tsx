@@ -1,14 +1,14 @@
 import { QRCode } from 'react-qrcode-logo'
-import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme } from '@masknet/theme'
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
-import { type ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { type ForwardedRef, forwardRef, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets/index.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { useCopyToClipboard } from 'react-use'
+import { CopyButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     preview: {
@@ -112,22 +112,11 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
     const { personaName, id, privateKey, words, height } = props
     const { classes } = useStyles()
     const t = useDashboardI18N()
-    const [state, copyToClipboard] = useCopyToClipboard()
-    const { showSnackbar } = useCustomSnackbar()
 
     const qrValue = useMemo(() => {
         const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
         return `mask://persona/${main}?nickname=${personaName}`
     }, [words?.join(','), privateKey, personaName])
-
-    useEffect(() => {
-        if (state.value) {
-            showSnackbar(t.personas_export_persona_copy_success(), { variant: 'success' })
-        }
-        if (state.error?.message) {
-            showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
-        }
-    }, [state])
 
     return (
         <Box
@@ -160,11 +149,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         <Box display="flex">
                             <Typography fontSize={14} fontWeight={600} width={102}>
                                 <span style={{ verticalAlign: 'middle' }}>{t.create_account_private_key()} </span>
-                                <Icons.Copy
-                                    className={classes.copyIcon}
-                                    size={14}
-                                    onClick={() => copyToClipboard(privateKey)}
-                                />
+                                <CopyButton size={14} className={classes.copyIcon} text={privateKey} />
                             </Typography>
                             <Typography
                                 fontSize={10}

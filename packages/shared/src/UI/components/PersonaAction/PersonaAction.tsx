@@ -1,13 +1,11 @@
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { useCopyToClipboard } from 'react-use'
 import { PlatformAvatar } from './PlatformAvatar.js'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { Icons } from '@masknet/icons'
-import { type PropsWithChildren, useCallback, useState } from 'react'
+import { type PropsWithChildren } from 'react'
 import { formatPublicKey } from '../../../utils/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { CopyButton } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
@@ -42,25 +40,6 @@ interface PersonaActionProps extends PropsWithChildren {
 export function PersonaAction(props: PersonaActionProps) {
     const { classes } = useStyles(undefined, { props })
     const { currentPersona, avatar, children } = props
-    const t = useSharedI18N()
-
-    const [open, setOpen] = useState(false)
-
-    const [, copyToClipboard] = useCopyToClipboard()
-
-    const onCopy = useCallback(
-        (e: React.MouseEvent) => {
-            e.preventDefault()
-            e.stopPropagation()
-            copyToClipboard(currentPersona?.identifier?.rawPublicKey ?? '')
-            setOpen(true)
-            // Close tooltip after five seconds of copying
-            setTimeout(() => {
-                setOpen(false)
-            }, 5000)
-        },
-        [currentPersona?.identifier?.rawPublicKey, copyToClipboard],
-    )
 
     return (
         <div className={classes.bottomFixed}>
@@ -76,15 +55,11 @@ export function PersonaAction(props: PersonaActionProps) {
                                 ? formatPublicKey(currentPersona.identifier.rawPublicKey)
                                 : '--'}
                         </Typography>
-                        <ShadowRootTooltip
-                            title={t.copied()}
-                            open={open}
-                            placement="top"
-                            onMouseLeave={() => setOpen(false)}
-                            disableFocusListener
-                            disableTouchListener>
-                            <Icons.Copy size={16} onClick={onCopy} className={classes.linkIcon} />
-                        </ShadowRootTooltip>
+                        <CopyButton
+                            size={16}
+                            text={currentPersona?.identifier.rawPublicKey ?? ''}
+                            className={classes.linkIcon}
+                        />
                     </Box>
                 </div>
             </Box>

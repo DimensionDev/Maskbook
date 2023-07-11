@@ -1,19 +1,19 @@
 import { unreachable } from '@masknet/kit'
-import type { ProfileIdentifier, AESCryptoKey } from '@masknet/base'
+import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/base'
 import { encodePostKey } from './Encryption.js'
 import type { EncryptIO, EncryptionResultE2EMap, EncryptTargetE2E } from './EncryptionTypes.js'
 import { createEphemeralKeysMap } from './utils.js'
 import { v37_addReceiver } from './v37-ecdh.js'
 import { v38_addReceiver } from './v38-ecdh.js'
+import type { EC_Key } from '../index.js'
 
 export interface AppendEncryptionOptions {
     version: -38 | -37
     postAESKey: AESCryptoKey
     iv: Uint8Array
-    target: ProfileIdentifier[]
+    target: ReadonlyArray<EC_Key<EC_Public_CryptoKey>>
 }
-export interface AppendEncryptionIO
-    extends Pick<EncryptIO, 'queryPublicKey' | 'getRandomECKey' | 'deriveAESKey' | 'getRandomValues'> {}
+export interface AppendEncryptionIO extends Pick<EncryptIO, 'getRandomECKey' | 'deriveAESKey' | 'getRandomValues'> {}
 export async function appendEncryptionTarget(
     options: AppendEncryptionOptions,
     io: AppendEncryptionIO,
