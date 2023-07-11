@@ -437,6 +437,7 @@
     "data_recovery_email_code": "Email verification code",
     "data_recovery_mobile": "Mobile",
     "data_recovery_mobile_code": "Mobile verification code",
+    "data_recovery_invalid_mobile": "Invalid phone number, please check and try again.",
     "file_unpacking": "Uppacking",
     "file_unpacking_completed": "Completed",
     "data_decrypting": "Decrypting",

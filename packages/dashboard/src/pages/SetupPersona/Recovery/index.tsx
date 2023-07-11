@@ -10,13 +10,14 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
-import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud.js'
+import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
 import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { Services } from '../../../API.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
+import { UserProvider } from '../../Settings/hooks/UserContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -182,7 +183,9 @@ export const Recovery = memo(function Recovery() {
                                 <RestorePersonaFromLocal onRestore={onRestore} />
                             </TabPanel>
                             <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
-                                <RestoreFromCloud />
+                                <UserProvider>
+                                    <RestoreFromCloud />
+                                </UserProvider>
                             </TabPanel>
                         </div>
                     </TabContext>

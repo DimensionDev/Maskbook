@@ -41,8 +41,7 @@ export interface StepperProps {
     children: ReactElement[]
     onChange?: (step: { name: string; params: any }) => void
 }
-export function Stepper(props: StepperProps) {
-    const { defaultStep, transition, step, onChange } = props
+export const Stepper = memo(function Stepper({ defaultStep, transition, step, children, onChange }: StepperProps) {
     const { classes } = useStyles()
     const [currentStep, setCurrentStep] = useState(defaultStep)
     const [currentTransition, setCurrentTransition] = useState(transition?.render)
@@ -59,7 +58,7 @@ export function Stepper(props: StepperProps) {
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-types
-        Children.forEach(props.children, (child: ReactElement<StepProps>) => {
+        Children.forEach(children, (child: ReactElement<StepProps>) => {
             if (!isValidElement(child)) return
             const name = child.props.name
             setSteps(name, child)
@@ -85,14 +84,12 @@ export function Stepper(props: StepperProps) {
 
     return (
         <>
-            <>{currentTransition}</>
-            <>
-                {steps[currentStep] ? (
-                    <Box className={currentTransition ? classes.hidden : ''} width="100%">
-                        {cloneElement(steps[currentStep], { toStep, params: stepParams[currentStep] })}
-                    </Box>
-                ) : null}
-            </>
+            {currentTransition}
+            {steps[currentStep] ? (
+                <Box className={currentTransition ? classes.hidden : ''} width="100%">
+                    {cloneElement(steps[currentStep], { toStep, params: stepParams[currentStep] })}
+                </Box>
+            ) : null}
         </>
     )
-}
+})

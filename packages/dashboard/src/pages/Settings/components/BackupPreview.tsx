@@ -176,7 +176,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                         className={classes.cardHeader}
                         avatar={
                             <div className={cx(classes.cardIcon, classes.walletIcon)}>
-                                <Icons.ConnectWallet size={20} color="#fff" />
+                                <Icons.WalletUnderTabs size={20} color="#fff" />
                             </div>
                         }
                         title={
