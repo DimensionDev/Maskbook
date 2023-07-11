@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { decodeText, encodeText } from '@masknet/kit'
 import { PluginDB } from '../../../database/Plugin.db.js'
-import { getDefaultPassword } from '../../helpers.js'
+import { getDefaultUserPassword } from '../../helpers.js'
 
 const SECRET_ID = '0'
 
@@ -44,19 +44,31 @@ async function deriveKey(iv: ArrayBuffer, password: string) {
     return deriveAES(await derivePBKDF2(password), iv)
 }
 
-export async function getSecret() {
+async function getSecret() {
     return PluginDB.get('secret', SECRET_ID)
 }
 
+/**
+ * Return true means a password (could be the default one) has been set.
+ * @returns
+ */
 export async function hasSecret() {
     return !!(await getSecret())
 }
 
+/**
+ * Return true means the user has set a password.
+ * @returns
+ */
 export async function hasSafeSecret() {
     const secret = await getSecret()
     return !!secret && (typeof secret.isUnsafe === 'undefined' || secret.isUnsafe === false)
 }
 
+/**
+ * Erase the preexisting master password by force, and create a new master password with the given user password.
+ * @param password
+ */
 export async function resetSecret(password: string) {
     await PluginDB.remove('secret', SECRET_ID)
     const iv = getIV()
@@ -70,10 +82,14 @@ export async function resetSecret(password: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
-        isUnsafe: password === getDefaultPassword(),
+        isUnsafe: password === getDefaultUserPassword(),
     })
 }
 
+/**
+ * Create a master password which will be encrypted by the given user password.
+ * @param password
+ */
 export async function encryptSecret(password: string) {
     const secret = await getSecret()
     if (secret) throw new Error('Failed to encrypt secret.')
@@ -89,14 +105,19 @@ export async function encryptSecret(password: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
-        isUnsafe: password === getDefaultPassword(),
+        isUnsafe: password === getDefaultUserPassword(),
     })
 }
 
+/**
+ * Update the user password which is used for encrypting the master password.
+ * @param oldPassword
+ * @param newPassword
+ */
 export async function updateSecret(oldPassword: string, newPassword: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to update secret.')
-    if (newPassword === getDefaultPassword()) throw new Error('Invalid password.')
+    if (newPassword === getDefaultUserPassword()) throw new Error('Invalid password.')
 
     const iv = getIV()
     const message = await decryptSecret(oldPassword)
@@ -113,6 +134,11 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
     })
 }
 
+/**
+ * Decrypt the mater password.
+ * @param password
+ * @returns
+ */
 export async function decryptSecret(password: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to decrypt secret.')

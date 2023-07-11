@@ -4,7 +4,10 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB.js'
 import type { LegacyWalletRecordInDatabase } from '../database/types.js'
 
-export function getDefaultPassword() {
+/**
+ * The default user password for master password encryption.
+ */
+export function getDefaultUserPassword() {
     return 'MASK'
 }
 

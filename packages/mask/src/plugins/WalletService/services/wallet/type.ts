@@ -5,6 +5,9 @@ export interface SecretRecord {
     type: 'secret'
     iv: ArrayBuffer
     key: ArrayBuffer
+    /**
+     * The encrypted master password.
+     */
     encrypted: ArrayBuffer
     /**
      * Indicate whether the default secret is used.
