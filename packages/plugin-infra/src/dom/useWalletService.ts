@@ -29,7 +29,12 @@ export interface WalletBackupProvider {
         derivationPath?: string,
         initialPassword?: string,
     ): Promise<string | undefined>
-    recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string): Promise<string>
+    recoverWalletFromPrivateKey(
+        name: string,
+        privateKey: string,
+        initialPassword_?: string,
+        derivationPath?: string,
+    ): Promise<string>
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>
 }
