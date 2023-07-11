@@ -1,3 +1,4 @@
+import { toBlob } from 'html-to-image'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -10,7 +11,6 @@ import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
-import { toBlob } from 'html-to-image'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
@@ -201,27 +201,14 @@ const CreateMnemonic = memo(function CreateMnemonic() {
             await PluginServices.Wallet.setPassword(password)
         }
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonic(
-            walletName,
-            words.join(' '),
-            undefined,
-            hasPassword ? undefined : 'MASK',
-        )
-
+        const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
         return address
     }, [words, walletName, location.state?.isReset, location.state?.password])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         await resetWallets()
 
-        const hasPassword = await PluginServices.Wallet.hasPassword()
-
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
-            walletName,
-            words.join(' '),
-            undefined,
-            hasPassword ? undefined : 'MASK',
-        )
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
             {

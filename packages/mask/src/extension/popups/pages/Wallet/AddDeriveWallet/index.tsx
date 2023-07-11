@@ -114,7 +114,6 @@ const AddDeriveWallet = memo(() => {
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
-            hasPassword ? undefined : 'MASK',
         )
 
         await Promise.all(
@@ -125,7 +124,6 @@ const AddDeriveWallet = memo(() => {
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
-                        hasPassword ? undefined : 'MASK',
                     ),
                 ),
         )

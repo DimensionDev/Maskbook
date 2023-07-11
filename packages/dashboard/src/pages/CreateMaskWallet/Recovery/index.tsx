@@ -111,12 +111,7 @@ const Recovery = memo(function Recovery() {
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
                 await resetWallets()
-                const hasPassword = await PluginServices.Wallet.hasPassword()
-                await PluginServices.Wallet.recoverWalletFromPrivateKey(
-                    walletName,
-                    data.privateKey,
-                    hasPassword ? undefined : 'MASK',
-                )
+                await PluginServices.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
@@ -129,12 +124,10 @@ const Recovery = memo(function Recovery() {
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
                 await resetWallets()
-                const hasPassword = await PluginServices.Wallet.hasPassword()
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
                     walletName,
                     keyStoreContent,
                     keyStorePassword,
-                    hasPassword ? undefined : 'MASK',
                 )
                 await PluginServices.Wallet.resolveMaskAccount([{ address }])
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
