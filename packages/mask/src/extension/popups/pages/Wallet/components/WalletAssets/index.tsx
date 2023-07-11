@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { EmptyStatus } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles, useTabs } from '@masknet/theme'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
@@ -99,11 +99,11 @@ export const WalletAssets = memo(function WalletAssets() {
     })
     const handleAdd = useCallback(() => navigate(PopupRoutes.AddToken), [navigate])
 
-    return wallet ? <WalletAssetsUI onAddTokenClick={handleAdd} /> : null
+    return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })
 
 export interface WalletAssetsUIProps {
-    onAddTokenClick: () => void
+    onAddToken: () => void
 }
 
 enum AssetTabs {
@@ -112,7 +112,7 @@ enum AssetTabs {
     Activity = 'Activity',
 }
 
-export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddTokenClick }) {
+export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -131,18 +131,13 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                         />
                         <Tab className={classes.tab} label={t('popups_wallet_tab_activity')} value={tabs.Activity} />
                     </StyledTabList>
-                    <Button variant="text" className={classes.addButton}>
+                    <Button variant="text" className={classes.addButton} onClick={onAddToken}>
                         <Icons.AddNoBorder size={16} />
                     </Button>
                 </Box>
                 <Box className={classes.panels}>
                     <TabPanel value={tabs.Tokens} className={classes.tabPanel}>
                         <AssetsList />
-                        <div style={{ padding: 16 }}>
-                            <ActionButton variant="roundedOutlined" fullWidth onClick={onAddTokenClick}>
-                                {t('add_token')}
-                            </ActionButton>
-                        </div>
                     </TabPanel>
                     <TabPanel value={tabs.Collectibles} className={classes.tabPanel}>
                         <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
