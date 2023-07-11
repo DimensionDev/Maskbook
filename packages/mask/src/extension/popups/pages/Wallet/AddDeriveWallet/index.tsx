@@ -107,8 +107,6 @@ const AddDeriveWallet = memo(() => {
         const unDeriveWallets = Array.from(indexes.current)
         if (!unDeriveWallets.length) return
 
-        const hasPassword = await WalletRPC.hasPassword()
-
         const firstPath = first(unDeriveWallets)
         const firstWallet = await WalletRPC.recoverWalletFromMnemonic(
             `${walletName}${firstPath!}`,

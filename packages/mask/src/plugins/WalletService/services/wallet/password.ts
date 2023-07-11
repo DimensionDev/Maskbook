@@ -1,6 +1,7 @@
 import { validate } from 'uuid'
 import * as database from './database/index.js'
 import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
+import { getDefaultPassword } from '../helpers.js'
 
 let inMemoryPassword = ''
 
@@ -29,6 +30,12 @@ export async function setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
     await database.encryptSecret(newPassword)
     INTERNAL_setPassword(newPassword)
+}
+
+export async function setDefaultPassword() {
+    const password = getDefaultPassword()
+    await database.encryptSecret(password)
+    INTERNAL_setPassword(password)
 }
 
 export async function hasPassword() {
