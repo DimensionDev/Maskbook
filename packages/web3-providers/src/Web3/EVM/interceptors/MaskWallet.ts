@@ -100,6 +100,14 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     context.abort(context)
                 }
                 break
+            case EthereumMethodType.MASK_RESET_ALL_WALLETS:
+                try {
+                    await this.walletProvider.resetAllWallets()
+                    context.write()
+                } catch (error) {
+                    context.abort(context)
+                }
+                break
             default:
                 break
         }
