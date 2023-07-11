@@ -1,11 +1,10 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
+import { CopyButton, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@mui/material'
 import { useCallback } from 'react'
-import { Copy, ExternalLink } from 'react-feather'
-import { useCopyToClipboard } from 'react-use'
+import { ExternalLink } from 'react-feather'
 import { useI18N } from '../../locales/index.js'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
 
@@ -74,19 +73,6 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLAnchorElement>) => {
-            ev.stopPropagation()
-            copyToClipboard(token?.contract ?? '')
-        },
-        [],
-        undefined,
-        undefined,
-        undefined,
-        t.copy_success_of_token_addr(),
-    )
-
     const onClose = useCallback(async () => {
         onSetDialog({ open: false, swap: false })
     }, [onSetDialog])
@@ -118,14 +104,11 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                     <Typography>{token?.name ?? '--'}</Typography>
                     <Stack direction="row">
                         <Typography>{token?.contract ? formatEthereumAddress(token?.contract, 4) : '--'}</Typography>
-                        <Link
-                            className={classes.link}
-                            underline="none"
-                            component="button"
+                        <CopyButton
+                            size={14}
                             title={t.wallet_status_button_copy_address()}
-                            onClick={onCopy}>
-                            <Copy size={14} />
-                        </Link>
+                            text={token?.contract ?? ''}
+                        />
                         <Link
                             className={classes.link}
                             href={

@@ -1,20 +1,19 @@
 // ! We're going to SSR this UI, so DO NOT import anything new!
+import { Icons } from '@masknet/icons'
+import { CopyButton, PersonaContext } from '@masknet/shared'
+import {
+    PopupRoutes,
+    formatPersonaFingerprint,
+    type ECKeyIdentifier,
+    type PersonaInformation,
+} from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { List, ListItemButton, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useHover } from 'react-use'
 import { Trash2 } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
-import { ListItemButton, List, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
-import {
-    formatPersonaFingerprint,
-    type PersonaInformation,
-    type ECKeyIdentifier,
-    PopupRoutes,
-} from '@masknet/shared-base'
-import { PersonaContext } from '@masknet/shared'
+import { useHover } from 'react-use'
 import Services from '../../../../../service.js'
-import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
     list: {
@@ -163,7 +162,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                     </Typography>
                     <Typography className={classes.identifier}>
                         {formatPersonaFingerprint(identifier.rawPublicKey ?? '', 10)}
-                        <CopyIconButton className={classes.copy} text={identifier.rawPublicKey} />
+                        <CopyButton className={classes.copy} text={identifier.rawPublicKey} />
                         <Trash2
                             size={12}
                             className={classes.trashIcon}

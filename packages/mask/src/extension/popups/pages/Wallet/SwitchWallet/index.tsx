@@ -52,9 +52,9 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { setChainId, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const handleClickCreate = useCallback(() => {
+    const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
-            browser.tabs.create({
+            await browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
             })
@@ -62,8 +62,8 @@ const SwitchWallet = memo(function SwitchWallet() {
             navigate(PopupRoutes.CreateWallet)
         }
     }, [wallets, history])
-    const handleImport = useCallback(() => {
-        browser.tabs.create({
+    const handleImport = useCallback(async () => {
+        await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/recovery'),
         })

@@ -4,11 +4,10 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
+import { CopyButton, FormattedAddress } from '@masknet/shared'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useReverseAddress, useWallet } from '@masknet/web3-hooks-base'
-import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -111,7 +110,7 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(
 
                         <Typography className={classes.address}>
                             <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
-                            <CopyIconButton text={address ?? ''} className={classes.copy} />
+                            <CopyButton text={address} className={classes.copy} />
                         </Typography>
                     </div>
                 </div>

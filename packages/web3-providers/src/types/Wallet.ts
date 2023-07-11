@@ -47,6 +47,8 @@ export namespace WalletAPI {
         renameWallet(address: string, name: string): Promise<void>
         /** Remove a wallet */
         removeWallet(address: string, password?: string | undefined): Promise<void>
+        /** Reset all wallets */
+        resetAllWallets(): Promise<void>
         /** Update a bunch of wallets. */
         updateWallets(wallets: Wallet[]): Promise<void>
         /** Remove a bunch of wallets. */

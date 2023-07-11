@@ -8,7 +8,7 @@ import {
     useRef,
     useState,
 } from 'react'
-import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
+import type { EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
 import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
 import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
@@ -23,6 +23,7 @@ import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMeth
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
 import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
+import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -105,7 +106,7 @@ export interface CompositionProps {
     personaAction?: React.ReactNode
 }
 export interface SubmitComposition {
-    target: EncryptTargetPublic | EncryptTargetE2E
+    target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier
     content: SerializableTypedMessages
     encode: 'text' | 'image'
     version: -37 | -38
@@ -193,7 +194,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     target:
                         encryptionKind === EncryptionTargetType.Public
                             ? { type: 'public' }
-                            : { type: 'E2E', target: recipients.map((x) => x.identifier) },
+                            : {
+                                  type: 'E2E',
+                                  target: recipients.map((x) => ({
+                                      profile: x.identifier,
+                                      persona: x.linkedPersona,
+                                  })),
+                              },
                     version: encodingKind === EncryptionMethodType.Text ? -37 : -38,
                 })
                 .finally(reset)

@@ -139,6 +139,12 @@ export class MaskWalletProvider
         }
     }
 
+    override async resetAllWallets(): Promise<void> {
+        await super.removeWallets(this.wallets)
+        await this.walletStorage?.account.setValue('')
+        await this.context?.resetAllWallets()
+    }
+
     override async renameWallet(address: string, name: string) {
         await super.renameWallet(address, name)
         CrossIsolationMessages.events.renameWallet.sendToAll({})

@@ -1,9 +1,8 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
 import { alpha, Box, Link, Typography } from '@mui/material'
-import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
+import { CopyButton, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useCopyToClipboard } from 'react-use'
 import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -82,14 +81,6 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         const { classes } = useStyles()
         const t = useSharedI18N()
 
-        const [, copyToClipboard] = useCopyToClipboard()
-
-        const onCopy = useSnackbarCallback({
-            executor: async () => copyToClipboard(address ?? ''),
-            deps: [],
-            successText: t.copy_wallet_address_success(),
-        })
-
         return (
             <Box onClick={onClick} className={classes.root}>
                 <WalletIcon
@@ -107,7 +98,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                     </Typography>
                     <Typography className={classes.address}>
                         <span>{formattedAddress}</span>
-                        {address ? <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} /> : null}
+                        {address ? <CopyButton size={14} className={classes.linkIcon} text={address} /> : null}
                         <Link
                             href={addressLink}
                             target="_blank"
