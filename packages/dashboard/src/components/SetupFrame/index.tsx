@@ -1,23 +1,34 @@
 import { memo, useState, type PropsWithChildren } from 'react'
-import { Box, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
 import { useDashboardI18N } from '../../locales/i18n_generated.js'
-import { LoadingBase } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 
 interface SetupFrameProps extends PropsWithChildren {
     hiddenSpline?: boolean
 }
 
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        [theme.breakpoints.up('lg')]: {
+            paddingLeft: '20%',
+        },
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: '50px',
+        },
+    },
+}))
+
 export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, hiddenSpline }) {
-    const theme = useTheme()
+    const { classes, theme } = useStyles()
     const t = useDashboardI18N()
     const [loading, setLoading] = useState(true)
 
     return (
         <Grid container sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
-            <Grid item xs={8} paddingY={16} paddingLeft="20%" paddingRight={8} minHeight="896px">
+            <Grid item xs={8} paddingY={16} className={classes.content} paddingRight={8} minHeight="896px">
                 <header>
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
