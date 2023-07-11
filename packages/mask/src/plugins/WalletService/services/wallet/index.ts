@@ -230,10 +230,8 @@ export async function recoverWalletFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-    initialPassword?: string,
 ) {
-    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
-
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importMnemonic({
         mnemonic,
         password: password_,
@@ -266,10 +264,8 @@ export async function generateAddressFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-    initialPassword?: string,
 ) {
-    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
-
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importMnemonic({
         mnemonic,
         password: password_,
@@ -284,13 +280,11 @@ export async function generateAddressFromMnemonic(
         derivationPath,
         StoredKeyData: imported.StoredKey.data,
     })
-
     return created?.account?.address ?? undefined
 }
 
-export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword?: string) {
-    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
-
+export async function recoverWalletFromPrivateKey(name: string, privateKey: string) {
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
         name,
@@ -309,14 +303,8 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
     return database.addWallet(created.account.address, name, undefined, imported.StoredKey)
 }
 
-export async function recoverWalletFromKeyStoreJSON(
-    name: string,
-    json: string,
-    jsonPassword: string,
-    initialPassword?: string,
-) {
-    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
-
+export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importJSON({
         coin: api.Coin.Ethereum,
         json,
