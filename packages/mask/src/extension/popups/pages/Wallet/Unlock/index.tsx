@@ -1,14 +1,14 @@
 import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { makeStyles } from '@masknet/theme'
+import { Trans } from 'react-i18next'
+import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { LoadingButton } from '@mui/lab'
-import { Trans } from 'react-i18next'
 import { ResetWalletModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({

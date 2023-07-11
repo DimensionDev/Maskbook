@@ -1,10 +1,10 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
 import { toBuffer } from '@ethereumjs/util'
+import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import type { SignType, Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { api } from '@dimensiondev/mask-wallet-core/proto'
 import * as database from './database/index.js'
 import * as password from './password.js'
 import * as Mask from '../maskwallet/index.js'
@@ -35,8 +35,6 @@ export {
     validatePassword,
     clearPassword,
 } from './password.js'
-
-export { getDefaultUserPassword } from '../helpers.js'
 
 export * from './network.js'
 

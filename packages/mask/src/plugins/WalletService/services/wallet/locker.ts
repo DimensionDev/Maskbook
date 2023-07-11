@@ -19,7 +19,7 @@ export async function unlockWallet(unverifiedPassword: string) {
         currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(false)
         return true
-    } catch (error) {
+    } catch {
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(true)
         return false
     }

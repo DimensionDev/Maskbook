@@ -1,4 +1,4 @@
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, getDefaultWalletName } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import type { UseFormSetError } from 'react-hook-form'
@@ -81,7 +81,6 @@ const Recovery = memo(function Recovery() {
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
     const [error, setError] = useState('')
-    const walletName = 'Wallet 1'
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
@@ -111,13 +110,13 @@ const Recovery = memo(function Recovery() {
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
-                await PluginServices.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
+                await PluginServices.Wallet.recoverWalletFromPrivateKey(getDefaultWalletName(), data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
             }
         },
-        [t, walletName, navigate, location.state?.isReset, location.state?.password],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const onRestore = useCallback(
@@ -126,7 +125,7 @@ const Recovery = memo(function Recovery() {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
-                    walletName,
+                    getDefaultWalletName(),
                     keyStoreContent,
                     keyStorePassword,
                 )
@@ -136,7 +135,7 @@ const Recovery = memo(function Recovery() {
                 setError(t.create_wallet_key_store_incorrect_password())
             }
         },
-        [t, walletName, navigate, location.state?.isReset, location.state?.password],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const handleRecovery = useCallback(() => {

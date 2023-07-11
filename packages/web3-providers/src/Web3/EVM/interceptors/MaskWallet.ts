@@ -29,7 +29,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     context.write(this.walletProvider.subscription.wallets.getCurrentValue())
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_ADD_WALLET:
@@ -38,7 +38,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     await this.walletProvider.addWallet(context.wallet)
                     context.write()
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
@@ -47,7 +47,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     await this.walletProvider.updateOrAddWallet(context.wallet)
                     context.write()
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_UPDATE_WALLET:
@@ -57,7 +57,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     await this.walletProvider.updateWallet(address, updates)
                     context.write()
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_RENAME_WALLET:
@@ -67,7 +67,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     await this.walletProvider.renameWallet(address, name)
                     context.write()
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_REMOVE_WALLET:
@@ -77,7 +77,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     await this.walletProvider.removeWallet(address, password)
                     context.write()
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_UPDATE_WALLETS:
@@ -87,7 +87,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     await this.walletProvider.updateWallets(wallets)
                     context.write()
                 } catch (error) {
-                    context.abort(context)
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.MASK_REMOVE_WALLETS:

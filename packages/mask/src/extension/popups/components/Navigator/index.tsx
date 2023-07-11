@@ -1,14 +1,14 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { memo } from 'react'
+import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { NavLink, type LinkProps } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
-import { useWallet } from '@masknet/web3-hooks-base'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {

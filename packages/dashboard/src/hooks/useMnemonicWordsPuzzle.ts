@@ -1,8 +1,8 @@
-import { range, shuffle, remove, clone } from 'lodash-es'
-import { useAsyncRetry } from 'react-use'
-import { PluginServices } from '../API.js'
 import { useCallback, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { produce } from 'immer'
+import { range, shuffle, remove, clone } from 'lodash-es'
+import { PluginServices } from '../API.js'
 
 const PUZZLE_SIZE = 3
 

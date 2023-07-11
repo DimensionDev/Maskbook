@@ -1,21 +1,21 @@
 import { memo, useState } from 'react'
-import type { z as zod } from 'zod'
-import { useI18N } from '../../../../../utils/index.js'
-import { Box, Link, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { usePasswordForm } from '../hooks/usePasswordForm.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { Trans } from 'react-i18next'
+import { Controller } from 'react-hook-form'
+import type { z as zod } from 'zod'
+import { Box, Link, Typography, useTheme } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
 import { useBalance, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { Controller } from 'react-hook-form'
+import { useI18N } from '../../../../../utils/index.js'
+import { usePasswordForm } from '../hooks/usePasswordForm.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -132,7 +132,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                await WalletRPC.changePassword(await WalletRPC.getDefaultUserPassword(), data.password)
+                await WalletRPC.changePassword(getDefaultWalletPassword(), data.password)
                 const hasPassword = await WalletRPC.hasPassword()
                 if (hasPassword) {
                     navigate(PopupRoutes.Wallet, { replace: true })

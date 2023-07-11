@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { decodeText, encodeText } from '@masknet/kit'
+import { getDefaultWalletPassword } from '@masknet/shared-base'
 import { PluginDB } from '../../../database/Plugin.db.js'
-import { getDefaultUserPassword } from '../../helpers.js'
 
 const SECRET_ID = '0'
 
@@ -82,7 +82,7 @@ export async function resetSecret(password: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
-        isUnsafe: password === getDefaultUserPassword(),
+        isUnsafe: password === getDefaultWalletPassword(),
     })
 }
 
@@ -106,7 +106,7 @@ export async function encryptSecret(password: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
-        isUnsafe: password === getDefaultUserPassword(),
+        isUnsafe: password === getDefaultWalletPassword(),
     })
 }
 /**
@@ -118,7 +118,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to update secret.')
 
-    if (newPassword === getDefaultUserPassword()) throw new Error('Invalid password.')
+    if (newPassword === getDefaultWalletPassword()) throw new Error('Invalid password.')
 
     const iv = getIV()
     const message = await decryptSecret(oldPassword)

@@ -1,14 +1,14 @@
 import { validate } from 'uuid'
+import { getDefaultWalletPassword } from '@masknet/shared-base'
 import * as database from './database/index.js'
 import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
-import { getDefaultUserPassword } from '../helpers.js'
 
 let inMemoryPassword = ''
 
 export async function INTERNAL_getPassword() {
     return inMemoryPassword
         ? database.decryptSecret(inMemoryPassword)
-        : database.decryptSecret(getDefaultUserPassword())
+        : database.decryptSecret(getDefaultWalletPassword())
 }
 
 export async function INTERNAL_getPasswordRequired() {
@@ -35,7 +35,7 @@ export async function setPassword(newPassword: string) {
 }
 
 export async function setDefaultPassword() {
-    const password = getDefaultUserPassword()
+    const password = getDefaultWalletPassword()
     const hasUnsafePassword = await database.hasSecret()
     if (hasUnsafePassword) return
     await database.encryptSecret(password)

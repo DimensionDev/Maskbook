@@ -1,12 +1,11 @@
-import { useWallets } from '@masknet/web3-hooks-base'
 import { useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
 import { createContainer } from 'unstated-next'
-import { PluginServices } from '../../API.js'
+import { useLocation } from 'react-router-dom'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { getDefaultWalletPassword, CrossIsolationMessages } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { getDefaultUserPassword } from './helpers.js'
+import { PluginServices } from '../../API.js'
 
 function useContext() {
     const location = useLocation()
@@ -32,7 +31,7 @@ function useContext() {
             if (isReset) {
                 await resetWallets(password, isReset)
             } else if (password && !hasPassword) {
-                await PluginServices.Wallet.changePassword(getDefaultUserPassword(), password)
+                await PluginServices.Wallet.changePassword(getDefaultWalletPassword(), password)
             }
         },
         [resetWallets],
