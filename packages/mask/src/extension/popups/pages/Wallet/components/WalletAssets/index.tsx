@@ -1,4 +1,5 @@
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
+import { EmptyStatus } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
@@ -12,7 +13,6 @@ import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -89,12 +89,6 @@ const StyledTabList = styled(TabList)`
     }
 `
 
-enum WalletTabs {
-    Tokens = 'Tokens',
-    Collectibles = 'Collectibles',
-    Activity = 'Activity',
-}
-
 export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -122,12 +116,9 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
     const { t } = useI18N()
 
     const { classes } = useStyles()
-    const { assetsLoading } = useContainer(WalletContext)
     const [currentTab, onChange, tabs] = useTabs(AssetTabs.Tokens, AssetTabs.Collectibles, AssetTabs.Activity)
 
-    return assetsLoading ? (
-        <LoadingStatus height="100%" />
-    ) : (
+    return (
         <div className={classes.content}>
             <TabContext value={currentTab}>
                 <Box className={classes.header}>

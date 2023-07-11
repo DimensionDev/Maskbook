@@ -5,8 +5,17 @@ import { makeStyles } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import { formatBalance, formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Box, List, ListItem, ListItemIcon, ListItemText, Typography, type TypographyProps } from '@mui/material'
-import { isNaN } from 'lodash-es'
+import {
+    Box,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Skeleton,
+    Typography,
+    type TypographyProps,
+} from '@mui/material'
+import { isNaN, range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
@@ -64,7 +73,7 @@ type Asset = FungibleAsset<ChainId, SchemaType>
 
 export const AssetsList = memo(function AssetsList() {
     const navigate = useNavigate()
-    const { assets, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
+    const { assets, assetsLoading, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
         navigate(`${PopupRoutes.TokenDetail}/${asset.address}`)
@@ -78,7 +87,11 @@ export const AssetsList = memo(function AssetsList() {
     }, [assets])
     return (
         <>
-            <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
+            {assetsLoading ? (
+                <AssetsListSkeleton />
+            ) : (
+                <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
+            )}
             <MoreBar isExpand={assetsIsExpand} hasLowValueToken={hasLowValueToken} onClick={onSwitch} />
         </>
     )
@@ -165,6 +178,40 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                     </ListItem>
                 )
             })}
+        </List>
+    )
+})
+
+const AssetsListSkeleton = memo(function AssetsListSkeleton() {
+    const { classes } = useStyles()
+    return (
+        <List dense className={classes.list}>
+            {range(4).map((i) => (
+                <ListItem
+                    key={i}
+                    className={classes.item}
+                    secondaryAction={
+                        <Typography className={classes.value}>
+                            <Skeleton width={60} />
+                        </Typography>
+                    }>
+                    <ListItemIcon>
+                        <Box position="relative">
+                            <Skeleton variant="circular" className={classes.tokenIcon} />
+                            <Skeleton variant="circular" width={16} height={16} className={classes.badgeIcon} />
+                        </Box>
+                    </ListItemIcon>
+                    <ListItemText
+                        className={classes.text}
+                        secondary={
+                            <Typography>
+                                <Skeleton width={100} />
+                            </Typography>
+                        }>
+                        <Skeleton width={90} />
+                    </ListItemText>
+                </ListItem>
+            ))}
         </List>
     )
 })

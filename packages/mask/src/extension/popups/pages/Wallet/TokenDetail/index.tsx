@@ -14,7 +14,7 @@ import {
     type Dimension,
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { openWindow, queryClient } from '@masknet/shared-base-ui'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useChainId, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -214,7 +214,6 @@ const TokenDetail = memo(function TokenDetail() {
                         address: asset.address,
                     })
                     showSnackbar(t('hided_token_successfully'))
-                    queryClient.invalidateQueries(['fungible-assets', NetworkPluginID.PLUGIN_EVM, chainId])
                     navigate(-1)
                 }}>
                 <Icons.Trash size={24} />
