@@ -49,7 +49,7 @@ async function getSecret() {
 }
 
 /**
- * Return true means a password (could be the default one) has been set.
+ * Return true means a user password (could be the default one) has been set.
  * @returns
  */
 export async function hasSecret() {
@@ -57,7 +57,7 @@ export async function hasSecret() {
 }
 
 /**
- * Return true means the user has set a password.
+ * Return true means the user has set a password (could not be the default one).
  * @returns
  */
 export async function hasSafeSecret() {
@@ -66,7 +66,7 @@ export async function hasSafeSecret() {
 }
 
 /**
- * Erase the preexisting master secret by force, and create a new master secret with the given user password.
+ * Erase the preexisting master secret by force, and create a new one with the given user password.
  * @param password
  */
 export async function resetSecret(password: string) {
@@ -135,7 +135,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
 }
 
 /**
- * Decrypt the master password.
+ * Decrypt the master secret.
  * @param password
  * @returns
  */
