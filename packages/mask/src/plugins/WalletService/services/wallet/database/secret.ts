@@ -135,7 +135,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
 }
 
 /**
- * Decrypt the mater password.
+ * Decrypt the master password.
  * @param password
  * @returns
  */
