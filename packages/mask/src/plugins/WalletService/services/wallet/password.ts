@@ -1,11 +1,12 @@
 import { validate } from 'uuid'
 import * as database from './database/index.js'
 import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
+import { getDefaultPassword } from '../helpers.js'
 
-let password = ''
+let inMemoryPassword = ''
 
 export async function INTERNAL_getPassword() {
-    return password ? database.decryptSecret(password) : ''
+    return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
 }
 
 export async function INTERNAL_getPasswordRequired() {
@@ -14,13 +15,13 @@ export async function INTERNAL_getPasswordRequired() {
         if (!password_) throw new Error('No password set yet or expired.')
         return password_
     } else {
-        return 'MASK'
+        return getDefaultPassword()
     }
 }
 
 export function INTERNAL_setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
-    password = newPassword
+    inMemoryPassword = newPassword
 }
 
 export async function resetPassword(newPassword: string) {
@@ -40,7 +41,7 @@ export async function hasPassword() {
 }
 
 export async function verifyPassword(unverifiedPassword: string) {
-    if (password === unverifiedPassword) return true
+    if (inMemoryPassword === unverifiedPassword) return true
     return validate(await database.decryptSecret(unverifiedPassword))
 }
 
@@ -69,5 +70,5 @@ export function validatePasswordRequired(unverifiedPassword: string) {
 }
 
 export function clearPassword() {
-    password = ''
+    inMemoryPassword = ''
 }

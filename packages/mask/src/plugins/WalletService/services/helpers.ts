@@ -4,6 +4,10 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB.js'
 import type { LegacyWalletRecordInDatabase } from '../database/types.js'
 
+export function getDefaultPassword() {
+    return 'MASK'
+}
+
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet']>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
     return record ? LegacyWalletRecordOutDB(record) : null

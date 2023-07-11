@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { decodeText, encodeText } from '@masknet/kit'
 import { PluginDB } from '../../../database/Plugin.db.js'
+import { getDefaultPassword } from '../../helpers.js'
 
 const SECRET_ID = '0'
 
@@ -48,7 +49,7 @@ export async function getSecret() {
 }
 
 export async function hasSecret() {
-    return !!(await getSecret())
+    return (await getSecret())?.hasUpdatedByUser === true
 }
 
 export async function resetSecret(password: string) {
@@ -88,6 +89,7 @@ export async function encryptSecret(password: string) {
 export async function updateSecret(oldPassword: string, newPassword: string) {
     const secret = await getSecret()
     if (!secret) throw new Error('Failed to update secret.')
+    if (newPassword === getDefaultPassword()) throw new Error('Invalid password.')
 
     const iv = getIV()
     const message = await decryptSecret(oldPassword)
@@ -100,6 +102,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
         iv,
         key: primaryKeyWrapped,
         encrypted: await encrypt(encodeText(message), primaryKey, iv),
+        hasUpdatedByUser: true,
     })
 }
 
