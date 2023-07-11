@@ -8,6 +8,8 @@ declare namespace Mask {
     export const ethereum: Ethereum.Provider & Ethereum.ExperimentalProvider
 }
 /** @public Types defined in EIP-1193 */
+// https://github.com/typescript-eslint/typescript-eslint/issues/7192
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
 declare namespace Mask.Ethereum {
     /** Extra APIs that only can be used with Mask Network is defined here. */
     export interface ExperimentalProvider {}
