@@ -9,9 +9,13 @@ export async function INTERNAL_getPassword() {
 }
 
 export async function INTERNAL_getPasswordRequired() {
-    const password_ = await INTERNAL_getPassword()
-    if (!password_) throw new Error('No password set yet or expired.')
-    return password_
+    if (await hasPassword()) {
+        const password_ = await INTERNAL_getPassword()
+        if (!password_) throw new Error('No password set yet or expired.')
+        return password_
+    } else {
+        return 'MASK'
+    }
 }
 
 export function INTERNAL_setPassword(newPassword: string) {
