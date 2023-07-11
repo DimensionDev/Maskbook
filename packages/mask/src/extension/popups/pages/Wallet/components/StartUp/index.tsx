@@ -1,134 +1,116 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Alert, AlertTitle, Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
-import { NetworkSelector } from '../../../../components/NetworkSelector/index.js'
-import { useHasPassword } from '../../../../hook/useHasPassword.js'
-import { useTitle } from '../../../../hook/useTitle.js'
+import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        flex: 1,
         display: 'flex',
         flexDirection: 'column',
-    },
-    alert: {
-        padding: '2px 10px',
-        backgroundColor: '#EFF5FF',
-    },
-    alertTitle: {
-        fontWeight: 600,
-        fontSize: 14,
-        color: '#1C68F3',
-        marginBottom: 3,
-        lineHeight: '20px',
-    },
-    alertContent: {
-        fontSize: 12,
-        lineHeight: '16px',
-        color: '#1C68F3',
-    },
-    header: {
-        padding: 10,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 1,
-        backgroundColor: '#ffffff',
-    },
-    title: {
-        fontSize: 12,
-        lineHeight: '16px',
-        fontWeight: 500,
+        background: theme.palette.maskColor.secondaryBottom,
     },
     content: {
-        flex: 1,
-        backgroundColor: '#f7f9fa',
-        paddingBottom: 40,
-    },
-    item: {
-        padding: '12px 16px',
-        backgroundColor: '#ffffff',
+        padding: 16,
         display: 'flex',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+    },
+    titleWrapper: {
+        padding: 16,
+        display: 'flex',
+        marginBottom: 12,
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 24,
+        lineHeight: '120%',
+        fontStyle: 'normal',
+        fontWeight: 700,
+    },
+    addWalletWrapper: {
+        display: 'flex',
+        width: 368,
+        padding: 12,
         alignItems: 'center',
-        marginBottom: 1,
+        gap: 8,
+        marginBottom: 12,
+        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        background: theme.palette.maskColor.bottom,
+        borderRadius: 8,
         cursor: 'pointer',
     },
-    itemTitle: {
-        fontSize: 16,
-        lineHeight: 1.5,
-        color: theme.palette.primary.main,
-        fontWeight: 600,
-        marginLeft: 15,
+    subTitle: {
+        color: theme.palette.maskColor.main,
+        fontSize: 12,
+        fontWeight: 700,
+    },
+    description: {
+        color: theme.palette.maskColor.third,
+        fontSize: 12,
+        fontWeight: 400,
+    },
+    mnemonicIcon: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 30,
+        height: 30,
+        background: theme.palette.maskColor.success,
+        borderRadius: '100%',
     },
 }))
 
 export const WalletStartUp = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const location = useLocation()
+    const theme = useTheme()
 
-    const onEnterCreateWallet = useCallback(async () => {
-        const params = new URLSearchParams(location.search)
+    const onEnterCreateWallet = useCallback(async (route: DashboardRoutes) => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(
-                urlcat('/dashboard.html#/create-mask-wallet/form', { chainId: params.get('chainId') }),
-            ),
+            url: browser.runtime.getURL(`/dashboard.html#${route}`),
         })
-        if (navigator.userAgent.includes('Firefox')) {
+        if (Sniffings.is_firefox) {
             window.close()
         }
 
         await Services.Helper.removePopupWindow()
-    }, [location.search])
-
-    const { hasPassword, loading } = useHasPassword()
-
-    useTitle('')
+    }, [])
 
     return (
         <Box className={classes.container}>
-            <Alert icon={false} severity="info" className={classes.alert}>
-                <AlertTitle className={classes.alertTitle}>{t('popups_welcome')}</AlertTitle>
-                <Typography className={classes.alertContent}>{t('popups_wallet_start_up_tip')}</Typography>
-            </Alert>
             <Box className={classes.content}>
-                <Box className={classes.header}>
-                    <Typography className={classes.title}>{t('wallet_new')}</Typography>
-                    <NetworkSelector />
+                <Box className={classes.titleWrapper}>
+                    <Typography className={classes.title}>{t('popups_add_wallet')}</Typography>
                 </Box>
-                <Box className={classes.item} onClick={onEnterCreateWallet}>
-                    <Icons.MaskWallet size={24} />
-                    <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
+                <Box
+                    className={classes.addWalletWrapper}
+                    onClick={() => onEnterCreateWallet(DashboardRoutes.CreateMaskWalletMnemonic)}>
+                    <Icons.MaskBlue size={30} />
+                    <div>
+                        <Typography className={classes.subTitle}>{t('popups_create_a_new_wallet_title')}</Typography>
+                        <Typography className={classes.description}>
+                            {t('popups_generate_a_new_wallet_address')}
+                        </Typography>
+                    </div>
                 </Box>
-                {!loading ? (
-                    <Link
-                        to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
-                        onClick={(event) => {
-                            if (!navigator.userAgent.includes('Firefox')) return
-                            const params = new URLSearchParams(location.search)
-                            const toBeClose = params.get('toBeClose')
-                            if (!toBeClose) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                                Services.Helper.openPopupWindow(
-                                    !hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet,
-                                )
-                            }
-                        }}
-                        style={{ textDecoration: 'none' }}>
-                        <Box className={classes.item}>
-                            <Icons.ImportWallet size={24} />
-                            <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
-                        </Box>
-                    </Link>
-                ) : null}
+
+                <Box
+                    className={classes.addWalletWrapper}
+                    onClick={() => onEnterCreateWallet(DashboardRoutes.RecoveryMaskWallet)}>
+                    <div className={classes.mnemonicIcon}>
+                        <Icons.Mnemonic size={20} color={theme.palette.maskColor.white} />
+                    </div>
+                    <div>
+                        <Typography className={classes.subTitle}>{t('popups_import_wallets')}</Typography>
+                        <Typography className={classes.description}>
+                            {t('popups_import_wallets_description')}
+                        </Typography>
+                    </div>
+                </Box>
             </Box>
         </Box>
     )

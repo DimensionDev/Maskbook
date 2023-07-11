@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
@@ -70,6 +70,9 @@ const CreateWalletForm = memo(function CreateWalletForm() {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
+    const location = useLocation()
+    const params = new URLSearchParams(location.search)
+    const isReset = params.get('reset')
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -106,7 +109,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
             DashboardRoutes.CreateMaskWalletMnemonic,
             data.password
                 ? {
-                      state: { password: data.password },
+                      state: { password: data.password, isReset },
                   }
                 : undefined,
         )

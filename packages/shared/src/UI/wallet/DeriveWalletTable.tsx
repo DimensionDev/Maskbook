@@ -75,6 +75,8 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         alignSelf: 'stretch',
         flex: '1 0 0',
+    },
+    tableRowWithHoverEffect: {
         '&:hover': {
             borderRadius: 8,
             background: theme.palette.maskColor.bg,
@@ -103,7 +105,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
     hiddenHeader,
     page,
 }) {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const t = useSharedI18N()
     return (
         <Table size="small" padding="none" stickyHeader>
@@ -180,7 +182,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
     const theme = useTheme()
 
     return (
-        <TableRow key={address} className={classes.tableRow}>
+        <TableRow key={address} className={cx(classes.tableRow, classes.tableRowWithHoverEffect)}>
             <TableCell align="left" variant="body" className={classes.cell}>
                 <Typography className={classes.second}>{page * 10 + index + 1}</Typography>
                 <Typography className={classes.title}>
