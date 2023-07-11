@@ -270,7 +270,6 @@ export async function generateAddressFromMnemonic(
         mnemonic,
         password: password_,
     })
-
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
     const created = await Mask.createAccountOfCoinAtPath({

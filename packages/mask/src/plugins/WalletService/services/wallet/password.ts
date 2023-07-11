@@ -1,7 +1,6 @@
 import { validate } from 'uuid'
 import * as database from './database/index.js'
 import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
-import { getDefaultPassword } from '../helpers.js'
 
 let inMemoryPassword = ''
 
@@ -10,13 +9,9 @@ export async function INTERNAL_getPassword() {
 }
 
 export async function INTERNAL_getPasswordRequired() {
-    if (await hasPassword()) {
-        const password_ = await INTERNAL_getPassword()
-        if (!password_) throw new Error('No password set yet or expired.')
-        return password_
-    } else {
-        return getDefaultPassword()
-    }
+    const password_ = await INTERNAL_getPassword()
+    if (!password_) throw new Error('No password set yet or expired.')
+    return password_
 }
 
 export function INTERNAL_setPassword(newPassword: string) {
