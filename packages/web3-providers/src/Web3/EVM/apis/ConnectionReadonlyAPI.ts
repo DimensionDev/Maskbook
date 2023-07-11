@@ -138,6 +138,10 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
+    async resetAllWallets(initial?: ConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+
     async updateWallets(wallets: Wallet[], initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }

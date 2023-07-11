@@ -4,8 +4,8 @@ import { v4 as uuid } from 'uuid'
 import * as bip39 from 'bip39'
 import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { decode } from '@msgpack/msgpack'
-import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { decodeArrayBuffer, unreachable } from '@masknet/kit'
+import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { type BackupSummary, getBackupSummary, normalizeBackup, type NormalizedBackup } from '@masknet/backup-format'
 import {
     type EC_Private_JsonWebKey,

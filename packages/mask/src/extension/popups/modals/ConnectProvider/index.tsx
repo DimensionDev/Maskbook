@@ -167,7 +167,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 <Box className={classes.icon}>
-                    <img src={provider.icon.toString()} style={{ width: 32, height: 32 }} />
+                    <img src={provider.icon} style={{ width: 32, height: 32 }} />
                 </Box>
                 {isTimeout ? (
                     <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={handleConnect}>
