@@ -12,7 +12,6 @@ import {
     useAllPersonas,
     useSNSAdaptorContext,
     useLastRecognizedIdentity,
-    useSocialIdentity,
     useSocialIdentityByUserId,
     type IdentityResolved,
 } from '@masknet/plugin-infra/content-script'
@@ -183,7 +182,19 @@ function Content(props: ProfileTabContentProps) {
         },
     ]
 
-    const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
+    // const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
+    const currentSocialIdentity = {
+        identifier: {
+            network: 'twitter.com',
+            userId: 'suji_yan',
+        } as ProfileIdentifier,
+        nickname: 'Suji Yan - Mask is BUIDLing',
+        avatar: 'https://pbs.twimg.com/profile_images/1571030729605144577/Nxsva4Vq_400x400.png',
+        bio: 'founder of @realmasknetwork #Mask\u{1F426}\nMaintain some fediverse instances\nsujiyan.eth',
+        homepage: 'https://mask.io',
+        isOwner: false,
+        hasBinding: false,
+    }
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
@@ -212,7 +223,6 @@ function Content(props: ProfileTabContentProps) {
         id: x.ID,
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
-
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
@@ -239,7 +249,6 @@ function Content(props: ProfileTabContentProps) {
     const contentComponent = useMemo(() => {
         const Component = getProfileTabContent(componentTabId)
         if (!Component) return null
-
         return <Component identity={currentSocialIdentity} socialAccount={selectedSocialAccount} />
     }, [componentTabId, selectedSocialAccount, currentSocialIdentity])
 

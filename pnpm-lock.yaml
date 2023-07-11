@@ -300,6 +300,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/plugin-approval':
+        specifier: workspace:^
+        version: link:../plugins/Approval
       '@masknet/plugin-artblocks':
         specifier: workspace:^
         version: link:../plugins/ArtBlocks
@@ -315,12 +318,21 @@ importers:
       '@masknet/plugin-evm':
         specifier: workspace:^
         version: link:../plugins/EVM
+      '@masknet/plugin-external':
+        specifier: workspace:^
+        version: link:../plugins/External
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
+      '@masknet/plugin-flow':
+        specifier: workspace:^
+        version: link:../plugins/Flow
       '@masknet/plugin-gitcoin':
         specifier: workspace:^
         version: link:../plugins/Gitcoin
+      '@masknet/plugin-go-plus-security':
+        specifier: workspace:^
+        version: link:../plugins/GoPlusSecurity
       '@masknet/plugin-handle':
         specifier: workspace:^
         version: link:../plugins/Handle
@@ -333,18 +345,39 @@ importers:
       '@masknet/plugin-maskbox':
         specifier: workspace:^
         version: link:../plugins/MaskBox
+      '@masknet/plugin-nextid':
+        specifier: workspace:^
+        version: link:../plugins/NextID
       '@masknet/plugin-profilecard':
         specifier: workspace:^
         version: link:../plugins/ProfileCard
       '@masknet/plugin-redpacket':
         specifier: workspace:^
         version: link:../plugins/RedPacket
+      '@masknet/plugin-rss3':
+        specifier: workspace:^
+        version: link:../plugins/RSS3
+      '@masknet/plugin-scam-warning':
+        specifier: workspace:^
+        version: link:../plugins/ScamWarning
+      '@masknet/plugin-scamsniffer':
+        specifier: workspace:^
+        version: link:../plugins/ScamSniffer
+      '@masknet/plugin-smart-pay':
+        specifier: workspace:^
+        version: link:../plugins/SmartPay
       '@masknet/plugin-snapshot':
         specifier: workspace:^
         version: link:../plugins/Snapshot
+      '@masknet/plugin-solana':
+        specifier: workspace:^
+        version: link:../plugins/Solana
       '@masknet/plugin-trader':
         specifier: workspace:^
         version: link:../plugins/Trader
+      '@masknet/plugin-transak':
+        specifier: workspace:^
+        version: link:../plugins/Transak
       '@masknet/plugin-vcent':
         specifier: workspace:^
         version: link:../plugins/VCent
@@ -34073,7 +34106,7 @@ packages:
     dev: false
 
   github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.67)(webpack-cli@5.0.1):
-    resolution: {commit: 528c91e564d5756e21c9c462b607d913452af770, repo: git+ssh://git@github.com/Jack-Works/webpack.git, type: git}
+    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/528c91e564d5756e21c9c462b607d913452af770}
     id: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770
     name: webpack
     version: 5.88.0
@@ -34117,7 +34150,7 @@ packages:
     dev: true
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
+    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:

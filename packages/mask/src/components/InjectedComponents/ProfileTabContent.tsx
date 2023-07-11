@@ -157,7 +157,6 @@ function Content(props: ProfileTabContentProps) {
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
-
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
