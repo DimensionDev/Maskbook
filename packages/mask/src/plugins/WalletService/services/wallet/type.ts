@@ -10,10 +10,10 @@ export interface SecretRecord {
      */
     encrypted: ArrayBuffer
     /**
-     * Indicate whether the default secret is used.
+     * Indicate whether the default user password is used.
      *
-     * true: the unsafe default secret is used.
-     * false: the default secret has been overrided by the user given secret.
+     * true: the unsafe default user password is used.
+     * false: the default user password is not used or has been modified by the user.
      */
     isUnsafe?: boolean
 }
