@@ -2,6 +2,9 @@ import { Result } from 'ts-results-es'
 import { compact, omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import * as bip39 from 'bip39'
+import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
+import { decode } from '@msgpack/msgpack'
+import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { decodeArrayBuffer, unreachable } from '@masknet/kit'
 import { type BackupSummary, getBackupSummary, normalizeBackup, type NormalizedBackup } from '@masknet/backup-format'
 import {
@@ -15,10 +18,7 @@ import {
 import { openPopupWindow } from '../helper/popup-opener.js'
 import { requestHostPermission } from '../helper/request-permission.js'
 import { restoreNormalizedBackup } from './internal_restore.js'
-import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
-import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../identity/persona/utils.js'
-import { decode } from '@msgpack/msgpack'
 
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()
 
