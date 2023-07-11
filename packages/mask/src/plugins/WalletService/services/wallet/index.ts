@@ -150,7 +150,7 @@ export async function deriveWallet(name: string) {
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
 
         // import the candidate by the private key
-        return recoverWalletFromPrivateKey(name, exported.privateKey)
+        return recoverWalletFromPrivateKey(name, exported.privateKey, latestDerivationPath)
     }
 }
 
@@ -252,7 +252,7 @@ export async function recoverWalletFromMnemonic(
             StoredKeyData: imported.StoredKey.data,
         })
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${derivationPath}`)
-        return recoverWalletFromPrivateKey(name, exported.privateKey)
+        return recoverWalletFromPrivateKey(name, exported.privateKey, derivationPath)
     } else {
         const created = await Mask.createAccountOfCoinAtPath({
             coin: api.Coin.Ethereum,
@@ -292,7 +292,12 @@ export async function generateAddressFromMnemonic(
     return created?.account?.address ?? undefined
 }
 
-export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string) {
+export async function recoverWalletFromPrivateKey(
+    name: string,
+    privateKey: string,
+    derivationPath?: string,
+    initialPassword_?: string,
+) {
     const password_ = initialPassword_ ?? (await password.INTERNAL_getPasswordRequired())
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
@@ -309,7 +314,7 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-    return database.addWallet(created.account.address, name, undefined, imported.StoredKey)
+    return database.addWallet(created.account.address, name, derivationPath, imported.StoredKey)
 }
 
 export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
