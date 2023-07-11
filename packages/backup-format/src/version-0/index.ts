@@ -17,8 +17,7 @@ export function isBackupVersion0(obj: unknown): obj is BackupJSONFileVersion0 {
     if (!isObjectLike(obj)) return false
     try {
         const data: BackupJSONFileVersion0 = obj as any
-        if (!data.local || !data.key || !data.key.key || !data.key.key.privateKey || !data.key.key.publicKey)
-            return false
+        if (!data.local || !data.key?.key?.privateKey || !data.key.key.publicKey) return false
         return true
     } catch {
         return false

@@ -11,7 +11,7 @@ export function useUser() {
     const whoAmI = useLastRecognizedIdentity()
 
     return useMemo(() => {
-        if (!account || !whoAmI || !whoAmI.identifier || whoAmI.identifier?.userId === '$unknown') return
+        if (!account || !whoAmI?.identifier || whoAmI.identifier?.userId === '$unknown') return
         return {
             userId: whoAmI.identifier.userId,
             address: account,

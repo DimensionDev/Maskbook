@@ -86,7 +86,7 @@ export const SelectProvider = memo(function SelectProvider() {
                 .map((provider) => {
                     return (
                         <div className={classes.providerItem} key={provider.ID} onClick={() => onClick(provider.type)}>
-                            <img src={provider.icon.toString()} className={classes.providerIcon} />
+                            <img src={provider.icon} className={classes.providerIcon} />
                             <Typography className={classes.providerName}>{provider.name}</Typography>
                         </div>
                     )
