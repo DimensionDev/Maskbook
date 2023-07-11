@@ -20,7 +20,6 @@ export async function unlockWallet(unverifiedPassword: string) {
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(false)
         return true
     } catch (error) {
-        console.log({ error })
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(true)
         return false
     }

@@ -48,9 +48,7 @@ export async function hasPassword() {
 
 export async function verifyPassword(unverifiedPassword: string) {
     if (inMemoryPassword === unverifiedPassword) return true
-    const uuid = await database.decryptSecret(unverifiedPassword)
-    console.log({ uuid })
-    return validate(uuid)
+    return validate(await database.decryptSecret(unverifiedPassword))
 }
 
 export async function verifyPasswordRequired(unverifiedPassword: string) {
@@ -61,7 +59,6 @@ export async function verifyPasswordRequired(unverifiedPassword: string) {
 export async function changePassword(oldPassword: string, newPassword: string) {
     validatePasswordRequired(newPassword)
     validatePasswordRequired(oldPassword)
-    console.log({ oldPassword, newPassword })
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
     INTERNAL_setPassword(newPassword)

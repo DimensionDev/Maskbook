@@ -71,7 +71,6 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             isReset: boolean
         }
     }
-    console.log({ state })
     const walletName = 'Wallet 1'
     const { mnemonic, password, isReset } = state.usr
     const indexes = useRef(new Set<number>())

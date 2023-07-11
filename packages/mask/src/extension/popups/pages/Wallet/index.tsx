@@ -37,8 +37,6 @@ const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
 
-const exclusionDetectLocked = [PopupRoutes.Unlock]
-
 const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
