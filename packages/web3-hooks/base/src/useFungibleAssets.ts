@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { noop, unionWith } from 'lodash-es'
 import {
     asyncIteratorToArray,
@@ -34,12 +34,10 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const blockedTokens = useBlockedFungibleTokens(pluginID)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
-    const result = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
-        queryKey: ['fungible-assets', pluginID, chainId, account],
+    const { data: mergedAssets = EMPTY_LIST, ...rest } = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
+        queryKey: ['fungible-assets', pluginID, account],
         queryFn: async () => {
             if (!account) return EMPTY_LIST
-            const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
-            const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
             const iterator = pageableToIterator(async (indicator?: PageIndicator) => {
                 return Hub.getFungibleAssets(account, {
                     indicator,
@@ -53,71 +51,78 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             const assets = await asyncIteratorToArray(iterator)
             const trustedAssets = await asyncIteratorToArray(trustedAssetsIterator)
 
-            const mergedAssets = unionWith(
+            return unionWith(
                 assets,
                 trustedAssets,
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             )
-
-            const filteredAssets =
-                mergedAssets.length && schemaType ? mergedAssets.filter((x) => x.schema === schemaType) : mergedAssets
-
-            return filteredAssets
-                .filter((x) => !isBlockedToken(x))
-                .sort((a, z) => {
-                    // the currently selected chain id
-                    if (a.chainId !== z.chainId) {
-                        if (a.chainId === chainId) return -1
-                        if (z.chainId === chainId) return 1
-                    }
-
-                    // native token
-                    const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
-                    const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
-                    if (isNativeTokenA) return -1
-                    if (isNativeTokenZ) return 1
-
-                    // mask token with position value
-                    const aUSD = toZero(a.value?.[CurrencyType.USD])
-                    const zUSD = toZero(z.value?.[CurrencyType.USD])
-                    const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
-                    const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
-                    if (aUSD.isPositive() && isMaskTokenA) return -1
-                    if (zUSD.isPositive() && isMaskTokenZ) return 1
-
-                    // token value
-                    if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
-
-                    // token balance
-                    const aBalance = leftShift(a.balance, a.decimals)
-                    const zBalance = leftShift(z.balance, z.decimals)
-                    if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
-
-                    // trusted token
-                    if (isTrustedToken(a.address)) return -1
-                    if (isTrustedToken(z.address)) return 1
-
-                    // mask token with position value
-                    if (isMaskTokenA) return -1
-                    if (isMaskTokenZ) return 1
-
-                    // alphabet
-                    if (a.name !== z.name) return a.name < z.name ? -1 : 1
-
-                    return 0
-                })
         },
     })
+
+    const assets: Array<Web3Helper.FungibleAssetScope<S, T>> = useMemo(() => {
+        const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
+        const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
+        const filteredAssets =
+            mergedAssets.length && schemaType ? mergedAssets.filter((x) => x.schema === schemaType) : mergedAssets
+
+        return filteredAssets
+            .filter((x) => !isBlockedToken(x))
+            .sort((a, z) => {
+                // the currently selected chain id
+                if (a.chainId !== z.chainId) {
+                    if (a.chainId === chainId) return -1
+                    if (z.chainId === chainId) return 1
+                }
+
+                // native token
+                const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
+                const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
+                if (isNativeTokenA) return -1
+                if (isNativeTokenZ) return 1
+
+                // mask token with position value
+                const aUSD = toZero(a.value?.[CurrencyType.USD])
+                const zUSD = toZero(z.value?.[CurrencyType.USD])
+                const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
+                const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
+                if (aUSD.isPositive() && isMaskTokenA) return -1
+                if (zUSD.isPositive() && isMaskTokenZ) return 1
+
+                // token value
+                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+
+                // token balance
+                const aBalance = leftShift(a.balance, a.decimals)
+                const zBalance = leftShift(z.balance, z.decimals)
+                if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
+
+                // trusted token
+                if (isTrustedToken(a.address)) return -1
+                if (isTrustedToken(z.address)) return 1
+
+                // mask token with position value
+                if (isMaskTokenA) return -1
+                if (isMaskTokenZ) return 1
+
+                // alphabet
+                if (a.name !== z.name) return a.name < z.name ? -1 : 1
+
+                return 0
+            })
+    }, [mergedAssets, trustedTokens, blockedTokens, schemaType, chainId])
 
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
                 if (isSameAddress(account, ev.account)) {
-                    result.refetch()
+                    rest.refetch()
                 }
             }) ?? noop
         )
-    }, [account, result.refetch, BalanceNotifier])
+    }, [account, rest.refetch, BalanceNotifier])
 
-    return result
+    return {
+        data: assets,
+        ...rest,
+    }
 }

@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { FormattedBalance, ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import { formatBalance, formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Box, List, ListItem, ListItemIcon, ListItemText, Typography, type TypographyProps } from '@mui/material'
-import { isNaN } from 'lodash-es'
+import { Box, List, ListItem, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
+import { isNaN, range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
@@ -21,10 +21,12 @@ const useStyles = makeStyles()((theme) => ({
     item: {
         padding: 14,
         cursor: 'pointer',
-        marginBottom: theme.spacing(1),
         borderRadius: 8,
         '&:hover': {
             backgroundColor: theme.palette.maskColor.bg,
+        },
+        '&:not(:last-of-type)': {
+            marginBottom: theme.spacing(1),
         },
     },
     tokenIcon: {
@@ -49,22 +51,18 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     more: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gas: 6,
-        textAlign: 'center',
-        padding: 12,
-        cursor: 'pointer',
-        backgroundColor: theme.palette.maskColor.white,
+        display: 'inline-flex',
+        width: 'auto',
+        margin: theme.spacing(0, 'auto', 2),
     },
 }))
 
 type Asset = FungibleAsset<ChainId, SchemaType>
 
 export const AssetsList = memo(function AssetsList() {
+    const { classes } = useStyles()
     const navigate = useNavigate()
-    const { assets, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
+    const { assets, assetsLoading, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
         navigate(`${PopupRoutes.TokenDetail}/${asset.address}`)
@@ -78,33 +76,41 @@ export const AssetsList = memo(function AssetsList() {
     }, [assets])
     return (
         <>
-            <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
-            <MoreBar isExpand={assetsIsExpand} hasLowValueToken={hasLowValueToken} onClick={onSwitch} />
+            {assetsLoading ? (
+                <AssetsListSkeleton />
+            ) : (
+                <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
+            )}
+            <MoreBar
+                isExpand={assetsIsExpand}
+                hasLowValueToken={hasLowValueToken}
+                onClick={onSwitch}
+                className={classes.more}
+            />
         </>
     )
 })
 
-export interface MoreBarProps extends TypographyProps {
+export interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean
     hasLowValueToken?: boolean
 }
 
-export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, hasLowValueToken, className, ...rest }) {
-    const { classes, cx } = useStyles()
+export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, hasLowValueToken, ...rest }) {
     const { t } = useI18N()
     if (!hasLowValueToken) return null
     if (isExpand)
         return (
-            <Typography className={cx(classes.more, className)} {...rest}>
+            <ActionButton variant="roundedOutlined" {...rest}>
                 <span>{t('popups_wallet_more_collapse')}</span>
                 <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
-            </Typography>
+            </ActionButton>
         )
     return (
-        <Typography className={cx(classes.more, className)} {...rest}>
+        <ActionButton variant="roundedOutlined" {...rest}>
             <span>{t('popups_wallet_more_expand')}</span>
             <Icons.ArrowDrop />
-        </Typography>
+        </ActionButton>
     )
 })
 
@@ -165,6 +171,40 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                     </ListItem>
                 )
             })}
+        </List>
+    )
+})
+
+const AssetsListSkeleton = memo(function AssetsListSkeleton() {
+    const { classes } = useStyles()
+    return (
+        <List dense className={classes.list}>
+            {range(4).map((i) => (
+                <ListItem
+                    key={i}
+                    className={classes.item}
+                    secondaryAction={
+                        <Typography className={classes.value}>
+                            <Skeleton width={60} />
+                        </Typography>
+                    }>
+                    <ListItemIcon>
+                        <Box position="relative">
+                            <Skeleton variant="circular" className={classes.tokenIcon} />
+                            <Skeleton variant="circular" width={16} height={16} className={classes.badgeIcon} />
+                        </Box>
+                    </ListItemIcon>
+                    <ListItemText
+                        className={classes.text}
+                        secondary={
+                            <Typography>
+                                <Skeleton width={100} />
+                            </Typography>
+                        }>
+                        <Skeleton width={90} />
+                    </ListItemText>
+                </ListItem>
+            ))}
         </List>
     )
 })
