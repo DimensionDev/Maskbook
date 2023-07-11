@@ -81,22 +81,20 @@ export function ChainContextProvider({ value, children }: ProviderProps<ChainCon
     const [_networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
-    const account =
-        (controlled ? value.account : _account ?? value.account) ?? Sniffings.is_popup_wallet_page
-            ? maskAccount
-            : globalAccount
-    const chainId =
-        (controlled ? value.chainId : _chainId ?? value.chainId) ?? Sniffings.is_popup_wallet_page
-            ? maskChainId
-            : globalChainId
-    const networkType =
-        (controlled ? value.networkType : _networkType ?? value.networkType) ?? Sniffings.is_popup_wallet_page
-            ? maskNetworkType
-            : globalNetworkType
-    const providerType =
-        (controlled ? value.providerType : _providerType ?? value.providerType) ?? Sniffings.is_popup_wallet_page
-            ? ProviderType.MaskWallet
-            : globalProviderType
+    const account = controlled
+        ? value.account
+        : _account ?? value.account ?? (Sniffings.is_popup_wallet_page ? maskAccount : globalAccount)
+    const chainId = controlled
+        ? value.chainId
+        : _chainId ?? value.chainId ?? (Sniffings.is_popup_wallet_page ? maskChainId : globalChainId)
+    const networkType = controlled
+        ? value.networkType
+        : _networkType ?? value.networkType ?? (Sniffings.is_popup_wallet_page ? maskNetworkType : globalNetworkType)
+    const providerType = controlled
+        ? value.providerType
+        : _providerType ??
+          value.providerType ??
+          (Sniffings.is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
 
     const context = useMemo(
         () => ({

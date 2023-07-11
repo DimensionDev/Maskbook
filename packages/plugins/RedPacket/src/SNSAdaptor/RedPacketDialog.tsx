@@ -2,13 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import {
-    useChainContext,
-    useChainIdValid,
-    Web3ContextProvider,
-    useGasPrice,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useChainIdValid, useGasPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
@@ -70,7 +64,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
@@ -82,8 +76,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
         )
     }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
-    const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
 
+    const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
@@ -195,98 +189,95 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     // #endregion
 
     return (
-        <Web3ContextProvider value={{ pluginID, chainId: networkTabChainId }}>
-            <TabContext value={currentTab}>
-                <InjectedDialog
-                    isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-                    open={props.open}
-                    title={title}
-                    titleTail={
-                        step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
-                            <Icons.History onClick={() => setShowHistory((history) => !history)} />
-                        ) : null
-                    }
-                    titleTabs={
-                        step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                                <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
-                                <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
-                            </MaskTabList>
-                        ) : null
-                    }
-                    networkTabs={
-                        step === CreateRedPacketPageStep.NewRedPacketPage &&
-                        !openNFTConfirmDialog &&
-                        !openSelectNFTDialog ? (
-                            <div className={classes.abstractTabWrapper}>
-                                <NetworkTab
-                                    chains={chainIdList}
-                                    hideArrowButton={currentTab === tabs.collectibles}
-                                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                                    onChange={(chainId: ChainId) => setChainId(chainId)}
-                                />
-                            </div>
-                        ) : null
-                    }
-                    onClose={onDialogClose}
-                    isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
-                    disableTitleBorder>
-                    <DialogContent className={classes.dialogContent}>
-                        {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                            <>
-                                <div
-                                    style={{
-                                        ...(showHistory ? { display: 'none' } : {}),
-                                        height: showHistory
-                                            ? 0
-                                            : currentTab === 'collectibles' && isNFTRedPacketLoaded
-                                            ? 'calc(100% + 84px)'
-                                            : 'auto',
-                                    }}>
-                                    <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
-                                        <RedPacketERC20Form
-                                            origin={settings}
-                                            onClose={onClose}
-                                            onNext={onNext}
-                                            onChange={_onChange}
-                                            gasOption={gasOption}
-                                            onGasOptionChange={handleGasSettingChange}
-                                        />
-                                    </TabPanel>
-                                    <TabPanel
-                                        value={tabs.collectibles}
-                                        style={{ padding: 0, height: openNFTConfirmDialog ? 564 : 474 }}>
-                                        <RedPacketERC721Form
-                                            openSelectNFTDialog={openSelectNFTDialog}
-                                            setOpenSelectNFTDialog={setOpenSelectNFTDialog}
-                                            setOpenNFTConfirmDialog={setOpenNFTConfirmDialog}
-                                            openNFTConfirmDialog={openNFTConfirmDialog}
-                                            onClose={onClose}
-                                            setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
-                                            gasOption={gasOption}
-                                            onGasOptionChange={handleGasSettingChange}
-                                        />
-                                    </TabPanel>
-                                </div>
-                                {showHistory ? (
-                                    <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
-                                ) : null}
-                            </>
-                        ) : null}
-
-                        {step === CreateRedPacketPageStep.ConfirmPage ? (
-                            <RedPacketConfirmDialog
-                                onClose={onClose}
-                                onBack={onBack}
-                                onCreated={handleCreated}
-                                settings={settings}
-                                gasOption={gasOption}
-                                onGasOptionChange={handleGasSettingChange}
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                open={props.open}
+                title={title}
+                titleTail={
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
+                        <Icons.History onClick={() => setShowHistory((history) => !history)} />
+                    ) : null
+                }
+                titleTabs={
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
+                        <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                            <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
+                            <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
+                        </MaskTabList>
+                    ) : null
+                }
+                networkTabs={
+                    step === CreateRedPacketPageStep.NewRedPacketPage &&
+                    !openNFTConfirmDialog &&
+                    !openSelectNFTDialog ? (
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab
+                                chains={chainIdList}
+                                hideArrowButton={currentTab === tabs.collectibles}
+                                pluginID={NetworkPluginID.PLUGIN_EVM}
                             />
-                        ) : null}
-                    </DialogContent>
-                </InjectedDialog>
-            </TabContext>
-        </Web3ContextProvider>
+                        </div>
+                    ) : null
+                }
+                onClose={onDialogClose}
+                isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
+                disableTitleBorder>
+                <DialogContent className={classes.dialogContent}>
+                    {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                        <>
+                            <div
+                                style={{
+                                    ...(showHistory ? { display: 'none' } : {}),
+                                    height: showHistory
+                                        ? 0
+                                        : currentTab === 'collectibles' && isNFTRedPacketLoaded
+                                        ? 'calc(100% + 84px)'
+                                        : 'auto',
+                                }}>
+                                <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
+                                    <RedPacketERC20Form
+                                        origin={settings}
+                                        onClose={onClose}
+                                        onNext={onNext}
+                                        onChange={_onChange}
+                                        gasOption={gasOption}
+                                        onGasOptionChange={handleGasSettingChange}
+                                    />
+                                </TabPanel>
+                                <TabPanel
+                                    value={tabs.collectibles}
+                                    style={{ padding: 0, height: openNFTConfirmDialog ? 564 : 474 }}>
+                                    <RedPacketERC721Form
+                                        openSelectNFTDialog={openSelectNFTDialog}
+                                        setOpenSelectNFTDialog={setOpenSelectNFTDialog}
+                                        setOpenNFTConfirmDialog={setOpenNFTConfirmDialog}
+                                        openNFTConfirmDialog={openNFTConfirmDialog}
+                                        onClose={onClose}
+                                        setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
+                                        gasOption={gasOption}
+                                        onGasOptionChange={handleGasSettingChange}
+                                    />
+                                </TabPanel>
+                            </div>
+                            {showHistory ? (
+                                <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
+                            ) : null}
+                        </>
+                    ) : null}
+
+                    {step === CreateRedPacketPageStep.ConfirmPage ? (
+                        <RedPacketConfirmDialog
+                            onClose={onClose}
+                            onBack={onBack}
+                            onCreated={handleCreated}
+                            settings={settings}
+                            gasOption={gasOption}
+                            onGasOptionChange={handleGasSettingChange}
+                        />
+                    ) : null}
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     )
 }
