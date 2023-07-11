@@ -1,15 +1,15 @@
+import { toBlob } from 'html-to-image'
+import { memo, useCallback, useRef, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { Alert, Box, Button, Stack, Typography, alpha, useTheme } from '@mui/material'
-import { toBlob } from 'html-to-image'
-import { memo, useCallback, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAsync, useAsyncFn } from 'react-use'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
@@ -202,27 +202,14 @@ const CreateMnemonic = memo(function CreateMnemonic() {
             await PluginServices.Wallet.setPassword(password)
         }
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonic(
-            walletName,
-            words.join(' '),
-            undefined,
-            hasPassword ? undefined : 'MASK',
-        )
-
+        const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
         return address
     }, [words, walletName, location.state?.isReset, location.state?.password])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         await resetWallets()
 
-        const hasPassword = await PluginServices.Wallet.hasPassword()
-
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
-            walletName,
-            words.join(' '),
-            undefined,
-            hasPassword ? undefined : 'MASK',
-        )
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
             {
