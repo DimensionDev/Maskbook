@@ -1,12 +1,12 @@
 import {
     type AESJsonWebKey,
-    ECKeyIdentifierFromJsonWebKey,
     type EC_Private_JsonWebKey,
     type EC_Public_JsonWebKey,
     isAESJsonWebKey,
     isEC_Private_JsonWebKey,
-    isEC_Public_JsonWebKey,
+    isEC_JsonWebKey,
     ProfileIdentifier,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { isObjectLike } from 'lodash-es'
 import { None, Some } from 'ts-results-es'
@@ -33,10 +33,10 @@ export async function normalizeBackupVersion0(file: BackupJSONFileVersion0): Pro
     const { username, key } = file.key
     const { publicKey, privateKey } = key
 
-    if (!isEC_Public_JsonWebKey(publicKey)) return backup
+    if (!isEC_JsonWebKey(publicKey)) return backup
 
     const persona: NormalizedBackup.PersonaBackup = {
-        identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        identifier: (await ECKeyIdentifier.fromJsonWebKey(publicKey)).unwrap(),
         publicKey,
         linkedProfiles: new Map(),
         localKey: isAESJsonWebKey(local) ? Some(local) : None,

@@ -1,20 +1,21 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../locales/index.js'
-import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
-import { PluginServices } from '../../../API.js'
-import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { ComponentToPrint } from './ComponentToPrint.js'
+import { makeStyles } from '@masknet/theme'
+import { Alert, Box, Button, Stack, Typography, alpha, useTheme } from '@mui/material'
 import { toBlob } from 'html-to-image'
+import { memo, useCallback, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
+import { PluginServices } from '../../../API.js'
+import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
-import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
 import { ResetWalletContext } from '../context.js'
+import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { ComponentToPrint } from './ComponentToPrint.js'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
     container: {
@@ -398,8 +399,6 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
     const ref = useRef(null)
     const { classes, cx } = useStyles({ isVerify: false })
     const theme = useTheme()
-    const [copyState, copyToClipboard] = useCopyToClipboard()
-    const { showSnackbar } = useCustomSnackbar()
 
     const [, handleDownload] = useAsyncFn(async () => {
         if (!ref.current) return
@@ -411,18 +410,6 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
         link.href = URL.createObjectURL(dataUrl)
         link.click()
     }, [])
-
-    useEffect(() => {
-        if (copyState.value) {
-            showSnackbar(t.personas_export_persona_copy_success(), {
-                variant: 'success',
-                message: t.persona_phrase_copy_description(),
-            })
-        }
-        if (copyState.error?.message) {
-            showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
-        }
-    }, [copyState.value, copyState.error?.message])
 
     return (
         <>
@@ -441,9 +428,12 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                 <div className={classes.storeIcon} onClick={handleDownload}>
                     <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                 </div>
-                <div className={classes.storeIcon} onClick={() => copyToClipboard(words.join(' '))}>
-                    <Icons.Copy color={theme.palette.maskColor.main} size={18} />
-                </div>
+                <CopyButton
+                    color={theme.palette.maskColor.main}
+                    size={18}
+                    text={words.join(' ')}
+                    successText={t.persona_phrase_copy_description()}
+                />
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
                 {t.create_wallet_mnemonic_tip()}

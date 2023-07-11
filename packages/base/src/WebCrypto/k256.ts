@@ -1,7 +1,6 @@
 import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@masknet/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JsonWebKey.js'
 import { Convert } from 'pvtsutils'
-import { ECKeyIdentifier } from '../Identifier/ec-key.js'
 
 /**
  * Compress x & y into a single x
@@ -43,7 +42,7 @@ export async function decompressK256Raw(point: Uint8Array) {
     return pointCompress(point, false)
 }
 
-async function compressK256Key(key: EC_JsonWebKey): Promise<string> {
+export async function compressK256Key(key: EC_JsonWebKey): Promise<string> {
     const arr = await compressK256Point(key.x!, key.y!)
     return encodeArrayBuffer(arr)
 }
@@ -69,9 +68,4 @@ export async function isK256Point(x: Uint8Array) {
 export async function isK256PrivateKey(d: Uint8Array) {
     const { isPrivate } = await import('tiny-secp256k1')
     return isPrivate(d)
-}
-
-export async function ECKeyIdentifierFromJsonWebKey(key: EC_JsonWebKey) {
-    const x = await compressK256Key(key)
-    return new ECKeyIdentifier('secp256k1', x)
 }

@@ -5,12 +5,12 @@ import * as bip39 from 'bip39'
 import { decodeArrayBuffer, unreachable } from '@masknet/kit'
 import { type BackupSummary, getBackupSummary, normalizeBackup, type NormalizedBackup } from '@masknet/backup-format'
 import {
-    ECKeyIdentifierFromJsonWebKey,
     type EC_Private_JsonWebKey,
     type EC_Public_JsonWebKey,
     fromBase64URL,
     isEC_Private_JsonWebKey,
     PopupRoutes,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { openPopupWindow } from '../helper/popup-opener.js'
 import { requestHostPermission } from '../helper/request-permission.js'
@@ -79,7 +79,7 @@ export async function addUnconfirmedPersonaRestore({
 
     if (!privateKey.d) return
 
-    const identifier = await ECKeyIdentifierFromJsonWebKey(publicKey)
+    const identifier = (await ECKeyIdentifier.fromJsonWebKey(publicKey)).unwrap()
     const backupInfo = await addUnconfirmedBackup(
         JSON.stringify({
             _meta_: {

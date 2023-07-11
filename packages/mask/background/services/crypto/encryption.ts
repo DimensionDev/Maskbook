@@ -1,4 +1,4 @@
-import type { EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/shared-base'
+import type { EC_Public_CryptoKey, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { isTypedMessageText, type SerializableTypedMessages, type TypedMessageText } from '@masknet/typed-message'
 import {
     type EC_Key,
@@ -18,19 +18,31 @@ import {
     publishPostAESKey_version39Or38,
     publishPostAESKey_version37,
 } from '../../network/gun/encryption/queryPostKey.js'
+import { None, Some } from 'ts-results-es'
+
+export interface EncryptTargetE2EFromProfileIdentifier {
+    type: 'E2E'
+    target: ReadonlyArray<{ profile: ProfileIdentifier; persona?: PersonaIdentifier }>
+}
 export async function encryptTo(
     version: -37 | -38,
     content: SerializableTypedMessages,
-    target: EncryptTargetPublic | EncryptTargetE2E,
+    target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier,
     whoAmI: ProfileIdentifier | undefined,
     network: SocialNetworkEnum,
 ): Promise<string | Uint8Array> {
+    const [keyMap, convertedTarget] = await prepareEncryptTarget(target)
+
+    const authorPublicKey = whoAmI ? await queryPublicKey(whoAmI).catch(noop) : undefined
     const { identifier, output, postKey, e2e } = await encrypt(
         {
             network: whoAmI?.network || SocialNetworkEnumToProfileDomain(network),
-            author: whoAmI,
+            author: whoAmI ? Some(whoAmI) : None,
+            authorPublicKey: authorPublicKey
+                ? Some({ algr: EC_KeyCurveEnum.secp256k1, key: authorPublicKey } satisfies EC_Key<EC_Public_CryptoKey>)
+                : None,
             message: content,
-            target,
+            target: convertedTarget,
             version,
         },
         {
@@ -43,10 +55,6 @@ export async function encryptTo(
                 if (!whoAmI) throw new Error('No Profile found')
                 return encryptByLocalKey(whoAmI, content, iv)
             },
-            queryPublicKey: (id) =>
-                queryPublicKey(id).then((key): EC_Key<EC_Public_CryptoKey> | null =>
-                    key ? { algr: EC_KeyCurveEnum.secp256k1, key } : null,
-                ),
         },
     )
     ;(async () => {
@@ -54,7 +62,7 @@ export async function encryptTo(
         const usingPersona = profile?.linkedPersona
         return savePostKeyToDB(identifier, postKey, {
             postBy: whoAmI,
-            recipients: target.type === 'public' ? 'everyone' : e2eMapToRecipientDetails(e2e!),
+            recipients: target.type === 'public' ? 'everyone' : e2eMapToRecipientDetails(keyMap!, e2e!),
             encryptBy: usingPersona,
             ...collectInterestedMeta(content),
         })
@@ -70,12 +78,51 @@ export async function encryptTo(
     return output
 }
 
-function e2eMapToRecipientDetails(input: EncryptionResultE2EMap): Map<ProfileIdentifier, Date> {
+function e2eMapToRecipientDetails(
+    keyMap: Map<EC_Public_CryptoKey, ProfileIdentifier>,
+    input: EncryptionResultE2EMap,
+): Map<ProfileIdentifier, Date> {
     const result = new Map<ProfileIdentifier, Date>()
-    for (const [identifier] of input) {
+    for (const [key] of input) {
+        const identifier = keyMap?.get(key.key)
+        if (!identifier) continue
         result.set(identifier, new Date())
     }
     return result
+}
+
+/** @internal */
+export function prepareEncryptTarget(
+    target: EncryptTargetE2EFromProfileIdentifier,
+): Promise<readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier>, EncryptTargetE2E]>
+export function prepareEncryptTarget(target: EncryptTargetPublic): Promise<readonly [key_map: null, EncryptTargetE2E]>
+export function prepareEncryptTarget(
+    target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier,
+): Promise<
+    readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier> | null, EncryptTargetPublic | EncryptTargetE2E]
+>
+export async function prepareEncryptTarget(
+    target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier,
+): Promise<
+    readonly [key_map: Map<EC_Public_CryptoKey, ProfileIdentifier> | null, EncryptTargetPublic | EncryptTargetE2E]
+> {
+    if (target.type === 'public') return [null, target] as const
+    const key_map = new Map<EC_Public_CryptoKey, ProfileIdentifier>()
+    const map: Array<EC_Key<EC_Public_CryptoKey>> = []
+
+    await Promise.allSettled(
+        target.target.map(async (id) => {
+            const key = (await id.persona?.toCryptoKey('derive')) || (await queryPublicKey(id.profile))
+            if (!key) {
+                console.error('No publicKey found for profile', id.profile.toText())
+                return
+            }
+            map.push({ algr: EC_KeyCurveEnum.secp256k1, key })
+            key_map.set(key, id.profile)
+        }),
+    )
+
+    return [key_map, { type: 'E2E', target: map } satisfies EncryptTargetE2E] as const
 }
 
 function collectInterestedMeta(content: SerializableTypedMessages) {

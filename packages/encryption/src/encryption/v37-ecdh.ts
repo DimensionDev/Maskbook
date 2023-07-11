@@ -3,8 +3,6 @@ import {
     type EncryptTargetE2E,
     type EncryptIO,
     type EncryptResult,
-    EncryptError,
-    EncryptErrorReasons,
     type EncryptionResultE2E,
     type EncryptionResultE2EMap,
 } from './EncryptionTypes.js'
@@ -19,15 +17,13 @@ export async function v37_addReceiver(
         getEphemeralKey: ReturnType<typeof createEphemeralKeysMap>['getEphemeralKey']
     },
     target: EncryptTargetE2E,
-    io: Pick<EncryptIO, 'getRandomECKey' | 'queryPublicKey' | 'getRandomValues'>,
+    io: Pick<EncryptIO, 'getRandomECKey' | 'getRandomValues'>,
 ): Promise<EncryptionResultE2EMap> {
     const { getEphemeralKey, postIV, postKeyEncoded } = context
 
     const ecdh = Promise.allSettled(
-        target.target.map(async (id): Promise<EncryptionResultE2E> => {
+        target.target.map(async (receiverPublicKey): Promise<EncryptionResultE2E> => {
             const iv = postIV || fillIV(io)
-            const receiverPublicKey = await io.queryPublicKey(id)
-            if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const [ephemeralPublicKey, ephemeralPrivateKey] = await getEphemeralKey(receiverPublicKey.algr)
             const aes = await crypto.subtle.deriveKey(
                 { name: 'ECDH', public: receiverPublicKey.key },
@@ -40,7 +36,7 @@ export async function v37_addReceiver(
             const encryptedPostKey = await encryptWithAES(aes, iv, await postKeyEncoded)
             const result: EncryptionResultE2E = {
                 encryptedPostKey: encryptedPostKey.unwrap(),
-                target: id,
+                target: receiverPublicKey,
             }
             if (!firstTime) result.ephemeralPublicKey = ephemeralPublicKey
             return result

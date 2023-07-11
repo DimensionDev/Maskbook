@@ -1,14 +1,14 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo } from 'react'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import urlcat from 'urlcat'
-import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { type EnhanceableSite, formatPersonaFingerprint, type ProfileAccount } from '@masknet/shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { CopyButton } from '@masknet/shared'
+import { formatPersonaFingerprint, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
+import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
+import { memo } from 'react'
+import urlcat from 'urlcat'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
@@ -187,7 +187,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                         alignItems="center"
                                         columnGap="2px">
                                         {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyIconButton text={fingerprint} className={classes.icon} />
+                                        <CopyButton text={fingerprint} className={classes.icon} />
                                         <Link
                                             underline="none"
                                             target="_blank"
