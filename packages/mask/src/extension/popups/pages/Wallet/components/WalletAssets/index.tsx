@@ -133,7 +133,11 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                 <Box className={classes.header}>
                     <StyledTabList value={currentTab} onChange={onChange}>
                         <Tab className={classes.tab} label={t('popups_wallet_tab_assets')} value={tabs.Tokens} />
-                        <Tab className={classes.tab} label="Collectives" value={tabs.Collectibles} />
+                        <Tab
+                            className={classes.tab}
+                            label={t('popups_wallet_tab_collectibles')}
+                            value={tabs.Collectibles}
+                        />
                         <Tab className={classes.tab} label={t('popups_wallet_tab_activity')} value={tabs.Activity} />
                     </StyledTabList>
                     <Button variant="text" className={classes.addButton}>
