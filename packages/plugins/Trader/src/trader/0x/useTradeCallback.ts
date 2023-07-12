@@ -31,7 +31,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
     }, [account, tradeComputed, gasConfig])
 
     return useAsyncFn(async () => {
-        if (!account || !config || !tradeComputed || !tradeComputed.trade_) {
+        if (!account || !config || !tradeComputed?.trade_) {
             return
         }
 

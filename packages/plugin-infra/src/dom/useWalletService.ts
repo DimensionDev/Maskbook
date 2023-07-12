@@ -37,6 +37,7 @@ export interface WalletBackupProvider {
     ): Promise<string>
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>
+    changePassword(oldPassword: string, newPassword: string): Promise<void>
 }
 
 export const WalletServiceRef = new ValueRefWithReady<WalletBackupProvider>()

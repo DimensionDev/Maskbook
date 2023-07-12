@@ -66,8 +66,7 @@ export class UniSwapV2Like implements TraderAPI.Provider {
         const context = getTradeContext(chainId, this.provider)
         const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]
 
-        if (!tokenA || !tokenB || !context || !context.FACTORY_CONTRACT_ADDRESS || !context.INIT_CODE_HASH)
-            return EMPTY_LIST
+        if (!tokenA || !tokenB || !context?.FACTORY_CONTRACT_ADDRESS || !context.INIT_CODE_HASH) return EMPTY_LIST
 
         const bases: Token[] = !chainIdValid
             ? []

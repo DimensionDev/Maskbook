@@ -1,11 +1,14 @@
 import { validate } from 'uuid'
+import { getDefaultWalletPassword } from '@masknet/shared-base'
 import * as database from './database/index.js'
 import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
-let password = ''
+let inMemoryPassword = ''
 
 export async function INTERNAL_getPassword() {
-    return password ? database.decryptSecret(password) : ''
+    return inMemoryPassword
+        ? database.decryptSecret(inMemoryPassword)
+        : database.decryptSecret(getDefaultWalletPassword())
 }
 
 export async function INTERNAL_getPasswordRequired() {
@@ -16,7 +19,13 @@ export async function INTERNAL_getPasswordRequired() {
 
 export function INTERNAL_setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
-    password = newPassword
+    inMemoryPassword = newPassword
+}
+
+export async function resetPassword(newPassword: string) {
+    validatePasswordRequired(newPassword)
+    await database.resetSecret(newPassword)
+    INTERNAL_setPassword(newPassword)
 }
 
 export async function setPassword(newPassword: string) {
@@ -25,12 +34,20 @@ export async function setPassword(newPassword: string) {
     INTERNAL_setPassword(newPassword)
 }
 
+export async function setDefaultPassword() {
+    const password = getDefaultWalletPassword()
+    const hasUnsafePassword = await database.hasSecret()
+    if (hasUnsafePassword) return
+    await database.encryptSecret(password)
+    INTERNAL_setPassword(password)
+}
+
 export async function hasPassword() {
-    return database.hasSecret()
+    return database.hasSafeSecret()
 }
 
 export async function verifyPassword(unverifiedPassword: string) {
-    if (password === unverifiedPassword) return true
+    if (inMemoryPassword === unverifiedPassword) return true
     return validate(await database.decryptSecret(unverifiedPassword))
 }
 
@@ -39,11 +56,12 @@ export async function verifyPasswordRequired(unverifiedPassword: string) {
     return true
 }
 
-export async function changePassword(newPassword: string) {
+export async function changePassword(oldPassword: string, newPassword: string) {
     validatePasswordRequired(newPassword)
-    const oldPassword = await INTERNAL_getPasswordRequired()
+    validatePasswordRequired(oldPassword)
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
+    INTERNAL_setPassword(newPassword)
 }
 
 export function validatePassword(unverifiedPassword: string) {
@@ -59,5 +77,5 @@ export function validatePasswordRequired(unverifiedPassword: string) {
 }
 
 export function clearPassword() {
-    password = ''
+    inMemoryPassword = ''
 }

@@ -7,15 +7,11 @@ registerPlugin({
     SNSAdaptor: {
         load: () => import('./SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
-            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-            import.meta.webpackHot &&
-            import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js'))),
+            import.meta.webpackHot?.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js'))),
     },
     Worker: {
         load: () => import('./Worker/index.js'),
-        hotModuleReload: (hot) =>
-            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker/index.js'))),
+        hotModuleReload: (hot) => import.meta.webpackHot?.accept('./Worker', () => hot(import('./Worker/index.js'))),
     },
     i18n: languages,
 })

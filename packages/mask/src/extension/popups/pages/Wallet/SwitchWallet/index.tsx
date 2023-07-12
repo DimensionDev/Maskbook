@@ -9,9 +9,8 @@ import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
-import { Services } from '../../../../service.js'
-import { ActionModal, useActionModal } from '../../../components/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
@@ -53,9 +52,9 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { setChainId, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const handleClickCreate = useCallback(() => {
+    const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
-            browser.tabs.create({
+            await browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
             })
@@ -63,12 +62,11 @@ const SwitchWallet = memo(function SwitchWallet() {
             navigate(PopupRoutes.CreateWallet)
         }
     }, [wallets, history])
-    const handleImport = useCallback(() => {
-        if (navigator.userAgent.includes('Firefox')) {
-            Services.Helper.openPopupWindow(PopupRoutes.ImportWallet)
-            return
-        }
-        navigate(PopupRoutes.ImportWallet)
+    const handleImport = useCallback(async () => {
+        await browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/recovery'),
+        })
     }, [])
 
     const handleSelect = useCallback(
@@ -86,6 +84,11 @@ const SwitchWallet = memo(function SwitchWallet() {
         },
         [history, smartPayChainId, chainId, closeModal],
     )
+
+    const handleLock = useCallback(async () => {
+        await WalletRPC.lockWallet()
+        navigate(PopupRoutes.Unlock)
+    }, [])
 
     const action = (
         <Box className={classes.modalAction}>
@@ -117,9 +120,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 fullWidth
                 size="small"
                 variant="outlined"
-                onClick={() => {
-                    WalletRPC.lockWallet()
-                }}>
+                onClick={handleLock}>
                 <Icons.Lock size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_lock_wallet')}

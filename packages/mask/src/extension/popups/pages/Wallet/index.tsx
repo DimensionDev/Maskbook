@@ -5,7 +5,6 @@ import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { lazy, Suspense, useEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
-import urlcat from 'urlcat'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
@@ -13,7 +12,6 @@ import { EditNetwork } from './EditNetwork/index.js'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { NetworkManagement } from './NetworkManagement/index.js'
 import SelectWallet from './SelectWallet/index.js'
 
@@ -39,8 +37,6 @@ const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
 
-const exclusionDetectLocked = [PopupRoutes.Unlock]
-
 const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
@@ -54,8 +50,6 @@ export default function Wallet() {
     })
 
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
         if (
@@ -101,15 +95,10 @@ export default function Wallet() {
     }, [location.search, location.pathname, chainId, TransactionFormatter])
 
     useEffect(() => {
-        if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return
-        navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
-    }, [isLocked, location.pathname, getLockStatusLoading])
-
-    useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
-    }, [retry])
+    }, [])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

@@ -1,21 +1,20 @@
+import { toBlob } from 'html-to-image'
+import { memo, useCallback, useRef, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { Alert, Box, Button, Stack, Typography, alpha, useTheme } from '@mui/material'
-import { toBlob } from 'html-to-image'
-import { isUndefined } from 'lodash-es'
-import { memo, useCallback, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
 import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
+import { ResetWalletContext } from '../context.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { walletName } from '../constants.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
@@ -87,7 +86,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
         marginTop: 12,
         gap: '12px',
     },
-    storeIcon: {
+    iconBox: {
         height: 40,
         width: 40,
         cursor: 'pointer',
@@ -171,39 +170,41 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
+    const walletName = 'Wallet 1'
     const t = useDashboardI18N()
-
+    const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [isVerify, setIsVerify] = useState(false)
     const { classes, cx } = useStyles({ isVerify })
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
-
-    const { value: hasPassword = false } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     const onVerifyClick = useCallback(() => {
         setIsVerify(true)
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.RecoveryMaskWallet)
-    }, [])
+        navigate(DashboardRoutes.RecoveryMaskWallet, {
+            state: {
+                password: location.state?.password,
+                isReset: location.state?.isReset,
+            },
+        })
+    }, [location.state?.password, location.state?.isReset])
 
     const { value: address } = useAsync(async () => {
-        const password = location.state?.password
-        if (isUndefined(hasPassword)) return
-
-        if (hasPassword === false) {
-            await PluginServices.Wallet.setPassword(password)
-        }
-
         if (!words.length) return
 
+        const hasPassword = await PluginServices.Wallet.hasPassword()
+
+        if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
+
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
-
         return address
-    }, [words, hasPassword, location.state?.password])
+    }, [words.join(' '), walletName])
 
-    const [, onSubmit] = useAsyncFn(async () => {
+    const [{ loading }, onSubmit] = useAsyncFn(async () => {
+        handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
@@ -213,7 +214,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words])
+    }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
 
     return (
         <div className={classes.container}>
@@ -228,8 +229,10 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                 </div>
                 {isVerify ? (
                     <VerifyMnemonicUI
+                        isReset={location.state?.isReset}
                         setIsVerify={setIsVerify}
                         words={words}
+                        loading={loading}
                         isMatched={isMatched}
                         answerCallback={answerCallback}
                         puzzleAnswer={puzzleAnswer}
@@ -265,6 +268,8 @@ interface VerifyMnemonicUIProps {
         [key: number]: string
     }
     puzzleWordList: PuzzleWord[]
+    isReset: boolean
+    loading: boolean
     isMatched: boolean | undefined
     setIsVerify: (isVerify: boolean) => void
     onSubmit: () => void
@@ -282,6 +287,8 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     answerCallback,
     setIsVerify,
     onSubmit,
+    loading,
+    isReset,
     puzzleWordList,
     puzzleAnswer,
     verifyAnswerCallback,
@@ -325,10 +332,12 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                     <PrimaryButton
                         className={classes.bold}
                         width="125px"
+                        disabled={loading}
+                        loading={loading}
                         size="large"
                         color="primary"
                         onClick={() => verifyAnswerCallback(onSubmit)}>
-                        {t.verify()}
+                        {isReset ? t.restore() : t.verify()}
                     </PrimaryButton>
                 </div>
             </SetupFrameController>
@@ -399,15 +408,17 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                 <MnemonicReveal words={words} indexed />
             </div>
             <div className={classes.storeWords}>
-                <div className={classes.storeIcon} onClick={handleDownload}>
+                <div className={classes.iconBox} onClick={handleDownload}>
                     <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                 </div>
-                <CopyButton
-                    color={theme.palette.maskColor.main}
-                    size={18}
-                    text={words.join(' ')}
-                    successText={t.persona_phrase_copy_description()}
-                />
+                <div className={classes.iconBox}>
+                    <CopyButton
+                        color={theme.palette.maskColor.main}
+                        size={18}
+                        text={words.join(' ')}
+                        successText={t.persona_phrase_copy_description()}
+                    />
+                </div>
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
                 {t.create_wallet_mnemonic_tip()}

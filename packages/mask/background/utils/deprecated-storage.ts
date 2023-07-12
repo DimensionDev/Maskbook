@@ -77,7 +77,8 @@ const storage = new MutexStorage()
  * @internal
  */
 export async function __deprecated__getStorage<T>(key: string): Promise<Option<T>> {
-    if (typeof browser === 'undefined' || !browser.storage) return None
+    if (typeof browser === 'undefined') return None
+    if (!browser.storage) return None
     const value = await storage.getStorage(key)
     if (value === undefined) return None
     return Some(value as any)
@@ -89,6 +90,7 @@ export async function __deprecated__getStorage<T>(key: string): Promise<Option<T
  * @internal
  */
 export async function __deprecated__setStorage<T>(key: string, value: T): Promise<void> {
-    if (typeof browser === 'undefined' || !browser.storage) return
+    if (typeof browser === 'undefined') return
+    if (!browser.storage) return
     return storage.setStorage(key, value)
 }

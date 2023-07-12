@@ -34,19 +34,16 @@ export interface PluginServices {
             }>
         >
         hasPassword(): Promise<boolean>
+        changePassword(oldPassword: string, newPassword: string): Promise<void>
         setPassword(newPassword: string): Promise<void>
-        recoverWalletFromMnemonic(
-            name: string,
-            mnemonic: string,
-            derivationPath?: string,
-            initialPassword?: string,
-        ): Promise<string>
+        recoverWalletFromMnemonic(name: string, mnemonic: string, derivationPath?: string): Promise<string>
         generateAddressFromMnemonic(
             name: string,
             mnemonic: string,
             derivationPath?: string,
-            initialPassword?: string,
         ): Promise<string | undefined>
+        resetPassword(newPassword: string): Promise<void>
+        setDefaultPassword(): Promise<void>
         resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }
