@@ -49,7 +49,6 @@
         "@masknet/plugin-rss3": "workspace:^",
         "@masknet/plugin-scam-warning": "workspace:^",
         "@masknet/plugin-scamsniffer": "workspace:^",
-        "@masknet/plugin-smart-pay": "workspace:^",
         "@masknet/plugin-snapshot": "workspace:^",
         "@masknet/plugin-solana": "workspace:^",
         "@masknet/plugin-trader": "workspace:^",
