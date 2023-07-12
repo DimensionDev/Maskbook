@@ -146,9 +146,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
             fullWidth={false}
             open={open}
             isOnBack
-            titleTail={
-                <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
-            }
+            titleTail={<Icons.Wallet size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Alert open={tipsVisible} onClose={dismissTips}>

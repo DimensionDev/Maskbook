@@ -254,7 +254,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
                                     loading={loading}
                                     fullWidth
                                     size="large"
-                                    startIcon={<Icons.ConnectWallet size={18} />}
+                                    startIcon={<Icons.Wallet size={18} />}
                                     disabled={!!validationMessage || loading}
                                     onClick={donate}>
                                     {validationMessage || t.donate()}
