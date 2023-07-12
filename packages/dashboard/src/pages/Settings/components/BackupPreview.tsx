@@ -150,12 +150,12 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                                 <Icons.BaseUser size={20} />
                             </ListItemIcon>
                             <ListItemText className={classes.listText}>
-                                {t.settings_backup_preview_associated_account()}
+                                {t.settings_backup_preview_associated_accounts()}
                             </ListItemText>
                         </ListItem>
                         <ListItem secondaryAction={<Typography>{info.contacts}</Typography>}>
                             <ListItemIcon className={classes.listItemIcon}>
-                                <Icons.Contacts size={20} />
+                                <Icons.BaseContacts size={20} />
                             </ListItemIcon>
                             <ListItemText className={classes.listText}>
                                 {t.settings_backup_preview_contacts()}
