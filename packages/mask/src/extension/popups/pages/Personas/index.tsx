@@ -32,18 +32,12 @@ const Persona = memo(() => {
 
     useMount(() => {
         return CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open, uri }) => {
-            if (open)
-                navigate(PopupRoutes.WalletConnect, {
-                    state: {
-                        uri,
-                    },
-                    replace: true,
-                })
-            else {
-                navigate(PopupRoutes.ConnectWallet, {
-                    replace: true,
-                })
-            }
+            if (!open || location.href.includes(PopupRoutes.WalletConnect)) return
+            navigate(PopupRoutes.WalletConnect, {
+                state: {
+                    uri,
+                },
+            })
         })
     })
 

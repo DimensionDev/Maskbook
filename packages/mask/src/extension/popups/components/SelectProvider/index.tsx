@@ -57,7 +57,15 @@ export const SelectProvider = memo(function SelectProvider() {
             if (providerType === ProviderType.MaskWallet) {
                 navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
                 return
-            } else if (providerType === ProviderType.MetaMask) {
+            } else if (providerType === ProviderType.WalletConnect) {
+                const account = await Web3.connect({ providerType })
+
+                // wallet connect has been connected
+                if (account) {
+                    navigate(PopupRoutes.ConnectWallet)
+                    return
+                }
+            } else {
                 if (disableNewWindow) {
                     modalNavigate(
                         PopupModalRoutes.ConnectProvider,
@@ -79,11 +87,6 @@ export const SelectProvider = memo(function SelectProvider() {
 
                 return
             }
-
-            await Web3.disconnect({ providerType })
-            return Web3.connect({
-                providerType,
-            })
         },
         [location.search],
     )

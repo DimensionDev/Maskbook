@@ -1,10 +1,11 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
+import { CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -85,6 +86,15 @@ export default memo(function WalletConnect() {
     const { classes } = useStyles()
     const location = useLocation()
     const uri = location.state?.uri as string | undefined
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open }) => {
+            if (open) return
+            navigate(PopupRoutes.ConnectWallet, {
+                replace: true,
+            })
+        })
+    }, [])
 
     return (
         <Box>
