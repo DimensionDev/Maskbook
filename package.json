@@ -26,7 +26,7 @@
     "svgo": "svgo packages/icons/*/*.svg",
     "test": "vitest",
     "spellcheck": "cspell lint --no-must-find-files",
-    "clean": "rimraf --glob **/i18n_generated.ts"
+    "clean": "rimraf --glob **/i18n_generated.ts **/node_modules"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20230307045856-46252fb",
