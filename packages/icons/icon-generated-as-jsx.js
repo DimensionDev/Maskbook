@@ -2791,11 +2791,6 @@ export const Verification = /*#__PURE__*/ __createIcon('Verification', [
         s: true,
     },
 ])
-export const Wallert = /*#__PURE__*/ __createIcon('Wallert', [
-    {
-        u: () => new URL('./general/Wallert.svg', import.meta.url),
-    },
-])
 export const Wallet = /*#__PURE__*/ __createIcon('Wallet', [
     {
         u: () => new URL('./general/Wallet.svg', import.meta.url),

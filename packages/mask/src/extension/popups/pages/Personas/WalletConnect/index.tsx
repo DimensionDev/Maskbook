@@ -93,7 +93,7 @@ export default memo(function WalletConnect() {
                     <Icons.ArrowBack onClick={() => navigate(-1)} />
                 </Box>
                 <Box className={classes.icon}>
-                    <Icons.Wallert size={64} />
+                    <Icons.MaskWallet size={64} />
                 </Box>
             </Box>
             <Typography className={classes.title}>{t('wallet_connect')}</Typography>
