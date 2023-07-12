@@ -1,4 +1,5 @@
 import { Environment, getEnvironment } from '@dimensiondev/holoflows-kit'
+import { defer } from '@masknet/kit'
 
 export interface BuildInfoFile {
     readonly BUILD_DATE: string
@@ -11,7 +12,7 @@ export interface BuildInfoFile {
     readonly channel: 'stable' | 'beta' | 'insider'
 }
 
-async function getBuildInfo(): Promise<BuildInfoFile> {
+export async function getBuildInfo(): Promise<BuildInfoFile> {
     try {
         // eslint-disable-next-line no-bitwise
         const hasBrowserAPI = getEnvironment() & Environment.HasBrowserAPI
@@ -33,4 +34,14 @@ async function getBuildInfo(): Promise<BuildInfoFile> {
         }
     }
 }
-export const env = await getBuildInfo()
+export let env: BuildInfoFile
+const [_promise, resolve] = defer<void>()
+export const envReadyPromise = _promise
+export function setup() {
+    return getBuildInfo().then(setEnv)
+}
+export function setEnv(_env: BuildInfoFile) {
+    if (env) return
+    resolve()
+    env = _env
+}

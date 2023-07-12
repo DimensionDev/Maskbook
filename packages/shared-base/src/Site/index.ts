@@ -76,6 +76,7 @@ export function isExtensionSiteType() {
 }
 
 export function isEthereumInjected() {
+    if (typeof window === 'undefined') return false
     return typeof Reflect.get(window, 'ethereum') !== 'undefined'
 }
 

@@ -1,9 +1,3 @@
 import './initialization/fetch.js'
-import './initialization/telemetry.js'
-import './initialization/storage.js'
-import './initialization/telemetry-update.js'
-import '../shared-ui/locales_legacy/init.js'
-import './social-network-adaptor/index.js'
-
-import { activateSocialNetworkUI } from './social-network/define.js'
-export const status = activateSocialNetworkUI()
+import './initialization/async-setup.js'
+export const { status } = await import(/* webpackMode: 'eager' */ './initialization/post-async-setup.js')
