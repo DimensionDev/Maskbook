@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
 import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
