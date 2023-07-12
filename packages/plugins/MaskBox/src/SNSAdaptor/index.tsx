@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURLs } from '@masknet/shared-base'
+import { PluginID, parseURLs } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
@@ -33,7 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.MaskBox />
-            const name = <Trans i18nKey="plugin_mask_box_name" />
+            const name = <Trans i18nKey="plugin_mask_box_name" ns={PluginID.MaskBox} />
             const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,

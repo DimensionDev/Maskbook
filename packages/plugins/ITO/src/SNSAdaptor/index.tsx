@@ -10,7 +10,7 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { EnhanceableSite, SOCIAL_MEDIA_NAME, getSiteType } from '@masknet/shared-base'
+import { EnhanceableSite, PluginID, SOCIAL_MEDIA_NAME, getSiteType } from '@masknet/shared-base'
 import { ITOInjection } from './ITOInjection.js'
 import { openDialog } from './emitter.js'
 import { Typography } from '@mui/material'
@@ -57,7 +57,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Markets size={36} />
-            const name = <Trans i18nKey="plugin_ito_name" />
+            const name = <Trans i18nKey="plugin_ito_name" ns={PluginID.ITO} />
+
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
 
             return {
