@@ -1,11 +1,14 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { Sniffings } from '../Sniffings/index.js'
 import { ExtensionSite, EnhanceableSite } from './types.js'
+import { parseURL } from '../utils/parseURL.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
     [EnhanceableSite.App]:
-        process.env.NODE_ENV === 'production' ? /^(app\.mask\.io|app-stage\.mask\.io)$/i : /localhost/,
+        process.env.NODE_ENV === 'production'
+            ? /^(app\.mask\.io|app-[beta|stage|test]\.mask\.io|[\w-]*\.?maskbook\.pages\.dev)$/i
+            : /localhost/,
     [EnhanceableSite.Facebook]: /facebook\.com/i,
     [EnhanceableSite.Twitter]: /twitter\.com/i,
     [EnhanceableSite.Minds]: /minds\.com/i,
@@ -25,8 +28,7 @@ export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.
 export const ExtensionSiteList = getEnumAsArray(ExtensionSite).map((x) => x.value)
 
 export function getEnhanceableSiteType(url?: string) {
-    const { host } = location
-    const target = url ?? host
+    const target = parseURL(url)?.host ?? location.host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (target.match(regexp)) return type as EnhanceableSite
         continue
@@ -34,9 +36,8 @@ export function getEnhanceableSiteType(url?: string) {
     return
 }
 
-function getExtensionSiteType(url?: string) {
-    const { pathname } = location
-    const target = url ?? pathname
+export function getExtensionSiteType(url?: string) {
+    const target = parseURL(url)?.pathname ?? location.pathname
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
         if (target.match(regexp)) return type as ExtensionSite
         continue
