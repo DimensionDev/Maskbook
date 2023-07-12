@@ -1095,6 +1095,7 @@
     "adding_network_successfully": "crwdns21577:0crwdne21577:0",
     "deleted_network_successfully": "crwdns21621:0crwdne21621:0",
     "hided_token_successfully": "crwdns21627:0crwdne21627:0",
+    "not_enough_data_to_present": "crwdns21659:0crwdne21659:0",
     "wallet_send": "crwdns21375:0crwdne21375:0",
     "wallet_receive": "crwdns21377:0crwdne21377:0",
     "wallet_swap": "crwdns21379:0crwdne21379:0",
