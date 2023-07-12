@@ -41,13 +41,13 @@ const useStyles = makeStyles()({
     },
 })
 interface CoinMarketTableProps {
-    trending: TrendingAPI.Trending
+    trending?: TrendingAPI.Trending
 }
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending }: CoinMarketTableProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const { market } = trending
+    const market = trending?.market
 
     return (
         <Stack>
