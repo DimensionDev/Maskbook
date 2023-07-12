@@ -16,7 +16,7 @@ import { sendCode, type RestoreQueryError } from '../../../pages/Settings/api.js
 import { phoneRegexp } from '../../../pages/Settings/regexp.js'
 import { AccountType, Locale, Scenario } from '../../../pages/Settings/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
-import { RestoreContext } from './CloudRestoreProvider.js'
+import { RestoreContext } from './RestoreProvider.js'
 
 export const PhoneField = memo(function PhoneField() {
     const language = useLanguage()

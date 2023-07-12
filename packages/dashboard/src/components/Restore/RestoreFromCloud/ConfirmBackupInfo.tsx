@@ -10,7 +10,7 @@ import PasswordField from '../../PasswordField/index.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { AccountStatusBar } from '../AccountStatusBar.js'
 import { BackupInfoCard } from '../BackupInfoCard.js'
-import { RestoreContext } from './CloudRestoreProvider.js'
+import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
@@ -26,7 +26,6 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
             return JSON.stringify(decode(decrypted))
         } catch {
             return null
-        } finally {
         }
     }, [])
     const handleNext = useCallback(async () => {

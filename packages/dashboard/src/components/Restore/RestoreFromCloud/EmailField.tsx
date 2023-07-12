@@ -9,7 +9,7 @@ import { emailRegexp } from '../../../pages/Settings/regexp.js'
 import { AccountType, Locale, Scenario } from '../../../pages/Settings/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { useLanguage } from '../../../pages/Personas/api.js'
-import { RestoreContext } from './CloudRestoreProvider.js'
+import { RestoreContext } from './RestoreProvider.js'
 
 export const EmailField = memo(function EmailField() {
     const language = useLanguage()
