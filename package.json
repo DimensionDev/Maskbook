@@ -12,6 +12,7 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
+    "preinstall": "if [ -n \"$CF_PAGES\" ]; then echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> .npmrc; fi",
     "start": "dev",
     "start:mv2": "dev --mv2",
     "start:mv3": "dev --mv3",
