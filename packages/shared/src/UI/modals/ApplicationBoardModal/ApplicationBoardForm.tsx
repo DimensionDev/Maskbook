@@ -2,13 +2,14 @@ import { MaskTabList, useTabs } from '@masknet/theme'
 import { useState } from 'react'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Tab } from '@mui/material'
+import { IconButton, Tab } from '@mui/material'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
 import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
 import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import { Icons } from '@masknet/icons'
 
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
@@ -36,6 +37,14 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
 
     return (
         <>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton
+                    size="small"
+                    sx={{ margin: '-5px' }}
+                    onClick={() => setOpoenSettings((openSettings) => !openSettings)}>
+                    <Icons.Gear size={24} />
+                </IconButton>
+            </div>
             {openSettings ? (
                 <>
                     <TabContext value={currentTab}>
