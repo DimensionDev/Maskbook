@@ -1,4 +1,3 @@
-import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import git from '@nice-labs/git-rev'
 
 interface GitInfoReport {
@@ -7,14 +6,6 @@ interface GitInfoReport {
     COMMIT_DATE: string
     BRANCH_NAME: string
     DIRTY: boolean
-}
-
-export function emitGitInfo(reproducible: boolean) {
-    return emitJSONFile<GitInfoReport>({
-        name: 'git-info.json',
-        content: getGitInfo(reproducible),
-        space: 4,
-    })
 }
 
 /** Get git info */

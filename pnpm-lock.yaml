@@ -457,6 +457,9 @@ importers:
         specifier: 1.6.0
         version: 1.6.0(react@0.0.0-experimental-9a72e6227-20230525)
     devDependencies:
+      '@nice-labs/emit-file-webpack-plugin':
+        specifier: ^1.1.4
+        version: 1.1.4(webpack@5.88.0)
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.10
         version: 0.5.10(react-refresh@0.14.0)(webpack-dev-server@4.13.3)(webpack@5.88.0)

@@ -11,6 +11,7 @@ import webpack from 'webpack'
 import { createRequire } from 'module'
 import { getGitInfo } from './.webpack/git-info.js'
 import { EnvironmentPluginNoCache, EnvironmentPluginCache } from './.webpack/EnvironmentPlugin.js'
+import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(dirname(import.meta.url))
@@ -104,6 +105,19 @@ function Configuration(env, argv) {
                 'process.version': JSON.stringify('v19.0.0'),
                 'process.browser': 'true',
             }),
+            (() => {
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
+                const json = {
+                    BRANCH_NAME,
+                    BUILD_DATE,
+                    channel: 'stable',
+                    COMMIT_DATE,
+                    COMMIT_HASH,
+                    DIRTY,
+                    VERSION: '2.21.0',
+                }
+                return emitJSONFile({ content: json, name: 'build-info.json' })
+            })(),
         ],
         devServer: {
             client: {

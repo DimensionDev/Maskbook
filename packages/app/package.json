@@ -83,6 +83,7 @@
     },
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+        "@nice-labs/emit-file-webpack-plugin": "^1.1.4",
         "@sinonjs/text-encoding": "^0.7.2",
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^6.7.3",

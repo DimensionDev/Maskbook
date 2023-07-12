@@ -8,9 +8,10 @@ import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin.js'
 import { emitManifestFile } from './manifest.js'
-import { emitGitInfo, getGitInfo } from './git-info.js'
+import { getGitInfo } from './git-info.js'
 
 import { dirname, join } from 'node:path'
 import { readFileSync, readdirSync } from 'node:fs'
@@ -202,7 +203,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     VERSION,
                 )})`,
                 'process.browser': 'true',
-                'process.version': JSON.stringify('v19.0.0'),
+                'process.version': JSON.stringify('v20.0.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',
@@ -234,7 +235,20 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 ],
             }),
             emitManifestFile(flags, computedFlags),
-            emitGitInfo(flags.reproducibleBuild),
+            (() => {
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo(flags.reproducibleBuild)
+                const json = {
+                    BRANCH_NAME,
+                    BUILD_DATE,
+                    channel: flags.channel,
+                    COMMIT_DATE,
+                    COMMIT_HASH,
+                    DIRTY,
+                    VERSION,
+                    REACT_DEVTOOLS_EDITOR_URL: flags.mode === 'development' ? flags.devtoolsEditorURI : undefined,
+                }
+                return emitJSONFile({ content: json, name: 'build-info.json' })
+            })(),
         ],
         optimization: {
             minimize: false,
