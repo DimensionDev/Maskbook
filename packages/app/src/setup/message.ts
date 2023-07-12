@@ -5,7 +5,7 @@ import {
     type PluginMessageEmitter,
     type PluginMessageEmitterItem,
 } from '@masknet/plugin-infra'
-import type { InternalMessage_PluginMessage } from '../plugin-worker/message.js'
+import type { InternalMessage_PluginMessage } from '../background-worker/message.js'
 export type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
@@ -17,14 +17,14 @@ function MessageEventReceiver(event: MessageEvent): void {
     for (const h of handler) h(data)
 }
 if (typeof SharedWorker === 'function') {
-    const worker = new SharedWorker(new URL('../plugin-worker/index.ts', import.meta.url), {
+    const worker = new SharedWorker(new URL('../background-worker/index.ts', import.meta.url), {
         name: 'mask plugin worker',
     })
     worker.port.addEventListener('message', MessageEventReceiver)
     worker.port.start()
     postMessage = (type: string, data: unknown) => worker.port.postMessage([type, data])
 } else {
-    const worker = new Worker(new URL('../plugin-worker/index.ts', import.meta.url), {
+    const worker = new Worker(new URL('../background-worker/index.ts', import.meta.url), {
         name: 'mask plugin worker',
     })
     worker.addEventListener('message', MessageEventReceiver)

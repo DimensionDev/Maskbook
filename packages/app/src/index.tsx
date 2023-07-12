@@ -1,5 +1,6 @@
 import './styles/index.css'
 import './locales/init.js'
+import './setup/storage.js'
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
