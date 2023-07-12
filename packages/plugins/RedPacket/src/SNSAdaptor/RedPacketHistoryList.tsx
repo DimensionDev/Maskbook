@@ -6,8 +6,8 @@ import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
 import { useI18N } from '../locales/index.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
+import { type NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
