@@ -7,7 +7,7 @@ export interface WalletRecord {
     name: string
     /** The address of wallet */
     address: string
-    /** The initial derivation path of mnemonic words or private keys  */
+    /** The initial derivation path of mnemonic words  */
     derivationPath?: string
     /** the latest local derivation path of mnemonic words */
     latestDerivationPath?: string
