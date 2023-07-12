@@ -66,6 +66,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     ),
 
     selectAccount: WalletRPC.selectMaskAccount,
+
     recordConnectedSites: WalletRPC.recordConnectedSites,
 
     signWithPersona: Services.Identity.signWithPersona,
@@ -75,5 +76,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     addWallet: WalletRPC.updateWallet,
     updateWallet: WalletRPC.updateWallet,
     removeWallet: WalletRPC.removeWallet,
+    resetAllWallets: WalletRPC.resetAllWallets,
     hasPaymentPassword: WalletRPC.hasPassword,
 }

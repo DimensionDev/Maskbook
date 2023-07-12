@@ -1867,6 +1867,47 @@ export const Message = /*#__PURE__*/ __createIcon('Message', [
         u: () => new URL('./general/Message.svg', import.meta.url),
     },
 ])
+export const Mnemonic = /*#__PURE__*/ __createIcon(
+    'Mnemonic',
+    [
+        {
+            u: () => new URL('./general/Mnemonic.svg', import.meta.url),
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    viewBox: '0 0 24 25',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M2.865 5.878a2.8 2.8 0 0 1 2.8-2.8h13.69a.8.8 0 0 1 0 1.6H5.665a1.2 1.2 0 0 0-1.2 1.2v.803h13.87a2.8 2.8 0 0 1 2.8 2.8v10.138a2.8 2.8 0 0 1-2.8 2.8H5.665a2.8 2.8 0 0 1-2.8-2.8V5.88Zm1.6 2.403v11.338a1.2 1.2 0 0 0 1.2 1.2h12.67a1.2 1.2 0 0 0 1.2-1.2V9.481a1.2 1.2 0 0 0-1.2-1.2H4.465Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M12.285 9.23a.8.8 0 0 1 .463 1.032l-3.484 9.155a.8.8 0 1 1-1.496-.569l3.484-9.155a.8.8 0 0 1 1.033-.463Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M15.769 19.881a.8.8 0 0 0 .463-1.032l-3.484-9.155a.8.8 0 0 0-1.495.569l3.484 9.155a.8.8 0 0 0 1.032.463Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M9.458 15.546a.8.8 0 0 1 .8-.8H13.9a.8.8 0 0 1 0 1.6h-3.642a.8.8 0 0 1-.8-.8Z',
+                            clipRule: 'evenodd',
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [24, 25],
+)
 export const More = /*#__PURE__*/ __createIcon('More', [
     {
         u: () => new URL('./general/More.svg', import.meta.url),

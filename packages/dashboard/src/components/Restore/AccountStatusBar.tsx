@@ -6,12 +6,10 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontSize: 14,
         fontWeight: 700,
-        fontFamily: 'Helvetica',
     },
     actionButton: {
         fontSize: 14,
         fontWeight: 700,
-        fontFamily: 'Helvetica',
         color: theme.palette.maskColor.main,
     },
 }))

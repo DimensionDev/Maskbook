@@ -128,6 +128,9 @@ export namespace Plugin.Shared {
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
+        /** Select a Mask Wallet account */
+        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
+
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>
 
@@ -147,9 +150,6 @@ export namespace Plugin.Shared {
 
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
-
-        /** Select a Mask Wallet account */
-        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>
@@ -171,6 +171,9 @@ export namespace Plugin.Shared {
 
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
+
+        /** Reset all wallets */
+        resetAllWallets(): Promise<void>
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>

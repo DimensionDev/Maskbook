@@ -1,10 +1,10 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
 import { toBuffer } from '@ethereumjs/util'
+import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import type { SignType, Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { api } from '@dimensiondev/mask-wallet-core/proto'
 import * as database from './database/index.js'
 import * as password from './password.js'
 import * as Mask from '../maskwallet/index.js'
@@ -30,6 +30,8 @@ export {
     hasPassword,
     verifyPassword,
     changePassword,
+    resetPassword,
+    setDefaultPassword,
     validatePassword,
     clearPassword,
 } from './password.js'
@@ -172,6 +174,10 @@ export async function removeWallet(address: string, unverifiedPassword: string) 
     await database.deleteWallet(wallet.address)
 }
 
+export async function resetAllWallets() {
+    await database.resetAllWallets()
+}
+
 export async function exportMnemonic(address: string, unverifiedPassword?: string) {
     if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
     const password_ = await password.INTERNAL_getPasswordRequired()
@@ -235,9 +241,8 @@ export async function recoverWalletFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-    initialPassword?: string,
 ) {
-    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importMnemonic({
         mnemonic,
         password: password_,
@@ -270,15 +275,12 @@ export async function generateAddressFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-    initialPassword?: string,
 ) {
-    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
-
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importMnemonic({
         mnemonic,
         password: password_,
     })
-
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
     const created = await Mask.createAccountOfCoinAtPath({
@@ -288,12 +290,11 @@ export async function generateAddressFromMnemonic(
         derivationPath,
         StoredKeyData: imported.StoredKey.data,
     })
-
     return created?.account?.address ?? undefined
 }
 
-export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string) {
-    const password_ = initialPassword_ ?? (await password.INTERNAL_getPasswordRequired())
+export async function recoverWalletFromPrivateKey(name: string, privateKey: string) {
+    const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
         name,

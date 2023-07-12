@@ -6,8 +6,6 @@ import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
-    const password = await WalletServiceRef.value.INTERNAL_getPasswordRequired()
-
     for (const wallet of backup) {
         try {
             const name = wallet.name
@@ -16,7 +14,6 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                 await WalletServiceRef.value.recoverWalletFromPrivateKey(
                     name,
                     await JWKToKey(wallet.privateKey.val, 'private'),
-                    password,
                 )
             else if (wallet.mnemonic.some) {
                 // fix a backup bug of pre-v2.2.2 versions
@@ -26,7 +23,6 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                     name,
                     wallet.mnemonic.val.words,
                     index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
-                    password,
                 )
             }
         } catch (error) {
