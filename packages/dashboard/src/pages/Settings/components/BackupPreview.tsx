@@ -1,6 +1,9 @@
 import type { BackupSummary } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
+import { ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import {
     Card,
     CardContent,
@@ -14,9 +17,6 @@ import {
 } from '@mui/material'
 import { Box, type BoxProps } from '@mui/system'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -176,7 +176,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                         className={classes.cardHeader}
                         avatar={
                             <div className={cx(classes.cardIcon, classes.walletIcon)}>
-                                <Icons.WalletUnderTabs size={20} color="#fff" />
+                                <Icons.Wallet size={20} color="#fff" />
                             </div>
                         }
                         title={
@@ -190,7 +190,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                             {info.wallets.map((wallet) => (
                                 <ListItem key={wallet} className={classes.wallet}>
                                     <ListItemIcon className={classes.listItemIcon}>
-                                        <Icons.ConnectWallet size={20} />
+                                        <Icons.Wallet size={20} />
                                     </ListItemIcon>
                                     <ListItemText className={classes.listText}>
                                         <Link

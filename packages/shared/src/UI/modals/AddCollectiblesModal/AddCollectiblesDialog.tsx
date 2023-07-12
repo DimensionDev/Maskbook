@@ -307,7 +307,7 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
                     <Stack className={classes.toolbar} direction="row" justifyContent="center">
                         <Button
                             fullWidth
-                            startIcon={<Icons.ConnectWallet size={18} />}
+                            startIcon={<Icons.Wallet size={18} />}
                             disabled={disabled}
                             onClick={handleAdd}>
                             {t.add_collectibles()}

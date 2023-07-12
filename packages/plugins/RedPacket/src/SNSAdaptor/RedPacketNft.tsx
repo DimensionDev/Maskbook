@@ -437,7 +437,7 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
                         expectedChainId={chainId}>
                         <WalletConnectedBoundary
                             expectedChainId={chainId}
-                            startIcon={<Icons.ConnectWallet size={18} />}
+                            startIcon={<Icons.Wallet size={18} />}
                             classes={{
                                 connectWallet: classes.button,
                             }}
