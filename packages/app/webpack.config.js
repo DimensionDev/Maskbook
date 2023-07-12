@@ -26,7 +26,7 @@ function Configuration(env, argv) {
         mode,
         entry: './src/index.tsx',
         output: {
-            path: fileURLToPath(new URL('./output', import.meta.url)),
+            path: fileURLToPath(new URL('./dist', import.meta.url)),
             publicPath: 'auto',
             clean: true,
         },
