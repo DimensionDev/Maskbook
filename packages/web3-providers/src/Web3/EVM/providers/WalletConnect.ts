@@ -37,11 +37,6 @@ interface DisconnectPayload {
     ]
 }
 
-interface ModalClosePayload {
-    event: 'modal_closed'
-    params: []
-}
-
 export default class WalletConnectProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
@@ -96,34 +91,30 @@ export default class WalletConnectProvider
     }
 
     private async onConnect(error: Error | null, payload: SessionPayload) {
+        if (error) return
+
         await this.context?.closeWalletConnectDialog('Connected')
 
-        if (error) {
-            this.connection?.reject(error)
-        } else {
-            this.connection?.resolve({
-                chainId: payload.params[0].chainId,
-                account: first(payload.params[0].accounts) ?? '',
-            })
+        const account = {
+            chainId: payload.params[0].chainId,
+            account: first(payload.params[0].accounts) ?? '',
         }
+
+        this.connection?.resolve(account)
+        this.emitter.emit('connect', account)
     }
 
     private async onDisconnect(error: Error | null, payload: DisconnectPayload) {
+        if (error) return
+        if (payload.params[0].message === 'cleanup') return
+
         await this.context?.closeWalletConnectDialog('Disconnected')
 
-        this.connection?.reject(error || new Error('User rejected'))
-
-        if (error) return
-
+        this.connection?.reject(new Error(payload.params[0].message))
         this.emitter.emit('disconnect', ProviderType.WalletConnect)
     }
 
     private onSessionUpdate(error: Error | null, payload: SessionPayload) {
-        if (this.connection) {
-            this.onConnect(error, payload)
-            return
-        }
-
         if (error) return
 
         this.emitter.emit('chainId', toHex(payload.params[0].chainId))
@@ -159,8 +150,16 @@ export default class WalletConnectProvider
                 await openQRCodeModal()
             }
         } else {
+            // try {
+            //     // to kill a unconnected session will throw an error
+            //     await connector?.killSession()
+            //     await connector.createSession()
+            // } catch {
+
+            // }
+
             if (connector.session.handshakeId === 0) await connector.createSession()
-            else connector.rejectSession(new Error('User rejected'))
+            else connector.rejectSession(new Error('cleanup'))
 
             await openQRCodeModal()
         }
@@ -171,6 +170,11 @@ export default class WalletConnectProvider
     }
 
     private async logout() {
+        try {
+            // to kill a unconnected session will throw an error
+            await this.connector?.killSession()
+        } catch {}
+
         this.onDisconnect(new Error('disconnect'), {
             event: 'disconnect',
             params: [
