@@ -12,7 +12,6 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "preinstall": "if [ -n \"$CF_PAGES\" ]; then echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> .npmrc; fi",
     "start": "dev",
     "start:mv2": "dev --mv2",
     "start:mv3": "dev --mv3",
@@ -23,7 +22,8 @@
     "lint": "eslint packages --cache --fix",
     "lint:ci": "eslint packages --cache --cache-strategy content",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
-    "prepare": "husky install",
+    "prepare": "npm run prepare:pages && husky install",
+    "prepare:pages": "if [ -n \"$CF_PAGES\" ]; then echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> .npmrc; fi",
     "svgo": "svgo packages/icons/*/*.svg",
     "test": "vitest",
     "spellcheck": "cspell lint --no-must-find-files"
