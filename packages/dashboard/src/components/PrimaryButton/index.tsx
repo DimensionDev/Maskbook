@@ -31,7 +31,7 @@ export const PrimaryButton = memo<ActionButtonProps>(function PrimaryButton(prop
     const { width, loading, children, className, style, ...rest } = props
     const { classes } = useStyles(undefined, { props: { classes: rest.classes } })
     return (
-        <ActionButton {...props} classes={classes}>
+        <ActionButton {...props} disabled={props.disabled || loading} classes={classes}>
             {children}
         </ActionButton>
     )

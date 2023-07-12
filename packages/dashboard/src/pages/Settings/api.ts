@@ -21,6 +21,11 @@ interface UploadLinkRequest extends BackupBaseRequest {
     abstract: string
 }
 
+export interface RestoreQueryError {
+    status: number
+    message: string
+}
+
 const withErrorMiddleware =
     <T>(handler: (res: Response) => Promise<T>) =>
     async (res: Response) => {
@@ -56,8 +61,8 @@ export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) =
     })
 }
 
-export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkRequest) => {
-    return fetchBackupInstance('v1/backup/upload', {
+export const fetchUploadLink = async ({ code, account, abstract, type }: UploadLinkRequest) => {
+    const res = await fetchBackupInstance('v1/backup/upload', {
         method: 'POST',
         body: JSON.stringify({
             code,
@@ -65,10 +70,12 @@ export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkReq
             account: account.replace(' ', ''),
             abstract,
         }),
-    }).then<string>((res) => res.upload_url)
+    })
+    const result: string = res.upload_url
+    return result
 }
 
-export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) => {
+export const fetchDownloadLink = async ({ account, code, type }: VerifyCodeRequest) => {
     return fetchBackupInstance('v1/backup/download', {
         method: 'POST',
         body: JSON.stringify({
