@@ -1,5 +1,5 @@
 import { memo, useState, type PropsWithChildren } from 'react'
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
@@ -11,13 +11,24 @@ interface SetupFrameProps extends PropsWithChildren {
 }
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'flex',
+        overflow: 'auto',
+    },
     content: {
+        minWidth: 'clamp(700px, 66.6667%, 66.6667%)',
         [theme.breakpoints.up('lg')]: {
             paddingLeft: '20%',
         },
         [theme.breakpoints.down('lg')]: {
-            paddingLeft: '50px',
+            paddingLeft: 40,
+            paddingRight: 40,
         },
+    },
+    sidebar: {
+        // 1024*0.3=307.2
+        minWidth: 'clamp(307px, 33.333%, 33.333%)',
+        flexShrink: 0,
     },
 }))
 
@@ -27,8 +38,10 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
     const [loading, setLoading] = useState(true)
 
     return (
-        <Grid container sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
-            <Grid item xs={8} paddingY={16} className={classes.content} paddingRight={8} minHeight="896px">
+        <Box
+            className={classes.container}
+            sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
+            <Box paddingY={16} className={classes.content} paddingRight={8} minHeight="896px">
                 <header>
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
@@ -36,8 +49,8 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                 <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative', paddingBottom: '116px' }}>
                     {children}
                 </Box>
-            </Grid>
-            <Grid item xs={4} position="relative">
+            </Box>
+            <Box className={classes.sidebar} position="relative">
                 {!hiddenSpline ? (
                     <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
                         <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
@@ -61,8 +74,8 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                         <LoadingBase size={36} />
                     </Box>
                 ) : null}
-            </Grid>
-        </Grid>
+            </Box>
+        </Box>
     )
 })
 

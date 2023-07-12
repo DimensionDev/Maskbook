@@ -99,7 +99,7 @@ export const Recovery = memo(function Recovery() {
                     })
                 }
             } catch {
-                setError(t.sign_in_account_mnemonic_confirm_failed())
+                setError(t.incorrect_identiy_mnemonic())
             }
         },
         [t, navigate],
