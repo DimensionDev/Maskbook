@@ -1,4 +1,3 @@
-import { memoize } from 'lodash-es'
 import { Environment, getEnvironment } from '@dimensiondev/holoflows-kit'
 
 export interface BuildInfoFile {
@@ -12,14 +11,16 @@ export interface BuildInfoFile {
     readonly channel: 'stable' | 'beta' | 'insider'
 }
 
-async function getBuildInfoRaw(): Promise<BuildInfoFile> {
+async function getBuildInfo(): Promise<BuildInfoFile> {
     try {
-        const response =
-            // eslint-disable-next-line no-bitwise
-            await (getEnvironment() & Environment.HasBrowserAPI
-                ? fetch('/build-info.json')
-                : fetch((globalThis as any).browser.runtime.getURL('/build-info.json')))
+        // eslint-disable-next-line no-bitwise
+        const hasBrowserAPI = getEnvironment() & Environment.HasBrowserAPI
+        const b = (globalThis as any).browser
+        const manifestVersion = hasBrowserAPI ? b.runtime.getManifest().version : undefined
+        const response = await fetch(hasBrowserAPI ? b.runtime.getURL('/build-info.json') : '/build-info.json')
         const env: BuildInfoFile = await response.json()
+        if (manifestVersion) Object.assign(env.VERSION, { VERSION: manifestVersion })
+        Object.freeze(env)
         return env
     } catch {
         return {
@@ -32,4 +33,4 @@ async function getBuildInfoRaw(): Promise<BuildInfoFile> {
         }
     }
 }
-export const getBuildInfo: typeof getBuildInfoRaw = memoize(getBuildInfoRaw)
+export const env = await getBuildInfo()

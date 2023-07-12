@@ -3,6 +3,7 @@ import { timeout } from '@masknet/kit'
 import { __DEBUG__ONLY__enableCryptoKeySerialization, serializer } from '@masknet/shared-base'
 import type { BackupFormat, Instance, ObjectStore } from './types.js'
 import { useI18N } from '../../utils/index.js'
+import { env } from '@masknet/flags'
 
 __DEBUG__ONLY__enableCryptoKeySerialization()
 
@@ -161,12 +162,12 @@ async function backupAll() {
     const payload: BackupFormat = {
         buildInfo: {
             'user-agent': navigator.userAgent,
-            version: process.env.VERSION,
-            'build-date': process.env.BUILD_DATE,
-            'commit-hash': process.env.COMMIT_HASH,
-            'commit-date': process.env.COMMIT_DATE,
-            'branch-name': process.env.BRANCH_NAME,
-            dirty: process.env.DIRTY,
+            version: env.VERSION,
+            'build-date': env.BUILD_DATE,
+            'commit-hash': env.COMMIT_HASH,
+            'commit-date': env.COMMIT_DATE,
+            'branch-name': env.BRANCH_NAME,
+            dirty: env.DIRTY,
         },
         instances,
     }

@@ -1332,6 +1332,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api
@@ -3812,6 +3815,9 @@ importers:
 
   packages/shared-base-ui:
     dependencies:
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base

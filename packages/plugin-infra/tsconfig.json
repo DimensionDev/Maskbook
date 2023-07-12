@@ -7,6 +7,7 @@
   },
   "include": ["./src"],
   "references": [
+    { "path": "../flags" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
     { "path": "../theme" },

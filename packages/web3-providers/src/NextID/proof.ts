@@ -16,6 +16,7 @@ import {
     EMPTY_LIST,
     getDomainSystem,
 } from '@masknet/shared-base'
+import { env } from '@masknet/flags'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
@@ -23,7 +24,7 @@ import { fetchJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 
 const BASE_URL =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
+    process.env.NODE_ENV === 'production' && env.channel === 'stable' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
 const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $domain) {
           source

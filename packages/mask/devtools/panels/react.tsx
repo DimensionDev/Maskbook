@@ -7,6 +7,7 @@ import { initialize, createBridge, type DevtoolsProps, createStore } from 'react
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, devtoolsEval } from './utils.js'
 import type { DevtoolsPanels } from 'webextension-polyfill/namespaces/devtools_panels.js'
+import { env } from '@masknet/flags'
 
 const registerOnStyleChange = (() => {
     let lastText = ''
@@ -69,10 +70,12 @@ export async function startReactDevTools(signal: AbortSignal) {
     const __eval = devtoolsEval(runInContentScript)
 
     const id = String(browser.devtools.inspectedWindow.tabId)
-    await __eval`
-        globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
-    `
-    setEditorPreference()
+    await Promise.all([
+        __eval`
+            globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
+        `,
+        setEditorPreference(),
+    ])
     syncSavedPreferences(runInContentScript)
 
     // TODO: registerDevToolsEventLogger?
@@ -313,11 +316,8 @@ function getMountPoint(window: Window | undefined, signal: AbortSignal) {
 
     return dom2
 }
-function setEditorPreference() {
-    let preset = 'vscode://file/{path}:{line}'
-    try {
-        preset = process.env.REACT_DEVTOOLS_EDITOR_URL
-    } catch {}
+async function setEditorPreference() {
+    const preset = env.REACT_DEVTOOLS_EDITOR_URL || 'vscode://file/{path}:{line}'
     const editorURL = 'React::DevTools::openInEditorUrl'
     if (!getLocalStorage(editorURL)) {
         setLocalStorage(editorURL, JSON.stringify(preset))

@@ -13,7 +13,6 @@ export * from './resolve.js'
 export * from './subscription.js'
 export * from './getDomainSystem.js'
 export * from './parseURL.js'
-export * from './buildInfo.js'
 
 export type PartialRequired<T, RequiredKeys extends keyof T> = Omit<T, RequiredKeys> & Pick<Required<T>, RequiredKeys>
 

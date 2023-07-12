@@ -1,7 +1,8 @@
+import { env } from './buildInfo.js'
 const devOnly = process.env.NODE_ENV === 'development'
 const prodOnly = process.env.NODE_ENV === 'production'
-const insiderOnly = process.env.channel === 'insider' || devOnly
-const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
+const insiderOnly = env.channel === 'insider' || devOnly
+const betaOrInsiderOnly = insiderOnly || env.channel === 'beta'
 
 export const flags = {
     isolated_dashboard_bridge_enabled: false,
@@ -40,7 +41,7 @@ export const flags = {
     sandboxedPluginRuntime: false,
 
     /** The earliest version for the sentry to watch events and exceptions. */
-    sentry_earliest_version: process.env.VERSION,
+    sentry_earliest_version: env.VERSION === 'N/A' ? '' : env.VERSION,
     sentry_sample_rate: 0.05,
     sentry_enabled: prodOnly,
     sentry_event_enabled: prodOnly,
