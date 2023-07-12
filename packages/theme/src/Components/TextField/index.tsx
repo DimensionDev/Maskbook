@@ -85,7 +85,7 @@ export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'var
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
     const { label, sx, required = false, className, wrapperProps, helperText, onChange, ...rest } = props
     const InputProps = (props.InputProps as InputProps) ?? {}
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const handleChange = useCallback(
         (ev: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
             if (ev.currentTarget.value && !new RegExp(InputProps.inputProps?.pattern).test(ev.currentTarget.value)) {
@@ -119,13 +119,13 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                     helperText={helperText}
                     InputProps={{
                         disableUnderline: true,
-                        className: classes.input,
                         classes: {
                             disabled: classes.inputDisabled,
                             focused: classes.inputFocused,
                             ...InputProps.classes,
                         },
                         ...InputProps,
+                        className: cx(classes.input, InputProps?.className),
                     }}
                 />
             ) : (

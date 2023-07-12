@@ -129,6 +129,7 @@ export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.sv
 export function asset_loading_url() { return new URL("./general/AssetLoading.svg", import.meta.url) }
 export function author_url() { return new URL("./general/Author.svg", import.meta.url) }
 export function back_up_url() { return new URL("./general/BackUp.svg", import.meta.url) }
+export function base_contacts_url() { return new URL("./general/BaseContacts.svg", import.meta.url) }
 export function base_user_url() { return new URL("./general/BaseUser.svg", import.meta.url) }
 export function best_trade_url() { return new URL("./general/BestTrade.svg", import.meta.url) }
 export function blue_pin_url() { return new URL("./general/BluePin.svg", import.meta.url) }

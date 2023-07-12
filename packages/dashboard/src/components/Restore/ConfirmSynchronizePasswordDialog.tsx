@@ -11,7 +11,7 @@ export interface ConfirmSynchronizePasswordDialogProps {
 }
 
 export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordDialogProps>(
-    ({ open, onClose, onConform }) => {
+    function ConfirmSynchronizePasswordDialog({ open, onClose, onConform }) {
         const t = useDashboardI18N()
 
         return (

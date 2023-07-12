@@ -1,4 +1,4 @@
-import { createContext, type PropsWithChildren, useState, useMemo, useCallback } from 'react'
+import { createContext, type PropsWithChildren, useState, useMemo, useCallback, memo } from 'react'
 import { SettingPasswordDialog } from '../components/dialogs/SettingPasswordDialog.js'
 import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog/index.js'
 
@@ -48,7 +48,7 @@ export type ConfirmPasswordOption = {
     hasPaymentPassword?: boolean
 }
 
-export function UserProvider({ children }: PropsWithChildren<{}>) {
+export const UserProvider = memo(function UserProvider({ children }: PropsWithChildren<{}>) {
     const backupPassword = localStorage.getItem('backupPassword')
     const [user, setUser] = useState({
         backupPassword: backupPassword && atob(backupPassword),
@@ -128,4 +128,4 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
             )}
         </UserContext.Provider>
     )
-}
+})

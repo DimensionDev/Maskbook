@@ -834,6 +834,11 @@ export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
         u: () => new URL('./general/BackUp.svg', import.meta.url),
     },
 ])
+export const BaseContacts = /*#__PURE__*/ __createIcon('BaseContacts', [
+    {
+        u: () => new URL('./general/BaseContacts.svg', import.meta.url),
+    },
+])
 export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
     {
         u: () => new URL('./general/BaseUser.svg', import.meta.url),
