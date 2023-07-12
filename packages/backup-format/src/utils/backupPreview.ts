@@ -25,7 +25,7 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
     )
 
     const personas = compact(
-        Array.from(json.personas.values())
+        ownerPersonas
             .sort((p) => (p.nickname.unwrapOr(false) ? -1 : 0))
             .map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey).trim()),
     )
