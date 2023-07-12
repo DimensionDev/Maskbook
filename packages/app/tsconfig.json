@@ -16,6 +16,7 @@
     { "path": "../encryption" },
     { "path": "../plugin-infra" },
     { "path": "../plugins/Trader" },
+    { "path": "../plugins/RedPacket" },
     { "path": "../plugins/CrossChainBridge" },
     { "path": "../typed-message/base" },
     { "path": "../typed-message/react" },

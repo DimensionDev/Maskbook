@@ -13,3 +13,5 @@ registerPlugin({
         hotModuleReload: (hot) => import.meta.webpackHot?.accept('./Worker', () => hot(import('./Worker/index.js'))),
     },
 })
+
+export * from './SNSAdaptor/RedPacketFormSPA.js'

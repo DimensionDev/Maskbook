@@ -21,7 +21,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
-import { DialogTabs } from '../types.js'
+import { CreateRedPacketPageStep, DialogTabs } from '../types.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
@@ -47,11 +47,6 @@ const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistor
         },
     }),
 )
-
-enum CreateRedPacketPageStep {
-    NewRedPacketPage = 'new',
-    ConfirmPage = 'confirm',
-}
 
 interface RedPacketDialogProps {
     open: boolean

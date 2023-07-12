@@ -12,3 +12,8 @@ export enum RpTypeTabs {
     ERC20 = 0,
     ERC721 = 1,
 }
+
+export enum CreateRedPacketPageStep {
+    NewRedPacketPage = 'new',
+    ConfirmPage = 'confirm',
+}
