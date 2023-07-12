@@ -30,7 +30,7 @@ export function setupReactShadowRootEnvironment(
     // Note: This React Root does not expect to have any direct DOM children.
     createRoot(globalContainer).render(
         <StrictMode>
-            <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />,
+            <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />
         </StrictMode>,
     )
     return portalContainer

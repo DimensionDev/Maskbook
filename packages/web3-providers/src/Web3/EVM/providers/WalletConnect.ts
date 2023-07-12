@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { defer, delay } from '@masknet/kit'
+import { defer } from '@masknet/kit'
 import { Flags } from '@masknet/flags'
 import WalletConnect from '@walletconnect/client'
 import type { Account } from '@masknet/shared-base'
@@ -91,7 +91,6 @@ export default class WalletConnectProvider
         connector.on('connect', createListener(this.onConnect.bind(this)))
         connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
         connector.on('session_update', createListener(this.onSessionUpdate.bind(this)))
-        // connector.on('modal_closed', createListener(this.onModalClose.bind(this)))
 
         return connector
     }
@@ -144,8 +143,6 @@ export default class WalletConnectProvider
 
         const openQRCodeModal = async () => {
             const reason = await this.context?.openWalletConnectDialog(connector.uri)
-            // wait a while to prevent from closing a successful connection
-            await delay(300)
             if (reason === 'UserRejected') this.connection?.reject(new Error('User rejected'))
         }
 
