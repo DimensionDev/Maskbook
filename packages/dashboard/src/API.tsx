@@ -15,12 +15,7 @@ interface MaskAccount {
 export interface PluginServices {
     Wallet: {
         createMnemonicWords(): Promise<string[]>
-        recoverWalletFromPrivateKey(
-            name: string,
-            privateKey: string,
-            initialPassword_?: string,
-            derivationPath?: string,
-        ): Promise<string>
+        recoverWalletFromPrivateKey(name: string, privateKey: string, derivationPath?: string): Promise<string>
         recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
         getDerivableAccounts(
             mnemonic: string,

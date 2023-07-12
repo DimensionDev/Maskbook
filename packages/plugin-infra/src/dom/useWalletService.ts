@@ -17,24 +17,11 @@ export interface WalletBackupProvider {
             derivationPath: string
         }>
     >
-    recoverWalletFromMnemonic(
-        name: string,
-        mnemonic: string,
-        derivationPath?: string,
-        initialPassword?: string,
-    ): Promise<string>
-    generateAddressFromMnemonic(
-        name: string,
-        mnemonic: string,
-        derivationPath?: string,
-        initialPassword?: string,
-    ): Promise<string | undefined>
-    recoverWalletFromPrivateKey(
-        name: string,
-        privateKey: string,
-        initialPassword_?: string,
-        derivationPath?: string,
-    ): Promise<string>
+    resetPassword(newPassword: string): Promise<void>
+    setDefaultPassword(): Promise<void>
+    recoverWalletFromMnemonic(name: string, mnemonic: string, derivationPath?: string): Promise<string>
+    generateAddressFromMnemonic(name: string, mnemonic: string, derivationPath?: string): Promise<string | undefined>
+    recoverWalletFromPrivateKey(name: string, privateKey: string, derivationPath?: string): Promise<string>
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
     INTERNAL_getPasswordRequired(): Promise<string>
     changePassword(oldPassword: string, newPassword: string): Promise<void>
