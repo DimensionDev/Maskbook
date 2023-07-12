@@ -19,6 +19,7 @@ const navigation = [
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
     { name: 'Bridges', icon: TruckIcon, to: ApplicationRoutes.Bridges },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
+    { name: 'Applications', icon: Cog6ToothIcon, to: ApplicationRoutes.Applications },
 ]
 
 function NavigationLink(props: (typeof navigation)[0]) {
