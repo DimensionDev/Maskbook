@@ -1,5 +1,18 @@
 # @masknet/encryption
 
+## 0.2.0
+
+### Minor Changes
+
+- d53e1858f: (breaking) encrypt API now requires publicKey feed directly instead of using queryPublicKey
+
+### Patch Changes
+
+- Updated dependencies [d53e1858f]
+- Updated dependencies [d53e1858f]
+- Updated dependencies [d53e1858f]
+  - @masknet/base@0.2.0
+
 ## 0.1.3
 
 ### Patch Changes
