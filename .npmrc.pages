@@ -1,3 +1,0 @@
-@dimensiondev:registry=https://npm.pkg.github.com/
-resolution-mode=time-based
-//npm.pkg.github.com/:_authToken={NPM_TOKEN}
