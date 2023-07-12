@@ -142,7 +142,7 @@ const TokenDetail = memo(function TokenDetail() {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(address)
     const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
-    const asset = useAsset(address, account)
+    const asset = useAsset(chainId, address, account)
     const coinId = useCoinGeckoCoinId(chainId, address)
     const { data: tokenPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
@@ -193,6 +193,7 @@ const TokenDetail = memo(function TokenDetail() {
     const { showSnackbar } = usePopupCustomSnackbar()
     const { setExtension } = useContext(PageTitleContext)
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     useEffect(() => {
         if (!asset || isNativeToken) return
         setExtension(
@@ -254,12 +255,12 @@ const TokenDetail = memo(function TokenDetail() {
                                     name={asset.name}
                                     chainId={asset.chainId}
                                     logoURL={asset.logoURL}
-                                    AvatarProps={{ sx: { width: 16, height: 16 } }}
+                                    size={16}
                                 />
                                 <FormattedBalance
-                                    value={balance}
+                                    value={asset.balance}
                                     decimals={asset.decimals}
-                                    significant={4}
+                                    significant={6}
                                     formatter={formatBalance}
                                 />
                             </Typography>

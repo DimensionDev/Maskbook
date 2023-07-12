@@ -51,7 +51,7 @@ const Transfer = memo(function Transfer() {
     const { data: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { data: erc20Balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
     const balance = isNativeToken ? nativeTokenBalance : erc20Balance
-    const currentAsset = useAsset(address, account)
+    const currentAsset = useAsset(chainId, address, account)
     const [selectedAsset, setSelectedAsset] = useState(currentAsset ?? first(assets))
 
     const otherWallets = useMemo(
