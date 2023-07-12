@@ -1,5 +1,5 @@
 import { ObservableMap } from '@masknet/shared-base'
-import { StrictMode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
 
@@ -29,9 +29,9 @@ export function setupReactShadowRootEnvironment(
 
     // Note: This React Root does not expect to have any direct DOM children.
     createRoot(globalContainer).render(
-        <StrictMode>
-            <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />
-        </StrictMode>,
+        // <StrictMode>
+        <MountingPoint wrapJSX={wrapJSX} preventPropagationList={preventEventPropagationList} />,
+        // </StrictMode>,
     )
     return portalContainer
 }

@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { defer } from '@masknet/kit'
+import { defer, delay } from '@masknet/kit'
 import { Flags } from '@masknet/flags'
 import WalletConnect from '@walletconnect/client'
 import type { Account } from '@masknet/shared-base'
@@ -86,45 +86,36 @@ export default class WalletConnectProvider
 
         const connector = new WalletConnect({
             bridge: Flags.wc_v1_bridge_url,
-            qrcodeModal: {
-                open: async (uri: string, callback) => {
-                    await this.context?.openWalletConnectDialog(uri)
-                    callback()
-                },
-                close: () => {
-                    this.context?.closeWalletConnectDialog()
-                },
-            },
         })
 
         connector.on('connect', createListener(this.onConnect.bind(this)))
         connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
         connector.on('session_update', createListener(this.onSessionUpdate.bind(this)))
-        connector.on('modal_closed', createListener(this.onModalClose.bind(this)))
+        // connector.on('modal_closed', createListener(this.onModalClose.bind(this)))
 
         return connector
     }
 
-    private onConnect(error: Error | null, payload: SessionPayload) {
-        if (!this.connection) return
+    private async onConnect(error: Error | null, payload: SessionPayload) {
+        await this.context?.closeWalletConnectDialog('Connected')
 
         if (error) {
-            this.connection.reject(error)
-            return
+            this.connection?.reject(error)
+        } else {
+            this.connection?.resolve({
+                chainId: payload.params[0].chainId,
+                account: first(payload.params[0].accounts) ?? '',
+            })
         }
-        this.connection.resolve({
-            chainId: payload.params[0].chainId,
-            account: first(payload.params[0].accounts) ?? '',
-        })
     }
 
-    private onDisconnect(error: Error | null, payload: DisconnectPayload) {
-        if (this.connection) {
-            this.connection.reject(error || new Error('User rejected'))
-            return
-        }
+    private async onDisconnect(error: Error | null, payload: DisconnectPayload) {
+        await this.context?.closeWalletConnectDialog('Disconnected')
+
+        this.connection?.reject(error || new Error('User rejected'))
 
         if (error) return
+
         this.emitter.emit('disconnect', ProviderType.WalletConnect)
     }
 
@@ -140,10 +131,6 @@ export default class WalletConnectProvider
         this.emitter.emit('accounts', payload.params[0].accounts)
     }
 
-    private onModalClose(error: Error | null, payload: ModalClosePayload) {
-        this.connection?.reject(error || new Error('User rejected'))
-    }
-
     private async login(expectedChainId?: ChainId) {
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
@@ -153,20 +140,32 @@ export default class WalletConnectProvider
             reject,
         }
 
-        if (this.connector?.connected) {
-            const { chainId: actualChainId, accounts } = this.connector
+        const connector = (this.connector ??= this.createConnector())
+
+        const openQRCodeModal = async () => {
+            const reason = await this.context?.openWalletConnectDialog(connector.uri)
+            // wait a while to prevent from closing a successful connection
+            await delay(300)
+            if (reason === 'UserRejected') this.connection?.reject(new Error('User rejected'))
+        }
+
+        if (connector.connected) {
+            const { chainId: actualChainId, accounts } = connector
             const account = first(accounts)
+
             if (actualChainId !== 0 && actualChainId === expectedChainId && isValidAddress(account)) {
                 this.connection.resolve({
                     chainId: actualChainId,
                     account,
                 })
             } else {
-                await this.cleanup()
-                await this.connector.createSession()
+                await openQRCodeModal()
             }
         } else {
-            await this.connector?.createSession()
+            if (connector.session.handshakeId === 0) await connector.createSession()
+            else connector.rejectSession(new Error('User rejected'))
+
+            await openQRCodeModal()
         }
 
         return deferred.finally(() => {
@@ -175,8 +174,6 @@ export default class WalletConnectProvider
     }
 
     private async logout() {
-        await this.cleanup()
-
         this.onDisconnect(new Error('disconnect'), {
             event: 'disconnect',
             params: [
@@ -185,14 +182,6 @@ export default class WalletConnectProvider
                 },
             ],
         })
-    }
-
-    private async cleanup() {
-        try {
-            await this.connector?.killSession()
-        } catch {
-            window.localStorage.removeItem('walletconnect')
-        }
     }
 
     override async switchChain(chainId: ChainId): Promise<void> {

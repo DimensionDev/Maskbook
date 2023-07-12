@@ -7,10 +7,12 @@ export interface WalletConnectQRCodeOpenProps {
     uri: string
 }
 
+export type WalletConnectQRCodeCloseProps = 'UserRejected' | 'Connected' | 'Disconnected'
+
 export interface WalletConnectQRCodeDialogProps {}
 
 export const WalletConnectQRCodeModal = forwardRef<
-    SingletonModalRefCreator<WalletConnectQRCodeOpenProps>,
+    SingletonModalRefCreator<WalletConnectQRCodeOpenProps, WalletConnectQRCodeCloseProps>,
     WalletConnectQRCodeDialogProps
 >((props, ref) => {
     const [uri, setURI] = useState('')
@@ -21,5 +23,5 @@ export const WalletConnectQRCodeModal = forwardRef<
     })
 
     if (!open) return null
-    return <QRCodeDialog uri={uri} open onClose={() => dispatch?.close()} />
+    return <QRCodeDialog uri={uri} open onClose={() => dispatch?.close('UserRejected')} />
 })

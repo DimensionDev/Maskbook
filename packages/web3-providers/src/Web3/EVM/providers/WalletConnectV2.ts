@@ -110,7 +110,7 @@ export default class WalletConnectV2Provider
 
         await approval()
 
-        if (uri) this.context?.closeWalletConnectDialog()
+        if (uri) this.context?.closeWalletConnectDialog('Connected')
 
         return this.signClient.account
     }

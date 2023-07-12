@@ -38,13 +38,13 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         openPopupConnectWindow: reject,
         openPopupWindow: reject,
         fetchJSON: reject,
-        openWalletConnectDialog: async (uri: string) => {
-            await WalletConnectQRCodeModal.openAndWaitForClose({
+        openWalletConnectDialog: (uri: string) => {
+            return WalletConnectQRCodeModal.openAndWaitForClose({
                 uri,
             })
         },
-        closeWalletConnectDialog: () => {
-            WalletConnectQRCodeModal.close()
+        closeWalletConnectDialog: async (reason) => {
+            WalletConnectQRCodeModal.close(reason)
         },
         queryPersonaByProfile: reject,
         recordConnectedSites: reject,

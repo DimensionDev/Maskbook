@@ -37,7 +37,6 @@ export function ConnectWallet({ pluginID, networkType, providerType, open, onCon
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
-
         if (!networkType || !providerType) throw new Error('Failed to connect to provider.')
 
         const chainId = Others.networkResolver.networkChainId(networkType)

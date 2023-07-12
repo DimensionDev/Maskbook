@@ -141,14 +141,15 @@ export namespace Plugin.Shared {
 
         /** Fetch json from background */
         fetchJSON<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
+
         /** Open popup connect window */
         openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
-        openWalletConnectDialog(uri: string): Promise<void>
+        openWalletConnectDialog(uri: string): Promise<'UserRejected' | 'Connected' | 'Disconnected'>
 
         /** Close walletconnect dialog */
-        closeWalletConnectDialog(): void
+        closeWalletConnectDialog(reason: 'UserRejected' | 'Connected' | 'Disconnected'): Promise<void>
 
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>

@@ -1,6 +1,6 @@
 import { SingletonModal } from '@masknet/shared-base'
 import type { SelectProviderModalOpenProps, SelectProviderModalCloseProps } from './SelectProviderModal/index.js'
-import type { WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeModal/index.js'
+import type { WalletConnectQRCodeCloseProps, WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeModal/index.js'
 import type { WalletRiskWarningModalOpenProps } from './WalletRiskWarningModal/index.js'
 import type { ConnectWalletModalOpenProps, ConnectWalletModalCloseProps } from './ConnectWalletModal/index.js'
 import type { LeavePageConfirmModalOpenProps } from './LeavePageConfirmModal/index.js'
@@ -20,7 +20,10 @@ import type {
 import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
 import type { PersonaSelectPanelModalOpenProps } from './PersonaSelectPanelModal/index.js'
 
-export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
+export const WalletConnectQRCodeModal = new SingletonModal<
+    WalletConnectQRCodeOpenProps,
+    WalletConnectQRCodeCloseProps
+>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps, SelectProviderModalCloseProps>()
 export const WalletStatusModal = new SingletonModal()
 export const WalletRiskWarningModal = new SingletonModal<WalletRiskWarningModalOpenProps>()

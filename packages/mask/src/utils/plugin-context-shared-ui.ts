@@ -36,13 +36,13 @@ export const RestPartOfPluginUIContextShared: Omit<
     openPopupConnectWindow: Services.Helper.openPopupConnectWindow,
     fetchJSON: Services.Helper.fetchJSON,
 
-    openWalletConnectDialog: async (uri: string) => {
-        await WalletConnectQRCodeModal.openAndWaitForClose({
+    openWalletConnectDialog: (uri: string) => {
+        return WalletConnectQRCodeModal.openAndWaitForClose({
             uri,
         })
     },
-    closeWalletConnectDialog: () => {
-        WalletConnectQRCodeModal.close()
+    closeWalletConnectDialog: async (reason) => {
+        WalletConnectQRCodeModal.close(reason)
     },
 
     wallets: createSubscriptionFromAsync(
