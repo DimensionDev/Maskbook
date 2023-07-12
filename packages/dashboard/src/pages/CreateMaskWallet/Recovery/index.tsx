@@ -1,19 +1,19 @@
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, getDefaultWalletName } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import type { UseFormSetError } from 'react-hook-form'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { PluginServices } from '../../../API.js'
-import { walletName } from '../constants.js'
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
+import { ResetWalletContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -76,10 +76,12 @@ const useStyles = makeStyles()((theme) => ({
 
 const Recovery = memo(function Recovery() {
     const t = useDashboardI18N()
+    const location = useLocation()
     const { cx, classes } = useStyles()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
     const [error, setError] = useState('')
+    const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
 
@@ -91,32 +93,39 @@ const Recovery = memo(function Recovery() {
 
                 navigate(DashboardRoutes.AddDeriveWallet, {
                     replace: false,
-                    state: { mnemonic },
+                    state: {
+                        mnemonic,
+                        password: location.state?.password,
+                        isReset: location.state?.isReset,
+                    },
                 })
             } catch {
                 setError(t.wallet_recovery_mnemonic_confirm_failed())
             }
         },
-        [t, navigate],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
-                await PluginServices.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
+                await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+                await PluginServices.Wallet.recoverWalletFromPrivateKey(getDefaultWalletName(), data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
             }
         },
-        [t, walletName, navigate],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const onRestore = useCallback(
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
+                await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+
                 const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
-                    walletName,
+                    getDefaultWalletName(),
                     keyStoreContent,
                     keyStorePassword,
                 )
@@ -126,12 +135,18 @@ const Recovery = memo(function Recovery() {
                 setError(t.create_wallet_key_store_incorrect_password())
             }
         },
-        [t, walletName, navigate],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.CreateMaskWalletMnemonic)
-    }, [])
+        navigate(DashboardRoutes.CreateMaskWalletMnemonic, {
+            state: {
+                password: location.state?.password,
+                isReset: location.state?.isReset,
+            },
+            replace: true,
+        })
+    }, [location.state?.password, location.state?.isReset])
 
     return (
         <Box>

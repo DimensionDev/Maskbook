@@ -57,6 +57,13 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
     const [readingFile, setReadingFile] = useState(false)
 
+    const reset = useCallback(() => {
+        setFile(null)
+        setBackupValue('')
+        setSummary(null)
+        setRestoreStatus(RestoreStatus.WaitingInput)
+    }, [])
+
     const handleSetFile = useCallback(async (file: File) => {
         setFile(file)
         if (file.type === supportedFileType.json) {
@@ -67,14 +74,9 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         } else if ([supportedFileType.octetStream, supportedFileType.macBinary].includes(file.type)) {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
+            reset()
             showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
         }
-    }, [])
-    const reset = useCallback(() => {
-        setFile(null)
-        setBackupValue('')
-        setSummary(null)
-        setRestoreStatus(RestoreStatus.WaitingInput)
     }, [])
 
     useAsync(async () => {
@@ -103,11 +105,11 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             const decoded = decode(decrypted)
             setBackupValue(JSON.stringify(decoded))
         } catch (error_) {
-            setError(t.sign_in_account_cloud_backup_decrypt_failed())
+            setError(t.incorrect_backup_password())
         } finally {
             setReadingFile(false)
         }
-    }, [file, password])
+    }, [file, password, t])
 
     const restoreDB = useCallback(async () => {
         try {
@@ -148,7 +150,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     return (
         <Box width="100%">
             {restoreStatus !== RestoreStatus.Verified ? (
-                <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit />
+                <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin" />
             ) : null}
             {file && restoreStatus !== RestoreStatus.Verified ? (
                 <FileFrame

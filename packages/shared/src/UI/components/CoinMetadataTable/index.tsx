@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CoinMetadataTableProps {
-    trending: TrendingAPI.Trending
+    trending?: TrendingAPI.Trending
 }
 
 const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
@@ -95,12 +95,12 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
     const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const metadataLinks = [[t.website(), trending.coin.home_urls]] as Array<[string, string[] | undefined]>
+    const metadataLinks = [[t.website(), trending?.coin.home_urls]] as Array<[string, string[] | undefined]>
 
-    const contracts = trending.contracts?.filter((x) => x.chainId) ?? [
+    const contracts = trending?.contracts?.filter((x) => x.chainId) ?? [
         {
-            chainId: trending.coin.chainId!,
-            address: trending.coin.contract_address!,
+            chainId: trending?.coin.chainId!,
+            address: trending?.coin.contract_address!,
             pluginID: NetworkPluginID.PLUGIN_EVM,
         },
     ]
@@ -201,7 +201,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                 </TableRow>
                             )
                         })}
-                        {!!trending.coin.community_urls?.length && (
+                        {!!trending?.coin.community_urls?.length && (
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">

@@ -1,37 +1,29 @@
 import { MaskTextField, SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { memo, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { sendCode } from '../../../pages/Settings/api.js'
+import { sendCode, type RestoreQueryError } from '../../../pages/Settings/api.js'
 import { emailRegexp } from '../../../pages/Settings/regexp.js'
-import { AccountType, Locale, Scenario, type BackupFileInfo } from '../../../pages/Settings/type.js'
+import { AccountType, Locale, Scenario } from '../../../pages/Settings/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
-import { ValidationCodeStep } from './common.js'
 import { useLanguage } from '../../../pages/Personas/api.js'
-import type { StepCommonProps } from '../../Stepper/index.js'
+import { RestoreContext } from './RestoreProvider.js'
 
-interface Props extends StepCommonProps {
-    onNext(
-        account: string,
-        type: AccountType,
-        code: string,
-    ): Promise<
-        | BackupFileInfo
-        | {
-              message: string
-          }
-    >
-}
-
-export const EmailField = memo(function EmailField({ toStep, onNext }: Props) {
+export const EmailField = memo(function EmailField() {
     const language = useLanguage()
     const t = useDashboardI18N()
-    const [account, setAccount] = useState<string>('')
     const [invalidEmail, setInvalidEmail] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
-    const [code, setCode] = useState('')
+    const [error, setError] = useState('')
+
+    const { state, dispatch, downloadBackupInfo } = RestoreContext.useContainer()
+    const { emailForm, loading } = state
+    const { account, code } = emailForm
+    const setCode = useCallback((code: string) => {
+        dispatch({ type: 'SET_EMAIL', form: { code } })
+    }, [])
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
         const type = AccountType.Email
@@ -52,20 +44,33 @@ export const EmailField = memo(function EmailField({ toStep, onNext }: Props) {
     }
 
     const { fillSubmitOutlet } = usePersonaRecovery()
+    const disabled = !account || invalidEmail || !code
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
                 color="primary"
                 size="large"
                 onClick={async () => {
-                    const backupInfo = await onNext(account, AccountType.Email, code)
-                    toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo, account, type: AccountType.Email })
+                    dispatch({ type: 'SET_LOADING', loading: true })
+                    try {
+                        const backupFileInfo = await downloadBackupInfo(AccountType.Email, account, code)
+                        dispatch({ type: 'SET_BACKUP_INFO', info: backupFileInfo })
+                        dispatch({ type: 'NEXT_STEP' })
+                    } catch (err) {
+                        setError((err as RestoreQueryError).message)
+                    } finally {
+                        dispatch({ type: 'SET_LOADING', loading: false })
+                    }
                 }}
-                disabled={!account || invalidEmail}>
+                loading={loading}
+                disabled={disabled}>
                 {t.continue()}
             </PrimaryButton>,
         )
-    }, [account, code, invalidEmail])
+    }, [account, code, loading, disabled])
+
+    const hasError = invalidEmail || !!error
+    const errorMessage = invalidEmail ? t.sign_in_account_cloud_backup_email_format_error() : error || ''
 
     return (
         <>
@@ -73,19 +78,28 @@ export const EmailField = memo(function EmailField({ toStep, onNext }: Props) {
                 fullWidth
                 value={account}
                 onBlur={validCheck}
-                onChange={(event) => setAccount(event.target.value)}
-                error={invalidEmail}
+                onChange={(event) => {
+                    setError('')
+                    dispatch({
+                        type: 'SET_EMAIL',
+                        form: { account: event.target.value },
+                    })
+                }}
+                error={hasError}
                 placeholder={t.data_recovery_email()}
-                helperText={invalidEmail ? t.sign_in_account_cloud_backup_email_format_error() : ''}
+                helperText={errorMessage}
                 type="email"
                 size="small"
             />
             <Box mt={1.5}>
                 <SendingCodeField
-                    onChange={(c) => setCode(c)}
+                    onChange={setCode}
                     errorMessage={sendCodeError?.message}
                     onSend={handleSendCodeFn}
                     placeholder={t.data_recovery_email_code()}
+                    inputProps={{
+                        maxLength: 6,
+                    }}
                 />
             </Box>
         </>

@@ -103,9 +103,7 @@ export function PluginSettingsDialog() {
                 open={open}
                 onClose={() => setOpen(false)}
                 title={t('settings')}
-                titleTail={
-                    <Icons.WalletUnderTabs size={24} onClick={openPopupWindow} className={classes.titleTailButton} />
-                }
+                titleTail={<Icons.Wallet size={24} onClick={openPopupWindow} className={classes.titleTailButton} />}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="SettingTabs">
                         {tabs.map((tab) => (

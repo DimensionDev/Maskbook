@@ -1,7 +1,6 @@
 import { series, type TaskFunction } from 'gulp'
 import { createBuildStorybook6, fromNPMTask, PKG_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
-import { buildSPA } from '../projects/app.js'
 
 const STATIC_PATH = new URL('netlify/storybook-static/', PKG_PATH)
 
@@ -11,6 +10,7 @@ const dashboardSB = createBuildStorybook6(
     new URL('dashboard/', STATIC_PATH),
     'dashboard-storybook',
 )
+
 // prettier-ignore
 const themeSB = createBuildStorybook6(
     new URL('theme/', PKG_PATH),
@@ -25,5 +25,6 @@ const [buildStorybookShared] = fromNPMTask(
 )
 
 // Note: run multiple webpack task in parallel might cause OOM
-export const buildNetlify: TaskFunction = series(codegen, buildStorybookShared, dashboardSB, themeSB, buildSPA)
+export const buildNetlify: TaskFunction = series(codegen, buildStorybookShared, dashboardSB, themeSB)
+
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')

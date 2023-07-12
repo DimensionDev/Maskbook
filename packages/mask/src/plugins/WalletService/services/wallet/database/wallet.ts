@@ -119,3 +119,10 @@ export async function deleteWallet(address: string) {
     await PluginDB.remove('wallet', address)
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 }
+
+export async function resetAllWallets() {
+    for await (const x of PluginDB.iterate_mutate('wallet')) {
+        await x.delete()
+    }
+    CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
+}

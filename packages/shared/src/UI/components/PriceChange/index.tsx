@@ -25,15 +25,16 @@ export const PriceChange = memo(function PriceChange({ change, loading, ...rest 
                 <Skeleton width={30} height={16} />
             </Stack>
         )
-    if (change === 0) return null
 
     const color = change > 0 ? colors.success : colors.danger
 
     return (
         <Stack alignItems="center" justifyContent="center" direction="row" {...rest}>
-            <Icons.ArrowDrop size={16} style={{ color, transform: change > 0 ? 'rotate(180deg)' : '' }} />
+            {change ? (
+                <Icons.ArrowDrop size={16} style={{ color, transform: change > 0 ? 'rotate(180deg)' : '' }} />
+            ) : null}
             <Typography className={classes.value} color={color}>
-                {change.toFixed(2)}%
+                {change ? `${change.toFixed(2)}%` : '--'}
             </Typography>
         </Stack>
     )

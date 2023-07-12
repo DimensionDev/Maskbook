@@ -197,6 +197,8 @@ export interface ConnectionAPI_Base<
     updateOrAddWallet?: (wallet: Wallet, initial?: Options) => Promise<void>
     /** Rename a wallet */
     renameWallet?: (address: string, name: string, initial?: Options) => Promise<void>
+    /** Reset all wallets */
+    resetAllWallets?: (initial?: Options) => Promise<void>
     /** Remove a wallet */
     removeWallet?: (address: string, password?: string | undefined, initial?: Options) => Promise<void>
     /** Update a bunch of wallets. */

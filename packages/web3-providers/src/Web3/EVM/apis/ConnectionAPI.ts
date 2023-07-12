@@ -116,6 +116,15 @@ export class ConnectionAPI
         )
     }
 
+    override async resetAllWallets(initial?: ConnectionOptions): Promise<void> {
+        await this.Request.request<void>(
+            {
+                method: EthereumMethodType.MASK_RESET_ALL_WALLETS,
+            },
+            this.ConnectionOptions.fill(initial),
+        )
+    }
+
     override async updateWallets(wallets: Wallet[], initial?: ConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {

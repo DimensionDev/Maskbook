@@ -148,7 +148,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                                     name={asset.name}
                                     chainId={asset.chainId}
                                     logoURL={asset.logoURL}
-                                    AvatarProps={{ sx: { width: 36, height: 36 } }}
+                                    size={36}
                                 />
                                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
                             </Box>
