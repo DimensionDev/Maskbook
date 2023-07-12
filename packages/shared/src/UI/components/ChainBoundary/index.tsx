@@ -149,7 +149,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<Icons.ConnectWallet size={18} />}
+                        startIcon={<Icons.Wallet size={18} />}
                         onClick={() => SelectProviderModal.open()}
                         {...props.ActionButtonPromiseProps}>
                         {t.plugin_wallet_wrong_network()}
@@ -166,7 +166,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     <ActionButton
                         className={classes.connectWallet}
                         fullWidth
-                        startIcon={<Icons.ConnectWallet size={18} />}
+                        startIcon={<Icons.Wallet size={18} />}
                         onClick={() => SelectProviderModal.open()}
                         {...props.ActionButtonPromiseProps}>
                         {t.plugin_wallet_connect_a_wallet()}

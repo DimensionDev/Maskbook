@@ -25,7 +25,8 @@
     "prepare": "husky install",
     "svgo": "svgo packages/icons/*/*.svg",
     "test": "vitest",
-    "spellcheck": "cspell lint --no-must-find-files"
+    "spellcheck": "cspell lint --no-must-find-files",
+    "clean": "rimraf --glob **/i18n_generated.ts **/node_modules"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20230307045856-46252fb",
@@ -51,6 +52,7 @@
     "react": "0.0.0-experimental-9a72e6227-20230525",
     "react-dom": "0.0.0-experimental-9a72e6227-20230525",
     "react-i18next": "^12.2.0",
+    "rimraf": "^5.0.0",
     "ses": "0.18.3",
     "ts-results-es": "^3.6.0"
   },

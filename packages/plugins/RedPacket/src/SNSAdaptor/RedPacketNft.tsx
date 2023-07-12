@@ -13,13 +13,13 @@ import {
 import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 import { useI18N } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -437,7 +437,7 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
                         expectedChainId={chainId}>
                         <WalletConnectedBoundary
                             expectedChainId={chainId}
-                            startIcon={<Icons.ConnectWallet size={18} />}
+                            startIcon={<Icons.Wallet size={18} />}
                             classes={{
                                 connectWallet: classes.button,
                             }}

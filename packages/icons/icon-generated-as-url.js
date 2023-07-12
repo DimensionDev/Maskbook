@@ -299,7 +299,6 @@ export function verification_url() { return new URL("./general/Verification.svg"
 export function wallet_url() { return new URL("./general/Wallet.svg", import.meta.url) }
 export function wallet_nav_url() { return new URL("./general/WalletNav.svg", import.meta.url) }
 export function wallet_setting_url() { return new URL("./general/WalletSetting.svg", import.meta.url) }
-export function wallet_under_tabs_url() { return new URL("./general/WalletUnderTabs.svg", import.meta.url) }
 export function warning_url() { return new URL("./general/Warning.svg", import.meta.url) }
 export function warning_triangle_url() { return new URL("./general/WarningTriangle.svg", import.meta.url) }
 export function web_url() { return new URL("./general/Web.svg", import.meta.url) }
@@ -316,7 +315,6 @@ export function art_blocks_url() { return new URL("./plugins/ArtBlocks.png", imp
 export function avatar_url() { return new URL("./plugins/Avatar.svg", import.meta.url) }
 export function bit_url() { return new URL("./plugins/Bit.svg", import.meta.url) }
 export function collectibles_url() { return new URL("./plugins/Collectibles.svg", import.meta.url) }
-export function connect_wallet_url() { return new URL("./plugins/ConnectWallet.svg", import.meta.url) }
 export function cross_bridge_url() { return new URL("./plugins/CrossBridge.png", import.meta.url) }
 export function currency_url() { return new URL("./plugins/Currency.svg", import.meta.url) }
 export function cyber_connect_dark_url() { return new URL("./plugins/CyberConnect.dark.svg", import.meta.url) }
