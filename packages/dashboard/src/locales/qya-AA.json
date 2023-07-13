@@ -462,5 +462,9 @@
     "welcome_agreement_policy": "crwdns19513:0crwdne19513:0",
     "welcome_new_agreement_policy": "crwdns20685:0crwdne20685:0",
     "wallets_history_burn": "crwdns20005:0crwdne20005:0",
-    "wallet_connect_tips": "crwdns20371:0crwdne20371:0"
+    "wallet_connect_tips": "crwdns20371:0crwdne20371:0",
+    "identity_words": "crwdns21661:0crwdne21661:0",
+    "private_key": "crwdns21663:0crwdne21663:0",
+    "local_backup": "crwdns21665:0crwdne21665:0",
+    "incorrect_verification_code": "crwdns21667:0crwdne21667:0"
 }
