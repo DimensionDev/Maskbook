@@ -1,28 +1,20 @@
-import { map } from 'lodash-es'
-import { makeNewBugIssueURL } from './issue.js'
 import { useI18N } from '../../utils/index.js'
-import { openWindow } from '@masknet/shared-base-ui'
+import { useBuildInfoMarkdown, openWindow, useBuildInfo } from '@masknet/shared-base-ui'
 
-export const DEBUG_INFO = {
-    'User Agent': navigator.userAgent,
-    'Mask Version': process.env.VERSION,
-    'Build Date': process.env.channel_DATE,
-    'Commit Hash': process.env.COMMIT_HASH,
-    'Commit Date': process.env.COMMIT_DATE,
-    'Branch Name': process.env.BRANCH_NAME,
-    Dirty: process.env.DIRTY,
-}
-
-function onNewBugIssue() {
-    return openWindow(makeNewBugIssueURL())
-}
 export function DebugInfo() {
     const { t } = useI18N()
+    const info = useBuildInfo()
+    const markdown = useBuildInfoMarkdown()
+
+    const url = new URLSearchParams()
+    url.set('title', '[Bug] ')
+    url.set('body', markdown)
+    const link = 'https://github.com/DimensionDev/Maskbook/issues/new?' + url.toString()
 
     return (
         <>
-            <pre>{map(DEBUG_INFO, (value, key) => `${key}: ${value}`).join('\n')}</pre>
-            <button type="button" onClick={onNewBugIssue}>
+            <pre>{JSON.stringify(info, undefined, 4)}</pre>
+            <button type="button" onClick={() => openWindow(link)}>
                 {t('debug_new_bug_issue')}
             </button>
         </>

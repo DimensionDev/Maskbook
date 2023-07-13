@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { has } from 'lodash-es'
 import { Flags } from './Flags.js'
+import { env } from '../flags/buildInfo.js'
 
 interface FetchResult<T extends Record<string, unknown>> {
     flags?: T
@@ -108,7 +109,7 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
     async fetch() {
         const response = await fetch(
             urlcat(this.remoteFlagsURL, {
-                channel: process.env.channel,
+                channel: env.channel,
                 NODE_ENV: process.env.NODE_ENV,
             }),
         )

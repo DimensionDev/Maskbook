@@ -1,3 +1,4 @@
+import { env } from '@masknet/flags'
 import type { SocialNetworkUI } from '@masknet/types'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
@@ -19,7 +20,7 @@ export function activateSocialNetworkUI() {
 }
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
     if (UI.notReadyForProduction) {
-        if (process.env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
+        if (env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
     }
     definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI
