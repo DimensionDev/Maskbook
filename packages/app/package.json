@@ -28,6 +28,7 @@
         "@heroicons/react": "^2.0.17",
         "@masknet/base": "workspace:^",
         "@masknet/encryption": "workspace:^",
+        "@masknet/flags": "workspace:^",
         "@masknet/plugin-artblocks": "workspace:^",
         "@masknet/plugin-collectible": "workspace:^",
         "@masknet/plugin-cyberconnect": "workspace:^",

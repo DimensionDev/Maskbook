@@ -300,6 +300,9 @@ importers:
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/plugin-artblocks':
         specifier: workspace:^
         version: link:../plugins/ArtBlocks
