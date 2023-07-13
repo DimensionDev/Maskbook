@@ -31,3 +31,6 @@ import '@masknet/plugin-claim'
 import '@masknet/plugin-savings'
 import '@masknet/plugin-pets'
 import '@masknet/plugin-game'
+
+import '@masknet/plugin-file-service'
+import '@masknet/plugin-smart-pay'
