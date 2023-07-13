@@ -14,7 +14,6 @@ export interface Application {
 }
 
 export function useUnlistedEntries() {
-    console.log(PersistentStorages.ApplicationEntryUnListed.storage.data)
     return useSubscription(PersistentStorages.ApplicationEntryUnListed.storage.data.subscription)
 }
 

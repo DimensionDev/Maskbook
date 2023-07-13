@@ -12,5 +12,7 @@
     "game_share_btn": "crwdns17944:0crwdne17944:0",
     "game_share_title": "crwdns17946:0crwdne17946:0",
     "game_dialog_info": "crwdns17948:0crwdne17948:0",
+    "plugin_game_name": "crwdns17990:0crwdne17990:0",
+    "plugin_game_description": "crwdns17992:0crwdne17992:0",
     "game_share_text": "crwdns17950:0{{name}}crwdnd17950:0{{snsId}}crwdnd17950:0$t(mask:hash_tag)crwdnd17950:0{{share_Twitter}}crwdne17950:0"
 }
