@@ -205,7 +205,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         }
     }, [currentPersona, account, chainId, account, providerType, bindProof])
 
-    const handleCancel = useCallback(() => {
+    const handleCancel = useCallback(async () => {
         if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
             navigate(-1)
             return
