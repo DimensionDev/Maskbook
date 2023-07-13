@@ -44,4 +44,5 @@ export enum PopupRoutes {
     ChangeOwner = '/wallet/change-owner',
     Contracts = '/contracts',
     Settings = '/settings',
+    WalletConnect = '/personas/wallet-connect',
 }

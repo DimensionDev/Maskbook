@@ -6,8 +6,11 @@ import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 let inMemoryPassword = ''
 
 export async function INTERNAL_getPassword() {
-    return inMemoryPassword
-        ? database.decryptSecret(inMemoryPassword)
+    const hasSafeSecret = await database.hasSafeSecret()
+    return hasSafeSecret
+        ? inMemoryPassword
+            ? database.decryptSecret(inMemoryPassword)
+            : ''
         : database.decryptSecret(getDefaultWalletPassword())
 }
 
@@ -35,9 +38,9 @@ export async function setPassword(newPassword: string) {
 }
 
 export async function setDefaultPassword() {
+    const hasSecret = await database.hasSecret()
+    if (hasSecret) return
     const password = getDefaultWalletPassword()
-    const hasUnsafePassword = await database.hasSecret()
-    if (hasUnsafePassword) return
     await database.encryptSecret(password)
     INTERNAL_setPassword(password)
 }

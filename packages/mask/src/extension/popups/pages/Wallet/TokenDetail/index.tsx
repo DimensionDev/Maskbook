@@ -18,10 +18,10 @@ import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useChainId, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
-import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Button, Typography } from '@mui/material'
+import { SchemaType, getNativeTokenAddress, isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { PageTitleContext } from '../../../context.js'
@@ -29,10 +29,10 @@ import { useTitle } from '../../../hook/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { ActionGroup } from '../components/index.js'
 import { useAsset } from '../hooks/index.js'
+import { DIMENSION, TrendingChart } from './TrendingChart.js'
 import { useCoinStats } from './useCoinStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
-import { DIMENSION, TrendingChart } from './TrendingChart.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -122,16 +122,24 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+function useTokenParams() {
+    const [params] = useSearchParams()
+    const defaultChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const rawChainId = params.get('chainId')
+    const chainId: ChainId = rawChainId ? Number.parseInt(rawChainId, 10) : defaultChainId
+    const address = params.get('address') || getNativeTokenAddress(chainId)
+    return { chainId, address }
+}
+
 const TokenDetail = memo(function TokenDetail() {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { address } = useParams()
+    const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(address)
-    const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
+    const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const asset = useAsset(chainId, address, account)
     const { data: tokenPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
@@ -197,8 +205,6 @@ const TokenDetail = memo(function TokenDetail() {
         return () => setExtension(undefined)
     }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t])
 
-    if (!asset) return null
-
     return (
         <div className={classes.halo}>
             <Box className={classes.page}>
@@ -226,22 +232,29 @@ const TokenDetail = memo(function TokenDetail() {
                     <Box display="flex" flexDirection="row" justifyContent="space-between">
                         <Box>
                             <Typography className={classes.label}>Balance</Typography>
-                            <Typography component="div" className={classes.value}>
-                                <TokenIcon
-                                    className={classes.tokenIcon}
-                                    address={asset.address}
-                                    name={asset.name}
-                                    chainId={asset.chainId}
-                                    logoURL={asset.logoURL}
-                                    size={16}
-                                />
-                                <FormattedBalance
-                                    value={asset.balance}
-                                    decimals={asset.decimals}
-                                    significant={6}
-                                    formatter={formatBalance}
-                                />
-                            </Typography>
+                            {asset ? (
+                                <Typography component="div" className={classes.value}>
+                                    <TokenIcon
+                                        className={classes.tokenIcon}
+                                        address={asset.address}
+                                        name={asset.name}
+                                        chainId={asset.chainId}
+                                        logoURL={asset.logoURL}
+                                        size={16}
+                                    />
+                                    <FormattedBalance
+                                        value={asset.balance}
+                                        decimals={asset.decimals}
+                                        significant={6}
+                                        formatter={formatBalance}
+                                    />
+                                </Typography>
+                            ) : (
+                                <Typography component="div" className={classes.value}>
+                                    <Skeleton className={classes.tokenIcon} variant="circular" width={16} height={16} />
+                                    <Skeleton variant="text" width={30} />
+                                </Typography>
+                            )}
                         </Box>
                         <Box textAlign="right">
                             <Typography className={classes.label}>value</Typography>

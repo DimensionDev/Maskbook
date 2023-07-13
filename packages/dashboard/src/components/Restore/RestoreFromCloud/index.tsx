@@ -46,8 +46,8 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = useContext(UserContext)
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
-    const { state } = RestoreContext.useContainer()
-    const { account, accountType, password, backupDecrypted, backupSummary } = state
+    const { state, dispatch } = RestoreContext.useContainer()
+    const { account, accountType, backupSummary, password, backupDecrypted } = state
 
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
 
@@ -69,6 +69,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog])
 
     const handleRestore = useCallback(async () => {
+        dispatch({ type: 'SET_LOADING', loading: true })
         try {
             if (backupSummary?.wallets.length) {
                 const hasPassword = await PluginServices.Wallet.hasPassword()
@@ -77,13 +78,14 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
 
             await Services.Backup.restoreBackup(backupDecrypted)
             await restoreCallback()
+            dispatch({ type: 'SET_LOADING', loading: false })
             navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count: backupSummary?.countOfWallet }), {
                 replace: true,
             })
         } catch {
             showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
         }
-    }, [user, backupDecrypted, backupSummary])
+    }, [user, backupSummary])
 
     const onCloseSynchronizePassword = useCallback(() => {
         toggleSynchronizePasswordDialog(false)

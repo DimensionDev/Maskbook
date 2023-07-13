@@ -55,6 +55,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
     const [readingFile, setReadingFile] = useState(false)
+    const [processing, setProcessing] = useState(false)
 
     const reset = useCallback(() => {
         setFile(null)
@@ -94,6 +95,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
 
     const decryptBackupFile = useCallback(async () => {
         if (!file) return
+        setProcessing(true)
         try {
             setReadingFile(true)
             const [decrypted] = await Promise.all([
@@ -106,11 +108,14 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             setError(t.incorrect_backup_password())
         } finally {
             setReadingFile(false)
+            setProcessing(false)
         }
     }, [file, password, t])
 
     const restoreDB = useCallback(async () => {
         try {
+            setProcessing(true)
+            // If json has wallets, restore in popup.
             if (summary?.wallets.length) {
                 const hasPassword = await PluginServices.Wallet.hasPassword()
                 if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
@@ -120,25 +125,31 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             await onRestore(summary?.countOfWallet)
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
+        } finally {
+            setProcessing(false)
         }
     }, [backupValue, onRestore, summary])
 
+    const loading = readingFile || processing
     const disabled = useMemo(() => {
-        if (!readingFile && restoreStatus === RestoreStatus.Verified) return !summary
+        if (loading) return true
+        if (restoreStatus === RestoreStatus.Verified) return !summary
         if (restoreStatus === RestoreStatus.Decrypting) return !password
-        return readingFile || !file
-    }, [readingFile, !file, restoreStatus, summary, !password])
+        return !file
+    }, [loading, !file, restoreStatus, summary, !password])
+
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
                 size="large"
                 color="primary"
                 onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
+                loading={loading}
                 disabled={disabled}>
                 {restoreStatus !== RestoreStatus.Verified ? t.continue() : t.restore()}
             </PrimaryButton>,
         )
-    }, [restoreStatus, decryptBackupFile, restoreDB, disabled])
+    }, [restoreStatus, decryptBackupFile, restoreDB, disabled, loading])
 
     return (
         <Box width="100%">
@@ -169,13 +180,11 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                         helperText={error}
                     />
                 </Box>
-            ) : restoreStatus === RestoreStatus.Verified ? (
-                summary ? (
-                    <>
-                        <AccountStatusBar label={file?.name} actionLabel={t.file_reselect()} onAction={reset} />
-                        <BackupPreview mt={2} info={summary} />
-                    </>
-                ) : null
+            ) : restoreStatus === RestoreStatus.Verified && summary ? (
+                <>
+                    <AccountStatusBar label={file?.name} actionLabel={t.file_reselect()} onAction={reset} />
+                    <BackupPreview mt={2} info={summary} />
+                </>
             ) : null}
         </Box>
     )

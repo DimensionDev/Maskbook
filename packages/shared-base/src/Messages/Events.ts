@@ -256,3 +256,8 @@ export interface GameDialogEvent {
     open: boolean
     tokenProps?: { tokenId?: string; contract?: string; chainId?: number }
 }
+
+export interface PopupWalletConnectEvent {
+    open: boolean
+    uri?: string
+}
