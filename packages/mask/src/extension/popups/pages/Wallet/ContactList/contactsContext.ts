@@ -28,8 +28,9 @@ function useContacts() {
     }, [receiver, resolveDomainError, registeredAddress])
 
     const address = isValidAddress(receiver) ? receiver : isValidAddress(registeredAddress) ? registeredAddress : ''
+    const ensName = isValidDomain(receiver) ? receiver : ''
 
-    return { address, receiver, registeredAddress, setReceiver, receiverValidationMessage }
+    return { address, ensName, receiver, registeredAddress, setReceiver, receiverValidationMessage }
 }
 
 export const ContactsContext = createContainer(useContacts)
