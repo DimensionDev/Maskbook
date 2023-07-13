@@ -89,7 +89,7 @@ export class SentryAPI implements Provider<Event, Event> {
                 console.log('DEBUG: sentry is sending an event.')
                 console.log(event)
 
-                // send automatically by sentry tracker
+                // for events that are collected by Sentry
                 if (!event.tags?.group_id) {
                     // ignored in the development mode
                     if (process.env.NODE_ENV === 'development') {
@@ -247,31 +247,31 @@ export class SentryAPI implements Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
-        if (!this.shouldRecord(options.sampleRate)) return
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
-        } else {
-            const transaction = Sentry.startTransaction({
-                name: options.eventID,
-            })
-            const span = transaction.startChild({
-                op: 'task',
-                description: this.createEvent(options).message,
-            })
-            span.finish()
-            transaction.finish()
-        }
+        // if (!this.shouldRecord(options.sampleRate)) return
+        // if (process.env.NODE_ENV === 'development') {
+        //     console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
+        // } else {
+        const transaction = Sentry.startTransaction({
+            name: options.eventID,
+        })
+        const span = transaction.startChild({
+            op: 'task',
+            description: this.createEvent(options).message,
+        })
+        span.finish()
+        transaction.finish()
+        // }
     }
 
     captureException(options: ExceptionOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
-        if (!this.shouldRecord(options.sampleRate)) return
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
-        } else {
-            Sentry.captureException(options.error, this.createException(options))
-        }
+        // if (!this.shouldRecord(options.sampleRate)) return
+        // if (process.env.NODE_ENV === 'development') {
+        //     console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
+        // } else {
+        Sentry.captureException(options.error, this.createException(options))
+        // }
     }
 }
