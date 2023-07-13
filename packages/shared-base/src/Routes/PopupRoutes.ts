@@ -21,6 +21,7 @@ export enum PopupRoutes {
     ConfirmTransaction = '/wallet/confirm-transaction',
     Unlock = '/wallet/unlock',
     Transfer = '/wallet/transfer',
+    Contacts = '/wallet/contacts',
     SetPaymentPassword = '/wallet/password',
     ReplaceTransaction = '/wallet/replace',
     NetworkManagement = '/wallet/network-management',
@@ -45,5 +46,4 @@ export enum PopupRoutes {
     ChangeOwner = '/wallet/change-owner',
     Contracts = '/contracts',
     Settings = '/settings',
-    Contacts = '/contacts',
 }
