@@ -41,7 +41,7 @@ export const flags = {
     sandboxedPluginRuntime: false,
 
     /** The earliest version for the sentry to watch events and exceptions. */
-    sentry_earliest_version: env.VERSION === 'N/A' ? '' : env.VERSION,
+    sentry_earliest_version: env.VERSION || env.VERSION,
     sentry_sample_rate: 0.05,
     sentry_enabled: prodOnly,
     sentry_event_enabled: prodOnly,

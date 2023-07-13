@@ -1,22 +1,16 @@
 import git from '@nice-labs/git-rev'
 
 interface GitInfoReport {
-    BUILD_DATE: string
-    COMMIT_HASH: string
-    COMMIT_DATE: string
-    BRANCH_NAME: string
-    DIRTY: boolean
+    BUILD_DATE?: string | undefined
+    COMMIT_HASH?: string | undefined
+    COMMIT_DATE?: string | undefined
+    BRANCH_NAME?: string | undefined
+    DIRTY?: boolean
 }
 
 /** Get git info */
 export function getGitInfo(reproducible: boolean): GitInfoReport {
-    const report: GitInfoReport = {
-        BUILD_DATE: new Date(0).toISOString(),
-        COMMIT_HASH: 'N/A',
-        COMMIT_DATE: 'N/A',
-        BRANCH_NAME: 'N/A',
-        DIRTY: false,
-    }
+    const report: GitInfoReport = {}
     try {
         if (reproducible && !git.default.isRepository()) return report
         const DIRTY = git.default.isDirty()

@@ -51,9 +51,9 @@ export class SentryAPI implements Provider<Event, Event> {
     constructor(env: BuildInfoFile) {
         const release =
             env.channel === 'stable' && process.env.NODE_ENV === 'production'
-                ? env.COMMIT_HASH === 'N/A'
-                    ? `mask-${env.VERSION}-reproducible`
-                    : `mask-${env.COMMIT_HASH}`
+                ? env.COMMIT_HASH
+                    ? `mask-${env.COMMIT_HASH}`
+                    : `mask-${env.VERSION}-reproducible`
                 : undefined
         if (typeof Sentry === 'undefined') {
             if (process.env.NODE_ENV !== 'test') console.warn('Sentry is not defined')
@@ -81,7 +81,7 @@ export class SentryAPI implements Provider<Event, Event> {
                 // version control
                 if (
                     env.VERSION &&
-                    Flags.sentry_earliest_version.length &&
+                    Flags.sentry_earliest_version &&
                     !isSameVersion(env.VERSION, Flags.sentry_earliest_version) &&
                     !isNewerThan(env.VERSION, Flags.sentry_earliest_version)
                 )

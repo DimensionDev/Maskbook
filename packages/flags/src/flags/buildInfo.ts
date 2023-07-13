@@ -2,11 +2,11 @@ import { Environment, getEnvironment } from '@dimensiondev/holoflows-kit'
 import { defer } from '@masknet/kit'
 
 export interface BuildInfoFile {
-    readonly BUILD_DATE: string
-    readonly VERSION: string
-    readonly COMMIT_HASH: string
-    readonly COMMIT_DATE: string
-    readonly BRANCH_NAME: string
+    readonly BUILD_DATE?: string | undefined
+    readonly VERSION?: string | undefined
+    readonly COMMIT_HASH?: string | undefined
+    readonly COMMIT_DATE?: string | undefined
+    readonly BRANCH_NAME?: string | undefined
     readonly DIRTY?: boolean
     readonly REACT_DEVTOOLS_EDITOR_URL?: string
     readonly channel: 'stable' | 'beta' | 'insider'
@@ -20,17 +20,12 @@ export async function getBuildInfo(): Promise<BuildInfoFile> {
         const manifestVersion = hasBrowserAPI ? b.runtime.getManifest().version : undefined
         const response = await fetch(hasBrowserAPI ? b.runtime.getURL('/build-info.json') : '/build-info.json')
         const env: BuildInfoFile = await response.json()
-        if (manifestVersion) Object.assign(env.VERSION, { VERSION: manifestVersion })
+        if (manifestVersion) Object.assign(env, { VERSION: manifestVersion })
         Object.freeze(env)
         return env
     } catch {
         return {
             channel: 'stable',
-            BRANCH_NAME: 'N/A',
-            BUILD_DATE: 'N/A',
-            COMMIT_DATE: 'N/A',
-            COMMIT_HASH: 'N/A',
-            VERSION: 'N/A',
         }
     }
 }

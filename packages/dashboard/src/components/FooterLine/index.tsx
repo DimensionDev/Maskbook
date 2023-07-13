@@ -74,7 +74,7 @@ export const FooterLine = memo((props: HTMLProps<HTMLDivElement>) => {
     const defaultVersionLink = `${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
-        if (env.COMMIT_HASH === 'N/A' || (env.channel === 'stable' && !event.metaKey)) {
+        if (!env.COMMIT_HASH || (env.channel === 'stable' && !event.metaKey)) {
             openWindow(defaultVersionLink)
         } else {
             openWindow(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${env.COMMIT_HASH}`)

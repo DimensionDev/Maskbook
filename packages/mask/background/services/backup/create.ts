@@ -2,7 +2,7 @@ import { type BackupSummary, generateBackupRAW, getBackupSummary } from '@maskne
 import { createNewBackup } from './internal_create.js'
 import { env } from '@masknet/flags'
 
-const maskVersion = env.VERSION === 'N/A' ? undefined : env.VERSION
+const maskVersion = env.VERSION
 export async function generateBackupPreviewInfo(): Promise<BackupSummary> {
     // can we avoid create a full backup?
     const backup = await createNewBackup({ allProfile: true, maskVersion })
