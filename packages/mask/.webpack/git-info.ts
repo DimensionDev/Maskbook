@@ -5,7 +5,7 @@ interface GitInfoReport {
     COMMIT_HASH?: string | undefined
     COMMIT_DATE?: string | undefined
     BRANCH_NAME?: string | undefined
-    DIRTY?: boolean
+    DIRTY?: boolean | undefined
 }
 
 /** Get git info */

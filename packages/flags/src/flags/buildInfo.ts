@@ -7,7 +7,7 @@ export interface BuildInfoFile {
     readonly COMMIT_HASH?: string | undefined
     readonly COMMIT_DATE?: string | undefined
     readonly BRANCH_NAME?: string | undefined
-    readonly DIRTY?: boolean
+    readonly DIRTY?: boolean | undefined
     readonly REACT_DEVTOOLS_EDITOR_URL?: string
     readonly channel: 'stable' | 'beta' | 'insider'
 }
@@ -31,11 +31,11 @@ export async function getBuildInfo(): Promise<BuildInfoFile> {
 }
 export let env: BuildInfoFile
 const [_promise, resolve] = defer<void>()
-export const envReadyPromise = _promise
-export function setup() {
-    return getBuildInfo().then(setEnv)
+export const buildInfoReadyPromise = _promise
+export function setupBuildInfo() {
+    return getBuildInfo().then(setupBuildInfoManually)
 }
-export function setEnv(_env: BuildInfoFile) {
+export function setupBuildInfoManually(_env: BuildInfoFile) {
     if (env) return
     resolve()
     env = _env

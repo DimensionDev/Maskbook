@@ -1,9 +1,7 @@
 import { noop } from 'lodash-es'
-import { envReadyPromise } from '@masknet/flags/build-info'
-import * as Flags /* webpackDefer: true */ from '@masknet/flags'
-import { hmr } from '../../../utils-pure/index.js'
+import { buildInfoReadyPromise } from '@masknet/flags/build-info'
+import { hmr } from '../../../utils-pure/hmr.js'
 import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
-import { MaskMessages } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
 export const injectedScriptURL = '/injected-script.js'
@@ -26,8 +24,9 @@ function InjectContentScript(signal: AbortSignal) {
         const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
         // #region Injected script
-        await envReadyPromise
-        if (Flags.Flags.has_firefox_xray_vision) {
+        await buildInfoReadyPromise
+        const { Flags } = await import('@masknet/flags')
+        if (Flags.has_firefox_xray_vision) {
             browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
         } else {
             // Refresh the injected script every time in the development mode.
@@ -38,7 +37,7 @@ function InjectContentScript(signal: AbortSignal) {
         // #endregion
 
         // #region Mask SDK
-        if (Flags.Flags.mask_SDK_ready) {
+        if (Flags.mask_SDK_ready) {
             const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
             browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
         }
@@ -49,8 +48,11 @@ function InjectContentScript(signal: AbortSignal) {
     signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
 
     if (process.env.NODE_ENV === 'development') {
-        envReadyPromise.then(() => {
-            if (!Flags.Flags.mask_SDK_ready) return
+        buildInfoReadyPromise.then(async () => {
+            await buildInfoReadyPromise
+            const { Flags } = await import(/* webpackMode: 'eager' */ '@masknet/flags')
+            const { MaskMessages } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
+            if (!Flags.mask_SDK_ready) return
             signal.addEventListener(
                 'abort',
                 MaskMessages.events.maskSDKHotModuleReload.on(async () => {

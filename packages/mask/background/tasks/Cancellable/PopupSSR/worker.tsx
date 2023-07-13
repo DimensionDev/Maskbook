@@ -1,5 +1,5 @@
-import { setup } from '@masknet/flags/build-info'
-await setup()
+import { setupBuildInfo } from '@masknet/flags/build-info'
+await setupBuildInfo()
 
 const { render } = await import(/* webpackMode: 'eager' */ './loader.js')
 const { serializer } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')

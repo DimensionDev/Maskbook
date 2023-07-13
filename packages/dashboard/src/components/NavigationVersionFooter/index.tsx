@@ -12,6 +12,6 @@ const VersionContainer = styled('div')(() => ({
 
 export const NavigationVersionFooter = memo(() => {
     const t = useDashboardI18N()
-    const version = useBuildInfo().VERSION
-    return <VersionContainer>{version ? version : t.version_of_stable({ version })}</VersionContainer>
+    const version = useBuildInfo().VERSION || 'unknown'
+    return <VersionContainer>{t.version_of_stable({ version })}</VersionContainer>
 })
