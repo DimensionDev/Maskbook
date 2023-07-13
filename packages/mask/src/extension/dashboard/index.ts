@@ -1,3 +1,3 @@
-import { status } from '../../setup.ui.js'
-await status
+import { activateSocialNetworkUI } from '../../setup.ui.js'
+await activateSocialNetworkUI()
 await import(/* webpackMode: 'eager' */ './post-init.js')

@@ -4,6 +4,7 @@
 const loaded = Symbol.for('mask_init_content_script')
 if (!Reflect.get(globalThis, loaded)) {
     Reflect.set(globalThis, loaded, true)
-    await import(/* webpackMode: 'eager' */ './setup.ui.js')
+    const { activateSocialNetworkUI } = await import(/* webpackMode: 'eager' */ './setup.ui.js')
+    await activateSocialNetworkUI()
 }
 export {}
