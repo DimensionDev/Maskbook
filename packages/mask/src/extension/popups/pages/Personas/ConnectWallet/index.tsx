@@ -209,7 +209,8 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
             navigate(-1)
             return
-        } else return Services.Helper.removePopupWindow()
+        }
+        return Services.Helper.removePopupWindow()
     }, [signResult])
 
     const handleChooseAnotherWallet = useCallback(() => {
@@ -223,7 +224,8 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
             navigate(-1)
             return
-        } else await Services.Helper.removePopupWindow()
+        }
+        return Services.Helper.removePopupWindow()
     }, [providerType])
 
     const handleBack = useCallback(() => {
