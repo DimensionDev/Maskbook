@@ -73,7 +73,8 @@ export async function startReactDevTools(signal: AbortSignal) {
     await __eval`
         globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
     `
-    setEditorPreference(), syncSavedPreferences(runInContentScript)
+    setEditorPreference()
+    syncSavedPreferences(runInContentScript)
 
     // TODO: registerDevToolsEventLogger?
 

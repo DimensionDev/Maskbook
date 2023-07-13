@@ -10,7 +10,7 @@ export const contentScriptURL = '/generated__content__script.html'
 
 if (typeof browser.scripting?.registerContentScripts === 'undefined') InjectContentScript(signal)
 
-function InjectContentScript(signal: AbortSignal) {
+async function InjectContentScript(signal: AbortSignal) {
     const injectedScript = fetchUserScript(injectedScriptURL)
     const maskSDK = fetchUserScript(maskSDK_URL)
     const injectContentScript = fetchInjectContentScript(contentScriptURL)
@@ -48,21 +48,19 @@ function InjectContentScript(signal: AbortSignal) {
     signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
 
     if (process.env.NODE_ENV === 'development') {
-        buildInfoReadyPromise.then(async () => {
-            await buildInfoReadyPromise
-            const { Flags } = await import(/* webpackMode: 'eager' */ '@masknet/flags')
-            const { MaskMessages } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
-            if (!Flags.mask_SDK_ready) return
-            signal.addEventListener(
-                'abort',
-                MaskMessages.events.maskSDKHotModuleReload.on(async () => {
-                    const code = (await fetchUserScript(maskSDK_URL)) + '\n;console.log("[@masknet/sdk] SDK reloaded.")'
-                    for (const tab of await browser.tabs.query({})) {
-                        browser.tabs.executeScript(tab.id, { code }).then(noop)
-                    }
-                }),
-            )
-        })
+        await buildInfoReadyPromise
+        const { Flags } = await import(/* webpackMode: 'eager' */ '@masknet/flags')
+        if (!Flags.mask_SDK_ready) return
+        const { MaskMessages } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
+        signal.addEventListener(
+            'abort',
+            MaskMessages.events.maskSDKHotModuleReload.on(async () => {
+                const code = (await fetchUserScript(maskSDK_URL)) + '\n;console.log("[@masknet/sdk] SDK reloaded.")'
+                for (const tab of await browser.tabs.query({})) {
+                    browser.tabs.executeScript(tab.id, { code }).then(noop)
+                }
+            }),
+        )
     }
 }
 export async function fetchInjectContentScriptList(entryHTML: string) {

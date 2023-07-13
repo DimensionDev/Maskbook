@@ -1,12 +1,11 @@
 import { setupBuildInfo } from '@masknet/flags/build-info'
-await setupBuildInfo()
 
-const { render } = await import(/* webpackMode: 'eager' */ './loader.js')
-const { serializer } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
 globalThis.addEventListener('message', async (event) => {
-    return Promise.resolve(serializer.deserialization(event.data) as any)
-        .then(render)
-        .then(postMessage)
+    await setupBuildInfo()
+    const { serializer } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
+    const data = serializer.deserialization(event.data)
+    const { render } = await import(/* webpackMode: 'eager' */ './loader.js')
+    postMessage(render(await data))
 })
 
 globalThis.postMessage('alive')

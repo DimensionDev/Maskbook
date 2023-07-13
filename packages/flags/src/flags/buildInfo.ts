@@ -32,8 +32,9 @@ export async function getBuildInfo(): Promise<BuildInfoFile> {
 export let env: BuildInfoFile
 const [_promise, resolve] = defer<void>()
 export const buildInfoReadyPromise = _promise
-export function setupBuildInfo() {
-    return getBuildInfo().then(setupBuildInfoManually)
+export async function setupBuildInfo(): Promise<void> {
+    if (env) return
+    return setupBuildInfoManually(await getBuildInfo())
 }
 export function setupBuildInfoManually(_env: BuildInfoFile) {
     if (env) return
