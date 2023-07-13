@@ -29,7 +29,7 @@ interface ApplicationBoardFormProps {
 }
 export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
     const t = useSharedI18N()
-    const [openSettings, setOpoenSettings] = useState(false)
+    const [openSettings, setOpenSettings] = useState(false)
     const [currentTab, onChange, tabs, setTab] = useTabs(
         ApplicationSettingTabs.pluginList,
         ApplicationSettingTabs.pluginSwitch,
@@ -41,7 +41,7 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                 <IconButton
                     size="small"
                     sx={{ margin: '-5px' }}
-                    onClick={() => setOpoenSettings((openSettings) => !openSettings)}>
+                    onClick={() => setOpenSettings((openSettings) => !openSettings)}>
                     <Icons.Gear size={24} />
                 </IconButton>
             </div>
