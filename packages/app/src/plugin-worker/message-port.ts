@@ -15,7 +15,6 @@ globalThis.addEventListener('connect', (event) => {
     // message send through port is a tuple [type, data]
     port.addEventListener('message', (e) => {
         const [type, data] = e.data
-        console.log(type, data)
         const handlers = messageHandlers.get(type)
         if (!handlers?.size) return
         for (const f of handlers) {

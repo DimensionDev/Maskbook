@@ -12,7 +12,6 @@ const messageHandlers = new Map<string, Set<MessageHandler>>()
 
 function MessageEventReceiver(event: MessageEvent): void {
     const [type, data] = event.data
-    console.log(type, data)
     const handler = messageHandlers.get(type)
     if (!handler?.size) return
     for (const h of handler) h(data)
