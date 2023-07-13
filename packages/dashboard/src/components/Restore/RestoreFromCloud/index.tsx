@@ -79,7 +79,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
             await Services.Backup.restoreBackup(backupDecrypted)
             await restoreCallback()
             dispatch({ type: 'SET_LOADING', loading: false })
-            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count: backupSummary?.countOfWallet }), {
+            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count: backupSummary?.countOfWallets }), {
                 replace: true,
             })
         } catch {

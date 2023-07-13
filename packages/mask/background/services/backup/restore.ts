@@ -26,7 +26,10 @@ export async function generateBackupSummary(raw: string) {
 
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [...compact(personas), ...wallets])
-        return getBackupSummary(backup, sum([accounts.filter((x) => x.deployed).length, wallets.length]))
+        return {
+            ...getBackupSummary(backup),
+            countOfWallets: sum([accounts.filter((x) => x.deployed).length, wallets.length]),
+        }
     })
 }
 

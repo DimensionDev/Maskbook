@@ -25,7 +25,7 @@ export interface RestoreState {
         code: string
     } & PhoneNumberFieldValue
     backupFileInfo: BackupFileInfo | null
-    backupSummary: BackupSummary | null
+    backupSummary: (BackupSummary & { countOfWallets: number }) | null
     backupDecrypted: string
 }
 
@@ -82,7 +82,7 @@ type Action =
       }
     | {
           type: 'SET_BACKUP_SUMMARY'
-          summary: BackupSummary
+          summary: BackupSummary & { countOfWallets: number }
           backupDecrypted: string
       }
     | {

@@ -10,10 +10,9 @@ export interface BackupSummary {
     files: number
     wallets: string[]
     createdAt: number
-    countOfWallet?: number
 }
 
-export function getBackupSummary(json: NormalizedBackup.Data, countOfWallet?: number): BackupSummary {
+export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
     let files = 0
 
     try {
@@ -41,6 +40,5 @@ export function getBackupSummary(json: NormalizedBackup.Data, countOfWallet?: nu
         files,
         wallets: json.wallets.map((wallet) => wallet.address),
         createdAt: Number(json.meta.createdAt),
-        countOfWallet,
     }
 }

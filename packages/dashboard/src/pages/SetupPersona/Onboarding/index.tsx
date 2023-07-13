@@ -13,6 +13,7 @@ import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { useSearchParams } from 'react-router-dom'
 import { compact } from 'lodash-es'
+import { isZero } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -111,7 +112,7 @@ export const Onboarding = memo(function Onboarding() {
                 {t.persona_onboarding_ready()}
                 {t.ready()}
             </Typography>,
-            count ? (
+            count && !isZero(count) ? (
                 <Typography key="wallets">
                     {t.persona_onboarding_recovery_wallets()}
                     {t.persona_onboarding_wallets({ count: Number(count) })}

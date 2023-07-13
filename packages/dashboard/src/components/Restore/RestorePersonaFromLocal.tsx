@@ -49,7 +49,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const [file, setFile] = useState<File | null>(null)
-    const [summary, setSummary] = useState<BackupSummary | null>(null)
+    const [summary, setSummary] = useState<(BackupSummary & { countOfWallets: number }) | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -122,7 +122,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             }
             await Services.Backup.restoreBackup(backupValue)
 
-            await onRestore(summary?.countOfWallet)
+            await onRestore(summary?.countOfWallets)
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         } finally {
