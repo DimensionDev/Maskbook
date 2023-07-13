@@ -45,7 +45,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = useContext(UserContext)
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
-    const { state } = RestoreContext.useContainer()
+    const { state, dispatch } = RestoreContext.useContainer()
     const { account, accountType, backupSummary, backupSummaryId, password } = state
 
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
@@ -68,9 +68,11 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog])
 
     const handleRestore = useCallback(async () => {
+        dispatch({ type: 'SET_LOADING', loading: true })
         try {
             if (backupSummary?.wallets) {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupSummaryId, action: 'wallet' })
+                dispatch({ type: 'SET_LOADING', loading: false })
                 return
             } else {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupSummaryId, action: 'confirm' })
@@ -80,6 +82,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
         } catch {
             showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
         }
+        dispatch({ type: 'SET_LOADING', loading: false })
     }, [user, backupSummary, backupSummaryId])
 
     const onCloseSynchronizePassword = useCallback(() => {
