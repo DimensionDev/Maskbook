@@ -244,7 +244,6 @@ export class SentryAPI implements Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
-        if (!this.shouldRecord(options.sampleRate)) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
