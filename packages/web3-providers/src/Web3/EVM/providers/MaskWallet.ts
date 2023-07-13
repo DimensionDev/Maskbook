@@ -48,6 +48,7 @@ export class MaskWalletProvider
         const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
         if (isRecovery) return
 
+        // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
         const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []

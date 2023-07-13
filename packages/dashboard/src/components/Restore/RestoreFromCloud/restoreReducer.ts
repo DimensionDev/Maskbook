@@ -123,10 +123,12 @@ export function restoreReducer(state: RestoreState, action: Action) {
                 break
             case 'SET_EMAIL':
                 Object.assign(draft.emailForm, action.form)
+                if (action.form.code) draft.emailForm.code = action.form.code.replaceAll(/\D/g, '')
                 break
             case 'SET_PHONE':
                 Object.assign(draft.phoneForm, action.form)
                 draft.phoneForm.account = `+${draft.phoneForm.dialingCode} ${draft.phoneForm.phone}`
+                if (action.form.code) draft.phoneForm.code = action.form.code.replaceAll(/\D/g, '')
                 break
             case 'SET_VALIDATION':
                 break

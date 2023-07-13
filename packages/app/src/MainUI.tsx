@@ -39,14 +39,14 @@ export function MainUI() {
                             <Route path={`${ApplicationRoutes.Applications}/*`} element={<ApplicationsPage />} />
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
                         </Routes>
-
-                        <DisableShadowRootContext.Provider value={false}>
-                            <ShadowRootIsolation>
-                                <PageInspectorRender />
-                            </ShadowRootIsolation>
-                        </DisableShadowRootContext.Provider>
                     </div>
                 </HashRouter>
+
+                <DisableShadowRootContext.Provider value={false}>
+                    <ShadowRootIsolation>
+                        <PageInspectorRender />
+                    </ShadowRootIsolation>
+                </DisableShadowRootContext.Provider>
             </Suspense>
         </DashboardContext.Provider>
     )

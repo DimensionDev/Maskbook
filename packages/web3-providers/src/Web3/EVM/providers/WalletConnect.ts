@@ -4,7 +4,7 @@ import type { RequestArguments } from 'web3-core'
 import { defer } from '@masknet/kit'
 import { Flags } from '@masknet/flags'
 import WalletConnect from '@walletconnect/client'
-import type { Account } from '@masknet/shared-base'
+import { Sniffings, type Account } from '@masknet/shared-base'
 import {
     type ChainId,
     chainResolver,
@@ -141,6 +141,7 @@ export default class WalletConnectProvider
     }
 
     private onModalClose(error: Error | null, payload: ModalClosePayload) {
+        if (Sniffings.is_popup_page) return
         this.connection?.reject(error || new Error('User rejected'))
     }
 

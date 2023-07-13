@@ -24,6 +24,7 @@ export const PhoneField = memo(function PhoneField() {
     const [invalidPhone, setInvalidPhone] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const [error, setError] = useState('')
+    const [codeError, setCodeError] = useState('')
     const { state, dispatch, downloadBackupInfo } = RestoreContext.useContainer()
     const { loading, phoneForm } = state
     const { account, code, dialingCode } = phoneForm
@@ -51,7 +52,7 @@ export const PhoneField = memo(function PhoneField() {
     }, [account, language])
 
     const { fillSubmitOutlet } = usePersonaRecovery()
-    const disabled = !account || invalidPhone || !phoneRegexp.test(account) || !code || !!error || loading
+    const disabled = !account || invalidPhone || !phoneRegexp.test(account) || code.length !== 6 || !!error || loading
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
@@ -64,7 +65,10 @@ export const PhoneField = memo(function PhoneField() {
                         dispatch({ type: 'SET_BACKUP_INFO', info: backupInfo })
                         dispatch({ type: 'NEXT_STEP' })
                     } catch (err) {
-                        setError((err as RestoreQueryError).message)
+                        const message = (err as RestoreQueryError).message
+                        if (['code not found', 'code mismatch'].includes(message))
+                            setCodeError(t.incorrect_verification_code())
+                        else setError(message)
                     } finally {
                         dispatch({ type: 'SET_LOADING', loading: false })
                     }
@@ -87,8 +91,9 @@ export const PhoneField = memo(function PhoneField() {
             />
             <Box mt={1.5}>
                 <SendingCodeField
+                    value={code}
                     onChange={(code) => dispatch({ type: 'SET_PHONE', form: { code } })}
-                    errorMessage={sendCodeError?.message}
+                    errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCode}
                     placeholder={t.data_recovery_mobile_code()}
                     inputProps={{

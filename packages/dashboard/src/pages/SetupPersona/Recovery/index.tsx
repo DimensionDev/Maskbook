@@ -162,10 +162,10 @@ export const Recovery = memo(function Recovery() {
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Recovery Methods">
-                                <Tab className={classes.tab} label="Identity words" value={tabs.mnemonic} />
-                                <Tab className={classes.tab} label="Private Key" value={tabs.privateKey} />
-                                <Tab className={classes.tab} label="Local Backup" value={tabs.local} />
-                                <Tab className={classes.tab} label="Cloud Backup" value={tabs.cloud} />
+                                <Tab className={classes.tab} label={t.identity_words()} value={tabs.mnemonic} />
+                                <Tab className={classes.tab} label={t.private_key()} value={tabs.privateKey} />
+                                <Tab className={classes.tab} label={t.local_backup()} value={tabs.local} />
+                                <Tab className={classes.tab} label={t.cloud_backup()} value={tabs.cloud} />
                             </MaskTabList>
                         </div>
                         <div className={classes.panelContainer}>
