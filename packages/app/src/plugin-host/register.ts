@@ -26,3 +26,5 @@ import '@masknet/plugin-external'
 import '@masknet/plugin-nextid'
 import '@masknet/plugin-trader/register'
 import '@masknet/plugin-profilecard'
+
+import '@masknet/plugin-claim'

@@ -309,6 +309,9 @@ importers:
       '@masknet/plugin-artblocks':
         specifier: workspace:^
         version: link:../plugins/ArtBlocks
+      '@masknet/plugin-claim':
+        specifier: workspace:^
+        version: link:../plugins/Claim
       '@masknet/plugin-collectible':
         specifier: workspace:^
         version: link:../plugins/Collectible
