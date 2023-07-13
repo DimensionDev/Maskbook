@@ -91,7 +91,7 @@ export class SentryAPI implements Provider<Event, Event> {
 
                 // send automatically by sentry tracker
                 if (!event.tags?.group_id) {
-                    // ignored in development mode
+                    // ignored in the development mode
                     if (process.env.NODE_ENV === 'development') {
                         // eslint-disable-next-line @typescript-eslint/no-base-to-string
                         console.log(`[LOG EXCEPTION]: ${event}`)
