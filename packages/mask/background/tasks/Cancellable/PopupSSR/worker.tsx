@@ -5,7 +5,7 @@ globalThis.addEventListener('message', async (event) => {
     const { serializer } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
     const data = serializer.deserialization(event.data)
     const { render } = await import(/* webpackMode: 'eager' */ './loader.js')
-    postMessage(render(await data))
+    postMessage(await render(await data))
 })
 
 globalThis.postMessage('alive')
