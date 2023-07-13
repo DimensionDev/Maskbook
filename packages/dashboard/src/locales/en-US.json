@@ -462,5 +462,9 @@
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "welcome_new_agreement_policy": "By continuing to the app, you agree to these <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "wallets_history_burn": "Burn",
-    "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+    "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
+    "identity_words": "Identity Words",
+    "private_key": "Private Key",
+    "local_backup": "Local Backup",
+    "incorrect_verification_code": "Incorrect verification code."
 }

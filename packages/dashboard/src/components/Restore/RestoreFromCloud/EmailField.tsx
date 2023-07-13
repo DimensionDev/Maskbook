@@ -17,6 +17,7 @@ export const EmailField = memo(function EmailField() {
     const [invalidEmail, setInvalidEmail] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const [error, setError] = useState('')
+    const [codeError, setCodeError] = useState('')
 
     const { state, dispatch, downloadBackupInfo } = RestoreContext.useContainer()
     const { emailForm, loading } = state
@@ -44,7 +45,7 @@ export const EmailField = memo(function EmailField() {
     }
 
     const { fillSubmitOutlet } = usePersonaRecovery()
-    const disabled = !account || invalidEmail || !code
+    const disabled = !account || invalidEmail || code.length !== 6
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
@@ -57,7 +58,10 @@ export const EmailField = memo(function EmailField() {
                         dispatch({ type: 'SET_BACKUP_INFO', info: backupFileInfo })
                         dispatch({ type: 'NEXT_STEP' })
                     } catch (err) {
-                        setError((err as RestoreQueryError).message)
+                        const message = (err as RestoreQueryError).message
+                        if (['code not found', 'code mismatch'].includes(message))
+                            setCodeError(t.incorrect_verification_code())
+                        else setError(message)
                     } finally {
                         dispatch({ type: 'SET_LOADING', loading: false })
                     }
@@ -93,8 +97,9 @@ export const EmailField = memo(function EmailField() {
             />
             <Box mt={1.5}>
                 <SendingCodeField
+                    value={code}
                     onChange={setCode}
-                    errorMessage={sendCodeError?.message}
+                    errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCodeFn}
                     placeholder={t.data_recovery_email_code()}
                     inputProps={{
