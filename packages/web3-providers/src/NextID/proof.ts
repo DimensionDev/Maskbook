@@ -24,7 +24,7 @@ import { fetchJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 
 const BASE_URL =
-    process.env.NODE_ENV === 'production' && env.channel === 'stable' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
+    env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
 const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $domain) {
           source

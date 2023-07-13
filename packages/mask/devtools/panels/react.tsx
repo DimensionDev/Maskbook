@@ -70,13 +70,10 @@ export async function startReactDevTools(signal: AbortSignal) {
     const __eval = devtoolsEval(runInContentScript)
 
     const id = String(browser.devtools.inspectedWindow.tabId)
-    await Promise.all([
-        __eval`
-            globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
-        `,
-        setEditorPreference(),
-    ])
-    syncSavedPreferences(runInContentScript)
+    await __eval`
+        globalThis.${GLOBAL_ID_KEY} = ${JSON.stringify(id)}
+    `
+    setEditorPreference(), syncSavedPreferences(runInContentScript)
 
     // TODO: registerDevToolsEventLogger?
 
@@ -316,7 +313,7 @@ function getMountPoint(window: Window | undefined, signal: AbortSignal) {
 
     return dom2
 }
-async function setEditorPreference() {
+function setEditorPreference() {
     const preset = env.REACT_DEVTOOLS_EDITOR_URL || 'vscode://file/{path}:{line}'
     const editorURL = 'React::DevTools::openInEditorUrl'
     if (!getLocalStorage(editorURL)) {

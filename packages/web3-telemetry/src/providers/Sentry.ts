@@ -1,4 +1,3 @@
-/// <reference types="@masknet/global-types/web-extension" />
 /// <reference types="@masknet/global-types/env" />
 import '@sentry/tracing'
 import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'

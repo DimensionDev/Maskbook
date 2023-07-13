@@ -17,7 +17,7 @@ interface CreatePayloadResponse {
     created_at: string
 }
 
-const BASE_URL = process.env.NODE_ENV === 'production' && env.channel === 'stable' ? KV_BASE_URL_PROD : KV_BASE_URL_DEV
+const BASE_URL = env.channel === 'stable' && process.env.NODE_ENV === 'production' ? KV_BASE_URL_PROD : KV_BASE_URL_DEV
 
 function formatPatchData(pluginID: string, data: unknown) {
     return {
