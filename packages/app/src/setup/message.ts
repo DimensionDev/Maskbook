@@ -115,6 +115,9 @@ if (typeof SharedWorker === 'function') {
                     postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                     dispatchData(eventName, data)
                 },
+                async sendToBackgroundPage(data) {
+                    postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                },
                 sendToLocal(data) {
                     dispatchData(eventName, data)
                 },

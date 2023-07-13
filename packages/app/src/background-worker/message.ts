@@ -84,13 +84,17 @@ export type InternalMessage_PluginMessage = [type: string, data: unknown, requir
         }
         const emitter = createProxy((eventName) => {
             const value: PluginMessageEmitterItem<unknown> = {
-                on(callback) {
+                on(callback, options) {
                     const events = getEventName(eventName)
                     events.add(callback)
+                    options?.signal?.addEventListener('abort', () => events.delete(callback), { once: true })
                     return () => events.delete(callback)
                 },
                 off(callback) {
                     getEventName(eventName).delete(callback)
+                },
+                async sendToBackgroundPage(data) {
+                    dispatchData(eventName, data)
                 },
                 async sendByBroadcast(data) {
                     broadcastMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)

@@ -73,10 +73,11 @@ export interface CrossIsolationEvents {
 export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }
 export interface PluginMessageEmitterItem<T> {
     /** @returns A function to remove the listener */
-    on(callback: (data: T) => void): () => void
+    on(callback: (data: T) => void, options?: { signal?: AbortSignal }): () => void
     off(callback: (data: T) => void): void
     sendToLocal(data: T): void
     sendToContentScripts?(data: T): void
+    sendToBackgroundPage(data: T): void
     sendToVisiblePages(data: T): void
     sendByBroadcast(data: T): void
     sendToAll(data: T): void
