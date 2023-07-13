@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
 
@@ -60,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
 const AddContactInputPanel = memo(function AddContactInputPanel() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
     const { address, receiver, setReceiver, receiverValidationMessage, registeredAddress } =
         ContactsContext.useContainer()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
