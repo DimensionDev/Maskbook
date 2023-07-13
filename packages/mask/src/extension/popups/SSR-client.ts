@@ -31,10 +31,14 @@ if (location.hash === '#/personas') {
 
         console.time('[SSR] Hydrate')
     })
-    import(/* webpackPreload: true */ './normal-client.js')
-} else {
-    import(/* webpackPreload: true */ './normal-client.js')
 }
+
+// To make prefetch not be tree-shake
+if (''.toLowerCase() === 'hint') {
+    prefetch()
+}
+await import(/* webpackMode: 'eager' */ '../../setup.ui.js')
+await import(/* webpackMode: 'eager' */ './normal-client.js')
 
 // this function is never called, but it will hint webpack to preload modules we need
 function prefetch() {
@@ -42,10 +46,5 @@ function prefetch() {
     import(/* webpackPreload: true */ './pages/Personas/index.js')
     import(/* webpackPreload: true */ './pages/Personas/Home/index.js')
     import(/* webpackPreload: true */ './pages/Wallet/index.js')
-}
-
-// To make prefetch not be tree-shake
-if (''.toLowerCase() === 'hint') {
-    prefetch()
 }
 export {}

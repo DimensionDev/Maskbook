@@ -294,7 +294,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
-        dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
+        dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.ts')),
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),

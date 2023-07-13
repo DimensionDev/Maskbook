@@ -1,8 +1,4 @@
 import { setTelemetryID } from './services/helper/telemetry-id.js'
-import { setEnv, getBuildInfo } from '@masknet/flags/build-info'
+import { setup } from '@masknet/flags/build-info'
 
-await Promise.allSettled([
-    //
-    setTelemetryID(false),
-    getBuildInfo().then(setEnv),
-])
+await Promise.allSettled([setTelemetryID(false), setup()])
