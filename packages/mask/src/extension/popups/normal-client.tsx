@@ -49,7 +49,7 @@ if (location.hash === '#/personas') {
     }
     console.timeEnd('[SSR] Hydrate')
 } else {
-    await status
+    await activateSocialNetworkUI()
     createNormalReactRoot(<Popups />)
     startPluginHost()
 }
