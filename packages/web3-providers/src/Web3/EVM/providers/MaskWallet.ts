@@ -9,7 +9,6 @@ import {
     getSiteType,
     PopupRoutes,
     ValueRef,
-    isExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -45,9 +44,6 @@ export class MaskWalletProvider
         )
     }
     async update() {
-        const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
-        if (isRecovery) return
-
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 

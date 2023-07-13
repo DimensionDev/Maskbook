@@ -27,7 +27,7 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
             style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
             {...rest}
             disableElevation
-            disabled={!!(rest.disabled && !loading)}>
+            disabled={!!(rest.disabled || loading)}>
             {loading ? (
                 <Box
                     position="absolute"
