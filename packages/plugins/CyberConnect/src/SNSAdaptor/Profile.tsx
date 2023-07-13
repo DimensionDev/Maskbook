@@ -174,7 +174,9 @@ function Profile({ url }: { url: string }) {
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.PopupLink} />
                             </Link>
-                            {identity?.address ? <CopyButton text={identity.address} className={classes.icon} /> : null}
+                            {identity?.address ? (
+                                <CopyButton text={identity.address} className={classes.icon} size={16} />
+                            ) : null}
                         </Stack>
                     </Stack>
 

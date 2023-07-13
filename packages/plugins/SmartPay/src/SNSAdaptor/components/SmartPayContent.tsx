@@ -10,6 +10,7 @@ import {
     useMenuConfig,
     ApproveMaskDialog,
     FormattedCurrency,
+    CopyButton,
 } from '@masknet/shared'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -263,13 +264,7 @@ export const SmartPayContent = memo(() => {
                         </Typography>
                         <Typography className={classes.address}>
                             {formatEthereumAddress(contractAccount?.address ?? '', 4)}
-                            <Icons.PopupCopy
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onCopy(contractAccount.address)
-                                }}
-                                size={14}
-                            />
+                            <CopyButton size={14} text={contractAccount.address} />
                             <Link
                                 href={
                                     chainId
@@ -370,7 +365,7 @@ export const SmartPayContent = memo(() => {
                             {menu}
                             <Typography className={classes.address}>
                                 {formatEthereumAddress(account ?? '', 4)}
-                                <Icons.PopupCopy onClick={() => onCopy(account)} size={14} />
+                                <CopyButton size={14} text={account} />
                                 <Link
                                     href={
                                         account && chainId ? Others.explorerResolver.addressLink(chainId, account) : ''

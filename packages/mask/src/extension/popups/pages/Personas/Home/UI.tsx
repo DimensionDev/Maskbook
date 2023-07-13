@@ -187,7 +187,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                         alignItems="center"
                                         columnGap="2px">
                                         {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyButton text={fingerprint} className={classes.icon} />
+                                        <CopyButton text={fingerprint} size={12} className={classes.icon} />
                                         <Link
                                             underline="none"
                                             target="_blank"

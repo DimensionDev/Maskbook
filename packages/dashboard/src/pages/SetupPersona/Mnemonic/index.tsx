@@ -54,6 +54,8 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${theme.palette.maskColor.line}`,
         borderRadius: 8,
         color: theme.palette.maskColor.main,
+        height: 36,
+        width: 36,
     },
     warning: {
         background: alpha(theme.palette.maskColor.warn, 0.1),
