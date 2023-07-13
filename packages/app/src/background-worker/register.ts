@@ -6,6 +6,5 @@ import '@masknet/plugin-artblocks'
 import '@masknet/plugin-snapshot'
 import '@masknet/plugin-cyberconnect'
 import '@masknet/plugin-vcent'
-
 import '@masknet/plugin-transak'
 import '@masknet/plugin-pets'

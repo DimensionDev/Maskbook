@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { IconButton, Tab } from '@mui/material'
+import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
+import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
-import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
-import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
-import { Icons } from '@masknet/icons'
 
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
@@ -46,26 +46,24 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                 </IconButton>
             </div>
             {openSettings ? (
-                <>
-                    <TabContext value={currentTab}>
-                        <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                            <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
-                            <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
-                        </MaskTabList>
+                <TabContext value={currentTab}>
+                    <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
+                        <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
+                        <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
+                    </MaskTabList>
 
-                        <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
-                            <ApplicationSettingPluginList />
-                        </TabPanel>
-                        <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
-                            <ApplicationSettingPluginSwitch
-                                focusPluginID={props.focusPluginID}
-                                setPluginMinimalModeEnabled={props.setPluginMinimalModeEnabled}
-                                getDecentralizedSearchSettings={props.getDecentralizedSearchSettings}
-                                setDecentralizedSearchSettings={props.setDecentralizedSearchSettings}
-                            />
-                        </TabPanel>
-                    </TabContext>
-                </>
+                    <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
+                        <ApplicationSettingPluginList />
+                    </TabPanel>
+                    <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
+                        <ApplicationSettingPluginSwitch
+                            focusPluginID={props.focusPluginID}
+                            setPluginMinimalModeEnabled={props.setPluginMinimalModeEnabled}
+                            getDecentralizedSearchSettings={props.getDecentralizedSearchSettings}
+                            setDecentralizedSearchSettings={props.setDecentralizedSearchSettings}
+                        />
+                    </TabPanel>
+                </TabContext>
             ) : (
                 <ApplicationBoardContent
                     openDashboard={props.openDashboard}
