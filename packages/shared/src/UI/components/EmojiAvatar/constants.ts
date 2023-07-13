@@ -1,3 +1,4 @@
+/* eslint-disable @masknet/unicode-specific-set */
 export const EMOJI_LIST = [
     '🐶',
     '🐱',

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID, generateContactAvatarColor } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { useChainContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import { Box, Typography, useTheme } from '@mui/material'
@@ -61,7 +61,8 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
-    const { receiver, setReceiver, receiverValidationMessage, registeredAddress } = ContactsContext.useContainer()
+    const { address, receiver, setReceiver, receiverValidationMessage, registeredAddress } =
+        ContactsContext.useContainer()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const theme = useTheme()
@@ -69,8 +70,9 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
     const openAddContactModal = useCallback(() => {
         AddContactModal.openAndWaitForClose({
             title: t('wallet_add_contact'),
+            address,
         })
-    }, [])
+    }, [address])
 
     return (
         <>

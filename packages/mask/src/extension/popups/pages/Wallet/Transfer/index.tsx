@@ -1,5 +1,5 @@
-import { NetworkPluginID, generateContactAvatarColor } from '@masknet/shared-base'
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import {
     useAccount,
     useBalance,
@@ -9,14 +9,14 @@ import {
     useWallets,
 } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Link, List, ListItem, Typography, useTheme } from '@mui/material'
-import { memo, useMemo, useState } from 'react'
+import { Box, Link, List, ListItem, Typography, useTheme } from '@mui/material'
+import { memo, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from './contactsContext.js'
 import { Icons } from '@masknet/icons'
-import { EmojiAvatar, EthereumBlockie, FormattedAddress, TokenIcon, WalletIcon } from '@masknet/shared'
+import { EmojiAvatar, FormattedAddress } from '@masknet/shared'
 import AddContactInputPanel from './AddContactInputPanel.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -75,18 +75,6 @@ const useStyles = makeStyles()((theme) => ({
     emojiAvatar: {
         marginRight: 10,
         fontSize: 14,
-    },
-    input: {
-        flex: 1,
-    },
-    save: {
-        color: theme.palette.maskColor.primary,
-        marginRight: 4,
-    },
-    endAdornment: {
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
     },
     iconMore: {
         cursor: 'pointer',

@@ -1,4 +1,4 @@
-import { type ProfileInformation as Profile, generateContactAvatarColor } from '@masknet/shared-base'
+import { generateContactAvatarColor } from '@masknet/shared-base'
 import { useTheme, Avatar as MuiAvatar, type AvatarProps } from '@mui/material'
 import { EMOJI_LIST } from './constants.js'
 

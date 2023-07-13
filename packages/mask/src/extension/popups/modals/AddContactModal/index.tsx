@@ -1,5 +1,4 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
@@ -21,14 +20,16 @@ const useStyles = makeStyles()((theme) => ({
 
 interface AddContactModalProps extends BottomDrawerProps {
     onConfirm?(): void
+    address: string
 }
 
-function AddContactDrawer({ onConfirm, ...rest }: AddContactModalProps) {
+function AddContactDrawer({ onConfirm, address, ...rest }: AddContactModalProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
     return (
         <BottomDrawer {...rest}>
             <div className={classes.buttonGroup}>
+                <EmojiAvatar address={address} />
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
                     {t('cancel')}
                 </ActionButton>
@@ -42,6 +43,7 @@ export type AddContactModalOpenProps = Omit<AddContactModalProps, 'open'>
 export const AddContactModal = forwardRef<SingletonModalRefCreator<AddContactModalOpenProps, boolean>>((_, ref) => {
     const [props, setProps] = useState<AddContactModalOpenProps>({
         title: '',
+        address: '',
     })
 
     const [open, dispatch] = useSingletonModal(ref, {
