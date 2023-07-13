@@ -1,4 +1,4 @@
-import { defer, delay } from '@masknet/kit'
+import { defer, timeout } from '@masknet/kit'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Providers, Web3 } from '@masknet/web3-providers'
@@ -37,12 +37,7 @@ async function pollResult(address: string) {
     const unsubscribe = subscription.subscribe(() => {
         if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) resolve(true)
     })
-    await Promise.race([
-        promise,
-        delay(10_000).then(() => {
-            throw new Error('It takes too long to create a wallet. You might try again.')
-        }),
-    ]).finally(unsubscribe)
+    return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
 }
 
 const CreateWallet = memo(function CreateWallet() {

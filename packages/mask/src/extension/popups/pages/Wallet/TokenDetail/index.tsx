@@ -11,9 +11,6 @@ import {
     PriceChartRange,
     ReloadStatus,
     TokenIcon,
-    useDimension,
-    usePriceLineChart,
-    type Dimension,
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -23,7 +20,7 @@ import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
@@ -35,6 +32,7 @@ import { useAsset } from '../hooks/index.js'
 import { useCoinStats } from './useCoinStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
+import { DIMENSION, TrendingChart } from './TrendingChart.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -124,15 +122,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const DIMENSION: Dimension = {
-    top: 32,
-    right: 16,
-    bottom: 32,
-    left: 16,
-    width: 368,
-    height: 174,
-}
-
 const TokenDetail = memo(function TokenDetail() {
     const { classes } = useStyles()
     const { t } = useI18N()
@@ -150,7 +139,7 @@ const TokenDetail = memo(function TokenDetail() {
         return leftShift(balance, asset.decimals).times(tokenPrice)
     }, [balance, asset?.decimals, tokenPrice])
 
-    const { data: trending, isLoading, isError } = useTrending(chainId, address)
+    const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
         trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
 
@@ -171,14 +160,8 @@ const TokenDetail = memo(function TokenDetail() {
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [asset, nativeToken])
 
-    const svgRef = useRef<SVGSVGElement>(null)
-    useDimension(svgRef, DIMENSION)
-
     const [chartRange, setChartRange] = useState(TrendingAPI.Days.ONE_DAY)
-
-    const { data: stats = EMPTY_LIST, refetch } = useCoinStats(chainId, address, chartRange)
-    const chartData = useMemo(() => stats.map(([date, price]) => ({ date: new Date(date), value: price })), [stats])
-    usePriceLineChart(svgRef, chartData, DIMENSION, 'token-price-line-chart', { sign: 'USD' })
+    const { data: stats = EMPTY_LIST, refetch, isLoading: isLoadingStats } = useCoinStats(chainId, address, chartRange)
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -223,30 +206,23 @@ const TokenDetail = memo(function TokenDetail() {
                     <Typography className={classes.assetValue}>
                         <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
                     </Typography>
-                    <PriceChange change={priceChange} loading={isLoading} />
+                    <PriceChange change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
-                    {!isLoading && isError ? (
+                    {!isLoadingStats && isError ? (
                         <ReloadStatus
                             onRetry={refetch}
                             className={classes.trending}
                             height={DIMENSION.height}
                             width={DIMENSION.width}
                         />
-                    ) : !isLoading && !stats.length ? (
+                    ) : !isLoadingStats && !stats.length ? (
                         <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
                             {t('not_enough_data_to_present')}
                         </EmptyStatus>
                     ) : (
-                        <svg
-                            key={`${chainId}.${address}`}
-                            className={classes.trending}
-                            ref={svgRef}
-                            width={DIMENSION.width}
-                            height={DIMENSION.height}
-                            viewBox={`0 0 ${DIMENSION.width} ${DIMENSION.height}`}
-                            preserveAspectRatio="xMidYMid meet"
-                        />
+                        <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />
                     )}
+
                     <Box display="flex" flexDirection="row" justifyContent="space-between">
                         <Box>
                             <Typography className={classes.label}>Balance</Typography>
@@ -275,7 +251,7 @@ const TokenDetail = memo(function TokenDetail() {
                         </Box>
                     </Box>
                 </Box>
-                {isLoading ? (
+                {isLoadingTrending ? (
                     <Box className={classes.info}>
                         <FungibleCoinMarketTableSkeleton />
                         <CoinMetadataTableSkeleton />
