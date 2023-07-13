@@ -1,4 +1,5 @@
 import { lazy, memo, Suspense, useEffect } from 'react'
+import { useMount } from 'react-use'
 import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import {
     CrossIsolationMessages,
@@ -12,7 +13,6 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js
 import { PersonaHeader } from './components/PersonaHeader/index.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
-import { useMount } from 'react-use'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
@@ -23,7 +23,9 @@ const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
 const ConnectedWallets = lazy(() => import('./ConnectedWallets/index.js'))
 const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
 const WalletConnect = lazy(() => import('./WalletConnect/index.js'))
+
 const r = relativeRouteOf(PopupRoutes.Personas)
+
 const Persona = memo(() => {
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()

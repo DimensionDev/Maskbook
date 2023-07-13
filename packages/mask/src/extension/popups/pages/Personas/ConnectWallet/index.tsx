@@ -210,7 +210,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
             navigate(-1)
             return
         }
-        return Services.Helper.removePopupWindow()
+        await Services.Helper.removePopupWindow()
     }, [signResult])
 
     const handleChooseAnotherWallet = useCallback(() => {
@@ -225,7 +225,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
             navigate(-1)
             return
         }
-        return Services.Helper.removePopupWindow()
+        await Services.Helper.removePopupWindow()
     }, [providerType])
 
     const handleBack = useCallback(() => {
