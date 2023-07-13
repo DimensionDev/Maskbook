@@ -354,6 +354,9 @@ importers:
       '@masknet/plugin-nextid':
         specifier: workspace:^
         version: link:../plugins/NextID
+      '@masknet/plugin-pets':
+        specifier: workspace:^
+        version: link:../plugins/Pets
       '@masknet/plugin-profilecard':
         specifier: workspace:^
         version: link:../plugins/ProfileCard
@@ -363,6 +366,9 @@ importers:
       '@masknet/plugin-rss3':
         specifier: workspace:^
         version: link:../plugins/RSS3
+      '@masknet/plugin-savings':
+        specifier: workspace:^
+        version: link:../plugins/Savings
       '@masknet/plugin-scam-warning':
         specifier: workspace:^
         version: link:../plugins/ScamWarning

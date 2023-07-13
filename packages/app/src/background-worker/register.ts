@@ -8,3 +8,4 @@ import '@masknet/plugin-cyberconnect'
 import '@masknet/plugin-vcent'
 
 import '@masknet/plugin-transak'
+import '@masknet/plugin-pets'

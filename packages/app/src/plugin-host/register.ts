@@ -28,3 +28,5 @@ import '@masknet/plugin-trader/register'
 import '@masknet/plugin-profilecard'
 
 import '@masknet/plugin-claim'
+import '@masknet/plugin-savings'
+import '@masknet/plugin-pets'
