@@ -25,9 +25,12 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
     )
 
     const personas = compact(
-        Array.from(json.personas.values()).map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey)),
+        ownerPersonas
+            .sort((p) => (p.nickname.unwrapOr(false) ? -1 : 0))
+            .map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey).trim()),
     )
     return {
+        // Names or publicKeys */
         personas,
         accounts: sumBy(ownerPersonas, (persona) => persona.linkedProfiles.size),
         posts: json.posts.size,

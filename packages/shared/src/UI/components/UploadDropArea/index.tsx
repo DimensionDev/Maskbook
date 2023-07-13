@@ -67,11 +67,12 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends HTMLProps<HTMLDivElement> {
     maxFileSize?: number
     omitSizeLimit?: boolean
+    accept?: string
     onSelectFile(file: File): void
 }
 
 export const UploadDropArea = memo(
-    ({ maxFileSize = Number.POSITIVE_INFINITY, omitSizeLimit, onSelectFile, className, ...rest }: Props) => {
+    ({ maxFileSize = Number.POSITIVE_INFINITY, omitSizeLimit, onSelectFile, className, accept, ...rest }: Props) => {
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
         const { showSnackbar } = useCustomSnackbar()
@@ -88,6 +89,7 @@ export const UploadDropArea = memo(
             const input = document.createElement('input')
             input.type = 'file'
             input.hidden = true
+            if (accept) input.accept = accept
             input.addEventListener('input', function onInput(event) {
                 handleFiles((event.currentTarget as any).files as FileList)
                 input.removeEventListener('input', onInput)
@@ -95,7 +97,7 @@ export const UploadDropArea = memo(
             })
             input.click()
             document.body.append(input)
-        }, [])
+        }, [accept])
         const [bond, { over }] = useDropArea({
             onFiles: handleFiles,
             onText: () => showMessage(101),

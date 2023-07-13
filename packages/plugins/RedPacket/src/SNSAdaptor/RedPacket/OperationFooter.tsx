@@ -109,7 +109,7 @@ export function OperationFooter({
                         <WalletConnectedBoundary
                             hideRiskWarningConfirmed
                             expectedChainId={chainId ?? ChainId.Mainnet}
-                            startIcon={<Icons.ConnectWallet size={18} />}
+                            startIcon={<Icons.Wallet size={18} />}
                             ActionButtonProps={{ variant: 'roundedDark' }}>
                             {getObtainButton(onClaimOrRefund)}
                         </WalletConnectedBoundary>

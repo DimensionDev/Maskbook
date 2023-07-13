@@ -687,7 +687,7 @@ export function ITO(props: ITO_Props) {
                                         <WalletConnectedBoundary
                                             expectedChainId={payload.chain_id}
                                             hideRiskWarningConfirmed
-                                            startIcon={<Icons.ConnectWallet size={18} />}
+                                            startIcon={<Icons.Wallet size={18} />}
                                             ActionButtonProps={{ variant: 'roundedDark' }}
                                             classes={{ button: classes.actionButton }}>
                                             <ActionButton

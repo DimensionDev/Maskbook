@@ -1,6 +1,5 @@
 import { useRef } from 'react'
-import { first, last } from 'lodash-es'
-import { Stack, Typography, useTheme } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Coin, Currency, Stat } from '../../types/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -53,20 +52,10 @@ export interface PriceChartProps extends withClasses<'root'> {
 export function PriceChart(props: PriceChartProps) {
     const t = useI18N()
     const { classes } = useStyles(props, { props })
-    const colors = useTheme().palette.maskColor
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    const dimension = {
-        ...DEFAULT_DIMENSION,
-        width: DEFAULT_DIMENSION.width,
-        height: DEFAULT_DIMENSION.height,
-    }
-
-    useDimension(svgRef, dimension)
-
-    const firstPrice = first(props.stats)?.[1] ?? 0
-    const lastPrice = last(props.stats)?.[1] ?? 0
+    useDimension(svgRef, DEFAULT_DIMENSION)
 
     usePriceLineChart(
         svgRef,
@@ -74,9 +63,9 @@ export function PriceChart(props: PriceChartProps) {
             date: new Date(date),
             value: price,
         })),
-        dimension,
+        DEFAULT_DIMENSION,
         'x-trader-price-line-chart',
-        { sign: props.currency.name ?? 'USD', color: lastPrice - firstPrice < 0 ? colors.danger : colors.success },
+        { sign: props.currency.name ?? 'USD' },
     )
 
     return (
@@ -90,9 +79,9 @@ export function PriceChart(props: PriceChartProps) {
                     <svg
                         className={classes.svg}
                         ref={svgRef}
-                        width={dimension.width}
-                        height={dimension.height}
-                        viewBox={`0 0 ${dimension.width} ${dimension.height}`}
+                        width={DEFAULT_DIMENSION.width}
+                        height={DEFAULT_DIMENSION.height}
+                        viewBox={`0 0 ${DEFAULT_DIMENSION.width} ${DEFAULT_DIMENSION.height}`}
                         preserveAspectRatio="xMidYMid meet"
                         onClick={() => {
                             props.stats.length && openWindow(props.coin?.platform_url)

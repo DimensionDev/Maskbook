@@ -1,26 +1,29 @@
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNativeToken } from '@masknet/web3-hooks-base'
 import { CoinGeckoTrending, DSearch } from '@masknet/web3-providers'
-import { type ChainId, getTokenConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 
 export function useCoinGeckoCoinId(chainId: ChainId, address?: string) {
     const isNativeToken = isNativeTokenAddress(address)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { data: coinInfo } = useQuery({
-        enabled: !isNativeToken,
+    const erc20Result = useQuery({
+        enabled: !isNativeToken && !!address,
         queryKey: ['coin-gecko', 'coin-info', 'by-address', address],
         queryFn: async () => {
-            return CoinGeckoTrending.getCoinInfoByAddress(address ?? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS'))
+            const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address!)
+            return coinInfo?.id
         },
     })
 
-    const { data: result = EMPTY_LIST } = useQuery({
+    const nativeTokenResult = useQuery({
         enabled: !!nativeToken?.symbol && isNativeToken,
         queryKey: ['native-token-result', nativeToken?.symbol],
-        queryFn: async () => DSearch.search<Web3Helper.TokenResultAll>(nativeToken!.symbol),
+        queryFn: async () => {
+            const results = await DSearch.search<Web3Helper.TokenResultAll>(nativeToken!.symbol)
+            return results[0]?.id
+        },
     })
-
-    return isNativeToken ? result[0]?.id : coinInfo?.id
+    return isNativeToken ? nativeTokenResult : erc20Result
 }
