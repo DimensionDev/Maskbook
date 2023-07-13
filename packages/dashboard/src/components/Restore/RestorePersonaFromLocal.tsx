@@ -49,7 +49,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const [file, setFile] = useState<File | null>(null)
-    const [summary, setSummary] = useState<(BackupSummary & { countOfWallets: number }) | null>(null)
+    const [summary, setSummary] = useState<BackupSummary | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
