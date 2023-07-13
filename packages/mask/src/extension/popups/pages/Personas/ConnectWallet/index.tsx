@@ -206,7 +206,11 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [currentPersona, account, chainId, account, providerType, bindProof])
 
     const handleCancel = useCallback(() => {
-        return Services.Helper.removePopupWindow()
+        if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
+            navigate(-1)
+            return
+        }
+        await Services.Helper.removePopupWindow()
     }, [signResult])
 
     const handleChooseAnotherWallet = useCallback(() => {
@@ -217,11 +221,14 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
 
     const handleDone = useCallback(async () => {
         await Web3.disconnect({ providerType })
+        if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
+            navigate(-1)
+            return
+        }
         await Services.Helper.removePopupWindow()
     }, [providerType])
 
     const handleBack = useCallback(() => {
-        console.log('done1')
         navigate(urlcat(PopupRoutes.Personas, { tab: HomeTabType.ConnectedWallets, disableNewWindow: true }), {
             replace: true,
         })
