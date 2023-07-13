@@ -6,6 +6,11 @@ import {
     type PluginMessageEmitterItem,
 } from '@masknet/plugin-infra'
 import type { InternalMessage_PluginMessage } from '../background-worker/message.js'
+import {
+    __workaround__replaceImplementationOfCrossIsolationMessage__,
+    __workaround__replaceImplementationOfMaskMessage__,
+    serializer,
+} from '@masknet/shared-base'
 export type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
@@ -61,14 +66,12 @@ if (typeof SharedWorker === 'function') {
     }
 
     const cache = new Map<string, PluginMessageEmitter<unknown>>()
-    __workaround__replaceImplementationOfCreatePluginMessage__(function (
-        pluginID: string,
-        serializer: Serialization | undefined,
-    ): PluginMessageEmitter<unknown> {
-        if (cache.has(pluginID)) return cache.get(pluginID)! as PluginMessageEmitter<unknown>
+
+    function createEmitter(domain: string, serializer: Serialization | undefined) {
+        if (cache.has(domain)) return cache.get(domain)! as PluginMessageEmitter<unknown>
 
         const listeners = new Map<string, Set<(data: unknown) => void>>()
-        addListener(pluginID, async (message) => {
+        addListener(domain, async (message) => {
             const [type, data] = message as InternalMessage_PluginMessage
             dispatchData(type, await de_ser(data))
         })
@@ -106,10 +109,10 @@ if (typeof SharedWorker === 'function') {
                     getEventName(eventName).delete(callback)
                 },
                 async sendByBroadcast(data) {
-                    postMessage(pluginID, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                    postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                 },
                 async sendToAll(data) {
-                    postMessage(pluginID, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                    postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                     dispatchData(eventName, data)
                 },
                 sendToLocal(data) {
@@ -117,14 +120,22 @@ if (typeof SharedWorker === 'function') {
                 },
                 async sendToVisiblePages(data) {
                     if (document.visibilityState === 'visible') dispatchData(eventName, data)
-                    postMessage(pluginID, [eventName, await ser(data), true] satisfies InternalMessage_PluginMessage)
+                    postMessage(domain, [eventName, await ser(data), true] satisfies InternalMessage_PluginMessage)
                 },
             }
             return value
         })
-        cache.set(pluginID, emitter)
+        cache.set(domain, emitter)
         return emitter
+    }
+    __workaround__replaceImplementationOfCreatePluginMessage__(function (
+        pluginID: string,
+        serializer: Serialization | undefined,
+    ): PluginMessageEmitter<unknown> {
+        return createEmitter('plugin:' + pluginID, serializer)
     })
+    __workaround__replaceImplementationOfCrossIsolationMessage__(createEmitter('cross-isolation', undefined))
+    __workaround__replaceImplementationOfMaskMessage__(createEmitter('mask', serializer))
 }
 
 // Ensure plugin host is ready by blocking this file

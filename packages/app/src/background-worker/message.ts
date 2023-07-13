@@ -1,6 +1,10 @@
 import * as Service from './service.js'
 import { AsyncCall, type CallbackBasedChannel } from 'async-call-rpc/full'
-import { serializer } from '@masknet/shared-base'
+import {
+    __workaround__replaceImplementationOfCrossIsolationMessage__,
+    __workaround__replaceImplementationOfMaskMessage__,
+    serializer,
+} from '@masknet/shared-base'
 import { pluginWorkerReadyPromise } from './ready.js'
 import {
     __workaround__replaceImplementationOfCreatePluginMessage__,
@@ -48,14 +52,11 @@ export type InternalMessage_PluginMessage = [type: string, data: unknown, requir
 
     const cache = new Map<string, PluginMessageEmitter<unknown>>()
     __workaround__replaceIsBackground__(() => true)
-    __workaround__replaceImplementationOfCreatePluginMessage__(function (
-        pluginID: string,
-        serializer: Serialization | undefined,
-    ): PluginMessageEmitter<unknown> {
-        if (cache.has(pluginID)) return cache.get(pluginID)! as PluginMessageEmitter<unknown>
+    function createEmitter(domain: string, serializer: Serialization | undefined) {
+        if (cache.has(domain)) return cache.get(domain)! as PluginMessageEmitter<unknown>
 
         const listeners = new Map<string, Set<(data: unknown) => void>>()
-        addListener(pluginID, async (message) => {
+        addListener(domain, async (message) => {
             const [type, data] = message as InternalMessage_PluginMessage
             dispatchData(type, await de_ser(data))
         })
@@ -92,28 +93,32 @@ export type InternalMessage_PluginMessage = [type: string, data: unknown, requir
                     getEventName(eventName).delete(callback)
                 },
                 async sendByBroadcast(data) {
-                    broadcastMessage(pluginID, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                    broadcastMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                 },
                 async sendToAll(data) {
-                    broadcastMessage(pluginID, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                    broadcastMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                     dispatchData(eventName, data)
                 },
                 sendToLocal(data) {
                     dispatchData(eventName, data)
                 },
                 async sendToVisiblePages(data) {
-                    broadcastMessage(pluginID, [
-                        eventName,
-                        await ser(data),
-                        true,
-                    ] satisfies InternalMessage_PluginMessage)
+                    broadcastMessage(domain, [eventName, await ser(data), true] satisfies InternalMessage_PluginMessage)
                 },
             }
             return value
         })
-        cache.set(pluginID, emitter)
+        cache.set(domain, emitter)
         return emitter
+    }
+    __workaround__replaceImplementationOfCreatePluginMessage__(function (
+        pluginID: string,
+        serializer: Serialization | undefined,
+    ): PluginMessageEmitter<unknown> {
+        return createEmitter('plugin:' + pluginID, serializer)
     })
+    __workaround__replaceImplementationOfCrossIsolationMessage__(createEmitter('cross-isolation', undefined))
+    __workaround__replaceImplementationOfMaskMessage__(createEmitter('mask', serializer))
 }
 
 // RPC
