@@ -115,7 +115,7 @@ const avoidMistakeRules = {
     // '@masknet/string-no-data-url': 'error', // data:...
     '@masknet/unicode-no-bidi': 'error',
     '@masknet/unicode-no-invisible': 'error',
-    '@masknet/unicode-specific-set': 'warn',
+    '@masknet/unicode-specific-set': 'off',
 
     // Confusing code
     'no-bitwise': 'error', // need mark out

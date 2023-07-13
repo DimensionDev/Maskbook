@@ -839,11 +839,69 @@ export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
         u: () => new URL('./general/BackUp.svg', import.meta.url),
     },
 ])
+export const BaseClose = /*#__PURE__*/ __createIcon('BaseClose', [
+    {
+        u: () => new URL('./general/BaseClose.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        d: 'M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        d: 'M7.757 7.757c.352-.351.985-.287 1.416.143l6.927 6.927c.43.43.494 1.064.142 1.416-.351.351-.985.287-1.415-.143L7.9 9.173c-.43-.43-.494-1.064-.143-1.416Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        d: 'M16.242 7.757c.352.352.288.985-.142 1.416L9.173 16.1c-.43.43-1.064.494-1.416.142-.351-.351-.287-.985.143-1.415L14.827 7.9c.43-.43 1.064-.494 1.415-.143Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const BaseContacts = /*#__PURE__*/ __createIcon('BaseContacts', [
     {
         u: () => new URL('./general/BaseContacts.svg', import.meta.url),
     },
 ])
+export const BaseUpload = /*#__PURE__*/ __createIcon(
+    'BaseUpload',
+    [
+        {
+            u: () => new URL('./general/BaseUpload.svg', import.meta.url),
+            j: () =>
+                /*#__PURE__*/ _jsx('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    viewBox: '0 0 24 25',
+                    children: /*#__PURE__*/ _jsxs('g', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'm12 5.12 4.566 4.565a.8.8 0 0 1-1.131 1.131L12.8 8.182v7.569a.8.8 0 0 1-1.6 0V8.18l-2.634 2.635a.8.8 0 0 1-1.131-1.131L12 5.119Z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M5.8 15.45v3h12.4v-3h1.6v3.6a1 1 0 0 1-1 1H5.2a1 1 0 0 1-1-1v-3.6h1.6Z',
+                            }),
+                        ],
+                    }),
+                }),
+            s: true,
+        },
+    ],
+    [24, 25],
+)
 export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
     {
         u: () => new URL('./general/BaseUser.svg', import.meta.url),
@@ -1237,25 +1295,22 @@ export const Decrease = /*#__PURE__*/ __createIcon('decrease', [
         u: () => new URL('./general/decrease.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
-                viewBox: '0 0 20 20',
-                fill: 'none',
                 xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
                 children: /*#__PURE__*/ _jsxs('g', {
-                    id: 'base/decrease',
+                    id: 'decrease_svg__base/decrease',
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    clipRule: 'evenodd',
                     children: [
                         /*#__PURE__*/ _jsx('path', {
-                            id: 'Vector (Stroke)',
-                            fillRule: 'evenodd',
-                            clipRule: 'evenodd',
-                            d: 'M10.0001 3.99935C6.68637 3.99935 4.00008 6.68564 4.00008 9.99935C4.00008 13.3131 6.68637 15.9993 10.0001 15.9993C13.3138 15.9993 16.0001 13.3131 16.0001 9.99935C16.0001 6.68564 13.3138 3.99935 10.0001 3.99935ZM2.66675 9.99935C2.66675 5.94926 5.94999 2.66602 10.0001 2.66602C14.0502 2.66602 17.3334 5.94926 17.3334 9.99935C17.3334 14.0494 14.0502 17.3327 10.0001 17.3327C5.94999 17.3327 2.66675 14.0494 2.66675 9.99935Z',
-                            fill: 'currentColor',
+                            id: 'decrease_svg__Vector (Stroke)',
+                            d: 'M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm-7.333 6a7.333 7.333 0 1 1 14.666 0 7.333 7.333 0 0 1-14.666 0Z',
                         }),
                         /*#__PURE__*/ _jsx('path', {
-                            id: 'Vector (Stroke)_2',
-                            fillRule: 'evenodd',
-                            clipRule: 'evenodd',
-                            d: 'M6.66663 9.99937C6.66663 9.63118 6.9651 9.3327 7.33329 9.3327H12.6666C13.0348 9.3327 13.3333 9.63118 13.3333 9.99937C13.3333 10.3676 13.0348 10.666 12.6666 10.666H7.33329C6.9651 10.666 6.66663 10.3676 6.66663 9.99937Z',
-                            fill: 'currentColor',
+                            id: 'decrease_svg__Vector (Stroke)_2',
+                            d: 'M6.667 10c0-.369.298-.667.666-.667h5.334a.667.667 0 1 1 0 1.333H7.333a.667.667 0 0 1-.666-.667Z',
                         }),
                     ],
                 }),

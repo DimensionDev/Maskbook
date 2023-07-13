@@ -3,7 +3,6 @@ import { useAsyncRetry } from 'react-use'
 import { useMatch, useLocation } from 'react-router-dom'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import Services from '../../../../../service.js'
 import { useConnected } from '../../hooks/useConnected.js'
 import { WalletHeaderUI } from './UI.js'
 import { getEvmNetworks } from '../../../../../../utils/networks.js'
@@ -66,6 +65,6 @@ export const WalletHeader = memo(function WalletHeader() {
             wallet={wallet}
         />
     ) : (
-        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
+        <NormalHeader />
     )
 })

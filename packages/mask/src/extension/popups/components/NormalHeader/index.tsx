@@ -38,7 +38,6 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NormalHeaderProps {
     onlyTitle?: boolean
-    onClose(): void
 }
 
 function canNavBack() {
@@ -47,7 +46,7 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onlyTitle, onClose }) {
+export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onlyTitle }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { title, extension, customBackHandler } = useContext(PageTitleContext)

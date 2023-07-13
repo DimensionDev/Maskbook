@@ -1,166 +1,100 @@
-import urlcat from 'urlcat'
-import { memo, useState } from 'react'
-import { useAsync } from 'react-use'
-import { useNavigate } from 'react-router-dom'
+import { ElementAnchor } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useContainer } from 'unstated-next'
-import { Button, Link, List } from '@mui/material'
-import {
-    isSameAddress,
-    type RecentTransactionComputed,
-    type TransactionDescriptor,
-    TransactionDescriptorType,
-} from '@masknet/web3-shared-base'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { explorerResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { WalletContext } from '../../hooks/useWalletContext.js'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useAccount } from '@masknet/web3-hooks-base'
+import { DeBankHistory } from '@masknet/web3-providers'
+import type { Transaction } from '@masknet/web3-shared-evm'
+import { List } from '@mui/material'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { range } from 'lodash-es'
+import { memo, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { ReplaceType } from '../../type.js'
-import { ActivityListItem } from './ActivityListItem.js'
-import { EmptyStatus } from '@masknet/shared'
+import { ActivityListItem, ActivityListItemSkeleton } from './ActivityListItem.js'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     list: {
         backgroundColor: '#ffffff',
-        padding: 0,
+        padding: theme.spacing(2),
     },
-    buttonContainer: {
-        padding: 16,
+    item: {
+        '&:not(:last-of-type)': {
+            marginBottom: theme.spacing(1.5),
+        },
     },
-    moreButton: {
-        fontWeight: 600,
-        fontSize: 14,
-        color: '#1C68F3',
-        lineHeight: '20px',
-        padding: '10px 0',
-        borderRadius: 20,
-        backgroundColor: '#ffffff',
-    },
+}))
 
-    empty: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-        fontSize: 12,
-        lineHeight: '16px',
-        fontWeight: 600,
-    },
-})
+export interface ActivityListProps {}
 
-export interface ActivityListProps {
-    tokenAddress?: string
-}
-
-export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
-    const { transactions } = useContainer(WalletContext)
-    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
-    const { value: dataSource = EMPTY_LIST } = useAsync(async () => {
-        if (!TransactionFormatter) return
-        const formattedTransactions = await Promise.all(
-            transactions.map(async (transaction) => {
-                const formatterTransaction = await TransactionFormatter.formatTransaction(chainId, transaction._tx)
-
-                return {
-                    formatterTransaction,
-                    transaction,
-                }
-            }),
-        )
-
-        return formattedTransactions.filter(({ transaction, formatterTransaction }) => {
-            if (!tokenAddress) return true
-            else if (isNativeTokenAddress(tokenAddress))
-                return formatterTransaction.type === TransactionDescriptorType.TRANSFER
-            else if (formatterTransaction.type === TransactionDescriptorType.INTERACTION) {
-                return isSameAddress(transaction._tx.to, tokenAddress)
-            }
-
-            return false
-        })
-    }, [chainId, tokenAddress, transactions])
-
-    return (
-        <ActivityListUI
-            dataSource={dataSource}
-            chainId={chainId}
-            formatterTransactionLink={explorerResolver.transactionLink}
-        />
-    )
-})
-
-export interface ActivityListUIProps {
-    dataSource: Array<{
-        transaction: RecentTransactionComputed<ChainId, Transaction>
-        formatterTransaction: TransactionDescriptor<ChainId, Transaction, TransactionParameter>
-    }>
-    chainId: ChainId
-    formatterTransactionLink?: (chainId: ChainId, id: string) => string
-}
-
-export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, formatterTransactionLink }) => {
+export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     const { classes } = useStyles()
-    const { t } = useI18N()
-    const [isExpand, setExpand] = useState(!(dataSource.length > 3))
     const navigate = useNavigate()
-    const { setTransaction } = useContainer(WalletContext)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { data, isFetching, fetchNextPage } = useInfiniteQuery({
+        queryKey: ['debank', 'all-history', account],
+        queryFn: async ({ pageParam }) => {
+            return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
+        },
+        getNextPageParam: (lastPage) => lastPage.nextIndicator,
+    })
+    const transactions = useMemo(() => data?.pages.flatMap((p) => p.data) || EMPTY_LIST, [data?.pages])
 
-    if (dataSource.length === 0)
-        return (
-            <EmptyStatus className={classes.empty} height="100%">
-                {t('popups_wallet_no_transactions')}
-            </EmptyStatus>
-        )
+    const handleSpeedup = useCallback(
+        (transaction: Transaction) => {
+            navigate(
+                urlcat(PopupRoutes.ReplaceTransaction, {
+                    type: ReplaceType.SPEED_UP,
+                }),
+                {
+                    state: { transaction },
+                },
+            )
+        },
+        [navigate],
+    )
+
+    const handleCancel = useCallback(
+        (transaction: Transaction) => {
+            navigate(
+                urlcat(PopupRoutes.ReplaceTransaction, {
+                    type: ReplaceType.CANCEL,
+                }),
+                {
+                    state: { transaction },
+                },
+            )
+        },
+        [navigate],
+    )
+
+    const handleView = useCallback(
+        (transaction: Transaction) => {
+            navigate(PopupRoutes.TransactionDetail, {
+                // No available API to fetch a transaction info yet.
+                // Just pass target transaction to the detail page.
+                state: { transaction },
+            })
+        },
+        [navigate],
+    )
 
     return (
         <>
             <List dense className={classes.list}>
-                {dataSource.slice(0, !isExpand ? 3 : undefined).map(({ transaction, formatterTransaction }, index) => {
-                    return (
-                        <Link
-                            href={formatterTransactionLink?.(chainId, transaction.indexId)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            key={index}
-                            style={{ textDecoration: 'none' }}>
-                            <ActivityListItem
-                                transaction={transaction}
-                                formatterTransaction={formatterTransaction}
-                                toAddress={transaction._tx.to}
-                                onSpeedUpClick={(e) => {
-                                    e.preventDefault()
-                                    setTransaction(transaction)
-                                    navigate(
-                                        urlcat(PopupRoutes.ReplaceTransaction, {
-                                            type: ReplaceType.SPEED_UP,
-                                        }),
-                                    )
-                                }}
-                                onCancelClick={(e) => {
-                                    e.preventDefault()
-                                    setTransaction(transaction)
-                                    navigate(
-                                        urlcat(PopupRoutes.ReplaceTransaction, {
-                                            type: ReplaceType.CANCEL,
-                                        }),
-                                    )
-                                }}
-                            />
-                        </Link>
-                    )
-                })}
+                {transactions.map((transaction) => (
+                    <ActivityListItem
+                        key={transaction.id}
+                        className={classes.item}
+                        transaction={transaction}
+                        onSpeedup={handleSpeedup}
+                        onCancel={handleCancel}
+                        onView={handleView}
+                    />
+                ))}
+                {isFetching ? range(4).map((i) => <ActivityListItemSkeleton key={i} className={classes.item} />) : null}
             </List>
-            {!isExpand ? (
-                <div className={classes.buttonContainer}>
-                    <Button fullWidth className={classes.moreButton} onClick={() => setExpand(true)}>
-                        {t('more')}
-                    </Button>
-                </div>
-            ) : null}
+            <ElementAnchor callback={() => fetchNextPage()} key={transactions.length} height={10} />
         </>
     )
 })

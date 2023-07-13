@@ -1,10 +1,7 @@
 import type { Transaction } from './types.js'
 import type { ExplorerAPI } from '../entry-types.js'
 
-export function toTransaction(transaction: Transaction): ExplorerAPI.Transaction & {
-    status: '0' | '1'
-    confirmations: number
-} {
+export function toTransaction(transaction: Transaction): ExplorerAPI.Transaction {
     return {
         nonce: Number.parseInt(transaction.nonce, 10),
         blockHash: transaction.blockHash,

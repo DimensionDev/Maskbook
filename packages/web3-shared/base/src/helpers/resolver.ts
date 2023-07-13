@@ -252,6 +252,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
 export const resolveCurrencyName = createLookupTableResolver<CurrencyType, string>(
     {
         [CurrencyType.BTC]: 'BTC',
+        [CurrencyType.ETH]: 'ETH',
         [CurrencyType.NATIVE]: 'ETH',
         [CurrencyType.USD]: 'USD',
     },

@@ -19,6 +19,7 @@ import type {
 export enum CurrencyType {
     NATIVE = 'native',
     BTC = 'btc',
+    ETH = 'eth',
     USD = 'usd',
 }
 
@@ -167,9 +168,7 @@ export interface Identity {
     link?: string
 }
 
-export type Price = {
-    [key in CurrencyType]?: string
-}
+export type Price = Partial<Record<CurrencyType, string>>
 
 export interface Contact {
     name: string
@@ -782,32 +781,37 @@ export interface AddressName {
     resolvedAddress?: string
 }
 
+type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
+    name: string
+    symbol: string
+    amount: string
+    direction: string
+}
+
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: string
-    filterType?: string
+    type?: LiteralUnion<'burn' | 'contract interaction'>
+    cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
+    cateName?: string
+    /** address */
     from: string
+    /** address */
     to: string
     /** unix timestamp */
     timestamp: number
     /** 0: failed 1: succeed */
     status?: 0 | 1
-    /** transferred tokens */
-    tokens: Array<
-        Token<ChainId, SchemaType> & {
-            name: string
-            symbol: string
-            amount: string
-            direction: string
-        }
-    >
+    /** transferred assets */
+    assets: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */
     fee?: Price
     input?: string
     hash?: string
     methodId?: string
     blockNumber?: number
+    isScam?: boolean
+    nonce?: number
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
