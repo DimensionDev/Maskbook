@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Wallet } from '@masknet/shared-base'
-import { ChainIcon, CopyButton, FormattedAddress, WalletIcon } from '@masknet/shared'
+import { ChainIcon, CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
@@ -133,7 +133,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon size={30} mainIcon={currentNetwork.icon} />
+                        <ImageIcon size={30} icon={currentNetwork.icon} />
                     ) : (
                         <ChainIcon size={30} name={currentNetwork.name} />
                     )}
