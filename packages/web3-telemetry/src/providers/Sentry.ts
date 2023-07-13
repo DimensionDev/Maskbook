@@ -86,6 +86,9 @@ export class SentryAPI implements Provider<Event, Event> {
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
                 if (event.message && IGNORE_ERRORS.some((x) => event.message?.includes(x))) return null
 
+                console.log('DEBUG: sentry is sending an event.')
+                console.log(event)
+
                 // send automatically by sentry tracker
                 if (!event.tags?.group_id) {
                     // ignored in development mode
