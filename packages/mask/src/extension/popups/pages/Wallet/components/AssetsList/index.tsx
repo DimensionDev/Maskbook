@@ -10,6 +10,7 @@ import { isNaN, range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
+import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 
@@ -65,7 +66,7 @@ export const AssetsList = memo(function AssetsList() {
     const { assets, assetsLoading, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
-        navigate(`${PopupRoutes.TokenDetail}/${asset.address}`)
+        navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
     }, [])
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
 

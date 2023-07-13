@@ -1,5 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { createSubscriptionFromAsync, CrossIsolationMessages, EMPTY_LIST, MaskMessages } from '@masknet/shared-base'
+import {
+    createSubscriptionFromAsync,
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    MaskMessages,
+    Sniffings,
+} from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '../extension/service.js'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
@@ -37,11 +43,19 @@ export const RestPartOfPluginUIContextShared: Omit<
     fetchJSON: Services.Helper.fetchJSON,
 
     openWalletConnectDialog: async (uri: string) => {
+        if (Sniffings.is_popup_page) {
+            CrossIsolationMessages.events.popupWalletConnectEvent.sendToAll({ uri, open: true })
+            return
+        }
         await WalletConnectQRCodeModal.openAndWaitForClose({
             uri,
         })
     },
     closeWalletConnectDialog: () => {
+        if (Sniffings.is_popup_page) {
+            CrossIsolationMessages.events.popupWalletConnectEvent.sendToAll({ open: false })
+            return
+        }
         WalletConnectQRCodeModal.close()
     },
 

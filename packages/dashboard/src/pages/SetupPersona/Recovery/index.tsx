@@ -16,8 +16,9 @@ import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnem
 import { Services } from '../../../API.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
-import { SignUpRoutePath } from '../../SignUp/routePath.js'
 import { UserProvider } from '../../Settings/hooks/UserContext.js'
+import urlcat from 'urlcat'
+import { SignUpRoutePath } from '../../SignUp/routePath.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -127,16 +128,19 @@ export const Recovery = memo(function Recovery() {
         [t, navigate],
     )
 
-    const onRestore = useCallback(async () => {
-        if (!currentPersona) {
-            const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona)
-                await delay(1000)
+    const onRestore = useCallback(
+        async (count?: number) => {
+            if (!currentPersona) {
+                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+                if (lastedPersona) {
+                    await changeCurrentPersona(lastedPersona)
+                    await delay(1000)
+                }
             }
-        }
-        navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
-    }, [!currentPersona, changeCurrentPersona, navigate])
+            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count }), { replace: true })
+        },
+        [!currentPersona, changeCurrentPersona, navigate],
+    )
 
     return (
         <Box>

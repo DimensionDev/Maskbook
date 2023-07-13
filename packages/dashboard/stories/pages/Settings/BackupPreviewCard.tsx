@@ -18,6 +18,7 @@ export const BackupPreviewCard = of({
             wallets: ['0x0000000000000000000000000000000000000000', '0x1111111111111111111111111111111111111111'],
             createdAt: 0,
             relations: 0,
+            countOfWallets: 0,
         },
     },
 })
