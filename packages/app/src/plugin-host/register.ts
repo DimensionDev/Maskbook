@@ -9,7 +9,6 @@ import '@masknet/plugin-vcent'
 
 import '@masknet/plugin-ito'
 import '@masknet/plugin-redpacket'
-import '@masknet/plugin-file-service'
 import '@masknet/plugin-maskbox'
 
 import '@masknet/plugin-flow'

@@ -4,7 +4,7 @@ import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
 
@@ -16,8 +16,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_valuables_description" />,
-            name: <Trans i18nKey="plugin_valuables_name" />,
+            description: <Trans i18nKey="plugin_valuables_description" ns={PluginID.Valuables} />,
+            name: <Trans i18nKey="plugin_valuables_name" ns={PluginID.Valuables} />,
             marketListSortingPriority: 10,
             tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
             icon: <Icons.Valuables size={36} variant="dark" />,

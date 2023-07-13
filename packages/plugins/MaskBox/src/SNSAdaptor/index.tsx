@@ -52,7 +52,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 marketListSortingPriority: 14,
                 icon,
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
-                description: <Trans i18nKey="plugin_mask_box_description" />,
+                description: <Trans i18nKey="plugin_mask_box_description" ns={PluginID.MaskBox} />,
                 category: 'dapp',
                 iconFilterColor,
                 name,

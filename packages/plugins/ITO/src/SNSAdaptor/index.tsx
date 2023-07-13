@@ -86,6 +86,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <Trans
                         i18nKey="plugin_ito_description"
                         values={{ sns: SOCIAL_MEDIA_NAME[getSiteType() ?? EnhanceableSite.Twitter] }}
+                        ns={PluginID.ITO}
                     />
                 ),
                 category: 'dapp',
