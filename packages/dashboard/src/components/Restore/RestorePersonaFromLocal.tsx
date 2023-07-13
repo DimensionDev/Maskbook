@@ -117,7 +117,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             }
             await Services.Backup.restoreBackup(backupValue)
 
-            await onRestore(summary?.countOfSmartPay)
+            await onRestore(summary?.countOfWallet)
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }

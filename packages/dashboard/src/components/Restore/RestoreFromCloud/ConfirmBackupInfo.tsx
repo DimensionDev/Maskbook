@@ -47,7 +47,6 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
         }
         dispatch({ type: 'SET_LOADING', loading: false })
 
-        // const { info,  } = backupNormalized.val
         dispatch({ type: 'SET_PASSWORD', password })
         dispatch({ type: 'TO_STEP', step: RestoreStep.Restore })
         dispatch({ type: 'SET_BACKUP_SUMMARY', summary: summary.val, backupDecrypted })

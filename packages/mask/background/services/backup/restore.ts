@@ -3,7 +3,7 @@ import { requestHostPermission } from '../helper/request-permission.js'
 import { restoreNormalizedBackup } from './internal_restore.js'
 import { Result } from 'ts-results-es'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
-import { compact } from 'lodash-es'
+import { compact, sum } from 'lodash-es'
 import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { fromBase64URL } from '@masknet/shared-base'
 
@@ -26,7 +26,7 @@ export async function generateBackupSummary(raw: string) {
 
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [...compact(personas), ...wallets])
-        return getBackupSummary(backup, accounts.filter((x) => x.deployed).length)
+        return getBackupSummary(backup, sum([accounts.filter((x) => x.deployed).length, wallets.length]))
     })
 }
 
