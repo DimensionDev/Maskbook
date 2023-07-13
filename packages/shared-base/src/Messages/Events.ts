@@ -252,6 +252,8 @@ export interface PersonaSignRequestEvent {
 
 export type WalletsUpdatedEvent = void
 
+export type ContactsUpdatedEvent = void
+
 export interface RequestsUpdatedEvent {
     hasRequest: boolean
 }

@@ -37,6 +37,7 @@ export {
 } from './password.js'
 
 export * from './network.js'
+export * from './contact.js'
 
 // locker
 export { isLocked, lockWallet, unlockWallet } from './locker.js'

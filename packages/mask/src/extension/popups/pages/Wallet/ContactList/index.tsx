@@ -9,7 +9,7 @@ import {
     useWallets,
 } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Link, List, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, Link, List, ListItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
@@ -105,7 +105,7 @@ const ContactListUI = memo(function TransferUI() {
     const isNativeToken = !address || isNativeTokenAddress(address)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { receiver, setReceiver, receiverValidationMessage } = ContactsContext.useContainer()
+    const { receiver, setReceiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
     const theme = useTheme()
 
     const { data: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
@@ -124,37 +124,27 @@ const ContactListUI = memo(function TransferUI() {
             <Box className={classes.page}>
                 <AddContactInputPanel />
                 <Box className={classes.contactsPanel}>
+                    {contacts.length ? (
+                        <Typography className={classes.contactTitle}>
+                            {t('wallet_transfer_my_contacts_title')}
+                        </Typography>
+                    ) : null}
+                    <List className={classes.contactsList}>
+                        {contacts.map((contact, index) => {
+                            return (
+                                <Stack key={index}>
+                                    <ContactListItem address={contact.id} name={contact.name} />
+                                </Stack>
+                            )
+                        })}
+                    </List>
                     <Typography className={classes.contactTitle}>{t('wallet_transfer_my_wallets_title')}</Typography>
                     <List className={classes.contactsList}>
                         {wallets.map((wallet, index) => {
                             return (
-                                <ListItem key={index} classes={{ root: classes.contactsListItem }}>
-                                    <div className={classes.contactsListItemInfo}>
-                                        <EmojiAvatar
-                                            address={wallet.address}
-                                            className={classes.emojiAvatar}
-                                            sx={{ width: 24, height: 24 }}
-                                        />
-                                        <div>
-                                            <Typography className={classes.nickname}>{wallet.name}</Typography>
-                                            <Typography className={classes.identifier}>
-                                                <FormattedAddress
-                                                    address={wallet.address}
-                                                    formatter={formatEthereumAddress}
-                                                    size={4}
-                                                />
-                                                <Link
-                                                    onClick={(event) => event.stopPropagation()}
-                                                    href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer">
-                                                    <Icons.PopupLink className={classes.icon} />
-                                                </Link>
-                                            </Typography>
-                                        </div>
-                                    </div>
-                                    <Icons.More size={24} className={classes.iconMore} />
-                                </ListItem>
+                                <Stack key={index}>
+                                    <ContactListItem address={wallet.address} name={wallet.name} />
+                                </Stack>
                             )
                         })}
                     </List>
@@ -173,6 +163,38 @@ const ContactListUI = memo(function TransferUI() {
         </div>
     )
 })
+
+interface ContactListItemProps {
+    address: string
+    name: string
+}
+
+function ContactListItem({ address, name }: ContactListItemProps) {
+    const { classes } = useStyles()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
+    return (
+        <ListItem classes={{ root: classes.contactsListItem }}>
+            <div className={classes.contactsListItemInfo}>
+                <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
+                <div>
+                    <Typography className={classes.nickname}>{name}</Typography>
+                    <Typography className={classes.identifier}>
+                        <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />
+                        <Link
+                            onClick={(event) => event.stopPropagation()}
+                            href={explorerResolver.addressLink(chainId, address ?? '')}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <Icons.PopupLink className={classes.icon} />
+                        </Link>
+                    </Typography>
+                </div>
+            </div>
+            <Icons.More size={24} className={classes.iconMore} />
+        </ListItem>
+    )
+}
 
 function ContactList() {
     return (

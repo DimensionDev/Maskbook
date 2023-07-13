@@ -1,14 +1,16 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useLookupAddress } from '@masknet/web3-hooks-base'
 import { isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useI18N } from '../../../../../utils/index.js'
+import { useContacts } from '../../../hook/useContacts.js'
 
-function useContacts() {
+function useContactsContext() {
     const { t } = useI18N()
     const [receiver, setReceiver] = useState('')
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { value: contacts = EMPTY_LIST, retry: retryContacts } = useContacts()
 
     const { value: registeredAddress = '', error: resolveDomainError } = useLookupAddress(
         NetworkPluginID.PLUGIN_EVM,
@@ -30,7 +32,16 @@ function useContacts() {
     const address = isValidAddress(receiver) ? receiver : isValidAddress(registeredAddress) ? registeredAddress : ''
     const ensName = isValidDomain(receiver) ? receiver : ''
 
-    return { address, ensName, receiver, registeredAddress, setReceiver, receiverValidationMessage }
+    return {
+        contacts,
+        retryContacts,
+        address,
+        ensName,
+        receiver,
+        registeredAddress,
+        setReceiver,
+        receiverValidationMessage,
+    }
 }
 
-export const ContactsContext = createContainer(useContacts)
+export const ContactsContext = createContainer(useContactsContext)

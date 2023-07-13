@@ -9,6 +9,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
+import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -66,6 +67,11 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
         return ''
     }, [t, addressError])
 
+    const addContact = useCallback(async () => {
+        await WalletRPC.addContact({ name, id: address })
+        onConfirm?.()
+    }, [name, address])
+
     return (
         <BottomDrawer {...rest}>
             <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
@@ -91,7 +97,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
                     {t('cancel')}
                 </ActionButton>
-                <ActionButton onClick={onConfirm} className={classes.button} disabled={addressError || !name || !name}>
+                <ActionButton onClick={addContact} className={classes.button} disabled={addressError || !name || !name}>
                     {t('confirm')}
                 </ActionButton>
             </div>

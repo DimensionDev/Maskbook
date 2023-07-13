@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
 const AddContactInputPanel = memo(function AddContactInputPanel() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress } =
+    const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress, retryContacts } =
         ContactsContext.useContainer()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -71,6 +71,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
             title: t('wallet_add_contact'),
             address,
             name: ensName,
+            onConfirm: retryContacts,
         })
     }, [address, ensName])
 
