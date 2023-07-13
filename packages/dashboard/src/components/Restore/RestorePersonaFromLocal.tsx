@@ -5,9 +5,9 @@ import { FileFrame, UploadDropArea } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
-import { Messages, Services } from '../../API.js'
+import { PluginServices, Services } from '../../API.js'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
 import { BackupPreview } from '../../pages/Settings/components/BackupPreview.js'
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface RestoreFromLocalProps {
-    onRestore: () => Promise<void>
+    onRestore: (count?: number) => Promise<void>
 }
 
 export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ onRestore }: RestoreFromLocalProps) {
@@ -51,7 +51,6 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const [file, setFile] = useState<File | null>(null)
     const [summary, setSummary] = useState<BackupSummary | null>(null)
     const [backupValue, setBackupValue] = useState('')
-    const [backupId, setBackupId] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
@@ -82,10 +81,9 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     useAsync(async () => {
         if (!backupValue) return
 
-        const backupInfo = await Services.Backup.addUnconfirmedBackup(backupValue)
-        if (backupInfo.ok) {
-            setSummary(backupInfo.val.info)
-            setBackupId(backupInfo.val.id)
+        const summary = await Services.Backup.generateBackupSummary(backupValue)
+        if (summary.ok) {
+            setSummary(summary.val)
             setRestoreStatus(RestoreStatus.Verified)
         } else {
             showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
@@ -113,22 +111,17 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
 
     const restoreDB = useCallback(async () => {
         try {
-            // If json has wallets, restore in popup.
             if (summary?.wallets.length) {
-                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'wallet' })
-                return
-            } else {
-                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
-                await onRestore()
+                const hasPassword = await PluginServices.Wallet.hasPassword()
+                if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
             }
+            await Services.Backup.restoreBackup(backupValue)
+
+            await onRestore(summary?.countOfSmartPay)
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }
-    }, [backupId, summary?.wallets])
-
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(onRestore)
-    }, [onRestore])
+    }, [backupValue, onRestore, summary])
 
     const disabled = useMemo(() => {
         if (!readingFile && restoreStatus === RestoreStatus.Verified) return !summary

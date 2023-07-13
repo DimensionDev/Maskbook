@@ -4,7 +4,7 @@ import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styl
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard.js'
 import type { BackupFileInfo } from '../../type.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { Messages, Services } from '../../../../API.js'
+import { Services } from '../../../../API.js'
 import { fetchBackupValue } from '../../api.js'
 import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
@@ -57,16 +57,11 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             const encrypted = await fetchBackupValue(info.downloadURL)
             const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
             const backupText = JSON.stringify(decode(decrypted))
-            const data = (await Services.Backup.addUnconfirmedBackup(backupText)).unwrap()
 
-            if (data.info.wallets) {
-                await Services.Backup.restoreUnconfirmedBackup({ id: data.id, action: 'wallet' })
-            } else {
-                await Services.Backup.restoreUnconfirmedBackup({ id: data.id, action: 'confirm' })
+            await Services.Backup.restoreBackup(backupText)
 
-                restoreCallback()
-                setBackupPassword('')
-            }
+            restoreCallback()
+            setBackupPassword('')
         } catch (error) {
             setIncorrectBackupPassword(true)
         }
@@ -83,10 +78,6 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
     useEffect(() => {
         setIncorrectBackupPassword(false)
     }, [backupPassword])
-
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
 
     return (
         <MaskDialog maxWidth="xs" title={t.settings_cloud_backup()} open={open} onClose={onClose}>

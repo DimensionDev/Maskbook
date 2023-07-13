@@ -6,11 +6,13 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Trend } from '../../../assets/index.js'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 
 import { Services } from '../../../API.js'
 import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
+import { useSearchParams } from 'react-router-dom'
+import { compact } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -73,6 +75,8 @@ export const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
+    const [params] = useSearchParams()
+
     const onSetupTwitter = useCallback(async () => {
         const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
@@ -84,8 +88,13 @@ export const Onboarding = memo(function Onboarding() {
         window.close()
     }, [])
 
+    const onSetupPaymentPassword = useCallback(async () => {
+        await Services.Helper.openPopupWindow(PopupRoutes.SetPaymentPassword)
+    }, [])
+
     const words = useMemo(() => {
-        return [
+        const count = params.get('count')
+        return compact([
             <Typography key="identity">
                 {t.persona_onboarding_creating_identity()}
                 {t.identity()}
@@ -102,7 +111,13 @@ export const Onboarding = memo(function Onboarding() {
                 {t.persona_onboarding_ready()}
                 {t.ready()}
             </Typography>,
-        ]
+            count ? (
+                <Typography key="wallets">
+                    {t.persona_onboarding_recovery_wallets()}
+                    {t.persona_onboarding_wallets({ count: Number(count) })}
+                </Typography>
+            ) : undefined,
+        ])
     }, [t])
 
     return (
@@ -135,6 +150,13 @@ export const Onboarding = memo(function Onboarding() {
                     size="large"
                     startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
                     {t.persona_onboarding_to_twitter()}
+                </PrimaryButton>
+                <PrimaryButton
+                    onClick={onSetupPaymentPassword}
+                    size="large"
+                    sx={{ ml: 1.5 }}
+                    startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
+                    {t.persona_onboarding_set_payment_password()}
                 </PrimaryButton>
             </SetupFrameController>
         </Box>

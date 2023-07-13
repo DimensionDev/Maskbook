@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { delay } from '@masknet/kit'
 import { useCustomSnackbar } from '@masknet/theme'
-import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
-import { DashboardRoutes, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { SignUpRoutePath } from '../routePath.js'
-import { Messages, PluginServices, Services } from '../../../API.js'
+import { Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
+import { delay } from '@masknet/kit'
+import { useAsync } from 'react-use'
+import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
+import urlcat from 'urlcat'
 
 export function PersonaRecovery() {
     const t = useDashboardI18N()
@@ -33,9 +33,10 @@ export function PersonaRecovery() {
         navigate(DashboardRoutes.SignUp, { replace: true })
     }, [state.mnemonic, state.privateKey])
 
-    const [{ loading: submitLoading }, onNext] = useAsyncFn(
+    const onNext = useCallback(
         async (personaName: string) => {
             setError('')
+
             try {
                 let result:
                     | {
@@ -44,6 +45,7 @@ export function PersonaRecovery() {
                           publicKey: EC_Public_JsonWebKey
                       }
                     | undefined
+
                 if (state.mnemonic) {
                     result = await Services.Identity.queryPersonaEOAByMnemonic(state?.mnemonic.join(' '), '')
                 } else if (state.privateKey) {
@@ -54,22 +56,9 @@ export function PersonaRecovery() {
                 }
 
                 const chainId = await SmartPayBundler.getSupportedChainId()
-                if (result?.address) {
-                    const smartPayAccounts = await SmartPayOwner.getAccountsByOwners(chainId, [result.address])
-                    const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
-                    if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
-                        await Services.Backup.addUnconfirmedPersonaRestore({
-                            mnemonic: state?.mnemonic?.join(' '),
-                            privateKeyString: state.privateKey,
-                            personaName,
-                        })
-                        Messages.events.restoreSuccess.on(() => {
-                            navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
-                            changeCurrentPersona(result?.identifier)
-                        })
-                        return
-                    }
-                }
+                const accounts = result?.address
+                    ? await SmartPayOwner.getAccountsByOwner(chainId, result.address)
+                    : EMPTY_LIST
 
                 let identifier: ECKeyIdentifier
                 if (state.mnemonic) {
@@ -85,11 +74,7 @@ export function PersonaRecovery() {
                 showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
                 await delay(300)
-                const persona = await Services.Identity.queryPersona(identifier)
-                Messages.events.restoreSuccess.sendToAll({
-                    wallets: persona?.address ? [persona.address] : [],
-                })
-                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+                navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count: accounts.length }), { replace: true })
             } catch (error) {
                 setError((error as Error).message)
             }
@@ -97,5 +82,5 @@ export function PersonaRecovery() {
         [state?.mnemonic, state?.privateKey],
     )
 
-    return <PersonaNameUI onNext={onNext} loading={submitLoading} error={error} />
+    return <PersonaNameUI onNext={onNext} error={error} />
 }
