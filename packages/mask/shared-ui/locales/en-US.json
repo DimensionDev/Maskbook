@@ -296,7 +296,7 @@
     "wallet_transfer_title": "Transfer",
     "wallet_transfer_my_wallets_title": "My Wallets",
     "wallets_transfer_error_address_absence": "Enter recipient address",
-    "wallets_transfer_error_invalid_address": "Invalid recipient address",
+    "wallets_transfer_error_invalid_address": "Invalid wallet address.",
     "wallet_transfer_error_no_ens_support": "Network does not support ENS.",
     "wallet_transfer_error_amount_absence": "Enter an amount",
     "wallet_transfer_error_address_absence": "Enter recipient address",
