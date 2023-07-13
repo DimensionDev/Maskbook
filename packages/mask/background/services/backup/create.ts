@@ -1,5 +1,6 @@
 import { type BackupSummary, generateBackupRAW, getBackupSummary } from '@masknet/backup-format'
 import { createNewBackup } from './internal_create.js'
+
 export async function generateBackupPreviewInfo(): Promise<BackupSummary> {
     // can we avoid create a full backup?
     const backup = await createNewBackup({ allProfile: true })

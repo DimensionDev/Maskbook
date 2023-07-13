@@ -52,19 +52,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
             paddingBottom: theme.spacing(2),
         },
-        tab: {
-            height: 36,
-            minHeight: 36,
-        },
-        tabPaper: {
-            backgroundColor: 'inherit',
-        },
-        indicator: {
-            display: 'none',
-        },
-        tabPanel: {
-            marginTop: 12,
-        },
         approvalWrapper: {
             display: 'flex',
             flexDirection: 'column',
@@ -132,16 +119,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     return (
         <div className={classes.approvalWrapper}>
             <div className={classes.abstractTabWrapper}>
-                <NetworkTab
-                    classes={{
-                        tab: classes.tab,
-                        tabPanel: classes.tabPanel,
-                        indicator: classes.indicator,
-                        tabPaper: classes.tabPaper,
-                    }}
-                    chains={chainIdList}
-                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                />
+                <NetworkTab chains={chainIdList} pluginID={NetworkPluginID.PLUGIN_EVM} />
             </div>
             <section className={classes.contentWrapper}>
                 {tab === Tabs.tokens ? (

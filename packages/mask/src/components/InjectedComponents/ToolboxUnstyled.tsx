@@ -135,7 +135,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
-                            <Icons.ConnectWallet size={iconSize} />
+                            <Icons.Wallet size={iconSize} />
                         )}
                     </ListItemIcon>
                     {mini ? null : (

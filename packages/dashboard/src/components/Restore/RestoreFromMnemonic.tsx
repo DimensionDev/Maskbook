@@ -1,4 +1,4 @@
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { some } from 'lodash-es'
 import { useCallback, useLayoutEffect } from 'react'
@@ -10,10 +10,8 @@ import { PrimaryButton } from '../PrimaryButton/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
-        marginTop: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-        color: getMaskColor(theme).redMain,
-        borderLeft: `2px solid ${getMaskColor(theme).redMain}`,
+        marginTop: theme.spacing(2),
+        color: theme.palette.maskColor.danger,
     },
 }))
 

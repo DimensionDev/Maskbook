@@ -1095,6 +1095,7 @@
     "adding_network_successfully": "Adding network successfully",
     "deleted_network_successfully": "Network successfully deleted.",
     "hided_token_successfully": "Successfully hidden.",
+    "not_enough_data_to_present": "Not enough data to present.",
     "wallet_send": "Send",
     "wallet_receive": "Receive",
     "wallet_swap": "Swap",

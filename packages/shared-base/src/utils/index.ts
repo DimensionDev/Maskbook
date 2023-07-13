@@ -12,6 +12,7 @@ export * from './personas.js'
 export * from './resolve.js'
 export * from './subscription.js'
 export * from './getDomainSystem.js'
+export * from './parseURL.js'
 
 export type PartialRequired<T, RequiredKeys extends keyof T> = Omit<T, RequiredKeys> & Pick<Required<T>, RequiredKeys>
 

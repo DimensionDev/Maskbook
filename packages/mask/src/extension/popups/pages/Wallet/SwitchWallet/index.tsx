@@ -99,7 +99,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 variant="outlined"
                 disabled={wallets.length >= MAX_WALLET_LIMIT}
                 onClick={handleClickCreate}>
-                <Icons.ConnectWallet size={20} color={theme.palette.maskColor.second} />
+                <Icons.Wallet size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_add_wallet')}
                 </Typography>

@@ -100,7 +100,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>
-                        <Icons.ConnectWallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
+                        <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
                     </Button>
                 </Box>
             )
