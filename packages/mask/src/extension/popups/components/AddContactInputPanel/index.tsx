@@ -64,7 +64,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
     const theme = useTheme()
 
     const openAddContactModal = useCallback(() => {
-        AddContactModal.openAndWaitForClose({
+        return AddContactModal.openAndWaitForClose({
             title: t('wallet_add_contact'),
             address,
             name: ensName,
@@ -73,37 +73,35 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
     }, [address, ensName])
 
     return (
-        <>
-            <Box padding={2} className={classes.receiverPanel}>
-                <div className={classes.to}>
-                    <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
-                </div>
-                <div className={classes.fieldWrapper}>
-                    <MaskTextField
-                        placeholder={t('wallet_transfer_placeholder')}
-                        value={receiver}
-                        onChange={(ev) => setReceiver(ev.target.value)}
-                        wrapperProps={{ className: classes.input }}
-                        InputProps={{
-                            spellCheck: false,
-                            endAdornment:
-                                !receiverValidationMessage && (registeredAddress || receiver) ? (
-                                    <div className={classes.endAdornment} onClick={openAddContactModal}>
-                                        <Typography className={classes.save}>{t('save')}</Typography>
-                                        <Icons.AddUser size={18} color={theme.palette.maskColor.second} />
-                                    </div>
-                                ) : undefined,
-                            classes: { input: classes.inputText },
-                        }}
-                    />
-                    {receiverValidationMessage || registeredAddress ? (
-                        <Typography className={receiverValidationMessage ? classes.validation : classes.receiver}>
-                            {receiverValidationMessage || registeredAddress}
-                        </Typography>
-                    ) : null}
-                </div>
-            </Box>
-        </>
+        <Box padding={2} className={classes.receiverPanel}>
+            <div className={classes.to}>
+                <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
+            </div>
+            <div className={classes.fieldWrapper}>
+                <MaskTextField
+                    placeholder={t('wallet_transfer_placeholder')}
+                    value={receiver}
+                    onChange={(ev) => setReceiver(ev.target.value)}
+                    wrapperProps={{ className: classes.input }}
+                    InputProps={{
+                        spellCheck: false,
+                        endAdornment:
+                            !receiverValidationMessage && (registeredAddress || receiver) ? (
+                                <div className={classes.endAdornment} onClick={openAddContactModal}>
+                                    <Typography className={classes.save}>{t('save')}</Typography>
+                                    <Icons.AddUser size={18} color={theme.palette.maskColor.second} />
+                                </div>
+                            ) : undefined,
+                        classes: { input: classes.inputText },
+                    }}
+                />
+                {receiverValidationMessage || registeredAddress ? (
+                    <Typography className={receiverValidationMessage ? classes.validation : classes.receiver}>
+                        {receiverValidationMessage || registeredAddress}
+                    </Typography>
+                ) : null}
+            </div>
+        </Box>
     )
 })
 

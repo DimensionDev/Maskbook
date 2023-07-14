@@ -1,10 +1,9 @@
 import { NetworkPluginID, WalletContactType } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenAddress, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, List, ListItem, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
@@ -122,13 +121,10 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
 }))
 
 const ContactListUI = memo(function TransferUI() {
-    const location = useLocation()
     const { t } = useI18N()
     const { classes } = useStyles({})
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
-    const address = useParams().address || nativeTokenAddress
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { receiver, setReceiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
+    const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
 
     useTitle(t('popups_send'))
 
@@ -198,7 +194,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
     const theme = useTheme()
 
     const editContact = useCallback(() => {
-        EditContactModal.openAndWaitForClose({
+        return EditContactModal.openAndWaitForClose({
             title: t('wallet_edit_contact'),
             address,
             name,
@@ -207,7 +203,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
     }, [address, name, type])
 
     const deleteContact = useCallback(() => {
-        DeleteContactModal.openAndWaitForClose({
+        return DeleteContactModal.openAndWaitForClose({
             title: t('wallet_edit_contact'),
             address,
             name,
