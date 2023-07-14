@@ -13,9 +13,3 @@ export enum SetupGuideStep {
     PinExtension = 'pin-extension',
     Close = 'close',
 }
-
-export enum BooleanPreference {
-    False = 0,
-    Default = 1,
-    True = 2,
-}

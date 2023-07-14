@@ -1,9 +1,4 @@
-import type { PopupRoutes } from './PopupRoutes.js'
-import type { DashboardRoutes } from './DashboardRoutes.js'
-
-export * from './PopupRoutes.js'
-export * from './DashboardRoutes.js'
-export * from './PopupModalRoutes.js'
+import type { PopupRoutes, DashboardRoutes } from '../types/Routes.js'
 
 export function relativeRouteOf(parent: PopupRoutes): (child: PopupRoutes) => string
 export function relativeRouteOf(parent: DashboardRoutes): (child: DashboardRoutes) => string

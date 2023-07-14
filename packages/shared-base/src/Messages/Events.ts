@@ -1,8 +1,8 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
-import type { NetworkPluginID, PluginID } from '../Plugin/index.js'
-import type { PersonaInformation, RelationFavor } from '../Persona/types.js'
+import type { NetworkPluginID, PluginID } from '../types/PluginID.js'
+import type { PersonaInformation, RelationFavor } from '../types/Persona.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/types.js'
 
 export interface MaskSettingsEvents {

@@ -39,10 +39,11 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
+import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
-import type { LinkedProfileDetails } from '@masknet/public-api'
+
 export declare namespace Plugin {
     /**
      * A code loader interface of the plugin API.

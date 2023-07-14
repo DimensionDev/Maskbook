@@ -1,3 +1,37 @@
+export enum DashboardRoutes {
+    Setup = '/setup',
+    Welcome = '/setup/welcome',
+    SignUpPersona = '/setup/sign-up',
+    RecoveryPersona = '/setup/recovery',
+    SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
+    SignUpPersonaOnboarding = '/setup/sign-up/onboarding',
+    SignUp = '/sign-up',
+    SignIn = '/sign-in',
+    PrivacyPolicy = '/privacy-policy',
+    Personas = '/personas',
+    Wallets = '/wallets',
+    WalletsTransfer = '/wallets/transfer',
+    WalletsSwap = '/wallets/swap',
+    WalletsRedPacket = '/wallets/red-packet',
+    WalletsSell = '/wallets/sell',
+    WalletsHistory = '/wallets/history',
+    CreateMaskWallet = '/create-mask-wallet',
+    CreateMaskWalletForm = '/create-mask-wallet/form',
+    RecoveryMaskWallet = '/create-mask-wallet/recovery',
+    CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
+    AddDeriveWallet = '/create-mask-wallet/add-derive-wallet',
+    SignUpMaskWalletOnboarding = '/create-mask-wallet/onboarding',
+    Settings = '/settings',
+}
+
+export enum PopupModalRoutes {
+    ChooseNetwork = '/modal/choose-network',
+    SwitchWallet = '/modal/switch-wallet',
+    ConnectSocialAccount = '/modal/connect-social-account',
+    SelectProvider = '/modal/select-provider',
+    ConnectProvider = '/modal/connect-provider',
+}
+
 export enum PopupRoutes {
     Root = '/',
     Wallet = '/wallet',

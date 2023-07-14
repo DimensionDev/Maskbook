@@ -2,9 +2,10 @@ import { isEqual } from 'lodash-es'
 import { Appearance, LanguageOptions } from '@masknet/public-api'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 import { updateLanguage } from '../i18n/index.js'
-import { NetworkPluginID } from '../Plugin/index.js'
+import { BooleanPreference } from '../types.js'
+import { NetworkPluginID, PluginID } from '../types/PluginID.js'
+import { LockStatus } from '../types/Wallet.js'
 import { EnhanceableSite, ExtensionSite } from '../Site/types.js'
-import { BooleanPreference } from '../legacy-settings/types.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
@@ -26,6 +27,11 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
         [ExtensionSite.PopupConnect]: NetworkPluginID.PLUGIN_EVM,
     },
     isEqual,
+)
+
+export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
+    `${PluginID.Wallet}+maskWalletLockStatus`,
+    LockStatus.INIT,
 )
 
 export const currentSetupGuideStatus = createBulkSettings('currentSetupGuideStatus', '')
