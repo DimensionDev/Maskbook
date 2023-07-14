@@ -27,6 +27,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'createPersona'
     | 'currentPersonaIdentifier'
     | 'allPersonas'
+    | 'getSearchedKeyword'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

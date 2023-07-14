@@ -8,6 +8,7 @@ import {
     TruckIcon,
     WindowIcon,
     UserCircleIcon,
+    MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
 import { SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
@@ -23,6 +24,7 @@ const navigation = [
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
     { name: 'Bridges', icon: TruckIcon, to: ApplicationRoutes.Bridges },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
+    { name: 'Search', icon: MagnifyingGlassIcon, to: ApplicationRoutes.Search },
 ]
 
 function NavigationLink(props: (typeof navigation)[0]) {
