@@ -1,14 +1,14 @@
+import { memo, useCallback, useMemo } from 'react'
 import { NetworkPluginID, WalletContactType } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, List, ListItem, MenuItem, Stack, Typography, useTheme } from '@mui/material'
-import { memo, useCallback, useMemo } from 'react'
+import { Icons } from '@masknet/icons'
+import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
-import { Icons } from '@masknet/icons'
-import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 
@@ -125,7 +125,7 @@ const ContactListUI = memo(function TransferUI() {
     const { classes } = useStyles({})
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
-    console.log({ contacts })
+
     useTitle(t('popups_send'))
 
     return (

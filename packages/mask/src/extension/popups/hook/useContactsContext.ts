@@ -18,7 +18,6 @@ function useContactsContext() {
         chainId,
     )
 
-    // #region validation
     const receiverValidationMessage = useMemo(() => {
         if (!receiver) return ''
         if (
