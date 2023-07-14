@@ -31,7 +31,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
             8,
             'https://static.flowscan.org/mainnet/icons/A.1654653399040a61.FlowToken.png',
         ),
-        explorerURL: {
+        explorerUrl: {
             url: 'https://flowscan.org/',
         },
     },
@@ -55,7 +55,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
             8,
             'https://static.flowscan.org/mainnet/icons/A.1654653399040a61.FlowToken.png',
         ),
-        explorerURL: {
+        explorerUrl: {
             url: 'https://testnet.flowscan.org/',
         },
     },

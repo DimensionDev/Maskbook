@@ -34,7 +34,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         schema: SchemaType.Native,
         ...x.nativeCurrency,
     },
-    explorerURL: {
+    explorerUrl: {
         url: x.explorers?.[0]?.url ?? x.infoURL,
     },
 }))

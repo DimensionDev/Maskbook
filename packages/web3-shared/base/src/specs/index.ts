@@ -179,9 +179,9 @@ export interface Network {
         symbol: string
         decimals: number
     }
-    rpcUrls: string[]
-    blockExplorerUrls: string[]
-    iconUrls?: string[]
+    rpcUrl: string
+    blockExplorerUrl: string
+    iconUrl?: string
     features?: string[]
     createdAt: Date
     updatedAt: Date
@@ -200,7 +200,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
     // EIP3091
-    explorerURL: {
+    explorerUrl: {
         url: string
         parameters?: Record<string, string | number | boolean>
     }
