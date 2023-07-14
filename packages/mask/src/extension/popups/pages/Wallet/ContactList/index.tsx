@@ -9,14 +9,14 @@ import {
     useWallets,
 } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Link, List, ListItem, Stack, Typography, useTheme } from '@mui/material'
+import { Box, Link, List, ListItem, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from './contactsContext.js'
 import { Icons } from '@masknet/icons'
-import { EmojiAvatar, FormattedAddress } from '@masknet/shared'
+import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import AddContactInputPanel from './AddContactInputPanel.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -71,6 +71,20 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         cursor: 'pointer',
         marginLeft: 4,
+    },
+    menu: {
+        padding: '4px 4px 8px 4px',
+        borderRadius: '16px',
+    },
+    menuItem: {
+        padding: 8,
+        width: 132,
+        minHeight: 'unset',
+    },
+    optionName: {
+        fontSize: 14,
+        fontWeight: 700,
+        marginLeft: 8,
     },
     emojiAvatar: {
         marginRight: 10,
@@ -170,8 +184,45 @@ interface ContactListItemProps {
 }
 
 function ContactListItem({ address, name }: ContactListItemProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const theme = useTheme()
+
+    const menuOptions = useMemo(
+        () => [
+            {
+                name: t('edit'),
+                icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
+            },
+            {
+                name: t('delete'),
+                icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
+            },
+        ],
+        [t],
+    )
+
+    const [menu, openMenu] = useMenuConfig(
+        menuOptions.map((option, index) => (
+            <MenuItem key={index} className={classes.menuItem}>
+                {option.icon}
+                <Typography className={classes.optionName}>{option.name}</Typography>
+            </MenuItem>
+        )),
+        {
+            anchorSibling: false,
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right',
+            },
+            transformOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+            },
+            classes: { paper: classes.menu },
+        },
+    )
 
     return (
         <ListItem classes={{ root: classes.contactsListItem }}>
@@ -191,7 +242,8 @@ function ContactListItem({ address, name }: ContactListItemProps) {
                     </Typography>
                 </div>
             </div>
-            <Icons.More size={24} className={classes.iconMore} />
+            <Icons.More size={24} className={classes.iconMore} onClick={openMenu} />
+            {menu}
         </ListItem>
     )
 }

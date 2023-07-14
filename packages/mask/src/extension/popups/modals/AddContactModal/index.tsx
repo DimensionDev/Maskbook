@@ -10,6 +10,7 @@ import { alpha } from '@mui/system'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
+import { useContacts } from '../../hook/useContacts.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -60,12 +61,17 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
+    const { value: contacts } = useContacts()
+
     const addressError = Boolean(address) && !isValidAddress(address)
+
+    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name))
 
     const validationMessage = useMemo(() => {
         if (addressError) return t('wallets_transfer_error_invalid_address')
+        if (nameAlreadyExist) return t('wallets_transfer_contact_wallet_name_already_exist')
         return ''
-    }, [t, addressError])
+    }, [t, addressError, nameAlreadyExist])
 
     const addContact = useCallback(async () => {
         await WalletRPC.addContact({ name, id: address })
@@ -81,6 +87,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 className={classes.input}
                 value={name}
                 onChange={(ev) => setName(ev.target.value)}
+                error={nameAlreadyExist}
             />
             <MaskTextField
                 spellCheck={false}
@@ -90,14 +97,15 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 onChange={(ev) => setAddress(ev.target.value)}
                 error={addressError}
             />
-            {validationMessage ? (
-                <Typography className={classes.helperText}>{t('wallets_transfer_error_invalid_address')}</Typography>
-            ) : null}
+            {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
                     {t('cancel')}
                 </ActionButton>
-                <ActionButton onClick={addContact} className={classes.button} disabled={addressError || !name || !name}>
+                <ActionButton
+                    onClick={addContact}
+                    className={classes.button}
+                    disabled={addressError || nameAlreadyExist || !name || !name}>
                     {t('confirm')}
                 </ActionButton>
             </div>
