@@ -66,7 +66,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
     const { t } = useI18N()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
-        await Web3State.state.AddressBook?.removeAddress?.(address)
+        await Web3State.state.AddressBook?.removeContact?.(address)
         onConfirm?.()
     }, [address])
 

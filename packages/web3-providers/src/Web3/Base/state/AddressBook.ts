@@ -30,16 +30,16 @@ export class AddressBookState implements Web3AddressBookState {
         return this.storage.initializedPromise
     }
 
-    async addAddress(name: string, address: string) {
+    async addContact(name: string, address: string) {
         if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
         await this.storage.setValue(this.storage.value.concat({ name, address }))
     }
-    async removeAddress(address: string) {
+    async removeContact(address: string) {
         if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
         await this.storage.setValue(this.storage.value.filter((x) => !this.options.isSameAddress(x.address, address)))
     }
 
-    async renameAddress(name: string, address: string) {
+    async renameContact(name: string, address: string) {
         if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
 
         await this.storage.setValue(

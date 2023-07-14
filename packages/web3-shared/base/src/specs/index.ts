@@ -859,11 +859,11 @@ export interface AddressBookState {
     addressBook?: Subscription<Array<{ name: string; address: string }>>
 
     /** Add a contact into address book. */
-    addAddress: (name: string, address: string) => Promise<void>
+    addContact: (name: string, address: string) => Promise<void>
     /** Remove a contact from address book. */
-    removeAddress: (address: string) => Promise<void>
-    /** Rename an name from address book. */
-    renameAddress: (name: string, address: string) => Promise<void>
+    removeContact: (address: string) => Promise<void>
+    /** Rename an name of contact from address book. */
+    renameContact: (name: string, address: string) => Promise<void>
 }
 export interface RiskWarningState {
     ready: boolean
