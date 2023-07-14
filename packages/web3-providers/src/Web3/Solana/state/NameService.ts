@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { type ChainId, formatAddress, isValidAddress, isValidDomain, isZeroAddress } from '@masknet/web3-shared-solana'
+import { formatAddress, isValidAddress, isValidDomain, isZeroAddress } from '@masknet/web3-shared-solana'
 import { Bonfida } from '@masknet/web3-providers'
 import type { NameServiceAPI } from '@masknet/web3-providers/types'
 import { NameServiceState } from '../../Base/state/NameService.js'
