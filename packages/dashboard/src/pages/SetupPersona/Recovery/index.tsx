@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
         borderRadius: theme.spacing(1, 1, 0, 0),
         overflow: 'hidden',
+        marginBottom: 46,
     },
     tabList: {
         background:
@@ -143,7 +144,7 @@ export const Recovery = memo(function Recovery() {
     )
 
     return (
-        <Box>
+        <>
             <Box className={classes.header}>
                 <Typography variant="h1" className={classes.title}>
                     {t.data_recovery_title()}
@@ -204,6 +205,6 @@ export const Recovery = memo(function Recovery() {
                     }}
                 </RecoveryContext.Consumer>
             </RecoveryProvider>
-        </Box>
+        </>
     )
 })
