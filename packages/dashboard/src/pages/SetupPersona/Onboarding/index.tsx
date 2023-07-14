@@ -122,7 +122,7 @@ export const Onboarding = memo(function Onboarding() {
     }, [t])
 
     return (
-        <Box>
+        <>
             <Box className={classes.card}>
                 <Typography className={classes.pin}>{t.persona_onboarding_pin_tips()}</Typography>
                 <Box mt={2.25} display="flex" alignItems="center">
@@ -160,6 +160,6 @@ export const Onboarding = memo(function Onboarding() {
                     {t.persona_onboarding_set_payment_password()}
                 </PrimaryButton>
             </SetupFrameController>
-        </Box>
+        </>
     )
 })

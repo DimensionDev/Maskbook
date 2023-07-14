@@ -1,6 +1,6 @@
 import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
+import { Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -76,7 +76,7 @@ export const Welcome = memo(function Welcome() {
     const { classes } = useStyles()
 
     return (
-        <Box>
+        <>
             <Typography variant="h1" className={classes.title}>
                 {t.welcome_to_use_mask_network()}
             </Typography>
@@ -125,6 +125,6 @@ export const Welcome = memo(function Welcome() {
                     />
                 </Typography>
             </SetupFrameController>
-        </Box>
+        </>
     )
 })
