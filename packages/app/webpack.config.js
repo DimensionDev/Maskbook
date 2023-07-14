@@ -10,7 +10,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import { createRequire } from 'module'
 import { getGitInfo } from './.webpack/git-info.js'
-import { EnvironmentPluginNoCache, EnvironmentPluginCache } from './.webpack/EnvironmentPlugin.js'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 
 const require = createRequire(import.meta.url)
@@ -89,13 +88,6 @@ function Configuration(env, argv) {
                 Buffer: [require.resolve('buffer'), 'Buffer'],
                 'process.nextTick': require.resolve('next-tick'),
             }),
-            (() => {
-                // In development mode, it will be shared across different target to speedup.
-                // This is a valuable trade-off.
-                const info = getGitInfo()
-                if (process.env.NODE_ENV === 'development') return EnvironmentPluginCache(info)
-                return EnvironmentPluginNoCache(info)
-            })(),
             new webpack.DefinePlugin({
                 'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
                 'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
