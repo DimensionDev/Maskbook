@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 const AddContactInputPanel = memo(function AddContactInputPanel() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress, retryContacts } =
+    const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress } =
         ContactsContext.useContainer()
 
     const theme = useTheme()
@@ -68,7 +68,6 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
             title: t('wallet_add_contact'),
             address,
             name: ensName,
-            onConfirm: retryContacts,
         })
     }, [address, ensName])
 

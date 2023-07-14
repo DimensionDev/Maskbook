@@ -10,7 +10,7 @@ function useContactsContext() {
     const { t } = useI18N()
     const [receiver, setReceiver] = useState('')
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: contacts = EMPTY_LIST, retry: retryContacts } = useContacts()
+    const { value: contacts = EMPTY_LIST } = useContacts()
 
     const { value: registeredAddress = '', error: resolveDomainError } = useLookupAddress(
         NetworkPluginID.PLUGIN_EVM,
@@ -34,7 +34,6 @@ function useContactsContext() {
 
     return {
         contacts,
-        retryContacts,
         address,
         ensName,
         receiver,

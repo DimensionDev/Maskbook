@@ -200,7 +200,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
             name,
             type,
         })
-    }, [address, name, type])
+    }, [address, name, type, t])
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
@@ -208,7 +208,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
             address,
             name,
         })
-    }, [address, name])
+    }, [address, name, t])
 
     const menuOptions = useMemo(
         () => [

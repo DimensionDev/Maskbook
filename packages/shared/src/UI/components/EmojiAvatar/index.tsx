@@ -19,7 +19,7 @@ export function EmojiAvatar({ address, ...props }: Props) {
         return undefined
     }, [address])
 
-    const emoji = useMemo(() => {
+    const randomEmoji = useMemo(() => {
         return EMOJI_LIST[Number.parseInt(address.slice(0, 6), 16) % EMOJI_LIST.length]
     }, [address])
 
@@ -30,7 +30,7 @@ export function EmojiAvatar({ address, ...props }: Props) {
                     defaultEmojiSetting?.backgroundColor ?? generateContactAvatarColor(address, theme.palette.mode),
             }}
             {...props}>
-            {defaultEmojiSetting?.emoji ?? emoji}
+            {defaultEmojiSetting?.emoji ?? randomEmoji}
         </MuiAvatar>
     )
 }
