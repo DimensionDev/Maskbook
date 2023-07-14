@@ -12,5 +12,4 @@ export const inMemoryStorageBackend = createInMemoryKVStorageBackend((key, value
 export const indexedDBStorageBackend = createIndexedDB_KVStorageBackend('mask-plugin', (key, value) => {
     broadcastMessage('indexedDBStorage', [key, value])
 })
-
 setupMaskKVStorageBackend(indexedDBStorageBackend, inMemoryStorageBackend)

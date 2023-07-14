@@ -22,15 +22,15 @@ function MessageEventReceiver(event: MessageEvent): void {
     for (const h of handler) h(data)
 }
 if (typeof SharedWorker === 'function') {
-    const worker = new SharedWorker(new URL('../background-worker/index.ts', import.meta.url), {
-        name: 'mask plugin worker',
+    const worker = new SharedWorker(new URL('../background-worker/init.ts', import.meta.url), {
+        name: 'mask',
     })
     worker.port.addEventListener('message', MessageEventReceiver)
     worker.port.start()
     postMessage = (type: string, data: unknown) => worker.port.postMessage([type, data])
 } else {
-    const worker = new Worker(new URL('../background-worker/index.ts', import.meta.url), {
-        name: 'mask plugin worker',
+    const worker = new Worker(new URL('../background-worker/init.ts', import.meta.url), {
+        name: 'mask',
     })
     worker.addEventListener('message', MessageEventReceiver)
     postMessage = (type: string, data: unknown) => worker.postMessage([type, data])
@@ -66,8 +66,7 @@ if (typeof SharedWorker === 'function') {
     }
 
     const cache = new Map<string, PluginMessageEmitter<unknown>>()
-
-    function createEmitter(domain: string, serializer: Serialization | undefined) {
+    function createEmitter(domain: string, serializer: Serialization | undefined): PluginMessageEmitter<unknown> {
         if (cache.has(domain)) return cache.get(domain)! as PluginMessageEmitter<unknown>
 
         const listeners = new Map<string, Set<(data: unknown) => void>>()

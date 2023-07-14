@@ -8,9 +8,10 @@ import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin.js'
 import { emitManifestFile } from './manifest.js'
-import { emitGitInfo, getGitInfo } from './git-info.js'
+import { getGitInfo } from './git-info.js'
 
 import { dirname, join } from 'node:path'
 import { readFileSync, readdirSync } from 'node:fs'
@@ -180,17 +181,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 Buffer: [require.resolve('buffer'), 'Buffer'],
                 'process.nextTick': require.resolve('next-tick'),
             }),
-            (() => {
-                // In development mode, it will be shared across different target to speedup.
-                // This is a valuable trade-off.
-                const runtimeValues: Record<string, string | boolean> = {
-                    ...getGitInfo(flags.reproducibleBuild),
-                    channel: flags.channel,
-                }
-                if (flags.mode === 'development') runtimeValues.REACT_DEVTOOLS_EDITOR_URL = flags.devtoolsEditorURI
-                if (flags.mode === 'development') return EnvironmentPluginCache(runtimeValues)
-                return EnvironmentPluginNoCache(runtimeValues)
-            })(),
             new EnvironmentPlugin({
                 NODE_ENV: flags.mode,
                 NODE_DEBUG: false,
@@ -198,11 +188,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
             }),
             new DefinePlugin({
-                'process.env.VERSION': `(typeof browser === 'object' && browser.runtime ? browser.runtime.getManifest().version : ${JSON.stringify(
-                    VERSION,
-                )})`,
                 'process.browser': 'true',
-                'process.version': JSON.stringify('v19.0.0'),
+                'process.version': JSON.stringify('v20.0.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',
@@ -234,7 +221,20 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 ],
             }),
             emitManifestFile(flags, computedFlags),
-            emitGitInfo(flags.reproducibleBuild),
+            (() => {
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo(flags.reproducibleBuild)
+                const json = {
+                    BRANCH_NAME,
+                    BUILD_DATE,
+                    channel: flags.channel,
+                    COMMIT_DATE,
+                    COMMIT_HASH,
+                    DIRTY,
+                    VERSION,
+                    REACT_DEVTOOLS_EDITOR_URL: flags.mode === 'development' ? flags.devtoolsEditorURI : undefined,
+                }
+                return emitJSONFile({ content: json, name: 'build-info.json' })
+            })(),
         ],
         optimization: {
             minimize: false,
@@ -294,7 +294,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
-        dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
+        dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.ts')),
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),

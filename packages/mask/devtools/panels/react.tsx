@@ -7,6 +7,7 @@ import { initialize, createBridge, type DevtoolsProps, createStore } from 'react
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, devtoolsEval } from './utils.js'
 import type { DevtoolsPanels } from 'webextension-polyfill/namespaces/devtools_panels.js'
+import { env } from '@masknet/flags'
 
 const registerOnStyleChange = (() => {
     let lastText = ''
@@ -314,10 +315,7 @@ function getMountPoint(window: Window | undefined, signal: AbortSignal) {
     return dom2
 }
 function setEditorPreference() {
-    let preset = 'vscode://file/{path}:{line}'
-    try {
-        preset = process.env.REACT_DEVTOOLS_EDITOR_URL
-    } catch {}
+    const preset = env.REACT_DEVTOOLS_EDITOR_URL || 'vscode://file/{path}:{line}'
     const editorURL = 'React::DevTools::openInEditorUrl'
     if (!getLocalStorage(editorURL)) {
         setLocalStorage(editorURL, JSON.stringify(preset))

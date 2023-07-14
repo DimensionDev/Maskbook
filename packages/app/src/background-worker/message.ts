@@ -52,7 +52,7 @@ export type InternalMessage_PluginMessage = [type: string, data: unknown, requir
 
     const cache = new Map<string, PluginMessageEmitter<unknown>>()
     __workaround__replaceIsBackground__(() => true)
-    function createEmitter(domain: string, serializer: Serialization | undefined) {
+    function createEmitter(domain: string, serializer: Serialization | undefined): PluginMessageEmitter<unknown> {
         if (cache.has(domain)) return cache.get(domain)! as PluginMessageEmitter<unknown>
 
         const listeners = new Map<string, Set<(data: unknown) => void>>()

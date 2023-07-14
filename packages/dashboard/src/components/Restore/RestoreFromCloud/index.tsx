@@ -1,9 +1,9 @@
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { memo, useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useContext, useLayoutEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Messages, Services } from '../../../API.js'
+import { PluginServices, Services } from '../../../API.js'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
 import { BackupPreview } from '../../../pages/Settings/components/BackupPreview.js'
@@ -16,6 +16,7 @@ import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 import { InputForm } from './InputForm.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
+import urlcat from 'urlcat'
 
 interface RestoreProps {
     onRestore: () => Promise<void>
@@ -46,7 +47,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const { user, updateUser } = useContext(UserContext)
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
     const { state, dispatch } = RestoreContext.useContainer()
-    const { account, accountType, backupSummary, backupSummaryId, password } = state
+    const { account, accountType, backupSummary, password, backupDecrypted } = state
 
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
 
@@ -70,20 +71,21 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const handleRestore = useCallback(async () => {
         dispatch({ type: 'SET_LOADING', loading: true })
         try {
-            if (backupSummary?.wallets) {
-                await Services.Backup.restoreUnconfirmedBackup({ id: backupSummaryId, action: 'wallet' })
-                dispatch({ type: 'SET_LOADING', loading: false })
-                return
-            } else {
-                await Services.Backup.restoreUnconfirmedBackup({ id: backupSummaryId, action: 'confirm' })
-                await restoreCallback()
+            if (backupSummary?.wallets.length) {
+                const hasPassword = await PluginServices.Wallet.hasPassword()
+                if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
             }
-            navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
+
+            await Services.Backup.restoreBackup(backupDecrypted)
+            await restoreCallback()
+            dispatch({ type: 'SET_LOADING', loading: false })
+            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count: backupSummary?.countOfWallets }), {
+                replace: true,
+            })
         } catch {
             showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
         }
-        dispatch({ type: 'SET_LOADING', loading: false })
-    }, [user, backupSummary, backupSummaryId])
+    }, [user, backupSummary])
 
     const onCloseSynchronizePassword = useCallback(() => {
         toggleSynchronizePasswordDialog(false)
@@ -95,10 +97,6 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
         updateUser({ backupPassword: password })
         onCloseSynchronizePassword()
     }, [account, password])
-
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
 
     return (
         <Box width="100%">

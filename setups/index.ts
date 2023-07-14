@@ -3,6 +3,11 @@ import { afterAll, afterEach, beforeAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import { BundlerHandlers } from './handlers/SmartPayBundler.js'
 import { DSearchHandlers } from './handlers/DSearch.js'
+import { setupBuildInfoManually } from '../packages/flags/src/flags/buildInfo.js'
+
+setupBuildInfoManually({
+    channel: 'stable',
+})
 
 // Add `fetch` polyfill.
 globalThis.fetch = fetch

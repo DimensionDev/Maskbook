@@ -31,7 +31,6 @@ const Transfer = lazy(() => import('./Transfer/index.js'))
 const ContractInteraction = lazy(() => import('./ContractInteraction/index.js'))
 const Unlock = lazy(() => import('./Unlock/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
-const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
@@ -109,7 +108,6 @@ export default function Wallet() {
             ) : (
                 <Routes>
                     <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
-                    <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
                     <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
                     <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
                     <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />

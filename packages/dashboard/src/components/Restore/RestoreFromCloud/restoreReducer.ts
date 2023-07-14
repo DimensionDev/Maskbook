@@ -26,7 +26,7 @@ export interface RestoreState {
     } & PhoneNumberFieldValue
     backupFileInfo: BackupFileInfo | null
     backupSummary: BackupSummary | null
-    backupSummaryId: string
+    backupDecrypted: string
 }
 
 export const initialState: RestoreState = {
@@ -47,7 +47,7 @@ export const initialState: RestoreState = {
     },
     backupFileInfo: null,
     backupSummary: null,
-    backupSummaryId: '',
+    backupDecrypted: '',
 }
 
 type Action =
@@ -83,7 +83,7 @@ type Action =
     | {
           type: 'SET_BACKUP_SUMMARY'
           summary: BackupSummary
-          id: string
+          backupDecrypted: string
       }
     | {
           type: 'SET_PASSWORD'
@@ -140,7 +140,7 @@ export function restoreReducer(state: RestoreState, action: Action) {
                 break
             case 'SET_BACKUP_SUMMARY':
                 draft.backupSummary = action.summary
-                draft.backupSummaryId = action.id
+                draft.backupDecrypted = action.backupDecrypted
                 break
             case 'SET_LOADING':
                 draft.loading = action.loading

@@ -7,5 +7,5 @@
   },
   "include": ["./src", "./src/**/*.json"],
   // Only type-level dependency.
-  "references": [{ "path": "../public-api" }, { "path": "../shared-base" }]
+  "references": [{ "path": "../public-api" }, { "path": "../shared-base" }, { "path": "../flags/" }]
 }
