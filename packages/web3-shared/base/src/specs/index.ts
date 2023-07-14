@@ -851,17 +851,19 @@ export interface SettingsState {
     nonFungibleAssetSourceType?: Subscription<SourceType>
 }
 
-export interface AddressBookState<ChainId> {
+export interface AddressBookState {
     ready: boolean
     readyPromise: Promise<void>
 
     /** The tracked addresses of currently chosen sub-network */
-    addressBook?: Subscription<string[]>
+    addressBook?: Subscription<Array<{ name: string; address: string }>>
 
-    /** Add an address into address book. */
-    addAddress: (chainId: ChainId, address: string) => Promise<void>
-    /** Remove an address from address book. */
-    removeAddress: (chainId: ChainId, address: string) => Promise<void>
+    /** Add a contact into address book. */
+    addContact: (name: string, address: string) => Promise<void>
+    /** Remove a contact from address book. */
+    removeContact: (address: string) => Promise<void>
+    /** Rename an name of contact from address book. */
+    renameContact: (name: string, address: string) => Promise<void>
 }
 export interface RiskWarningState {
     ready: boolean
@@ -1060,7 +1062,7 @@ export interface BlockNumberNotifierState<ChainId> {
 }
 
 export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
-    AddressBook?: AddressBookState<ChainId>
+    AddressBook?: AddressBookState
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>

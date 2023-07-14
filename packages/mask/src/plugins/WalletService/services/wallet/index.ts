@@ -21,10 +21,8 @@ function sanitizeWallet(wallet: Wallet): Wallet {
     return omit(wallet, ['storedKeyInfo'])
 }
 
-// wallet db
+// db
 export { hasWallet, updateWallet } from './database/wallet.js'
-
-// network db
 export { getNetwork, getNetworks, addNetwork, updateNetwork, deleteNetwork } from './database/network.js'
 
 // password

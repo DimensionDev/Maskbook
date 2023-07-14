@@ -62,7 +62,7 @@ export const ActionGroup = memo(function ActionGroup({ className, address, onSwa
             <button
                 type="button"
                 className={classes.button}
-                onClick={() => navigate(address ? `${PopupRoutes.Transfer}/${address}` : PopupRoutes.Transfer)}>
+                onClick={() => navigate(address ? `${PopupRoutes.Contacts}/${address}` : PopupRoutes.Contacts)}>
                 <Icons.Send size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_send')}</Typography>
             </button>

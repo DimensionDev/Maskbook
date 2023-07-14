@@ -159,6 +159,7 @@ export function contacts_url() { return new URL("./general/Contacts.svg", import
 export function copy_url() { return new URL("./general/Copy.svg", import.meta.url) }
 export function cram_url() { return new URL("./general/Cram.svg", import.meta.url) }
 export function dashboard_url() { return new URL("./general/Dashboard.svg", import.meta.url) }
+export function decrease_url() { return new URL("./general/decrease.svg", import.meta.url) }
 export function default_token_dark_url() { return new URL("./general/DefaultToken.dark.svg", import.meta.url) }
 export function default_token_dim_url() { return new URL("./general/DefaultToken.dim.svg", import.meta.url) }
 export function default_token_light_url() { return new URL("./general/DefaultToken.light.svg", import.meta.url) }
