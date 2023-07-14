@@ -67,8 +67,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias: Record<string, string> = {
-                    // It's a Node impl for xhr which is unnecessary
-                    'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.mjs'),
                     'error-polyfill': require.resolve('./package-overrides/null.mjs'),
                 }
                 if (computedFlags.reactProductionProfiling) alias['react-dom$'] = require.resolve('react-dom/profiling')
