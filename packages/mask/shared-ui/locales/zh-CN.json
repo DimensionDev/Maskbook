@@ -289,7 +289,6 @@
     "wallet_transfer_receiving_account": "收款账户",
     "wallet_transfer_to_address": "发送到地址",
     "wallet_transfer_send": "发送",
-    "wallet_transfer_placeholder": "ENS或地址(0x...)",
     "wallet_transfer_title": "转账",
     "wallet_transfer_error_amount_absence": "输入数额",
     "wallet_transfer_error_address_absence": "输入收款人地址",
