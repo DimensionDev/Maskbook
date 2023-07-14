@@ -1,4 +1,4 @@
-enum SiteType {
+enum SiteHost {
     Twitter = 'twitter.com',
     Facebook = 'facebook.com',
 }
@@ -22,8 +22,8 @@ export const Sniffings = {
         location.href.includes('popups.html') &&
         location.href.includes('/wallet'),
 
-    is_twitter_page: typeof location === 'object' && location.href.includes(SiteType.Twitter),
-    is_facebook_page: typeof location === 'object' && location.href.includes(SiteType.Facebook),
+    is_twitter_page: typeof location === 'object' && location.href.includes(SiteHost.Twitter),
+    is_facebook_page: typeof location === 'object' && location.href.includes(SiteHost.Facebook),
 
     is_opera: typeof navigator === 'object' && navigator.userAgent.includes('OPR/'),
     is_edge: typeof navigator === 'object' && navigator.userAgent.includes('Edg'),

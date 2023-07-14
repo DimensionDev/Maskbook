@@ -1,4 +1,4 @@
-import { EMPTY_LIST } from '../Pure/index.js'
+import { EMPTY_LIST } from '../constants.js'
 import { createConstantSubscription } from '../helpers/subscription.js'
 
 export const ZERO = createConstantSubscription(0)
