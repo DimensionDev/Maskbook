@@ -1,17 +1,17 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { alpha } from '@mui/system'
 import { buttonClasses } from '@mui/material/Button'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EmojiAvatar } from '@masknet/shared'
-import { alpha } from '@mui/system'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { useWalletContacts } from '../../hook/useWalletContacts.js'
 import { Web3State } from '@masknet/web3-providers'
+import { useAddressBook } from '@masknet/web3-hooks-base'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -62,7 +62,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    const contacts = useWalletContacts()
+    const contacts = useAddressBook()
 
     const addressError = Boolean(address) && !isValidAddress(address)
     const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name))

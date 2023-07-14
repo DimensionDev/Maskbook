@@ -1,16 +1,16 @@
 import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { buttonClasses } from '@mui/material/Button'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
 import { Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3State } from '@masknet/web3-providers'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
