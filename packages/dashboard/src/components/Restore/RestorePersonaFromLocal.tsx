@@ -79,7 +79,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         }
     }, [])
 
-    useAsync(async () => {
+    const { loading: getSummaryLoading } = useAsync(async () => {
         if (!backupValue) return
 
         const summary = await Services.Backup.generateBackupSummary(backupValue)
@@ -130,7 +130,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         }
     }, [backupValue, onRestore, summary])
 
-    const loading = readingFile || processing
+    const loading = readingFile || processing || getSummaryLoading
     const disabled = useMemo(() => {
         if (loading) return true
         if (restoreStatus === RestoreStatus.Verified) return !summary
