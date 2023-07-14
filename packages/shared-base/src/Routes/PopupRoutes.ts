@@ -10,7 +10,6 @@ export enum PopupRoutes {
     DeleteWallet = '/wallet/delete',
     CreateWallet = '/wallet/create',
     SelectWallet = '/wallet/select',
-    WalletRecovered = '/wallet/recovered',
     LegacyWalletRecovered = '/wallet/legacy-recovered',
     BackupWallet = '/wallet/backup',
     AddToken = '/wallet/addToken',
@@ -46,4 +45,5 @@ export enum PopupRoutes {
     ChangeOwner = '/wallet/change-owner',
     Contracts = '/contracts',
     Settings = '/settings',
+    WalletConnect = '/personas/wallet-connect',
 }

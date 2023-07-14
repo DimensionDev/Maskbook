@@ -1,8 +1,7 @@
 import { noop } from 'lodash-es'
-import { Flags } from '@masknet/flags'
-import { hmr } from '../../../utils-pure/index.js'
+import { buildInfoReadyPromise } from '@masknet/flags/build-info'
+import { hmr } from '../../../utils-pure/hmr.js'
 import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
-import { MaskMessages } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
 export const injectedScriptURL = '/injected-script.js'
@@ -11,7 +10,7 @@ export const contentScriptURL = '/generated__content__script.html'
 
 if (typeof browser.scripting?.registerContentScripts === 'undefined') InjectContentScript(signal)
 
-function InjectContentScript(signal: AbortSignal) {
+async function InjectContentScript(signal: AbortSignal) {
     const injectedScript = fetchUserScript(injectedScriptURL)
     const maskSDK = fetchUserScript(maskSDK_URL)
     const injectContentScript = fetchInjectContentScript(contentScriptURL)
@@ -25,6 +24,8 @@ function InjectContentScript(signal: AbortSignal) {
         const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
         // #region Injected script
+        await buildInfoReadyPromise
+        const { Flags } = await import('@masknet/flags')
         if (Flags.has_firefox_xray_vision) {
             browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
         } else {
@@ -46,7 +47,11 @@ function InjectContentScript(signal: AbortSignal) {
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
     signal.addEventListener('abort', () => browser.webNavigation.onCommitted.removeListener(onCommittedListener))
 
-    if (process.env.NODE_ENV === 'development' && Flags.mask_SDK_ready) {
+    if (process.env.NODE_ENV === 'development') {
+        await buildInfoReadyPromise
+        const { Flags } = await import(/* webpackMode: 'eager' */ '@masknet/flags')
+        if (!Flags.mask_SDK_ready) return
+        const { MaskMessages } = await import(/* webpackMode: 'eager' */ '@masknet/shared-base')
         signal.addEventListener(
             'abort',
             MaskMessages.events.maskSDKHotModuleReload.on(async () => {

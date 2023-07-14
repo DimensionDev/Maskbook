@@ -4,7 +4,6 @@ import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
 import { createPartialSharedUIContext, createPluginHost } from '../../../shared/plugin-infra/host.js'
 import { WalletRPC } from '../../plugins/WalletService/messages.js'
-import { status } from '../../setup.ui.js'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import Services from '../service.js'
@@ -41,4 +40,4 @@ startPluginDashboard(
         Services.Helper.hasHostPermission,
     ),
 )
-status.then(() => createNormalReactRoot(<IntegratedDashboard />))
+createNormalReactRoot(<IntegratedDashboard />)

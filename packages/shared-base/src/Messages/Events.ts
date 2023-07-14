@@ -38,7 +38,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     ownPersonaChanged: void
     ownProofChanged: void
     NFTProjectTwitterDetect: NFTProjectTwitterDetectEvent
-    restoreSuccess: RestoreSuccessEvent
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
     hostPermissionChanged: void
@@ -156,11 +155,6 @@ export interface SettingsUpdateEvent {
     value: any
 }
 
-export interface RestoreSuccessEvent {
-    wallets?: string[]
-    count?: number
-}
-
 export interface redpacketDialogEvent {
     open: boolean
     source?: PluginID
@@ -263,4 +257,9 @@ export type WalletLockStatusUpdatedEvent = boolean
 export interface GameDialogEvent {
     open: boolean
     tokenProps?: { tokenId?: string; contract?: string; chainId?: number }
+}
+
+export interface PopupWalletConnectEvent {
+    open: boolean
+    uri?: string
 }

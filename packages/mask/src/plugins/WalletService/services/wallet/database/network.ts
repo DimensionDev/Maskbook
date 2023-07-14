@@ -70,8 +70,6 @@ export async function getNetworks() {
 
     return networks
         .sort((a, z) => {
-            if (a.updatedAt > z.updatedAt) return -1
-            if (a.updatedAt < z.updatedAt) return 1
             if (a.createdAt > z.createdAt) return -1
             if (a.createdAt < z.createdAt) return 1
             return 0

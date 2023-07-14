@@ -8,6 +8,11 @@
         "types": "./dist/index.d.ts",
         "mask-src": "./src/index.ts",
         "default": "./dist/index.js"
+      },
+      "./build-info": {
+        "types": "./dist/flags/buildInfo.d.ts",
+        "mask-src": "./src/flags/buildInfo.ts",
+        "default": "./dist/flags/buildInfo.js"
       }
     },
     "types": "./dist/index.d.ts",

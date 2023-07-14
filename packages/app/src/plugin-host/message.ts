@@ -5,7 +5,7 @@ import {
     type PluginMessageEmitter,
     type PluginMessageEmitterItem,
 } from '@masknet/plugin-infra'
-import type { InternalMessage_PluginMessage } from '../plugin-worker/message.js'
+import type { InternalMessage_PluginMessage } from '../plugin-worker/message-port.js'
 export type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
@@ -16,19 +16,29 @@ function MessageEventReceiver(event: MessageEvent): void {
     if (!handler?.size) return
     for (const h of handler) h(data)
 }
+
+// Ensure plugin host is ready by blocking this file
+const [workerReadyPromise, workerReady] = defer<void>()
+{
+    const removeListener = addListener('ready', () => {
+        removeListener()
+        workerReady()
+    })
+}
 if (typeof SharedWorker === 'function') {
-    const worker = new SharedWorker(new URL('../plugin-worker/index.ts', import.meta.url), {
-        name: 'mask plugin worker',
+    const worker = new SharedWorker(new URL('../plugin-worker/init.ts', import.meta.url), {
+        name: 'mask',
     })
     worker.port.addEventListener('message', MessageEventReceiver)
     worker.port.start()
     postMessage = (type: string, data: unknown) => worker.port.postMessage([type, data])
 } else {
-    const worker = new Worker(new URL('../plugin-worker/index.ts', import.meta.url), {
-        name: 'mask plugin worker',
+    const worker = new Worker(new URL('../plugin-worker/init.ts', import.meta.url), {
+        name: 'mask',
     })
     worker.addEventListener('message', MessageEventReceiver)
     postMessage = (type: string, data: unknown) => worker.postMessage([type, data])
+    worker.postMessage(['ready-request', undefined])
 }
 
 {
@@ -126,21 +136,10 @@ if (typeof SharedWorker === 'function') {
         return emitter
     })
 }
-
-// Ensure plugin host is ready by blocking this file
-{
-    const [promise, resolve] = defer<void>()
-    const removeListener = addListener('ready', () => {
-        removeListener()
-        resolve()
-    })
-    postMessage('request-ready', null)
-    await promise
-}
-
 export function addListener(type: string, callback: MessageHandler) {
     if (!messageHandlers.has(type)) messageHandlers.set(type, new Set())
     const store = messageHandlers.get(type)!
     store.add(callback)
     return () => store.delete(callback)
 }
+await workerReadyPromise

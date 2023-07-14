@@ -23,6 +23,7 @@ import type {
     WalletLockStatusUpdatedEvent,
     GameDialogEvent,
     ContactsUpdatedEvent,
+    PopupWalletConnectEvent,
 } from './Events.js'
 
 /**
@@ -58,7 +59,7 @@ export interface CrossIsolationEvents {
     ITODialogEvent: ITODialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent
-
+    popupWalletConnectEvent: PopupWalletConnectEvent
     walletsUpdated: WalletsUpdatedEvent
     contactsUpdated: ContactsUpdatedEvent
     requestsUpdated: RequestsUpdatedEvent

@@ -8,8 +8,8 @@ if (typeof Worker === 'undefined') {
     signal.addEventListener('abort', () => browser.runtime.onMessage.removeListener(f), { once: true })
 
     startListen(async (props) => {
-        const { main } = await import('./worker.js')
-        return main(props)
+        const { render } = await import('./loader.js')
+        return render(props)
     }, signal)
 }
 

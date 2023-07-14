@@ -14,9 +14,18 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         overflow: 'auto',
+        minHeight: '100vh',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     content: {
+        background: theme.palette.maskColor.bottom,
         minWidth: 'clamp(700px, 66.6667%, 66.6667%)',
+        paddingTop: '12.5vh',
+        paddingBottom: '12.5vh',
+        paddingRight: theme.spacing(8),
+        minHeight: 1024,
+        display: 'flex',
+        flexDirection: 'column',
         [theme.breakpoints.up('lg')]: {
             paddingLeft: '20%',
         },
@@ -38,17 +47,13 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
     const [loading, setLoading] = useState(true)
 
     return (
-        <Box
-            className={classes.container}
-            sx={{ minHeight: '100vh', backgroundColor: (theme) => theme.palette.maskColor.bottom }}>
-            <Box paddingY={16} className={classes.content} paddingRight={8} minHeight="896px">
+        <Box className={classes.container}>
+            <Box className={classes.content}>
                 <header>
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
 
-                <Box sx={{ paddingTop: 4.5, height: '100%', position: 'relative', paddingBottom: '116px' }}>
-                    {children}
-                </Box>
+                <Box sx={{ paddingTop: 4.5, flex: 1, position: 'relative' }}>{children}</Box>
             </Box>
             <Box className={classes.sidebar} position="relative">
                 {!hiddenSpline ? (

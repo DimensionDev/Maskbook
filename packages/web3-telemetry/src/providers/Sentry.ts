@@ -1,7 +1,9 @@
+/// <reference types="@masknet/global-types/env" />
 import '@sentry/tracing'
 import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import { Flags } from '@masknet/flags'
 import { getSiteType, getAgentType, getExtensionId, TelemetryID } from '@masknet/shared-base'
+import type { BuildInfoFile } from '@masknet/flags'
 import { joinsABTest } from '../helpers/joinsABTest.js'
 import { getABTestSeed } from '../helpers/getABTestSeed.js'
 import { isNewerThan } from '../helpers/isNewerThan.js'
@@ -46,17 +48,18 @@ const IGNORE_ERRORS = [
 ]
 
 export class SentryAPI implements Provider<Event, Event> {
-    constructor() {
+    constructor(env: BuildInfoFile) {
         const release =
-            process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
-                ? process.env.COMMIT_HASH === 'N/A'
-                    ? `mask-${process.env.VERSION}-reproducible`
-                    : `mask-${process.env.COMMIT_HASH}`
+            env.channel === 'stable' && process.env.NODE_ENV === 'production'
+                ? env.COMMIT_HASH
+                    ? `mask-${env.COMMIT_HASH}`
+                    : `mask-${env.VERSION}-reproducible`
                 : undefined
         if (typeof Sentry === 'undefined') {
-            console.warn('Sentry is not defined')
+            if (process.env.NODE_ENV !== 'test') console.warn('Sentry is not defined')
             return
         }
+
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             release,
@@ -77,8 +80,10 @@ export class SentryAPI implements Provider<Event, Event> {
             beforeSend: (event) => {
                 // version control
                 if (
-                    !isSameVersion(process.env.VERSION, Flags.sentry_earliest_version) &&
-                    !isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)
+                    env.VERSION &&
+                    Flags.sentry_earliest_version &&
+                    !isSameVersion(env.VERSION, Flags.sentry_earliest_version) &&
+                    !isNewerThan(env.VERSION, Flags.sentry_earliest_version)
                 )
                     return null
 
@@ -88,7 +93,7 @@ export class SentryAPI implements Provider<Event, Event> {
 
                 // send automatically by sentry tracker
                 if (!event.tags?.group_id) {
-                    // ignored in development mode
+                    // ignored in the development mode
                     if (process.env.NODE_ENV === 'development') {
                         // eslint-disable-next-line @typescript-eslint/no-base-to-string
                         console.log(`[LOG EXCEPTION]: ${event}`)
@@ -114,13 +119,13 @@ export class SentryAPI implements Provider<Event, Event> {
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
         Sentry.setTag('extension_id', getExtensionId())
-        Sentry.setTag('channel', process.env.channel)
-        Sentry.setTag('version', process.env.VERSION)
+        Sentry.setTag('channel', env.channel)
+        Sentry.setTag('version', env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
         Sentry.setTag('device_ab', joinsABTest())
         Sentry.setTag('device_seed', getABTestSeed())
         Sentry.setTag('device_id', TelemetryID.value)
-        Sentry.setTag('branch_name', process.env.BRANCH_NAME)
+        Sentry.setTag('branch_name', env.BRANCH_NAME)
         TelemetryID.addListener((trackID) => {
             Sentry.setTag('device_ab', joinsABTest())
             Sentry.setTag('device_seed', getABTestSeed())
@@ -244,7 +249,6 @@ export class SentryAPI implements Provider<Event, Event> {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
-        if (!this.shouldRecord(options.sampleRate)) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
