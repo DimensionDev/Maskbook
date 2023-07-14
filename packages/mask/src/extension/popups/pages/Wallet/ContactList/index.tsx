@@ -11,7 +11,7 @@ import { ContactsContext } from './contactsContext.js'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import AddContactInputPanel from './AddContactInputPanel.js'
-import { EditContactModal } from '../../../modals/modals.js'
+import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
@@ -200,6 +200,14 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
         })
     }, [address, name, type])
 
+    const deleteContact = useCallback(() => {
+        DeleteContactModal.openAndWaitForClose({
+            title: t('wallet_edit_contact'),
+            address,
+            name,
+        })
+    }, [address, name])
+
     const menuOptions = useMemo(
         () => [
             {
@@ -212,7 +220,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
                       {
                           name: t('delete'),
                           icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
-                          handler: () => {},
+                          handler: deleteContact,
                       },
                   ]
                 : []),
@@ -222,7 +230,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
 
     const [menu, openMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
-            <MenuItem key={index} className={classes.menuItem} onClick={editContact}>
+            <MenuItem key={index} className={classes.menuItem} onClick={option.handler}>
                 {option.icon}
                 <Typography className={classes.optionName}>{option.name}</Typography>
             </MenuItem>

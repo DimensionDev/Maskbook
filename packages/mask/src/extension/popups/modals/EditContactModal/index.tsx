@@ -140,7 +140,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     onClick={edit}
                     loading={loading}
                     className={classes.button}
-                    disabled={nameAlreadyExist || !name || !name}>
+                    disabled={nameAlreadyExist || !name}>
                     {t('confirm')}
                 </ActionButton>
             </div>

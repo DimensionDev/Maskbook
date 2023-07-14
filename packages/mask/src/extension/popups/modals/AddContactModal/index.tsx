@@ -11,6 +11,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { useContacts } from '../../hook/useContacts.js'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -73,7 +74,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
         return ''
     }, [t, addressError, nameAlreadyExist])
 
-    const addContact = useCallback(async () => {
+    const [{ loading }, addContact] = useAsyncFn(async () => {
         await WalletRPC.addContact({ name, id: address })
         onConfirm?.()
     }, [name, address])
@@ -103,6 +104,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                     {t('cancel')}
                 </ActionButton>
                 <ActionButton
+                    loading={loading}
                     onClick={addContact}
                     className={classes.button}
                     disabled={addressError || nameAlreadyExist || !name || !name}>
