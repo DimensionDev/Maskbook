@@ -16,8 +16,8 @@ interface Network {
 
 interface AddEthereumChainParameter {
     chainId: string
-    blockExplorerUrls?: string[]
     chainName?: string
+    blockExplorerUrls?: string[]
     iconUrls?: string[]
     nativeCurrency?: {
         name: string
