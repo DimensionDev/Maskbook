@@ -1,16 +1,9 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, WalletContactType } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import {
-    useAccount,
-    useBalance,
-    useChainContext,
-    useFungibleTokenBalance,
-    useNativeTokenAddress,
-    useWallets,
-} from '@masknet/web3-hooks-base'
-import { explorerResolver, formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useChainContext, useNativeTokenAddress, useWallets } from '@masknet/web3-hooks-base'
+import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, List, ListItem, MenuItem, Stack, Typography, useTheme } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -18,8 +11,9 @@ import { ContactsContext } from './contactsContext.js'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import AddContactInputPanel from './AddContactInputPanel.js'
+import { EditContactModal } from '../../../modals/modals.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
         overflowX: 'hidden',
         height: '100%',
@@ -73,13 +67,25 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 4,
     },
     menu: {
-        padding: '4px 4px 8px 4px',
+        padding: '4px 0px 8px 0px',
         borderRadius: '16px',
     },
     menuItem: {
-        padding: 8,
-        width: 132,
+        padding: '8px 12px',
+        width: 140,
         minHeight: 'unset',
+        '&:first-child': showDivideLine
+            ? {
+                  '&:after': {
+                      content: '""',
+                      background: theme.palette.divider,
+                      bottom: 0,
+                      position: 'absolute',
+                      width: 120,
+                      height: 1,
+                  },
+              }
+            : {},
     },
     optionName: {
         fontSize: 14,
@@ -112,24 +118,11 @@ const useStyles = makeStyles()((theme) => ({
 const ContactListUI = memo(function TransferUI() {
     const location = useLocation()
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
     const address = useParams().address || nativeTokenAddress
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const isNativeToken = !address || isNativeTokenAddress(address)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, setReceiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
-    const theme = useTheme()
-
-    const { data: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { data: erc20Balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
-    const balance = isNativeToken ? nativeTokenBalance : erc20Balance
-
-    const otherWallets = useMemo(
-        () => wallets.map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
-        [wallets],
-    )
 
     useTitle(t('popups_send'))
 
@@ -147,7 +140,11 @@ const ContactListUI = memo(function TransferUI() {
                         {contacts.map((contact, index) => {
                             return (
                                 <Stack key={index}>
-                                    <ContactListItem address={contact.id} name={contact.name} />
+                                    <ContactListItem
+                                        address={contact.id}
+                                        name={contact.name}
+                                        type={WalletContactType.Contact}
+                                    />
                                 </Stack>
                             )
                         })}
@@ -157,7 +154,11 @@ const ContactListUI = memo(function TransferUI() {
                         {wallets.map((wallet, index) => {
                             return (
                                 <Stack key={index}>
-                                    <ContactListItem address={wallet.address} name={wallet.name} />
+                                    <ContactListItem
+                                        address={wallet.address}
+                                        name={wallet.name}
+                                        type={WalletContactType.Wallet}
+                                    />
                                 </Stack>
                             )
                         })}
@@ -181,31 +182,47 @@ const ContactListUI = memo(function TransferUI() {
 interface ContactListItemProps {
     address: string
     name: string
+    type: WalletContactType
 }
 
-function ContactListItem({ address, name }: ContactListItemProps) {
+function ContactListItem({ address, name, type }: ContactListItemProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({ showDivideLine: type === WalletContactType.Contact })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
+
+    const editContact = useCallback(() => {
+        EditContactModal.openAndWaitForClose({
+            title: t('wallet_edit_contact'),
+            address,
+            name,
+            type,
+        })
+    }, [address, name, type])
 
     const menuOptions = useMemo(
         () => [
             {
                 name: t('edit'),
                 icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
+                handler: editContact,
             },
-            {
-                name: t('delete'),
-                icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
-            },
+            ...(type === WalletContactType.Contact
+                ? [
+                      {
+                          name: t('delete'),
+                          icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
+                          handler: () => {},
+                      },
+                  ]
+                : []),
         ],
-        [t],
+        [t, type],
     )
 
     const [menu, openMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
-            <MenuItem key={index} className={classes.menuItem}>
+            <MenuItem key={index} className={classes.menuItem} onClick={editContact}>
                 {option.icon}
                 <Typography className={classes.optionName}>{option.name}</Typography>
             </MenuItem>

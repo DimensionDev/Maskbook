@@ -2,15 +2,17 @@ import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { buttonClasses } from '@mui/material/Button'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { WalletContactType, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
-import { isValidAddress } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { useContacts } from '../../hook/useContacts.js'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -42,70 +44,103 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         marginTop: 12,
+        background: 'transparent',
+    },
+    inputRoot: {
+        background: 'transparent',
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 700,
+        color: theme.palette.maskColor.third,
+        height: 30,
+        caretColor: theme.palette.maskColor.primary,
+        border: 'none',
+        outline: 'none',
+        '&.Mui-focused': {
+            border: 'none',
+            outline: 'none',
+        },
+        '& .MuiInputBase-input': {
+            textAlign: 'center',
+        },
     },
     helperText: {
         color: theme.palette.maskColor.danger,
         marginTop: 12,
     },
+    address: {
+        textAlign: 'center',
+        color: theme.palette.maskColor.second,
+        marginTop: 12,
+        fontSize: 16,
+    },
+    inputWrapper: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '0 auto',
+    },
 }))
 
-interface AddContactModalProps extends BottomDrawerProps {
+interface EditContactModalProps extends BottomDrawerProps {
     onConfirm?(): void
-    setAddress(address: string): void
     setName(name: string): void
     address: string
     name: string
+    type: WalletContactType | undefined
 }
 
-function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
+function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }: EditContactModalProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     const { value: contacts } = useContacts()
 
-    const addressError = Boolean(address) && !isValidAddress(address)
-
-    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name))
+    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name && contact.id !== address))
 
     const validationMessage = useMemo(() => {
-        if (addressError) return t('wallets_transfer_error_invalid_address')
         if (nameAlreadyExist) return t('wallets_transfer_contact_wallet_name_already_exist')
         return ''
-    }, [t, addressError, nameAlreadyExist])
+    }, [t, nameAlreadyExist])
 
-    const addContact = useCallback(async () => {
-        await WalletRPC.addContact({ name, id: address })
+    const [{ loading }, edit] = useAsyncFn(async () => {
+        if (type === WalletContactType.Contact) {
+            await WalletRPC.updateContact(address, { name, id: address })
+        } else if (type === WalletContactType.Wallet) {
+            await Web3.renameWallet?.(address, name, { providerType: ProviderType.MaskWallet })
+        }
+
         onConfirm?.()
-    }, [name, address])
+    }, [name, address, type])
 
     return (
         <BottomDrawer {...rest}>
             <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
-            <MaskTextField
-                spellCheck={false}
-                placeholder={t('wallet_name_wallet')}
-                className={classes.input}
-                value={name}
-                onChange={(ev) => setName(ev.target.value)}
-                error={nameAlreadyExist}
-            />
-            <MaskTextField
-                spellCheck={false}
-                placeholder={t('address')}
-                wrapperProps={{ className: classes.input }}
-                value={address}
-                onChange={(ev) => setAddress(ev.target.value)}
-                error={addressError}
-            />
+            <Box className={classes.inputWrapper}>
+                <MaskTextField
+                    variant="standard"
+                    inputProps={{ style: { textAlign: 'center' } }}
+                    classes={{ root: classes.inputRoot }}
+                    spellCheck={false}
+                    placeholder={t('wallet_name_wallet')}
+                    className={classes.input}
+                    value={name}
+                    onChange={(ev) => setName(ev.target.value)}
+                    error={nameAlreadyExist}
+                />
+            </Box>
+            <Typography className={classes.address}>{formatEthereumAddress(address, 4)}</Typography>
             {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
                     {t('cancel')}
                 </ActionButton>
                 <ActionButton
-                    onClick={addContact}
+                    onClick={edit}
+                    loading={loading}
                     className={classes.button}
-                    disabled={addressError || nameAlreadyExist || !name || !name}>
+                    disabled={nameAlreadyExist || !name || !name}>
                     {t('confirm')}
                 </ActionButton>
             </div>
@@ -113,15 +148,14 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     )
 }
 
-export type AddContactModalOpenProps = Omit<AddContactModalProps, 'open' | 'setAddress' | 'setName'>
-export const AddContactModal = forwardRef<SingletonModalRefCreator<AddContactModalOpenProps, boolean>>((_, ref) => {
-    const [props, setProps] = useState<AddContactModalOpenProps>({
+export type EditContactModalOpenProps = Omit<EditContactModalProps, 'open' | 'setName'>
+export const EditContactModal = forwardRef<SingletonModalRefCreator<EditContactModalOpenProps, boolean>>((_, ref) => {
+    const [props, setProps] = useState<EditContactModalOpenProps>({
         title: '',
         address: '',
         name: '',
+        type: undefined,
     })
-
-    const setAddress = useCallback((address: string) => setProps({ ...props, address }), [props])
 
     const setName = useCallback((name: string) => setProps({ ...props, name }), [props])
 
@@ -131,10 +165,9 @@ export const AddContactModal = forwardRef<SingletonModalRefCreator<AddContactMod
         },
     })
     return (
-        <AddContactDrawer
+        <EditContactDrawer
             open={open}
             {...props}
-            setAddress={setAddress}
             setName={setName}
             onClose={() => dispatch?.close(false)}
             onConfirm={() => dispatch?.close(true)}
