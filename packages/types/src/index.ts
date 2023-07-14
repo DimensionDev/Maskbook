@@ -1,2 +1,2 @@
-export * from './ScoialNetwork.js'
+export * from './SocialNetwork.js'
 export * from './SocialNetworkUI.js'

@@ -16,7 +16,7 @@ import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
-import type { SocialNetwork } from './ScoialNetwork.js'
+import type { SocialNetwork } from './SocialNetwork.js'
 
 export namespace SocialNetworkUI {
     export interface DeferredDefinition extends SocialNetwork.Base {
