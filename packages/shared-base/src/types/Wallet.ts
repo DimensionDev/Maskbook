@@ -1,5 +1,11 @@
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 
+export enum LockStatus {
+    INIT = 0,
+    UNLOCK = 1,
+    LOCKED = 2,
+}
+
 export interface Wallet {
     id: string
     /** User define wallet name. Default address.prefix(6) */
