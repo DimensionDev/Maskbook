@@ -7,10 +7,10 @@ import { memo, useCallback, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { ContactsContext } from './contactsContext.js'
+import { ContactsContext } from '../../../hook/useContactsContext.js'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
-import AddContactInputPanel from './AddContactInputPanel.js'
+import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({

@@ -3,8 +3,8 @@ import { useChainContext, useLookupAddress } from '@masknet/web3-hooks-base'
 import { isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useI18N } from '../../../../../utils/index.js'
-import { useContacts } from '../../../hook/useContacts.js'
+import { useI18N } from '../../../utils/index.js'
+import { useContacts } from './useContacts.js'
 
 function useContactsContext() {
     const { t } = useI18N()

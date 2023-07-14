@@ -1,13 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { type NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
 
-import { useI18N } from '../../../../../utils/index.js'
-import { ContactsContext } from './contactsContext.js'
-import { AddContactModal } from '../../../modals/modals.js'
+import { useI18N } from '../../../../utils/index.js'
+import { ContactsContext } from '../../hook/useContactsContext.js'
+import { AddContactModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -62,7 +60,6 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
     const { classes } = useStyles()
     const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress, retryContacts } =
         ContactsContext.useContainer()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const theme = useTheme()
 
