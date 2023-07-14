@@ -1,9 +1,10 @@
 import { Emitter, ALL_EVENTS } from '@servie/events'
-import { EMPTY_LIST } from '../index.js'
+import { EMPTY_LIST } from '../constants.js'
 
 function tick(callback: () => void) {
     Promise.resolve().then(callback)
 }
+
 export class ObservableWeakMap<K extends object, V> extends WeakMap<K, V> {
     readonly ALL_EVENTS: typeof ALL_EVENTS = ALL_EVENTS
 

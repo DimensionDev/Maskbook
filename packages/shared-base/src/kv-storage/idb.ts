@@ -1,6 +1,6 @@
-import type { KVStorageBackend } from './types.js'
-import { type IDBPDatabase, openDB } from 'idb/with-async-ittr'
 import { None, Some } from 'ts-results-es'
+import { type IDBPDatabase, openDB } from 'idb/with-async-ittr'
+import type { KVStorageBackend } from './types.js'
 
 /**
  * Create a KVStorageBackend that stores the data in the indexedDB
