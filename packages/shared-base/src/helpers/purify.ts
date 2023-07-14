@@ -7,6 +7,7 @@ const policy =
               createHTML: (x) => x,
           })
         : null
+
 export function purify(html: string): TrustedHTML | string {
     const sanitized = DOMPurify.sanitize(html)
     return policy?.createHTML?.(sanitized) ?? sanitized
