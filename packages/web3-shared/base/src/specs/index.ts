@@ -170,6 +170,23 @@ export interface Contact {
     address: string
 }
 
+export interface Network {
+    id: string
+    name: string
+    chainId: number
+    nativeCurrency: {
+        name: string
+        symbol: string
+        decimals: number
+    }
+    rpcUrls: string[]
+    blockExplorerUrls: string[]
+    iconUrls?: string[]
+    features?: string[]
+    createdAt: Date
+    updatedAt: Date
+}
+
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     type: NetworkType
     chainId: ChainId
@@ -856,7 +873,7 @@ export interface SettingsState extends Startable {
 
 export interface AddressBookState extends Startable {
     /** The tracked addresses of currently chosen sub-network */
-    addressBook?: Subscription<Contact[]>
+    contacts?: Subscription<Contact[]>
 
     /** Add a contact into address book. */
     addContact: (contact: Contact) => Promise<void>
@@ -866,8 +883,15 @@ export interface AddressBookState extends Startable {
     renameContact: (contact: Contact) => Promise<void>
 }
 
-export interface CustomNetworkState extends Startable {
-    customNetworks?: Subscription<Array<{}>>
+export interface NetworkState extends Startable {
+    networks?: Subscription<Network[]>
+
+    /** Add a new custom. */
+    addNetwork: (network: Network) => Promise<void>
+    /** Update a custom network */
+    updateNetwork: (id: string, updates: Partial<Network>) => Promise<void>
+    /** Remove a custom network */
+    removeNetwork: (id: string) => Promise<void>
 }
 
 export interface RiskWarningState extends Startable {
@@ -1050,6 +1074,7 @@ export interface BlockNumberNotifierState<ChainId> {
 
 export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
     AddressBook?: AddressBookState
+    Network?: NetworkState
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>
