@@ -6,10 +6,9 @@ import type { NameServiceAPI } from '@masknet/web3-providers/types'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 
 export class NameServiceState<
-    ChainId extends number,
     DomainBook extends Record<string, string> = Record<string, string>,
     DomainBooks extends Record<NameServiceID, DomainBook> = Record<NameServiceID, DomainBook>,
-> implements Web3NameServiceState<ChainId>
+> implements Web3NameServiceState
 {
     public storage: StorageItem<DomainBooks> = null!
     public domainBook?: Subscription<DomainBook>
