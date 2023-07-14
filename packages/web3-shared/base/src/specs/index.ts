@@ -165,6 +165,11 @@ export type Price = {
     [key in CurrencyType]?: string
 }
 
+export interface Contact {
+    name: string
+    address: string
+}
+
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     type: NetworkType
     chainId: ChainId
@@ -851,14 +856,18 @@ export interface SettingsState extends Startable {
 
 export interface AddressBookState extends Startable {
     /** The tracked addresses of currently chosen sub-network */
-    addressBook?: Subscription<Array<{ name: string; address: string }>>
+    addressBook?: Subscription<Contact[]>
 
     /** Add a contact into address book. */
-    addContact: (name: string, address: string) => Promise<void>
+    addContact: (contact: Contact) => Promise<void>
     /** Remove a contact from address book. */
     removeContact: (address: string) => Promise<void>
     /** Rename an name of contact from address book. */
-    renameContact: (name: string, address: string) => Promise<void>
+    renameContact: (contact: Contact) => Promise<void>
+}
+
+export interface CustomNetworkState extends Startable {
+    customNetworks?: Subscription<Array<{}>>
 }
 
 export interface RiskWarningState extends Startable {

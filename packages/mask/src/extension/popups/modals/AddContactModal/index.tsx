@@ -74,7 +74,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     }, [t, addressError, nameAlreadyExist])
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
-        await Web3State.state.AddressBook?.addContact?.(name, address)
+        await Web3State.state.AddressBook?.addContact({ name, address })
         onConfirm?.()
     }, [name, address, onConfirm])
 

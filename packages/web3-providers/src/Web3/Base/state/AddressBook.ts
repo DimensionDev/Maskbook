@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST, type StorageItem } from '@masknet/shared-base'
-import type { AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
+import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
 export class AddressBookState implements Web3AddressBookState {
     public storage: StorageItem<Array<{ name: string; address: string }>> = null!
@@ -30,7 +30,7 @@ export class AddressBookState implements Web3AddressBookState {
         return this.storage.initializedPromise
     }
 
-    async addContact(name: string, address: string) {
+    async addContact({ address, name }: Contact) {
         if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
         await this.storage.setValue(this.storage.value.concat({ name, address }))
     }
@@ -39,7 +39,7 @@ export class AddressBookState implements Web3AddressBookState {
         await this.storage.setValue(this.storage.value.filter((x) => !this.options.isSameAddress(x.address, address)))
     }
 
-    async renameContact(name: string, address: string) {
+    async renameContact({ address, name }: Contact) {
         if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
 
         await this.storage.setValue(
