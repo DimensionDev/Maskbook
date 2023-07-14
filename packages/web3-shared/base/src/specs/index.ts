@@ -889,7 +889,7 @@ export interface NetworkState extends Startable {
     /** Add a new custom. */
     addNetwork: (network: Network) => Promise<void>
     /** Update a custom network */
-    updateNetwork: (id: string, updates: Partial<Network>) => Promise<void>
+    updateNetwork: (id: string, updates: Omit<Partial<Network>, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>
     /** Remove a custom network */
     removeNetwork: (id: string) => Promise<void>
 }
