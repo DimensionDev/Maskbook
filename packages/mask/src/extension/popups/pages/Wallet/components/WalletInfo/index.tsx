@@ -110,7 +110,7 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(
 
                         <Typography className={classes.address}>
                             <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
-                            <CopyButton text={address} className={classes.copy} />
+                            <CopyButton text={address} className={classes.copy} size={12} />
                         </Typography>
                     </div>
                 </div>

@@ -177,7 +177,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 <FormattedAddress address={account} size={4} formatter={Others.formatAddress} />
                             )}
                         </Typography>
-                        <CopyButton className={cx(classes.icon, classes.copyIcon)} text={account} />
+                        <CopyButton className={cx(classes.icon, classes.copyIcon)} size={17.5} text={account} />
                         {chainIdValid ? (
                             <Link
                                 className={classes.link}

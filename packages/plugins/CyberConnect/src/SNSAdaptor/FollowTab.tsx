@@ -60,7 +60,7 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
                         rel="noopener noreferrer">
                         <Icons.PopupLink className={classes.PopupLink} />
                     </Link>
-                    <CopyButton text={identity.address} className={classes.icon} />
+                    <CopyButton text={identity.address} className={classes.icon} size={16} />
                 </Stack>
             </div>
         </div>

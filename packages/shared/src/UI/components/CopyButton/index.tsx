@@ -1,19 +1,38 @@
-import { memo, useCallback, useState, type MouseEvent, useRef } from 'react'
-import { Link } from '@mui/material'
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { Link, type LinkProps } from '@mui/material'
+import { memo, useCallback, useRef, useState, type MouseEvent } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useSharedI18N } from '../../../index.js'
-import { ShadowRootTooltip } from '@masknet/theme'
 
-export interface CopyButtonProps extends Omit<GeneratedIconProps, 'title'> {
+const useStyles = makeStyles()((theme) => ({
+    copy: {
+        color: theme.palette.maskColor.second,
+        '&:hover': {
+            color: theme.palette.maskColor.main,
+        },
+    },
+}))
+
+export interface CopyButtonProps
+    extends Omit<LinkProps<'button'>, 'color'>,
+        Pick<GeneratedIconProps, 'size' | 'color'> {
     title?: string
     text: string
     /** defaults to 'Copied' */
     successText?: string
 }
 
-export const CopyButton = memo<CopyButtonProps>(function CopyButton({ text, title, successText, ...props }) {
+export const CopyButton = memo<CopyButtonProps>(function CopyButton({
+    text,
+    title,
+    successText,
+    size,
+    color,
+    ...props
+}) {
     const t = useSharedI18N()
+    const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const [copied, setCopied] = useState(false)
     const [active, setActive] = useState(false)
@@ -33,16 +52,13 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({ text, titl
         [text],
     )
 
-    const reset = useCallback(() => {
-        setCopied(false)
-    }, [])
-
     const tooltipTitle = copied ? successText ?? t.copied() : title ?? t.copy()
+    const iconProps = { size, color }
 
     return (
-        <ShadowRootTooltip title={tooltipTitle} placement="top" onOpen={reset}>
-            <Link underline="none" component="button" onClick={handleCopy}>
-                {active ? <Icons.Check {...props} /> : <Icons.Copy {...props} />}
+        <ShadowRootTooltip open={active} title={tooltipTitle} placement="top">
+            <Link underline="none" component="button" onClick={handleCopy} {...props} fontSize={0}>
+                {active ? <Icons.Check {...iconProps} /> : <Icons.Copy {...iconProps} className={classes.copy} />}
             </Link>
         </ShadowRootTooltip>
     )

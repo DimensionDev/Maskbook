@@ -113,7 +113,7 @@ export default memo(function Receive() {
                 <Typography className={classes.network}>{currentNetwork.name}</Typography>
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />
-                    <CopyButton text={account} size={24} style={{ marginLeft: 16 }} />
+                    <CopyButton text={account} size={24} ml={2} style={{ marginLeft: 16 }} />
                 </Typography>
             </Box>
             <div className={classes.halo}>
