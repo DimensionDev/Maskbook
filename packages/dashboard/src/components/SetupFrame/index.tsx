@@ -53,7 +53,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
 
-                <Box sx={{ paddingTop: 4.5, flex: 1, position: 'relative' }}>{children}</Box>
+                <Box sx={{ paddingTop: 4.5, flex: 1, display: 'flex', flexDirection: 'column' }}>{children}</Box>
             </Box>
             <Box className={classes.sidebar} position="relative">
                 {!hiddenSpline ? (
@@ -86,9 +86,5 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
 
 interface SetupFrameControllerProps extends PropsWithChildren {}
 export const SetupFrameController = memo<SetupFrameControllerProps>(function SetupFrameController({ children }) {
-    return (
-        <Box position="absolute" bottom="0" width="100%">
-            {children}
-        </Box>
-    )
+    return <Box marginTop="auto">{children}</Box>
 })

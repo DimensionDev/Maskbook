@@ -132,7 +132,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
     }, [state.personaName, words.join('')])
 
     return (
-        <Box>
+        <>
             <Box className={classes.header}>
                 <Typography className={classes.second}>{t.create_step({ step: '2', total: '2' })}</Typography>
                 <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
@@ -191,6 +191,6 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
                     {t.continue()}
                 </PrimaryButton>
             </SetupFrameController>
-        </Box>
+        </>
     )
 })

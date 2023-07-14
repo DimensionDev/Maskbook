@@ -1,8 +1,8 @@
 import { Routes, Route, useMatch } from 'react-router-dom'
 import { lazy } from 'react'
-import { SetupFrame } from '../../components/CreateWalletFrame/index.js'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { ResetWalletContext } from './context.js'
+import { SetupFrame } from '../../components/SetupFrame/index.js'
 
 const CreateWalletForm = lazy(() => import('./CreateWalletForm/index.js'))
 const CreateMnemonic = lazy(() => import('./CreateMnemonic/index.js'))

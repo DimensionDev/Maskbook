@@ -149,7 +149,7 @@ const Recovery = memo(function Recovery() {
     }, [location.state?.password, location.state?.isReset])
 
     return (
-        <Box>
+        <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
                     {t.create_step({ step: '2', total: '2' })}
@@ -207,7 +207,7 @@ const Recovery = memo(function Recovery() {
                     }}
                 </RecoveryContext.Consumer>
             </RecoveryProvider>
-        </Box>
+        </>
     )
 })
 

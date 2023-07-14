@@ -143,7 +143,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     )
 
     return (
-        <Box>
+        <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
                     {t.create_step({ step: '2', total: '2' })}
@@ -200,7 +200,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                     {t.continue()}
                 </PrimaryButton>
             </SetupFrameController>
-        </Box>
+        </>
     )
 })
 

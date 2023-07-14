@@ -5,11 +5,11 @@ import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
+        flex: 1,
     },
     title: {
         fontSize: 30,
