@@ -4,7 +4,7 @@ import * as kit /* webpackDefer: true */ from '@masknet/kit'
 // false positive. we're not using lodash.get
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import * as lodash /* webpackDefer: true */ from 'lodash-es'
-import * as pure /* webpackDefer: true */ from '../Pure/index.js'
+import * as constants /* webpackDefer: true */ from '../constants.js'
 import * as stringify /* webpackDefer: true */ from 'json-stable-stringify'
 
 export type ValueComparer<T> = (a: T, b: T) => boolean
@@ -99,8 +99,8 @@ export class ValueRefJSON<T extends object> extends ValueRefWithReady<string> {
     private json: Readonly<T> | undefined
     get asJSON(): Readonly<T> {
         if (this.json) return this.json
-        if (this.value === '[]') return (this.json = pure.EMPTY_LIST as any)
-        if (this.value === '{}') return (this.json = pure.EMPTY_OBJECT as any)
+        if (this.value === '[]') return (this.json = constants.EMPTY_LIST as any)
+        if (this.value === '{}') return (this.json = constants.EMPTY_OBJECT as any)
         return (this.json = JSON.parse(this.value))
     }
 }
