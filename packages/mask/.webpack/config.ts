@@ -13,7 +13,7 @@ import { emitManifestFile } from './manifest.js'
 import { getGitInfo } from './git-info.js'
 
 import { dirname, join } from 'node:path'
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
@@ -39,7 +39,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const pnpmPatchHash = readdir(patchesDir).then((files) =>
         Promise.all(
             files.map(async (file) => {
-                return encodeArrayBuffer(await crypto.subtle.digest('SHA-256', await readFile(file)))
+                return encodeArrayBuffer(await crypto.subtle.digest('SHA-256', await readFile(join(patchesDir, file))))
             }),
         ),
     )
