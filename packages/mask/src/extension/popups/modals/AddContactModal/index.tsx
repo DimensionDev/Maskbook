@@ -9,9 +9,9 @@ import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
-import { useContacts } from '../../hook/useContacts.js'
+import { useWalletContacts } from '../../hook/useWalletContacts.js'
 import { useAsyncFn } from 'react-use'
+import { Web3State } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -62,7 +62,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    const { value: contacts } = useContacts()
+    const contacts = useWalletContacts()
 
     const addressError = Boolean(address) && !isValidAddress(address)
 
@@ -75,7 +75,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     }, [t, addressError, nameAlreadyExist])
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
-        await WalletRPC.addContact({ name, id: address })
+        await Web3State.state.AddressBook?.addAddress?.(name, address)
         onConfirm?.()
     }, [name, address])
 

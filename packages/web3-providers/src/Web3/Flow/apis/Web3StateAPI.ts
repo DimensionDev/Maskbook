@@ -36,9 +36,7 @@ export class FlowWeb3StateAPI extends Web3StateAPI_Base<
         await Provider_.setup()
 
         return {
-            AddressBook: new AddressBook(context, {
-                chainId: Provider_.chainId,
-            }),
+            AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             Settings: new Settings(context),
             Transaction: new Transaction(context, {

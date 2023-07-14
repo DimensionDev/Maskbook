@@ -24,7 +24,6 @@ function sanitizeWallet(wallet: Wallet): Wallet {
 // db
 export { hasWallet, updateWallet } from './database/wallet.js'
 export { getNetwork, getNetworks, addNetwork, updateNetwork, deleteNetwork } from './database/network.js'
-export { getContact, getContacts, addContact, updateContact, deleteContact } from './database/contact.js'
 
 // password
 export {

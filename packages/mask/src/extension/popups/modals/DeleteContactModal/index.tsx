@@ -8,9 +8,9 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
 import { Typography } from '@mui/material'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
+import { Web3State } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -66,7 +66,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
     const { t } = useI18N()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
-        await WalletRPC.deleteContact(address)
+        await Web3State.state.AddressBook?.removeAddress?.(address)
         onConfirm?.()
     }, [address])
 

@@ -125,7 +125,7 @@ const ContactListUI = memo(function TransferUI() {
     const { classes } = useStyles({})
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
-
+    console.log({ contacts })
     useTitle(t('popups_send'))
 
     return (
@@ -143,7 +143,7 @@ const ContactListUI = memo(function TransferUI() {
                             return (
                                 <Stack key={index}>
                                     <ContactListItem
-                                        address={contact.id}
+                                        address={contact.address}
                                         name={contact.name}
                                         type={WalletContactType.Contact}
                                     />

@@ -8,10 +8,9 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
-import { useContacts } from '../../hook/useContacts.js'
+import { useWalletContacts } from '../../hook/useWalletContacts.js'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { Web3, Web3State } from '@masknet/web3-providers'
 import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -95,9 +94,9 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    const { value: contacts } = useContacts()
+    const contacts = useWalletContacts()
 
-    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name && contact.id !== address))
+    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name && contact.address !== address))
 
     const validationMessage = useMemo(() => {
         if (nameAlreadyExist) return t('wallets_transfer_contact_wallet_name_already_exist')
@@ -106,7 +105,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
 
     const [{ loading }, edit] = useAsyncFn(async () => {
         if (type === WalletContactType.Contact) {
-            await WalletRPC.updateContact(address, { name, id: address })
+            await Web3State.state.AddressBook?.renameAddress?.(name, address)
         } else if (type === WalletContactType.Wallet) {
             await Web3.renameWallet?.(address, name, { providerType: ProviderType.MaskWallet })
         }
