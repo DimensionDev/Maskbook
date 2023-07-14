@@ -1,5 +1,5 @@
 import { EMPTY_LIST } from '../Pure/index.js'
-import { createConstantSubscription } from '../utils/subscription.js'
+import { createConstantSubscription } from '../helpers/subscription.js'
 
 export const ZERO = createConstantSubscription(0)
 export const UNDEFINED = createConstantSubscription(undefined)
