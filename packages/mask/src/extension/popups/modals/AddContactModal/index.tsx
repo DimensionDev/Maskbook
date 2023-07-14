@@ -1,5 +1,6 @@
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import { forwardRef, useCallback, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { buttonClasses } from '@mui/material/Button'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
@@ -10,7 +11,6 @@ import { alpha } from '@mui/system'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useWalletContacts } from '../../hook/useWalletContacts.js'
-import { useAsyncFn } from 'react-use'
 import { Web3State } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,7 +65,6 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const contacts = useWalletContacts()
 
     const addressError = Boolean(address) && !isValidAddress(address)
-
     const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name))
 
     const validationMessage = useMemo(() => {
@@ -77,7 +76,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await Web3State.state.AddressBook?.addContact?.(name, address)
         onConfirm?.()
-    }, [name, address])
+    }, [name, address, onConfirm])
 
     return (
         <BottomDrawer {...rest}>
@@ -107,7 +106,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                     loading={loading}
                     onClick={addContact}
                     className={classes.button}
-                    disabled={addressError || nameAlreadyExist || !name || !name}>
+                    disabled={addressError || nameAlreadyExist || !name}>
                     {t('confirm')}
                 </ActionButton>
             </div>

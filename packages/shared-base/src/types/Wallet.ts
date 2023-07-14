@@ -64,8 +64,3 @@ export interface LegacyWalletRecord {
     createdAt: Date
     updatedAt: Date
 }
-
-export enum WalletContactType {
-    Wallet = 'Wallet',
-    Contact = 'Contact',
-}

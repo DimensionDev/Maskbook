@@ -1,17 +1,19 @@
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import { forwardRef, useCallback, useMemo, useState } from 'react'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { useAsyncFn } from 'react-use'
+import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
-import { WalletContactType, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EmojiAvatar } from '@masknet/shared'
 import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
 import { useWalletContacts } from '../../hook/useWalletContacts.js'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3, Web3State } from '@masknet/web3-providers'
-import { useAsyncFn } from 'react-use'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { ContactType } from '../../pages/Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -87,7 +89,7 @@ interface EditContactModalProps extends BottomDrawerProps {
     setName(name: string): void
     address: string
     name: string
-    type: WalletContactType | undefined
+    type: ContactType | undefined
 }
 
 function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }: EditContactModalProps) {
@@ -96,7 +98,9 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
 
     const contacts = useWalletContacts()
 
-    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name && contact.address !== address))
+    const nameAlreadyExist = Boolean(
+        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)),
+    )
 
     const validationMessage = useMemo(() => {
         if (nameAlreadyExist) return t('wallets_transfer_contact_wallet_name_already_exist')
@@ -104,14 +108,14 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     }, [t, nameAlreadyExist])
 
     const [{ loading }, edit] = useAsyncFn(async () => {
-        if (type === WalletContactType.Contact) {
+        if (type === ContactType.Recipient) {
             await Web3State.state.AddressBook?.renameContact?.(name, address)
-        } else if (type === WalletContactType.Wallet) {
+        } else if (type === ContactType.Owned) {
             await Web3.renameWallet?.(address, name, { providerType: ProviderType.MaskWallet })
         }
 
         onConfirm?.()
-    }, [name, address, type])
+    }, [name, address, type, onConfirm])
 
     return (
         <BottomDrawer {...rest}>

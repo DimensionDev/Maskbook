@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { NetworkPluginID, WalletContactType } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -11,6 +11,7 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
+import { ContactType } from '../type.js'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
@@ -122,7 +123,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
 
 const ContactListUI = memo(function TransferUI() {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
 
@@ -145,7 +146,7 @@ const ContactListUI = memo(function TransferUI() {
                                     <ContactListItem
                                         address={contact.address}
                                         name={contact.name}
-                                        type={WalletContactType.Contact}
+                                        type={ContactType.Recipient}
                                     />
                                 </Stack>
                             )
@@ -159,7 +160,7 @@ const ContactListUI = memo(function TransferUI() {
                                     <ContactListItem
                                         address={wallet.address}
                                         name={wallet.name}
-                                        type={WalletContactType.Wallet}
+                                        type={ContactType.Owned}
                                     />
                                 </Stack>
                             )
@@ -184,12 +185,12 @@ const ContactListUI = memo(function TransferUI() {
 interface ContactListItemProps {
     address: string
     name: string
-    type: WalletContactType
+    type: ContactType
 }
 
 function ContactListItem({ address, name, type }: ContactListItemProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ showDivideLine: type === WalletContactType.Contact })
+    const { classes } = useStyles({ showDivideLine: type === ContactType.Recipient })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
 
@@ -217,7 +218,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
                 icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
                 handler: editContact,
             },
-            ...(type === WalletContactType.Contact
+            ...(type === ContactType.Recipient
                 ? [
                       {
                           name: t('delete'),
