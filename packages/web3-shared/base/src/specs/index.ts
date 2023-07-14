@@ -171,7 +171,6 @@ export interface Contact {
 }
 
 export interface Network {
-    id: string
     name: string
     chainId: number
     nativeCurrency: {
@@ -186,6 +185,8 @@ export interface Network {
     createdAt: Date
     updatedAt: Date
 }
+
+export type ReasonableNetwork = Omit<Network, 'createdAt' | 'updatedAt'>
 
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     type: NetworkType
@@ -887,9 +888,9 @@ export interface NetworkState extends Startable {
     networks?: Subscription<Network[]>
 
     /** Add a new custom. */
-    addNetwork: (network: Network) => Promise<void>
+    addNetwork: (network: ReasonableNetwork) => Promise<void>
     /** Update a custom network */
-    updateNetwork: (id: string, updates: Omit<Partial<Network>, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>
+    updateNetwork: (id: string, updates: Partial<ReasonableNetwork>) => Promise<void>
     /** Remove a custom network */
     removeNetwork: (id: string) => Promise<void>
 }
