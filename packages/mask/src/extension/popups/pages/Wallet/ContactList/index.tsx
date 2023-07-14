@@ -122,7 +122,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
 
 const ContactListUI = memo(function TransferUI() {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const { classes } = useStyles()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
 
