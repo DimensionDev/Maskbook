@@ -27,6 +27,8 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
         display: 'flex',
         flexDirection: 'column',
         padding: '0 16px',
+        maxHeight: 380,
+        overflow: 'scroll',
     },
     contactsList: {
         padding: 0,
@@ -48,6 +50,10 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
         justifyContent: 'space-between',
         paddingLeft: '0px !important',
         paddingRight: '0px !important',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
     },
     contactsListItemInfo: {
         display: 'flex',
