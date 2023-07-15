@@ -44,6 +44,9 @@ const useStyles = makeStyles()((theme) => {
             // space for action group.
             paddingBottom: 68,
             zIndex: 3,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         deleteButton: {
             padding: 0,

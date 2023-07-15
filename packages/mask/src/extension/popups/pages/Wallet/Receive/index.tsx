@@ -118,6 +118,7 @@ export default memo(function Receive() {
 
     useTitle(t('wallet_receive'))
 
+    // TODO custom networks
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
 
     return (
