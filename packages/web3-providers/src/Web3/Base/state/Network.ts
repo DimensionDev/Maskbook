@@ -46,6 +46,7 @@ export class NetworkState implements Web3NetworkState {
         await this.storage.setValue({
             ...this.storage.value,
             [id]: {
+                id,
                 ...network,
                 createdAt: now,
                 updatedAt: now,

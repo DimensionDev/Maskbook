@@ -171,6 +171,7 @@ export interface Contact {
 }
 
 export interface Network {
+    id: string
     name: string
     chainId: number
     nativeCurrency: {
@@ -186,7 +187,16 @@ export interface Network {
     updatedAt: Date
 }
 
-export type ReasonableNetwork = Omit<Network, 'createdAt' | 'updatedAt'>
+export type UpdateableNetwork = Omit<Network, 'createdAt' | 'updatedAt'>
+
+export type ReasonableNetwork = Omit<UpdateableNetwork, 'id'>
+
+export type RecognizableNetwork = UpdateableNetwork & {
+    /**
+     * Indicate a built-in network.
+     */
+    isRegisterd: boolean
+}
 
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     type: NetworkType

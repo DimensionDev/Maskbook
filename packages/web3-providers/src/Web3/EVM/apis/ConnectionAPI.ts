@@ -21,7 +21,7 @@ import {
     isNativeTokenAddress,
     ContractTransaction,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { TransactionStatusType, type ReasonableNetwork, type RecognizableNetwork } from '@masknet/web3-shared-base'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
@@ -30,6 +30,7 @@ import { Web3StateRef } from './Web3StateAPI.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 
 export class ConnectionAPI
     extends ConnectionReadonlyAPI
@@ -50,6 +51,10 @@ export class ConnectionAPI
             Web3Provider
         >
 {
+    private get Network() {
+        return Web3StateRef.value.Network
+    }
+
     private get Transaction() {
         return Web3StateRef.value.Transaction
     }
@@ -544,5 +549,24 @@ export class ConnectionAPI
             },
             options,
         )
+    }
+
+    override async getNetworks(): Promise<RecognizableNetwork[]> {
+        const registerdNetworks = getRegisteredWeb3Networks()
+        const customizedNetworks = this.Network?.networks?.getCurrentValue()
+
+        return [...registerdNetworks, ...customizedNetworks]
+    }
+
+    override async addNetwork(network: ReasonableNetwork): Promise<void> {
+        await this.Network?.addNetwork(network)
+    }
+
+    override async updateNetwork(id: string, updates: Partial<ReasonableNetwork>): Promise<void> {
+        await this.Network?.updateNetwork(id, updates)
+    }
+
+    override async removeNetwork(id: string): Promise<void> {
+        await this.Network?.removeNetwork(id)
     }
 }

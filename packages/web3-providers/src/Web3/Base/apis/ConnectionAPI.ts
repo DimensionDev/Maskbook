@@ -5,6 +5,8 @@ import type {
     NonFungibleToken,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
+    ReasonableNetwork,
+    RecognizableNetwork,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { ConnectionOptions_Base } from './ConnectionOptionsAPI.js'
@@ -205,6 +207,14 @@ export interface ConnectionAPI_Base<
     updateWallets?: (wallets: Wallet[], initial?: Options) => Promise<void>
     /** Remove a bunch of wallets. */
     removeWallets?: (wallets: Wallet[], initial?: Options) => Promise<void>
+    /** Get all registered & customized networks. */
+    getNetworks(): Promise<RecognizableNetwork[]>
+    /** Add a network. */
+    addNetwork(network: ReasonableNetwork): Promise<void>
+    /** Update a network. */
+    updateNetwork(id: string, updates: Partial<ReasonableNetwork>): Promise<void>
+    /** Remove a network by id. */
+    removeNetwork(id: string): Promise<void>
     /** Confirm transaction */
     confirmTransaction(hash: string, initial?: Options): Promise<TransactionReceipt>
     /** Replace transaction */

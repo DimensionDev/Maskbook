@@ -42,6 +42,8 @@ import {
     createNonFungibleTokenMetadata,
     createNonFungibleTokenContract,
     createNonFungibleTokenCollection,
+    type ReasonableNetwork,
+    type RecognizableNetwork,
 } from '@masknet/web3-shared-base'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
@@ -762,6 +764,19 @@ export class ConnectionReadonlyAPI
     }
 
     cancelTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+
+    getNetworks(): Promise<RecognizableNetwork[]> {
+        throw new Error('Method not implemented.')
+    }
+    addNetwork(network: ReasonableNetwork): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateNetwork(id: string, updates: Partial<ReasonableNetwork>): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    removeNetwork(id: string): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }
