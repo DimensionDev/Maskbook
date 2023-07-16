@@ -30,7 +30,7 @@ import { ConfirmModal } from '../../../modals/modals.js'
 import { ActionGroup } from '../components/index.js'
 import { useAsset } from '../hooks/index.js'
 import { DIMENSION, TrendingChart } from './TrendingChart.js'
-import { useCoinStats } from './useCoinStats.js'
+import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
 
@@ -163,7 +163,11 @@ const TokenDetail = memo(function TokenDetail() {
     }, [asset, nativeToken])
 
     const [chartRange, setChartRange] = useState(TrendingAPI.Days.ONE_DAY)
-    const { data: stats = EMPTY_LIST, refetch, isLoading: isLoadingStats } = useCoinStats(chainId, address, chartRange)
+    const {
+        data: stats = EMPTY_LIST,
+        refetch,
+        isLoading: isLoadingStats,
+    } = useCoinTrendingStats(chainId, address, chartRange)
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
     const { showSnackbar } = usePopupCustomSnackbar()
