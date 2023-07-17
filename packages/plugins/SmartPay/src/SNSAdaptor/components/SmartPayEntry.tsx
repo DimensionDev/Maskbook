@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { ApplicationEntry, LeavePageConfirmModal, useSharedI18N } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
@@ -51,7 +51,19 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 openDashboard,
             })
         }
-        return
+
+        // if there is verified persona but current persona isn't verified
+        if ((value.hasVerifiedPersona || personas.length) && !value.signPersona && !value.signWallet) {
+            return PersonaSelectPanelModal.open({
+                enableVerify: true,
+                target: PluginID.SmartPay,
+            })
+        }
+        return setSmartPayDialog({
+            open: true,
+            signWallet: value.signWallet,
+            signPersona: value.signPersona,
+        })
     }, [loading, wallets, value, personas])
 
     useEffect(() => {

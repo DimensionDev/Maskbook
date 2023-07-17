@@ -1,10 +1,9 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry, useCopyToClipboard, useUpdateEffect } from 'react-use'
+import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
 import { isNaN, sum } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
     ImageIcon,
-    useSnackbarCallback,
     TokenIcon,
     FormattedBalance,
     useMenuConfig,
@@ -226,16 +225,6 @@ export const SmartPayContent = memo(() => {
         return sum(values)
     }, [assets])
 
-    // #endregion
-
-    // #region copy event handler
-    const [, copyToClipboard] = useCopyToClipboard()
-
-    const onCopy = useSnackbarCallback({
-        executor: async (address?: string) => copyToClipboard(address ?? ''),
-        deps: [],
-        successText: t.copy_wallet_address_success(),
-    })
     // #endregion
 
     const currentProfile = useLastRecognizedIdentity()

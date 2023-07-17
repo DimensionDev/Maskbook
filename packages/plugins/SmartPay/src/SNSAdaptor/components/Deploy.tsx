@@ -238,11 +238,7 @@ export function Deploy({ open }: { open: boolean }) {
                                 ) : (
                                     <>
                                         {formatEthereumAddress(contractAccount?.address ?? '', 4)}
-                                        <CopyButton
-                                            size={14}
-                                            text={contractAccount?.address ?? ''}
-                                            successText={t.copy_wallet_address_success()}
-                                        />
+                                        <CopyButton size={14} text={contractAccount?.address ?? ''} />
                                     </>
                                 )}
                             </Typography>
