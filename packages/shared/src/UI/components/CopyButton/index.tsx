@@ -7,7 +7,6 @@ import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     copy: {
-        color: theme.palette.maskColor.second,
         '&:hover': {
             color: theme.palette.maskColor.main,
         },
@@ -32,7 +31,7 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
     ...props
 }) {
     const t = useSharedI18N()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const [copied, setCopied] = useState(false)
     const [active, setActive] = useState(false)
@@ -57,7 +56,7 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
 
     return (
         <ShadowRootTooltip open={active} title={tooltipTitle} placement="top">
-            <Link underline="none" component="button" onClick={handleCopy} {...props} fontSize={0}>
+            <Link underline="none" component="button" onClick={handleCopy} color="inherit" {...props} fontSize={0}>
                 {active ? <Icons.Check {...iconProps} /> : <Icons.Copy {...iconProps} className={classes.copy} />}
             </Link>
         </ShadowRootTooltip>
