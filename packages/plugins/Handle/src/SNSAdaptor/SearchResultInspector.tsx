@@ -1,8 +1,8 @@
-import { useContext, useEffect } from 'react'
+import { memo, useContext, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Typography, type Theme } from '@mui/material'
 import { CopyButton, SocialAccountList } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Others } from '@masknet/web3-providers'
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function SearchResultInspectorContent() {
+export const SearchResultInspectorContent = memo(function SearchResultInspectorContent() {
     const { classes } = useStyles()
     const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const suffix = domain ? domain.split('.').pop()! : undefined
@@ -82,6 +82,7 @@ export function SearchResultInspectorContent() {
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
                                 <CopyButton size={20} className={classes.reversedAddressIcon} text={reversedAddress} />
+                                <CopyButton size={20} className={classes.reversedAddressIcon} text={reversedAddress} />
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -102,12 +103,16 @@ export function SearchResultInspectorContent() {
             </Box>
         </>
     )
-}
+})
 
-export function SearchResultInspector(props: SearchResultInspectorProps) {
+const useTheme = () => MaskLightTheme
+const useMaskIconPalette = (theme: Theme) => theme.palette.mode
+export const SearchResultInspector = memo(function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
         <ENSProvider {...props}>
-            <SearchResultInspectorContent />
+            <MaskThemeProvider useTheme={useTheme} useMaskIconPalette={useMaskIconPalette}>
+                <SearchResultInspectorContent />
+            </MaskThemeProvider>
         </ENSProvider>
     )
-}
+})
