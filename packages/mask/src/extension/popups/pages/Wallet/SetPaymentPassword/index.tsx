@@ -7,7 +7,7 @@ import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
-import { useBalance, useWallets } from '@masknet/web3-hooks-base'
+import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance } from '@masknet/shared'
@@ -278,12 +278,14 @@ function WalletItem({ address }: WalletItemProps) {
     })
     const theme = useTheme()
 
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+
     return (
         <Box className={classes.addWalletWrapper}>
             <Icons.ETH size={30} />
             <div>
                 <Typography className={classes.subTitle}>
-                    {formatEthereumAddress(address, 4)}{' '}
+                    {domain || formatEthereumAddress(address, 4)}{' '}
                     <Link
                         underline="none"
                         target="_blank"
