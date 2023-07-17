@@ -110,6 +110,13 @@ const useStyles = makeStyles()((theme) => ({
     strong: {
         color: theme.palette.maskColor.main,
     },
+    walletItemList: {
+        height: 240,
+        overflow: 'scroll',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
 const SetPaymentPassword = memo(function SetPaymentPassword() {
@@ -227,9 +234,11 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                     </>
                 ) : (
                     <>
-                        {wallets.slice(0, 3).map((wallet, index) => (
-                            <WalletItem address={wallet.address} key={index} />
-                        ))}
+                        <Box className={classes.walletItemList}>
+                            {wallets.map((wallet, index) => (
+                                <WalletItem address={wallet.address} key={index} />
+                            ))}
+                        </Box>
                         <div className={classes.setPasswordButtonWrapper}>
                             <ActionButton fullWidth onClick={() => setIsCreating(true)}>
                                 {t('popups_set_the_payment_password_title')}
