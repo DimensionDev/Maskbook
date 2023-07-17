@@ -170,33 +170,8 @@ export interface Contact {
     address: string
 }
 
-export interface Network {
-    id: string
-    name: string
-    chainId: number
-    nativeCurrency: {
-        name: string
-        symbol: string
-        decimals: number
-    }
-    rpcUrl: string
-    blockExplorerUrl: string
-    iconUrl?: string
-    features?: string[]
-    createdAt: Date
-    updatedAt: Date
-}
-
-export type ReasonableNetwork = Omit<Network, 'id' | 'createdAt' | 'updatedAt'>
-
-export type RecognizableNetwork = Omit<Network, 'createdAt' | 'updatedAt'> & {
-    /**
-     * Indicate a built-in network.
-     */
-    isRegistered: boolean
-}
-
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
+    ID: string
     type: NetworkType
     chainId: ChainId
     coinMarketCapChainId: string
@@ -208,13 +183,29 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     shortName?: string
     network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
+    rpcUrl: string
+    iconUrl?: string
     // EIP3091
     explorerUrl: {
         url: string
         parameters?: Record<string, string | number | boolean>
     }
     features?: string[]
+    // Indicate a built-in chain or customized one.
+    isCustomized: boolean
 }
+
+export type Network<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType>
+
+export type ReasonableNetwork<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType> & {
+    createdAt: Date
+    updatedAt: Date
+}
+
+export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
+    Network<ChainId, SchemaType, NetworkType>,
+    'ID'
+>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -892,14 +883,17 @@ export interface AddressBookState extends Startable {
     renameContact: (contact: Contact) => Promise<void>
 }
 
-export interface NetworkState extends Startable {
-    networks?: Subscription<Network[]>
+export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+    networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
-    /** Add a new custom. */
-    addNetwork: (network: ReasonableNetwork) => Promise<void>
-    /** Update a custom network */
-    updateNetwork: (id: string, updates: Partial<ReasonableNetwork>) => Promise<void>
-    /** Remove a custom network */
+    /** Add a new network. */
+    addNetwork: (descriptor: TransferableNetwork<ChainId, SchemaType, NetworkType>) => Promise<void>
+    /** Update a network. */
+    updateNetwork: (
+        id: string,
+        updates: Partial<TransferableNetwork<ChainId, SchemaType, NetworkType>>,
+    ) => Promise<void>
+    /** Remove a network */
     removeNetwork: (id: string) => Promise<void>
 }
 
@@ -1083,7 +1077,7 @@ export interface BlockNumberNotifierState<ChainId> {
 
 export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
     AddressBook?: AddressBookState
-    Network?: NetworkState
+    Network?: NetworkState<ChainId, SchemaType, NetworkType>
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>

@@ -3,11 +3,17 @@ import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_OBJECT, mapSubscription, type StorageItem } from '@masknet/shared-base'
-import type { Network, ReasonableNetwork, NetworkState as Web3NetworkState } from '@masknet/web3-shared-base'
+import type {
+    ReasonableNetwork,
+    TransferableNetwork,
+    NetworkState as Web3NetworkState,
+} from '@masknet/web3-shared-base'
 
-export class NetworkState implements Web3NetworkState {
-    public storage: StorageItem<Record<string, Network>> = null!
-    public networks?: Subscription<Network[]>
+export class NetworkState<ChainId, SchemaType, NetworkType>
+    implements Web3NetworkState<ChainId, SchemaType, NetworkType>
+{
+    public storage: StorageItem<Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>> = null!
+    public networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Network', {
@@ -32,29 +38,29 @@ export class NetworkState implements Web3NetworkState {
         if (!Object.hasOwn(this.storage.value, id)) throw new Error('Not a valid network ID.')
     }
 
-    private async validateNetwork(network: ReasonableNetwork) {
+    private async validateNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>) {
         return true
     }
 
-    async addNetwork(network: ReasonableNetwork) {
+    async addNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>) {
         const valid = await this.validateNetwork(network)
         if (!valid) throw new Error('Not a valid network.')
 
-        const id = uuid()
+        const ID = uuid()
         const now = new Date()
 
         await this.storage.setValue({
             ...this.storage.value,
-            [id]: {
-                id,
+            [ID]: {
                 ...network,
+                ID,
                 createdAt: now,
                 updatedAt: now,
             },
         })
     }
 
-    async updateNetwork(id: string, updates: Partial<ReasonableNetwork>) {
+    async updateNetwork(id: string, updates: Partial<TransferableNetwork<ChainId, SchemaType, NetworkType>>) {
         this.assertNetwork(id)
 
         await this.storage.setValue({

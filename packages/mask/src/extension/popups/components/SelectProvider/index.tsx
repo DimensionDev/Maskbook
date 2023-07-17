@@ -44,7 +44,7 @@ export const SelectProvider = memo(function SelectProvider() {
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()
-    const provders = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
+    const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(
         async (providerType: ProviderType) => {
@@ -90,7 +90,7 @@ export const SelectProvider = memo(function SelectProvider() {
 
     return (
         <Box className={classes.container}>
-            {provders
+            {providers
                 .filter((x) => (x.enableRequirements?.supportedExtensionSites ?? []).includes(ExtensionSite.Popup))
                 .map((provider) => {
                     return (

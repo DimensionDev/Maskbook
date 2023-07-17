@@ -27,6 +27,7 @@ import {
     isCryptoPunksContractAddress,
     getEthereumConstant,
     getTokenConstant,
+    type NetworkType,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -42,8 +43,8 @@ import {
     createNonFungibleTokenMetadata,
     createNonFungibleTokenContract,
     createNonFungibleTokenCollection,
-    type ReasonableNetwork,
-    type RecognizableNetwork,
+    type Network,
+    type TransferableNetwork,
 } from '@masknet/web3-shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
@@ -767,11 +768,14 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    getNetworks(initial?: ConnectionOptions): Promise<RecognizableNetwork[]> {
+    getNetworks(initial?: ConnectionOptions): Promise<Array<Network<ChainId, SchemaType, NetworkType>>> {
         throw new Error('Method not implemented.')
     }
 
-    addNetwork(network: ReasonableNetwork, initial?: ConnectionOptions): Promise<void> {
+    addNetwork(
+        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
+        initial?: ConnectionOptions,
+    ): Promise<void> {
         throw new Error('Method not implemented.')
     }
 

@@ -22,6 +22,7 @@ const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
 export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => ({
     ...x,
+    ID: `${x.chainId}_${x.name}`,
     coinMarketCapChainId: '',
     coinGeckoChainId: '',
     coinGeckoPlatformId: '',
@@ -34,9 +35,13 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         schema: SchemaType.Native,
         ...x.nativeCurrency,
     },
+    // not accessable
+    rpcUrl: '',
+    iconUrl: x.nativeCurrency.logoURL,
     explorerUrl: {
         url: x.explorers?.[0]?.url ?? x.infoURL,
     },
+    isCustomized: false,
 }))
 
 export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>> = [

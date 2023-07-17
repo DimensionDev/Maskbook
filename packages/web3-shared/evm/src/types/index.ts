@@ -191,9 +191,6 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
     ? S
     : T
 
-/**
- * Keep updating to packages/public-api/src/web.ts
- */
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
@@ -211,6 +208,7 @@ export enum NetworkType {
     Conflux = 'Conflux',
     Astar = 'Astar',
     Moonbeam = 'Moonbeam',
+    CustomNetwork = 'CustomNetwork',
 }
 
 export enum ProviderType {
