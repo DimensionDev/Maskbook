@@ -1,8 +1,8 @@
-import { asyncIteratorToArray } from '@masknet/shared-base'
 import { v4 as uuid } from 'uuid'
+import { asyncIteratorToArray } from '@masknet/shared-base'
+import { PluginDB } from '../../../database/Plugin.db.js'
 import { type I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 import { createBaseSchema, createSchema, fetchChains } from '../../../../../utils/network-schema.js'
-import { PluginDB } from '../../../database/Plugin.db.js'
 
 interface Network {
     /** uuid */

@@ -58,6 +58,7 @@ export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
         case NetworkType.Metis:
         case NetworkType.Conflux:
         case NetworkType.Moonbeam:
+        case NetworkType.CustomNetwork:
             console.error('To be implement network:', networkType)
             return EMPTY_LIST
         default:
