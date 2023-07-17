@@ -583,7 +583,7 @@ export class ConnectionAPI
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<void>(
             {
-                method: EthereumMethodType.MASK_RENAME_WALLET,
+                method: EthereumMethodType.MASK_RENAME_NETWORK,
                 params: [id, name],
             },
             options,
