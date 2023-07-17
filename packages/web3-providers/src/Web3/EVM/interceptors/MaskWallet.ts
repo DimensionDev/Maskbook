@@ -142,7 +142,6 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     context.abort(context)
                 }
                 break
-
             default:
                 break
         }
