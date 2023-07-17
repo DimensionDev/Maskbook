@@ -27,7 +27,6 @@ import {
     isCryptoPunksContractAddress,
     getEthereumConstant,
     getTokenConstant,
-    type NetworkType,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -43,8 +42,6 @@ import {
     createNonFungibleTokenMetadata,
     createNonFungibleTokenContract,
     createNonFungibleTokenCollection,
-    type Network,
-    type TransferableNetwork,
 } from '@masknet/web3-shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
@@ -78,7 +75,6 @@ export class ConnectionReadonlyAPI
             AddressType,
             SchemaType,
             ProviderType,
-            NetworkType,
             Signature,
             UserOperation,
             Transaction,
@@ -766,32 +762,6 @@ export class ConnectionReadonlyAPI
     }
 
     cancelTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNetworks(initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<Array<Network<ChainId, SchemaType, NetworkType>>>(
-            {
-                method: EthereumMethodType.MASK_GET_ALL_NETWORKS,
-                params: [],
-            },
-            options,
-        )
-    }
-
-    addNetwork(
-        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
-        initial?: ConnectionOptions,
-    ): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    renameNetwork(id: string, name: string, initial?: ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    removeNetwork(id: string, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

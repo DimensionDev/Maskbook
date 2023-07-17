@@ -46,7 +46,6 @@ export class FlowConnectionAPI
             AddressType,
             SchemaType,
             ProviderType,
-            NetworkType,
             Signature,
             Operation,
             Transaction,

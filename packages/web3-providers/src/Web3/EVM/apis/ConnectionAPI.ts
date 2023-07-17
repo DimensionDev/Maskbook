@@ -20,10 +20,8 @@ import {
     getAverageBlockDelay,
     isNativeTokenAddress,
     ContractTransaction,
-    type NetworkType,
-    EIP3085Editor,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType, type TransferableNetwork } from '@masknet/web3-shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
@@ -41,7 +39,6 @@ export class ConnectionAPI
             AddressType,
             SchemaType,
             ProviderType,
-            NetworkType,
             Signature,
             UserOperation,
             Transaction,
@@ -53,10 +50,6 @@ export class ConnectionAPI
             Web3Provider
         >
 {
-    private get Network() {
-        return Web3StateRef.value.Network
-    }
-
     private get Transaction() {
         return Web3StateRef.value.Transaction
     }
@@ -548,47 +541,6 @@ export class ConnectionAPI
                         value: '0x0',
                     },
                 ],
-            },
-            options,
-        )
-    }
-
-    override async addNetwork(
-        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
-        initial?: ConnectionOptions,
-    ): Promise<void> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<void>(
-            {
-                method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
-                params: [
-                    EIP3085Editor.fromDescriptor({
-                        ID: '0',
-                        ...network,
-                    }).eip3085ChainDescriptor,
-                ],
-            },
-            options,
-        )
-    }
-
-    override async renameNetwork(id: string, name: string, initial?: ConnectionOptions): Promise<void> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_RENAME_NETWORK,
-                params: [id, name],
-            },
-            options,
-        )
-    }
-
-    override async removeNetwork(id: string, initial?: ConnectionOptions): Promise<void> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_REMOVE_NETWORK,
-                params: [id],
             },
             options,
         )

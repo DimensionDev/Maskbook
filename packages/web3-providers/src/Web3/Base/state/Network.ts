@@ -1,8 +1,8 @@
 import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_OBJECT, mapSubscription, type StorageItem } from '@masknet/shared-base'
+import { getRegisteredWeb3Chains, getRegisteredWeb3Networks, type Plugin } from '@masknet/plugin-infra'
+import { EMPTY_OBJECT, mapSubscription, type NetworkPluginID, type StorageItem } from '@masknet/shared-base'
 import type {
     ReasonableNetwork,
     TransferableNetwork,
@@ -15,15 +15,34 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     public storage: StorageItem<Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>> = null!
     public networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
-    constructor(protected context: Plugin.Shared.SharedUIContext) {
+    constructor(
+        protected context: Plugin.Shared.SharedUIContext,
+        protected options: {
+            getNetworkPluginID: () => NetworkPluginID
+        },
+    ) {
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Network', {
             value: EMPTY_OBJECT,
         })
 
         this.storage = storage.value
-        this.networks = mapSubscription(this.storage.subscription, (networks) =>
-            Object.values(networks).sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()),
-        )
+
+        this.networks = mapSubscription(this.storage.subscription, (storage) => {
+            const customizedNetworks = Object.values(storage).sort(
+                (a, z) => a.createdAt.getTime() - z.createdAt.getTime(),
+            )
+            const pluginID = this.options.getNetworkPluginID()
+            const registeredChains = getRegisteredWeb3Chains(pluginID)
+            const registeredNetworks = getRegisteredWeb3Networks(pluginID)
+
+            return [
+                ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
+                ...customizedNetworks.map((x) => ({
+                    ...omit(x, 'createdAt', 'updatedAt'),
+                    isCustomized: true,
+                })),
+            ] as Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
+        })
     }
 
     get ready() {

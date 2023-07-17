@@ -4,7 +4,7 @@ import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { EIP3085Editor, type EIP3085Descriptor } from './EIP3085Editor.js'
+import { type EIP3085Descriptor } from './EIP3085Editor.js'
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
@@ -70,12 +70,12 @@ export class PayloadEditor {
         return this.config.chainId ?? this.options?.chainId
     }
 
-    get network() {
+    get chainDescriptor() {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
                 const [descriptor] = params as [EIP3085Descriptor]
-                return EIP3085Editor.from(descriptor).descriptor
+                return descriptor
             default:
                 return null
         }

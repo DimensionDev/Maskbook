@@ -48,7 +48,6 @@ export class SolanaConnectionAPI
             AddressType,
             SchemaType,
             ProviderType,
-            NetworkType,
             Signature,
             Operation,
             Transaction,

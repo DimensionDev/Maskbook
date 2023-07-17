@@ -1,7 +1,8 @@
 import { useSubscription } from 'use-subscription'
-import { EMPTY_ARRAY } from '@masknet/shared-base'
-import { Web3State } from '@masknet/web3-providers'
+import { EMPTY_ARRAY, type NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State } from './useWeb3State.js'
 
-export function useContacts() {
-    return useSubscription(Web3State.state.AddressBook?.contacts ?? EMPTY_ARRAY)
+export function useContacts<T extends NetworkPluginID = NetworkPluginID>(pluginID?: T) {
+    const { AddressBook } = useWeb3State(pluginID)
+    return useSubscription(AddressBook?.contacts ?? EMPTY_ARRAY)
 }

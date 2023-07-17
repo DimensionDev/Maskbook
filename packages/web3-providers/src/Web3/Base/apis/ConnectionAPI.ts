@@ -1,13 +1,11 @@
 import type { Account, ECKeyIdentifier, Proof, Wallet } from '@masknet/shared-base'
 import type {
     FungibleToken,
-    Network,
     NonFungibleCollection,
     NonFungibleToken,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
-    TransferableNetwork,
 } from '@masknet/web3-shared-base'
 import type { ConnectionOptions_Base } from './ConnectionOptionsAPI.js'
 
@@ -16,7 +14,6 @@ export interface ConnectionAPI_Base<
     AddressType,
     SchemaType,
     ProviderType,
-    NetworkType,
     Signature,
     Operation,
     Transaction,
@@ -208,14 +205,6 @@ export interface ConnectionAPI_Base<
     updateWallets?: (wallets: Wallet[], initial?: Options) => Promise<void>
     /** Remove a bunch of wallets. */
     removeWallets?: (wallets: Wallet[], initial?: Options) => Promise<void>
-    /** Get all registered & customized networks. */
-    getNetworks(initial?: Options): Promise<Array<Network<ChainId, SchemaType, NetworkType>>>
-    /** Add a new network. */
-    addNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>, initial?: Options): Promise<void>
-    /** Rename a network. */
-    renameNetwork(id: string, name: string, initial?: Options): Promise<void>
-    /** Remove a network by id. */
-    removeNetwork(id: string, initial?: Options): Promise<void>
     /** Confirm transaction */
     confirmTransaction(hash: string, initial?: Options): Promise<TransactionReceipt>
     /** Replace transaction */

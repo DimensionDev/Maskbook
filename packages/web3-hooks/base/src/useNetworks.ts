@@ -1,7 +1,8 @@
 import { useSubscription } from 'use-subscription'
-import { EMPTY_ARRAY } from '@masknet/shared-base'
-import { Web3State } from '@masknet/web3-providers'
+import { EMPTY_ARRAY, type NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State } from './useWeb3State.js'
 
-export function useNetworks() {
-    return useSubscription(Web3State.state.Network?.networks ?? EMPTY_ARRAY)
+export function useNetworks<T extends NetworkPluginID = NetworkPluginID>(pluginID?: T) {
+    const { Network } = useWeb3State(pluginID)
+    return useSubscription(Network?.networks ?? EMPTY_ARRAY)
 }

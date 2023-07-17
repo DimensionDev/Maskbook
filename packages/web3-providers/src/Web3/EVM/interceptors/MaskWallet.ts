@@ -4,8 +4,6 @@ import { EthereumMethodType, type Middleware, ProviderType, isValidAddress } fro
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
-import { getNetworks } from '../helpers/getNetworks.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class MaskWallet implements Middleware<ConnectionContext> {
     private get walletProvider() {
@@ -105,38 +103,6 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             case EthereumMethodType.MASK_RESET_ALL_WALLETS:
                 try {
                     await this.walletProvider.resetAllWallets()
-                    context.write()
-                } catch (error) {
-                    context.abort(context)
-                }
-                break
-            case EthereumMethodType.MASK_GET_ALL_NETWORKS:
-                context.write(getNetworks())
-                break
-            case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
-                try {
-                    if (!context.network) throw new Error('Invalid network payload.')
-                    await Web3StateRef.value.Network?.addNetwork(context.network)
-                    context.write()
-                } catch (error) {
-                    context.abort(context)
-                }
-                break
-            case EthereumMethodType.MASK_RENAME_NETWORK:
-                try {
-                    const [id, name] = context.requestArguments.params as [string, string]
-                    await Web3StateRef.value.Network?.updateNetwork(id, {
-                        name,
-                    })
-                    context.write()
-                } catch (error) {
-                    context.abort(context)
-                }
-                break
-            case EthereumMethodType.MASK_REMOVE_NETWORK:
-                try {
-                    const [id] = context.requestArguments.params as [string]
-                    await Web3StateRef.value.Network?.removeNetwork(id)
                     context.write()
                 } catch (error) {
                     context.abort(context)

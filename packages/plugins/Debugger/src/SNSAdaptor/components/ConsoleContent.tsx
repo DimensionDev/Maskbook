@@ -9,6 +9,7 @@ import {
     useLookupAddress,
     useWeb3Others,
     useChainContext,
+    useNetworks,
 } from '@masknet/web3-hooks-base'
 import {
     useLastRecognizedIdentity,
@@ -44,6 +45,10 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
     const themeSettings = useThemeSettings()
+    const networks = useNetworks()
+
+    console.log('DEBUG: networks')
+    console.log(networks)
 
     useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
 
