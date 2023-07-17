@@ -193,7 +193,7 @@ export type RecognizableNetwork = Omit<Network, 'createdAt' | 'updatedAt'> & {
     /**
      * Indicate a built-in network.
      */
-    isRegisterd: boolean
+    isRegistered: boolean
 }
 
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {

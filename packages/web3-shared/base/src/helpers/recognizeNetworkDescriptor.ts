@@ -1,8 +1,8 @@
 import type { ChainDescriptor, NetworkDescriptor, RecognizableNetwork } from '../specs/index.js'
 
 export function recognizeNetwork(
-    chain: ChainDescriptor<number, string, string>,
-    network: NetworkDescriptor<number, string>,
+    chain: ChainDescriptor<number, unknown, unknown>,
+    network: NetworkDescriptor<number, unknown>,
 ): RecognizableNetwork {
     return {
         id: network.ID,
@@ -14,9 +14,10 @@ export function recognizeNetwork(
             decimals: chain.nativeCurrency.decimals,
         },
         blockExplorerUrl: chain.explorerUrl.url,
+        // no accessable
         rpcUrl: '',
         iconUrl: network.icon,
         features: chain.features,
-        isRegisterd: true,
+        isRegistered: true,
     }
 }

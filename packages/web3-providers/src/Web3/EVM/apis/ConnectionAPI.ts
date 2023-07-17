@@ -1,8 +1,10 @@
 import type Web3 from 'web3'
 import { toHex } from 'web3-utils'
+import { omit } from 'lodash-es'
 import { delay } from '@masknet/kit'
 import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import { NetworkPluginID, type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
+import { recognizeNetwork } from '@masknet/web3-shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -552,11 +554,19 @@ export class ConnectionAPI
     }
 
     override async getNetworks(): Promise<RecognizableNetwork[]> {
-        const chains = getRegisteredWeb3Chains(NetworkPluginID.PLUGIN_EVM)
-        const registerdNetworks = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM)
+        const registeredChains = getRegisteredWeb3Chains(NetworkPluginID.PLUGIN_EVM)
+        const registeredNetworks = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM)
         const customizedNetworks = this.Network?.networks?.getCurrentValue() ?? []
 
-        return [...registerdNetworks, ...customizedNetworks]
+        return [
+            ...registeredNetworks.map((x) =>
+                recognizeNetwork(registeredChains.find((y) => y.chainId === x.chainId)!, x),
+            ),
+            ...customizedNetworks.map((x) => ({
+                ...omit(x, 'createdAt', 'updatedAt'),
+                isRegistered: true,
+            })),
+        ]
     }
 
     override async addNetwork(network: ReasonableNetwork): Promise<void> {
