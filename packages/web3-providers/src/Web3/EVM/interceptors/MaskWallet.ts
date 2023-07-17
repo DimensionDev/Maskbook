@@ -115,6 +115,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 break
             case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
                 try {
+                    if (!context.network) throw new Error('Invalid network payload.')
                     await Web3StateRef.value.Network?.addNetwork(context.network)
                     context.write()
                 } catch (error) {

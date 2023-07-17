@@ -21,6 +21,7 @@ import {
     isNativeTokenAddress,
     ContractTransaction,
     type NetworkType,
+    EIP3085Editor,
 } from '@masknet/web3-shared-evm'
 import { TransactionStatusType, type Network, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { RequestAPI } from './RequestAPI.js'
@@ -572,7 +573,10 @@ export class ConnectionAPI
             {
                 method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
                 params: [
-                    // conversion
+                    EIP3085Editor.fromDescriptor({
+                        ID: '0',
+                        ...network,
+                    }).eip3085ChainDescriptor,
                 ],
             },
             options,

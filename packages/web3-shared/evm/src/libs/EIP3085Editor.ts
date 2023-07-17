@@ -19,29 +19,29 @@ export interface EIP3085Descriptor {
 }
 
 export class EIP3085Editor {
-    constructor(private descriptor: EIP3085Descriptor) {}
+    constructor(public eip3085ChainDescriptor: EIP3085Descriptor) {}
 
-    get chainDescriptor(): ChainDescriptor<ChainId, SchemaType, NetworkType> {
-        const chainId = Number.parseInt(this.descriptor.chainId, 16) as ChainId
+    get descriptor(): ChainDescriptor<ChainId, SchemaType, NetworkType> {
+        const chainId = Number.parseInt(this.eip3085ChainDescriptor.chainId, 16) as ChainId
 
         return {
-            ID: `${this.descriptor.chainId}_${this.descriptor.chainName ?? 'UNKNOWN'}`,
+            ID: `${this.eip3085ChainDescriptor.chainId}_${this.eip3085ChainDescriptor.chainName ?? 'UNKNOWN'}`,
             type: NetworkType.CustomNetwork,
             chainId,
             coinMarketCapChainId: '',
             coinGeckoChainId: '',
             coinGeckoPlatformId: '',
-            name: this.descriptor.chainName ?? 'UNKNOWN',
+            name: this.eip3085ChainDescriptor.chainName ?? 'UNKNOWN',
             network: 'mainnet',
             nativeCurrency: {
                 ...createNativeToken(chainId),
-                name: this.descriptor.nativeCurrency?.name ?? 'UNKNOWN',
-                symbol: this.descriptor.nativeCurrency?.symbol ?? 'UNKNOWN',
-                decimals: this.descriptor.nativeCurrency?.decimals ?? 0,
+                name: this.eip3085ChainDescriptor.nativeCurrency?.name ?? 'UNKNOWN',
+                symbol: this.eip3085ChainDescriptor.nativeCurrency?.symbol ?? 'UNKNOWN',
+                decimals: this.eip3085ChainDescriptor.nativeCurrency?.decimals ?? 0,
             },
-            rpcUrl: first(this.descriptor.rpcUrls) ?? '',
+            rpcUrl: first(this.eip3085ChainDescriptor.rpcUrls) ?? '',
             explorerUrl: {
-                url: first(this.descriptor.blockExplorerUrls) ?? '',
+                url: first(this.eip3085ChainDescriptor.blockExplorerUrls) ?? '',
             },
             isCustomized: false,
         }
