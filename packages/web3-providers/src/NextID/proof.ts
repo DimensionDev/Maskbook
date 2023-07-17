@@ -355,6 +355,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 domain: {
                     owner: {
                         neighborWithTraversal: NeighborList
+                        nft: NextIDEnsRecord[]
                     }
                 } | null
             }
@@ -375,9 +376,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             },
             { enableSquash: true },
         )
-
+        console.log('------')
         if (!data.domain) return EMPTY_LIST
-        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, [])
+        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, data.domain.owner.nft)
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
