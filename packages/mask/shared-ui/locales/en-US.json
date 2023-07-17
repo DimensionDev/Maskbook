@@ -1072,6 +1072,7 @@
     "wallet_risk_warning_confirm_tips": "Clicking the confirm button means that you agree to bear the above possible risks.",
     "wallet_risk_confirm_confirming": "Confirming",
     "wallet_risk_confirm_failed": "Confirm Failed",
+    "wallet_name_length_error": "String must contain at least 1 character(s)",
     "add_collectibles_token_id_placeholder": "Token ID separated by comma, e.g. 1223,1224,",
     "plugin_wallet_solana_tips": "Phantom only supports the Solana chain.",
     "plugin_wallet_blocto_tips": "Blocto only supports the Flow chain.",
