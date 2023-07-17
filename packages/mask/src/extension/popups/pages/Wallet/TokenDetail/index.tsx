@@ -137,9 +137,10 @@ const TokenDetail = memo(function TokenDetail() {
     const asset = useAsset(chainId, address, account)
     const { data: tokenPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
+        if (asset?.value?.usd) return asset.value.usd
         if (!asset?.decimals || !tokenPrice || !balance) return 0
         return leftShift(balance, asset.decimals).times(tokenPrice)
-    }, [balance, asset?.decimals, tokenPrice])
+    }, [balance, asset, tokenPrice])
 
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
