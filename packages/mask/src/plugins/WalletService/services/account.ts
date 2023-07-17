@@ -16,6 +16,7 @@ interface MaskAccount {
     owner?: string
     identifier?: ECKeyIdentifier
 }
+
 // #region select wallet with popups
 let deferred: DeferTuple<MaskAccount[], Error> | null
 

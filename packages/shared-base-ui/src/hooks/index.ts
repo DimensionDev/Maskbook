@@ -1,3 +1,4 @@
+export * from './useBuildInfo.js'
 export * from './useValueRef.js'
 export * from './useObservableMapSet.js'
 export * from './useControlledDialog.js'

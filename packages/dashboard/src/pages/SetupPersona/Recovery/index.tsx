@@ -10,12 +10,14 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
-import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud.js'
+import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
 import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { Services } from '../../../API.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
+import { UserProvider } from '../../Settings/hooks/UserContext.js'
+import urlcat from 'urlcat'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
         borderRadius: theme.spacing(1, 1, 0, 0),
         overflow: 'hidden',
+        marginBottom: 46,
     },
     tabList: {
         background:
@@ -98,7 +101,7 @@ export const Recovery = memo(function Recovery() {
                     })
                 }
             } catch {
-                setError(t.sign_in_account_mnemonic_confirm_failed())
+                setError(t.incorrect_identity_mnemonic())
             }
         },
         [t, navigate],
@@ -126,19 +129,22 @@ export const Recovery = memo(function Recovery() {
         [t, navigate],
     )
 
-    const onRestore = useCallback(async () => {
-        if (!currentPersona) {
-            const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona)
-                await delay(1000)
+    const onRestore = useCallback(
+        async (count?: number) => {
+            if (!currentPersona) {
+                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+                if (lastedPersona) {
+                    await changeCurrentPersona(lastedPersona)
+                    await delay(1000)
+                }
             }
-        }
-        navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
-    }, [!currentPersona, changeCurrentPersona, navigate])
+            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count }), { replace: true })
+        },
+        [!currentPersona, changeCurrentPersona, navigate],
+    )
 
     return (
-        <Box>
+        <>
             <Box className={classes.header}>
                 <Typography variant="h1" className={classes.title}>
                     {t.data_recovery_title()}
@@ -161,10 +167,10 @@ export const Recovery = memo(function Recovery() {
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Recovery Methods">
-                                <Tab className={classes.tab} label="Identity words" value={tabs.mnemonic} />
-                                <Tab className={classes.tab} label="Private Key" value={tabs.privateKey} />
-                                <Tab className={classes.tab} label="Local Backup" value={tabs.local} />
-                                <Tab className={classes.tab} label="Cloud Backup" value={tabs.cloud} />
+                                <Tab className={classes.tab} label={t.identity_words()} value={tabs.mnemonic} />
+                                <Tab className={classes.tab} label={t.private_key()} value={tabs.privateKey} />
+                                <Tab className={classes.tab} label={t.local_backup()} value={tabs.local} />
+                                <Tab className={classes.tab} label={t.cloud_backup()} value={tabs.cloud} />
                             </MaskTabList>
                         </div>
                         <div className={classes.panelContainer}>
@@ -182,7 +188,9 @@ export const Recovery = memo(function Recovery() {
                                 <RestorePersonaFromLocal onRestore={onRestore} />
                             </TabPanel>
                             <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
-                                <RestoreFromCloud />
+                                <UserProvider>
+                                    <RestoreFromCloud />
+                                </UserProvider>
                             </TabPanel>
                         </div>
                     </TabContext>
@@ -197,6 +205,6 @@ export const Recovery = memo(function Recovery() {
                     }}
                 </RecoveryContext.Consumer>
             </RecoveryProvider>
-        </Box>
+        </>
     )
 })

@@ -1,109 +1,115 @@
 import { memo, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { Typography } from '@mui/material'
+import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { Trans } from 'react-i18next'
 import { LoadingButton } from '@mui/lab'
-import { useI18N } from '../../../../../utils/index.js'
-import { PasswordField } from '../../../components/PasswordField/index.js'
+import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { PasswordField } from '../../../components/PasswordField/index.js'
+import { ResetWalletModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
-    contain: {
-        flex: 1,
-        padding: '0 16px',
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        background: theme.palette.maskColor.secondaryBottom,
     },
-    header: {
+    content: {
+        padding: '0px 16px',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+    },
+    titleWrapper: {
+        paddingTop: 8,
+        height: 100,
+        padding: 16,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 10,
-        padding: '50px 0',
     },
     title: {
-        fontSize: 16,
-        fontWeight: 500,
-        lineHeight: '22px',
-        color: '#15181B',
+        fontSize: 24,
+        lineHeight: '120%',
+        fontStyle: 'normal',
+        fontWeight: 700,
+        marginBottom: 12,
     },
-    label: {
-        color: '#1C68F3',
-        fontSize: 12,
-        lineHeight: '16px',
-        margin: '10px 0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    inputWrapper: {
+        paddingTop: 18,
+        height: 192,
+        width: '100%',
     },
-    button: {
-        fontWeight: 600,
-        marginTop: 50,
-        padding: '9px 0',
-        borderRadius: 20,
+    strong: {
+        color: theme.palette.maskColor.main,
     },
-    disabled: {
-        opacity: 0.5,
-        backgroundColor: '#1C68F3!important',
-        color: '#ffffff!important',
+    pointer: {
+        cursor: 'pointer',
     },
 }))
 
 const Unlock = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const location = useLocation()
     const [password, setPassword] = useState('')
-
+    const theme = useTheme()
     const navigate = useNavigate()
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
-        return WalletRPC.unlockWallet(password)
+        const verified = await WalletRPC.unlockWallet(password)
+
+        if (verified) navigate({ pathname: PopupRoutes.Wallet }, { replace: true })
+        return verified
     }, [password])
 
-    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
-
-    useAsync(async () => {
-        if (!(isLocked === false && !getLockStatusLoading)) return
-        const from = new URLSearchParams(location.search).get('from')
-        navigate({ pathname: from ?? PopupRoutes.Wallet, search: location.search }, { replace: true })
-    }, [isLocked, getLockStatusLoading, location.search])
-
-    useTitle('')
-
     return (
-        <main className={classes.contain}>
-            <div className={classes.header}>
-                <Icons.MaskWallet size={48} />
-                <Typography className={classes.title}>{t('popups_wallet_unlock_wallet')}</Typography>
-            </div>
-            <div>
-                <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                <PasswordField
-                    value={password}
-                    type="password"
-                    onKeyDown={(event) => {
-                        if (event.key === 'Enter') handleUnlock()
-                    }}
-                    onChange={(e) => setPassword(e.target.value)}
-                    error={verified === false}
-                    helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}
-                />
-            </div>
-            <LoadingButton
-                loading={loading}
-                fullWidth
-                variant="contained"
-                classes={{ root: classes.button, disabled: classes.disabled }}
-                disabled={!password}
-                onClick={handleUnlock}>
-                {t('unlock')}
-            </LoadingButton>
-        </main>
+        <Box className={classes.container}>
+            <Box className={classes.content}>
+                <Box className={classes.titleWrapper}>
+                    <Typography className={classes.title}>{t('welcome_back')}</Typography>
+                </Box>
+                <Box className={classes.inputWrapper}>
+                    <PasswordField
+                        placeholder="Password"
+                        value={password}
+                        type="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {verified === false ? (
+                        <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
+                            {t('popups_wallet_unlock_error_password')}
+                        </Typography>
+                    ) : null}
+                </Box>
+
+                <LoadingButton
+                    loading={loading}
+                    fullWidth
+                    variant="contained"
+                    disabled={!password}
+                    onClick={handleUnlock}>
+                    {t('unlock')}
+                </LoadingButton>
+
+                <Typography
+                    color={theme.palette.maskColor.third}
+                    marginTop="16px"
+                    onClick={() => ResetWalletModal.open({})}
+                    className={classes.pointer}
+                    fontSize={14}
+                    textAlign="center"
+                    fontWeight={400}>
+                    <Trans
+                        i18nKey="popups_wallet_reset_tips"
+                        components={{ strong: <strong className={classes.strong} /> }}
+                    />
+                </Typography>
+            </Box>
+        </Box>
     )
 })
 

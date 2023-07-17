@@ -1,3 +1,4 @@
+import type { ComponentType, ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
@@ -12,8 +13,8 @@ import type {
     SocialAddress,
     SocialIdentity,
     SocialAccount,
+    Startable,
 } from '@masknet/shared-base'
-import type { ComponentType, ReactNode } from 'react'
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -835,10 +836,7 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
-export interface SettingsState {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface SettingsState extends Startable {
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
@@ -851,22 +849,19 @@ export interface SettingsState {
     nonFungibleAssetSourceType?: Subscription<SourceType>
 }
 
-export interface AddressBookState<ChainId> {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface AddressBookState extends Startable {
     /** The tracked addresses of currently chosen sub-network */
-    addressBook?: Subscription<string[]>
+    addressBook?: Subscription<Array<{ name: string; address: string }>>
 
-    /** Add an address into address book. */
-    addAddress: (chainId: ChainId, address: string) => Promise<void>
-    /** Remove an address from address book. */
-    removeAddress: (chainId: ChainId, address: string) => Promise<void>
+    /** Add a contact into address book. */
+    addContact: (name: string, address: string) => Promise<void>
+    /** Remove a contact from address book. */
+    removeContact: (address: string) => Promise<void>
+    /** Rename an name of contact from address book. */
+    renameContact: (name: string, address: string) => Promise<void>
 }
-export interface RiskWarningState {
-    ready: boolean
-    readyPromise: Promise<void>
 
+export interface RiskWarningState extends Startable {
     /** Is approved */
     approved?: Subscription<boolean>
 
@@ -885,20 +880,14 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceState<ChainId> {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface NameServiceState extends Startable {
     /** get address of domain name */
     lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
     reverse?: (address: string) => Promise<string | undefined>
 }
 
-export interface TokenState<ChainId, SchemaType> {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface TokenState<ChainId, SchemaType> extends Startable {
     /** The user trusted fungible tokens. */
     trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user trusted non-fungible tokens. */
@@ -947,10 +936,7 @@ export interface TokenState<ChainId, SchemaType> {
         tokenIds: string[],
     ): Promise<void>
 }
-export interface TransactionState<ChainId, Transaction> {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface TransactionState<ChainId, Transaction> extends Startable {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
@@ -996,10 +982,7 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         txHash?: string,
     ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
-export interface TransactionWatcherState<ChainId, Transaction> {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface TransactionWatcherState<ChainId, Transaction> extends Startable {
     emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
     /** Add a transaction into the watch list. */
@@ -1016,10 +999,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
         status: TransactionStatusType,
     ) => Promise<void>
 }
-export interface ProviderState<ChainId, ProviderType, NetworkType> {
-    ready: boolean
-    readyPromise: Promise<void>
-
+export interface ProviderState<ChainId, ProviderType, NetworkType> extends Startable {
     /** The account of the currently visiting site. */
     account?: Subscription<string>
     /** The chain id of the currently visiting site. */
@@ -1060,11 +1040,11 @@ export interface BlockNumberNotifierState<ChainId> {
 }
 
 export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
-    AddressBook?: AddressBookState<ChainId>
+    AddressBook?: AddressBookState
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>
-    NameService?: NameServiceState<ChainId>
+    NameService?: NameServiceState
     RiskWarning?: RiskWarningState
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>

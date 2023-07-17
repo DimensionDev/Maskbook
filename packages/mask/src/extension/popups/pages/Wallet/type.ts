@@ -18,3 +18,8 @@ export enum HomeTabType {
     SocialAccounts = 'Social Accounts',
     ConnectedWallets = 'Connected Wallets',
 }
+
+export enum ContactType {
+    Owned = 'Owned',
+    Recipient = 'Recipient',
+}

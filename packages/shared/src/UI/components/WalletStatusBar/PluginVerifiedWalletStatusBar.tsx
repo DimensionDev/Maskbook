@@ -213,7 +213,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={() => SelectProviderModal.open()}>
-                        <Icons.ConnectWallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
+                        <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
                     </Button>
                 </Box>
             )

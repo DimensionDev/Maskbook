@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function FileServiceDialog({ onClose, selectMode, selectedFileIds, compositionType }: FileServiceDialogProps) {
+export function FileServiceDialog({ onClose, selectMode, selectedFileIds, compositionType }: FileServiceDialogProps) {
     const { classes } = useStyles()
     const [confirmed] = useTermsConfirmed()
 
@@ -72,5 +72,3 @@ function FileServiceDialog({ onClose, selectMode, selectedFileIds, compositionTy
         </MemoryRouter>
     )
 }
-
-export default FileServiceDialog

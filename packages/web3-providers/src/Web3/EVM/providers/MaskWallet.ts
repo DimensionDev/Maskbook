@@ -9,7 +9,6 @@ import {
     getSiteType,
     PopupRoutes,
     ValueRef,
-    isExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -45,9 +44,7 @@ export class MaskWalletProvider
         )
     }
     async update() {
-        const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
-        if (isRecovery) return
-
+        // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
         const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
@@ -119,14 +116,30 @@ export class MaskWalletProvider
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
+        if (!this.hostedAccount && !this.wallets.length) await this.walletStorage?.account.setValue(wallet.address)
         await this.context?.addWallet(wallet.address, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         const scWallets = this.wallets.filter((x) => isSameAddress(x.owner, address))
         if (scWallets.length) await super.removeWallets(scWallets)
+        if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
         await this.context?.removeWallet(address, password)
+    }
+
+    override async removeWallets(wallets: Wallet[]): Promise<void> {
+        await super.removeWallets(wallets)
+        for (const wallet of wallets) {
+            if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
+            await this.context?.removeWallet(wallet.address)
+        }
+    }
+
+    override async resetAllWallets(): Promise<void> {
+        await super.removeWallets(this.wallets)
+        await this.walletStorage?.account.setValue('')
+        await this.context?.resetAllWallets()
     }
 
     override async renameWallet(address: string, name: string) {

@@ -1,6 +1,5 @@
 import { TelemetryID } from '../../../shared-base/src/Telemetry/index.js'
 import Services from '../extension/service.js'
-import { delay } from '@masknet/kit'
 
 const timeStart = Date.now()
 const task = Services.Helper.getTelemetryID().then((id) => {
@@ -11,4 +10,4 @@ const task = Services.Helper.getTelemetryID().then((id) => {
     }
 })
 
-await Promise.race([delay(500), task])
+export default task

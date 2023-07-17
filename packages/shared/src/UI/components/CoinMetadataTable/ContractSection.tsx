@@ -31,13 +31,7 @@ export function ContractSection({
             {chain ? (
                 <WalletIcon mainIcon={chain?.icon} size={14} />
             ) : iconURL ? (
-                <TokenIcon
-                    logoURL={iconURL}
-                    address={address}
-                    name={name}
-                    symbol={symbol}
-                    AvatarProps={{ style: { width: 16, height: 16 } }}
-                />
+                <TokenIcon logoURL={iconURL} address={address} name={name} symbol={symbol} size={16} />
             ) : (
                 <Box width={16} />
             )}
@@ -52,7 +46,7 @@ export function ContractSection({
                 onClick={chainId ? () => openWindow(Others.explorerResolver.addressLink(chainId, address)) : noop}>
                 <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
             </Typography>
-            <CopyButton size={16} text={address} />
+            <CopyButton size={16} text={address} scoped={false} />
         </Stack>
     )
 }

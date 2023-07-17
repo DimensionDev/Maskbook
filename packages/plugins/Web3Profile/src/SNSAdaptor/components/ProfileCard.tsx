@@ -144,7 +144,7 @@ export const ProfileCard = memo(function ProfileCard({
 
     const action = walletProofs.length ? (
         <>
-            <Icons.ConnectWallet size={24} />
+            <Icons.Wallet size={24} />
             <Typography className={classes.percent} variant="body2" mx={1}>
                 {listingAddresses.length}/{walletProofs.length}
             </Typography>

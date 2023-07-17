@@ -54,9 +54,7 @@ export class Web3StateAPI extends Web3StateAPI_Base<
             Provider: Provider_,
             BalanceNotifier: new BalanceNotifier(),
             BlockNumberNotifier: new BlockNumberNotifier(),
-            AddressBook: new AddressBook(context, {
-                chainId: Provider_.chainId,
-            }),
+            AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             NameService: new NameService(context),
             RiskWarning: new RiskWarning(context, {

@@ -1,11 +1,9 @@
-import React, { lazy, Suspense, useCallback, useEffect } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Route, Routes, Navigate, HashRouter } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
-import { DashboardRoutes, type RestoreSuccessEvent } from '@masknet/shared-base'
-import { Messages } from '../API.js'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
@@ -21,34 +19,6 @@ const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
 export function Pages() {
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
-    const restoreCallback = useCallback(
-        async ({ wallets, count }: RestoreSuccessEvent) => {
-            if (count) {
-                showSnackbar(t.recovery_smart_pay_wallet_title(), {
-                    variant: 'success',
-                    message: t.recovery_smart_pay_wallet_description({
-                        count,
-                    }),
-                })
-            } else if (wallets) {
-                const chainId = await SmartPayBundler.getSupportedChainId()
-                const accounts = await SmartPayOwner.getAccountsByOwners(chainId, wallets)
-                const deployedWallet = accounts.filter((x) => x.deployed)
-                if (!deployedWallet.length) return
-                showSnackbar(t.recovery_smart_pay_wallet_title(), {
-                    variant: 'success',
-                    message: t.recovery_smart_pay_wallet_description({
-                        count: deployedWallet.length,
-                    }),
-                })
-            }
-        },
-        [t, showSnackbar],
-    )
-
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
 
     useMountReport(EventID.AccessDashboard)
 

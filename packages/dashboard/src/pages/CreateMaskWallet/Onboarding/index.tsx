@@ -96,7 +96,7 @@ const Onboarding = memo(function Onboarding() {
     }, [t])
 
     return (
-        <Box>
+        <>
             <Box className={classes.card}>
                 <Typography className={classes.pin}>{t.persona_onboarding_pin_tips()}</Typography>
                 <Box mt={2.25} display="flex" alignItems="center">
@@ -124,7 +124,7 @@ const Onboarding = memo(function Onboarding() {
                     <Typography fontWeight={700}>{t.create_wallet_onboarding_got_it()}</Typography>
                 </PrimaryButton>
             </SetupFrameController>
-        </Box>
+        </>
     )
 })
 

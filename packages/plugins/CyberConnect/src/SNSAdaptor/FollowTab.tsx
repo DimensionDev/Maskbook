@@ -20,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
         color: theme.palette.maskColor.publicSecond,
-        transform: 'translate(0px, 1px)',
     },
     PopupLink: {
         width: 16,
@@ -60,7 +59,7 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
                         rel="noopener noreferrer">
                         <Icons.PopupLink className={classes.PopupLink} />
                     </Link>
-                    <CopyButton text={identity.address} className={classes.icon} />
+                    <CopyButton text={identity.address} className={classes.icon} size={16} />
                 </Stack>
             </div>
         </div>

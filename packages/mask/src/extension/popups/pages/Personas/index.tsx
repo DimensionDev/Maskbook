@@ -1,6 +1,13 @@
 import { lazy, memo, Suspense, useEffect } from 'react'
-import { Route, Routes, useSearchParams } from 'react-router-dom'
-import { NetworkPluginID, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { useMount } from 'react-use'
+import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    CrossIsolationMessages,
+    NetworkPluginID,
+    PopupModalRoutes,
+    PopupRoutes,
+    relativeRouteOf,
+} from '@masknet/shared-base'
 
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
@@ -15,12 +22,27 @@ const SelectPersona = lazy(() => import('./SelectPersona/index.js'))
 const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
 const ConnectedWallets = lazy(() => import('./ConnectedWallets/index.js'))
 const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
+const WalletConnect = lazy(() => import('./WalletConnect/index.js'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
+
 const Persona = memo(() => {
+    const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
 
     const [params] = useSearchParams()
+
+    useMount(() => {
+        return CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open, uri }) => {
+            if (!open || location.href.includes(PopupRoutes.WalletConnect)) return
+            navigate(PopupRoutes.WalletConnect, {
+                state: {
+                    uri,
+                },
+            })
+        })
+    })
+
     useEffect(() => {
         const from = params.get('from')
         const providerType = params.get('providerType')
@@ -41,6 +63,7 @@ const Persona = memo(() => {
                     <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
                     <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
                     <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
+                    <Route path={r(PopupRoutes.WalletConnect)} element={<WalletConnect />} />
                     <Route path="*" element={<Home />} />
                 </Routes>
             </Web3ContextProvider>

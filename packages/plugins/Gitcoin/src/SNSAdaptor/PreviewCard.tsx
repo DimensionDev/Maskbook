@@ -261,7 +261,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                 onClick={() => {
                                     DonateModal.open({ grant })
                                 }}
-                                startIcon={<Icons.ConnectWallet size={18} />}>
+                                startIcon={<Icons.Wallet size={18} />}>
                                 {t.donate()}
                             </Button>
                         </ChainBoundary>

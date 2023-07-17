@@ -72,7 +72,6 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const [content, setContent] = useState('')
     const [preview, setPreview] = useState<BackupSummary | null>(null)
     // backup id
-    const [id, setId] = useState('')
 
     const handleClose = () => {
         onClose()
@@ -83,22 +82,18 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     }
     const handleConfirm = async () => {
         if (!preview) return
-
-        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
+        const str = tab === 'file' ? content : text
+        await Services.Backup.restoreBackup(str)
     }
 
     useAsync(async () => {
         const str = tab === 'file' ? content : text
 
-        if (str) {
-            const obj = await Services.Backup.addUnconfirmedBackup(str)
-            if (obj.ok) {
-                setPreview(obj.val.info)
-                setId(obj.val.id)
-            }
+        const summary = await Services.Backup.generateBackupSummary(str)
+        if (summary.ok) {
+            setPreview(summary.val)
         } else {
             setPreview(null)
-            setId('')
         }
     }, [tab, text, content])
 

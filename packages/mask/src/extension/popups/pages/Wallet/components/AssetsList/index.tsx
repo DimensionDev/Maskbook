@@ -10,6 +10,7 @@ import { isNaN, range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
+import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 
@@ -65,14 +66,15 @@ export const AssetsList = memo(function AssetsList() {
     const { assets, assetsLoading, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
-        navigate(`${PopupRoutes.TokenDetail}/${asset.address}`)
+        navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
     }, [])
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
 
     const hasLowValueToken = useMemo(() => {
-        return !!assets.find((x) =>
-            !isNativeTokenAddress(x.address) && x.value?.usd ? isLessThan(x.value.usd, 1) : true,
-        )
+        return !!assets.find((x) => {
+            if (isNativeTokenAddress(x.address)) return false
+            return x.value?.usd ? isLessThan(x.value.usd, 1) : false
+        })
     }, [assets])
     return (
         <>
@@ -81,24 +83,19 @@ export const AssetsList = memo(function AssetsList() {
             ) : (
                 <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
             )}
-            <MoreBar
-                isExpand={assetsIsExpand}
-                hasLowValueToken={hasLowValueToken}
-                onClick={onSwitch}
-                className={classes.more}
-            />
+            {hasLowValueToken ? (
+                <MoreBar isExpand={assetsIsExpand} onClick={onSwitch} className={classes.more} />
+            ) : null}
         </>
     )
 })
 
 export interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean
-    hasLowValueToken?: boolean
 }
 
-export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, hasLowValueToken, ...rest }) {
+export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, ...rest }) {
     const { t } = useI18N()
-    if (!hasLowValueToken) return null
     if (isExpand)
         return (
             <ActionButton variant="roundedOutlined" {...rest}>
@@ -148,7 +145,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                                     name={asset.name}
                                     chainId={asset.chainId}
                                     logoURL={asset.logoURL}
-                                    AvatarProps={{ sx: { width: 36, height: 36 } }}
+                                    size={36}
                                 />
                                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
                             </Box>

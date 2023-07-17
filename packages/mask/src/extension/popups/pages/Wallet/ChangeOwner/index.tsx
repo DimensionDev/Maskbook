@@ -303,6 +303,7 @@ export default function ChangeOwner() {
                                                 <CopyButton
                                                     text={persona.identifier.rawPublicKey}
                                                     className={classes.copy}
+                                                    size={14}
                                                 />
                                                 {persona.address ? (
                                                     <Link
@@ -356,7 +357,7 @@ export default function ChangeOwner() {
                                             <Typography className={classes.popoverTitle}>{wallet.name}</Typography>
                                             <Typography className={classes.identity}>
                                                 {formatEthereumAddress(wallet.address, 4)}
-                                                <CopyButton text={wallet.address} className={classes.copy} />
+                                                <CopyButton text={wallet.address} className={classes.copy} size={14} />
                                                 <Link
                                                     sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
                                                     href={explorerResolver.addressLink(chainId, wallet.address)}

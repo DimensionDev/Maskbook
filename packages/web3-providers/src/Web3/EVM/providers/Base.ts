@@ -79,6 +79,9 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     removeWallets(wallets: Wallet[]): Promise<void> {
         throw new Error('Method not implemented.')
     }
+    resetAllWallets(): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
 
     async switchAccount(account?: string | undefined): Promise<void> {
         throw new Error('Method not implemented.')

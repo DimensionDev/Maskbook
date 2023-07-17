@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Wallet } from '@masknet/shared-base'
-import { ChainIcon, CopyButton, FormattedAddress, WalletIcon } from '@masknet/shared'
+import { ChainIcon, CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
@@ -45,7 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     icon: {
-        fontSize: 12,
         height: 12,
         width: 12,
         color: '#767F8D',
@@ -133,7 +132,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon size={30} mainIcon={currentNetwork.icon} />
+                        <ImageIcon size={30} icon={currentNetwork.icon} />
                     ) : (
                         <ChainIcon size={30} name={currentNetwork.name} />
                     )}
@@ -175,7 +174,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            <CopyButton text={wallet.address} className={classes.icon} />
+                            <CopyButton text={wallet.address} className={classes.icon} size={12} />
                             <Link
                                 onClick={(event) => event.stopPropagation()}
                                 style={{ width: 12, height: 12 }}

@@ -1,32 +1,32 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { first } from 'lodash-es'
-import { Typography, alpha, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
-import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
-import { SmartPayOwner, Web3 } from '@masknet/web3-providers'
 import {
     useCurrentPersonaInformation,
     useLastRecognizedIdentity,
     useSNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
+import { CopyButton, ImageIcon, PersonaAction, WalletDescription } from '@masknet/shared'
+import { NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
+import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
+import { SmartPayOwner, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ManagePopover } from './ManagePopover.js'
-import { SmartPayBanner } from './SmartPayBanner.js'
-import { type ManagerAccount, ManagerAccountType } from '../../type.js'
-import { useI18N } from '../../locales/index.js'
-import { CreateSuccessDialog } from './CreateSuccessDialog.js'
+import { ProviderType, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Typography, alpha } from '@mui/material'
+import { first } from 'lodash-es'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
 import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
+import { useI18N } from '../../locales/index.js'
 import { PluginSmartPayMessages } from '../../message.js'
+import { ManagerAccountType, type ManagerAccount } from '../../type.js'
+import { CreateSuccessDialog } from './CreateSuccessDialog.js'
+import { ManagePopover } from './ManagePopover.js'
+import { SmartPayBanner } from './SmartPayBanner.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -166,16 +166,6 @@ export function Deploy({ open }: { open: boolean }) {
 
     const { account: contractAccount, nonce } = value ?? {}
 
-    // #region copy event handler
-    const [, copyToClipboard] = useCopyToClipboard()
-
-    const onCopy = useSnackbarCallback({
-        executor: async () => copyToClipboard(contractAccount?.address ?? ''),
-        deps: [],
-        successText: t.copy_wallet_address_success(),
-    })
-    // #endregion
-
     const [{ loading: deployLoading }, handleDeploy] = useDeploy(
         signPersona,
         signWallet,
@@ -248,7 +238,7 @@ export function Deploy({ open }: { open: boolean }) {
                                 ) : (
                                     <>
                                         {formatEthereumAddress(contractAccount?.address ?? '', 4)}
-                                        <Icons.PopupCopy onClick={onCopy} size={14} />
+                                        <CopyButton size={14} text={contractAccount?.address ?? ''} />
                                     </>
                                 )}
                             </Typography>

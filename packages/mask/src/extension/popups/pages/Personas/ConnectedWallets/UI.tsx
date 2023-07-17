@@ -145,7 +145,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                         size={4}
                                         formatter={formatEthereumAddress}
                                     />
-                                    <CopyButton text={wallet.identity} className={classes.icon} />
+                                    <CopyButton text={wallet.identity} className={classes.icon} size={16} />
                                     <Link
                                         style={{ width: 16, height: 16 }}
                                         href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
