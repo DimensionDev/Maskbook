@@ -89,7 +89,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                         />
                     </BottomNavLink>
                 )}
-                <BottomNavLink to={PopupRoutes.Contacts}>
+                <BottomNavLink to={PopupRoutes.Friends}>
                     <BottomNavigationAction
                         showLabel={false}
                         icon={<Icons.Contacts size={24} />}
