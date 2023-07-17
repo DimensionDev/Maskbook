@@ -1,3 +1,4 @@
+import { difference } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import {
     type ChainDescriptor,
@@ -16,7 +17,6 @@ import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { ChainIdList, getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
-import { difference } from 'lodash-es'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 

@@ -187,11 +187,9 @@ export interface Network {
     updatedAt: Date
 }
 
-export type UpdateableNetwork = Omit<Network, 'createdAt' | 'updatedAt'>
+export type ReasonableNetwork = Omit<Network, 'id' | 'createdAt' | 'updatedAt'>
 
-export type ReasonableNetwork = Omit<UpdateableNetwork, 'id'>
-
-export type RecognizableNetwork = UpdateableNetwork & {
+export type RecognizableNetwork = Omit<Network, 'createdAt' | 'updatedAt'> & {
     /**
      * Indicate a built-in network.
      */

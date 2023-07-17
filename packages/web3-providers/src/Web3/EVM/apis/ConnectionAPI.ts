@@ -1,7 +1,8 @@
 import type Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Account, ECKeyIdentifier, Proof, Wallet } from '@masknet/shared-base'
+import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import { NetworkPluginID, type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -30,7 +31,6 @@ import { Web3StateRef } from './Web3StateAPI.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
-import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 
 export class ConnectionAPI
     extends ConnectionReadonlyAPI
@@ -552,8 +552,9 @@ export class ConnectionAPI
     }
 
     override async getNetworks(): Promise<RecognizableNetwork[]> {
-        const registerdNetworks = getRegisteredWeb3Networks()
-        const customizedNetworks = this.Network?.networks?.getCurrentValue()
+        const chains = getRegisteredWeb3Chains(NetworkPluginID.PLUGIN_EVM)
+        const registerdNetworks = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM)
+        const customizedNetworks = this.Network?.networks?.getCurrentValue() ?? []
 
         return [...registerdNetworks, ...customizedNetworks]
     }

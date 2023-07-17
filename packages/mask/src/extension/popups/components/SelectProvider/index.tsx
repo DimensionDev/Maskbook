@@ -1,16 +1,16 @@
+import { memo, useCallback } from 'react'
+import urlcat from 'urlcat'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { ExtensionSite, NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { Box, Typography } from '@mui/material'
-import { memo, useCallback } from 'react'
 import Services from '../../../service.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useModalNavigate } from '../index.js'
 import { HomeTabType } from '../../pages/Wallet/type.js'
-import urlcat from 'urlcat'
-import { Web3 } from '@masknet/web3-providers'
+
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'grid',
@@ -44,10 +44,7 @@ export const SelectProvider = memo(function SelectProvider() {
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()
-
-    const providers = getRegisteredWeb3Providers().filter(
-        (x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM,
-    ) as Array<Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>>
+    const provders = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(
         async (providerType: ProviderType) => {
@@ -93,7 +90,7 @@ export const SelectProvider = memo(function SelectProvider() {
 
     return (
         <Box className={classes.container}>
-            {providers
+            {provders
                 .filter((x) => (x.enableRequirements?.supportedExtensionSites ?? []).includes(ExtensionSite.Popup))
                 .map((provider) => {
                     return (

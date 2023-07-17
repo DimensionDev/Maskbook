@@ -1,10 +1,10 @@
 // DO NOT import React in this file. This file is also used by worker.
 import { memoize } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
+import { env, type BuildInfoFile } from '@masknet/flags'
 import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Plugin } from '../types.js'
-import { env, type BuildInfoFile } from '@masknet/flags'
 
 const __registered = new Map<PluginID, Plugin.DeferredDefinition>()
 const listeners = new Set<onNewPluginRegisteredListener>()
@@ -48,28 +48,30 @@ export function registerPlugin<
     getRegisteredWeb3Providers_memo.cache.clear?.()
 }
 
-function getRegisteredPluginsSort_EVM_Ahead() {
-    return [...__registered.values()].sort(sort_EVM_ahead)
+function getRegisteredPlugin(ID: NetworkPluginID) {
+    const pluginID = ID as unknown as PluginID
+    return [...__registered.values()].find((x) => x.ID === pluginID)
 }
-
-function sort_EVM_ahead(a: Plugin.DeferredDefinition, b: Plugin.DeferredDefinition) {
-    if (a.ID.includes('evm')) return -1
-    if (b.ID.includes('evm')) return 1
-    return 0
-}
-const getRegisteredWeb3Networks_memo = memoize(() => {
-    return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Networks || [])
+const getRegisteredWeb3Chains_memo = memoize((ID: NetworkPluginID) => {
+    return getRegisteredPlugin(ID)?.declareWeb3Chains ?? []
 })
-const getRegisteredWeb3Providers_memo = memoize(() => {
-    return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Providers || [])
+const getRegisteredWeb3Networks_memo = memoize((ID: NetworkPluginID) => {
+    return getRegisteredPlugin(ID)?.declareWeb3Networks ?? []
+})
+const getRegisteredWeb3Providers_memo = memoize((ID: NetworkPluginID) => {
+    return getRegisteredPlugin(ID)?.declareWeb3Providers ?? []
 })
 
-export function getRegisteredWeb3Networks() {
-    return getRegisteredWeb3Networks_memo() as Web3Helper.NetworkDescriptorAll[]
+export function getRegisteredWeb3Chains<T extends NetworkPluginID>(ID: T) {
+    return getRegisteredWeb3Chains_memo(ID) as Array<Web3Helper.ChainDescriptorScope<void, T>>
 }
 
-export function getRegisteredWeb3Providers() {
-    return getRegisteredWeb3Providers_memo() as Web3Helper.ProviderDescriptorAll[]
+export function getRegisteredWeb3Networks<T extends NetworkPluginID>(ID: T) {
+    return getRegisteredWeb3Networks_memo(ID) as Array<Web3Helper.NetworkDescriptorScope<void, T>>
+}
+
+export function getRegisteredWeb3Providers<T extends NetworkPluginID>(ID: T) {
+    return getRegisteredWeb3Providers_memo(ID) as Array<Web3Helper.ProviderDescriptorScope<void, T>>
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition, currentChannel: BuildInfoFile['channel']) {
