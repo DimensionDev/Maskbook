@@ -83,7 +83,6 @@ export async function getNetwork(id: string) {
 }
 
 export async function addNetwork(network: Omit<Network, 'id'>, patch?: Partial<NetworkRecord>) {
-    const now = Date.now()
     // i18n is too large to have in background, therefore we just return the key
     const fakeT = ((key: string) => key) as I18NFunction
     const baseSchema = createBaseSchema(fakeT, () => true)
@@ -101,6 +100,7 @@ export async function addNetwork(network: Omit<Network, 'id'>, patch?: Partial<N
     const chainParameter = await networkToChainParameter(parsed)
     if (!chainParameter) throw new Error('Failed to create Chain Parameter')
 
+    const now = Date.now()
     await PluginDB.add({
         type: 'network',
         ...chainParameter,

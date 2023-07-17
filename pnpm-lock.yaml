@@ -4431,6 +4431,9 @@ importers:
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
     devDependencies:
       '@types/bn.js':
         specifier: ^4.11.6
@@ -34208,3 +34211,4 @@ packages:
 time:
   /@types/uuid@9.0.1: '2023-02-22T02:32:36.856Z'
   /@types/web@0.0.99: '2023-03-18T04:08:10.433Z'
+  /zod@3.21.4: '2023-03-07T04:39:36.379Z'
