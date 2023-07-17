@@ -3,7 +3,7 @@ import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, TokenIcon } from '@
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { type ChainId, formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
@@ -125,19 +125,13 @@ export default memo(function Receive() {
         <Box>
             <Box className={classes.header}>
                 <Box className={classes.iconContainer}>
-                    {address && !isNativeTokenAddress(address) ? (
-                        <TokenIcon
-                            chainId={chainId as ChainId}
-                            address={address}
-                            name={asset?.name}
-                            logoURL={asset?.logoURL}
-                            size={60}
-                        />
-                    ) : currentNetwork.isMainnet ? (
-                        <ImageIcon size={60} icon={currentNetwork.icon} />
-                    ) : (
-                        <ChainIcon size={60} name={currentNetwork.name} />
-                    )}
+                    <TokenIcon
+                        chainId={chainId as ChainId}
+                        address={address}
+                        name={asset?.name}
+                        logoURL={asset?.logoURL}
+                        size={60}
+                    />
                     <div className={classes.badge}>
                         {currentNetwork.isMainnet ? (
                             <ImageIcon size={16} icon={currentNetwork.icon} />

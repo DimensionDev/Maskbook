@@ -1,6 +1,6 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
@@ -17,10 +17,20 @@ export interface TokenIconProps extends IconProps {
 }
 
 export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, symbol, tokenType = TokenType.Fungible, disableDefaultIcon, ...rest } = props
+    const {
+        pluginID,
+        chainId: propChainId,
+        address,
+        logoURL,
+        symbol,
+        tokenType = TokenType.Fungible,
+        disableDefaultIcon,
+        ...rest
+    } = props
+    const { data: token } = useFungibleToken(pluginID, address, undefined, { chainId: propChainId })
 
     const { chainId } = useChainContext({ chainId: props.chainId })
-    const Hub = useWeb3Hub(props.pluginID)
+    const Hub = useWeb3Hub(pluginID)
     const isNFT = tokenType === TokenType.NonFungible
     const { data } = useQuery({
         queryKey: ['token-icon', chainId, address, isNFT],
@@ -34,5 +44,6 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     })
 
     if (data && disableDefaultIcon) return null
-    return <Icon {...rest} logoURL={isNFT ? logoURL : data || logoURL} name={symbol ?? name} />
+    const text = token?.name || token?.symbol || symbol
+    return <Icon {...rest} logoURL={isNFT ? logoURL : data || logoURL} name={text} />
 })
