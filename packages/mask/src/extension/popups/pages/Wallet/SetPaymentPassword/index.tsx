@@ -105,7 +105,8 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 128,
     },
     textField: {
-        marginTop: 10,
+        width: '100%',
+        height: 54,
     },
     strong: {
         color: theme.palette.maskColor.main,
@@ -175,37 +176,38 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 {isCreating ? (
                     <>
                         <form className={classes.form} onSubmit={onSubmit}>
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        classes={{ root: classes.textField }}
-                                        type="password"
-                                        variant="filled"
-                                        placeholder={t('popups_wallet_payment_password')}
-                                        error={!isValid && !!errors.password?.message}
-                                        helperText={!isValid ? errors.password?.message : ''}
-                                    />
-                                )}
-                                name="password"
-                            />
-                            <Controller
-                                render={({ field }) => (
-                                    <PasswordField
-                                        classes={{ root: classes.textField }}
-                                        {...field}
-                                        error={!isValid && !!errors.confirm?.message}
-                                        helperText={!isValid ? errors.confirm?.message : ''}
-                                        type="password"
-                                        variant="filled"
-                                        placeholder={t('popups_wallet_re_payment_password')}
-                                    />
-                                )}
-                                name="confirm"
-                                control={control}
-                            />
-
+                            <div className={classes.textField}>
+                                <Controller
+                                    control={control}
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            type="password"
+                                            variant="filled"
+                                            placeholder={t('popups_wallet_payment_password')}
+                                            error={!isValid && !!errors.password?.message}
+                                            helperText={!isValid ? errors.password?.message : ''}
+                                        />
+                                    )}
+                                    name="password"
+                                />
+                            </div>
+                            <div className={classes.textField}>
+                                <Controller
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            error={!isValid && !!errors.confirm?.message}
+                                            helperText={!isValid ? errors.confirm?.message : ''}
+                                            type="password"
+                                            variant="filled"
+                                            placeholder={t('popups_wallet_re_payment_password')}
+                                        />
+                                    )}
+                                    name="confirm"
+                                    control={control}
+                                />
+                            </div>
                             {errorMsg ? (
                                 <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
                                     {errorMsg}
