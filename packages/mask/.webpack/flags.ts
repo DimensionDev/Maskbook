@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url'
 const __dirname = fileURLToPath(dirname(import.meta.url))
 
 export interface BuildFlags {
-    engine: 'chromium' | 'firefox' | 'safari'
+    /** If this field is set, manifest.json will copy the content of manifest-*.json */
+    mainManifestFile: 'chromium-mv2' | 'chromium-mv3' | 'firefox-mv2' | 'firefox-mv3' | 'safari-mv3'
     /** @default 2 */
     manifest?: 2 | 3
     mode: 'development' | 'production'
@@ -36,12 +37,12 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     const {
         mode,
         profiling = false,
-        engine,
         manifest = 2,
         readonlyCache = false,
         channel = 'stable',
         devtoolsEditorURI = 'vscode://file/{path}:{line}',
         sourceMapHideFrameworks = true,
+        mainManifestFile,
     } = flags
     let {
         hmr = mode === 'development',
@@ -53,12 +54,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
 
-    // Firefox requires reproducible build when reviewing the uploaded source code.
-    if (engine === 'firefox' && mode === 'production') reproducibleBuild = true
-
-    // CSP of Twitter bans connection to the HMR server and blocks the app to start.
-    if (engine === 'firefox') hmr = false
-
     if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
 
@@ -68,7 +63,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         outputPath,
         // Runtime
         manifest,
-        engine,
+        mainManifestFile,
         // DX
         hmr,
         reactRefresh,
@@ -88,7 +83,9 @@ export interface ComputedFlags {
     reactProductionProfiling: boolean
 }
 
-export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
+export function computedBuildFlags(
+    flags: Pick<Required<BuildFlags>, 'mode' | 'sourceMapPreference' | 'manifest' | 'profiling'>,
+): ComputedFlags {
     let sourceMapKind: Configuration['devtool'] = false
     if (flags.mode === 'production') sourceMapKind = 'source-map'
 

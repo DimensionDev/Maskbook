@@ -1,7 +1,7 @@
 import yargs from 'yargs'
 import type { BuildFlagsExtended } from '../extension/flags.js'
 import { hideBin } from 'yargs/helpers'
-import { getPreset, Preset } from '../extension/flags.js'
+import { applyPresetEnforce, getPreset, Preset } from '../extension/flags.js'
 import { applyDotEnv } from '../extension/dotenv.js'
 
 const presets = Object.values(Preset)
@@ -52,7 +52,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
 
     if (opts instanceof Promise) throw new TypeError()
     const extensionOpts: BuildFlagsExtended = {
-        ...getPreset(opts.preset as Preset),
+        ...getPreset(opts.preset),
         mode,
         outputPath: opts.output,
         channel: opts.beta ? 'beta' : opts.insider ? 'insider' : 'stable',
@@ -69,5 +69,6 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         sourceMapHideFrameworks: opts.sourceMapHideFrameworks,
     }
     applyDotEnv(extensionOpts)
+    applyPresetEnforce(opts.preset, extensionOpts)
     return extensionOpts
 }

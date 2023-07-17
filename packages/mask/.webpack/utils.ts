@@ -14,3 +14,15 @@ export type EntryDescription = Exclude<
     Exclude<NonNullable<Configuration['entry']>, string | string[] | Function>[string],
     string | string[]
 >
+export function parseJSONc(data: string) {
+    data = data
+        .split('\n')
+        .filter((line) => !line.trim().startsWith('//'))
+        .join('\n')
+
+    try {
+        return JSON.parse(data)
+    } catch (err) {
+        throw new TypeError('Only // comments are supported.', { cause: err })
+    }
+}

@@ -1371,8 +1371,8 @@ importers:
         specifier: ^4.13.3
         version: 4.13.3(webpack-cli@5.0.1)(webpack@5.88.0)
       webpack-target-webextension:
-        specifier: ^1.0.4
-        version: 1.0.4(webpack@5.88.0)
+        specifier: ^1.1.0
+        version: 1.1.0(webpack@5.88.0)
 
   packages/mask-sdk:
     dependencies:
@@ -33442,8 +33442,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack-target-webextension@1.0.4(webpack@5.88.0):
-    resolution: {integrity: sha512-bxvB7a+R587DY4V39RsmcA04hcBDQAVwNvAITIA5m02wnjwSymF+H1CpHmheSa0HTh3mAp0KPAt4AWzzoUvTkw==}
+  /webpack-target-webextension@1.1.0(webpack@5.88.0):
+    resolution: {integrity: sha512-ip7ljKtjRmXKjuLZLo8jzcQjV3nuVPI1U+AUcx6PGJXC/+7apt20wbSVfOKnXDhHhijzP44qe/1qSgR8C+HgZg==}
     engines: {node: '>=14.17.6'}
     peerDependencies:
       webpack: ^5.0.0
@@ -34208,3 +34208,4 @@ packages:
 time:
   /@types/uuid@9.0.1: '2023-02-22T02:32:36.856Z'
   /@types/web@0.0.99: '2023-03-18T04:08:10.433Z'
+  /webpack-target-webextension@1.1.0: '2023-06-20T12:22:16.811Z'
