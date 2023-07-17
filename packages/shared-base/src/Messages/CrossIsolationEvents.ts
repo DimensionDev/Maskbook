@@ -82,4 +82,6 @@ export interface PluginMessageEmitterItem<T> {
     sendToVisiblePages(data: T): void
     sendByBroadcast(data: T): void
     sendToAll(data: T): void
+
+    pause?(): (reducer?: (data: T[]) => T[]) => Promise<void>
 }
