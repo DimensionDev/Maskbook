@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import type { UseFormSetError, SubmitHandler } from 'react-hook-form'
-import { MaskTextField } from '@masknet/theme'
+import { MaskTextField, makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { memo, useCallback, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +9,13 @@ import { z } from 'zod'
 import { useDashboardI18N } from '../../locales/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
+
+const useStyles = makeStyles()((theme) => ({
+    input: {
+        backgroundColor: theme.palette.maskColor.input,
+        color: theme.palette.maskColor.main,
+    },
+}))
 
 const schema = z.object({
     privateKey: z.string(),
@@ -24,6 +31,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
     handleRestoreFromPrivateKey,
     multiline,
 }: RestoreFromPrivateKeyProps) {
+    const { classes } = useStyles()
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const { fillSubmitOutlet } = usePersonaRecovery()
@@ -67,6 +75,9 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                 render={({ field }) => (
                     <MaskTextField
                         {...field}
+                        InputProps={{
+                            className: classes.input,
+                        }}
                         multiline={multiline}
                         rows={multiline ? 6 : undefined}
                         sx={{ width: '100%' }}

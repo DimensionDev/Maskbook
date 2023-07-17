@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     tabContainer: {
         border: `1px solid ${theme.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
-        borderRadius: theme.spacing(1, 1, 0, 0),
+        borderRadius: theme.spacing(1),
         overflow: 'hidden',
     },
     tabList: {
