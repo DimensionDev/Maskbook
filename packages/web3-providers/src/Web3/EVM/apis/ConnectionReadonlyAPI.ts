@@ -769,8 +769,15 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    getNetworks(initial?: ConnectionOptions): Promise<Array<Network<ChainId, SchemaType, NetworkType>>> {
-        throw new Error('Method not implemented.')
+    getNetworks(initial?: ConnectionOptions) {
+        const options = this.ConnectionOptions.fill(initial)
+        return this.Request.request<Array<Network<ChainId, SchemaType, NetworkType>>>(
+            {
+                method: EthereumMethodType.MASK_GET_ALL_NETWORKS,
+                params: [],
+            },
+            options,
+        )
     }
 
     addNetwork(

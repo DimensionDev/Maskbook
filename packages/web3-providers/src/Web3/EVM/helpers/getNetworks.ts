@@ -14,7 +14,7 @@ export const getNetworks = memoize(() => {
         ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
         ...customizedNetworks.map((x) => ({
             ...omit(x, 'createdAt', 'updatedAt'),
-            isRegistered: true,
+            isCustomized: true,
         })),
     ]
 }) as () => Array<Network<ChainId, SchemaType, NetworkType>>

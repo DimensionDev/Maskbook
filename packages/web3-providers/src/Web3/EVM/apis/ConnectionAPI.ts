@@ -23,7 +23,7 @@ import {
     type NetworkType,
     EIP3085Editor,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType, type Network, type TransferableNetwork } from '@masknet/web3-shared-base'
+import { TransactionStatusType, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
@@ -548,17 +548,6 @@ export class ConnectionAPI
                         value: '0x0',
                     },
                 ],
-            },
-            options,
-        )
-    }
-
-    override getNetworks(initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<Array<Network<ChainId, SchemaType, NetworkType>>>(
-            {
-                method: EthereumMethodType.MASK_GET_ALL_NETWORKS,
-                params: [],
             },
             options,
         )
