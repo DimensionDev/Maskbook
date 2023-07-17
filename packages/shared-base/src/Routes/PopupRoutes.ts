@@ -43,6 +43,6 @@ export enum PopupRoutes {
     Swap = '/swap',
     VerifyWallet = '/personas/verify',
     ChangeOwner = '/wallet/change-owner',
-    Contracts = '/contracts',
+    Contacts = '/contacts',
     Settings = '/settings',
 }
