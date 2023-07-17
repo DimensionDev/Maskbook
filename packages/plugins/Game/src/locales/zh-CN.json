@@ -12,7 +12,5 @@
     "game_share_btn": "分享",
     "game_share_title": "分享",
     "game_dialog_info": "分享这个游戏到 Twitter",
-    "plugin_game_name": "游戏",
-    "plugin_game_description": "用 NFT 玩游戏。",
     "game_share_text": "我在Twitter上由玩由 @NonFFriendx x {{snsId}}提供的 {{name}} 。\n安装Mask Network插件mask.io 并加入我！\n $t(mask:hash_tag) #NFF #NFTgame\n{{share_Twitter}}"
 }
