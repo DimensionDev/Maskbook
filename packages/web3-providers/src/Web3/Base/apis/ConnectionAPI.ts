@@ -208,13 +208,13 @@ export interface ConnectionAPI_Base<
     /** Remove a bunch of wallets. */
     removeWallets?: (wallets: Wallet[], initial?: Options) => Promise<void>
     /** Get all registered & customized networks. */
-    getNetworks(): Promise<RecognizableNetwork[]>
+    getNetworks(initial?: Options): Promise<RecognizableNetwork[]>
     /** Add a network. */
-    addNetwork(network: ReasonableNetwork): Promise<void>
+    addNetwork(network: ReasonableNetwork, initial?: Options): Promise<void>
     /** Update a network. */
-    updateNetwork(id: string, updates: Partial<ReasonableNetwork>): Promise<void>
+    renameNetwork(id: string, name: string, initial?: Options): Promise<void>
     /** Remove a network by id. */
-    removeNetwork(id: string): Promise<void>
+    removeNetwork(id: string, initial?: Options): Promise<void>
     /** Confirm transaction */
     confirmTransaction(hash: string, initial?: Options): Promise<TransactionReceipt>
     /** Replace transaction */

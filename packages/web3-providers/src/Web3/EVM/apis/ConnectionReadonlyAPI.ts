@@ -45,6 +45,7 @@ import {
     type ReasonableNetwork,
     type RecognizableNetwork,
 } from '@masknet/web3-shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
@@ -52,7 +53,6 @@ import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 import { fetchJSON } from '../../../entry-helpers.js'
 import type { ConnectionOptions_Base } from '../../../entry-types.js'
-import { queryClient } from '@masknet/shared-base-ui'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -767,16 +767,19 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    getNetworks(): Promise<RecognizableNetwork[]> {
+    getNetworks(initial?: ConnectionOptions): Promise<RecognizableNetwork[]> {
         throw new Error('Method not implemented.')
     }
-    addNetwork(network: ReasonableNetwork): Promise<void> {
+
+    addNetwork(network: ReasonableNetwork, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    updateNetwork(id: string, updates: Partial<ReasonableNetwork>): Promise<void> {
+
+    renameNetwork(id: string, name: string, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    removeNetwork(id: string): Promise<void> {
+
+    removeNetwork(id: string, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

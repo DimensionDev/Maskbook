@@ -83,6 +83,10 @@ export class ConnectionContext {
         return this.payloadEditor.signableMessage
     }
 
+    get network() {
+        return this.payloadEditor.network
+    }
+
     get config() {
         return omitBy<Transaction>(
             {

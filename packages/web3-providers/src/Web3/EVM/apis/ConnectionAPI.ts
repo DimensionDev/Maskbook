@@ -1,10 +1,7 @@
 import type Web3 from 'web3'
 import { toHex } from 'web3-utils'
-import { omit } from 'lodash-es'
 import { delay } from '@masknet/kit'
-import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '@masknet/plugin-infra'
-import { NetworkPluginID, type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
-import { recognizeNetwork } from '@masknet/web3-shared-base'
+import { type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -553,31 +550,49 @@ export class ConnectionAPI
         )
     }
 
-    override async getNetworks(): Promise<RecognizableNetwork[]> {
-        const registeredChains = getRegisteredWeb3Chains(NetworkPluginID.PLUGIN_EVM)
-        const registeredNetworks = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM)
-        const customizedNetworks = this.Network?.networks?.getCurrentValue() ?? []
-
-        return [
-            ...registeredNetworks.map((x) =>
-                recognizeNetwork(registeredChains.find((y) => y.chainId === x.chainId)!, x),
-            ),
-            ...customizedNetworks.map((x) => ({
-                ...omit(x, 'createdAt', 'updatedAt'),
-                isRegistered: true,
-            })),
-        ]
+    override getNetworks(initial?: ConnectionOptions): Promise<RecognizableNetwork[]> {
+        const options = this.ConnectionOptions.fill(initial)
+        return this.Request.request<RecognizableNetwork[]>(
+            {
+                method: EthereumMethodType.MASK_GET_ALL_NETWORKS,
+                params: [],
+            },
+            options,
+        )
     }
 
-    override async addNetwork(network: ReasonableNetwork): Promise<void> {
-        await this.Network?.addNetwork(network)
+    override async addNetwork(network: ReasonableNetwork, initial?: ConnectionOptions): Promise<void> {
+        const options = this.ConnectionOptions.fill(initial)
+        return this.Request.request<void>(
+            {
+                method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
+                params: [
+                    // conversion
+                ],
+            },
+            options,
+        )
     }
 
-    override async updateNetwork(id: string, updates: Partial<ReasonableNetwork>): Promise<void> {
-        await this.Network?.updateNetwork(id, updates)
+    override async renameNetwork(id: string, name: string, initial?: ConnectionOptions): Promise<void> {
+        const options = this.ConnectionOptions.fill(initial)
+        return this.Request.request<void>(
+            {
+                method: EthereumMethodType.MASK_RENAME_WALLET,
+                params: [id, name],
+            },
+            options,
+        )
     }
 
-    override async removeNetwork(id: string): Promise<void> {
-        await this.Network?.removeNetwork(id)
+    override async removeNetwork(id: string, initial?: ConnectionOptions): Promise<void> {
+        const options = this.ConnectionOptions.fill(initial)
+        return this.Request.request<void>(
+            {
+                method: EthereumMethodType.MASK_REMOVE_NETWORK,
+                params: [id],
+            },
+            options,
+        )
     }
 }

@@ -69,6 +69,16 @@ export class PayloadEditor {
         return this.config.chainId ?? this.options?.chainId
     }
 
+    get network() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
+                return null
+            default:
+                return null
+        }
+    }
+
     private getRawConfig() {
         const { method, params } = this.payload
         switch (method) {
