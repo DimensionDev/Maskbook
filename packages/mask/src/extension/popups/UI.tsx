@@ -73,23 +73,25 @@ const PopupRoutes = memo(function PopupRoutes() {
     const location = useLocation()
     const mainLocation = location.state?.mainLocation as Location | undefined
     return (
-        <Suspense
-            fallback={
-                <Box height="100vh" display="flex">
-                    <LoadingPlaceholder />
-                </Box>
-            }>
-            <PersonaContext.Provider initialState={personaInitialState}>
-                <UserContext.Provider>
-                    <Routes location={mainLocation || location}>
-                        <Route path="/" element={<PopupLayout />}>
-                            <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
-                            <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
-                            <Route path={PopupPaths.Friends + '/*'} element={<Contacts />} />
-                        </Route>
-                        <Route path={PopupPaths.Swap} element={<SwapPage />} />
-                        <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
-                        <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
+        <WalletContext.Provider>
+            <PersonaContext.Provider
+                initialState={{ queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation }}>
+                <Routes location={mainLocation || location}>
+                    <Route path="/" element={<PopupLayout />}>
+                        <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
+                        <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
+                        <Route path={PopupPaths.Contacts + '/*'} element={<Contacts />} />
+                    </Route>
+                    <Route path={PopupPaths.Swap} element={<SwapPage />} />
+                    <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
+                    <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
+                    <Route path={PopupPaths.ThirdPartyRequestPermission} element={<ThirdPartyRequestPermission />} />
+                    <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
+                </Routes>
+                {mainLocation ? (
+                    <Routes>
+                        <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />
+                        <Route path={PopupModalRoutes.SwitchWallet} element={wrapModal(<SwitchWallet />)} />
                         <Route
                             path={PopupPaths.ThirdPartyRequestPermission}
                             element={<ThirdPartyRequestPermission />}
