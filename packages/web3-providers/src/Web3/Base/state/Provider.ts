@@ -70,8 +70,7 @@ export class ProviderState<
     }
 
     async setup() {
-        await this.storage.account.initializedPromise
-        await this.storage.providerType.initializedPromise
+        await Promise.all([this.storage.account.initializedPromise, this.storage.providerType.initializedPromise])
 
         await this.setupSubscriptions()
         await this.setupProviders()
