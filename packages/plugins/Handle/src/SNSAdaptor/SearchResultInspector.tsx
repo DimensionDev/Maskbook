@@ -82,7 +82,6 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
                                 <CopyButton size={20} className={classes.reversedAddressIcon} text={reversedAddress} />
-                                <CopyButton size={20} className={classes.reversedAddressIcon} text={reversedAddress} />
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"

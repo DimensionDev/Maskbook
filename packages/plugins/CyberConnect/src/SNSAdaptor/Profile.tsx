@@ -64,7 +64,6 @@ const useStyles = makeStyles()((theme) => ({
     PopupLink: {
         width: 16,
         height: 16,
-        transform: 'translate(0px, -2px)',
         color: theme.palette.maskColor.publicSecond,
     },
     follow: {
@@ -168,14 +167,16 @@ function Profile({ url }: { url: string }) {
                             </Typography>
                             <Link
                                 onClick={(event) => event.stopPropagation()}
-                                style={{ width: 12, height: 12 }}
+                                style={{ width: 16, height: 16 }}
                                 href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <Icons.PopupLink className={classes.PopupLink} />
+                                <Icons.PopupLink className={classes.PopupLink} size={16} />
                             </Link>
                             {identity?.address ? (
-                                <CopyButton text={identity.address} className={classes.icon} size={16} />
+                                <ThemeProvider theme={MaskLightTheme}>
+                                    <CopyButton text={identity.address} className={classes.icon} size={16} />
+                                </ThemeProvider>
                             ) : null}
                         </Stack>
                     </Stack>

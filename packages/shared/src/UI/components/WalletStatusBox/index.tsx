@@ -1,5 +1,5 @@
-import { Button, Link, Typography, useTheme } from '@mui/material'
-import { MaskLightTheme, MaskThemeProvider, getMaskColor, makeStyles } from '@masknet/theme'
+import { Button, Link, Typography, useTheme, ThemeProvider } from '@mui/material'
+import { MaskLightTheme, getMaskColor, makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -177,11 +177,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 <FormattedAddress address={account} size={4} formatter={Others.formatAddress} />
                             )}
                         </Typography>
-                        <MaskThemeProvider
-                            useTheme={() => MaskLightTheme}
-                            useMaskIconPalette={(theme) => theme.palette.mode}>
+                        <ThemeProvider theme={MaskLightTheme}>
                             <CopyButton className={cx(classes.icon, classes.copyIcon)} size={17.5} text={account} />
-                        </MaskThemeProvider>
+                        </ThemeProvider>
                         {chainIdValid ? (
                             <Link
                                 className={classes.link}
