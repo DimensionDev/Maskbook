@@ -16,6 +16,7 @@ import {
     type TransactionSignature,
     type ProviderType,
     type Operation,
+    type NetworkType,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
@@ -26,6 +27,8 @@ import {
     type NonFungibleCollection,
     isSameAddress,
     createNonFungibleToken,
+    type Network,
+    type TransferableNetwork,
 } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
 import { PublicKey, sendAndConfirmRawTransaction, type BlockResponse } from '@solana/web3.js'
@@ -45,6 +48,7 @@ export class SolanaConnectionAPI
             AddressType,
             SchemaType,
             ProviderType,
+            NetworkType,
             Signature,
             Operation,
             Transaction,
@@ -413,5 +417,24 @@ export class SolanaConnectionAPI
     signTransactions(transactions: Transaction[], initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.all(transactions.map((x) => this.signTransaction(x, options)))
+    }
+
+    getNetworks(initial?: ConnectionOptions): Promise<Array<Network<ChainId, SchemaType, NetworkType>>> {
+        throw new Error('Method not implemented.')
+    }
+
+    addNetwork(
+        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
+        initial?: ConnectionOptions,
+    ): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+
+    renameNetwork(id: string, name: string, initial?: ConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+
+    removeNetwork(id: string, initial?: ConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
     }
 }

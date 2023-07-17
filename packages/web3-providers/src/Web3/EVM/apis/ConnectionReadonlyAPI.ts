@@ -78,6 +78,7 @@ export class ConnectionReadonlyAPI
             AddressType,
             SchemaType,
             ProviderType,
+            NetworkType,
             Signature,
             UserOperation,
             Transaction,

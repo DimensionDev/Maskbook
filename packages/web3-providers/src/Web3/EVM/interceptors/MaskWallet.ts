@@ -121,7 +121,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     context.abort(context)
                 }
                 break
-            case EthereumMethodType.MASK_UPDATE_NETWORK:
+            case EthereumMethodType.MASK_RENAME_NETWORK:
                 try {
                     const [id, name] = context.requestArguments.params as [string, string]
                     await Web3StateRef.value.Network?.updateNetwork(id, {

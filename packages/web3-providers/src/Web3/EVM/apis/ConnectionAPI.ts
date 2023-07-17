@@ -40,6 +40,7 @@ export class ConnectionAPI
             AddressType,
             SchemaType,
             ProviderType,
+            NetworkType,
             Signature,
             UserOperation,
             Transaction,

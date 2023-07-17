@@ -10,13 +10,13 @@ import type {
     TransferableNetwork,
 } from '@masknet/web3-shared-base'
 import type { ConnectionOptions_Base } from './ConnectionOptionsAPI.js'
-import type { NetworkType } from '@masknet/web3-shared-evm'
 
 export interface ConnectionAPI_Base<
     ChainId,
     AddressType,
     SchemaType,
     ProviderType,
+    NetworkType,
     Signature,
     Operation,
     Transaction,
