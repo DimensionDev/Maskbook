@@ -1,9 +1,8 @@
-import { FormattedBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useBalance, useNativeToken } from '@masknet/web3-hooks-base'
-import { formatBalance } from '@masknet/web3-shared-base'
 import { Skeleton, Typography, type TypographyProps } from '@mui/material'
 import { memo } from 'react'
+import { formatBalance } from '../../../../utils/index.js'
 
 interface WalletBalanceProps extends TypographyProps {
     account?: string
@@ -34,14 +33,5 @@ export const WalletBalance = memo(function WalletBalance({
         )
     }
 
-    return (
-        <Typography {...props}>
-            <FormattedBalance
-                value={balance}
-                decimals={nativeToken.decimals}
-                symbol={nativeToken.symbol}
-                formatter={formatBalance}
-            />
-        </Typography>
-    )
+    return <Typography {...props}>{`${formatBalance(balance, nativeToken.decimals)} ${nativeToken.symbol}`}</Typography>
 })
