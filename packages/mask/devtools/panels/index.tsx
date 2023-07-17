@@ -15,7 +15,10 @@ function init() {
     }
     window.cancelAnimationFrame = clearTimeout
 
-    import(/* webpackMode: 'eager' */ './react.js').then((m) => m.startReactDevTools(controller.signal))
+    import('@masknet/flags/build-info')
+        .then((mod) => mod.setupBuildInfo())
+        .then(() => import(/* webpackMode: 'eager' */ './react.js'))
+        .then((m) => m.startReactDevTools(controller.signal))
 
     function onRefresh() {
         // let's be the last task to run in the event loop. but is it ordered?
