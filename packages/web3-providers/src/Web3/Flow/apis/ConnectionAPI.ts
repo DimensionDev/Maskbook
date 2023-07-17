@@ -20,7 +20,6 @@ import {
     type BlockHeader,
     type ProviderType,
     type Signature,
-    type NetworkType,
 } from '@masknet/web3-shared-flow'
 import {
     type FungibleToken,
@@ -29,8 +28,6 @@ import {
     type NonFungibleTokenContract,
     type NonFungibleCollection,
     TransactionStatusType,
-    type Network,
-    type TransferableNetwork,
 } from '@masknet/web3-shared-base'
 import { toHex, type Account } from '@masknet/shared-base'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
@@ -384,25 +381,6 @@ export class FlowConnectionAPI
     }
 
     cancelTransaction(hash: string, config: Transaction, initial?: ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    getNetworks(initial?: ConnectionOptions): Promise<Array<Network<ChainId, SchemaType, NetworkType>>> {
-        throw new Error('Method not implemented.')
-    }
-
-    addNetwork(
-        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
-        initial?: ConnectionOptions,
-    ): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    renameNetwork(id: string, name: string, initial?: ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    removeNetwork(id: string, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

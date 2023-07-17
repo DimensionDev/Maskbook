@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type Web3 from 'web3'
 import { numberToHex, toHex, toNumber } from 'web3-utils'
-import { type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, Wallet } from '@masknet/shared-base'
 import {
     AddressType,
     SchemaType,

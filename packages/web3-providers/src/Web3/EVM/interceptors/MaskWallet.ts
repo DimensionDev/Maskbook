@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import { type Wallet } from '@masknet/shared-base'
+import type { Wallet } from '@masknet/shared-base'
 import { EthereumMethodType, type Middleware, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'

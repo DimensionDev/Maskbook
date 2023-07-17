@@ -15,6 +15,7 @@ import { Provider } from '../state/Provider.js'
 import { Settings } from '../state/Settings.js'
 import { Transaction } from '../state/Transaction.js'
 import { IdentityService } from '../state/IdentityService.js'
+import { Network } from '../state/Network.js'
 import { Web3StateAPI_Base } from '../../Base/apis/StateAPI.js'
 
 export const SolanaWeb3StateRef = new ValueRefWithReady<
@@ -41,6 +42,7 @@ export class SolanaWeb3StateAPI extends Web3StateAPI_Base<
             AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             Settings: new Settings(context),
+            Network: new Network(context),
             Transaction: new Transaction(context, {
                 chainId: Provider_.chainId,
                 account: Provider_.account,

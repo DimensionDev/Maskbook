@@ -1,7 +1,7 @@
 import type Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
