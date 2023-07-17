@@ -283,7 +283,7 @@ function WalletItem({ address }: WalletItemProps) {
             <Icons.ETH size={30} />
             <div>
                 <Typography className={classes.subTitle}>
-                    {formatEthereumAddress(address, 6)}{' '}
+                    {formatEthereumAddress(address, 4)}{' '}
                     <Link
                         underline="none"
                         target="_blank"
