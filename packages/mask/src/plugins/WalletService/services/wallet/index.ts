@@ -21,8 +21,9 @@ function sanitizeWallet(wallet: Wallet): Wallet {
     return omit(wallet, ['storedKeyInfo'])
 }
 
-// wallet db
+// db
 export { hasWallet, updateWallet } from './database/wallet.js'
+export { getNetwork, getNetworks, addNetwork, updateNetwork, deleteNetwork } from './database/network.js'
 
 // password
 export {
@@ -35,8 +36,6 @@ export {
     validatePassword,
     clearPassword,
 } from './password.js'
-
-export * from './network.js'
 
 // locker
 export { isLocked, lockWallet, unlockWallet } from './locker.js'

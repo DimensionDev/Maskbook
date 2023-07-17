@@ -1,3 +1,5 @@
+import './message.js'
+import './rpc.js'
 import './register.js'
 
 import { noop } from 'lodash-es'

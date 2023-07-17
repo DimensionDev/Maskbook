@@ -1,17 +1,11 @@
-import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { type ChainId, ChainIdList, formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
+import { formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
 import { AddressBookState } from '../../Base/state/AddressBook.js'
 
-export class AddressBook extends AddressBookState<ChainId, Record<ChainId, string[]>> {
-    constructor(
-        context: Plugin.Shared.SharedUIContext,
-        subscriptions: {
-            chainId?: Subscription<ChainId>
-        },
-    ) {
-        super(context, ChainIdList, subscriptions, {
+export class AddressBook extends AddressBookState {
+    constructor(context: Plugin.Shared.SharedUIContext) {
+        super(context, {
             isValidAddress,
             isSameAddress,
             formatAddress,

@@ -30,8 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionIcon: {
-        width: 16,
-        height: 16,
         cursor: 'pointer',
         marginLeft: theme.spacing(0.5),
     },
@@ -161,7 +159,9 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                             autoEscape
                             textToHighlight={secondaryText}
                         />
-                        {rawPublicKey ? <CopyButton className={classes.actionIcon} text={rawPublicKey} /> : null}
+                        {rawPublicKey ? (
+                            <CopyButton className={classes.actionIcon} size={16} text={rawPublicKey} />
+                        ) : null}
                         {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }

@@ -15,6 +15,8 @@ import { WalletHeader } from './components/WalletHeader/index.js'
 import { NetworkManagement } from './NetworkManagement/index.js'
 import SelectWallet from './SelectWallet/index.js'
 
+import TokenDetail from './TokenDetail/index.js'
+
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
@@ -23,14 +25,13 @@ const DeleteWallet = lazy(() => import('./DeleteWallet/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
 const BackupWallet = lazy(() => import('./BackupWallet/index.js'))
 const AddToken = lazy(() => import('./AddToken/index.js'))
-const TokenDetail = lazy(() => import('./TokenDetail/index.js'))
 const SignRequest = lazy(() => import('./SignRequest/index.js'))
 const GasSetting = lazy(() => import('./GasSetting/index.js'))
 const Transfer = lazy(() => import('./Transfer/index.js'))
+const ContactList = lazy(() => import('./ContactList/index.js'))
 const ContractInteraction = lazy(() => import('./ContractInteraction/index.js'))
 const Unlock = lazy(() => import('./Unlock/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
-const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
@@ -108,7 +109,6 @@ export default function Wallet() {
             ) : (
                 <Routes>
                     <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
-                    <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
                     <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
                     <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
                     <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
@@ -117,10 +117,11 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
                     <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
                     <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
+                    <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
                     <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
                     <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
                     <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
-                    <Route path={r(`${PopupRoutes.TokenDetail}/:address?` as PopupRoutes)} element={<TokenDetail />} />
+                    <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                     <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
                     <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
                     <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
@@ -132,7 +133,7 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
                     <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
                     <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
-                    <Route path={r(`${PopupRoutes.Receive}/:address?` as PopupRoutes)} element={<Receive />} />
+                    <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
                 </Routes>
             )}
         </Suspense>

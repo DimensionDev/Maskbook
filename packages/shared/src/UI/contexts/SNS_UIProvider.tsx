@@ -5,15 +5,13 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { DialogStackingProvider } from '@masknet/theme'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
-import { BuildInfo, queryClient, useValueRef } from '@masknet/shared-base-ui'
-import { buildInfoMarkdown } from '../../utils/BuildInfoMarkdown.js'
+import { queryClient, useValueRef } from '@masknet/shared-base-ui'
 import { I18NextProviderHMR } from '../components/I18NextProviderHMR.js'
 
 export function SNS_UIProvider(children: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,
-        (children) => <BuildInfo.Provider value={buildInfoMarkdown} children={children} />,
         <MaskUIRoot children={children} />,
     )
 }

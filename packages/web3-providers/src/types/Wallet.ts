@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
-import type { ECKeyIdentifier, Account, Wallet } from '@masknet/shared-base'
+import type { ECKeyIdentifier, Account, Wallet, Startable } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 
 export namespace WalletAPI {
@@ -20,7 +20,7 @@ export namespace WalletAPI {
         account?: string
     }
 
-    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> {
+    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
         readonly subscription: {
@@ -29,10 +29,6 @@ export namespace WalletAPI {
             wallets: Subscription<Wallet[]>
         }
 
-        /** Get to know whether the provider is ready. */
-        readonly ready: boolean
-        /** Keep waiting until the provider is ready. */
-        readonly readyPromise: Promise<void>
         /** connection status */
         readonly connected: boolean
         /** async setup tasks */

@@ -85,9 +85,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     wallets: {
         margin: 0,
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexFlow: 'wrap',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
     },
     wallet: {
         width: 'auto',

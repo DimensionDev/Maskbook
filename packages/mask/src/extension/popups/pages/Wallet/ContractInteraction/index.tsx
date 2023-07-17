@@ -145,8 +145,6 @@ const useStyles = makeStyles()(() => ({
         margin: '10px 0',
     },
     copy: {
-        width: 12,
-        height: 12,
         color: '#7B8192',
         cursor: 'pointer',
     },
@@ -401,7 +399,7 @@ const ContractInteraction = memo(() => {
                         {request?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
                         request?.transactionContext?.methods?.some((x) => x.name === 'approve') &&
                         to ? (
-                            <CopyButton text={to} className={classes.copy} />
+                            <CopyButton text={to} className={classes.copy} size={12} />
                         ) : null}
                     </Typography>
                 </div>

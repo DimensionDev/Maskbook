@@ -285,7 +285,6 @@
     "wallet_transfer_receiving_account": "받는 계정",
     "wallet_transfer_to_address": "주소",
     "wallet_transfer_send": "보내기",
-    "wallet_transfer_1559_placeholder": "Ens 나 주소(0x...)",
     "wallet_transfer_title": "전송",
     "wallet_transfer_error_amount_absence": "금액 입력",
     "wallet_transfer_error_address_absence": "받는 주소 입력",

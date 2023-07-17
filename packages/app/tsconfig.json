@@ -8,6 +8,7 @@
   "include": ["./src"],
   "references": [
     { "path": "./tsconfig.worker.json" },
+    { "path": "../flags" },
     { "path": "../base" },
     { "path": "../shared" },
     { "path": "../shared-base" },

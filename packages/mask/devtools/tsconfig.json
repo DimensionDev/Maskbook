@@ -7,5 +7,5 @@
     "emitDeclarationOnly": true
   },
   "include": ["./"],
-  "references": [{ "path": "../shared" }]
+  "references": [{ "path": "../shared" }, { "path": "../../shared-base/" }]
 }

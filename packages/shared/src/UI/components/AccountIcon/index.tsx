@@ -167,11 +167,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
 
             {supportedAddressTypes.includes(SocialAddressType.Firefly) ? (
                 <AccountTooltips type={SocialAddressType.Firefly}>
-                    <Icons.Firefly
-                        className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
-                        size={18}
-                        style={iconStyle}
-                    />
+                    <Icons.Firefly className={cx(classes.actionIcon, classes.icon)} size={18} style={iconStyle} />
                 </AccountTooltips>
             ) : null}
 

@@ -187,7 +187,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                         alignItems="center"
                                         columnGap="2px">
                                         {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyButton text={fingerprint} className={classes.icon} />
+                                        <CopyButton text={fingerprint} size={12} className={classes.icon} />
                                         <Link
                                             underline="none"
                                             target="_blank"
@@ -219,7 +219,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         </TabPanel>
                     </TabContext>
                 ) : (
-                    <Box sx={{ background: theme.palette.maskColor.bottom }}>
+                    <Box sx={{ background: theme.palette.maskColor.bottom, height: '100%' }}>
                         <Box className={classes.emptyHeader}>
                             <Icons.MaskSquare width={160} height={46} />
                         </Box>
@@ -240,7 +240,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <Button
                                 onClick={onRestore}
                                 variant="outlined"
-                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.bottom} size={18} />}>
+                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.main} size={18} />}>
                                 {t('popups_restore_and_login')}
                             </Button>
                         </div>

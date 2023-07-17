@@ -165,7 +165,12 @@ export const Farcaster = /*#__PURE__*/ __createIcon('Farcaster', [
 ])
 export const Firefly = /*#__PURE__*/ __createIcon('Firefly', [
     {
-        u: () => new URL('./brands/Firefly.svg', import.meta.url),
+        c: ['dark'],
+        u: () => new URL('./brands/Firefly.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/Firefly.light.svg', import.meta.url),
     },
 ])
 export const Flow = /*#__PURE__*/ __createIcon('Flow', [
@@ -1222,6 +1227,37 @@ export const Dashboard = /*#__PURE__*/ __createIcon(
     ],
     [25, 24],
 )
+export const Decrease = /*#__PURE__*/ __createIcon('decrease', [
+    {
+        u: () => new URL('./general/decrease.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                viewBox: '0 0 20 20',
+                fill: 'none',
+                xmlns: 'http://www.w3.org/2000/svg',
+                children: /*#__PURE__*/ _jsxs('g', {
+                    id: 'base/decrease',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            id: 'Vector (Stroke)',
+                            fillRule: 'evenodd',
+                            clipRule: 'evenodd',
+                            d: 'M10.0001 3.99935C6.68637 3.99935 4.00008 6.68564 4.00008 9.99935C4.00008 13.3131 6.68637 15.9993 10.0001 15.9993C13.3138 15.9993 16.0001 13.3131 16.0001 9.99935C16.0001 6.68564 13.3138 3.99935 10.0001 3.99935ZM2.66675 9.99935C2.66675 5.94926 5.94999 2.66602 10.0001 2.66602C14.0502 2.66602 17.3334 5.94926 17.3334 9.99935C17.3334 14.0494 14.0502 17.3327 10.0001 17.3327C5.94999 17.3327 2.66675 14.0494 2.66675 9.99935Z',
+                            fill: 'currentColor',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            id: 'Vector (Stroke)_2',
+                            fillRule: 'evenodd',
+                            clipRule: 'evenodd',
+                            d: 'M6.66663 9.99937C6.66663 9.63118 6.9651 9.3327 7.33329 9.3327H12.6666C13.0348 9.3327 13.3333 9.63118 13.3333 9.99937C13.3333 10.3676 13.0348 10.666 12.6666 10.666H7.33329C6.9651 10.666 6.66663 10.3676 6.66663 9.99937Z',
+                            fill: 'currentColor',
+                        }),
+                    ],
+                }),
+            }),
+        s: true,
+    },
+])
 export const DefaultToken = /*#__PURE__*/ __createIcon('DefaultToken', [
     {
         c: ['dark'],

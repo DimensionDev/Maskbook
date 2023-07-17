@@ -1,5 +1,5 @@
 /// <reference types="@masknet/global-types/firefox" />
-/// <reference types="@masknet/global-types/flag" />
+/// <reference types="@masknet/global-types/env" />
 
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 

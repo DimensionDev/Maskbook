@@ -1,5 +1,4 @@
 import { Composer } from '@masknet/web3-shared-evm'
-import { AddressBook } from '../middleware/AddressBook.js'
 import { Squash } from '../middleware/Squash.js'
 import { Nonce } from '../middleware/Nonce.js'
 import { Translator } from '../middleware/Translator.js'
@@ -21,7 +20,6 @@ export class ComposerAPI {
             new Interceptor(),
             new RecentTransaction(),
             new TransactionWatcher(),
-            new AddressBook(),
         )
 
         this.instance = instance

@@ -45,7 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     icon: {
-        fontSize: 12,
         height: 12,
         width: 12,
         color: '#767F8D',
@@ -175,7 +174,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            <CopyButton text={wallet.address} className={classes.icon} />
+                            <CopyButton text={wallet.address} className={classes.icon} size={12} />
                             <Link
                                 onClick={(event) => event.stopPropagation()}
                                 style={{ width: 12, height: 12 }}

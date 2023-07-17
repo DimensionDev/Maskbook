@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useModalNavigate } from '../index.js'
 import { HomeTabType } from '../../pages/Wallet/type.js'
 import urlcat from 'urlcat'
+import { Web3 } from '@masknet/web3-providers'
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'grid',
@@ -56,24 +57,35 @@ export const SelectProvider = memo(function SelectProvider() {
             if (providerType === ProviderType.MaskWallet) {
                 navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
                 return
-            }
-            if (disableNewWindow) {
-                modalNavigate(
-                    PopupModalRoutes.ConnectProvider,
-                    {
-                        providerType,
-                    },
-                    {
-                        replace: true,
-                    },
-                )
-                return
-            } else if (providerType === ProviderType.MetaMask) {
+            } else if (providerType === ProviderType.WalletConnect) {
+                const account = await Web3.connect({ providerType })
+
+                // wallet connect has been connected
+                if (account) {
+                    navigate(PopupRoutes.ConnectWallet)
+                    return
+                }
+            } else {
+                if (disableNewWindow) {
+                    modalNavigate(
+                        PopupModalRoutes.ConnectProvider,
+                        {
+                            providerType,
+                        },
+                        {
+                            replace: true,
+                        },
+                    )
+                    return
+                }
+
                 await Services.Helper.openPopupWindow(
                     PopupRoutes.Personas,
                     { providerType, from: PopupModalRoutes.SelectProvider, tab: HomeTabType.ConnectedWallets },
                     true,
                 )
+
+                return
             }
         },
         [location.search],

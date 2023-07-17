@@ -46,7 +46,7 @@ export function ContractSection({
                 onClick={chainId ? () => openWindow(Others.explorerResolver.addressLink(chainId, address)) : noop}>
                 <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
             </Typography>
-            <CopyButton size={16} text={address} />
+            <CopyButton size={16} text={address} scoped={false} />
         </Stack>
     )
 }

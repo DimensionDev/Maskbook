@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { Sniffings } from '../Sniffings/index.js'
 import { ExtensionSite, EnhanceableSite } from './types.js'
-import { parseURL } from '../utils/parseURL.js'
+import { parseURL } from '../helpers/parseURL.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
@@ -76,6 +76,7 @@ export function isExtensionSiteType() {
 }
 
 export function isEthereumInjected() {
+    if (typeof window === 'undefined') return false
     return typeof Reflect.get(window, 'ethereum') !== 'undefined'
 }
 

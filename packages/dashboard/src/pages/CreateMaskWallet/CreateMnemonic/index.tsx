@@ -9,13 +9,13 @@ import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
-import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
     container: {
@@ -23,6 +23,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
+        flex: 1,
     },
     title: {
         fontSize: 30,

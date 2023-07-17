@@ -326,7 +326,11 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                         if (!fortmaticProviderDescriptor) return
                                         handleClick(fortmaticProviderDescriptor, x.chainId)
                                     }}>
-                                    <ImageIcon icon={x.icon} size={30} iconFilterColor={alpha(x.iconColor, 0.2)} />
+                                    <ImageIcon
+                                        icon={x.icon}
+                                        size={30}
+                                        iconFilterColor={x.iconColor ? alpha(x.iconColor, 0.2) : undefined}
+                                    />
                                     <Typography className={classes.listItemText}>{x.name}</Typography>
                                 </ListItemButton>
                             ))}
