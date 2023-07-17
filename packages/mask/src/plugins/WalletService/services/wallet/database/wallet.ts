@@ -72,6 +72,7 @@ export async function addWallet(
     name?: string,
     derivationPath?: string,
     storedKeyInfo?: api.IStoredKeyInfo,
+    imported?: boolean,
 ) {
     const wallet = await getWallet(address)
 
@@ -89,6 +90,7 @@ export async function addWallet(
         storedKeyInfo,
         createdAt: now,
         updatedAt: now,
+        imported,
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     return address_

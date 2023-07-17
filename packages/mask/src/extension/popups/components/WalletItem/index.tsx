@@ -114,7 +114,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         <Typography className={classes.name}>
                             {`${wallet.name}${domain ? ` (${formatDomainName(domain)})` : ''}`}
                         </Typography>
-                        {wallet.hasDerivationPath ? null : (
+                        {!wallet.imported ? null : (
                             <Typography component="span" className={classes.badge}>
                                 {t('wallet_imported')}
                             </Typography>

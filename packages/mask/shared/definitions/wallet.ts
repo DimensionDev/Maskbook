@@ -9,6 +9,7 @@ export interface WalletRecord {
     type: 'wallet'
     derivationPath?: string
     latestDerivationPath?: string
+    imported?: boolean
     storedKeyInfo?: api.IStoredKeyInfo
     createdAt: Date
     updatedAt: Date

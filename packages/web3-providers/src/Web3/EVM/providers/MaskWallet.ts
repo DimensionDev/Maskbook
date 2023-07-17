@@ -71,6 +71,7 @@ export class MaskWalletProvider
                 owner: x.owner,
                 deployed: x.deployed,
                 identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
+                imported: true,
             }))
 
         const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>

@@ -35,6 +35,8 @@ export interface Wallet {
     deployed?: boolean
     /** persona identifier */
     identifier?: string
+    /** flag indicating whether the wallet is imported */
+    imported?: boolean
 }
 
 export interface LegacyWalletRecord {

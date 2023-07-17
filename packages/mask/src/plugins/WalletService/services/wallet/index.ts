@@ -151,7 +151,7 @@ export async function deriveWallet(name: string) {
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
 
         // import the candidate by the private key
-        return recoverWalletFromPrivateKey(name, exported.privateKey)
+        return recoverWalletFromPrivateKey(name, exported.privateKey, false)
     }
 }
 
@@ -240,6 +240,7 @@ export async function recoverWalletFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+    isImported = true,
 ) {
     const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importMnemonic({
@@ -256,7 +257,7 @@ export async function recoverWalletFromMnemonic(
             StoredKeyData: imported.StoredKey.data,
         })
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${derivationPath}`)
-        return recoverWalletFromPrivateKey(name, exported.privateKey)
+        return recoverWalletFromPrivateKey(name, exported.privateKey, isImported)
     } else {
         const created = await Mask.createAccountOfCoinAtPath({
             coin: api.Coin.Ethereum,
@@ -266,7 +267,7 @@ export async function recoverWalletFromMnemonic(
             StoredKeyData: imported.StoredKey.data,
         })
         if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-        return database.addWallet(created.account.address, name, derivationPath, imported.StoredKey)
+        return database.addWallet(created.account.address, name, derivationPath, imported.StoredKey, isImported)
     }
 }
 
@@ -292,7 +293,7 @@ export async function generateAddressFromMnemonic(
     return created?.account?.address ?? undefined
 }
 
-export async function recoverWalletFromPrivateKey(name: string, privateKey: string) {
+export async function recoverWalletFromPrivateKey(name: string, privateKey: string, isImported = true) {
     const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
@@ -309,7 +310,7 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-    return database.addWallet(created.account.address, name, undefined, imported.StoredKey)
+    return database.addWallet(created.account.address, name, undefined, imported.StoredKey, isImported)
 }
 
 export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
@@ -330,7 +331,7 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-    return database.addWallet(created.account.address, name, undefined, imported.StoredKey)
+    return database.addWallet(created.account.address, name, undefined, imported.StoredKey, true)
 }
 
 export async function signWithWallet<T>(type: SignType, message: T, address: string) {

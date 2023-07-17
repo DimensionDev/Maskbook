@@ -353,6 +353,7 @@ export function Deploy({ open }: { open: boolean }) {
                             id: contractAccount?.address,
                             createdAt: new Date(),
                             updatedAt: new Date(),
+                            imported: true,
                         },
                         {
                             providerType: ProviderType.MaskWallet,
