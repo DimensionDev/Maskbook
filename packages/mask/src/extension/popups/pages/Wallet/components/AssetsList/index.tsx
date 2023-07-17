@@ -71,9 +71,10 @@ export const AssetsList = memo(function AssetsList() {
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
 
     const hasLowValueToken = useMemo(() => {
-        return !!assets.find((x) =>
-            !isNativeTokenAddress(x.address) && x.value?.usd ? isLessThan(x.value.usd, 1) : true,
-        )
+        return !!assets.find((x) => {
+            if (isNativeTokenAddress(x.address)) return false
+            return x.value?.usd ? isLessThan(x.value.usd, 1) : false
+        })
     }, [assets])
     return (
         <>
@@ -82,24 +83,19 @@ export const AssetsList = memo(function AssetsList() {
             ) : (
                 <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
             )}
-            <MoreBar
-                isExpand={assetsIsExpand}
-                hasLowValueToken={hasLowValueToken}
-                onClick={onSwitch}
-                className={classes.more}
-            />
+            {hasLowValueToken ? (
+                <MoreBar isExpand={assetsIsExpand} onClick={onSwitch} className={classes.more} />
+            ) : null}
         </>
     )
 })
 
 export interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean
-    hasLowValueToken?: boolean
 }
 
-export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, hasLowValueToken, ...rest }) {
+export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, ...rest }) {
     const { t } = useI18N()
-    if (!hasLowValueToken) return null
     if (isExpand)
         return (
             <ActionButton variant="roundedOutlined" {...rest}>

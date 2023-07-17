@@ -4,7 +4,7 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { useCoinGeckoCoinId } from './useCoinGeckoCoinId.js'
 
-export function useCoinStats(chainId: number, address?: string, days?: number) {
+export function useCoinTrendingStats(chainId: number, address?: string, days?: number) {
     const { data: coinId, isLoading } = useCoinGeckoCoinId(chainId, address)
     return useQuery({
         enabled: !isLoading && days !== undefined,

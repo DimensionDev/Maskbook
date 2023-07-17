@@ -20,8 +20,9 @@ import {
     getAverageBlockDelay,
     isNativeTokenAddress,
     ContractTransaction,
+    type NetworkType,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType, type ReasonableNetwork, type RecognizableNetwork } from '@masknet/web3-shared-base'
+import { TransactionStatusType, type Network, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
@@ -550,9 +551,9 @@ export class ConnectionAPI
         )
     }
 
-    override getNetworks(initial?: ConnectionOptions): Promise<RecognizableNetwork[]> {
+    override getNetworks(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<RecognizableNetwork[]>(
+        return this.Request.request<Array<Network<ChainId, SchemaType, NetworkType>>>(
             {
                 method: EthereumMethodType.MASK_GET_ALL_NETWORKS,
                 params: [],
@@ -561,7 +562,10 @@ export class ConnectionAPI
         )
     }
 
-    override async addNetwork(network: ReasonableNetwork, initial?: ConnectionOptions): Promise<void> {
+    override async addNetwork(
+        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
+        initial?: ConnectionOptions,
+    ): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<void>(
             {
