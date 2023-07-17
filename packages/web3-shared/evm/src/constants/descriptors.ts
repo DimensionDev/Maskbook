@@ -35,7 +35,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         schema: SchemaType.Native,
         ...x.nativeCurrency,
     },
-    // not accessable
+    // not accessible
     rpcUrl: '',
     iconUrl: x.nativeCurrency.logoURL,
     explorerUrl: {

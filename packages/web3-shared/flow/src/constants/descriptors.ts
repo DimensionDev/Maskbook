@@ -12,6 +12,7 @@ const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW
 
 export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = [
     {
+        ID: `${ChainId.Mainnet}_Flow`,
         type: NetworkType.Flow,
         chainId: ChainId.Mainnet,
         coinMarketCapChainId: '',
@@ -34,8 +35,11 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         explorerUrl: {
             url: 'https://flowscan.org/',
         },
+        rpcUrl: '',
+        isCustomized: false,
     },
     {
+        ID: `${ChainId.Testnet}_Flow`,
         type: NetworkType.Flow,
         chainId: ChainId.Testnet,
         coinMarketCapChainId: '',
@@ -58,6 +62,8 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         explorerUrl: {
             url: 'https://testnet.flowscan.org/',
         },
+        rpcUrl: '',
+        isCustomized: false,
     },
 ]
 

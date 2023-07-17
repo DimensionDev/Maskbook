@@ -12,6 +12,7 @@ const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 
 export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = [
     {
+        ID: `${ChainId.Mainnet}_Solana`,
         type: NetworkType.Solana,
         chainId: ChainId.Mainnet,
         coinMarketCapChainId: '',
@@ -34,8 +35,11 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         explorerUrl: {
             url: 'https://explorer.solana.com/',
         },
+        rpcUrl: '',
+        isCustomized: false,
     },
     {
+        ID: `${ChainId.Devnet}_Solana`,
         type: NetworkType.Solana,
         chainId: ChainId.Devnet,
         coinMarketCapChainId: '',
@@ -61,8 +65,11 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
                 cluster: 'devnet',
             },
         },
+        rpcUrl: '',
+        isCustomized: false,
     },
     {
+        ID: `${ChainId.Testnet}_Solana`,
         type: NetworkType.Solana,
         chainId: ChainId.Testnet,
         coinMarketCapChainId: '',
@@ -88,6 +95,8 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
                 cluster: 'testnet',
             },
         },
+        rpcUrl: '',
+        isCustomized: false,
     },
 ]
 
