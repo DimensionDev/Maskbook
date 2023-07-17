@@ -16,7 +16,6 @@
     "created_smart_pay_wallet_description": "Created a SmartPay Wallet on Ploygon network.",
     "create_successfully_tips": "Congratulation! You’ve deployed SmartPay Wallet {{address}}.",
     "create_successfully_tips_owner": "Management account of the SmartPay Wallet is {{owner}}.",
-    "copy_wallet_address_success": "Copy Success",
     "can_only_receive_polygon_assets": "Receives assets on Polygon Network ONLY",
     "current_manage_account": "Current Management account",
     "change_owner": "Change Owner",

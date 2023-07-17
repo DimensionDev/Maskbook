@@ -59,7 +59,7 @@ export function ContractItem({ pluginID, chainId, address, className, ...rest }:
                 <Typography className={classes.address} ml={1}>
                     <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
                 </Typography>
-                <CopyButton className={classes.icon} text={address} size={16} title="Copy address" />
+                <CopyButton className={classes.icon} text={address} size={16} title="Copy address" scoped={false} />
                 <Link
                     href={Others.explorerResolver.addressLink(chainId, address)}
                     className={classes.link}
