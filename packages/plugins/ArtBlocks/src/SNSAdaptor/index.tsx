@@ -7,6 +7,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
+import { PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -27,8 +28,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 15,
-            description: <Trans i18nKey="plugin_artblocks_description" />,
-            name: <Trans i18nKey="plugin_artblocks_name" />,
+            description: <Trans i18nKey="plugin_artblocks_description" ns={PluginID.ArtBlocks} />,
+            name: <Trans i18nKey="plugin_artblocks_name" ns={PluginID.ArtBlocks} />,
             icon: <Icons.ArtBlocks size={36} />,
         },
     ],

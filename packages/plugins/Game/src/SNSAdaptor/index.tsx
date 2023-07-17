@@ -5,7 +5,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
 import WalletConnectDialog, { ConnectContext } from './WalletConnectDialog.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Game size={36} />
-            const name = <Trans i18nKey="plugin_game_name" />
+            const name = <Trans i18nKey="plugin_game_name" ns={PluginID.Game} />
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled, ...props }) {
@@ -40,7 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 16,
                 marketListSortingPriority: 12,
                 icon,
-                description: <Trans i18nKey="plugin_game_description" />,
+                description: <Trans i18nKey="plugin_game_description" ns={PluginID.Game} />,
                 name,
                 tutorialLink: 'https://twitter.com/NonFFriend',
                 category: 'other',

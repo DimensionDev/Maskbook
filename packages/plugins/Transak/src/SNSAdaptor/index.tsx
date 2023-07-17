@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
 import { PluginTransakMessages } from '../messages.js'
 import { BuyTokenGlobalInjection } from './BuyTokenGlobalInjection.js'
+import { PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -14,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Transak size={36} />
-            const name = <Trans i18nKey="plugin_transak_name" />
+            const name = <Trans i18nKey="plugin_transak_name" ns={PluginID.Transak} />
             const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
