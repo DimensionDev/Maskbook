@@ -126,7 +126,13 @@ export default memo(function Receive() {
             <Box className={classes.header}>
                 <Box className={classes.iconContainer}>
                     {address && !isNativeTokenAddress(address) ? (
-                        <TokenIcon size={60} chainId={chainId as ChainId} address={address} />
+                        <TokenIcon
+                            chainId={chainId as ChainId}
+                            address={address}
+                            name={asset?.name}
+                            logoURL={asset?.logoURL}
+                            size={60}
+                        />
                     ) : currentNetwork.isMainnet ? (
                         <ImageIcon size={60} icon={currentNetwork.icon} />
                     ) : (

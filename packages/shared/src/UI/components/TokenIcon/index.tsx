@@ -22,7 +22,6 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const { chainId } = useChainContext({ chainId: props.chainId })
     const Hub = useWeb3Hub(props.pluginID)
     const isNFT = tokenType === TokenType.NonFungible
-    const key = address ? [chainId, address].join('/') : logoURL
     const { data } = useQuery({
         queryKey: ['token-icon', chainId, address, isNFT],
         enabled: !logoURL,
@@ -35,5 +34,5 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     })
 
     if (data && disableDefaultIcon) return null
-    return <Icon key={key} {...rest} logoURL={isNFT ? logoURL : data || logoURL} name={symbol ?? name} />
+    return <Icon {...rest} logoURL={isNFT ? logoURL : data || logoURL} name={symbol ?? name} />
 })
