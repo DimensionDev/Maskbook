@@ -68,8 +68,8 @@ export async function getWallets() {
 }
 
 export async function addWallet(
-    address: string,
     source: ImportSource,
+    address: string,
     updates?: {
         name?: string
         derivationPath?: string

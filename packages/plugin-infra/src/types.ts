@@ -168,8 +168,8 @@ export namespace Plugin.Shared {
 
         /** Add a new wallet */
         addWallet(
-            id: string,
             source: ImportSource,
+            id: string,
             updates?: {
                 name?: string
                 derivationPath?: string

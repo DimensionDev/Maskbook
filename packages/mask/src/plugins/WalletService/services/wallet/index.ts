@@ -237,9 +237,9 @@ export async function exportKeyStoreJSON(address: string, unverifiedPassword?: s
 }
 
 async function addWalletFromMnemonicWords(
+    source: ImportSource,
     name: string,
     mnemonic: string,
-    source: ImportSource,
     derivationPath: string,
 ) {
     const password_ = await password.INTERNAL_getPasswordRequired()
@@ -266,7 +266,7 @@ async function addWalletFromMnemonicWords(
             StoredKeyData: imported.StoredKey.data,
         })
         if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-        return database.addWallet(created?.account?.address, source, {
+        return database.addWallet(source, created.account.address, {
             name,
             derivationPath,
             storedKeyInfo: imported.StoredKey,
@@ -274,7 +274,7 @@ async function addWalletFromMnemonicWords(
     }
 }
 
-async function addWalletFromPrivateKey(name: string, privateKey: string, source: ImportSource) {
+async function addWalletFromPrivateKey(source: ImportSource, name: string, privateKey: string) {
     const password_ = await password.INTERNAL_getPasswordRequired()
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
@@ -291,7 +291,7 @@ async function addWalletFromPrivateKey(name: string, privateKey: string, source:
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-    return database.addWallet(created.account.address, source, {
+    return database.addWallet(source, created.account.address, {
         name,
         storedKeyInfo: imported.StoredKey,
     })
@@ -302,11 +302,11 @@ export function createWalletFromMnemonicWords(
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
 ) {
-    return addWalletFromMnemonicWords(name, mnemonic, ImportSource.LocalGenerated, derivationPath)
+    return addWalletFromMnemonicWords(ImportSource.LocalGenerated, name, mnemonic, derivationPath)
 }
 
 export function createWalletFromPrivateKey(name: string, privateKey: string) {
-    return addWalletFromPrivateKey(name, privateKey, ImportSource.LocalGenerated)
+    return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, privateKey)
 }
 
 export function recoverWalletFromMnemonicWords(
@@ -314,11 +314,11 @@ export function recoverWalletFromMnemonicWords(
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
 ) {
-    return addWalletFromMnemonicWords(name, mnemonic, ImportSource.UserProvided, derivationPath)
+    return addWalletFromMnemonicWords(ImportSource.UserProvided, name, mnemonic, derivationPath)
 }
 
 export function recoverWalletFromPrivateKey(name: string, privateKey: string) {
-    return addWalletFromPrivateKey(name, privateKey, ImportSource.UserProvided)
+    return addWalletFromPrivateKey(ImportSource.UserProvided, name, privateKey)
 }
 
 export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
@@ -339,7 +339,7 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-    return database.addWallet(created.account.address, ImportSource.UserProvided, {
+    return database.addWallet(ImportSource.UserProvided, created.account.address, {
         name,
         storedKeyInfo: imported.StoredKey,
     })

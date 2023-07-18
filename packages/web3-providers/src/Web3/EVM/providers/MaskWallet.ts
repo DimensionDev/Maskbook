@@ -63,7 +63,7 @@ export class MaskWalletProvider
             .map((x) => ({
                 id: x.address,
                 name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
-                source: ImportSource.UserProvided,
+                source: ImportSource.WalletRPC,
                 address: x.address,
                 hasDerivationPath: false,
                 hasStoredKeyInfo: false,
@@ -119,7 +119,7 @@ export class MaskWalletProvider
 
     override async addWallet(wallet: Wallet): Promise<void> {
         if (!this.hostedAccount && !this.wallets.length) await this.walletStorage?.account.setValue(wallet.address)
-        await this.context?.addWallet(wallet.address, ImportSource.WalletRPC, wallet)
+        await this.context?.addWallet(ImportSource.WalletRPC, wallet.address, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
