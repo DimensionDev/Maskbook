@@ -16,6 +16,7 @@ import {
     setDefaultPassword,
     recoverWalletFromPrivateKey,
     recoverWalletFromKeyStoreJSON,
+    createWalletFromMnemonic,
 } from '../services/index.js'
 import { INTERNAL_getPasswordRequired } from '../services/wallet/password.js'
 import { setupDatabase } from '../database/Plugin.db.js'
@@ -39,6 +40,7 @@ const worker: Plugin.Worker.Definition = {
             INTERNAL_getPasswordRequired,
             recoverWalletFromMnemonic,
             recoverWalletFromPrivateKey,
+            createWalletFromMnemonic,
         }
         MaskMessages.events.wallet_is_locked.on(
             async ([type]) => {

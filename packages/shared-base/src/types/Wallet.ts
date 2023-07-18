@@ -35,7 +35,10 @@ export interface Wallet {
     deployed?: boolean
     /** persona identifier */
     identifier?: string
-    /** flag indicating whether the wallet is imported */
+    /**
+     * flag indicating whether the wallet is imported
+     * The wallets recovered through private keys, mnemonic phrases, and store key will all be true.
+     */
     imported?: boolean
 }
 

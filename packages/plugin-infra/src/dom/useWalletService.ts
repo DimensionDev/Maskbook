@@ -17,12 +17,8 @@ export interface WalletBackupProvider {
             derivationPath: string
         }>
     >
-    recoverWalletFromMnemonic(
-        name: string,
-        mnemonic: string,
-        derivationPath?: string,
-        isImported?: boolean,
-    ): Promise<string>
+    recoverWalletFromMnemonic(name: string, mnemonic: string, derivationPath?: string): Promise<string>
+    createWalletFromMnemonic(name: string, mnemonic: string, derivationPath?: string): Promise<string>
     generateAddressFromMnemonic(name: string, mnemonic: string, derivationPath?: string): Promise<string | undefined>
     resetPassword(newPassword: string): Promise<void>
     setDefaultPassword(): Promise<void>

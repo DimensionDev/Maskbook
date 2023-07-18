@@ -207,11 +207,10 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
+        const address = await PluginServices.Wallet.createWalletFromMnemonic(
             walletName,
             words.join(' '),
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-            false,
         )
 
         await PluginServices.Wallet.resolveMaskAccount([

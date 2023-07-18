@@ -112,22 +112,20 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await handlePasswordAndWallets(password, isReset)
 
         const firstPath = first(unDeriveWallets)
-        const firstWallet = await PluginServices.Wallet.recoverWalletFromMnemonic(
+        const firstWallet = await PluginServices.Wallet.createWalletFromMnemonic(
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
-            false,
         )
 
         await Promise.all(
             unDeriveWallets
                 .slice(1)
                 .map(async (pathIndex) =>
-                    PluginServices.Wallet.recoverWalletFromMnemonic(
+                    PluginServices.Wallet.createWalletFromMnemonic(
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
-                        false,
                     ),
                 ),
         )
