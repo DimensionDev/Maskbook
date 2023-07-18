@@ -59,7 +59,7 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
     const iconProps = { size, color }
 
     return (
-        <ShadowRootTooltip open={active} title={tooltipTitle} placement="top" disableInteractive>
+        <ShadowRootTooltip open={active} title={tooltipTitle} placement="top" disableInteractive arrow>
             <Link underline="none" component="button" onClick={handleCopy} color="inherit" {...props} fontSize={0}>
                 {active ? (
                     <Icons.Check {...iconProps} color={theme.palette.maskColor.success} />
