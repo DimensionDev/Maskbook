@@ -16,7 +16,6 @@ import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemo
 import { useDashboardI18N } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
     title: {
@@ -188,18 +187,14 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         const hasPassword = await PluginServices.Wallet.hasPassword()
         if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
+        const address = await PluginServices.Wallet.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
     }, [words.join(' '), walletName])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
-        const address = await PluginServices.Wallet.createWalletFromMnemonic(
-            walletName,
-            words.join(' '),
-            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-        )
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonicWords(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
             {

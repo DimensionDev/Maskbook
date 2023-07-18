@@ -1,18 +1,18 @@
-import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { Box } from '@mui/system'
 import { memo, useCallback, useRef, useState } from 'react'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
+import { first } from 'lodash-es'
+import { Box } from '@mui/system'
+import { Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress } from '@masknet/web3-shared-base'
-import { useAsync, useAsyncFn, useLocation } from 'react-use'
-import { PluginServices } from '../../../API.js'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { DeriveWalletTable } from '@masknet/shared'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { PluginServices } from '../../../API.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
-import { first } from 'lodash-es'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
 
@@ -112,7 +112,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await handlePasswordAndWallets(password, isReset)
 
         const firstPath = first(unDeriveWallets)
-        const firstWallet = await PluginServices.Wallet.createWalletFromMnemonic(
+        const firstWallet = await PluginServices.Wallet.createWalletFromMnemonicWords(
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
@@ -122,7 +122,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             unDeriveWallets
                 .slice(1)
                 .map(async (pathIndex) =>
-                    PluginServices.Wallet.createWalletFromMnemonic(
+                    PluginServices.Wallet.createWalletFromMnemonicWords(
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
