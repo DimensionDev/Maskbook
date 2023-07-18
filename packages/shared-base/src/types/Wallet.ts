@@ -7,6 +7,7 @@ export enum LockStatus {
 }
 
 export enum ImportSource {
+    WalletRPC = 'wallet_rpc',
     LocalGenerated = 'local_generated',
     UserProvided = 'user_provided',
 }

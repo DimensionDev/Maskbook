@@ -119,7 +119,7 @@ export class MaskWalletProvider
 
     override async addWallet(wallet: Wallet): Promise<void> {
         if (!this.hostedAccount && !this.wallets.length) await this.walletStorage?.account.setValue(wallet.address)
-        await this.context?.addWallet(wallet.address, ImportSource.UserProvided, wallet)
+        await this.context?.addWallet(wallet.address, ImportSource.WalletRPC, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {

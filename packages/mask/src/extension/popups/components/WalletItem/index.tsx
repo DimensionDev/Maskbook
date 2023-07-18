@@ -114,11 +114,11 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         <Typography className={classes.name}>
                             {`${wallet.name}${domain ? ` (${formatDomainName(domain)})` : ''}`}
                         </Typography>
-                        {wallet.source === ImportSource.UserProvided ? (
+                        {wallet.source !== ImportSource.LocalGenerated ? null : (
                             <Typography component="span" className={classes.badge}>
                                 {t('wallet_imported')}
                             </Typography>
-                        ) : null}
+                        )}
                     </Typography>
                     <Typography className={classes.address}>
                         <Tooltip title={wallet.address} placement="right">
