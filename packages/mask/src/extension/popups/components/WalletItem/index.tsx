@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
+import { NetworkPluginID, SourceType, type Wallet } from '@masknet/shared-base'
 import { useReverseAddress } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import {
@@ -93,8 +93,8 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
     className,
     ...rest
 }) {
-    const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
+    const { classes, cx } = useStyles()
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
     const handleSelect = useCallback(() => {
@@ -114,11 +114,11 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         <Typography className={classes.name}>
                             {`${wallet.name}${domain ? ` (${formatDomainName(domain)})` : ''}`}
                         </Typography>
-                        {!wallet.imported ? null : (
+                        {wallet.source === SourceType.UserImported ? (
                             <Typography component="span" className={classes.badge}>
                                 {t('wallet_imported')}
                             </Typography>
-                        )}
+                        ) : null}
                     </Typography>
                     <Typography className={classes.address}>
                         <Tooltip title={wallet.address} placement="right">

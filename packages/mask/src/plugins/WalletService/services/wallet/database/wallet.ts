@@ -69,14 +69,14 @@ export async function getWallets() {
 
 export async function addWallet(
     address: string,
-    name?: string,
-    derivationPath?: string,
-    storedKeyInfo?: api.IStoredKeyInfo,
-    imported?: boolean,
+    source: 'local_generated' | 'user_imported',
+    updates?: Partial<{
+        name?: string
+        derivationPath?: string
+        storedKeyInfo?: api.IStoredKeyInfo
+    }>,
 ) {
     const wallet = await getWallet(address)
-
-    // overwrite mask wallet is not allowed
     if (wallet?.storedKeyInfo?.data) throw new Error('The wallet already exists.')
 
     const now = new Date()
@@ -84,13 +84,12 @@ export async function addWallet(
     await PluginDB.add({
         id: address_,
         type: 'wallet',
+        source,
         address: address_,
-        name: name?.trim() || `Account ${(await getWallets()).length + 1}`,
-        derivationPath,
-        storedKeyInfo,
+        ...updates,
+        name: updates?.name?.trim() || `Account ${(await getWallets()).length + 1}`,
         createdAt: now,
         updatedAt: now,
-        imported,
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     return address_
@@ -98,21 +97,20 @@ export async function addWallet(
 
 export async function updateWallet(
     address: string,
-    updates: Partial<Omit<WalletRecord, 'id' | 'type' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
+    updates: Partial<{
+        name: string
+        derivationPath?: string
+        latestDerivationPath?: string
+    }>,
 ) {
     const wallet = await getWallet(address)
-    const now = new Date()
-    const address_ = formatEthereumAddress(address)
-    const total = (await getWalletRecords()).length
+    if (!wallet) throw new Error('The wallet does not exist')
+
     await PluginDB.add({
         type: 'wallet',
-        id: address_,
-        address: address_,
-        name: `Account ${total + 1}`,
         ...wallet,
         ...updates,
-        createdAt: wallet?.createdAt ?? now,
-        updatedAt: now,
+        updatedAt: new Date(),
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 }

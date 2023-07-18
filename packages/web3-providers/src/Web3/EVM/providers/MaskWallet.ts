@@ -9,6 +9,7 @@ import {
     getSiteType,
     PopupRoutes,
     ValueRef,
+    SourceType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -62,6 +63,7 @@ export class MaskWalletProvider
             .map((x) => ({
                 id: x.address,
                 name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                source: SourceType.UserImported,
                 address: x.address,
                 hasDerivationPath: false,
                 hasStoredKeyInfo: false,
@@ -71,7 +73,6 @@ export class MaskWalletProvider
                 owner: x.owner,
                 deployed: x.deployed,
                 identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
-                imported: true,
             }))
 
         const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>

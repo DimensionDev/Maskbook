@@ -1,4 +1,5 @@
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
+import type { SourceType } from '@masknet/shared-base'
 
 export interface WalletRecord {
     id: string
@@ -9,8 +10,8 @@ export interface WalletRecord {
     type: 'wallet'
     derivationPath?: string
     latestDerivationPath?: string
-    imported?: boolean
     storedKeyInfo?: api.IStoredKeyInfo
+    source: SourceType
     createdAt: Date
     updatedAt: Date
 }

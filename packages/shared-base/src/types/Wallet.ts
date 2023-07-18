@@ -6,12 +6,19 @@ export enum LockStatus {
     LOCKED = 2,
 }
 
+export enum SourceType {
+    LocalGenerated = 'local_generated',
+    UserImported = 'user_imported',
+}
+
 export interface Wallet {
     id: string
-    /** User define wallet name. Default address.prefix(6) */
+    /** the user define wallet name. Default address.prefix(6) */
     name: string
-    /** The address of wallet */
+    /** the address of wallet */
     address: string
+    /** the wallet source */
+    source: SourceType
     /** true: Mask Wallet, false: External Wallet */
     hasStoredKeyInfo: boolean
     /** true: Derivable Wallet. false: UnDerivable Wallet */
@@ -24,7 +31,6 @@ export interface Wallet {
     latestDerivationPath?: string
     /** the internal presentation of mask wallet sdk */
     storedKeyInfo?: api.IStoredKeyInfo
-    /** the Mask SDK stored key info */
     /** record created at */
     createdAt: Date
     /** record updated at */
@@ -35,11 +41,6 @@ export interface Wallet {
     deployed?: boolean
     /** persona identifier */
     identifier?: string
-    /**
-     * flag indicating whether the wallet is imported
-     * The wallets recovered through private keys, mnemonic phrases, and store key will all be true.
-     */
-    imported?: boolean
 }
 
 export interface LegacyWalletRecord {
