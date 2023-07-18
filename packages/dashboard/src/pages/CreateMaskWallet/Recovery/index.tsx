@@ -1,17 +1,17 @@
+import { memo, useCallback, useMemo, useState } from 'react'
+import type { UseFormSetError } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes, getDefaultWalletName } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
-import type { UseFormSetError } from 'react-hook-form'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
-import { PluginServices } from '../../../API.js'
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 import { ResetWalletContext } from '../context.js'
 
@@ -89,7 +89,7 @@ const Recovery = memo(function Recovery() {
         async (values: string[]) => {
             try {
                 const mnemonic = values.join(' ')
-                await PluginServices.Wallet.getDerivableAccounts(mnemonic, 0, 1)
+                await WalletServiceRef.value.getDerivableAccounts(mnemonic, 0, 1)
 
                 navigate(DashboardRoutes.AddDeriveWallet, {
                     replace: false,
@@ -110,7 +110,7 @@ const Recovery = memo(function Recovery() {
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
-                await PluginServices.Wallet.recoverWalletFromPrivateKey(getDefaultWalletName(), data.privateKey)
+                await WalletServiceRef.value.recoverWalletFromPrivateKey(getDefaultWalletName(), data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
                 onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
@@ -124,12 +124,12 @@ const Recovery = memo(function Recovery() {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
-                const address = await PluginServices.Wallet.recoverWalletFromKeyStoreJSON(
+                const address = await WalletServiceRef.value.recoverWalletFromKeyStoreJSON(
                     getDefaultWalletName(),
                     keyStoreContent,
                     keyStorePassword,
                 )
-                await PluginServices.Wallet.resolveMaskAccount([{ address }])
+                await WalletServiceRef.value.resolveMaskAccount([{ address }])
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch {
                 setError(t.create_wallet_key_store_incorrect_password())

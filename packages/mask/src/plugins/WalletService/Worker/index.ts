@@ -3,7 +3,11 @@ import { MaskMessages } from '@masknet/shared-base'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import '../messages.js'
 import {
+    hasPassword,
     changePassword,
+    setPassword,
+    verifyPassword,
+    resetPassword,
     exportMnemonicWords,
     exportPrivateKey,
     getDerivableAccounts,
@@ -12,11 +16,12 @@ import {
     isLocked,
     recoverWalletFromMnemonicWords,
     generateAddressFromMnemonicWords,
-    resetPassword,
     setDefaultPassword,
     recoverWalletFromPrivateKey,
     recoverWalletFromKeyStoreJSON,
     createWalletFromMnemonicWords,
+    createMnemonicWords,
+    resolveMaskAccount,
 } from '../services/index.js'
 import { setupDatabase } from '../database/Plugin.db.js'
 import { base } from '../base.js'
@@ -27,18 +32,23 @@ const worker: Plugin.Worker.Definition = {
         setupDatabase(context.getDatabaseStorage())
         WalletServiceRef.value = {
             changePassword,
+            createMnemonicWords: async () => createMnemonicWords(),
+            createWalletFromMnemonicWords,
             exportMnemonicWords,
-            setDefaultPassword,
             exportPrivateKey,
-            recoverWalletFromKeyStoreJSON,
             generateAddressFromMnemonicWords,
-            resetPassword,
             getDerivableAccounts,
             getLegacyWallets,
             getWallets,
+            hasPassword,
+            recoverWalletFromKeyStoreJSON,
             recoverWalletFromMnemonicWords,
             recoverWalletFromPrivateKey,
-            createWalletFromMnemonicWords,
+            resetPassword,
+            resolveMaskAccount,
+            setDefaultPassword,
+            setPassword,
+            verifyPassword,
         }
         MaskMessages.events.wallet_is_locked.on(
             async ([type]) => {

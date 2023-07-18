@@ -7,8 +7,8 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
-import { PluginServices } from '../../../API.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
@@ -184,19 +184,18 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const { value: address } = useAsync(async () => {
         if (!words.length) return
 
-        const hasPassword = await PluginServices.Wallet.hasPassword()
-        if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
+        const hasPassword = await WalletServiceRef.value.hasPassword()
+        if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonicWords(walletName, words.join(' '))
+        const address = await WalletServiceRef.value.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
     }, [words.join(' '), walletName])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonicWords(walletName, words.join(' '))
-
-        await PluginServices.Wallet.resolveMaskAccount([
+        const address = await WalletServiceRef.value.recoverWalletFromMnemonicWords(walletName, words.join(' '))
+        await WalletServiceRef.value.resolveMaskAccount([
             {
                 address,
             },
