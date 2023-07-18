@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => {
             position: 'absolute',
             left: '16px',
             top: '14px',
-            background: 'white',
             borderRadius: '50%',
         },
     }
