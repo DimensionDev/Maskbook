@@ -24,3 +24,16 @@ export async function unlockWallet(unverifiedPassword: string) {
         return false
     }
 }
+
+const DEFAULT_LOCK_TIME = 1000 * 60 * 15 // 15 mins
+
+let autoLockTimer: NodeJS.Timeout | undefined
+
+export function setAutoLockTimer() {
+    clearTimeout(autoLockTimer)
+    autoLockTimer = setTimeout(async () => {
+        await lockWallet()
+    }, DEFAULT_LOCK_TIME)
+}
+
+setAutoLockTimer()

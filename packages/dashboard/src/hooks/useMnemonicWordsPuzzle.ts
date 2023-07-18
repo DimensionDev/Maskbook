@@ -58,9 +58,12 @@ export function useMnemonicWordsPuzzle() {
 
     const verifyAnswerCallback = useCallback(
         (callback?: () => void) => {
-            const matched = Object.entries(puzzleAnswer).every((entry) => {
-                return words[Number(entry[0])] === entry[1]
-            })
+            const puzzleAnswerEntries = Object.entries(puzzleAnswer)
+            const matched =
+                puzzleAnswerEntries.length === 3 &&
+                puzzleAnswerEntries.every((entry) => {
+                    return words[Number(entry[0])] === entry[1]
+                })
             setIsMatch(matched)
 
             if (matched) callback?.()

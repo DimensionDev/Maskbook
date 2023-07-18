@@ -17,6 +17,9 @@ export function useSetWalletNameForm(defaultName?: string) {
                 .min(1)
                 .max(12)
                 .refine((name) => {
+                    return name.trim().length !== 0
+                }, t('wallet_name_length_error'))
+                .refine((name) => {
                     return !wallets.some((wallet) => wallet.name === name)
                 }, t('account_already_exists')),
         })

@@ -157,6 +157,7 @@
     "web3-eth-contract": "1.8.0",
     "web3-utils": "1.8.0",
     "webextension-polyfill": "^0.10.0",
+    "react-idle-timer": "^5.7.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {

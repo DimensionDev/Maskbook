@@ -19,13 +19,6 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
-    container: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        flex: 1,
-    },
     title: {
         fontSize: 30,
         margin: '12px 0',
@@ -56,10 +49,6 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     },
     button: {
         whiteSpace: 'nowrap',
-    },
-    leftSide: {
-        width: '90%',
-        maxWidth: isVerify ? 720 : 948,
     },
     import: {
         fontSize: 14,
@@ -222,39 +211,37 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
 
     return (
-        <div className={classes.container}>
-            <div className={classes.leftSide}>
-                <div className={classes.between}>
-                    <Typography className={cx(classes.second, classes.bold)}>
-                        {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
-                    </Typography>
-                    <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
-                        {t.wallets_import_wallet_import()}
-                    </Typography>
-                </div>
-                {isVerify ? (
-                    <VerifyMnemonicUI
-                        isReset={location.state?.isReset}
-                        setIsVerify={setIsVerify}
-                        words={words}
-                        loading={loading}
-                        isMatched={isMatched}
-                        answerCallback={answerCallback}
-                        puzzleAnswer={puzzleAnswer}
-                        verifyAnswerCallback={verifyAnswerCallback}
-                        puzzleWordList={puzzleWordList}
-                        onSubmit={onSubmit}
-                    />
-                ) : (
-                    <CreateMnemonicUI
-                        address={address}
-                        words={words}
-                        onRefreshWords={refreshCallback}
-                        onVerifyClick={onVerifyClick}
-                    />
-                )}
+        <>
+            <div className={classes.between}>
+                <Typography className={cx(classes.second, classes.bold)}>
+                    {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
+                </Typography>
+                <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
+                    {t.wallets_import_wallet_import()}
+                </Typography>
             </div>
-        </div>
+            {isVerify ? (
+                <VerifyMnemonicUI
+                    isReset={location.state?.isReset}
+                    setIsVerify={setIsVerify}
+                    words={words}
+                    loading={loading}
+                    isMatched={isMatched}
+                    answerCallback={answerCallback}
+                    puzzleAnswer={puzzleAnswer}
+                    verifyAnswerCallback={verifyAnswerCallback}
+                    puzzleWordList={puzzleWordList}
+                    onSubmit={onSubmit}
+                />
+            ) : (
+                <CreateMnemonicUI
+                    address={address}
+                    words={words}
+                    onRefreshWords={refreshCallback}
+                    onVerifyClick={onVerifyClick}
+                />
+            )}
+        </>
     )
 })
 
@@ -337,7 +324,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                     <PrimaryButton
                         className={classes.bold}
                         width="125px"
-                        disabled={loading}
+                        disabled={loading || Object.entries(puzzleAnswer).length !== 3}
                         loading={loading}
                         size="large"
                         color="primary"
@@ -416,14 +403,13 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                 <div className={classes.iconBox} onClick={handleDownload}>
                     <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                 </div>
-                <div className={classes.iconBox}>
-                    <CopyButton
-                        color={theme.palette.maskColor.main}
-                        size={18}
-                        text={words.join(' ')}
-                        successText={t.persona_phrase_copy_description()}
-                    />
-                </div>
+                <CopyButton
+                    classes={{ root: classes.iconBox }}
+                    color={theme.palette.maskColor.main}
+                    size={18}
+                    text={words.join(' ')}
+                    successText={t.persona_phrase_copy_description()}
+                />
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
                 {t.create_wallet_mnemonic_tip()}
