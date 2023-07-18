@@ -86,9 +86,9 @@ export async function addWallet(
         type: 'wallet',
         source,
         address: address_,
+        name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
         derivationPath: updates?.derivationPath,
         storedKeyInfo: updates?.storedKeyInfo,
-        name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
         createdAt: now,
         updatedAt: now,
     })
