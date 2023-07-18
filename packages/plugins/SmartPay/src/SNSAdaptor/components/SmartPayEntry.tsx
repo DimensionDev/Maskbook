@@ -43,7 +43,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
             LeavePageConfirmModal.open({
                 info: {
                     target: 'dashboard',
-                    url: DashboardRoutes.Setup,
+                    url: DashboardRoutes.SignUpPersona,
                     text: t.create_persona_hint(),
                     title: t.create_persona_title(),
                     actionHint: t.create_persona_action(),

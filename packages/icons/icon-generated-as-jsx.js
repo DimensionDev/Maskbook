@@ -1065,7 +1065,12 @@ export const CircleWarning = /*#__PURE__*/ __createIcon('CircleWarning', [
 ])
 export const Clear = /*#__PURE__*/ __createIcon('Clear', [
     {
-        u: () => new URL('./general/Clear.svg', import.meta.url),
+        c: ['dark'],
+        u: () => new URL('./general/Clear.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/Clear.light.svg', import.meta.url),
     },
 ])
 export const Close = /*#__PURE__*/ __createIcon('Close', [
