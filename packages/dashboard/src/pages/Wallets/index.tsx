@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { useChainContext, useNetworkDescriptor, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
-import { PluginMessages } from '../../API.js'
 import { useDashboardI18N } from '../../locales/index.js'
 import { PageFrame } from '../../components/PageFrame/index.js'
 import { Assets } from './components/Assets/index.js'
@@ -57,7 +57,7 @@ function Wallets() {
         networkDescriptor ?? null,
     )
 
-    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
+    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const openSwapDialog = useCallback(() => {
         CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
