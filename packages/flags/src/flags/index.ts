@@ -13,6 +13,7 @@ export const flags = {
 
     shadowRootInit: {
         mode: '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly ? 'open' : 'closed',
+        delegatesFocus: true,
     } as const satisfies ShadowRootInit,
 
     // #region Experimental features
