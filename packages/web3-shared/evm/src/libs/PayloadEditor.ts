@@ -149,7 +149,6 @@ export class PayloadEditor {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.MASK_ADD_WALLET:
-            case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
                 const [wallet] = params as [Wallet]
                 return wallet
             default:
