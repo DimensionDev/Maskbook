@@ -5,7 +5,7 @@ import { useWallets } from '@masknet/web3-hooks-base'
 import { getDefaultWalletPassword, CrossIsolationMessages } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { PluginServices } from '../../API.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 function useContext() {
     const location = useLocation()
@@ -14,7 +14,7 @@ function useContext() {
     const resetWallets = useCallback(
         async (password: string | undefined, isReset: boolean | undefined) => {
             if (!(isReset && wallets.length && password)) return
-            await PluginServices.Wallet.resetPassword(password)
+            await WalletServiceRef.value.resetPassword(password)
             await Web3.resetAllWallets?.({
                 providerType: ProviderType.MaskWallet,
             })
@@ -25,13 +25,13 @@ function useContext() {
 
     const handlePasswordAndWallets = useCallback(
         async (password: string | undefined, isReset: boolean | undefined) => {
-            const hasPassword = await PluginServices.Wallet.hasPassword()
-            if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
+            const hasPassword = await WalletServiceRef.value.hasPassword()
+            if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
 
             if (isReset) {
                 await resetWallets(password, isReset)
             } else if (password && !hasPassword) {
-                await PluginServices.Wallet.changePassword(getDefaultWalletPassword(), password)
+                await WalletServiceRef.value.changePassword(getDefaultWalletPassword(), password)
             }
         },
         [resetWallets],

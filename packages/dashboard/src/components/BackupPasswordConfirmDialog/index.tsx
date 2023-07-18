@@ -1,12 +1,12 @@
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
-import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { type ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext.js'
-import { MaskDialog } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales/index.js'
 import { useNavigate } from 'react-router-dom'
+import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { MaskDialog } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { type ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext.js'
+import { useDashboardI18N } from '../../locales/index.js'
 import PasswordField from '../PasswordField/index.js'
-import { PluginServices } from '../../API.js'
 
 interface DialogProps {
     open: boolean
@@ -31,7 +31,7 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
     }
 
     const onSubmitPaymentPassword = useCallback(async () => {
-        const verified = await PluginServices.Wallet.verifyPassword(password)
+        const verified = await WalletServiceRef.value.verifyPassword(password)
         if (verified) {
             onConfirmed()
         } else {
