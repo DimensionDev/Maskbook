@@ -27,7 +27,7 @@ import type {
     SocialAccount,
     SocialIdentity,
     BooleanPreference,
-    SourceType,
+    ImportSource,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -169,7 +169,7 @@ export namespace Plugin.Shared {
         /** Add a new wallet */
         addWallet(
             id: string,
-            source: SourceType,
+            source: ImportSource,
             updates?: {
                 name?: string
                 derivationPath?: string

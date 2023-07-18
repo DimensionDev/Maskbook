@@ -1,6 +1,6 @@
 import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { CrossIsolationMessages, type SourceType, asyncIteratorToArray } from '@masknet/shared-base'
+import { CrossIsolationMessages, type ImportSource, asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db.js'
 import type { WalletRecord } from '../type.js'
@@ -69,7 +69,7 @@ export async function getWallets() {
 
 export async function addWallet(
     address: string,
-    source: SourceType,
+    source: ImportSource,
     updates?: {
         name?: string
         derivationPath?: string

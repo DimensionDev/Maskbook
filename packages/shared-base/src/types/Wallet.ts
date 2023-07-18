@@ -6,9 +6,9 @@ export enum LockStatus {
     LOCKED = 2,
 }
 
-export enum SourceType {
+export enum ImportSource {
     LocalGenerated = 'local_generated',
-    UserImported = 'user_imported',
+    UserProvided = 'user_provided',
 }
 
 export interface Wallet {
@@ -18,7 +18,7 @@ export interface Wallet {
     /** the address of wallet */
     address: string
     /** the wallet source */
-    source: SourceType
+    source: ImportSource
     /** true: Mask Wallet, false: External Wallet */
     hasStoredKeyInfo: boolean
     /** true: Derivable Wallet. false: UnDerivable Wallet */
