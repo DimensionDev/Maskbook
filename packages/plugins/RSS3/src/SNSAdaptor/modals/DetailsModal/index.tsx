@@ -18,12 +18,12 @@ export interface FeedDetailsModalProps {}
 
 export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsModalOpenProps>, FeedDetailsModalProps>(
     (props, ref) => {
-        const [props_, setProps_] = useState<FeedDetailsModalOpenProps>()
+        const [props_, setProps_] = useState<Omit<FeedDetailsModalOpenProps, 'scopedDomainsMap'>>()
         const [scopedDomainsMap, setScopedDomainsMap] = useState<Record<string, string>>({})
         const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
+            onOpen({ scopedDomainsMap, ...props }) {
                 setProps_(props)
-                setScopedDomainsMap(props.scopedDomainsMap)
+                setScopedDomainsMap(scopedDomainsMap)
             },
         })
 
@@ -41,3 +41,5 @@ export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsM
         )
     },
 )
+
+FeedDetailsModal.displayName = 'FeedDetailsModal'

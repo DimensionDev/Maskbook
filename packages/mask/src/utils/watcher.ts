@@ -22,7 +22,7 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
     if (options instanceof AbortSignal) {
         options = { signal: options }
     }
-    const { signal, missingReportRule } = options
+    const { signal, missingReportRule, shadowRootDelegatesFocus: delegatesFocus } = options
 
     if (missingReportRule) {
         watchers.set(watcher, missingReportRule)
@@ -39,8 +39,8 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
 
     watcher
         .setDOMProxyOption({
-            afterShadowRootInit: Flags.shadowRootInit,
-            beforeShadowRootInit: Flags.shadowRootInit,
+            afterShadowRootInit: { ...Flags.shadowRootInit, delegatesFocus },
+            beforeShadowRootInit: { ...Flags.shadowRootInit, delegatesFocus },
         })
         .startWatch({ subtree: true, childList: true }, signal)
     return watcher
@@ -59,6 +59,7 @@ export interface MissingReportRuleOptions {
 export interface WatchOptions {
     signal: AbortSignal
     missingReportRule?: MissingReportRuleOptions
+    shadowRootDelegatesFocus?: boolean
 }
 
 const watchers = new Map<MutationObserverWatcher<any>, MissingReportRuleOptions>()
