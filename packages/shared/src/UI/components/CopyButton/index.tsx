@@ -34,7 +34,8 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
     ...props
 }) {
     const t = useSharedI18N()
-    const { classes, theme } = useStyles()
+    const { classes, theme } = useStyles(undefined, { props })
+
     const [, copyToClipboard] = useCopyToClipboard()
     const [copied, setCopied] = useState(false)
     const [active, setActive] = useState(false)
@@ -60,7 +61,14 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
 
     return (
         <ShadowRootTooltip open={active} title={tooltipTitle} placement="top" disableInteractive arrow>
-            <Link underline="none" component="button" onClick={handleCopy} color="inherit" {...props} fontSize={0}>
+            <Link
+                underline="none"
+                component="button"
+                onClick={handleCopy}
+                color="inherit"
+                {...props}
+                fontSize={0}
+                className={classes.root}>
                 {active ? (
                     <Icons.Check {...iconProps} color={theme.palette.maskColor.success} />
                 ) : (

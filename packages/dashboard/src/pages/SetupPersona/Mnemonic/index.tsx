@@ -75,6 +75,16 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontSize: 14,
     },
+    iconBox: {
+        height: 40,
+        width: 40,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '8px',
+        border: `1px solid ${theme.palette.maskColor.line}`,
+    },
 }))
 
 export const SignUpMnemonic = memo(function SignUpMnemonic() {
@@ -160,6 +170,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
                     <Icons.Download2 size={18} />
                 </IconButton>
                 <CopyButton
+                    classes={{ root: classes.iconBox }}
                     size={18}
                     className={classes.iconButton}
                     text={words.join(' ')}

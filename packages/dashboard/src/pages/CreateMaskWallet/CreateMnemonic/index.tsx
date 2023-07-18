@@ -398,14 +398,13 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                 <div className={classes.iconBox} onClick={handleDownload}>
                     <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                 </div>
-                <div className={classes.iconBox}>
-                    <CopyButton
-                        color={theme.palette.maskColor.main}
-                        size={18}
-                        text={words.join(' ')}
-                        successText={t.persona_phrase_copy_description()}
-                    />
-                </div>
+                <CopyButton
+                    classes={{ root: classes.iconBox }}
+                    color={theme.palette.maskColor.main}
+                    size={18}
+                    text={words.join(' ')}
+                    successText={t.persona_phrase_copy_description()}
+                />
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
                 {t.create_wallet_mnemonic_tip()}
