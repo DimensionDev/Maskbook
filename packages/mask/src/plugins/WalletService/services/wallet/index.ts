@@ -38,7 +38,7 @@ export {
 } from './password.js'
 
 // locker
-export { isLocked, lockWallet, unlockWallet } from './locker.js'
+export { isLocked, lockWallet, unlockWallet, setAutoLockTimer } from './locker.js'
 
 export async function getWallet(address: string) {
     const wallet = await database.getWallet(address)

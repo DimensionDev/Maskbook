@@ -7,7 +7,7 @@ import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
-import { useBalance, useWallets } from '@masknet/web3-hooks-base'
+import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance } from '@masknet/shared'
@@ -105,10 +105,18 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 128,
     },
     textField: {
-        marginTop: 10,
+        width: '100%',
+        height: 54,
     },
     strong: {
         color: theme.palette.maskColor.main,
+    },
+    walletItemList: {
+        height: 240,
+        overflow: 'scroll',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -168,37 +176,38 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 {isCreating ? (
                     <>
                         <form className={classes.form} onSubmit={onSubmit}>
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        classes={{ root: classes.textField }}
-                                        type="password"
-                                        variant="filled"
-                                        placeholder={t('popups_wallet_payment_password')}
-                                        error={!isValid && !!errors.password?.message}
-                                        helperText={!isValid ? errors.password?.message : ''}
-                                    />
-                                )}
-                                name="password"
-                            />
-                            <Controller
-                                render={({ field }) => (
-                                    <PasswordField
-                                        classes={{ root: classes.textField }}
-                                        {...field}
-                                        error={!isValid && !!errors.confirm?.message}
-                                        helperText={!isValid ? errors.confirm?.message : ''}
-                                        type="password"
-                                        variant="filled"
-                                        placeholder={t('popups_wallet_re_payment_password')}
-                                    />
-                                )}
-                                name="confirm"
-                                control={control}
-                            />
-
+                            <div className={classes.textField}>
+                                <Controller
+                                    control={control}
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            type="password"
+                                            variant="filled"
+                                            placeholder={t('popups_wallet_payment_password')}
+                                            error={!isValid && !!errors.password?.message}
+                                            helperText={!isValid ? errors.password?.message : ''}
+                                        />
+                                    )}
+                                    name="password"
+                                />
+                            </div>
+                            <div className={classes.textField}>
+                                <Controller
+                                    render={({ field }) => (
+                                        <PasswordField
+                                            {...field}
+                                            error={!isValid && !!errors.confirm?.message}
+                                            helperText={!isValid ? errors.confirm?.message : ''}
+                                            type="password"
+                                            variant="filled"
+                                            placeholder={t('popups_wallet_re_payment_password')}
+                                        />
+                                    )}
+                                    name="confirm"
+                                    control={control}
+                                />
+                            </div>
                             {errorMsg ? (
                                 <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
                                     {errorMsg}
@@ -227,9 +236,11 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                     </>
                 ) : (
                     <>
-                        {wallets.slice(0, 3).map((wallet, index) => (
-                            <WalletItem address={wallet.address} key={index} />
-                        ))}
+                        <Box className={classes.walletItemList}>
+                            {wallets.map((wallet, index) => (
+                                <WalletItem address={wallet.address} key={index} />
+                            ))}
+                        </Box>
                         <div className={classes.setPasswordButtonWrapper}>
                             <ActionButton fullWidth onClick={() => setIsCreating(true)}>
                                 {t('popups_set_the_payment_password_title')}
@@ -269,12 +280,14 @@ function WalletItem({ address }: WalletItemProps) {
     })
     const theme = useTheme()
 
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+
     return (
         <Box className={classes.addWalletWrapper}>
             <Icons.ETH size={30} />
             <div>
                 <Typography className={classes.subTitle}>
-                    {formatEthereumAddress(address, 6)}{' '}
+                    {domain || formatEthereumAddress(address, 4)}{' '}
                     <Link
                         underline="none"
                         target="_blank"
