@@ -5,4 +5,5 @@ export enum ApplicationRoutes {
     Swap = '/swap',
     Bridges = '/bridges',
     Settings = '/settings',
+    Applications = '/applications',
 }

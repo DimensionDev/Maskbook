@@ -379,6 +379,7 @@ export class FlowConnectionAPI
     replaceTransaction(hash: string, config: Transaction, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
+
     cancelTransaction(hash: string, config: Transaction, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }

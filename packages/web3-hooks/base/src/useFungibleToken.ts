@@ -8,7 +8,7 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 
 export function useFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    address?: string,
+    address?: string | null,
     fallbackToken?: Web3Helper.FungibleTokenScope<S, T>,
     options?: HubOptions<T>,
 ) {

@@ -1,10 +1,12 @@
 import { Icons } from '@masknet/icons'
+import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
-import { useI18N } from '../../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import urlcat from 'urlcat'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -48,11 +50,12 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props extends BoxProps {
+    chainId?: ChainId
     address?: string
     onSwap?(): void
 }
 
-export const ActionGroup = memo(function ActionGroup({ className, address, onSwap, ...rest }: Props) {
+export const ActionGroup = memo(function ActionGroup({ className, chainId, address, onSwap, ...rest }: Props) {
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const navigate = useNavigate()
@@ -70,7 +73,12 @@ export const ActionGroup = memo(function ActionGroup({ className, address, onSwa
                 type="button"
                 className={classes.button}
                 onClick={() => {
-                    navigate(address ? `${PopupRoutes.Receive}/${address}` : PopupRoutes.Receive)
+                    navigate(
+                        urlcat(PopupRoutes.Receive, {
+                            chainId,
+                            address,
+                        }),
+                    )
                 }}>
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_receive')}</Typography>

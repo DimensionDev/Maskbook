@@ -1,12 +1,12 @@
 import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { alpha } from '@mui/system'
+import { Typography } from '@mui/material'
 import { buttonClasses } from '@mui/material/Button'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
-import { alpha } from '@mui/system'
-import { Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3State } from '@masknet/web3-providers'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
@@ -66,7 +66,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
     const { t } = useI18N()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
-        await Web3State.state.AddressBook?.removeContact?.(address)
+        await Web3State.state.AddressBook?.removeContact(address)
         onConfirm?.()
     }, [address, onConfirm])
 

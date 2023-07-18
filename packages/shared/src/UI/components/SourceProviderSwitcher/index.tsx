@@ -45,7 +45,7 @@ export function SourceProviderSwitcher({ sources, onSelect, selected }: SourcePr
                         <SourceProviderIcon size={24} provider={x} />
                         {selected === x && (
                             <Stack className={classes.selected}>
-                                <Icons.Success size={12} />
+                                <Icons.BorderedSuccess size={12} />
                             </Stack>
                         )}
                     </Stack>

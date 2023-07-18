@@ -24,7 +24,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
                 display: 'none',
             },
         },
-        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' },
+        header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: 8 },
         listItem: {
             width: '100%',
             display: 'flex',
@@ -37,7 +37,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             },
         },
         authorInfo: { display: 'flex', alignItems: 'center' },
-        author: { fontSize: 16, fontWeight: 700 },
+        author: { fontSize: 16, fontWeight: 700, wordBreak: 'break-word' },
         state: {
             display: 'flex',
             justifyContent: 'center',
@@ -201,8 +201,8 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
                 <EthereumBlockie address={proposal.author} classes={{ icon: classes.blockieIcon }} />
                 <Typography className={classes.author}>{domain ?? Others.formatAddress(proposal.author, 4)}</Typography>
             </div>
-            <div className={classes.state}>
-                <Typography fontWeight={700} fontSize={12}>
+            <div>
+                <Typography fontWeight={700} fontSize={12} className={classes.state}>
                     {startCase(proposal.state)}
                 </Typography>
             </div>

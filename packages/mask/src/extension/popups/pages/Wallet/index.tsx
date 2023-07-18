@@ -133,7 +133,7 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
                     <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
                     <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
-                    <Route path={r(`${PopupRoutes.Receive}/:address?` as PopupRoutes)} element={<Receive />} />
+                    <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
                 </Routes>
             )}
         </Suspense>

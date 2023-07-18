@@ -71,9 +71,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_snapshot_description" />,
+            description: <Trans i18nKey="plugin_snapshot_description" ns={PluginID.Snapshot} />,
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
-            name: <Trans i18nKey="plugin_snapshot_info_dao" />,
+            name: <Trans i18nKey="plugin_snapshot_info_dao" ns={PluginID.Snapshot} />,
             marketListSortingPriority: 8,
             icon: <Icons.Snapshot size={36} />,
         },

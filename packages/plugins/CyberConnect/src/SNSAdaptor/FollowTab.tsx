@@ -20,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
         color: theme.palette.maskColor.publicSecond,
-        transform: 'translate(0px, 1px)',
     },
     PopupLink: {
         width: 16,

@@ -3,13 +3,14 @@ import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Flags } from '@masknet/flags'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,18 +45,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const NetworkSelector = memo(() => {
-    const networks = getRegisteredWeb3Networks().filter(
-        (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-    ) as Array<NetworkDescriptor<ChainId, NetworkType>>
-
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const Web3 = useWeb3Connection()
+    const networks = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM)
 
     const onChainChange = useCallback(
         async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
-            Web3.switchChain?.(chainId)
+            await Web3.switchChain?.(chainId)
         },
-        [providerType, account, Web3],
+        [providerType, account],
     )
 
     return (

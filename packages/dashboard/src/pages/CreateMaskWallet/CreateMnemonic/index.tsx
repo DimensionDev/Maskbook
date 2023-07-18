@@ -185,7 +185,6 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         if (!words.length) return
 
         const hasPassword = await PluginServices.Wallet.hasPassword()
-
         if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
 
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))

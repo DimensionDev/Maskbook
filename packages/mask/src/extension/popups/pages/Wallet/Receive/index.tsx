@@ -3,13 +3,13 @@ import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, TokenIcon } from '@
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { formatEthereumAddress, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Skeleton, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { useParams } from 'react-router-dom'
 import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hook/index.js'
+import { useAsset } from '../hooks/useAsset.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -19,6 +19,23 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             alignItems: 'center',
             padding: theme.spacing(2),
+        },
+        iconContainer: {
+            height: 60,
+            width: 60,
+            position: 'relative',
+        },
+        badge: {
+            position: 'absolute',
+            border: `1px solid ${theme.palette.maskColor.white}`,
+            width: 17,
+            height: 17,
+            borderRadius: '50%',
+            right: -3,
+            bottom: -3,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         network: {
             color: theme.palette.maskColor.main,
@@ -89,28 +106,45 @@ const useStyles = makeStyles()((theme) => {
 export default memo(function Receive() {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { address } = useParams()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, address } = useTokenParams()
     const networks = useMemo(() => {
         return getEvmNetworks(Flags.support_testnet_switch).filter((x) =>
             Flags.support_testnet_switch ? true : x.isMainnet,
         )
     }, [])
 
+    const asset = useAsset(chainId, address ?? '', account)
+
     useTitle(t('wallet_receive'))
 
+    // TODO custom networks
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
+
     return (
         <Box>
             <Box className={classes.header}>
-                {address && !isNativeTokenAddress(address) ? (
-                    <TokenIcon address={address} />
-                ) : currentNetwork.isMainnet ? (
-                    <ImageIcon size={60} icon={currentNetwork.icon} />
+                <Box className={classes.iconContainer}>
+                    <TokenIcon
+                        chainId={chainId as ChainId}
+                        address={address}
+                        name={asset?.name}
+                        logoURL={asset?.logoURL}
+                        size={60}
+                    />
+                    <div className={classes.badge}>
+                        {currentNetwork.isMainnet ? (
+                            <ImageIcon size={16} icon={currentNetwork.icon} />
+                        ) : (
+                            <ChainIcon size={16} name={currentNetwork.name} />
+                        )}
+                    </div>
+                </Box>
+                {asset?.symbol ? (
+                    <Typography className={classes.network}>{asset.symbol}</Typography>
                 ) : (
-                    <ChainIcon size={60} name={currentNetwork.name} />
+                    <Skeleton width={60} className={classes.network} />
                 )}
-                <Typography className={classes.network}>{currentNetwork.name}</Typography>
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />
                     <CopyButton text={account} size={24} ml={2} style={{ marginLeft: 16 }} />

@@ -15,22 +15,22 @@ import {
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useAccount, useChainId, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
-import { SchemaType, getNativeTokenAddress, isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { PageTitleContext } from '../../../context.js'
-import { useTitle } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hook/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { ActionGroup } from '../components/index.js'
 import { useAsset } from '../hooks/index.js'
 import { DIMENSION, TrendingChart } from './TrendingChart.js'
-import { useCoinStats } from './useCoinStats.js'
+import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
 
@@ -44,6 +44,9 @@ const useStyles = makeStyles()((theme) => {
             // space for action group.
             paddingBottom: 68,
             zIndex: 3,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         deleteButton: {
             padding: 0,
@@ -122,15 +125,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-function useTokenParams() {
-    const [params] = useSearchParams()
-    const defaultChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const rawChainId = params.get('chainId')
-    const chainId: ChainId = rawChainId ? Number.parseInt(rawChainId, 10) : defaultChainId
-    const address = params.get('address') || getNativeTokenAddress(chainId)
-    return { chainId, address }
-}
-
 const TokenDetail = memo(function TokenDetail() {
     const { classes } = useStyles()
     const { t } = useI18N()
@@ -143,9 +137,10 @@ const TokenDetail = memo(function TokenDetail() {
     const asset = useAsset(chainId, address, account)
     const { data: tokenPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
+        if (asset?.value?.usd) return asset.value.usd
         if (!asset?.decimals || !tokenPrice || !balance) return 0
         return leftShift(balance, asset.decimals).times(tokenPrice)
-    }, [balance, asset?.decimals, tokenPrice])
+    }, [balance, asset, tokenPrice])
 
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
@@ -169,7 +164,11 @@ const TokenDetail = memo(function TokenDetail() {
     }, [asset, nativeToken])
 
     const [chartRange, setChartRange] = useState(TrendingAPI.Days.ONE_DAY)
-    const { data: stats = EMPTY_LIST, refetch, isLoading: isLoadingStats } = useCoinStats(chainId, address, chartRange)
+    const {
+        data: stats = EMPTY_LIST,
+        refetch,
+        isLoading: isLoadingStats,
+    } = useCoinTrendingStats(chainId, address, chartRange)
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -275,7 +274,7 @@ const TokenDetail = memo(function TokenDetail() {
                         <CoinMetadataTable trending={trending} />
                     </Box>
                 )}
-                <ActionGroup address={address} className={classes.actions} onSwap={openSwapDialog} />
+                <ActionGroup className={classes.actions} chainId={chainId} address={address} onSwap={openSwapDialog} />
             </Box>
         </div>
     )
