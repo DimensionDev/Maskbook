@@ -118,7 +118,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
                             chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
                             nativeCurrency: chainResolver.nativeCurrency(chainId),
                             rpcUrls: [ProviderURL.fromOfficial(chainId)],
-                            blockExplorerUrls: [chainResolver.explorerURL(chainId)?.url],
+                            blockExplorerUrls: [chainResolver.explorerUrl(chainId)?.url],
                         },
                     ],
                 })

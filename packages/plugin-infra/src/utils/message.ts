@@ -36,5 +36,5 @@ export interface DefaultPluginMessage {
 export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }
 const cache = new Map<string, PluginMessageEmitter<unknown>>()
 
-// TODO: this type should be defined here, not shared-base-ui
-export type { PluginMessageEmitterItem } from '@masknet/shared-base-ui'
+// TODO: this type should be defined here, not shared-base
+export type { PluginMessageEmitterItem } from '@masknet/shared-base'

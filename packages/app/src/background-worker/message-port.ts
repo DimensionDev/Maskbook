@@ -15,6 +15,10 @@ globalThis.addEventListener('connect', (event) => {
     // message send through port is a tuple [type, data]
     port.addEventListener('message', (e) => {
         const [type, data] = e.data
+        if (type === 'ready-request') {
+            pluginWorkerReadyPromise.then(() => port.postMessage(['ready', undefined]))
+            return
+        }
         const handlers = messageHandlers.get(type)
         if (!handlers?.size) return
         for (const f of handlers) {

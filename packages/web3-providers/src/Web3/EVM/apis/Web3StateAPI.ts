@@ -23,6 +23,7 @@ import { TransactionWatcher } from '../state/TransactionWatcher.js'
 import { IdentityService } from '../state/IdentityService.js'
 import { BalanceNotifier } from '../state/BalanceNotifier.js'
 import { BlockNumberNotifier } from '../state/BlockNumberNotifier.js'
+import { Network } from '../state/Network.js'
 
 export const Web3StateRef = new ValueRefWithReady<Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['Web3State']>()
 
@@ -54,6 +55,7 @@ export class Web3StateAPI extends Web3StateAPI_Base<
             Provider: Provider_,
             BalanceNotifier: new BalanceNotifier(),
             BlockNumberNotifier: new BlockNumberNotifier(),
+            Network: new Network(context),
             AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             NameService: new NameService(context),

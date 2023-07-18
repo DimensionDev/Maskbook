@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact, uniqBy } from 'lodash-es'
+import { compact } from 'lodash-es'
 import { MaskIconURLs } from '@masknet/icons'
 import {
     EMPTY_LIST,
@@ -42,7 +42,7 @@ import {
     resolveEventType,
     resolveSimpleHashRange,
     checkBlurToken,
-    checkLensFollower,
+    isLensFollower,
 } from '../helpers.js'
 import {
     type Asset,
@@ -287,16 +287,16 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
         const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
 
-        const filteredCollections = uniqBy(response.collections, (x) => x.top_contracts?.[0])
+        const filteredCollections = response.collections
             // Might got bad data responded including id field and other fields empty
-            .filter(
-                (x) =>
-                    x?.id &&
+            .filter((x) => {
+                if (!x?.id || x.spam_score === 100) return false
+                return (
                     isValidChainId(resolveChainId(x.chain)) &&
-                    x.spam_score !== 100 &&
                     x.top_contracts.length > 0 &&
-                    (!checkLensFollower(x.name ?? '') || !isERC712Only),
-            )
+                    (!isLensFollower(x.name) || !isERC712Only)
+                )
+            })
 
         let erc721CollectionIdList: string[] = EMPTY_LIST
 

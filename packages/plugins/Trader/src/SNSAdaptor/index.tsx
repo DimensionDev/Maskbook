@@ -76,7 +76,7 @@ const sns: Plugin.SNSAdaptor.Definition<ChainId> = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SwapColorful size={36} />
-            const name = <Trans i18nKey="plugin_trader_swap" />
+            const name = <Trans i18nKey="plugin_trader_swap" ns={PluginID.Trader} />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
