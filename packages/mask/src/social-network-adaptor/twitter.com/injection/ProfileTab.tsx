@@ -263,6 +263,7 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
                     name: 'Last tab in the profile page',
                     rule: isProfilePageLike,
                 },
+                shadowRootDelegatesFocus: false,
             })
             attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
                 <>
@@ -277,5 +278,6 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
     startWatch(contentWatcher, {
         signal,
         missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
+        shadowRootDelegatesFocus: false,
     })
 }
