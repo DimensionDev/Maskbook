@@ -1,4 +1,4 @@
-import type { Account, ECKeyIdentifier, Proof, UpdateableWallet, Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import type {
     FungibleToken,
     NonFungibleCollection,
@@ -190,9 +190,9 @@ export interface ConnectionAPI_Base<
     /** Get all wallets. */
     getWallets?: (initial?: Options) => Promise<Wallet[]>
     /** Add a new wallet. */
-    addWallet?: (wallet: UpdateableWallet, initial?: Options) => Promise<void>
+    addWallet?: (wallet: UpdatableWallet, initial?: Options) => Promise<void>
     /** Update a wallet. */
-    updateWallet?: (address: string, wallet: UpdateableWallet, initial?: Options) => Promise<void>
+    updateWallet?: (address: string, wallet: UpdatableWallet, initial?: Options) => Promise<void>
     /** Rename a wallet */
     renameWallet?: (address: string, name: string, initial?: Options) => Promise<void>
     /** Remove a wallet */
