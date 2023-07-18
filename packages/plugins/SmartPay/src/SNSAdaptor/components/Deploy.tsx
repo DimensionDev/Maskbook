@@ -2,6 +2,7 @@ import { first } from 'lodash-es'
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
+import { Box, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
     useCurrentPersonaInformation,
@@ -16,7 +17,6 @@ import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallet
 import { SmartPayOwner, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Typography, alpha } from '@mui/material'
 import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'

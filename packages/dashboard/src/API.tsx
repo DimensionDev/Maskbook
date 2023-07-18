@@ -33,7 +33,7 @@ export interface PluginServices {
         setPassword(newPassword: string): Promise<void>
         recoverWalletFromMnemonicWords(name: string, mnemonic: string, derivationPath?: string): Promise<string>
         createWalletFromMnemonicWords(name: string, mnemonic: string, derivationPath?: string): Promise<string>
-        generateAddressFromMnemonic(
+        generateAddressFromMnemonicWords(
             name: string,
             mnemonic: string,
             derivationPath?: string,
