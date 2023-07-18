@@ -8,6 +8,8 @@ export function useTokenParams() {
     const defaultChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const rawChainId = params.get('chainId')
     const chainId: ChainId = rawChainId ? Number.parseInt(rawChainId, 10) : defaultChainId
-    const address = params.get('address') || getNativeTokenAddress(chainId)
-    return { chainId, address }
+    const rawAddress = params.get('address')
+    const address = rawAddress || getNativeTokenAddress(chainId)
+
+    return { chainId, address, rawChainId, rawAddress }
 }

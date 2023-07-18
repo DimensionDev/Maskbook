@@ -110,3 +110,10 @@ export function formatInteger(value: BigNumber.Value | null | undefined, fallbac
     if (value === undefined || value === null) return fallback
     return new BigNumber(value).toFormat(0)
 }
+
+/** Trim ending zeros of decimals */
+export function trimZero(digit: string) {
+    return digit.replaceAll(/\.([1-9]*)?0+$/g, (_, p1) => {
+        return p1 ? `.${p1}` : ''
+    })
+}

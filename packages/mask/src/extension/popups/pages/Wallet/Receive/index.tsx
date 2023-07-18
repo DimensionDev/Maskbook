@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             justifyContent: 'center',
         },
-        network: {
+        name: {
             color: theme.palette.maskColor.main,
             marginTop: theme.spacing(1),
             fontSize: 24,
@@ -107,7 +107,9 @@ export default memo(function Receive() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { chainId, address } = useTokenParams()
+    const { chainId, address, rawChainId, rawAddress } = useTokenParams()
+    // No specific token but only for chain
+    const isChain = !rawChainId && !rawAddress
     const networks = useMemo(() => {
         return getEvmNetworks(Flags.support_testnet_switch).filter((x) =>
             Flags.support_testnet_switch ? true : x.isMainnet,
@@ -120,30 +122,37 @@ export default memo(function Receive() {
 
     // TODO custom networks
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
+    const name = isChain ? currentNetwork.name : asset?.symbol
 
     return (
         <Box>
             <Box className={classes.header}>
                 <Box className={classes.iconContainer}>
-                    <TokenIcon
-                        chainId={chainId as ChainId}
-                        address={address}
-                        name={asset?.name}
-                        logoURL={asset?.logoURL}
-                        size={60}
-                    />
-                    <div className={classes.badge}>
-                        {currentNetwork.isMainnet ? (
-                            <ImageIcon size={16} icon={currentNetwork.icon} />
-                        ) : (
-                            <ChainIcon size={16} name={currentNetwork.name} />
-                        )}
-                    </div>
+                    {isChain ? (
+                        <ImageIcon size={60} icon={currentNetwork.icon} name={currentNetwork.name} />
+                    ) : (
+                        <TokenIcon
+                            chainId={chainId as ChainId}
+                            address={address}
+                            name={asset?.name}
+                            logoURL={asset?.logoURL}
+                            size={60}
+                        />
+                    )}
+                    {isChain ? null : (
+                        <div className={classes.badge}>
+                            {currentNetwork.isMainnet ? (
+                                <ImageIcon size={16} icon={currentNetwork.icon} />
+                            ) : (
+                                <ChainIcon size={16} name={currentNetwork.name} />
+                            )}
+                        </div>
+                    )}
                 </Box>
-                {asset?.symbol ? (
-                    <Typography className={classes.network}>{asset.symbol}</Typography>
+                {name ? (
+                    <Typography className={classes.name}>{name}</Typography>
                 ) : (
-                    <Skeleton width={60} className={classes.network} />
+                    <Skeleton width={60} className={classes.name} />
                 )}
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />

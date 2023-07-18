@@ -45,5 +45,5 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
 
     if (data && disableDefaultIcon) return null
     const text = token?.name || token?.symbol || symbol
-    return <Icon {...rest} logoURL={isNFT ? logoURL : data || logoURL} name={text} />
+    return <Icon {...rest} logoURL={isNFT ? logoURL : logoURL || data} name={text} />
 })
