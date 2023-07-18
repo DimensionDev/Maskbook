@@ -5,7 +5,6 @@ import type { PluginMessageEmitterItem } from '@masknet/plugin-infra'
 
 export let Services: ServiceType = null!
 export let Messages: WebExtensionMessage<MaskEvents> = null!
-export let PluginMessages: PluginMessages = null!
 
 export interface PluginMessages {
     Transak: {
@@ -26,9 +25,4 @@ export function setService(rpc: any) {
 export function setMessages(MaskMessage: any) {
     Messages = MaskMessage
     Object.assign(globalThis, { Messages: MaskMessage })
-}
-
-export function setPluginMessages(message: PluginMessages) {
-    PluginMessages = message as any
-    Object.assign(globalThis, { PluginMessages: message })
 }
