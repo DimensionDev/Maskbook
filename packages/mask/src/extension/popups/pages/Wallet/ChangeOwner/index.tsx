@@ -182,7 +182,7 @@ export default function ChangeOwner() {
         })
         if (!receipt.status) return
 
-        await Web3.updateWallet?.(
+        await Web3.addWallet?.(
             contractAccount.address,
             {
                 name: 'Smart Pay',

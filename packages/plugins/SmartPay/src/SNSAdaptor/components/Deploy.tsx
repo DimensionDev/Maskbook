@@ -338,7 +338,6 @@ export function Deploy({ open }: { open: boolean }) {
                 open={successDialogOpen}
                 onClose={async () => {
                     if (!contractAccount) return
-                    const now = new Date()
                     await Web3.addWallet?.(
                         {
                             name: 'Smart pay',
