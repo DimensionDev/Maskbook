@@ -4,20 +4,20 @@ import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import '../messages.js'
 import {
     changePassword,
-    exportMnemonic,
+    exportMnemonicWords,
     exportPrivateKey,
     getDerivableAccounts,
     getLegacyWallets,
     getWallets,
     isLocked,
-    recoverWalletFromMnemonic,
-    generateAddressFromMnemonic,
+    recoverWalletFromMnemonicWords,
+    generateAddressFromMnemonicWords,
     resetPassword,
     setDefaultPassword,
     recoverWalletFromPrivateKey,
     recoverWalletFromKeyStoreJSON,
+    createWalletFromMnemonicWords,
 } from '../services/index.js'
-import { INTERNAL_getPasswordRequired } from '../services/wallet/password.js'
 import { setupDatabase } from '../database/Plugin.db.js'
 import { base } from '../base.js'
 
@@ -27,18 +27,18 @@ const worker: Plugin.Worker.Definition = {
         setupDatabase(context.getDatabaseStorage())
         WalletServiceRef.value = {
             changePassword,
-            exportMnemonic,
+            exportMnemonicWords,
             setDefaultPassword,
             exportPrivateKey,
             recoverWalletFromKeyStoreJSON,
-            generateAddressFromMnemonic,
+            generateAddressFromMnemonicWords,
             resetPassword,
             getDerivableAccounts,
             getLegacyWallets,
             getWallets,
-            INTERNAL_getPasswordRequired,
-            recoverWalletFromMnemonic,
+            recoverWalletFromMnemonicWords,
             recoverWalletFromPrivateKey,
+            createWalletFromMnemonicWords,
         }
         MaskMessages.events.wallet_is_locked.on(
             async ([type]) => {

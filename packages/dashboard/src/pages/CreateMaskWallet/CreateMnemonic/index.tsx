@@ -187,14 +187,14 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         const hasPassword = await PluginServices.Wallet.hasPassword()
         if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
 
-        const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
+        const address = await PluginServices.Wallet.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
     }, [words.join(' '), walletName])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
-        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonicWords(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
             {

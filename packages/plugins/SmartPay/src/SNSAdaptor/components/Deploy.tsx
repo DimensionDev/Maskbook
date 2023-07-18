@@ -1,3 +1,8 @@
+import { first } from 'lodash-es'
+import { useCallback, useEffect, useState } from 'react'
+import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { Box, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
     useCurrentPersonaInformation,
@@ -12,11 +17,6 @@ import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallet
 import { SmartPayOwner, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Typography, alpha } from '@mui/material'
-import { first } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
 import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
@@ -341,14 +341,7 @@ export function Deploy({ open }: { open: boolean }) {
                     await Web3.addWallet?.(
                         {
                             name: 'Smart pay',
-                            owner: manager?.address,
                             address: contractAccount?.address,
-                            identifier: manager?.identifier?.toText(),
-                            hasDerivationPath: false,
-                            hasStoredKeyInfo: false,
-                            id: contractAccount?.address,
-                            createdAt: new Date(),
-                            updatedAt: new Date(),
                         },
                         {
                             providerType: ProviderType.MaskWallet,

@@ -29,14 +29,15 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         if (loading || !value) return
 
         // Contract account already exists
-        if (wallets.filter((x) => x.owner).length)
+        if (wallets.filter((x) => x.owner).length) {
             setSmartPayDialog({
                 open: true,
                 hasAccounts: true,
                 signWallet: value.signWallet,
                 signPersona: value.signPersona,
             })
-
+            return
+        }
         // If there is no persona and no signer
         if (!personas.length && !value.signPersona && !value.signWallet) {
             LeavePageConfirmModal.open({
@@ -50,6 +51,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 },
                 openDashboard,
             })
+            return
         }
 
         // if there is verified persona but current persona isn't verified

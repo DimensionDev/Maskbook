@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
+import { Box, Link, Popover, Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedAddress } from '@masknet/shared'
 import {
@@ -15,7 +16,6 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { Box, Link, Popover, Typography, Button } from '@mui/material'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
@@ -177,27 +177,9 @@ export default function ChangeOwner() {
 
         if (!hash) return
 
-        const receipt = await Web3.confirmTransaction(hash, {
+        await Web3.confirmTransaction(hash, {
             signal: AbortSignal.timeout(5 * 60 * 1000),
         })
-        if (!receipt.status) return
-
-        await Web3.updateOrAddWallet?.(
-            {
-                name: 'Smart Pay',
-                owner: manageAccount.address,
-                identifier: manageAccount.identifier?.toText(),
-                address: contractAccount.address,
-                hasDerivationPath: false,
-                hasStoredKeyInfo: false,
-                id: contractAccount.address,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                providerType: ProviderType.MaskWallet,
-            },
-        )
     }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
 
     useTitle(t('popups_wallet_change_owner'))
