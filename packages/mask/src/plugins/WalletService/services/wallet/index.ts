@@ -5,9 +5,9 @@ import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import { SourceType, type SignType, type Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import * as Mask from '../maskwallet/index.js'
 import * as database from './database/index.js'
 import * as password from './password.js'
-import * as Mask from '../maskwallet/index.js'
 import { MAX_DERIVE_COUNT } from '../../constants.js'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
@@ -22,7 +22,7 @@ function sanitizeWallet(wallet: Wallet): Wallet {
 }
 
 // db
-export { hasWallet, updateWallet } from './database/wallet.js'
+export { hasWallet, addWallet, updateWallet } from './database/wallet.js'
 export { getNetwork, getNetworks, addNetwork, updateNetwork, deleteNetwork } from './database/network.js'
 
 // password

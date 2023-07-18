@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type Web3 from 'web3'
 import { numberToHex, toHex, toNumber } from 'web3-utils'
-import type { Account, ECKeyIdentifier, Proof, Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdateableWallet, Wallet } from '@masknet/shared-base'
 import {
     AddressType,
     SchemaType,
@@ -118,11 +118,11 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async addWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    async addWallet(wallet: UpdateableWallet, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async updateWallet(address: string, wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    async updateWallet(address: string, wallet: UpdateableWallet, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 

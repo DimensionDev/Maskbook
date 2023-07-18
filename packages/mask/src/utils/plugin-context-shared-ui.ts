@@ -59,12 +59,6 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletConnectQRCodeModal.close()
     },
 
-    wallets: createSubscriptionFromAsync(
-        () => WalletRPC.getWallets(),
-        EMPTY_LIST,
-        CrossIsolationMessages.events.walletsUpdated.on,
-    ),
-
     selectAccount: WalletRPC.selectMaskAccount,
 
     recordConnectedSites: WalletRPC.recordConnectedSites,
@@ -72,10 +66,17 @@ export const RestPartOfPluginUIContextShared: Omit<
     signWithPersona: Services.Identity.signWithPersona,
     signWithWallet: WalletRPC.signWithWallet,
 
+    wallets: createSubscriptionFromAsync(
+        () => WalletRPC.getWallets(),
+        EMPTY_LIST,
+        CrossIsolationMessages.events.walletsUpdated.on,
+    ),
+
     getWallets: WalletRPC.getWallets,
-    addWallet: WalletRPC.updateWallet,
+    addWallet: WalletRPC.addWallet,
     updateWallet: WalletRPC.updateWallet,
     removeWallet: WalletRPC.removeWallet,
     resetAllWallets: WalletRPC.resetAllWallets,
+
     hasPaymentPassword: WalletRPC.hasPassword,
 }

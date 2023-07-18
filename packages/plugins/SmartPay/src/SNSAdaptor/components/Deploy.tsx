@@ -342,15 +342,7 @@ export function Deploy({ open }: { open: boolean }) {
                     await Web3.addWallet?.(
                         {
                             name: 'Smart pay',
-                            source: 'user_imported',
-                            owner: manager?.address,
                             address: contractAccount?.address,
-                            identifier: manager?.identifier?.toText(),
-                            hasDerivationPath: false,
-                            hasStoredKeyInfo: false,
-                            id: contractAccount?.address,
-                            createdAt: now,
-                            updatedAt: now,
                         },
                         {
                             providerType: ProviderType.MaskWallet,

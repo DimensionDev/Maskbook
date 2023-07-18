@@ -43,6 +43,8 @@ export interface Wallet {
     identifier?: string
 }
 
+export type UpdateableWallet = Pick<Wallet, 'name' | 'address' | 'derivationPath'>
+
 export interface LegacyWalletRecord {
     /** ethereum hex address */
     address: string

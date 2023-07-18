@@ -182,17 +182,11 @@ export default function ChangeOwner() {
         })
         if (!receipt.status) return
 
-        await Web3.updateOrAddWallet?.(
+        await Web3.updateWallet?.(
+            contractAccount.address,
             {
                 name: 'Smart Pay',
-                owner: manageAccount.address,
-                identifier: manageAccount.identifier?.toText(),
                 address: contractAccount.address,
-                hasDerivationPath: false,
-                hasStoredKeyInfo: false,
-                id: contractAccount.address,
-                createdAt: new Date(),
-                updatedAt: new Date(),
             },
             {
                 providerType: ProviderType.MaskWallet,

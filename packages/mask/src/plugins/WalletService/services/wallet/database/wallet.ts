@@ -1,6 +1,6 @@
 import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { CrossIsolationMessages, asyncIteratorToArray } from '@masknet/shared-base'
+import { CrossIsolationMessages, type SourceType, asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db.js'
 import type { WalletRecord } from '../type.js'
@@ -69,12 +69,12 @@ export async function getWallets() {
 
 export async function addWallet(
     address: string,
-    source: 'local_generated' | 'user_imported',
-    updates?: Partial<{
+    source: SourceType,
+    updates?: {
         name?: string
         derivationPath?: string
         storedKeyInfo?: api.IStoredKeyInfo
-    }>,
+    },
 ) {
     const wallet = await getWallet(address)
     if (wallet?.storedKeyInfo?.data) throw new Error('The wallet already exists.')
@@ -86,8 +86,9 @@ export async function addWallet(
         type: 'wallet',
         source,
         address: address_,
-        ...updates,
-        name: updates?.name?.trim() || `Account ${(await getWallets()).length + 1}`,
+        derivationPath: updates?.derivationPath,
+        storedKeyInfo: updates?.storedKeyInfo,
+        name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
         createdAt: now,
         updatedAt: now,
     })
@@ -109,7 +110,9 @@ export async function updateWallet(
     await PluginDB.add({
         type: 'wallet',
         ...wallet,
-        ...updates,
+        name: updates.name ?? wallet.name,
+        derivationPath: updates?.derivationPath ?? wallet.derivationPath,
+        latestDerivationPath: updates?.latestDerivationPath ?? wallet.latestDerivationPath,
         updatedAt: new Date(),
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
