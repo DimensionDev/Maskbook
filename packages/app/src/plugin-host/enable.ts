@@ -10,7 +10,7 @@ import { createSharedContext } from '../helpers/createSharedContext.js'
 startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
     minimalMode: {
         events: new Emitter(),
-        isEnabled: () => BooleanPreference.True,
+        isEnabled: () => BooleanPreference.False,
     },
     addI18NResource(plugin, resource) {
         createI18NBundle(plugin, resource)(i18NextInstance)
