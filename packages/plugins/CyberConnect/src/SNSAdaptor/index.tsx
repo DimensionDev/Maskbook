@@ -1,4 +1,6 @@
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { ThemeProvider } from '@mui/material'
+import { MaskLightTheme } from '@masknet/theme'
 import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
@@ -11,7 +13,12 @@ const isCyberConnectUrl = (x: string): boolean => !!x.match(/app\.cyberconnect\.
 
 function Renderer({ url }: { url: string }) {
     usePluginWrapper(true)
-    return <Profile url={url} />
+
+    return (
+        <ThemeProvider theme={MaskLightTheme}>
+            <Profile url={url} />
+        </ThemeProvider>
+    )
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {

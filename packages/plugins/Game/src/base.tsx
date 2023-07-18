@@ -19,6 +19,7 @@ export const base: Plugin.Shared.Definition = {
                 [CurrentSNSNetwork.Facebook]: true,
                 [CurrentSNSNetwork.Instagram]: true,
                 [CurrentSNSNetwork.Minds]: true,
+                [CurrentSNSNetwork.__SPA__]: true,
             },
         },
         web3: {

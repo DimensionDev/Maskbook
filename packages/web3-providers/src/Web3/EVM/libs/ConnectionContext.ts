@@ -67,6 +67,10 @@ export class ConnectionContext {
         )
     }
 
+    get chainDescriptor() {
+        return this.payloadEditor.chainDescriptor
+    }
+
     get providerType() {
         return this.requestOptions?.providerType ?? this._options?.providerType ?? this._providerType
     }

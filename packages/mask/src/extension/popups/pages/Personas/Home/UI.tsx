@@ -1,14 +1,14 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo } from 'react'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import urlcat from 'urlcat'
-import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { type EnhanceableSite, formatPersonaFingerprint, type ProfileAccount } from '@masknet/shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { CopyButton } from '@masknet/shared'
+import { formatPersonaFingerprint, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
+import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
+import { memo } from 'react'
+import urlcat from 'urlcat'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
@@ -187,7 +187,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                         alignItems="center"
                                         columnGap="2px">
                                         {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyIconButton text={fingerprint} className={classes.icon} />
+                                        <CopyButton text={fingerprint} size={12} className={classes.icon} />
                                         <Link
                                             underline="none"
                                             target="_blank"
@@ -219,7 +219,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         </TabPanel>
                     </TabContext>
                 ) : (
-                    <Box sx={{ background: theme.palette.maskColor.bottom }}>
+                    <Box sx={{ background: theme.palette.maskColor.bottom, height: '100%' }}>
                         <Box className={classes.emptyHeader}>
                             <Icons.MaskSquare width={160} height={46} />
                         </Box>
@@ -240,7 +240,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <Button
                                 onClick={onRestore}
                                 variant="outlined"
-                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.bottom} size={18} />}>
+                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.main} size={18} />}>
                                 {t('popups_restore_and_login')}
                             </Button>
                         </div>

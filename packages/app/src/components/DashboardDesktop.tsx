@@ -6,6 +6,8 @@ import {
     HeartIcon,
     EyeIcon,
     TruckIcon,
+    WindowIcon,
+    UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
@@ -16,10 +18,11 @@ const navigation = [
     { name: 'Overview', icon: EyeIcon, to: ApplicationRoutes.Overview },
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
+    { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
+    { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
     { name: 'Bridges', icon: TruckIcon, to: ApplicationRoutes.Bridges },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
-    { name: 'web3profile', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Web3Profile },
 ]
 
 function NavigationLink(props: (typeof navigation)[0]) {

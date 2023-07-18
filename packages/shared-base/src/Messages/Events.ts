@@ -1,8 +1,8 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
-import type { NetworkPluginID, PluginID } from '../Plugin/index.js'
-import type { PersonaInformation, RelationFavor } from '../Persona/types.js'
+import type { NetworkPluginID, PluginID } from '../types/PluginID.js'
+import type { PersonaInformation, RelationFavor } from '../types/Persona.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/types.js'
 
 export interface MaskSettingsEvents {
@@ -38,7 +38,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     ownPersonaChanged: void
     ownProofChanged: void
     NFTProjectTwitterDetect: NFTProjectTwitterDetectEvent
-    restoreSuccess: RestoreSuccessEvent
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
     hostPermissionChanged: void
@@ -156,11 +155,6 @@ export interface SettingsUpdateEvent {
     value: any
 }
 
-export interface RestoreSuccessEvent {
-    wallets?: string[]
-    count?: number
-}
-
 export interface redpacketDialogEvent {
     open: boolean
     source?: PluginID
@@ -261,4 +255,9 @@ export type WalletLockStatusUpdatedEvent = boolean
 export interface GameDialogEvent {
     open: boolean
     tokenProps?: { tokenId?: string; contract?: string; chainId?: number }
+}
+
+export interface PopupWalletConnectEvent {
+    open: boolean
+    uri?: string
 }

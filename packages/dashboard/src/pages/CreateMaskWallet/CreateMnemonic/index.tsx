@@ -1,29 +1,23 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useAsync, useAsyncFn, useAsyncRetry, useCopyToClipboard } from 'react-use'
+import { toBlob } from 'html-to-image'
+import { memo, useCallback, useRef, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PluginServices } from '../../../API.js'
-import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { ComponentToPrint } from './ComponentToPrint.js'
-import { toBlob } from 'html-to-image'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
-import { SetupFrameController } from '../../../components/CreateWalletFrame/index.js'
-import { isUndefined } from 'lodash-es'
-import { walletName } from '../constants.js'
+import { ResetWalletContext } from '../context.js'
+import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { ComponentToPrint } from './ComponentToPrint.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
 const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
-    container: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-    },
     title: {
         fontSize: 30,
         margin: '12px 0',
@@ -55,10 +49,6 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
     button: {
         whiteSpace: 'nowrap',
     },
-    leftSide: {
-        width: '90%',
-        maxWidth: isVerify ? 720 : 948,
-    },
     import: {
         fontSize: 14,
         cursor: 'pointer',
@@ -86,7 +76,7 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
         marginTop: 12,
         gap: '12px',
     },
-    storeIcon: {
+    iconBox: {
         height: 40,
         width: 40,
         cursor: 'pointer',
@@ -170,39 +160,40 @@ const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => (
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
+    const walletName = 'Wallet 1'
     const t = useDashboardI18N()
-
+    const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [isVerify, setIsVerify] = useState(false)
     const { classes, cx } = useStyles({ isVerify })
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
-
-    const { value: hasPassword = false } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     const onVerifyClick = useCallback(() => {
         setIsVerify(true)
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.RecoveryMaskWallet)
-    }, [])
+        navigate(DashboardRoutes.RecoveryMaskWallet, {
+            state: {
+                password: location.state?.password,
+                isReset: location.state?.isReset,
+            },
+        })
+    }, [location.state?.password, location.state?.isReset])
 
     const { value: address } = useAsync(async () => {
-        const password = location.state?.password
-        if (isUndefined(hasPassword)) return
-
-        if (hasPassword === false) {
-            await PluginServices.Wallet.setPassword(password)
-        }
-
         if (!words.length) return
 
+        const hasPassword = await PluginServices.Wallet.hasPassword()
+        if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
+
         const address = await PluginServices.Wallet.generateAddressFromMnemonic(walletName, words.join(' '))
-
         return address
-    }, [words, hasPassword, location.state?.password])
+    }, [words.join(' '), walletName])
 
-    const [, onSubmit] = useAsyncFn(async () => {
+    const [{ loading }, onSubmit] = useAsyncFn(async () => {
+        handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+
         const address = await PluginServices.Wallet.recoverWalletFromMnemonic(walletName, words.join(' '))
 
         await PluginServices.Wallet.resolveMaskAccount([
@@ -212,40 +203,40 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words])
+    }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
 
     return (
-        <div className={classes.container}>
-            <div className={classes.leftSide}>
-                <div className={classes.between}>
-                    <Typography className={cx(classes.second, classes.bold)}>
-                        {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
-                    </Typography>
-                    <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
-                        {t.wallets_import_wallet_import()}
-                    </Typography>
-                </div>
-                {isVerify ? (
-                    <VerifyMnemonicUI
-                        setIsVerify={setIsVerify}
-                        words={words}
-                        isMatched={isMatched}
-                        answerCallback={answerCallback}
-                        puzzleAnswer={puzzleAnswer}
-                        verifyAnswerCallback={verifyAnswerCallback}
-                        puzzleWordList={puzzleWordList}
-                        onSubmit={onSubmit}
-                    />
-                ) : (
-                    <CreateMnemonicUI
-                        address={address}
-                        words={words}
-                        onRefreshWords={refreshCallback}
-                        onVerifyClick={onVerifyClick}
-                    />
-                )}
+        <>
+            <div className={classes.between}>
+                <Typography className={cx(classes.second, classes.bold)}>
+                    {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
+                </Typography>
+                <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
+                    {t.wallets_import_wallet_import()}
+                </Typography>
             </div>
-        </div>
+            {isVerify ? (
+                <VerifyMnemonicUI
+                    isReset={location.state?.isReset}
+                    setIsVerify={setIsVerify}
+                    words={words}
+                    loading={loading}
+                    isMatched={isMatched}
+                    answerCallback={answerCallback}
+                    puzzleAnswer={puzzleAnswer}
+                    verifyAnswerCallback={verifyAnswerCallback}
+                    puzzleWordList={puzzleWordList}
+                    onSubmit={onSubmit}
+                />
+            ) : (
+                <CreateMnemonicUI
+                    address={address}
+                    words={words}
+                    onRefreshWords={refreshCallback}
+                    onVerifyClick={onVerifyClick}
+                />
+            )}
+        </>
     )
 })
 
@@ -264,6 +255,8 @@ interface VerifyMnemonicUIProps {
         [key: number]: string
     }
     puzzleWordList: PuzzleWord[]
+    isReset: boolean
+    loading: boolean
     isMatched: boolean | undefined
     setIsVerify: (isVerify: boolean) => void
     onSubmit: () => void
@@ -281,6 +274,8 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     answerCallback,
     setIsVerify,
     onSubmit,
+    loading,
+    isReset,
     puzzleWordList,
     puzzleAnswer,
     verifyAnswerCallback,
@@ -324,10 +319,12 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                     <PrimaryButton
                         className={classes.bold}
                         width="125px"
+                        disabled={loading || Object.entries(puzzleAnswer).length !== 3}
+                        loading={loading}
                         size="large"
                         color="primary"
                         onClick={() => verifyAnswerCallback(onSubmit)}>
-                        {t.verify()}
+                        {isReset ? t.restore() : t.verify()}
                     </PrimaryButton>
                 </div>
             </SetupFrameController>
@@ -372,8 +369,6 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
     const ref = useRef(null)
     const { classes, cx } = useStyles({ isVerify: false })
     const theme = useTheme()
-    const [copyState, copyToClipboard] = useCopyToClipboard()
-    const { showSnackbar } = useCustomSnackbar()
 
     const [, handleDownload] = useAsyncFn(async () => {
         if (!ref.current) return
@@ -385,18 +380,6 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
         link.href = URL.createObjectURL(dataUrl)
         link.click()
     }, [])
-
-    useEffect(() => {
-        if (copyState.value) {
-            showSnackbar(t.personas_export_persona_copy_success(), {
-                variant: 'success',
-                message: t.persona_phrase_copy_description(),
-            })
-        }
-        if (copyState.error?.message) {
-            showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
-        }
-    }, [copyState.value, copyState.error?.message])
 
     return (
         <>
@@ -412,12 +395,16 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                 <MnemonicReveal words={words} indexed />
             </div>
             <div className={classes.storeWords}>
-                <div className={classes.storeIcon} onClick={handleDownload}>
+                <div className={classes.iconBox} onClick={handleDownload}>
                     <Icons.Download2 color={theme.palette.maskColor.main} size={18} />
                 </div>
-                <div className={classes.storeIcon} onClick={() => copyToClipboard(words.join(' '))}>
-                    <Icons.Copy color={theme.palette.maskColor.main} size={18} />
-                </div>
+                <CopyButton
+                    classes={{ root: classes.iconBox }}
+                    color={theme.palette.maskColor.main}
+                    size={18}
+                    text={words.join(' ')}
+                    successText={t.persona_phrase_copy_description()}
+                />
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
                 {t.create_wallet_mnemonic_tip()}

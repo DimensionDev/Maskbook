@@ -78,7 +78,7 @@ export const EditNetwork = memo(function EditNetwork() {
             chainId,
             rpc: getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
             currencySymbol: chainResolver.nativeCurrency(network.chainId)?.symbol,
-            explorer: explorerResolver.explorerURL(network.chainId).url,
+            explorer: explorerResolver.explorerUrl(network.chainId).url,
         }
     }, [chainId, networks])
     const { data: storedNetworks = [] } = useQuery({

@@ -78,7 +78,7 @@ export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAdd
             </Stack>
             <Stack direction="row" justifyContent="center">
                 <Button color="primary" variant="contained" onClick={onAddWallet} className={classes.button}>
-                    <Icons.WalletUnderTabs size={16} />
+                    <Icons.Wallet size={16} />
                     {t.add_wallet_button()}
                 </Button>
             </Stack>

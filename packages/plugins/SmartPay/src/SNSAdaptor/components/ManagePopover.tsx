@@ -1,13 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useSnackbarCallback } from '@masknet/shared'
+import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes, formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Popover, Radio, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useCopyToClipboard } from 'react-use'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useI18N } from '../../locales/index.js'
 import { type ManagerAccount, ManagerAccountType } from '../../type.js'
@@ -84,14 +83,6 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
     const { classes } = useStyles()
     const { personaManagers, walletManagers } = useManagers()
 
-    const [, copyToClipboard] = useCopyToClipboard()
-
-    const onCopy = useSnackbarCallback({
-        executor: async (text) => copyToClipboard(text),
-        deps: [],
-        successText: t.copy_wallet_address_success(),
-    })
-
     const { openPopupWindow, openDashboard } = useSNSAdaptorContext()
 
     return usePortalShadowRoot((container) => (
@@ -125,14 +116,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                                     <Typography className={classes.title}>{persona.nickname}</Typography>
                                     <Typography className={classes.identity}>
                                         {formatPersonaFingerprint(persona.identifier.rawPublicKey, 4)}
-                                        <Icons.PopupCopy
-                                            onClick={(event) => {
-                                                event.stopPropagation()
-                                                event.preventDefault()
-                                                onCopy(persona.identifier.rawPublicKey)
-                                            }}
-                                            size={14}
-                                        />
+                                        <CopyButton size={14} text={persona.identifier.rawPublicKey} />
                                     </Typography>
                                 </Box>
                             </Box>
@@ -175,14 +159,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                                     <Typography className={classes.title}>{wallet.name}</Typography>
                                     <Typography className={classes.identity}>
                                         {formatEthereumAddress(wallet.address, 4)}
-                                        <Icons.PopupCopy
-                                            size={14}
-                                            onClick={(event) => {
-                                                event.stopPropagation()
-                                                event.preventDefault()
-                                                onCopy(wallet.address)
-                                            }}
-                                        />
+                                        <CopyButton size={14} text={wallet.address} />
                                     </Typography>
                                 </Box>
                             </Box>

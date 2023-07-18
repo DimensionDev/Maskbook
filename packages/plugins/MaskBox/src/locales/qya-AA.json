@@ -11,5 +11,7 @@
     "details": "crwdns18860:0crwdne18860:0",
     "failed": "crwdns19339:0crwdne19339:0",
     "retry": "crwdns19341:0crwdne19341:0",
-    "action_title": "crwdns18862:0{{title}}crwdnd18862:0{{price}}crwdnd18862:0{{symbol}}crwdne18862:0"
+    "action_title": "crwdns18862:0{{title}}crwdnd18862:0{{price}}crwdnd18862:0{{symbol}}crwdne18862:0",
+    "plugin_mask_box_name": "crwdns21709:0crwdne21709:0",
+    "plugin_mask_box_description": "crwdns21711:0crwdne21711:0"
 }

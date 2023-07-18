@@ -2,7 +2,7 @@ import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { memo, useEffect, useState } from 'react'
 import { emitter } from './emitter.js'
-import FileServiceDialog from './MainDialog.js'
+import { FileServiceDialog } from './MainDialog.js'
 
 export const FileServiceInjection = memo(function FileServiceInjection() {
     const [open, setOpen] = useState(false)

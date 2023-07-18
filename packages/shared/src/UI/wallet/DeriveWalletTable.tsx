@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { useCopyToClipboard } from 'react-use'
 import { range } from 'lodash-es'
 import {
     Table,
@@ -15,7 +14,7 @@ import {
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { CopyButton, FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../locales/index.js'
@@ -76,6 +75,8 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         alignSelf: 'stretch',
         flex: '1 0 0',
+    },
+    tableRowWithHoverEffect: {
         '&:hover': {
             borderRadius: 8,
             background: theme.palette.maskColor.bg,
@@ -104,7 +105,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
     hiddenHeader,
     page,
 }) {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const t = useSharedI18N()
     return (
         <Table size="small" padding="none" stickyHeader>
@@ -178,18 +179,17 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
         chainId: ChainId.Mainnet,
     })
 
-    const [, copyToClipboard] = useCopyToClipboard()
     const theme = useTheme()
 
     return (
-        <TableRow key={address} className={classes.tableRow}>
+        <TableRow key={address} className={cx(classes.tableRow, classes.tableRowWithHoverEffect)}>
             <TableCell align="left" variant="body" className={classes.cell}>
                 <Typography className={classes.second}>{page * 10 + index + 1}</Typography>
                 <Typography className={classes.title}>
                     <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
                 </Typography>
                 <div className={classes.icons}>
-                    <Icons.Copy size={16} className={classes.icon} onClick={() => copyToClipboard(address)} />
+                    <CopyButton size={16} className={classes.icon} text={address} />
                     <Icons.LinkOut
                         size={16}
                         className={classes.link}

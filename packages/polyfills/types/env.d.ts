@@ -1,10 +1,18 @@
+/// <reference path="./env.d.ts" />
+declare module NodeJS {
+    interface ProcessEnv {
+        readonly NODE_ENV: 'development' | 'production' | 'test'
+        readonly MASK_SENTRY_DSN: string
+        /**
+         * Run skip tests like
+         * RUN_SKIP_TESTS=1 pnpm test
+         */
+        readonly RUN_SKIP_TESTS: string
+    }
+}
 declare namespace NodeJS {
     interface Process {
         env: ProcessEnv
-    }
-    interface ProcessEnv {
-        readonly NODE_ENV: 'production' | 'development' | 'test'
-        readonly MASK_SENTRY_DSN: string
     }
 }
 declare var process: NodeJS.Process

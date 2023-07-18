@@ -1,6 +1,5 @@
-import { useCopyToClipboard } from 'react-use'
-import { Button, Link, Typography, useTheme } from '@mui/material'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { Button, Link, Typography, useTheme, ThemeProvider } from '@mui/material'
+import { MaskLightTheme, getMaskColor, makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -16,11 +15,11 @@ import {
 } from '@masknet/web3-hooks-base'
 import {
     FormattedAddress,
-    useSnackbarCallback,
     WalletIcon,
     SelectProviderModal,
     useSharedI18N,
     WalletStatusModal,
+    CopyButton,
 } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -135,21 +134,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const networkDescriptor = useNetworkDescriptor()
     const { data: domain } = useReverseAddress(undefined, account)
 
-    // #region copy addr to clipboard
-    const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLAnchorElement>) => {
-            ev.stopPropagation()
-            copyToClipboard(account)
-        },
-        [],
-        undefined,
-        undefined,
-        undefined,
-        t.copy_success_of_wallet_addr(),
-    )
-    // #endregion
-
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
     if (!Others.isValidAddress(account)) {
@@ -193,14 +177,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 <FormattedAddress address={account} size={4} formatter={Others.formatAddress} />
                             )}
                         </Typography>
-                        <Link
-                            className={classes.link}
-                            underline="none"
-                            component="button"
-                            title={t.wallet_status_button_copy_address()}
-                            onClick={onCopy}>
-                            <Icons.Copy className={cx(classes.icon, classes.copyIcon)} />
-                        </Link>
+                        <ThemeProvider theme={MaskLightTheme}>
+                            <CopyButton className={cx(classes.icon, classes.copyIcon)} size={17.5} text={account} />
+                        </ThemeProvider>
                         {chainIdValid ? (
                             <Link
                                 className={classes.link}

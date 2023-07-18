@@ -7,12 +7,15 @@ import type {
 } from '@masknet/base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { EC_Key, EC_KeyCurveEnum } from '../payload/index.js'
+import type { Option } from 'ts-results-es'
 
 export interface EncryptOptions {
     /** Payload version to use. */
     version: -38 | -37
     /** Current author who started the encryption. */
-    author?: ProfileIdentifier
+    author: Option<ProfileIdentifier>
+    /** Public key of the current author. */
+    authorPublicKey: Option<EC_Key<EC_Public_CryptoKey>>
     /** Network of the encryption */
     network: string
     /** The message to be encrypted. */
@@ -25,16 +28,15 @@ export interface EncryptTargetPublic {
 }
 export interface EncryptTargetE2E {
     type: 'E2E'
-    target: ProfileIdentifier[]
+    target: ReadonlyArray<EC_Key<EC_Public_CryptoKey>>
 }
 export interface EncryptIO {
-    queryPublicKey(persona: ProfileIdentifier): Promise<EC_Key<EC_Public_CryptoKey> | null>
     /**
      * This is only used in v38.
      *
      * Note: Due to historical reason (misconfiguration), some user may not have localKey.
      *
-     * Throw in this case. v37 will resolve this problem.
+     * Throw in this case.
      */
     encryptByLocalKey(content: Uint8Array, iv: Uint8Array): Promise<Uint8Array | ArrayBuffer>
     /**
@@ -75,9 +77,9 @@ export interface EncryptResult {
     e2e?: EncryptionResultE2EMap
 }
 /** Additional information that need to be send to the internet in order to allow recipients to decrypt */
-export type EncryptionResultE2EMap = Map<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
+export type EncryptionResultE2EMap = Map<EC_Key<EC_Public_CryptoKey>, PromiseSettledResult<EncryptionResultE2E>>
 export interface EncryptionResultE2E {
-    target: ProfileIdentifier
+    target: EC_Key<EC_Public_CryptoKey>
     encryptedPostKey: Uint8Array
     /** This is used in v38. */
     ivToBePublished?: Uint8Array

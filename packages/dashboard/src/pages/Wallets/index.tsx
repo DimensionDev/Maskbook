@@ -8,8 +8,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 import { PluginMessages } from '../../API.js'
-import { PageFrame } from '../../components/PageFrame/index.js'
 import { useDashboardI18N } from '../../locales/index.js'
+import { PageFrame } from '../../components/PageFrame/index.js'
 import { Assets } from './components/Assets/index.js'
 import { Balance } from './components/Balance/index.js'
 import { History } from './components/History/index.js'
@@ -42,8 +42,11 @@ function Wallets() {
 
     const [receiveOpen, setReceiveOpen] = useState(false)
 
-    const networks = getRegisteredWeb3Networks()
     const { pluginID } = useNetworkContext()
+    const networks = getRegisteredWeb3Networks(pluginID).filter((x) => x.isMainnet)
+
+    // If show one network only, set it as default network
+    const defaultNetwork = networks.length !== 1 ? null : networks[0]
 
     const networkDescriptor = useNetworkDescriptor(
         NetworkPluginID.PLUGIN_EVM,
@@ -61,16 +64,6 @@ function Wallets() {
             open: true,
         })
     }, [])
-
-    const renderNetworks = useMemo(() => {
-        return networks.filter((x) => pluginID === x.networkSupporterPluginID && x.isMainnet)
-    }, [networks, pluginID])
-
-    // If show one network only, set it as default network
-    const defaultNetwork = useMemo(() => {
-        if (renderNetworks.length !== 1) return null
-        return renderNetworks[0]
-    }, [renderNetworks])
 
     useEffect(() => {
         if (isWalletPath) return
@@ -118,7 +111,7 @@ function Wallets() {
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
-                        networks={renderNetworks}
+                        networks={networks}
                         selectedNetwork={selectedNetwork}
                         onSelectNetwork={setSelectedNetwork}
                         showOperations={pluginID === NetworkPluginID.PLUGIN_EVM}

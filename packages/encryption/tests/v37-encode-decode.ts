@@ -36,14 +36,14 @@ test('Encode v37 payload', async () => {
         const newPayload = { ...payload }
         newPayload.author = Some(ProfileIdentifier.of('localhost', 'unknown').unwrap())
         const k256Key = (await queryTestPublicKey(ProfileIdentifier.of('localhost', 'alice').unwrap()))!
-        newPayload.authorPublicKey = Some(k256Key)
+        newPayload.authorPublicKey = k256Key
         newPayload.encryption = {
             type: 'E2E',
             iv: payload.encryption.iv,
             ephemeralPublicKey: new Map(),
             ownersAESKeyEncrypted: new Uint8Array([5, 6, 7, 8, 9, 10]),
         }
-        newPayload.encryption.ephemeralPublicKey.set(k256Key.algr, k256Key.key)
+        newPayload.encryption.ephemeralPublicKey.set(k256Key.unwrap().algr, k256Key.unwrap().key)
 
         const encoded = (await encodePayload.NoSign(newPayload).then((x) => x.unwrap())) as Uint8Array
         expect(encoded).toMatchSnapshot('Full payload')

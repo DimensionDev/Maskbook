@@ -1,6 +1,6 @@
-import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { Link, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Link, Stack, Tab, Typography } from '@mui/material'
 import ConnectButton from './ConnectButton.js'
 import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -59,12 +59,10 @@ const useStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
         color: theme.palette.maskColor.publicSecond,
-        transform: 'translate(0px, 1px)',
     },
     PopupLink: {
         width: 16,
         height: 16,
-        transform: 'translate(0px, -2px)',
         color: theme.palette.maskColor.publicSecond,
     },
     follow: {
@@ -116,21 +114,14 @@ function Profile({ url }: { url: string }) {
 
     function getNodata() {
         return (
-            <ThemeProvider theme={MaskLightTheme}>
-                <EmptyStatus height={400} p={2}>
-                    {currentTab === tabs.Followers ? t.no_followers() : t.no_followings()}
-                </EmptyStatus>
-            </ThemeProvider>
+            <EmptyStatus height={400} p={2}>
+                {currentTab === tabs.Followers ? t.no_followers() : t.no_followings()}
+            </EmptyStatus>
         )
     }
 
     if (isLoading) return <LoadingStatus height={196} omitText />
-    if (error)
-        return (
-            <ThemeProvider theme={MaskLightTheme}>
-                <ReloadStatus height={196} message={t.failed()} onRetry={refetch} />
-            </ThemeProvider>
-        )
+    if (error) return <ReloadStatus height={196} message={t.failed()} onRetry={refetch} />
 
     return (
         <TabContext value={currentTab}>
@@ -168,13 +159,15 @@ function Profile({ url }: { url: string }) {
                             </Typography>
                             <Link
                                 onClick={(event) => event.stopPropagation()}
-                                style={{ width: 12, height: 12 }}
+                                style={{ width: 16, height: 16 }}
                                 href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <Icons.PopupLink className={classes.PopupLink} />
+                                <Icons.PopupLink className={classes.PopupLink} size={16} />
                             </Link>
-                            {identity?.address ? <CopyButton text={identity.address} className={classes.icon} /> : null}
+                            {identity?.address ? (
+                                <CopyButton text={identity.address} className={classes.icon} size={16} />
+                            ) : null}
                         </Stack>
                     </Stack>
 

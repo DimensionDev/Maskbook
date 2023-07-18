@@ -12,6 +12,7 @@ import {
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { CopyButton } from '../CopyButton/index.js'
 
 /* cspell:disable-next-line */
 // TODO: Migrate to SocialIdentity by @Lanttcat
@@ -23,7 +24,6 @@ export interface PersonaNextIDMixture {
 
 interface PersonaItemProps extends withClasses<'checked' | 'unchecked'> {
     data: PersonaNextIDMixture
-    onCopy: (e: React.MouseEvent<HTMLElement>) => void
     onClick: () => void
     currentPersona?: PersonaNextIDMixture
     currentPersonaIdentifier?: ECKeyIdentifier
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function PersonaItemUI(props: PersonaItemProps) {
-    const { data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
+    const { data, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
     const { classes } = useStyles(undefined, { props })
 
     const isVerified = useMemo(() => {
@@ -102,7 +102,7 @@ export function PersonaItemUI(props: PersonaItemProps) {
                 <Typography className={classes.fingerprint}>
                     <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                         {formatPersonaFingerprint(data.persona.identifier.rawPublicKey, 4)}
-                        <Icons.Copy role="button" size={14} onClick={onCopy} />
+                        <CopyButton size={14} text={data.persona.identifier.rawPublicKey} />
                     </Stack>
                 </Typography>
             </Stack>

@@ -7,3 +7,4 @@ const flags = new RemoteFlags('https://mask-flags.r2d2.to/', defaultFlags)
 flags.fetchAndActive()
 
 export const Flags = flags.accessor
+export { env, type BuildInfoFile } from './flags/buildInfo.js'

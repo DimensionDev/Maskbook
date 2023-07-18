@@ -5,5 +5,6 @@ export enum ApplicationRoutes {
     Swap = '/swap',
     Bridges = '/bridges',
     Settings = '/settings',
-    Web3Profile = '/web3profile',
+    Web3Profile = '/web3-profile',
+    Applications = '/applications',
 }

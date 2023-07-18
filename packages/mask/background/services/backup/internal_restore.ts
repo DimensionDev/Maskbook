@@ -19,7 +19,7 @@ import {
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
 import { internal_wallet_restore } from './internal_wallet_restore.js'
 
-export async function restoreNormalizedBackup(backup: NormalizedBackup.Data, countOfSmartPay?: number) {
+export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
 
     {
@@ -42,9 +42,6 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data, cou
     await delay(backup.personas.size + backup.profiles.size)
 
     if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
-    MaskMessages.events.restoreSuccess.sendToAll({
-        count: countOfSmartPay,
-    })
 }
 
 async function restorePersonas(backup: NormalizedBackup.Data) {

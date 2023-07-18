@@ -9,6 +9,7 @@ import '@masknet/plugin-vcent'
 import '@masknet/plugin-ito'
 import '@masknet/plugin-redpacket'
 import '@masknet/plugin-file-service'
+
 import '@masknet/plugin-maskbox'
 
 import '@masknet/plugin-flow'
@@ -26,3 +27,10 @@ import '@masknet/plugin-external'
 import '@masknet/plugin-nextid'
 import '@masknet/plugin-trader/register'
 import '@masknet/plugin-profilecard'
+
+import '@masknet/plugin-claim'
+import '@masknet/plugin-savings'
+import '@masknet/plugin-pets'
+import '@masknet/plugin-game'
+
+import '@masknet/plugin-smart-pay'

@@ -2,14 +2,13 @@ import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { FormattedAddress, ImageIcon } from '@masknet/shared'
+import { CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type.js'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -146,7 +145,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                         size={4}
                                         formatter={formatEthereumAddress}
                                     />
-                                    <CopyIconButton text={wallet.identity} className={classes.icon} />
+                                    <CopyButton text={wallet.identity} className={classes.icon} size={16} />
                                     <Link
                                         style={{ width: 16, height: 16 }}
                                         href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}

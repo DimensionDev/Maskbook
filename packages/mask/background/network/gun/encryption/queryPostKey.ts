@@ -13,7 +13,6 @@ import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
 import * as gun_utils from /* webpackDefer: true */ '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { isObject, noop, uniq } from 'lodash-es'
-import { queryPublicKey } from '../../../database/persona/helper.js'
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.
 export async function GUN_queryPostKey_version40(
@@ -118,9 +117,7 @@ namespace Version38Or39 {
                 if (result.status === 'rejected') continue
                 const { encryptedPostKey, target, ivToBePublished } = result.value
                 if (!ivToBePublished) throw new Error('Missing salt')
-                const pub = await queryPublicKey(target)
-                if (!pub) throw new Error('missing key')
-                const jwk = await CryptoKeyToJsonWebKey(pub)
+                const jwk = await CryptoKeyToJsonWebKey(target.key)
                 const keyHash = await hashKey38(jwk)
                 const post: DataOnGun = {
                     encryptedKey: encodeArrayBuffer(encryptedPostKey),
@@ -278,9 +275,7 @@ namespace Version37 {
             try {
                 if (result.status === 'rejected') continue
                 const { encryptedPostKey, target, ephemeralPublicKey } = result.value
-                const pub = await queryPublicKey(target)
-                if (!pub) throw new Error('missing key')
-                const jwk = await CryptoKeyToJsonWebKey(pub)
+                const jwk = await CryptoKeyToJsonWebKey(target.key)
                 const keyPartition = `${networkPartition}-${postHash}-${await hashKey(jwk)}`
                 const post: DataOnGun = {
                     e: encodeArrayBuffer(encryptedPostKey),

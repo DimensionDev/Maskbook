@@ -1,7 +1,6 @@
 import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
 import {
     ECKeyIdentifier,
-    ECKeyIdentifierFromJsonWebKey,
     isAESJsonWebKey,
     isEC_Private_JsonWebKey,
     isEC_Public_JsonWebKey,
@@ -38,7 +37,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
     for (const persona of personas) {
         const { publicKey } = persona
         if (!isEC_Public_JsonWebKey(publicKey)) continue
-        const identifier = await ECKeyIdentifierFromJsonWebKey(publicKey)
+        const identifier = (await ECKeyIdentifier.fromJsonWebKey(publicKey)).unwrap()
         const normalizedPersona: NormalizedBackup.PersonaBackup = {
             identifier,
             linkedProfiles: new Map(),

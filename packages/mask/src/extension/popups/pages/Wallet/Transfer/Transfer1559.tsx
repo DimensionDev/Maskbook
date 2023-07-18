@@ -675,7 +675,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         render={({ field }) => (
                             <StyledInput
                                 {...field}
-                                placeholder={t('wallet_transfer_1559_placeholder')}
+                                placeholder={t('wallet_transfer_placeholder')}
                                 error={!!errors.address?.message}
                                 helperText={errors.address?.message}
                                 InputProps={{

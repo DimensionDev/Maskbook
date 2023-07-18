@@ -5,6 +5,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { SavingsDialog } from './SavingsDialog.js'
+import { PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -12,7 +13,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Savings size={36} />
-            const name = <Trans i18nKey="plugin_savings" />
+            const name = <Trans i18nKey="plugin_savings" ns={PluginID.Savings} />
             const iconFilterColor = 'rgba(255, 83, 146, 0.3)'
             return {
                 ApplicationEntryID: base.ID,

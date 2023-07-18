@@ -171,6 +171,7 @@ export enum EthereumMethodType {
     MASK_REMOVE_WALLET = 'MASK_REMOVE_WALLET',
     MASK_UPDATE_WALLETS = 'MASK_UPDATE_WALLETS',
     MASK_REMOVE_WALLETS = 'MASK_REMOVE_WALLETS',
+    MASK_RESET_ALL_WALLETS = 'MASK_RESET_ALL_WALLETS',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
 }
 
@@ -187,9 +188,6 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
     ? S
     : T
 
-/**
- * Keep updating to packages/public-api/src/web.ts
- */
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
@@ -207,6 +205,7 @@ export enum NetworkType {
     Conflux = 'Conflux',
     Astar = 'Astar',
     Moonbeam = 'Moonbeam',
+    CustomNetwork = 'CustomNetwork',
 }
 
 export enum ProviderType {

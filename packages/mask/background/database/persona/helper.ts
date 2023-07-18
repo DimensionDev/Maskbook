@@ -3,7 +3,6 @@ import {
     type AESCryptoKey,
     type AESJsonWebKey,
     ECKeyIdentifier,
-    ECKeyIdentifierFromJsonWebKey,
     type EC_Private_JsonWebKey,
     type EC_Public_CryptoKey,
     type EC_Public_JsonWebKey,
@@ -157,7 +156,7 @@ export async function createPersonaByJsonWebKey(options: {
     mnemonic?: PersonaRecord['mnemonic']
     uninitialized?: boolean
 }): Promise<PersonaIdentifier> {
-    const identifier = await ECKeyIdentifierFromJsonWebKey(options.publicKey)
+    const identifier = (await ECKeyIdentifier.fromJsonWebKey(options.publicKey)).unwrap()
     const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -186,7 +185,7 @@ export async function createProfileWithPersona(
         mnemonic?: PersonaRecord['mnemonic']
     },
 ): Promise<void> {
-    const ec_id = await ECKeyIdentifierFromJsonWebKey(keys.publicKey)
+    const ec_id = (await ECKeyIdentifier.fromJsonWebKey(keys.publicKey)).unwrap()
     const rec: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),

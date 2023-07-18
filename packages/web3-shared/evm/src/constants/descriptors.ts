@@ -1,3 +1,4 @@
+import { difference } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import {
     type ChainDescriptor,
@@ -16,12 +17,12 @@ import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { ChainIdList, getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
-import { difference } from 'lodash-es'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
 export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => ({
     ...x,
+    ID: `${x.chainId}_${x.name}`,
     coinMarketCapChainId: '',
     coinGeckoChainId: '',
     coinGeckoPlatformId: '',
@@ -34,9 +35,13 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         schema: SchemaType.Native,
         ...x.nativeCurrency,
     },
-    explorerURL: {
+    // not accessible
+    rpcUrl: '',
+    iconUrl: x.nativeCurrency.logoURL,
+    explorerUrl: {
         url: x.explorers?.[0]?.url ?? x.infoURL,
     },
+    isCustomized: false,
 }))
 
 export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>> = [

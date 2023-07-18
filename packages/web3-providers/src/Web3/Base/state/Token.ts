@@ -1,4 +1,5 @@
 import { uniqBy } from 'lodash-es'
+import { produce, type Draft } from 'immer'
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, safeEmptyList, type StorageObject } from '@masknet/shared-base'
 import {
@@ -11,7 +12,6 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { produce, type Draft } from 'immer'
 
 export interface TokenStorage<ChainId extends number, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>

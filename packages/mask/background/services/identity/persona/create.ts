@@ -4,7 +4,7 @@ import {
     type EC_Public_JsonWebKey,
     type PersonaIdentifier,
     isEC_Private_JsonWebKey,
-    ECKeyIdentifierFromJsonWebKey,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../database/persona/helper.js'
 import { decode, encode } from '@msgpack/msgpack'
@@ -69,7 +69,7 @@ export async function createPersonaByMnemonicV2(
 
 export async function queryPersonaKeyByMnemonicV2(mnemonicWords: string) {
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWords, '')
-    const identifier = await ECKeyIdentifierFromJsonWebKey(key.publicKey)
+    const identifier = (await ECKeyIdentifier.fromJsonWebKey(key.publicKey)).unwrap()
     const encodePrivateKey = encode(key.privateKey)
     const privateKey = encodeArrayBuffer(encodePrivateKey)
     return {

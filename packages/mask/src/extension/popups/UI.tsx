@@ -6,7 +6,6 @@ import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet
 import { EventID } from '@masknet/web3-telemetry/types'
 import { lazy, memo, useEffect, useState, type ReactNode, useMemo } from 'react'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import '../../social-network-adaptor/browser-action/index.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
@@ -19,6 +18,8 @@ import { wrapModal } from './components/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
+import { useIdleTimer } from 'react-idle-timer'
+import { WalletRPC } from '../../plugins/WalletService/messages.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
@@ -83,6 +84,7 @@ export default function Popups() {
     )
 
     useMountReport(EventID.AccessPopups)
+    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer, throttle: 2000 })
 
     return PageUIProvider(
         usePopupTheme,

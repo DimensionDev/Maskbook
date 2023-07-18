@@ -228,3 +228,5 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         </Web3ContextProvider>
     )
 })
+
+ProfileCard.displayName = 'ProfileCard'

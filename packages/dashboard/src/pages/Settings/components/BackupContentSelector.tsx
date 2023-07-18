@@ -44,7 +44,7 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
             value: json.personas,
         },
         {
-            name: t.settings_backup_preview_associated_account(),
+            name: t.settings_backup_preview_associated_accounts(),
             value: json.accounts,
             sub: true,
         },

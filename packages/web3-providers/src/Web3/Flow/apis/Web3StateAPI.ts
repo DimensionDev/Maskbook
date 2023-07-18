@@ -16,6 +16,7 @@ import { Provider } from '../state/Provider.js'
 import { Settings } from '../state/Settings.js'
 import { Transaction } from '../state/Transaction.js'
 import { IdentityService } from '../state/IdentityService.js'
+import { Network } from '../state/Network.js'
 
 export const FlowWeb3StateRef = new ValueRefWithReady<Web3Helper.Definition[NetworkPluginID.PLUGIN_FLOW]['Web3State']>()
 
@@ -36,11 +37,10 @@ export class FlowWeb3StateAPI extends Web3StateAPI_Base<
         await Provider_.setup()
 
         return {
-            AddressBook: new AddressBook(context, {
-                chainId: Provider_.chainId,
-            }),
+            AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             Settings: new Settings(context),
+            Network: new Network(context),
             Transaction: new Transaction(context, {
                 chainId: Provider_.chainId,
                 account: Provider_.account,

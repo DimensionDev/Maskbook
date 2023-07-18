@@ -167,7 +167,7 @@ function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, re
                 await Services.Crypto.appendShareTarget(
                     info.version.getCurrentValue()!,
                     iv,
-                    profiles.map((x) => x.identifier),
+                    profiles.map((x) => ({ profile: x.identifier, persona: x.linkedPersona })),
                     whoAmI,
                     activatedSocialNetworkUI.encryptionNetwork,
                 )

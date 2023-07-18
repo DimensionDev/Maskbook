@@ -6,8 +6,6 @@
 import * as base /* webpackDefer: true */ from '@masknet/shared-base'
 import { TelemetryID } from '../../../../shared-base/src/Telemetry/index.js'
 
-// Get old/create new telemetry in a blocking way.
-await setTelemetryID(false)
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 export async function getTelemetryID(): Promise<string> {

@@ -1,15 +1,16 @@
+import { memo, useCallback } from 'react'
+import urlcat from 'urlcat'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { ExtensionSite, NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { Box, Typography } from '@mui/material'
-import { memo, useCallback } from 'react'
 import Services from '../../../service.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useModalNavigate } from '../index.js'
 import { HomeTabType } from '../../pages/Wallet/type.js'
-import urlcat from 'urlcat'
+
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'grid',
@@ -43,10 +44,7 @@ export const SelectProvider = memo(function SelectProvider() {
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()
-
-    const providers = getRegisteredWeb3Providers().filter(
-        (x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM,
-    ) as Array<Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>>
+    const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(
         async (providerType: ProviderType) => {
@@ -56,24 +54,35 @@ export const SelectProvider = memo(function SelectProvider() {
             if (providerType === ProviderType.MaskWallet) {
                 navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
                 return
-            }
-            if (disableNewWindow) {
-                modalNavigate(
-                    PopupModalRoutes.ConnectProvider,
-                    {
-                        providerType,
-                    },
-                    {
-                        replace: true,
-                    },
-                )
-                return
-            } else if (providerType === ProviderType.MetaMask) {
+            } else if (providerType === ProviderType.WalletConnect) {
+                const account = await Web3.connect({ providerType })
+
+                // wallet connect has been connected
+                if (account) {
+                    navigate(PopupRoutes.ConnectWallet)
+                    return
+                }
+            } else {
+                if (disableNewWindow) {
+                    modalNavigate(
+                        PopupModalRoutes.ConnectProvider,
+                        {
+                            providerType,
+                        },
+                        {
+                            replace: true,
+                        },
+                    )
+                    return
+                }
+
                 await Services.Helper.openPopupWindow(
                     PopupRoutes.Personas,
                     { providerType, from: PopupModalRoutes.SelectProvider, tab: HomeTabType.ConnectedWallets },
                     true,
                 )
+
+                return
             }
         },
         [location.search],
@@ -86,7 +95,7 @@ export const SelectProvider = memo(function SelectProvider() {
                 .map((provider) => {
                     return (
                         <div className={classes.providerItem} key={provider.ID} onClick={() => onClick(provider.type)}>
-                            <img src={provider.icon.toString()} className={classes.providerIcon} />
+                            <img src={provider.icon} className={classes.providerIcon} />
                             <Typography className={classes.providerName}>{provider.name}</Typography>
                         </div>
                     )

@@ -1,15 +1,15 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsyncFn, useAsyncRetry, useCopyToClipboard, useUpdateEffect } from 'react-use'
+import { useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
 import { isNaN, sum } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
     ImageIcon,
-    useSnackbarCallback,
     TokenIcon,
     FormattedBalance,
     useMenuConfig,
     ApproveMaskDialog,
     FormattedCurrency,
+    CopyButton,
 } from '@masknet/shared'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -227,16 +227,6 @@ export const SmartPayContent = memo(() => {
 
     // #endregion
 
-    // #region copy event handler
-    const [, copyToClipboard] = useCopyToClipboard()
-
-    const onCopy = useSnackbarCallback({
-        executor: async (address?: string) => copyToClipboard(address ?? ''),
-        deps: [],
-        successText: t.copy_wallet_address_success(),
-    })
-    // #endregion
-
     const currentProfile = useLastRecognizedIdentity()
     const { value = 0, retry: refreshRemainFrequency } = useAsyncRetry(async () => {
         if (!currentProfile?.identifier?.userId) return 0
@@ -263,13 +253,7 @@ export const SmartPayContent = memo(() => {
                         </Typography>
                         <Typography className={classes.address}>
                             {formatEthereumAddress(contractAccount?.address ?? '', 4)}
-                            <Icons.PopupCopy
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onCopy(contractAccount.address)
-                                }}
-                                size={14}
-                            />
+                            <CopyButton size={14} text={contractAccount.address} />
                             <Link
                                 href={
                                     chainId
@@ -332,7 +316,7 @@ export const SmartPayContent = memo(() => {
 
     const [{ loading: openSendLoading }, handleSendClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        await openPopupWindow(PopupRoutes.Transfer, { toBeClose: 1, selectedToken: maskToken?.address })
+        await openPopupWindow(PopupRoutes.Contacts, { toBeClose: 1, selectedToken: maskToken?.address })
     }, [connectToCurrent, openPopupWindow, maskToken])
 
     const handleReceiveClick = useCallback(() => {
@@ -370,7 +354,7 @@ export const SmartPayContent = memo(() => {
                             {menu}
                             <Typography className={classes.address}>
                                 {formatEthereumAddress(account ?? '', 4)}
-                                <Icons.PopupCopy onClick={() => onCopy(account)} size={14} />
+                                <CopyButton size={14} text={account} />
                                 <Link
                                     href={
                                         account && chainId ? Others.explorerResolver.addressLink(chainId, account) : ''

@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
 import { CollectionList, UserAssetsProvider } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, PluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EventID } from '@masknet/web3-telemetry/types'
@@ -177,8 +177,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_collectibles_description" />,
-            name: <Trans i18nKey="plugin_collectibles_name" />,
+            description: <Trans i18nKey="plugin_collectibles_description" ns={PluginID.Collectible} />,
+            name: <Trans i18nKey="plugin_collectibles_name" ns={PluginID.Collectible} />,
             icon: <Icons.Collectibles size={36} />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',

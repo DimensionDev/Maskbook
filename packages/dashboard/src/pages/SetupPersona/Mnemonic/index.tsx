@@ -1,20 +1,21 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { Icons } from '@masknet/icons'
+import { CopyButton } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, Checkbox, FormControlLabel, IconButton, Stack, Typography, alpha } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { Icons } from '@masknet/icons'
-import { useCopyToClipboard, useAsync, useAsyncFn } from 'react-use'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { Words } from './Words.js'
-import { ComponentToPrint } from './ComponentToPrint.js'
-import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { toBlob } from 'html-to-image'
+import { memo, useCallback, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
 import { Services } from '../../../API.js'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
+import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { ComponentToPrint } from './ComponentToPrint.js'
+import { Words } from './Words.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -53,6 +54,8 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${theme.palette.maskColor.line}`,
         borderRadius: 8,
         color: theme.palette.maskColor.main,
+        height: 36,
+        width: 36,
     },
     warning: {
         background: alpha(theme.palette.maskColor.warn, 0.1),
@@ -72,6 +75,16 @@ const useStyles = makeStyles()((theme) => ({
     label: {
         fontSize: 14,
     },
+    iconBox: {
+        height: 36,
+        width: 36,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '8px',
+        border: `1px solid ${theme.palette.maskColor.line}`,
+    },
 }))
 
 export const SignUpMnemonic = memo(function SignUpMnemonic() {
@@ -90,7 +103,6 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
 
     const [checked, setChecked] = useState(true)
 
-    const [copyState, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
 
     const { words, refreshCallback } = useMnemonicWordsPuzzle()
@@ -131,20 +143,8 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         }
     }, [state.personaName, words.join('')])
 
-    useEffect(() => {
-        if (copyState.value) {
-            showSnackbar(t.personas_export_persona_copy_success(), {
-                variant: 'success',
-                message: t.persona_phrase_copy_description(),
-            })
-        }
-        if (copyState.error?.message) {
-            showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
-        }
-    }, [copyState.value, copyState.error?.message])
-
     return (
-        <Box>
+        <>
             <Box className={classes.header}>
                 <Typography className={classes.second}>{t.create_step({ step: '2', total: '2' })}</Typography>
                 <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
@@ -169,9 +169,13 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
                 <IconButton className={classes.iconButton} onClick={handleDownload}>
                     <Icons.Download2 size={18} />
                 </IconButton>
-                <IconButton className={classes.iconButton} onClick={() => copyToClipboard(words.join(' '))}>
-                    <Icons.Copy size={18} />
-                </IconButton>
+                <CopyButton
+                    classes={{ root: classes.iconBox }}
+                    size={18}
+                    className={classes.iconButton}
+                    text={words.join(' ')}
+                    successText={t.persona_phrase_copy_description()}
+                />
             </Box>
             <Box className={classes.warning}>
                 <Icons.WarningTriangle size={20} />
@@ -200,6 +204,6 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
                     {t.continue()}
                 </PrimaryButton>
             </SetupFrameController>
-        </Box>
+        </>
     )
 })

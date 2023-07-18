@@ -2,7 +2,7 @@ import { OnDemandWorker, serializer } from '@masknet/shared-base'
 import { hmr } from '../../../../utils-pure/index.js'
 import { cache, startListen } from './cache.js'
 
-const worker = new OnDemandWorker(new URL('./worker_init.ts', import.meta.url), { name: 'PopupSSR-Worker' })
+const worker = new OnDemandWorker(new URL('./worker.tsx', import.meta.url), { name: 'PopupSSR-Worker' })
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof Worker === 'function') {
     browser.runtime.onMessage.addListener(listener)
