@@ -76,8 +76,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     iconBox: {
-        height: 40,
-        width: 40,
+        height: 36,
+        width: 36,
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
