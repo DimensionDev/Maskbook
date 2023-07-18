@@ -13,7 +13,6 @@ import {
     useSNSAdaptorContext,
     useLastRecognizedIdentity,
     useSocialIdentityByUserId,
-    type IdentityResolved,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
@@ -22,14 +21,10 @@ import {
     MaskMessages,
     NextIDPlatform,
     PluginID,
-    type ProfileIdentifier,
     ProfileTabs,
     currentPersonaIdentifier,
     isFacebook,
     isTwitter,
-    type SocialAccount,
-    NetworkPluginID,
-    SocialAddressType,
 } from '@masknet/shared-base'
 import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
@@ -42,6 +37,7 @@ import {
     ConnectPersonaBoundary,
     GrantPermissions,
     PluginCardFrameMini,
+    ProfileTabContext,
     SearchResultInspector,
     SocialAccountList,
     TokenWithSocialGroupMenu,
@@ -51,7 +47,6 @@ import {
     usePluginHostPermissionCheck,
     useSharedI18N,
 } from '../../../index.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -156,45 +151,12 @@ function Content(props: ProfileTabContentProps) {
         retry: retryLoadPersonaStatus,
     } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, openDashboard, lastRecognized)
 
-    const currentVisitingSocialIdentity: IdentityResolved = {
-        identifier: {
-            network: 'twitter.com',
-            userId: 'suji_yan',
-        } as ProfileIdentifier,
-        nickname: 'Suji Yan - Mask is BUIDLing',
-        avatar: 'https://pbs.twimg.com/profile_images/1571030729605144577/Nxsva4Vq_400x400.png',
-        bio: 'founder of @realmasknetwork #Mask\u{1F426}\nMaintain some fediverse instances\nsujiyan.eth',
-        homepage: 'https://mask.io',
-        isOwner: false,
-    }
-    const socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>> = [
-        {
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            address: '0x934B510D4C9103E6a87AEf13b816fb080286D649',
-            label: 'sujiyan.eth',
-            supportedAddressTypes: [SocialAddressType.ENS, SocialAddressType.TwitterBlue, SocialAddressType.OpenSea],
-        },
-        {
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            address: '0x7cbba07e31dc7b12bb69a1209c5b11a8ac50acf5',
-            label: '',
-            supportedAddressTypes: [SocialAddressType.Firefly],
-        },
-    ]
+    const {
+        currentVisitingSocialIdentity,
+        socialAccounts = [],
+        currentSocialIdentity,
+    } = ProfileTabContext.useContainer()
 
-    // const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
-    const currentSocialIdentity = {
-        identifier: {
-            network: 'twitter.com',
-            userId: 'suji_yan',
-        } as ProfileIdentifier,
-        nickname: 'Suji Yan - Mask is BUIDLing',
-        avatar: 'https://pbs.twimg.com/profile_images/1571030729605144577/Nxsva4Vq_400x400.png',
-        bio: 'founder of @realmasknetwork #Mask\u{1F426}\nMaintain some fediverse instances\nsujiyan.eth',
-        homepage: 'https://mask.io',
-        isOwner: false,
-        hasBinding: false,
-    }
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
