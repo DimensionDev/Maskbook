@@ -18,6 +18,8 @@ import { wrapModal } from './components/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
+import { useIdleTimer } from 'react-idle-timer'
+import { WalletRPC } from '../../plugins/WalletService/messages.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
@@ -82,6 +84,7 @@ export default function Popups() {
     )
 
     useMountReport(EventID.AccessPopups)
+    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer })
 
     return PageUIProvider(
         usePopupTheme,
